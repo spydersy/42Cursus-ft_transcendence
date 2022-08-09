@@ -1,13 +1,19 @@
+import { calculateNewValue } from '@testing-library/user-event/dist/utils';
 import  React, { useEffect , useRef , useState  }  from 'react';
+
 import * as ReactDOM from 'react-dom'; 
 // import {Draggable} from 'typescript-react-draggable';
 import styled from "styled-components"
+import io from 'socket.io-client';
 
+const socket = io('http://localhost:3030');
 export default function Pong() {
   const tableRef : any= useRef<HTMLHeadingElement>(null);
   const ballRef : any = useRef<SVGCircleElement >(null);
   const playerRef : any = useRef<SVGRectElement >(null);
+  const player2Ref : any = useRef<SVGRectElement >(null);
   const [move, setmove] = useState(0)
+  const [Player, setPlayer] = useState<SVGRectElement>()
   var UP_KEY = 38;
   var DOWN_KEY = 40;
   
@@ -26,7 +32,6 @@ export default function Pong() {
 
     const colliding = x1 < (x2 + w2) && (x1 + w1) > x2 &&
       y1 < (y2 + h2) && (y1 + h1) > y2;
-    console.log(colliding)
     return colliding;
   }
   function moveBall() {
@@ -40,24 +45,25 @@ export default function Pong() {
       const bottomLimit = tableRef.current.offsetHeight - ballRadius;
       
       const [nextCX, nextCY] = [cx + directionX, cy + directionY];
-      if (nextCX < leftLimit || nextCX > rightLimit) 
+      if (nextCX > rightLimit) 
           directionX = -directionX;
       if (nextCY < topLimit || nextCY > bottomLimit )
           directionY = -directionY;
-
-      if (detectCollision()) {
-        alert("jmrr")
-        directionY = -directionY;
+      if (nextCY < topLimit) {
+        // directionY = -directionY;
       }
-        
-      
-      
+      if (detectCollision()) 
+        directionX = -directionX;
       const [xPos, yPos] = [cx + directionX, cy + directionY];
-
-      ballRef.current.setAttribute('cx', xPos);
-      ballRef.current.setAttribute('cy', yPos);
-      
-      requestAnimationFrame(moveBall);
+      console.log(xPos)
+      if (xPos <=  ballRadius) { // player lost
+        alert('Ooops');
+      } else {
+        ballRef.current.setAttribute('cx', xPos);
+        ballRef.current.setAttribute('cy', yPos);
+        requestAnimationFrame(moveBall);
+      }
+      // requestAnimationFrame(moveBall);
     }
     
     
@@ -76,30 +82,43 @@ export default function Pong() {
           
           break;
           case DOWN_KEY:
-
-
-            if (cy + 100 <= tableRef.current.offsetHeight - h)
-                playerRef.current.setAttribute('y', cy + 100);
-            else
-            playerRef.current.setAttribute('y', tableRef.current.offsetHeight  -h)
+              if (cy + 100 <= tableRef.current.offsetHeight - h)
+                  playerRef.current.setAttribute('y', cy + 100);
+              else
+              playerRef.current.setAttribute('y', tableRef.current.offsetHeight  -h)
             break;
         default: 
             break;
-          console.log(move)
         }
         // if (move != 0)
             // movePlayer(event)
     // console.log(playerRef.current.getAttribute('y'))
     }
     useEffect(() => {
-        document.addEventListener("keydown", movePlayer);
-        document.addEventListener("keyup", ()=>{
-          setmove(0)
-        });
-        document.body.addEventListener('x-swipe', event => {
-          console.log(event)
-        })
+     
+     const wp2 = parseInt(player2Ref.current.getAttribute('width'));
 
+        // player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - wp2 - 50)
+        document.addEventListener("keydown", movePlayer);
+        // document.addEventListener("keyup", ()=>{
+        //   setmove(0)
+        // });
+        // const clients : any = socket.get('Room Name');
+        socket.on('connect', () => {
+          // console.log("connected")
+            socket.emit("msgToServer", "sd")
+        });
+        socket.on('msgToClient', (message) => {
+
+
+         })
+        socket.on('observer', (ms : any) => {
+            console.log("just watchh")
+         })
+        socket.on('joined Room', (ms : any) => {
+            console.log("playerr")
+            console.log(ms)
+         })
     return () => {
       
     }
@@ -109,14 +128,21 @@ export default function Pong() {
     <>
     <Table ref={tableRef} >Pong
 
-<svg>
-    <circle ref={ballRef} id="ball"  cx="0" cy="0" r="20" fill="yellow"/>
-    {/* <line x1="0" y1="50%" x2="100%" y2="50%" stroke="#CCC" stroke-dasharray="8" /> */}
+      <svg>
+          <circle ref={ballRef} id="ball"  cx="110" cy="40" r="20" fill="yellow"/>
+          <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" stroke-dasharray="8" />
 
-    <rect ref={playerRef} y="0" width="33" height="180" fill="#FFF" />
+          <rect ref={playerRef} x="50" y="0" width="33" height="180" fill="#FFF" />
+          <rect ref={player2Ref}    y="0" width="33" height="180" fill="#FFF" />
 
-  </svg>
+        </svg>
     </Table>
+    <StartGButton onClick={()=>{
+      console.log("start")
+       requestAnimationFrame(moveBall);
+    }} >
+      START
+    </StartGButton>
     <StartGButton onClick={()=>{
       console.log("start")
        requestAnimationFrame(moveBall);
