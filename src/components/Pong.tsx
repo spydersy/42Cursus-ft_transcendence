@@ -59,6 +59,7 @@ export default function Pong() {
       if (xPos <=  ballRadius) { // player lost
         alert('Ooops');
       } else {
+      
         ballRef.current.setAttribute('cx', xPos);
         ballRef.current.setAttribute('cy', yPos);
         requestAnimationFrame(moveBall);
@@ -90,6 +91,9 @@ export default function Pong() {
         default: 
             break;
         }
+        const x = parseInt(playerRef.current.getAttribute('x'));
+      const y = parseInt(playerRef.current.getAttribute('y'));
+        socket.emit("player move",x,  y )
         // if (move != 0)
             // movePlayer(event)
     // console.log(playerRef.current.getAttribute('y'))
@@ -108,7 +112,12 @@ export default function Pong() {
           // console.log("connected")
             socket.emit("msgToServer", "sd")
         });
-        socket.on('msgToClient', (message) => {
+        socket.on('msgToClient', (x , y) => {
+          playerRef.current.setAttribute('x', x[0]);
+          playerRef.current.setAttribute('y', x[1]);
+          console.log(x[0])
+          console.log(x[1])
+          // console.log(y)
 
 
          })
@@ -117,7 +126,7 @@ export default function Pong() {
          })
         socket.on('joined Room', (ms : any) => {
             console.log("playerr")
-            console.log(ms)
+            // console.log(ms)
          })
     return () => {
       
