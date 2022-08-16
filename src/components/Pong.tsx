@@ -1,4 +1,4 @@
-import { calculateNewValue } from '@testing-library/user-event/dist/utils';
+
 import  React, { useEffect , useRef , useState  }  from 'react';
 
 import * as ReactDOM from 'react-dom'; 
@@ -12,8 +12,10 @@ export default function Pong() {
   const ballRef : any = useRef<SVGCircleElement >(null);
   const playerRef : any = useRef<SVGRectElement >(null);
   const player2Ref : any = useRef<SVGRectElement >(null);
-  const [move, setmove] = useState(0)
-  const [Player, setPlayer] = useState<SVGRectElement>()
+  var player : any = useRef<SVGRectElement >(null);
+  const [ready, setReady] = useState(false)
+  const [header, setHeader] = useState("waiting")
+  const [Player, setPlayer] = useState<SVGRectElement | string>()
   var UP_KEY = 38;
   var DOWN_KEY = 40;
   
@@ -70,64 +72,94 @@ export default function Pong() {
     
     function movePlayer(event :  KeyboardEvent)
     {
-      const cx = parseInt(playerRef.current.getAttribute('x'));
-      const cy = parseInt(playerRef.current.getAttribute('y'));
-      const h = parseInt(playerRef.current.getAttribute('height'));
+      const cx = parseInt(player.current.getAttribute('x'));
+      const cy = parseInt(player.current.getAttribute('y'));
+      const h = parseInt(player.current.getAttribute('height'));
       // console.log(event.keyCode )
       switch( event.keyCode ) {
         case UP_KEY:
           if (cy - 100 >= 0)
-            playerRef.current.setAttribute('y', cy - 100);
+          player.current.setAttribute('y', cy - 100);
           else
-          playerRef.current.setAttribute('y',0);
+          player.current.setAttribute('y',0);
           
           break;
           case DOWN_KEY:
               if (cy + 100 <= tableRef.current.offsetHeight - h)
-                  playerRef.current.setAttribute('y', cy + 100);
+                player.current.setAttribute('y', cy + 100);
               else
-              playerRef.current.setAttribute('y', tableRef.current.offsetHeight  -h)
+                player.current.setAttribute('y', tableRef.current.offsetHeight  -h)
             break;
         default: 
             break;
         }
-        const x = parseInt(playerRef.current.getAttribute('x'));
-      const y = parseInt(playerRef.current.getAttribute('y'));
+        const x = parseInt(player.current.getAttribute('x'));
+      const y = parseInt(player.current.getAttribute('y'));
         socket.emit("player move",x,  y )
         // if (move != 0)
             // movePlayer(event)
     // console.log(playerRef.current.getAttribute('y'))
     }
     useEffect(() => {
+
+      socket.emit("joinRoom", "room1")
+      console.log("join room")
+      socket.on('RoomJoined', (id : number ) => {
+        console.log(id)
+          setHeader("joined room Player " + id )
+          if (id === 0)
+          {
+            player = 1
+
+            }
+            else
+            {
+              player = 2
+          }
+
+
+      });
+      socket.on('roomFilled', (id : number ) => {
+          setHeader("joined room Watcher  " + id )
+      });
+      socket.on('StartGame', (id : number ) => {
+          setReady(true)
+      });
+
+     if (ready)
+     {
+      const wp2 = parseInt(player2Ref.current.getAttribute('width'));
+
+      player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 50)
+      player2Ref.current.setAttribute('y' , 0)
+      playerRef.current.setAttribute('x' ,  50)
+      playerRef.current.setAttribute('y' , 0)
+      console.log(player)
+      if (player === 1)
+        player = playerRef
+      else
+        player = player2Ref
+      document.addEventListener("keydown", movePlayer);
+
+      
+      socket.on('msgToClient', (x : any , y : any) => {
+        playerRef.current.setAttribute('x', x[0]);
+        playerRef.current.setAttribute('y', x[1]);
+        console.log(x[0])
+        console.log(x[1])
+        // console.log(y)
+
+
+       })
+      socket.on('observer', (ms : any) => {
+          console.log("just watchh")
+       })
+      socket.on('joined Room', (ms : any) => {
+          console.log("playerr")
+          // console.log(ms)
+       })
+     }
      
-     const wp2 = parseInt(player2Ref.current.getAttribute('width'));
-
-        // player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - wp2 - 50)
-        document.addEventListener("keydown", movePlayer);
-        // document.addEventListener("keyup", ()=>{
-        //   setmove(0)
-        // });
-        // const clients : any = socket.get('Room Name');
-        socket.on('connect', () => {
-          // console.log("connected")
-            socket.emit("msgToServer", "sd")
-        });
-        socket.on('msgToClient', (x , y) => {
-          playerRef.current.setAttribute('x', x[0]);
-          playerRef.current.setAttribute('y', x[1]);
-          console.log(x[0])
-          console.log(x[1])
-          // console.log(y)
-
-
-         })
-        socket.on('observer', (ms : any) => {
-            console.log("just watchh")
-         })
-        socket.on('joined Room', (ms : any) => {
-            console.log("playerr")
-            // console.log(ms)
-         })
     return () => {
       
     }
@@ -135,7 +167,11 @@ export default function Pong() {
   
   return (
     <>
-    <Table ref={tableRef} >Pong
+
+    <div>
+      Status : {header}
+    </div>
+   {ready ?  <Table ref={tableRef} >Pong
 
       <svg>
           <circle ref={ballRef} id="ball"  cx="110" cy="40" r="20" fill="yellow"/>
@@ -145,20 +181,12 @@ export default function Pong() {
           <rect ref={player2Ref}    y="0" width="33" height="180" fill="#FFF" />
 
         </svg>
-    </Table>
-    <StartGButton onClick={()=>{
-      console.log("start")
-       requestAnimationFrame(moveBall);
-    }} >
-      START
-    </StartGButton>
-    <StartGButton onClick={()=>{
-      console.log("start")
-       requestAnimationFrame(moveBall);
-    }} >
-      START
-    </StartGButton>
-    
+    </Table> :
+    <div>
+      QUEUE
+    </div>
+    }
+
 
     </>
   )
@@ -168,7 +196,8 @@ export default function Pong() {
 //style 
 const Table = styled.div`
 
-    height: calc(90vh - 50px);
+    width: 1000px;
+    height: 700px;
     position: relative;
     background-color: gray;
   svg{
@@ -179,13 +208,4 @@ const Table = styled.div`
     width: 100%;
     height: 100%;
   }
-`;
-const StartGButton = styled.button`
-
-   width: 150px;
-   height: 80px;
-  background-color: blue;
-  border-radius: 20px;
-    z-index: 2;
-  color: white;
 `;
