@@ -9,14 +9,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GameGateway = void 0;
+exports.GameGateway = exports.CatsController = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const common_1 = require("@nestjs/common");
+const common_2 = require("@nestjs/common");
+let CatsController = class CatsController {
+    findAll() {
+        return 'This action returns all cats';
+    }
+};
+__decorate([
+    (0, common_2.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", String)
+], CatsController.prototype, "findAll", null);
+CatsController = __decorate([
+    (0, common_2.Controller)('cats')
+], CatsController);
+exports.CatsController = CatsController;
 let GameGateway = class GameGateway {
     constructor() {
         this.logger = new common_1.Logger('GameLogger');
         this.roomlenght = 0;
+        this.roomArray = [];
     }
     afterInit(server) {
         this.logger.log("After Init");
@@ -25,26 +42,21 @@ let GameGateway = class GameGateway {
         this.logger.log("client is disconnected");
     }
     handleConnection(client, payload) {
-        this.logger.log("client is connected");
+        this.logger.log("client is connected " + client.id);
     }
-    handleJoinRoom(client, room) {
-        this.logger.log("client " + client.id + " joined room " + room);
-        var _room = this.wss.sockets.adapter.rooms.get(room);
-        console.log(_room);
-        if (_room && _room.has(client.id)) {
+    handleJoinRoom(client, args) {
+        this.logger.log("client " + client.id + " joined  " + args.name + " : " + args.room);
+        var _room = this.wss.sockets.adapter.rooms.get(args.room);
+        if (this.roomArray.includes(args.name)) {
+            client.join(room[0]);
         }
         else {
-            if (this.roomlenght < 2) {
-                client.emit("RoomJoined", this.roomlenght);
-            }
-            else
-                client.emit("roomFilled", this.roomlenght);
-            this.roomlenght++;
+            this.roomArray.puch(args.name);
         }
-        this.logger.log(this.roomlenght);
-        client.join(room);
-        if (this.roomlenght == 2)
-            this.wss.to(room).emit("StartGame");
+    }
+    handleLeaveRoom(client, room) {
+        this.roomlenght--;
+        client.leave(room[0]);
     }
 };
 __decorate([
@@ -60,9 +72,15 @@ __decorate([
 __decorate([
     (0, websockets_1.SubscribeMessage)('joinRoom'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], GameGateway.prototype, "handleJoinRoom", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('leaveRoom'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", void 0)
+], GameGateway.prototype, "handleLeaveRoom", null);
 GameGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {
