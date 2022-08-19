@@ -4,18 +4,22 @@ import  React, { useEffect , useRef , useState  }  from 'react';
 import * as ReactDOM from 'react-dom'; 
 // import {Draggable} from 'typescript-react-draggable';
 import styled from "styled-components"
+import axios from 'axios';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3030');
-export default function Pong() {
+interface myProps {
+  name: string;
+
+}
+export default function Pong({name}:myProps ) {
   const tableRef : any= useRef<HTMLHeadingElement>(null);
   const ballRef : any = useRef<SVGCircleElement >(null);
   const playerRef : any = useRef<SVGRectElement >(null);
   const player2Ref : any = useRef<SVGRectElement >(null);
-  var player : any = useRef<SVGRectElement >(null);
+  var player : number;
   const [ready, setReady] = useState(false)
   const [header, setHeader] = useState("waiting")
-  const [Player, setPlayer] = useState<SVGRectElement | string>()
+  const [Player, setPlayer] = useState<any>()
   var UP_KEY = 38;
   var DOWN_KEY = 40;
   
@@ -30,83 +34,93 @@ export default function Pong() {
     const y2 = parseInt(playerRef.current.getAttribute('y'));
     const w2 = parseInt(playerRef.current.getAttribute('width'));
     const h2 = parseInt(playerRef.current.getAttribute('height'));
-
-
+    
+    
     const colliding = x1 < (x2 + w2) && (x1 + w1) > x2 &&
-      y1 < (y2 + h2) && (y1 + h1) > y2;
+    y1 < (y2 + h2) && (y1 + h1) > y2;
     return colliding;
   }
   function moveBall() {
-      const cx = parseInt(ballRef.current.getAttribute('cx'));
-      const cy = parseInt(ballRef.current.getAttribute('cy'));
-
-      const ballRadius = parseInt(ballRef.current.getAttribute('r'));
-      const leftLimit = ballRadius;
-      const rightLimit = tableRef.current.offsetWidth - ballRadius;
-      const topLimit = ballRadius;
-      const bottomLimit = tableRef.current.offsetHeight - ballRadius;
-      
-      const [nextCX, nextCY] = [cx + directionX, cy + directionY];
-      if (nextCX > rightLimit) 
-          directionX = -directionX;
-      if (nextCY < topLimit || nextCY > bottomLimit )
-          directionY = -directionY;
-      if (nextCY < topLimit) {
-        // directionY = -directionY;
-      }
-      if (detectCollision()) 
-        directionX = -directionX;
-      const [xPos, yPos] = [cx + directionX, cy + directionY];
-      console.log(xPos)
-      if (xPos <=  ballRadius) { // player lost
-        alert('Ooops');
-      } else {
-      
-        ballRef.current.setAttribute('cx', xPos);
-        ballRef.current.setAttribute('cy', yPos);
-        requestAnimationFrame(moveBall);
-      }
-      // requestAnimationFrame(moveBall);
+    const cx = parseInt(ballRef.current.getAttribute('cx'));
+    const cy = parseInt(ballRef.current.getAttribute('cy'));
+    
+    const ballRadius = parseInt(ballRef.current.getAttribute('r'));
+    const leftLimit = ballRadius;
+    const rightLimit = tableRef.current.offsetWidth - ballRadius;
+    const topLimit = ballRadius;
+    const bottomLimit = tableRef.current.offsetHeight - ballRadius;
+    
+    const [nextCX, nextCY] = [cx + directionX, cy + directionY];
+    if (nextCX > rightLimit) 
+    directionX = -directionX;
+    if (nextCY < topLimit || nextCY > bottomLimit )
+    directionY = -directionY;
+    if (nextCY < topLimit) {
+      // directionY = -directionY;
     }
+    if (detectCollision()) 
+    directionX = -directionX;
+    const [xPos, yPos] = [cx + directionX, cy + directionY];
+    console.log(xPos)
+    if (xPos <=  ballRadius) { // player lost
+      alert('Ooops');
+    } else {
+      
+      ballRef.current.setAttribute('cx', xPos);
+      ballRef.current.setAttribute('cy', yPos);
+      requestAnimationFrame(moveBall);
+    }
+    // requestAnimationFrame(moveBall);
+  }
+  
+  
+  function movePlayer(event :  KeyboardEvent)
+  {
+    console.log(player)
+    
+    const p = Player?.current;
+    console.log(p)
+    // const cx = parseInt(p.getAttribute('x'));
+    // const cy = parseInt(p.getAttribute('y'));
+    // const h = parseInt(p.getAttribute('height'));
     
     
-    function movePlayer(event :  KeyboardEvent)
-    {
-      const cx = parseInt(player.current.getAttribute('x'));
-      const cy = parseInt(player.current.getAttribute('y'));
-      const h = parseInt(player.current.getAttribute('height'));
-      // console.log(event.keyCode )
-      switch( event.keyCode ) {
-        case UP_KEY:
-          if (cy - 100 >= 0)
-          player.current.setAttribute('y', cy - 100);
-          else
-          player.current.setAttribute('y',0);
-          
-          break;
-          case DOWN_KEY:
-              if (cy + 100 <= tableRef.current.offsetHeight - h)
-                player.current.setAttribute('y', cy + 100);
-              else
-                player.current.setAttribute('y', tableRef.current.offsetHeight  -h)
-            break;
-        default: 
-            break;
-        }
-        const x = parseInt(player.current.getAttribute('x'));
-      const y = parseInt(player.current.getAttribute('y'));
-        socket.emit("player move",x,  y )
-        // if (move != 0)
-            // movePlayer(event)
-    // console.log(playerRef.current.getAttribute('y'))
+    
+    
+    // switch( event.keyCode ) {
+      //   case UP_KEY:
+      //     if (cy - 100 >= 0)
+      //     p.setAttribute('y', cy - 100);
+      //     else
+      //     p.setAttribute('y',0);
+      
+      //     break;
+      //     case DOWN_KEY:
+      //         if (cy + 100 <= tableRef.current.offsetHeight - h)
+      //           p.setAttribute('y', cy + 100);
+      //         else
+      //           p.setAttribute('y', tableRef.current.offsetHeight  -h)
+      //       break;
+      //   default: 
+      //       break;
+      //   }
+      //   const x = parseInt(p.getAttribute('x'));
+      // const y = parseInt(p.getAttribute('y'));
+      //   socket.emit("player move",x,  y )
+      
     }
     useEffect(() => {
-
-      socket.emit("joinRoom", "room1")
-      console.log("join room")
+      const socket = io('http://localhost:3030');
+    
+      var args = {
+        name : name,
+        room : "room1"
+      }
+      socket.emit("joinRoom", args)
+ 
       socket.on('RoomJoined', (id : number ) => {
         console.log(id)
-          setHeader("joined room Player " + id )
+          setHeader( name +" joined room Player " + id )
           if (id === 0)
           {
             player = 1
@@ -120,7 +134,7 @@ export default function Pong() {
 
       });
       socket.on('roomFilled', (id : number ) => {
-          setHeader("joined room Watcher  " + id )
+          setHeader(name +" joined room Watcher  " + id )
       });
       socket.on('StartGame', (id : number ) => {
           setReady(true)
@@ -136,9 +150,10 @@ export default function Pong() {
       playerRef.current.setAttribute('y' , 0)
       console.log(player)
       if (player === 1)
-        player = playerRef
+          setPlayer(playerRef)
       else
-        player = player2Ref
+          setPlayer(player2Ref)
+
       document.addEventListener("keydown", movePlayer);
 
       
@@ -161,7 +176,7 @@ export default function Pong() {
      }
      
     return () => {
-      
+      socket.emit("leaveRoom", "room1")
     }
   })
   

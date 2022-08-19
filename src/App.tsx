@@ -6,19 +6,32 @@ import Pong from './components/Pong';
 
 function App() {
   const [start, setstart] = useState(false)
+  const [name, setname] = useState("")
+  const inputRef : any= useRef<any>(null);
+
   return (
     <div className="App">
        
         {
           start ? 
-          <Pong/>
+          <Pong name={name}/>
           :
+          
+<div>        <Input ref={inputRef} type="text" placeholder="Enter your name .."
+          
+    />
         <StartGButton onClick={()=>{
           console.log("start")
-          setstart(true)
+          var namee : string = inputRef.current.value
+          if (namee)
+          {
+            setname(namee)
+            setstart(true)
+          }
           }} >
       START
-    </StartGButton>
+    </StartGButton> 
+    </div>
 
         }
     </div>
@@ -34,4 +47,13 @@ const StartGButton = styled.button`
   border-radius: 20px;
     z-index: 2;
   color: white;
+`;
+const Input = styled.input`
+
+   width: 150px;
+   height: 40px;
+  /* background-color: blue; */
+  border-radius: 20px;
+    z-index: 2;
+  color: black;
 `;
