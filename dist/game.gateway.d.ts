@@ -12,5 +12,5 @@ export declare class GameGateway implements OnGatewayInit, OnGatewayConnection, 
     handleDisconnect(client: any): void;
     handleConnection(client: any, payload: any): void;
     handleJoinRoom(client: any, args: any): void;
-    handleLeaveRoom(client: any, room: string): void;
+    handleLeaveRoom(client: any, args: any): void;
 }

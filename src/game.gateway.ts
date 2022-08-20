@@ -24,7 +24,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   @WebSocketServer() wss : Server
   private logger: Logger = new Logger('GameLogger')
   private roomlenght: number = 0
-  private roomArray: Array<string> = []
+  private roomArray: string[] = []
 
   afterInit(server: any) {
     this.logger.log("After Init")
@@ -42,6 +42,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   @SubscribeMessage('msgToServer')
   handleConnection(client: any, payload: any): void {
     this.logger.log("client is connected "  + client.id)
+    client.emit("disconnected")
     // console.log("client is connected")
 
   }
@@ -53,13 +54,15 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     var _room = this.wss.sockets.adapter.rooms.get(args.room);
     if (this.roomArray.includes(args.name))
     {
-        client.join(room[0])
-
+      
     }
     else
     {
-        this.roomArray.puch(args.name)
+        client.join(args.room)
+        this.roomArray.push(args.name)
+        client.emit("RoomJoined",this.roomArray.length )
     }
+
     // if (_room && _room.has(client.id))
     // {
     //   // var r = this.wss.sockets.adapter.rooms
@@ -71,7 +74,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     // {
     //   if (this.roomlenght < 2)
     //   {
-    //     client.emit("RoomJoined",this.roomlenght )
+    //    
       
     //   }
     //   else
@@ -83,15 +86,18 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     // this.logger.log(this.roomlenght)
   
     // client.join(room[0])
-    // if (this.roomlenght == 2)
-    //     this.wss.to(room).emit("StartGame" )
+    if (this.roomArray.length == 2)
+        this.wss.to(args.room).emit("StartGame" )
 
     // console.log("client is connected")
   }
   @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(client: any, room: string): void {
-    this.roomlenght--;
-    client.leave(room[0])
+  handleLeaveRoom(client: any, args: any): void {
+    this.logger.log("mattet")
+    var i =     this.roomArray.indexOf(args.name);
+    if(i != -1)
+	    this.roomArray.splice(i, 1);
+    client.leave(args.room)
 
 
     // console.log("client is connected")

@@ -43,20 +43,27 @@ let GameGateway = class GameGateway {
     }
     handleConnection(client, payload) {
         this.logger.log("client is connected " + client.id);
+        client.emit("disconnected");
     }
     handleJoinRoom(client, args) {
         this.logger.log("client " + client.id + " joined  " + args.name + " : " + args.room);
         var _room = this.wss.sockets.adapter.rooms.get(args.room);
         if (this.roomArray.includes(args.name)) {
-            client.join(room[0]);
         }
         else {
-            this.roomArray.puch(args.name);
+            client.join(args.room);
+            this.roomArray.push(args.name);
+            client.emit("RoomJoined", this.roomArray.length);
         }
+        if (this.roomArray.length == 2)
+            this.wss.to(args.room).emit("StartGame");
     }
-    handleLeaveRoom(client, room) {
-        this.roomlenght--;
-        client.leave(room[0]);
+    handleLeaveRoom(client, args) {
+        this.logger.log("mattet");
+        var i = this.roomArray.indexOf(args.name);
+        if (i != -1)
+            this.roomArray.splice(i, 1);
+        client.leave(args.room);
     }
 };
 __decorate([
@@ -78,7 +85,7 @@ __decorate([
 __decorate([
     (0, websockets_1.SubscribeMessage)('leaveRoom'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], GameGateway.prototype, "handleLeaveRoom", null);
 GameGateway = __decorate([
