@@ -1,5 +1,5 @@
 
-import  React, { useEffect , useRef , useState  }  from 'react';
+import  React, { useEffect , useRef , useState ,useLayoutEffect }  from 'react';
 
 import * as ReactDOM from 'react-dom'; 
 // import {Draggable} from 'typescript-react-draggable';
@@ -109,8 +109,8 @@ export default function Pong({name}:myProps ) {
       //   socket.emit("player move",x,  y )
       
     }
+    const socket = io('http://localhost:3030');
     useEffect(() => {
-      const socket = io('http://localhost:3030');
     
       var args = {
         name : name,
@@ -121,7 +121,7 @@ export default function Pong({name}:myProps ) {
       socket.on('RoomJoined', (id : number ) => {
         console.log(id)
           setHeader( name +" joined room Player " + id )
-          if (id === 0)
+          if (id === 1)
           {
             player = 1
 
@@ -130,7 +130,7 @@ export default function Pong({name}:myProps ) {
             {
               player = 2
           }
-
+          console.log(player)
 
       });
       socket.on('roomFilled', (id : number ) => {
@@ -139,47 +139,31 @@ export default function Pong({name}:myProps ) {
       socket.on('StartGame', (id : number ) => {
           setReady(true)
       });
+      socket.on('disconnected', function() {
 
+        socket.emit('leaveRoom', args);
+
+    });
      if (ready)
      {
       const wp2 = parseInt(player2Ref.current.getAttribute('width'));
-
       player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 50)
       player2Ref.current.setAttribute('y' , 0)
       playerRef.current.setAttribute('x' ,  50)
       playerRef.current.setAttribute('y' , 0)
-      console.log(player)
-      if (player === 1)
-          setPlayer(playerRef)
-      else
-          setPlayer(player2Ref)
-
+      console.log("Player : " + player)
+      
       document.addEventListener("keydown", movePlayer);
 
-      
-      socket.on('msgToClient', (x : any , y : any) => {
-        playerRef.current.setAttribute('x', x[0]);
-        playerRef.current.setAttribute('y', x[1]);
-        console.log(x[0])
-        console.log(x[1])
-        // console.log(y)
+     
 
-
-       })
-      socket.on('observer', (ms : any) => {
-          console.log("just watchh")
-       })
-      socket.on('joined Room', (ms : any) => {
-          console.log("playerr")
-          // console.log(ms)
-       })
      }
      
     return () => {
-      socket.emit("leaveRoom", "room1")
     }
   })
   
+
   return (
     <>
 
@@ -190,7 +174,7 @@ export default function Pong({name}:myProps ) {
 
       <svg>
           <circle ref={ballRef} id="ball"  cx="110" cy="40" r="20" fill="yellow"/>
-          <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" stroke-dasharray="8" />
+          <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC"  />
 
           <rect ref={playerRef} x="50" y="0" width="33" height="180" fill="#FFF" />
           <rect ref={player2Ref}    y="0" width="33" height="180" fill="#FFF" />
