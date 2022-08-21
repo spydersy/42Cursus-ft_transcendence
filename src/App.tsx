@@ -1,9 +1,11 @@
 import  React, { useEffect , useRef , useState  }  from 'react';
 import styled from "styled-components"
-
+import {theme} from './theme'
+import { ThemeProvider } from 'styled-components';
 import './App.css';
 import Pong from './components/Pong';
-
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import SignIn from './Pages/SignIn';
 function App() {
   const [start, setstart] = useState(false)
   const [name, setname] = useState("")
@@ -11,29 +13,13 @@ function App() {
 
   return (
     <div className="App">
-       
-        {
-          start ? 
-          <Pong name={name}/>
-          :
-          
-<div>        <Input ref={inputRef} type="text" placeholder="Enter your name .."
-          
-    />
-        <StartGButton onClick={()=>{
-          console.log("start")
-          var namee : string = inputRef.current.value
-          if (namee)
-          {
-            setname(namee)
-            setstart(true)
-          }
-          }} >
-      START
-    </StartGButton> 
-    </div>
+       <ThemeProvider theme={theme}>
+         <Router>
 
-        }
+     <Route path="/signin" element={<SignIn />} />
+         </Router>
+fefef
+       </ThemeProvider>
     </div>
   );
 }
@@ -43,7 +29,7 @@ const StartGButton = styled.button`
 
    width: 150px;
    height: 80px;
-  background-color: blue;
+  background-color:  ${props => props.theme.colors.primaryText};
   border-radius: 20px;
     z-index: 2;
   color: white;
