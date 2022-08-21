@@ -4,7 +4,11 @@ import {theme} from './theme'
 import { ThemeProvider } from 'styled-components';
 import './App.css';
 import Pong from './components/Pong';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes, // instead of "Switch"
+  Route,
+} from "react-router-dom";
 import SignIn from './Pages/SignIn';
 function App() {
   const [start, setstart] = useState(false)
@@ -14,11 +18,12 @@ function App() {
   return (
     <div className="App">
        <ThemeProvider theme={theme}>
-         <Router>
-
-     <Route path="/signin" element={<SignIn />} />
-         </Router>
-fefef
+       <BrowserRouter>
+      <Routes>
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/game" element={<Pong name="mohamed" />} />
+      </Routes>
+    </BrowserRouter>
        </ThemeProvider>
     </div>
   );
