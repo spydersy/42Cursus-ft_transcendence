@@ -9,18 +9,28 @@ const BaseColor  = {
 export interface ThemeProps {
   colors  :{
     primaryText: string,
-    darkerText: string,
-    lighterText: string,
+    seconderyText: string,
+    primarybg: string,
+
+  },
+  fontSize  :{
+    // primarybg: string,
+    xl: string,
+    l: string
   }
 
   }
   
   export const theme: ThemeProps = {
     colors: {
+      primaryText: "#FFFFFF",
+      seconderyText: "#434343",
+      primarybg: "#157DBD",
 
-      primaryText: "#F2F5FF",
-      darkerText: "#F2F5FF",
-      lighterText: "#ABABAB",
+    },
+    fontSize: {
+      xl : "30px",
+      l : "17px"
     }
     
   };

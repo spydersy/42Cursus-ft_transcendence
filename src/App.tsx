@@ -10,6 +10,7 @@ import {
   Route,
 } from "react-router-dom";
 import SignIn from './Pages/SignIn';
+import Upperbar from './components/Upperbar';
 function App() {
   const [start, setstart] = useState(false)
   const [name, setname] = useState("")
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/game" element={<Pong name="mohamed" />} />
+        <Route path="/" element={<Upperbar />} />
       </Routes>
     </BrowserRouter>
        </ThemeProvider>
