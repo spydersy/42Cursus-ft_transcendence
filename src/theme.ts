@@ -11,12 +11,14 @@ export interface ThemeProps {
     primaryText: string,
     seconderyText: string,
     primarybg: string,
+    danger: string
 
   },
   fontSize  :{
     // primarybg: string,
     xl: string,
-    l: string
+    l: string,
+    s: string
   }
 
   }
@@ -26,11 +28,13 @@ export interface ThemeProps {
       primaryText: "#FFFFFF",
       seconderyText: "#434343",
       primarybg: "#157DBD",
+      danger: "#F13950"
 
     },
     fontSize: {
       xl : "30px",
-      l : "17px"
+      l : "17px",
+      s : "12px"
     }
     
   };
