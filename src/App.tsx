@@ -11,6 +11,8 @@ import {
 } from "react-router-dom";
 import SignIn from './Pages/SignIn';
 import Home from './Pages/Home';
+import Upperbar from './components/Upperbar';
+import Sidebar from './components/Sidebar';
 function App() {
   const [start, setstart] = useState(false)
   const [name, setname] = useState("")
@@ -19,16 +21,38 @@ function App() {
   return (
     <div className="App">
        <ThemeProvider theme={theme}>
-       <BrowserRouter>
-      <Routes>
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/game" element={<Pong name="mohamed" />} />
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
+        <main>
+        <Upperbar/>
+        <Sidebar/>
+        <Cont >
+    
+          <BrowserRouter>
+          <Routes>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/game" element={<Pong name="mohamed" />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </BrowserRouter>
+
+</Cont>
+
+        </main>
        </ThemeProvider>
     </div>
   );
 }
 
+const Cont = styled.div`
+position: absolute;
+
+  width: calc(100% - 250px);
+  height: calc(100% - 70px);
+  top: 70px;
+  left: 250px;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+  /* margin-right: auto; */
+  /* margin-left: auto; */
+
+`;
 export default App;

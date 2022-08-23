@@ -98,7 +98,7 @@ export default function Carousel() {
 		<CarouselItem id="item2" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(2)}}  className="carouselItemInner trans3d">2</CarouselItemInner></CarouselItem>
 		<CarouselItem id="item3" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(3)}}  className="carouselItemInner trans3d">3</CarouselItemInner></CarouselItem>
 		<CarouselItem id="item4" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(4)}}  className="carouselItemInner trans3d">4</CarouselItemInner></CarouselItem>
-		<CarouselItem id="item5" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(5)}}  className="carouselItemInner trans3d">5</CarouselItemInner></CarouselItem>
+		{/* <CarouselItem id="item5" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(5)}}  className="carouselItemInner trans3d">5</CarouselItemInner></CarouselItem> */}
 		
     </CarouselContainer>
     </Container>
