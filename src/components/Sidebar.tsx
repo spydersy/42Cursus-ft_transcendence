@@ -1,4 +1,4 @@
-import React , {useState}from 'react'
+import React , {useState , useRef} from 'react'
 import styled , {css} from "styled-components"
 import ExpandIcon from "../assets/imgs/dashboardIcon.svg"
 import {ReactComponent as DashIcon} from "../assets/imgs/dashboardIcon.svg";
@@ -13,33 +13,51 @@ export interface barProps {
     }
     
 export default function Sidebar() {
+    const sideBaRed : any= useRef<HTMLElement>(null);
     const [open, setopen] = useState(true)
     function openClose()
     {
-        
+        console.log(sideBaRed)
+        if (open)
+            sideBaRed.current.style.width = "76px"
+            else
+            sideBaRed.current.style.width = "243px"
+            
         setopen(!open)
     }
   return (
-    <SidebarWrraper open>
+    <SidebarWrraper ref={sideBaRed} open={open}>
         {open ? <Left onClick={openClose}   />: <Right onClick={openClose} /> }
 
 <Items>
 
         <Item>
             <DashIcon />
-            Dashboard
+            {
+                open ? "Dashboard" : ""  
+            }
+            
         </Item>
         <Item>
             <DMIcon />
-            Direct messages
+            {
+                open ? "Direct messages" : ""  
+            }
+           
         </Item>
         <Item>
             <RoomIcon />
-            Rooms
+            {
+                open ? "Rooms" : ""  
+            }
+            
         </Item>
         <Item>
             <UsersIcon />
-            All Users
+            {
+                open ? "All Users" : ""  
+            }
+            
         </Item>
 
 </Items>
@@ -59,27 +77,21 @@ const SidebarWrraper = styled.div<barProps>`
     align-items: flex-end;
     flex-direction: column;
     border-radius: 10px;
+    transition-duration: 200ms;
+    overflow: hidden;
+    ${props => (props.open === false) && css`
+    align-items: center ;
 
-    ${props => props.open && css`
-&::after{
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color:  ${props => props.theme.colors.danger};;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }`
+`
   }
+
     
 `;
 const Right = styled(ArrowRight)`
   
-        align-items: flex-end; 
+        align-items: center; 
          margin-top: 20px; 
          margin-bottom: 60px;
-         margin-right: 10px;
          path{
              fill: ${props => props.theme.colors.seconderyText}; 
         }
@@ -128,6 +140,7 @@ const Item = styled.div`
     align-items: center;
     /* justify-content:  */
     flex-direction: row;
+    overflow: hidden;
     cursor: pointer;
     svg{
         margin: 0 19px;
