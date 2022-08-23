@@ -10,7 +10,7 @@ import {
   Route,
 } from "react-router-dom";
 import SignIn from './Pages/SignIn';
-import Upperbar from './components/Upperbar';
+import Home from './Pages/Home';
 function App() {
   const [start, setstart] = useState(false)
   const [name, setname] = useState("")
@@ -23,7 +23,7 @@ function App() {
       <Routes>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/game" element={<Pong name="mohamed" />} />
-        <Route path="/" element={<Upperbar />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
        </ThemeProvider>
@@ -32,21 +32,3 @@ function App() {
 }
 
 export default App;
-const StartGButton = styled.button`
-
-   width: 150px;
-   height: 80px;
-  background-color:  ${props => props.theme.colors.primaryText};
-  border-radius: 20px;
-    z-index: 2;
-  color: white;
-`;
-const Input = styled.input`
-
-   width: 150px;
-   height: 40px;
-  /* background-color: blue; */
-  border-radius: 20px;
-    z-index: 2;
-  color: black;
-`;

@@ -11,6 +11,8 @@ export interface ThemeProps {
     primaryText: string,
     seconderyText: string,
     primarybg: string,
+    seconderybg: string,
+    green: string,
     danger: string
 
   },
@@ -28,6 +30,8 @@ export interface ThemeProps {
       primaryText: "#FFFFFF",
       seconderyText: "#434343",
       primarybg: "#157DBD",
+      seconderybg: '#ACCBDE',
+      green: '#3CC592',
       danger: "#F13950"
 
     },
