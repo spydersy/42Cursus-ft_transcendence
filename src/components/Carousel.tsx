@@ -35,9 +35,7 @@ export default function Carousel() {
 			mouseX = -(-(window.innerWidth * .5) + event.pageX) * .0025;
 			mouseY = -(-(window.innerHeight * .5) + event.pageY ) * .01;
 			mouseZ = -(radius) - (Math.abs(-(window.innerHeight * .5) + event.pageY ) - 200);
-            console.log(mouseX)
-            console.log(mouseY)
-            console.log(mouseZ)
+
 		}
 		
 		// loops and sets the carousel 3d properties
@@ -62,10 +60,7 @@ export default function Carousel() {
         carousel = $( '#carouselContainer' );
         item = $( '.carouselItem' );
         itemLength = $( '.carouselItem' ).length;
-        console.log(w)
-        console.log(container)
-        console.log(item)
-        console.log(itemLength)
+      
         rY = 360 / itemLength;
         radius = Math.round( (250) / Math.tan( Math.PI / itemLength ) );
 
@@ -97,12 +92,13 @@ export default function Carousel() {
     
   return (
     <Container className='test' >
+		
         <CarouselContainer id="carouselContainer" className='trans3d'>
-        <CarouselItem id="item1" className="carouselItem trans3d"><CarouselItemInner className="carouselItemInner trans3d">1</CarouselItemInner></CarouselItem>
-		<CarouselItem id="item2" className="carouselItem trans3d"><CarouselItemInner className="carouselItemInner trans3d">2</CarouselItemInner></CarouselItem>
-		<CarouselItem id="item3" className="carouselItem trans3d"><CarouselItemInner className="carouselItemInner trans3d">3</CarouselItemInner></CarouselItem>
-		<CarouselItem id="item4" className="carouselItem trans3d"><CarouselItemInner className="carouselItemInner trans3d">4</CarouselItemInner></CarouselItem>
-		<CarouselItem id="item5" className="carouselItem trans3d"><CarouselItemInner className="carouselItemInner trans3d">5</CarouselItemInner></CarouselItem>
+        <CarouselItem id="item1" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(1)}}   className="carouselItemInner trans3d">1</CarouselItemInner></CarouselItem>
+		<CarouselItem id="item2" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(2)}}  className="carouselItemInner trans3d">2</CarouselItemInner></CarouselItem>
+		<CarouselItem id="item3" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(3)}}  className="carouselItemInner trans3d">3</CarouselItemInner></CarouselItem>
+		<CarouselItem id="item4" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(4)}}  className="carouselItemInner trans3d">4</CarouselItemInner></CarouselItem>
+		<CarouselItem id="item5" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(5)}}  className="carouselItemInner trans3d">5</CarouselItemInner></CarouselItem>
 		
     </CarouselContainer>
     </Container>
@@ -111,7 +107,6 @@ export default function Carousel() {
 
 
 const Container = styled.div`
-
     .trans3d{
         -webkit-transform-style: preserve-3d;
 		-webkit-transform: translate3d(0, 0, 0);
@@ -124,13 +119,16 @@ const Container = styled.div`
     }
 `;
 const CarouselContainer = styled.section`
+
+
 		position:absolute;
-		margin-left:-500px;
-		margin-top:-500px;
-		left:50%;
-		top:50%;
-		width:1000px;
-		height:1000px;
+		/* margin-left:-500px;
+		margin-top:-500px; */
+		left:40%;
+		top:0%;
+		width:600px;
+		height:600px;
+		transform: translate(-50% , -50%);
 `;
 const CarouselItem = styled.figure`
 		position:absolute;
@@ -143,8 +141,8 @@ const CarouselItem = styled.figure`
 `;
 const CarouselItemInner = styled.div`
         overflow: hidden;
-
-    width:320px;
+cursor: pointer;
+    width:200px;
     height:130px;
     position:absolute;
     background-color:  ${props => props.theme.colors.primarybg};
