@@ -4,7 +4,9 @@ import Sidebar from '../components/Sidebar'
 import Upperbar from '../components/Upperbar'
 import styled from "styled-components"
 import Tet from "../assets/imgs/tests/test2.png"
-
+import Penta from "../assets/imgs/penta.svg"
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 const player = {
   name: "Melkarmi",
@@ -14,9 +16,9 @@ const player = {
 export default function Home() {
   return (
     <div className='container' >
-      <HeadComponent title="Statistic" />
       <Hero>
         <PlayerCard player={player} />
+
         <Stats player={player} />
     </Hero>
       {/* <Carousel/> */}
@@ -27,6 +29,7 @@ export default function Home() {
 
 const Hero = styled.div`
 width: 100%;
+margin-top: 100px;
 display: flex;
 align-items: center;
 justify-content: space-between;
@@ -60,7 +63,7 @@ export function PlayerCard(props: PlayerCardProps) {
   )
 }
 const PlayerCardStyle = styled.div`
-  margin-top: 160px;
+
   width: 388px;
   height: 243px;
   display: flex;
@@ -117,17 +120,100 @@ const PlayerCardStyle = styled.div`
 export function Stats(props: PlayerCardProps) {
   return (
     <StatsStyle  >
-     dd
+     <HeadComponent title="Stats"/>
+     <Data>
+      
+     <div style={{ width: 100, height: 100 }}>
+      <CircularProgressbar  styles={{
+          path: {
+            stroke: `#F13950`,
+            strokeLinecap: 'round',
+            transition: 'stroke-dashoffset 1s ease 0s',
+            transformOrigin: 'center center',
+          },
+          trail: {
+            stroke: '#ACCBDE',
+            strokeLinecap: 'round',
+
+          },
+          text: {
+            fill: '#000',
+            fontSize: '16px',
+          },
+      }} value={15}  text={`${15}%`} />
+    </div>
+    <div id="pentagon">
+      <img src={Penta} alt="penta" />
+    </div>
+     <div style={{ width: 100, height: 100 }}>
+      <CircularProgressbar  styles={{
+          path: {
+            stroke: `#3CC592`,
+            strokeLinecap: 'round',
+            transition: 'stroke-dashoffset 1s ease 0s',
+            transformOrigin: 'center center',
+          },
+          trail: {
+            stroke: '#ACCBDE',
+            strokeLinecap: 'round',
+
+          },
+          text: {
+            fill: '#000',
+            fontSize: '16px',
+          },
+      }}
+      value={66}  text={`${66}%`} />
+    </div>
+    {/* {\*
+    <div style={{ width: 100, height: 100 }}>
+      <CircularProgressbar value={66} />
+    </div>
+  </div>
+</div>  */}
+     </Data>
+     <ProgressBar>
+  <div>
+    d
+  </div>
+     </ProgressBar>
     </StatsStyle>
   )
 }
 
 const StatsStyle = styled.div`
-width: 500px;
-height: 100%;
- background-color: red;
-`;
+  width: 500px;
+  height: 243px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+`
+const Data = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  #pentagon {
+  position: relative;
+}
+`
+const ProgressBar = styled.div`
+  width: 100%;
+  background-color: ${props => props.theme.colors.seconderybg};
+  border-radius: 12.3071px;
+  display: flex;
+  div{
+    align-items: flex-start;  
+    height: 100%;
+    width: 30%;
+    background-color: ${props => props.theme.colors.primarybg};
+    border-radius: 12.3071px;
+  }
 
+`
 export interface headProps {
   title: string;
 }
@@ -149,3 +235,4 @@ const Head = styled.div`
   color:  ${props => props.theme.colors.seconderyText};;
   padding: 4px 0px;
 `;
+
