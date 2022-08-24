@@ -20,6 +20,7 @@ export interface ThemeProps {
     // primarybg: string,
     xl: string,
     l: string,
+    ll: string,
     s: string
   }
 
@@ -37,6 +38,7 @@ export interface ThemeProps {
     },
     fontSize: {
       xl : "30px",
+      ll : "22px",
       l : "17px",
       s : "12px"
     }
