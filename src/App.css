@@ -68,22 +68,42 @@ body {
   /* }  */
 }
 .container{
-  width: 1500px;
+  /* width: 1500px; */
   margin: 0 auto;
-
-    @media (min-width: 576px) {
+}
+@media  only screen and(min-width: 576px) {
+  .container{
+    /* width: 1500px; */
+    margin: 0 auto;
     max-width: 540px;
   }
-  @media (min-width: 768px) {
+}
+@media  only screen and (min-width: 768px) {
+  .container{
     max-width: 720px;
+    /* width: 1500px; */
+    margin: 0 auto;
   }
-  @media (min-width: 992px) {
+}
+@media  only screen and (min-width: 992px) {
+  .container{
+    /* width: 1500px; */
+    margin: 0 auto;
     max-width: 960px;
   }
-  @media (min-width: 1200px) {
+}
+@media  only screen and (min-width: 1200px) {
+  container{
     max-width: 1140px;
+    /* width: 1500px; */
+    margin: 0 auto;
   }
-  @media (min-width: 1400px) {
+}
+@media  only screen and (min-width: 1400px) {
+  container{
+    /* width: 1500px; */
+    margin: 0 auto;
+    background-color: red;
     max-width: 2000px;
   }
 }
