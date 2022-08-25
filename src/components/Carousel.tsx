@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import $ from 'jquery'; 
 import { gsap, TweenMax , Quint , Expo} from 'gsap';
 
+import FriendImg from "../assets/imgs/1vf.png"
+import RandImg from "../assets/imgs/1vr.png"
+import AiImg from "../assets/imgs/1vai.png"
+import Tidk from "../assets/imgs/tidk.png"
 
 export default function Carousel() {
     var w, container, carousel : Object, item, radius : number, itemLength, rY, ticker, fps; 
@@ -94,10 +98,18 @@ export default function Carousel() {
     <Container className='test' >
 		
         <CarouselContainer id="carouselContainer" className='trans3d'>
-        <CarouselItem id="item1" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(1)}}   className="carouselItemInner trans3d">1</CarouselItemInner></CarouselItem>
-		<CarouselItem id="item2" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(2)}}  className="carouselItemInner trans3d">2</CarouselItemInner></CarouselItem>
-		<CarouselItem id="item3" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(3)}}  className="carouselItemInner trans3d">3</CarouselItemInner></CarouselItem>
-		<CarouselItem id="item4" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(4)}}  className="carouselItemInner trans3d">4</CarouselItemInner></CarouselItem>
+        <CarouselItem id="item1" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(1)}}   className="carouselItemInner trans3d">
+			 <img src={FriendImg} alt="" />
+			 </CarouselItemInner></CarouselItem>
+		<CarouselItem id="item2" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(2)}}  className="carouselItemInner trans3d">
+			 <img src={RandImg} alt="" />
+			 </CarouselItemInner></CarouselItem>
+		<CarouselItem id="item3" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(3)}}  className="carouselItemInner trans3d">
+			 <img src={AiImg} alt="" />
+			 </CarouselItemInner></CarouselItem>
+		<CarouselItem id="item4" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(4)}}  className="carouselItemInner trans3d">
+			 <img src={Tidk} alt="" />
+			 </CarouselItemInner></CarouselItem>
 		{/* <CarouselItem id="item5" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(5)}}  className="carouselItemInner trans3d">5</CarouselItemInner></CarouselItem> */}
 		
     </CarouselContainer>
@@ -107,6 +119,7 @@ export default function Carousel() {
 
 
 const Container = styled.div`
+	position: relative;
     .trans3d{
         -webkit-transform-style: preserve-3d;
 		-webkit-transform: translate3d(0, 0, 0);
@@ -124,7 +137,7 @@ const CarouselContainer = styled.section`
 		position:absolute;
 		/* margin-left:-500px;
 		margin-top:-500px; */
-		left:40%;
+		left:18%;
 		top:0%;
 		width:600px;
 		height:600px;

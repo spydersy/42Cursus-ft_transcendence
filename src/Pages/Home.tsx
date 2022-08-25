@@ -7,10 +7,14 @@ import Tet from "../assets/imgs/tests/test2.png"
 import Penta from "../assets/imgs/penta.svg"
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import GameModes from '../components/GameModes'
 
 const player = {
-  name: "Melkarmi",
-  lvl: "Gold"
+  name: "Alchemist",
+  lvl: "Gold",
+  gamePlayed : 350,
+  lost : 200,
+  won : 150,
 }
 
 export default function Home() {
@@ -18,10 +22,12 @@ export default function Home() {
     <div className='container' >
       <Hero>
         <PlayerCard player={player} />
-
         <Stats player={player} />
+
     </Hero>
+    <GameModes/>
       {/* <Carousel/> */}
+
     </div>
   )
 }
@@ -37,7 +43,10 @@ justify-content: space-between;
 export interface PlayerCardProps {
   player: {
     name: string;
-    lvl: string
+    lvl: string,
+    gamePlayed : number,
+    lost : number,
+    won : number
   }
 
 
@@ -72,7 +81,8 @@ const PlayerCardStyle = styled.div`
   .first{
   width: 111px;
   height: 100%;
-  background-color: white;
+  background-color: #E4ECF2;
+   border-radius: 20px 0px 0px 0px ;
 }
 .sec{
   width: 277px;
@@ -120,10 +130,10 @@ const PlayerCardStyle = styled.div`
 export function Stats(props: PlayerCardProps) {
   return (
     <StatsStyle  >
-     <HeadComponent title="Stats"/>
+     {/* <HeadComponent title="Stats"/> */}
      <Data>
       
-     <div style={{ width: 100, height: 100 }}>
+     <div className='progessCont' style={{ width: 100, height: 100 }}>
       <CircularProgressbar  styles={{
           path: {
             stroke: `#F13950`,
@@ -141,11 +151,22 @@ export function Stats(props: PlayerCardProps) {
             fontSize: '16px',
           },
       }} value={15}  text={`${15}%`} />
+      <div className='circularLabel'>
+      {props.player.lost} <span style={{color: "#F13950"}}>Lost </span>
+      </div>
     </div>
     <div id="pentagon">
+      <div>
+        <div id="played">
+            {props.player.gamePlayed}
+        </div>
+        <div id="label">
+          PLAYED GAMES
+        </div>
+      </div>
       <img src={Penta} alt="penta" />
     </div>
-     <div style={{ width: 100, height: 100 }}>
+     <div className='progessCont' style={{ width: 100, height: 100 }}>
       <CircularProgressbar  styles={{
           path: {
             stroke: `#3CC592`,
@@ -164,17 +185,17 @@ export function Stats(props: PlayerCardProps) {
           },
       }}
       value={66}  text={`${66}%`} />
+      <div className='circularLabel'>
+      {props.player.won} <span style={{color: "#3CC592"}}>Won </span>
+      </div>
     </div>
-    {/* {\*
-    <div style={{ width: 100, height: 100 }}>
-      <CircularProgressbar value={66} />
-    </div>
-  </div>
-</div>  */}
      </Data>
      <ProgressBar>
-  <div>
-    d
+      
+  <div >
+    <div className='lvl'>
+      level 8 - 36%
+    </div>
   </div>
      </ProgressBar>
     </StatsStyle>
@@ -183,34 +204,95 @@ export function Stats(props: PlayerCardProps) {
 
 const StatsStyle = styled.div`
   width: 500px;
-  height: 243px;
+  min-height: 243px;
   display: flex;
   align-items: center;
   flex-direction: column;
+  justify-content: space-between;
   gap: 20px;
 `
 const Data = styled.div`
   width: 100%;
   height: auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: row;
   justify-content: space-between;
+  .progessCont{
+    font-family: 'Poppins' , sans-serif;
+    font-size:  ${props => props.theme.fontSize.l}; 
+    text-transform: uppercase;
+    font-weight: 600;
+    width: 100%;
+    .circularLabel{
+      text-align: center;
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      
+   }
+  }
+
   #pentagon {
   position: relative;
+  > div{
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 50px;
+    font-family: 'Poppins' , sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    #played{
+      font-style: normal;
+      font-weight: 700;
+      font-size:  ${props => props.theme.fontSize.ll}; 
+      line-height: 30px;
+      color:  ${props => props.theme.colors.seconderyText}; 
+    }
+    #label{
+      /* width: ; */
+      display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+      font-style: normal;
+      font-weight: 600;
+      font-size:  ${props => props.theme.fontSize.l}; 
+      line-height: 22px;
+      text-transform: uppercase;
+      color:  ${props => props.theme.colors.primaryText}; 
+      -webkit-text-stroke: 1px #000;
+    }
+  }
 }
 `
 const ProgressBar = styled.div`
   width: 100%;
+  height: 27px;
   background-color: ${props => props.theme.colors.seconderybg};
   border-radius: 12.3071px;
   display: flex;
-  div{
-    align-items: flex-start;  
+  align-items: center;
+  > div{
+    /* padding-right: 3px; */
+    
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-end;
     height: 100%;
-    width: 30%;
+    width: 36%;
     background-color: ${props => props.theme.colors.primarybg};
     border-radius: 12.3071px;
+    .lvl{
+      margin-right: 10px;
+      font-size: ${props => props.theme.fontSize.s};
+      color: white;
+    }
   }
 
 `
@@ -226,6 +308,7 @@ export function HeadComponent(props: headProps) {
 }
 
 const Head = styled.div`
+margin-top: 50px;
   width: 100%;
   border-bottom: 6px solid #D8E4ED;
   text-align: start;
