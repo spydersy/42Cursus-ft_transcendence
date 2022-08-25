@@ -48,7 +48,6 @@ export  function LogoComponent() {
     font-family: 'Michroma', sans-serif;
        color:  ${props => props.theme.colors.primaryText};;
        font-size:  ${props => props.theme.fontSize.l}; 
-    
        /* object-fit : contain; */
     `;
 export  function SearchBarComponent() {
@@ -137,9 +136,11 @@ export  function AvatarComponent() {
 const Avatar = styled.div`
   width: 40px;
   height: 40px;
-  border-redius : 50%;
+  border-radius : 50%;
   img{
     width: 100%;
     height: 100%;
   }
+  border: 2px solid #F13950;
+
 `;

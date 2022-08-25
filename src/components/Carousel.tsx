@@ -107,9 +107,9 @@ export default function Carousel() {
 		<CarouselItem id="item3" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(3)}}  className="carouselItemInner trans3d">
 			 <img src={AiImg} alt="" />
 			 </CarouselItemInner></CarouselItem>
-		<CarouselItem id="item4" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(4)}}  className="carouselItemInner trans3d">
+		{/* <CarouselItem id="item4" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(4)}}  className="carouselItemInner trans3d">
 			 <img src={Tidk} alt="" />
-			 </CarouselItemInner></CarouselItem>
+			 </CarouselItemInner></CarouselItem> */}
 		{/* <CarouselItem id="item5" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(5)}}  className="carouselItemInner trans3d">5</CarouselItemInner></CarouselItem> */}
 		
     </CarouselContainer>
@@ -129,6 +129,7 @@ const Container = styled.div`
 		-ms-transform: translate3d(0, 0, 0);
 		transform-style:preserve-3d;
 		transform: translate3d(0, 0, 0);
+
     }
 `;
 const CarouselContainer = styled.section`
@@ -159,7 +160,8 @@ cursor: pointer;
     height:130px;
     position:absolute;
     background-color:  ${props => props.theme.colors.primarybg};
-    border:10px solid rgba(255, 255, 255, .5);
+    /* border:10px solid rgba(255, 255, 255, .5); */
+	border-radius: 10px;
     color:aqua;
     font-size:72px;
     left:50%;
@@ -167,6 +169,9 @@ cursor: pointer;
     margin-left:-160px;
     margin-top:-90px;
     text-align:center;
+	/* &:hover{
+		transform: scale(1.2);
+	} */
     /* padding-top:50px; */
 `;
 
