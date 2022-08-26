@@ -5,12 +5,10 @@ import { AuthService } from './auth.service';
 export class AuthController {
 
     constructor (private authservice: AuthService) {
-
     }
 
     @Get()
-    default_auth_get(@Query() query) {
-        console.log("__QUERIES__ : ", query);
-        return this.authservice.default_auth_get(query);
+    SigninLogic(@Query() query) {
+        return this.authservice.SigninLogic(query);
     }
 }

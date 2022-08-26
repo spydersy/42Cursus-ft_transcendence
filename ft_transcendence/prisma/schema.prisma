@@ -11,20 +11,19 @@ datasource db {
 }
 
 model Users {
-  Id                Int      @id @unique
-  Email             String   @unique
-  Login             String   @unique
+  Id                Int        @id @unique
+  Email             String     @unique
+  Login             String     @unique
+  UsualFullName     String
   DefaultAvatar     String
-  UploadedAvatar   String?
-  Token             String   @unique
-  Refresh_token     String   @unique
-  Status            String   @unique
+  UploadedAvatar    String?
+  Status            String
   Notifications     Json?
-  Wins              Int      @default(0)
-  Losses            Int      @default(0)
-  Level             Int      @default(0)
-  Two_factor_auth   Boolean  @default(false)
-  LastModification  DateTime @updatedAt
+  Wins              Int        @default(0)
+  Losses            Int        @default(0)
+  Level             Int        @default(0)
+  TwoFactorAuth     Boolean    @default(false)
+  LastModification  DateTime   @updatedAt
 }
 
 model MatchHistory {
