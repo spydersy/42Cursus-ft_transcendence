@@ -1,17 +1,32 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled , {css} from "styled-components"
 import SearchIcon from "../assets/imgs/searchIcon.svg"
 import BellIcon from "../assets/imgs/bell-icon.svg"
 import TestAvatar from "../assets/imgs/tests/guy.svg" 
+import DropDown from './DropDown'
 
 export default function Upperbar() {
+  const [open, setopen] = useState(false)
+  const ToggleDD = (e : any)=>{
+    setopen(!open)
+    e.stopPropagation();
+  }
   return (
     <Wrraper>
         <LogoComponent/>
         <SearchBarComponent/>
         <RightCont>
           <NotificationComponent/>
-          <AvatarComponent/>
+          <div  style={{position : "relative"}} onClick={(e)=>{ToggleDD(e)}}>
+            <AvatarComponent/>
+            {
+              open && <DropDown closeDropdown={ ()=>{
+      
+                console.log(open)
+                setopen(false)
+              }} open={open} />
+            }
+          </div>
         </RightCont>
     </Wrraper>
     
@@ -28,6 +43,7 @@ const Wrraper = styled.div`
    flex-direction: row;
    justify-content: space-between;
   padding: 0 26px;
+  
 `;
 const RightCont = styled.div`
 width: 100px;

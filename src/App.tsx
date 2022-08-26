@@ -14,6 +14,7 @@ import Home from './Pages/Home';
 import Upperbar from './components/Upperbar';
 import Sidebar from './components/Sidebar';
 import ProtectedLayout from './components/protected/ProtectedLayout';
+import Profile from './Pages/Profile';
 function App() {
   const [start, setstart] = useState(false)
   const [name, setname] = useState("")
@@ -37,6 +38,7 @@ function App() {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/game" element={<Pong name="mohamed" />} />
             <Route path="/" element={<Home />} />
+            <Route path="/profile/id" element={<Profile />} />
           </Routes>
         </BrowserRouter>
 

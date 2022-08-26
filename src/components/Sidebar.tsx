@@ -31,7 +31,7 @@ export default function Sidebar() {
 
 <Items>
 
-        <Item>
+        <Item href='/'>
             <DashIcon />
             {
                 open ? "Dashboard" : ""  
@@ -128,7 +128,7 @@ const Items = styled.div`
     flex-direction: column;
     
 `;
-const Item = styled.div`
+const Item = styled.a`
 
     width: 100%;
     height: 60px;
