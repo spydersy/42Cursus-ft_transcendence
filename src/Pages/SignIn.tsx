@@ -8,8 +8,9 @@ export default function SignIn() {
     <Wrraper>
       <CoverCnt>
          <div>
-            
+            PingPong<br/>Time
          </div>
+
       </CoverCnt>
       <RightComponent>
          <img src={PatternImg}/>
@@ -21,11 +22,11 @@ export default function SignIn() {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae nunc in.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae nunc in. 
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae nunc in.
             </Description>
-            <LoginButton>
+            <LoginButton href="#api" >
                <img src={FtImg} alt="42logo" />
                Login with intra
             </LoginButton>
-            <a href="#termscondPage">Terms & conditions</a>
+            <a id="TermsCond" href="#termscondPage">Terms & conditions</a>
          </Bloc>
       </RightComponent>
    </Wrraper>
@@ -52,8 +53,18 @@ height: 100%;
    > div {
       width: 100%;
       height: 100%;
-      background: linear-gradient(152.83deg, rgba(138, 138, 138, 0.3) 0%, rgba(66, 134, 244, 0.3) 100%);
+      /* background: linear-gradient(152.83deg, rgba(138, 138, 138, 0.3) 0%, rgba(66, 134, 244, 0.3) 100%); */
       /* opacity: 0.3; */
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      text-align: start;
+      font-family: 'Michroma';
+      font-size: 52px;
+      color: ${props => props.theme.colors.primaryText};
+      line-height: 74px;
+      margin-left: 100px;
    }
 `;
 const RightComponent = styled.div`
@@ -92,13 +103,14 @@ const Bloc = styled.div`
    display: flex;
    align-items: flex-start;
    flex-direction: column;
-a{
+#TermsCond{
    margin-top: 80px;
    width: 100%;
    text-align: center;
    align-items: center;
    font-size: ${props => props.theme.fontSize.s};
    color: ${props => props.theme.colors.primarybg};
+   text-decoration: underline;
 }
 `;
 const Title = styled.div`
@@ -121,9 +133,9 @@ font-family: 'Poppins', sans-serif;
    max-height: 170px;
    height: 200px;
 `;
-const LoginButton = styled.button`
+const LoginButton = styled.a`
 margin: 0 auto ;
-padding: 0 30px;
+padding: 0 5px;
 width: 250px;
 height: 40px;
 left: 341px;

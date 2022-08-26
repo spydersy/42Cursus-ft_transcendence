@@ -24,10 +24,10 @@ function App() {
        <ThemeProvider theme={theme}>
         <main>
           <ProtectedLayout body={<Upperbar/>} />
-          <ProtectedLayout body={ <Sidebar/>} />
         {/* <Upperbar/> */}
         {/* <Sidebar/> */}
         <Cont >
+          <ProtectedLayout body={ <Sidebar/>} />
     
           <BrowserRouter>
           <Routes>
@@ -49,16 +49,17 @@ function App() {
 }
 
 const Cont = styled.div`
-position: absolute;
+/* position: absolute;
 
   width: calc(100% - 250px);
   height: calc(100% - 70px);
   top: 70px;
   left: 250px;
   padding-right: 1.5rem;
-  padding-left: 1.5rem;
+  padding-left: 1.5rem; */
   /* margin-right: auto; */
   /* margin-left: auto; */
-
+  display: flex;
+  flex-direction: row;
 `;
 export default App;

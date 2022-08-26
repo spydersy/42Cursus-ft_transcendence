@@ -96,17 +96,18 @@ body {
   }
 }
 @media  only screen and (min-width: 1200px) {
-  container{
+  .container{
     max-width: 1140px;
+    width: 1140px;
     /* width: 1500px; */
     margin: 0 auto;
+    /* background-color: red; */
   }
 }
 @media  only screen and (min-width: 1400px) {
-  container{
+  .container{
     /* width: 1500px; */
     margin: 0 auto;
-    background-color: red;
     max-width: 2000px;
   }
 }
