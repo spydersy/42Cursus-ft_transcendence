@@ -25,7 +25,7 @@ export default function Home() {
         <Stats player={player} />
 
     </Hero>
-    <GameModes/>
+    {/* <GameModes/> */}
       {/* <Carousel/> */}
 
     </div>

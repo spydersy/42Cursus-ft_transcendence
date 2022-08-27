@@ -1,4 +1,4 @@
-import React , {useState , useRef} from 'react'
+import React , {useState , useRef, useEffect} from 'react'
 import styled , {css} from "styled-components"
 import ExpandIcon from "../assets/imgs/dashboardIcon.svg"
 import {ReactComponent as DashIcon} from "../assets/imgs/dashboardIcon.svg";
@@ -15,13 +15,28 @@ export interface barProps {
 export default function Sidebar() {
     const sideBaRed : any= useRef<HTMLElement>(null);
     const [open, setopen] = useState(true)
+    useEffect(() => {
+    if (window.innerWidth < 1440)
+        setopen(false)
+      window.addEventListener("resize", (e)=>{
+        console.log(e)
+        if (window.innerWidth < 1440)
+            setopen(false)
+
+      })
+    
+      return () => {
+        
+      }
+    }, [])
+    
     function openClose()
     {
         console.log(sideBaRed)
         if (open)
             sideBaRed.current.style.width = "76px"
             else
-            sideBaRed.current.style.width = "243px"
+        sideBaRed.current.style.width = "243px"
             
         setopen(!open)
     }
@@ -70,9 +85,9 @@ const SidebarWrraper = styled.div<barProps>`
     max-width: 300px;
     height: calc(100vh - 70px);
     background-color: rgb(172,203,222, 0.5); 
-
-
-
+    
+    
+    
     display: flex;
     align-items: flex-end;
     flex-direction: column;
@@ -81,6 +96,7 @@ const SidebarWrraper = styled.div<barProps>`
     overflow: hidden;
     ${props => (props.open === false) && css`
     align-items: center ;
+    width: 76px;
 
 `
   }
