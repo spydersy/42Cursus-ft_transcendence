@@ -16,28 +16,44 @@ export default function Sidebar() {
     const sideBaRed : any= useRef<HTMLElement>(null);
     const [open, setopen] = useState(true)
     useEffect(() => {
-    if (window.innerWidth < 1440)
-        setopen(false)
-      window.addEventListener("resize", (e)=>{
-        console.log(e)
-        if (window.innerWidth < 1440)
-            openClose()
+    // if (window.innerWidth < 1440  )
+    //     setopen(false)
 
-      })
+
+    window.addEventListener("resize", (e : any)=>{
+        if ( e.currentTarget?.innerWidth >= 700)
+        {
+            if (e.currentTarget?.innerWidth< 1440 )
+            {
+                console.log(e.currentTarget?.innerWidth)
+                openClose()
+  
+            }
+        }
+        else
+        {
+            openClose()
+        }
+
+
+    })
     
       return () => {
         
       }
     }, [setopen])
     
-    function openClose()
-    {
-        console.log(sideBaRed)
+    const openClose=  ()=>
+    {   
+        if ( window.innerWidth < 800)
+        {
+            sideBaRed.current.style.width = "100%" 
+            return ;
+        }
         if (open)
             sideBaRed.current.style.width = "76px"
-            else
-        sideBaRed.current.style.width = "243px"
-            
+        else
+            sideBaRed.current.style.width = "243px"
         setopen(!open)
     }
   return (
@@ -49,28 +65,28 @@ export default function Sidebar() {
         <Item href='/'>
             <DashIcon />
             {
-                open ? "Dashboard" : ""  
+                open ? <div>Dashboard</div> : ""  
             }
             
         </Item>
         <Item>
             <DMIcon />
             {
-                open ? "Direct messages" : ""  
+                open ? <div>Direct messages</div> : ""  
             }
            
         </Item>
         <Item>
             <RoomIcon />
             {
-                open ? "Rooms" : ""  
+                open ? <div>Rooms</div> : ""  
             }
             
         </Item>
         <Item>
             <UsersIcon />
             {
-                open ? "All Users" : ""  
+                open ? <div>All Users</div> : ""  
             }
             
         </Item>
@@ -83,7 +99,7 @@ export default function Sidebar() {
 const SidebarWrraper = styled.div<barProps>`
     width: 243px;
     max-width: 300px;
-    height: calc(100vh - 70px);
+    height: calc(100%);
     background-color: rgb(172,203,222, 0.5); 
     
     
@@ -97,9 +113,22 @@ const SidebarWrraper = styled.div<barProps>`
     ${props => (props.open === false) && css`
     align-items: center ;
     width: 76px;
-
-`
+    `
   }
+  @media  only screen and (max-width: 768px) {
+
+  max-width: 100%;
+  width :100%;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  > svg{
+      display: none;
+  }
+}
 
     
 `;
@@ -138,10 +167,35 @@ const Left = styled(ArrowLeft)`
 `;
 const Items = styled.div`
 
-    width: 100%;
+    width: 90%;
     display: flex;
     align-items: center;
     flex-direction: column;
+    @media  only screen and (max-width: 768px) {
+        flex-direction: row;
+        justify-content: space-around;
+        >a{
+            width: auto;
+            >div{
+                display: none;
+            }
+            >svg{
+
+                margin: 0;
+            }
+            &:hover{
+                
+            }
+            &::after{
+                bottom: 0;
+                width: 100%;
+                height: 5px;
+                display: none;
+            }
+        }
+    }
+
+    
     
 `;
 const Item = styled.a`

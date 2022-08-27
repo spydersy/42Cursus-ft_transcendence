@@ -32,8 +32,7 @@ export default function Home() {
       <AchievementHistory />
 
     </Hero>
-    {/* <GameModes/> */}
-      {/* <Carousel/> */}
+    <GameModes/>
 
     </div>
   )
@@ -42,10 +41,16 @@ export default function Home() {
 
 const Hero = styled.div`
 width: 100%;
+height: auto;
 margin-top: 100px;
 display: flex;
 align-items: center;
 justify-content: space-around;
+@media  only screen and (max-width: 768px) {
+    flex-direction: column;
+    gap: 12px;
+    
+}
 `;
 export interface PlayerCardProps {
   player: {

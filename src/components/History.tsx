@@ -48,8 +48,8 @@ export default function History() {
             </a>
         </Head>
         {
-            listGame.map((match : any )=>{
-                return<GameComp match={match}  isFriend={true} />
+            listGame.map((match : any, id : number )=>{
+                return<GameComp key={id} match={match}  isFriend={true} />
             })
         }
         {/* <GameComp match={match2} isFriend={false} />
@@ -261,8 +261,8 @@ export  function AchievementHistory() {
               </a>
           </Head>
           {
-              listAchiev.map((match : any )=>{
-                  return<AchievmentComp achievment={match}  />
+              listAchiev.map((match : any, id : number )=>{
+                  return<AchievmentComp key={id}achievment={match}  />
               })
           }
    

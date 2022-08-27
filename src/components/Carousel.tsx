@@ -120,6 +120,9 @@ export default function Carousel() {
 
 const Container = styled.div`
 	position: relative;
+	width: 100%;
+	height: 100%;
+	background-color: red;
     .trans3d{
         -webkit-transform-style: preserve-3d;
 		-webkit-transform: translate3d(0, 0, 0);
@@ -138,10 +141,11 @@ const CarouselContainer = styled.section`
 		position:absolute;
 		/* margin-left:-500px;
 		margin-top:-500px; */
-		left:18%;
-		top:0%;
+		/* left:18%; */
+		left: 0;
+		top:0px;
 		width:600px;
-		height:600px;
+		height:100%;
 		transform: translate(-50% , -50%);
 `;
 const CarouselItem = styled.figure`

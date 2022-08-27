@@ -51,10 +51,10 @@ function App() {
 }
 
 const Cont = styled.div`
+height: calc(100%);
 /* position: absolute;
 
   width: calc(100% - 250px);
-  height: calc(100% - 70px);
   top: 70px;
   left: 250px;
   padding-right: 1.5rem;
