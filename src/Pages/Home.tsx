@@ -8,6 +8,7 @@ import Penta from "../assets/imgs/penta.svg"
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import GameModes from '../components/GameModes'
+import History , {AchievementHistory} from '../components/History'
 
 const player = {
   name: "Alchemist",
@@ -21,8 +22,14 @@ export default function Home() {
   return (
     <div className='container' >
       <Hero>
-        <PlayerCard player={player} />
+        {/* <PlayerCard player={player} /> */}
         <Stats player={player} />
+
+    </Hero>
+      <HeadComponent title=""/>
+    <Hero style={{marginTop : "40px"}}>
+      <History />
+      <AchievementHistory />
 
     </Hero>
     {/* <GameModes/> */}
@@ -38,7 +45,7 @@ width: 100%;
 margin-top: 100px;
 display: flex;
 align-items: center;
-justify-content: space-between;
+justify-content: space-around;
 `;
 export interface PlayerCardProps {
   player: {
@@ -133,7 +140,7 @@ export function Stats(props: PlayerCardProps) {
      {/* <HeadComponent title="Stats"/> */}
      <Data>
       
-     <div className='progessCont' style={{ width: 100, height: 100 }}>
+     <div className='progessCont' style={{ width: "140px", height: "140px" }}>
       <CircularProgressbar  styles={{
           path: {
             stroke: `#F13950`,
@@ -166,7 +173,7 @@ export function Stats(props: PlayerCardProps) {
       </div>
       <img src={Penta} alt="penta" />
     </div>
-     <div className='progessCont' style={{ width: 100, height: 100 }}>
+     <div className='progessCont' style={{ width: "140px", height: "140px" }}>
       <CircularProgressbar  styles={{
           path: {
             stroke: `#3CC592`,
@@ -203,7 +210,7 @@ export function Stats(props: PlayerCardProps) {
 }
 
 const StatsStyle = styled.div`
-  width: 500px;
+  width: 100%;
   min-height: 243px;
   display: flex;
   align-items: center;
@@ -217,7 +224,8 @@ const Data = styled.div`
   display: flex;
   align-items: flex-start;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+
   .progessCont{
     font-family: 'Poppins' , sans-serif;
     font-size:  ${props => props.theme.fontSize.l}; 
@@ -229,12 +237,15 @@ const Data = styled.div`
       display: inline-block;
       overflow: hidden;
       white-space: nowrap;
+      margin-top: 20px;
       
    }
   }
 
   #pentagon {
   position: relative;
+  width: 247px;
+  height: 191px;
   > div{
     position: absolute;
     top: 35%;
@@ -267,6 +278,10 @@ const Data = styled.div`
       color:  ${props => props.theme.colors.primaryText}; 
       -webkit-text-stroke: 1px #000;
     }
+  }
+  > img {
+    width: 100%;
+    height: 100%;
   }
 }
 `
@@ -310,7 +325,7 @@ export function HeadComponent(props: headProps) {
 const Head = styled.div`
 margin-top: 50px;
   width: 100%;
-  border-bottom: 6px solid #D8E4ED;
+  border-bottom: 3px solid #D8E4ED;
   text-align: start;
   text-transform: uppercase;
   font-family: 'Poppins' , sans-serif;

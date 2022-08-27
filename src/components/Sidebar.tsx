@@ -21,14 +21,14 @@ export default function Sidebar() {
       window.addEventListener("resize", (e)=>{
         console.log(e)
         if (window.innerWidth < 1440)
-            setopen(false)
+            openClose()
 
       })
     
       return () => {
         
       }
-    }, [])
+    }, [setopen])
     
     function openClose()
     {
