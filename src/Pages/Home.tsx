@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Carousel from '../components/Carousel'
 import Sidebar from '../components/Sidebar'
 import Upperbar from '../components/Upperbar'
@@ -9,6 +9,7 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import GameModes from '../components/GameModes'
 import History , {AchievementHistory} from '../components/History'
+import Navlinks from '../components/Navlinks'
 
 const player = {
   name: "Alchemist",
@@ -17,8 +18,10 @@ const player = {
   lost : 200,
   won : 150,
 }
+const linkslist = ["All Users", "Friends" , "blocked"]
 
 export default function Home() {
+  const [index, setindex] = useState(1)
   return (
     <div className='container' >
       <Hero>
@@ -27,12 +30,14 @@ export default function Home() {
 
     </Hero>
       <HeadComponent title=""/>
+    {/* <Navlinks index={index} setindex={(e)=> setindex(e)} list={linkslist}/> */}
+    
     <Hero style={{marginTop : "40px"}}>
       <History />
       <AchievementHistory />
 
-    </Hero>
-    <GameModes/>
+    </Hero> 
+     <GameModes/>
 
     </div>
   )

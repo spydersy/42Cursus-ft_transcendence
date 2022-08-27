@@ -7,7 +7,8 @@ export default function GameModes() {
   return (
     <Game>
         <HeadComponent title="Game modes"/>
-        <Carousel/>
+        {/* <Carousel/> */}
+        s
     </Game>
   )
 }
@@ -15,7 +16,7 @@ export default function GameModes() {
 
 const Game = styled.div`
 width: 100%;
-height: auto;
+
 height: 400px;
 /* margin-top: 100px; */
 display: flex;
