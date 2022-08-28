@@ -9,11 +9,6 @@ export default function SignIn() {
       <CoverCnt>
          <div>
             PingPong<br/>Time
-         </div>
-
-      </CoverCnt>
-      <RightComponent>
-         <img src={PatternImg}/>
          <Bloc>
             <Title>
             Welcome Back!
@@ -28,6 +23,11 @@ export default function SignIn() {
             </LoginButton>
             <a id="TermsCond" href="#termscondPage">Terms & conditions</a>
          </Bloc>
+         </div>
+
+      </CoverCnt>
+      <RightComponent>
+         <img src={PatternImg}/>
       </RightComponent>
    </Wrraper>
   )
@@ -42,14 +42,23 @@ const Wrraper = styled.div`
    width: 100vw;
    height: 100vh;
    display: flex;
-    
+   
 `;
 
 const CoverCnt = styled.div`
-background: url(${CoverImg})   no-repeat ;
-background-size: 100% 100%;
-width: 40%;
-height: 100%;
+   background: url(${CoverImg})   no-repeat ;
+   background-size: 100% 100%;
+   width: 45%;
+   min-width: 550px;
+   height: 100%;
+   position: relative;
+   @media  only screen and (max-width: 768px) {
+      width: 100%;
+      min-width: 100%;
+      >div{
+         justify-content: start;
+      }
+}
    > div {
       width: 100%;
       height: 100%;
@@ -68,11 +77,6 @@ height: 100%;
    }
 `;
 const RightComponent = styled.div`
-
-
-
-   position: relative;
-
    width: 60%;
    height: 100%;
 
@@ -81,7 +85,10 @@ const RightComponent = styled.div`
    justify-content: space-around;
    flex-direction: column;
    /* overflow: hidden; */
-
+   @media  only screen and (max-width: 768px) {
+      display: none;
+    
+}
    img{
     
       object-fit: cover;
@@ -93,16 +100,24 @@ const RightComponent = styled.div`
 const Bloc = styled.div`
    position: absolute;
    top: 50%;
-   left: -100px;
-   width: 650px;
+   right: 20%;
+   width: 90%;
+   min-width: 500px;
+   max-width: 500px;
    height: 400px;
-   transform: translate(0%, -50%);
+   transform: translate(100%, -50%);
    background: #FFFFFF;
    border-radius: 5px;
    padding: 30px;
    display: flex;
    align-items: flex-start;
    flex-direction: column;
+   @media  only screen and (max-width: 768px) {
+      width: 70%;
+      min-width: 70%;
+      right: 50%;
+      transform: translate(50%, -50%);
+}
 #TermsCond{
    margin-top: 80px;
    width: 100%;

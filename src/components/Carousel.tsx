@@ -107,6 +107,9 @@ export default function Carousel() {
 		<CarouselItem id="item3" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(3)}}  className="carouselItemInner trans3d">
 			 <img src={AiImg} alt="" />
 			 </CarouselItemInner></CarouselItem>
+		<CarouselItem id="item4" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(4)}}  className="carouselItemInner trans3d">
+			 <img src={Tidk} alt="" />
+			 </CarouselItemInner></CarouselItem>
 		{/* <CarouselItem id="item4" className="carouselItem trans3d"><CarouselItemInner onClick={()=>{console.log(4)}}  className="carouselItemInner trans3d">
 			 <img src={Tidk} alt="" />
 			 </CarouselItemInner></CarouselItem> */}
@@ -122,7 +125,7 @@ const Container = styled.div`
 	position: relative;
 	width: 100%;
 	height: 100%;
-	background-color: red;
+
     .trans3d{
         -webkit-transform-style: preserve-3d;
 		-webkit-transform: translate3d(0, 0, 0);
@@ -142,26 +145,44 @@ const CarouselContainer = styled.section`
 		/* margin-left:-500px;
 		margin-top:-500px; */
 		/* left:18%; */
-		left: 0;
+		left: 25%;
 		top:0px;
 		width:600px;
 		height:100%;
 		transform: translate(-50% , -50%);
+		@media  only screen and (max-width: 768px) {
+
+
+		width:200px;
+		height:100%;
+    
+}
+		
 `;
 const CarouselItem = styled.figure`
 		position:absolute;
-		margin-left:-500px;
-		margin-top:-500px;
+		margin-left:-225px;
+		margin-top:-225px;
 		left:50%;
 		top:50%;
-		width:1000px;
-		height:1000px;
+		width:500px;
+		height:500px;
+		overflow: visible;
+		@media  only screen and (max-width: 768px) {
+		
+		margin-left:-100px;
+		margin-top:-100px;
+
+		width:200px;
+		height:200px;
+    
+}
 `;
 const CarouselItemInner = styled.div`
-        overflow: hidden;
+        /* overflow: hidden; */
 cursor: pointer;
-    width:200px;
-    height:130px;
+    width: 300px;
+    height:200px;
     position:absolute;
     background-color:  ${props => props.theme.colors.primarybg};
     /* border:10px solid rgba(255, 255, 255, .5); */
@@ -173,9 +194,19 @@ cursor: pointer;
     margin-left:-160px;
     margin-top:-90px;
     text-align:center;
-	/* &:hover{
-		transform: scale(1.2);
-	} */
+	transition: scale 700ms ease-in-out ;
+	@media  only screen and (max-width: 768px) {
+		width: 200px;
+		margin-left:-100px;
+
+    height:150px;
+    
+}
+
+	>img{
+		width: 100%;
+		height: 100%;
+	}
     /* padding-top:50px; */
 `;
 

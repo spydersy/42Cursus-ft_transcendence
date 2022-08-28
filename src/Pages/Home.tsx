@@ -29,15 +29,14 @@ export default function Home() {
         <Stats player={player} />
 
     </Hero>
-      <HeadComponent title=""/>
-    {/* <Navlinks index={index} setindex={(e)=> setindex(e)} list={linkslist}/> */}
+     <GameModes/>
+      {/* <HeadComponent title=""/> */}
     
     <Hero style={{marginTop : "40px"}}>
       <History />
       <AchievementHistory />
 
     </Hero> 
-     <GameModes/>
 
     </div>
   )
@@ -47,10 +46,13 @@ export default function Home() {
 const Hero = styled.div`
 width: 100%;
 height: auto;
+padding: 20px 0;
 margin-top: 100px;
 display: flex;
 align-items: center;
 justify-content: space-around;
+border: 2px solid #2C85BE;
+
 @media  only screen and (max-width: 768px) {
     flex-direction: column;
     gap: 12px;
@@ -296,7 +298,7 @@ const Data = styled.div`
 }
 `
 const ProgressBar = styled.div`
-  width: 100%;
+  width: 90%;
   height: 27px;
   background-color: ${props => props.theme.colors.seconderybg};
   border-radius: 12.3071px;
