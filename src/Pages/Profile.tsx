@@ -11,6 +11,8 @@ import  Badge3 from "../assets/imgs/badge3.svg";
 // avatar 
 // PLayerCard
 
+
+////
 export interface PlayerCardProps {
   player: {
     name: string,
@@ -131,6 +133,7 @@ const PlayerCardStyle = styled.div`
       > img{
         width: 100%;
         height: 100%;
+        
       }
     }
 
@@ -211,9 +214,10 @@ const ProgressBar = styled.div`
   }
 
 `
+
+//// 
+
 const linkslist = [" ACHIEVEMENTS", " FRIENDS" , " GAME HISTORY"]
-
-
 
 const achievment1 = {
   name: "SERGENT",
@@ -232,6 +236,9 @@ const achievment3 = {
 }
 
 var listAchiev = [achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3]
+
+
+/////
 
 export function TabOne()
 {
@@ -275,7 +282,48 @@ const TabOone = styled.div`
 `;
 
 
-export function PlayerAchieve()
+export function Tabtwo()
+{
+  return (
+    <TabOone >
+      {/* <h1>Tab One</h1> */}
+      {
+        listAchiev.map((match : any, id : number )=>{
+            return<AchievmentComp key={id}achievment={match}  />
+        })
+      }
+    </TabOone>
+  )
+}
+
+const TabOtwo= styled.div`
+  height: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 10px 0px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+&::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+&::-webkit-scrollbar-thumb {
+  background: ${props => props.theme.colors.primarybg};
+}
+
+/* Handle on hover */
+&::-webkit-scrollbar-thumb:hover {
+  background: ${props => props.theme.colors.primarybg};
+}
+`;
+
+export function PlayerTabsBar()
 {
   const [index, setindex] = useState(1)
   // const [selectedTab, setSelectedTab] = useState<number>(tabs[0].index);
@@ -285,7 +333,7 @@ export function PlayerAchieve()
       <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/> 
         
         {index === 0 && <TabOne/> }
-        {index === 1 && "Friends"}
+        {index === 1 && <Tabtwo/>}
         {index === 2 && "blocked"}
   
     </PlayerAchieveStyle>
@@ -295,12 +343,12 @@ export function PlayerAchieve()
 const PlayerAchieveStyle = styled.div`
 
   margin-top: 15px;
-  padding: 0px 0px;
-  width:  100%;
+  /* padding: 0px 0px; */
+  width:  101%;
+  align-items: center;
   height: auto;
-  display: flex;
   border: 2px solid ${props => props.theme.colors.primarybg};
-  /* background-color: #e1e13153; */
+  background-color: #e1e11952;
   flex-direction: column;
   .sticker {
     background-color: ${props => props.theme.colors.primarybg};
@@ -318,34 +366,36 @@ const PlayerAchieveStyle = styled.div`
   }
 `;
 
+/////
+
 export default function Profile() {
   return (
-    <div className='container' style={{marginTop: "50px"}} >
-     
+    <div className='container' style={{marginTop: "50px"}}>
+         <TheBox>
+
           <PlayerCard player={player} />
+            <ProgressBar>
           
-          <ProgressBar>
-        
-            <div >
-              <div className='lvl'>
-                level 8 - 60%
+              <div >
+                <div className='lvl'>
+                  level 8 - 60%
+                </div>
               </div>
-            </div>
 
-          </ProgressBar>
+            </ProgressBar>
+          </TheBox>
 
-          <PlayerAchieve />
-
+          <PlayerTabsBar/>
     </div>
   )
 };
 
-// const Container = styled.div`
-//   background-color: #96c4e8;
-//   position: absolute;
-//   width: 670px;
-//   height: 350px;
-//   left: 25%;
-//   top: 101px;
+const TheBox = styled.div`
+  padding: 8px 8px 8px 8px;
+  width: 100%;
+  background-color: #ffffff;
+  border: 2px solid ${props => props.theme.colors.primarybg};
 
-// `;
+`;
+
+////
