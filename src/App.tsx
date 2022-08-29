@@ -14,8 +14,8 @@ import Home from './Pages/Home';
 import Upperbar from './components/Upperbar';
 import Sidebar from './components/Sidebar';
 import ProtectedLayout from './components/protected/ProtectedLayout';
-import Chat from './Pages/Chat';
-// import Profile from './Pages/Profile';
+import Profile from './Pages/Profile';
+
 function App() {
   const [start, setstart] = useState(false)
   const [name, setname] = useState("")
@@ -40,7 +40,7 @@ function App() {
             <Route path="/game" element={<Pong name="mohamed" />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/" element={<Home />} />
-            {/* <Route path="/profile/id" element={<Profile />} /> */}
+            <Route path="/profile/id" element={<Profile />} />
           </Routes>
         </BrowserRouter>
 
