@@ -69,7 +69,7 @@ export default function Sidebar() {
             }
             
         </Item>
-        <Item>
+        <Item  href='/chat' >
             <DMIcon />
             {
                 open ? <div>Direct messages</div> : ""  
