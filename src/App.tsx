@@ -15,6 +15,7 @@ import Upperbar from './components/Upperbar';
 import Sidebar from './components/Sidebar';
 import ProtectedLayout from './components/protected/ProtectedLayout';
 import Profile from './Pages/Profile';
+import Chat from './Pages/Chat';
 
 function App() {
   const [start, setstart] = useState(false)
