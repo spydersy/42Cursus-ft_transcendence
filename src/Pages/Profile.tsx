@@ -2,15 +2,10 @@ import React, {useState} from 'react'
 import styled from "styled-components"
 import Tet from "../assets/imgs/tests/test2.png"
 import Navlinks from '../components/Navlinks';
-import { AchievmentComp }  from '../components/History'
+import { AchievmentComp,AchievmentCompProps }  from '../components/History'
 import  Badge1 from "../assets/imgs/badge1.svg";
 import  Badge2 from "../assets/imgs/badge2.svg";
 import  Badge3 from "../assets/imgs/badge3.svg";
-
-
-// avatar 
-// PLayerCard
-
 
 ////
 export interface PlayerCardProps {
@@ -214,7 +209,6 @@ const ProgressBar = styled.div`
   }
 
 `
-
 //// 
 
 const linkslist = [" ACHIEVEMENTS", " FRIENDS" , " GAME HISTORY"]
@@ -236,7 +230,6 @@ const achievment3 = {
 }
 
 var listAchiev = [achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3]
-
 
 /////
 
@@ -281,22 +274,23 @@ const TabOone = styled.div`
 }
 `;
 
+////// 
 
 export function Tabtwo()
 {
   return (
     <TabOone >
-      {/* <h1>Tab One</h1> */}
+      {/* <h1> Helloo Tab Friends </h1> */}
       {
-        listAchiev.map((match : any, id : number )=>{
-            return<AchievmentComp key={id}achievment={match}  />
+        listCards.map((match : any, id : number )=>{
+            return<UserCard key={id}data={match}  />
         })
       }
     </TabOone>
   )
 }
 
-const TabOtwo= styled.div`
+const TabOtwo= styled.div` 
   height: 500px;
   display: flex;
   flex-wrap: wrap;
@@ -323,6 +317,132 @@ const TabOtwo= styled.div`
 }
 `;
 
+////
+
+const card = {
+  username: "mel-karmi",
+  grade : " The Alchemist",
+  status : true ,
+  avatar : Tet,
+}
+
+const card1 = {
+  username: "eelaazmi",
+  grade : "The Great Yaiba",
+  status : false ,
+  avatar : Badge2,
+
+}
+const card2 = {
+  username: "mamali",
+  grade : "Prince of Persia",
+  status : true ,
+  avatar : Tet,
+
+}
+
+var listCards = [card]
+
+export interface UserCard {
+  // avatar: string;
+  data: {
+    username: string;
+    grade: string;
+    status: boolean;
+    avatar: string;
+  }
+}
+
+export  function UserCard(props : UserCard) {
+return (
+  <UserCardStyle  >
+    <div className="unfriend">
+    x
+    </div>
+    <div className="img">
+      <img src={props.data.avatar} />
+    </div>
+
+     <div id="username">
+          {props.data.username}
+     </div>
+    
+    <div id="grade">
+          {props.data.grade}
+    </div>
+    
+    <div id="status">
+          {props.data.status ? <div className="text-w">online</div> : <div className="text-l">offline</div>}
+    </div>
+  
+  </UserCardStyle>
+)
+}
+
+const UserCardStyle = styled.div`
+  position: absolute;
+  width: 250px;
+  height: 350px;
+  background: #2e608a;
+  border-radius: 8px;
+  
+  .unfriend {
+    position: absolute;
+    width: 10%;
+  }
+
+  .img {
+    width: 100%;
+    height: 50%;
+    background: #bb1515;
+    position: flex;
+  }
+
+.username{
+  position: absolute;
+  width: 43px;
+  height: 9px;
+  left: 1001px;
+  top: 909px;
+
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 8px;
+  line-height: 12px;
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+  color: #FFFFFF;
+}
+.grade{
+  position: absolute;
+  width: 43px;
+  height: 9px;
+  left: 1002px;
+  top: 921px;
+
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 8px;
+  line-height: 12px;
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+  color: #969696;
+}
+
+
+`;
+
+///// 
+
+export function Tabthree()
+{
+  return (  <div> <h1> Helloo Tab Game History </h1> </div> )
+}
+
 export function PlayerTabsBar()
 {
   const [index, setindex] = useState(1)
@@ -334,7 +454,7 @@ export function PlayerTabsBar()
         
         {index === 0 && <TabOne/> }
         {index === 1 && <Tabtwo/>}
-        {index === 2 && "blocked"}
+        {index === 2 && <Tabthree/>}
   
     </PlayerAchieveStyle>
   )
@@ -343,13 +463,15 @@ export function PlayerTabsBar()
 const PlayerAchieveStyle = styled.div`
 
   margin-top: 15px;
+  padding : 10px;
   /* padding: 0px 0px; */
-  width:  101%;
+  width:  99.5%;
   align-items: center;
   height: auto;
   border: 2px solid ${props => props.theme.colors.primarybg};
-  background-color: #e1e11952;
+  /* background-color: #e1e11952; */
   flex-direction: column;
+  
   .sticker {
     background-color: ${props => props.theme.colors.primarybg};
     height: 8%;
