@@ -310,6 +310,7 @@ const AchievmentCompStyle = styled.div`
     align-items: flex-start;
     flex-direction: column;
     position: relative;
+    cursor: pointer;
     /* justify-content: ; */
     color: ${props => props.theme.colors.primaryText};;
     #title{

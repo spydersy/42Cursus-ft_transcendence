@@ -5,16 +5,16 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;
-  background: white;
+  /* background: white; */
   height: 40px;
-  border-bottom: 2px solid #f0f4f8;
+  border-bottom: 2px solid #533483;
   white-space: nowrap;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 `;
 
 
@@ -30,19 +30,22 @@ export interface NavlinksProps {
     
 
 const Item = styled.div<ItemProps>`
-  padding: 0 10px;
+  padding: 0 12px;
   height: 100%;
   color: #9eacbf;
+  margin-bottom: 3px;
   font-family: "Poppins";
   font-style: normal;
   font-weight: 500;
-  font-size: 16px;
-  line-height: 120%;
-  color: ${(props) => (props.active ? "#4569FF" : "#9EACBF")};
+  font-size: 15px;
+  line-height: 130%;
+  color: ${(props) => (props.active ? "#533483" : "#ffffff")};
   border-bottom: ${(props) =>
-    props.active ? " 2px solid #4569FF" : "#9EACBF"};
+    props.active ? "4px solid #533483" : "#ffffff"};
+  /* border-top: ${(props) =>
+    props.active ? "1px solid #533483" : "#ffffff"}; */
   cursor: pointer;
-  transition: all 300ms;
+  transition: all 200ms;
   @media (max-width: 768px) {
     font-size: 12px;
   }
