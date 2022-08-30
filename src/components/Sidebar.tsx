@@ -53,7 +53,7 @@ export default function Sidebar() {
         if (open)
             sideBaRed.current.style.width = "76px"
         else
-            sideBaRed.current.style.width = "243px"
+            sideBaRed.current.style.width = "300px"
         setopen(!open)
     }
   return (
@@ -97,17 +97,17 @@ export default function Sidebar() {
 }
 
 const SidebarWrraper = styled.div<barProps>`
-    width: 243px;
+    width: 300px;
     max-width: 300px;
     height: calc(100%);
-    background-color: rgb(172,203,222, 0.5); 
+    background-color: ${props => props.theme.colors.primarybg}; 
     
     
     
     display: flex;
     align-items: flex-end;
     flex-direction: column;
-    border-radius: 10px;
+    border-radius: 0px 10px 0 0 ;
     transition-duration: 200ms;
     overflow: hidden;
     ${props => (props.open === false) && css`
@@ -191,6 +191,7 @@ const Items = styled.div`
                 width: 100%;
                 height: 5px;
                 display: none;
+                
             }
         }
     }
@@ -218,30 +219,40 @@ const Item = styled.a`
         height: 30px;
         
         path{
-            fill: ${props => props.theme.colors.seconderyText};
+            /* fill: ${props => props.theme.colors.seconderyText}; */
                 stroke: ${props => props.theme.colors.seconderyText}; 
             }
     }
 position: relative;
     &:hover{
         /* border-left: 8px solid ; */
-        color :${props => props.theme.colors.primarybg}; 
+        /* color :${props => props.theme.colors.primarybg};  */
         &::after{
             content: "";
             position: absolute;
             left: 0;
             height: 100%;
             width: 5px;
-            background-color: ${props => props.theme.colors.primarybg};
+            background-color: ${props => props.theme.colors.purple};
             border-radius: 7px ;
         }
-        svg{
+        /* &::before{ ToDO
+            content: "ddd";
+            position: absolute;
+            left: 0;
+            height: 100%;
+            width: 5px;
+            background-color: ${props => props.theme.colors.border};
+            border-radius: 7px ;
+        } */
+       svg{ 
             path{
-                fill: ${props => props.theme.colors.primarybg};
-                stroke: ${props => props.theme.colors.primarybg}; 
+                fill: ${props => props.theme.colors.seconderyText};
+                /* stroke: ${props => props.theme.colors.primarybg};  */
             }
-        }
+        } 
     }
     transition: all 20ms ease-in;
     
 `;
+

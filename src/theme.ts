@@ -12,8 +12,11 @@ export interface ThemeProps {
     seconderyText: string,
     primarybg: string,
     seconderybg: string,
+    bg: string
     green: string,
-    danger: string
+    border: string,
+    danger: string,
+    purple: string,
 
   },
   fontSize  :{
@@ -28,12 +31,15 @@ export interface ThemeProps {
   
   export const theme: ThemeProps = {
     colors: {
-      primaryText: "#FFFFFF",
-      seconderyText: "#434343",
-      primarybg: "#157DBD",
-      seconderybg: '#ACCBDE',
+      primaryText: "#C8D0D9",
+      seconderyText: "#EFF6FC",
+      primarybg: "#171A22",
+      bg: "#0E1117",
+      seconderybg: '#171A22',
       green: '#3CC592',
-      danger: "#F13950"
+      border: '#2F373F',
+      danger: "#F13950",
+      purple:'#590696'
 
     },
     fontSize: {

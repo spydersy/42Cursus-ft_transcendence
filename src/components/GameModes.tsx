@@ -23,7 +23,9 @@ display: flex;
 align-items: center;
 flex-direction: column;
 justify-content: space-around;
-border: 2px solid #2C85BE;
+background-color:  ${props => props.theme.colors.primarybg};
+border-radius: 5px;
+border: 2px solid  ${props => props.theme.colors.border};
 
 @media  only screen and (max-width: 768px) {
 

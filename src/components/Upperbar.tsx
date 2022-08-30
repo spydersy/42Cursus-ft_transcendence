@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import styled , {css} from "styled-components"
 import SearchIcon from "../assets/imgs/searchIcon.svg"
-import BellIcon from "../assets/imgs/bell-icon.svg"
+import {ReactComponent as BellIcon }from "../assets/imgs/bell-icon.svg"
 import TestAvatar from "../assets/imgs/tests/guy.svg" 
 import DropDown from './DropDown'
 
@@ -75,7 +75,7 @@ export  function SearchBarComponent() {
     )
   }
   const SearchBar = styled.div`
-  background: #FFFFFF;
+  background:  ${props => props.theme.colors.bg};
   border-radius: 5px;
   display: flex;
   align-items: flex-start;
@@ -94,6 +94,7 @@ export  function SearchBarComponent() {
         transform: translateY(-50%);
       }
       input{
+        background-color: transparent;
         width: calc(100% - 40px);
         height: 100%;
         border: none;
@@ -118,7 +119,7 @@ export  function SearchBarComponent() {
 export  function NotificationComponent() {
   return (
     <Notification new={true}  >
-      <img src={BellIcon} alt="notifications" />
+    <BellIcon/>
     </Notification>
   )
 }
@@ -129,6 +130,13 @@ new: boolean
 const Notification= styled.div<SearchProps>`
 width: auto;
 position: relative;
+>svg{
+  path{
+    stroke: ${props => props.theme.colors.primaryText};
+
+  }
+  
+}
 ${props => props.new && css`
 &::after{
     content: "";

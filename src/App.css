@@ -97,6 +97,11 @@ body {
     /* width: 1500px; */
     margin: 0 auto;
   }
+  .container2{
+    /* width: 1500px; */
+    margin: 0 auto;
+    max-width: 2500px;
+  }
 }
 @media  only screen and (min-width: 992px) {
   .container{
@@ -106,14 +111,24 @@ body {
     width: 960px;
     
   }
+  .container2{
+    /* width: 1500px; */
+    margin: 0 auto;
+    max-width: 2500px;
+  }
 }
 @media  only screen and (min-width: 1200px) {
   .container{
-    max-width: 1140px;
-    width: 1140px;
-    /* width: 1500px; */
+    /* max-width: 1140px; */
+    /* width: 1140px; */
+    width: 1500px;
     margin: 0 auto;
     /* background-color: red; */
+  }
+  .container2{
+    /* width: 1500px; */
+    margin: 0 auto;
+    max-width: 2500px;
   }
 }
 @media  only screen and (min-width: 1400px) {
@@ -122,4 +137,10 @@ body {
     margin: 0 auto;
     max-width: 2000px;
   }
+  .container2{
+    /* width: 1500px; */
+    margin: 0 auto;
+    max-width: 2500px;
+  }
 }
+

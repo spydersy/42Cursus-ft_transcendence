@@ -6,67 +6,63 @@ import {ReactComponent as AddIcon} from "../assets/imgs/block-icon.svg";
 
 export default function Chat() {
   return (
-    <GridContainer className=''>
+    <GridContainer className='container'>
         <div className='right'>
         <ChatSidebar/>
             
         </div>
-        <div  className='top'>
-          <Top />
-        </div>
-        <div className='center'>
+        <div className='bodyy'>
+          <div  className='top'>
+            <Top />
+          </div>
+          <div className='center'>
 
-        <ChatBody/>
-        </div>
-        <div className='bottom'>
-          <BottomChat/>
+          <ChatBody/>
+          </div>
+          <div className='bottom'>
+            <BottomChat/>
+          </div>
         </div>
     </GridContainer>
   )
 }
 
 const GridContainer = styled.div`
-display: grid;
-    /* grid-template-rows: auto; */
-    grid-template-rows: 80px 50px 50px 100px;
-  grid-template-areas: 
-    "right header header header"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right main main main"
-    "right bottom bottom bottom";
-    border: 1px solid ${props => props.theme.colors.primarybg};
-    font-family: 'Poppins' , sans-serif;
-    .right{
+display: flex;
 
-        grid-area: right;
+
+    border: 1px solid ${props => props.theme.colors.border};
+    font-family: 'Poppins' , sans-serif;
+    .bodyy{
+
+      flex: auto;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+    .right{
+      width: 400px;
    
     }
     .top{
-        grid-area: header;
-        border-bottom: 1px solid ${props => props.theme.colors.primarybg};
-
+      background-color: ${props => props.theme.colors.seconderybg}; ;
+      height: 70px;
+      width: 100%;
+      border-bottom: 1px solid ${props => props.theme.colors.border};
+      color:  ${props => props.theme.colors.primaryText};
     }
     .center{
+      flex: auto;
+      width: 100%;
 
-        grid-area: main;
     }
     .bottom{
-      border-top: 1px solid ${props => props.theme.colors.primarybg};
+      height: 70px;
+      width: 100%;
 
+      border-top: 1px solid ${props => props.theme.colors.border};
+      background-color: ${props => props.theme.colors.seconderybg}; ;
+      
         grid-area: bottom;
         display: flex;
         align-items: center;
@@ -106,7 +102,7 @@ const ChatSidebarStyle = styled.div`
   width: 100%;
   height: 100%;
   /* padding: 5px  5px; */
-  border-right: 1px solid ${props => props.theme.colors.primarybg};
+  border-right: 1px solid ${props => props.theme.colors.border};
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -160,8 +156,10 @@ const ChatSidebarStyle = styled.div`
     }
 `;
 const SearchBar = styled.input`
+background-color:${props => props.theme.colors.bg}  ;
   border: none;
-  border: 2px solid ${props => props.theme.colors.seconderyText};
+  outline: none;
+  border: 2px solid ${props => props.theme.colors.border};
   padding-left: 35px;
   width: calc(100% - 30px);
   height: 100%;
@@ -180,7 +178,7 @@ export  function ChatMesgComponent() {
   return (
       <ChatMesgstyle>
 
-        <AvatarComponent/>
+        <Avatar/>
         <div>
           <div className='name'>
             mohamed Elkarmi
@@ -197,6 +195,10 @@ export  function ChatMesgComponent() {
       </ChatMesgstyle>
   )
 }
+const Avatar = styled(AvatarComponent)`
+  width: 40px;
+  height: 40px;
+`
   const ChatMesgstyle = styled.a`
  
     height: 65px;
@@ -218,7 +220,10 @@ export  function ChatMesgComponent() {
       align-items: flex-start;
       justify-content: space-between;
       flex-direction: column;
-      .name{}
+      .name{
+        color:  ${props => props.theme.colors.primaryText};
+
+      }
       .msg{
         font-size: 15px;
         color:  ${props => props.theme.colors.seconderyText};
@@ -229,7 +234,7 @@ export  function ChatMesgComponent() {
       position: absolute;
       top: 10px;
       right: 10px;
-      color: ${props => props.theme.colors.primarybg};
+      color: ${props => props.theme.colors.purple};
       font-size: 10px;
     }
   `;
@@ -289,16 +294,16 @@ const BlockFriendStyle = styled.div`
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
+    color: ${props => props.theme.colors.primaryText};
     cursor: pointer;
 
     svg{
  
         path{
-            /* fill: ${props => props.theme.colors.danger} */
+            fill: ${props => props.theme.colors.primaryText};
         }
     }
-    color: #000;
-    border: 1px solid ${props => props.theme.colors.seconderyText};
+    border: 1px solid ${props => props.theme.colors.border};
     border-radius: 10px;
     padding: 0 5px;
 `;
@@ -326,19 +331,24 @@ export  function BottomChat() {
      > textarea{
       flex: auto;
       height: 100%;
-      background-color: white;
+      background-color:  ${props => props.theme.colors.bg};
       border: none;
       outline: none;
-      border: 1px solid ${props => props.theme.colors.primarybg};
+      border: 1px solid ${props => props.theme.colors.border};
       border-radius: 5px;
+      color : ${props => props.theme.colors.primaryText};
+
      }
      >button{
+      background-color:  ${props => props.theme.colors.bg};
+      border: 1px solid ${props => props.theme.colors.border};
+
       height: 100%;
       width: 150px;
       border-radius: 5px;
       outline: none;
-      border: none;
-      color : ${props => props.theme.colors.primarybg};
+      /* border: none; */
+      color : ${props => props.theme.colors.primaryText};
       cursor: pointer;
      }
   `;
@@ -369,7 +379,7 @@ export  function BottomChat() {
     height: auto;
     align-items: flex-end;
     flex-direction: row;
-    background-color: red;
+    /* background-color: red; */
   }
   
 `;

@@ -68,27 +68,29 @@ const HistoryComponent = styled.div`
     display: flex;
     /* align-items: center; */
 
-    background: #D8E4ED;
+    background: #171A22;
     flex-direction: column;
     border-radius: 10px ;
     padding: 0 15px;
+    border : 1px solid ${props => props.theme.colors.border};;
 `
 const Head = styled.div`
     margin-bottom: 20px;
     width: 100%;
     height: 60px;
-    background-color: red;
-    border-bottom: 1px solid ${props => props.theme.colors.seconderyText};;
+
+    border-bottom: 1px solid ${props => props.theme.colors.border};;
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-size:${props => props.theme.fontSize.l} ;
     font-weight: 600;
-    background: #D8E4ED;
+    color :${props => props.theme.colors.primaryText}; 
+    background: transparent;
     > a{
         align-items: center;
         font-size: ${props => props.theme.fontSize.s};
-        color: ${props => props.theme.colors.seconderyText};
+        color: ${props => props.theme.colors.primaryText};
     }
     /* border-radius: 10px ; */
 `
@@ -145,10 +147,10 @@ const GameCompStyle = styled.div<GameCompProps>`
     background: linear-gradient(270deg, #157DBD 3.1%, rgba(21, 125, 189, 0.82) 44.76%, rgba(21, 125, 189, 0.58) 72.2%, #FFFFFF 100.65%); */
     width: 100%;
     height: 55px;
-    background: #CEE7F6;
-    border-top: 2px solid #2C85BE;
-    border-bottom: 2px solid #2C85BE;
-    border-left: 2px solid #2C85BE;
+    background: ${props => props.theme.colors.bg};
+    border-top: 2px solid  ${props => props.theme.colors.border};
+    border-bottom: 2px solid  ${props => props.theme.colors.border};
+    border-left: 2px solid  ${props => props.theme.colors.border};
     margin-bottom: 10px;
     display: flex;
     align-items: center;
@@ -187,6 +189,7 @@ const Data = styled.div`
     font-family: 'Poppins', sans-serif;
     font-style: normal;
     font-weight: 600;
+    color:  ${props => props.theme.colors.primaryText};
     .name{
         font-family: 'Poppins' , sans-serif;
         font-style: normal;
@@ -198,7 +201,7 @@ const Data = styled.div`
         text-align: center;
         letter-spacing: 0.5px;
 
-        color: #000000;
+        /* color: #000000; */
         /* margin: 10px 0px 3px 10px; */
     }
     .stat{
@@ -212,7 +215,7 @@ const Data = styled.div`
         text-align: center;
         letter-spacing: 0.5px;
 
-        color: #000000;
+        /* color: #000000; */
         
     }
 `;
@@ -242,11 +245,11 @@ const AddFriendStyle = styled.div`
     svg{
  
         path{
-            fill: ${props => props.theme.colors.primarybg}
+            fill: ${props => props.theme.colors.primaryText}
         }
     }
-    color: ${props => props.theme.colors.primarybg};
-    border: 1px solid ${props => props.theme.colors.primarybg};
+    color: ${props => props.theme.colors.primaryText};
+    border: 1px solid ${props => props.theme.colors.border};
     border-radius: 10px;
     padding: 0 5px;
 `;
@@ -300,14 +303,15 @@ export  function AchievmentComp(props : AchievmentCompProps) {
 const AchievmentCompStyle = styled.div`
     width: 300px;
     height: 55px;
-    background: #CEE7F6;
-    border: 2px solid #2C85BE;
+    background: ${props => props.theme.colors.bg};;
+    border: 2px solid ${props => props.theme.colors.border};;
     margin-bottom: 10px;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
     position: relative;
     /* justify-content: ; */
+    color: ${props => props.theme.colors.primaryText};;
     #title{
         font-family: 'Poppins' , sans-serif;
         font-style: normal;
@@ -319,7 +323,6 @@ const AchievmentCompStyle = styled.div`
         text-align: center;
         letter-spacing: 0.5px;
 
-        color: #000000;
         margin: 10px 0px 3px 10px;
     }
     #desc{
@@ -333,7 +336,7 @@ const AchievmentCompStyle = styled.div`
         text-align: center;
         letter-spacing: 0.5px;
 
-        color: #000000;
+        
         margin-left: 10px;
         /* max-width: ; */
 

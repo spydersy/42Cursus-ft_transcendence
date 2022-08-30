@@ -4,12 +4,13 @@ import Sidebar from '../components/Sidebar'
 import Upperbar from '../components/Upperbar'
 import styled from "styled-components"
 import Tet from "../assets/imgs/tests/test2.png"
-import Penta from "../assets/imgs/penta.svg"
+import { ReactComponent as Penta} from "../assets/imgs/penta.svg"
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import GameModes from '../components/GameModes'
 import History , {AchievementHistory} from '../components/History'
 import Navlinks from '../components/Navlinks'
+import Slider from '../components/Slider'
 
 const player = {
   name: "Alchemist",
@@ -26,8 +27,9 @@ export default function Home() {
     <div className='container' >
       <Hero>
         {/* <PlayerCard player={player} /> */}
-        <Stats player={player} />
-
+        {/* <Stats player={player} /> */}
+        
+        <Slider/>
     </Hero>
      <GameModes/>
       {/* <HeadComponent title=""/> */}
@@ -51,8 +53,9 @@ margin-top: 100px;
 display: flex;
 align-items: center;
 justify-content: space-around;
-border: 2px solid #2C85BE;
-
+border-radius: 5px;
+border: 2px solid  ${props => props.theme.colors.border};
+background-color: ${props => props.theme.colors.primarybg};
 @media  only screen and (max-width: 768px) {
     flex-direction: column;
     gap: 12px;
@@ -161,7 +164,7 @@ export function Stats(props: PlayerCardProps) {
             transformOrigin: 'center center',
           },
           trail: {
-            stroke: '#ACCBDE',
+            stroke: '#0E1117',
             strokeLinecap: 'round',
 
           },
@@ -183,7 +186,7 @@ export function Stats(props: PlayerCardProps) {
           PLAYED GAMES
         </div>
       </div>
-      <img src={Penta} alt="penta" />
+     <Penta/>
     </div>
      <div className='progessCont' style={{ width: "140px", height: "140px" }}>
       <CircularProgressbar  styles={{
@@ -194,7 +197,7 @@ export function Stats(props: PlayerCardProps) {
             transformOrigin: 'center center',
           },
           trail: {
-            stroke: '#ACCBDE',
+            stroke: '#0E1117',
             strokeLinecap: 'round',
 
           },
@@ -205,7 +208,7 @@ export function Stats(props: PlayerCardProps) {
       }}
       value={66}  text={`${66}%`} />
       <div className='circularLabel'>
-      {props.player.won} <span style={{color: "#3CC592"}}>Won </span>
+      {props.player.won} <span style={{color: "#3CC592"}}> Won </span>
       </div>
     </div>
      </Data>
@@ -250,6 +253,9 @@ const Data = styled.div`
       overflow: hidden;
       white-space: nowrap;
       margin-top: 20px;
+      color : ${props => props.theme.colors.primaryText};
+ 
+}
       
    }
   }
@@ -291,16 +297,23 @@ const Data = styled.div`
       -webkit-text-stroke: 1px #000;
     }
   }
-  > img {
+  > svg {
     width: 100%;
     height: 100%;
-  }
-}
+    /* display: none; */
+    /* svg{ */
+ 
+ path{
+     stroke: ${props => props.theme.colors.purple}
+ } 
+} 
+  
+
 `
 const ProgressBar = styled.div`
   width: 90%;
   height: 27px;
-  background-color: ${props => props.theme.colors.seconderybg};
+  background-color: ${props => props.theme.colors.bg};
   border-radius: 12.3071px;
   display: flex;
   align-items: center;
@@ -313,7 +326,7 @@ const ProgressBar = styled.div`
     align-items: flex-end;
     height: 100%;
     width: 36%;
-    background-color: ${props => props.theme.colors.primarybg};
+    background-color: ${props => props.theme.colors.purple};
     border-radius: 12.3071px;
     .lvl{
       margin-right: 10px;
