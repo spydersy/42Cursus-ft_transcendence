@@ -1,10 +1,58 @@
-import React from 'react'
-import styled , {css} from "styled-components"
+import React , {useEffect, useState, useRef}from 'react'
+import styled  from "styled-components"
 import { ReactComponent as SearchIcon}  from "../assets/imgs/searchIcon.svg"
 import { AvatarComponent } from '../components/Upperbar';
 import {ReactComponent as AddIcon} from "../assets/imgs/block-icon.svg";
+import {ReactComponent as SendIcon} from "../assets/imgs/send-icon.svg";
+import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
 
+
+const msgList = [
+  {
+    id: "0",
+    msg : "salam merhba", 
+  },
+  {
+    id: "0",
+    msg : "kidayr", 
+  }
+  , {
+    id: "1",
+    msg : "hamdulah unta ach fiha", 
+  }
+  , {
+    id: "0",
+    msg : "mafiha walo hh", 
+  }
+  , {
+    id: "1",
+    msg : "hh", 
+  },
+  {
+    id: "0",
+    msg : "ewa", 
+  }
+]
+interface chatType {
+  id: string,
+  msg: string,
+
+}
+interface ChatProps {
+  setList: (e : any) => void,
+  list: chatType[]
+
+}
 export default function Chat() {
+  const [list, setlist] = useState(msgList)
+
+ 
+  useEffect(() => {
+      
+    // alert("ss")
+    console.log(list)
+    
+  }, [list ])
   return (
     <GridContainer className='container'>
         <div className='right'>
@@ -17,10 +65,11 @@ export default function Chat() {
           </div>
           <div className='center'>
 
-          <ChatBody/>
+          <ChatBody list={list} setList={(e)=>{setlist(e)}}/>
           </div>
           <div className='bottom'>
-            <BottomChat/>
+            <BottomChat list={list} setList={(e)=>{setlist(e)}}  />
+          
           </div>
         </div>
     </GridContainer>
@@ -106,6 +155,7 @@ const ChatSidebarStyle = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin-bottom: 10px;
     .title{
 
         color :${props => props.theme.colors.seconderyText}; 
@@ -178,8 +228,10 @@ export  function ChatMesgComponent() {
   return (
       <ChatMesgstyle>
 
-        <Avatar/>
-        <div>
+        <Avatar>
+          <AvatarComponent/>
+        </Avatar>
+        <div className='mesgData'>
           <div className='name'>
             mohamed Elkarmi
           </div>
@@ -195,25 +247,25 @@ export  function ChatMesgComponent() {
       </ChatMesgstyle>
   )
 }
-const Avatar = styled(AvatarComponent)`
-  width: 40px;
-  height: 40px;
+const Avatar = styled.div`
+  width: 50px;
+  height: 50px;
 `
   const ChatMesgstyle = styled.a`
  
-    height: 65px;
+    height: 70px;
     width: 100%;
   position: relative;
     border-radius: 5px;
     align-items: center;
-    
     display: flex;
-    margin-bottom: 5px;
+    
+    margin-bottom: 10px;
     &:hover{
-      border :1px solid ${props => props.theme.colors.seconderybg}; 
+      /* border :1px solid ${props => props.theme.colors.seconderybg};  */
       background-color: ${props => props.theme.colors.seconderybg};
     }
-    > div{
+     .mesgData{
       margin-left: 12px;
       height: 40px;
       display: flex;
@@ -226,6 +278,7 @@ const Avatar = styled(AvatarComponent)`
       }
       .msg{
         font-size: 15px;
+        opacity: 0.7;
         color:  ${props => props.theme.colors.seconderyText};
       }
 
@@ -243,12 +296,16 @@ const Avatar = styled(AvatarComponent)`
 export  function Top() {
   return (
     <TopStyle>
-      <div>
+      <div style={{flex:"auto"}}>
+        <div style={{width: "40px" , height: "40px"}}>
+
         <AvatarComponent/>
-        <div>
+        </div >
+        <div >
             mohamed elkarmi
         </div>
       </div>
+      <ChallengeFriend/>
       <BlockFriend/>
     </TopStyle>
   )
@@ -265,6 +322,8 @@ const TopStyle = styled.div`
       width: 95%;
       height: 100%;
       margin: 0 auto;
+      gap: 5px;
+
     >div{
       display: flex;
       align-items: center;
@@ -282,6 +341,14 @@ export  function BlockFriend() {
     </BlockFriendStyle>
   )
 }
+export  function ChallengeFriend() {
+  return (
+    <BlockFriendStyle>
+        <GameIcon/>
+        Challenge
+    </BlockFriendStyle>
+  )
+}
 const BlockFriendStyle = styled.div`
    font-family: 'Poppins';
     font-style: normal;
@@ -294,13 +361,14 @@ const BlockFriendStyle = styled.div`
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    color: ${props => props.theme.colors.primaryText};
+    color: ${props => props.theme.colors.bg};
+    background-color: ${props => props.theme.colors.primaryText};
     cursor: pointer;
 
     svg{
  
         path{
-            fill: ${props => props.theme.colors.primaryText};
+            stroke: ${props => props.theme.colors.bg};
         }
     }
     border: 1px solid ${props => props.theme.colors.border};
@@ -309,12 +377,36 @@ const BlockFriendStyle = styled.div`
 `;
 
 
-export  function BottomChat() {
+export  function BottomChat(props: ChatProps) {
+
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const addMessage = ()=>{
+
+      var mesg : string = "";
+      if (inputRef.current?.value)
+      {
+        mesg =  inputRef.current.value
+        inputRef.current.value = ""
+      }
+      
+      if (mesg === "")
+        return ;
+      var msgtmp : chatType =  {
+        id: "1",
+        msg: mesg
+      }
+      var list =  props.list
+      list.push(msgtmp)
+      props.setList([...list])
+  }
+ 
   return (
     <BottomChatStyle>
-      <textarea  placeholder='Write something ..' />
-      <button>
+      <textarea ref={inputRef} 
+        placeholder='Write something ..' />
+      <button onClick={addMessage}>
         Send
+        <SendIcon/>
       </button>
     </BottomChatStyle>
   )
@@ -349,22 +441,35 @@ export  function BottomChat() {
       outline: none;
       /* border: none; */
       color : ${props => props.theme.colors.primaryText};
+      font-family: 'Poppins', sans-serif;
+      font-size:  ${props => props.theme.fontSize.l};;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
       cursor: pointer;
+      >svg{
+        path{
+          stroke:  ${props => props.theme.colors.primaryText};
+        }
+      }
      }
   `;
 
   
-  export  function ChatBody() {
+  export  function ChatBody(props: ChatProps) {
+ 
+    
     return (
       <ChatBodyStyle>
-<div>
+        {
+          props.list.map((object: any , i : number)=>{
+            if (object.id === "0")
+              return <div key={i} >  <MsgNotStyle>{object.msg} </MsgNotStyle></div>
+              else
+              return <div key={i}  >  <MsgStyle>{object.msg} </MsgStyle></div>
 
-        <MsgNotStyle>dds</MsgNotStyle>
-</div>
-        {/* <MsgStyle></MsgStyle>
-        <MsgNotStyle>dds</MsgNotStyle>
-        <MsgStyle>dds</MsgStyle> */}
-
+          })
+        }
       </ChatBodyStyle>
     )
   }
@@ -374,29 +479,41 @@ export  function BottomChat() {
   align-items: center;
   flex-direction: column;
   >div{
-    display: flex;
+   display: flex;
     width: 100%;
+    margin: 5px 10px;
     height: auto;
-    align-items: flex-end;
-    flex-direction: row;
-    /* background-color: red; */
+
+     align-items: flex-end; 
+    flex-direction: row; 
   }
   
 `;
   const    MsgStyle = styled.div`
-  background-color: ${props => props.theme.colors.seconderybg};
-  min-width: 300px;
+  background-color: ${props => props.theme.colors.purple};
+  /* min-width: 300px; */
   min-height: 26px;
   /* align-items: flex-end; */
   border-radius: 5px;
+  margin-left: auto;
+  margin-right: 10px;
+  text-align: start;
+  padding :5px;
+  max-width: 200px;
   `;
   const    MsgNotStyle = styled.div`
   /* align-items: flex-end; */
+  text-align: start;
+  padding :5px;
+  height: auto;
   align-self: flex-end;
   border-radius: 5px;
-  min-height: 26px;
+  /* min-height: 26px; */
   background-color: #D9D9D9;
-  min-width: 300px;
+  max-width: 200px;
+  margin-right: auto;
+  margin-left: 10px;
+  /* min-width: ; */
   
 `;
 

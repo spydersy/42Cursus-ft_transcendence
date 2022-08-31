@@ -1,45 +1,29 @@
-import React, {useState} from 'react'
-import Carousel from '../components/Carousel'
-import Sidebar from '../components/Sidebar'
-import Upperbar from '../components/Upperbar'
+import React from 'react'
+
+
+
 import styled from "styled-components"
 import Tet from "../assets/imgs/tests/test2.png"
 import { ReactComponent as Penta} from "../assets/imgs/penta.svg"
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import GameModes from '../components/GameModes'
-import History , {AchievementHistory} from '../components/History'
-import Navlinks from '../components/Navlinks'
+// import History , {AchievementHistory} from '../components/History'
+
 import Slider from '../components/Slider'
 
-const player = {
-  name: "Alchemist",
-  lvl: "Gold",
-  gamePlayed : 350,
-  lost : 200,
-  won : 150,
-}
-const linkslist = ["All Users", "Friends" , "blocked"]
-
 export default function Home() {
-  const [index, setindex] = useState(1)
+  // const [index, setindex] = useState(1)
   return (
-    <div className='container' >
+    <div className='container' style={{width: "1500px" }} >
       <Hero>
-      <HeadComponent title="Live Games"/>
-        {/* <PlayerCard player={player} /> */}
-        {/* <Stats player={player} /> */}
-        
+        <HeadComponent title="Live Games"/>
         <Slider/>
-    </Hero>
-     <GameModes/>
-    
-    {/* <Hero style={{marginTop : "40px"}}>
-      <History />
-      <AchievementHistory />
-
-    </Hero>  */}
-
+      </Hero>
+      <GameModes/>
+      <Hero style={{marginTop : "40px" , flexDirection: "column"}}>
+        <HeadComponent title="History"/>
+      </Hero> 
     </div>
   )
 }
@@ -351,10 +335,12 @@ export function HeadComponent(props: headProps) {
 const Head = styled.div`
 /* margin-top: 50px; */
   width: 90%;
-  border-bottom: 3px solid ${props => props.theme.colors.border};
+  /* border-bottom: 3px solid ${props => props.theme.colors.border}; */
   text-align: start;
-  text-transform: uppercase;
-  font-family: 'Poppins' , sans-serif;
+  /* text-transform: uppercase; */
+  /* font-family: 'Poppins' , sans-serif; */
+  font-family: 'Michroma', sans-serif;
+
   font-size:  ${props => props.theme.fontSize.ll};
   color:  ${props => props.theme.colors.seconderyText};;
   padding: 4px 0px;

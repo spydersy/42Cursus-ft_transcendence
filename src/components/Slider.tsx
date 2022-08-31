@@ -25,7 +25,7 @@ export default function Slider() {
                     classname = "main";
                 else if (id === main - 1)
                     classname = "left";
-                else if (id == main + 1)
+                else if (id === main + 1)
                     classname = "right"
                 else if (id > main + 1)
                     classname = "emptyright"
@@ -94,7 +94,7 @@ const SliderContainer = styled.div`
         width: 300px;
         height:  250px;
         z-index: 3;
-        background-color: white;
+        /* background-color: white; */
     }
     .right{
         top: 50%;

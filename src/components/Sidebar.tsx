@@ -1,6 +1,5 @@
 import React , {useState , useRef, useEffect} from 'react'
 import styled , {css} from "styled-components"
-import ExpandIcon from "../assets/imgs/dashboardIcon.svg"
 import {ReactComponent as DashIcon} from "../assets/imgs/dashboardIcon.svg";
 import {ReactComponent as DMIcon} from "../assets/imgs/dm.svg";
 import {ReactComponent as RoomIcon} from "../assets/imgs/room.svg";
@@ -40,6 +39,24 @@ export default function Sidebar() {
 
 
     const [focused, setfocused] = useState(0)
+    const openClose=  ()=>
+    {   
+        if ( window.innerWidth < 800)
+        {
+            sideBaRed.current.style.width = "100%" 
+            return ;
+        }
+        if (open)
+            sideBaRed.current.style.width = "76px"
+        else
+            sideBaRed.current.style.width = "300px"
+        setopen(!open)
+    }
+    const changeFocus=  (page : number)=>
+    {   
+       
+        setfocused(page)
+    }
     useEffect(() => {
         const pageName = window.location.pathname.split("/")[1];
         var pagenum = 0;
@@ -48,10 +65,7 @@ export default function Sidebar() {
         else if (pageName === "chat" ) pagenum = 1;
         else if (pageName === "rooms" ) pagenum = 2;
         else if (pageName === "users" ) pagenum = 3;
-        setfocused(pagenum)
-    // if (window.innerWidth < 1440  )
-    //     setopen(false)
-
+        changeFocus(pagenum)
 
     window.addEventListener("resize", (e : any)=>{
         if ( e.currentTarget?.innerWidth >= 700)
@@ -74,21 +88,8 @@ export default function Sidebar() {
       return () => {
         
       }
-    }, [setopen])
+    }, [setopen, setfocused ])
     
-    const openClose=  ()=>
-    {   
-        if ( window.innerWidth < 800)
-        {
-            sideBaRed.current.style.width = "100%" 
-            return ;
-        }
-        if (open)
-            sideBaRed.current.style.width = "76px"
-        else
-            sideBaRed.current.style.width = "300px"
-        setopen(!open)
-    }
   return (
     <SidebarWrraper ref={sideBaRed} open={open}>
         {open ? <Left onClick={openClose}   />: <Right onClick={openClose} /> }
@@ -106,7 +107,13 @@ export default function Sidebar() {
             })
         }
        </Items> 
-
+       <Item  active={false} href={"/"}>
+                <LogoutIcon/>
+                {
+                    open ? <div>LogOut</div> : <ToolTip>LogOut</ToolTip>  
+                }
+                
+            </Item>;
     </SidebarWrraper>
   )
 }
@@ -305,8 +312,6 @@ const Item = styled.a<ItemProps>`
             visibility: visible;
 					opacity: 1;
         }
-        /* border-left: 8px solid ; */
-        color : ${props => props.theme.colors.purple}; 
         &::after{
             content: "";
             position: absolute;
@@ -325,11 +330,7 @@ const Item = styled.a<ItemProps>`
             background-color: ${props => props.theme.colors.border};
             border-radius: 7px ;
         } */
-       svg{ 
-            path{
-                stroke: ${props => props.theme.colors.purple}; 
-            }
-        } 
+       
     }
     transition: all 20ms ease-in;
     

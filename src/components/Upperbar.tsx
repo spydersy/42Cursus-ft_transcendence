@@ -162,12 +162,13 @@ export  function AvatarComponent() {
 }
 
 const Avatar = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 100%;
+  height: 100%;
   border-radius : 50%;
   img{
     width: 100%;
     height: 100%;
+    object-fit: contain;
   }
   border: 2px solid   ${props => props.theme.colors.primarybg};;
 
