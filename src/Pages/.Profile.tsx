@@ -333,9 +333,10 @@ const TabOone = styled.div`
   height: 400px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: left;
-  padding: 0px;
+  justify-content: center;
+  padding: 20px;
   overflow-y: scroll;
+
   &::-webkit-scrollbar {
   width: 4px;
 }
@@ -473,13 +474,17 @@ return (
 const UserCardStyle = styled.div`
   position: relative;
   padding: 0px;
-  margin: 20px;
+  margin: 10px;
   width: 180px;
-  height: 180px;
+  height: 150px;
   background: ${Backcolor};
-  border-radius: 8px;
+  border-radius: 10px;
 
   transition: 1.2s ease-out;
+   
+  display: flex;
+      align-items: center;
+    flex-direction: column;
   /* animation: 8ms; */
   
   .img{
@@ -525,8 +530,8 @@ const UserCardStyle = styled.div`
 
   &:hover{
     background: ${Backcolor};
-    width: 220px;
-    height: 300px;
+    width: 180px;
+    height: 250px;
     transition: 0.6s ease-out;
     .img{
       position: absolute;
@@ -539,8 +544,8 @@ const UserCardStyle = styled.div`
       border-radius: 20%;
       transition: 0.9s ease-in-out;
       > img {
-        width: 150px;
-        height:150px;
+        width: 110px;
+        height:110px;
         padding: 5px 5px 5px 5px ;
         transition: 0.9s ease-in-out;
       }
@@ -566,21 +571,19 @@ const UserCardStyle = styled.div`
       padding: 0px 0px;
       margin-top: 10px;
       bottom: 20%;
-   
-
-      text-align: center;
-      font-size: 24px;
-      font-weight: 80px;
+      font-size: 18px;
       line-height: 25px;
       text-transform: capitalize;
-      font: 20px; 
       font-weight: bold;
-      text-align: center;
+      border: 2px solid ${Backcolor};
+
     }
     .grade{
         position: absolute;
         text-align: center;
-        color: #ffffff;
+        color: #ffffff ;
+        border: 2px solid ${Backcolor};
+
         bottom: 10%;
       }
   }
@@ -595,3 +598,5 @@ export function Tabthree()
 
 
 
+// State Comp in profile card 
+// game history

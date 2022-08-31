@@ -301,8 +301,8 @@ export  function AchievmentComp(props : AchievmentCompProps) {
 }
 
 const AchievmentCompStyle = styled.div`
-    width: 300px;
-    height: 55px;
+    width: 350px;
+    height: 60px;
     background: ${props => props.theme.colors.bg};;
     border: 2px solid ${props => props.theme.colors.border};;
     margin-bottom: 10px;
