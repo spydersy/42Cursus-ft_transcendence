@@ -3,10 +3,13 @@ import { Injectable, Query } from '@nestjs/common';
 import { lastValueFrom, map } from 'rxjs';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-    constructor(private httpService: HttpService, private prisma: PrismaService) { }
+    constructor(private httpService: HttpService,
+                private prisma: PrismaService,
+                private jwtTokenService: JwtService) { }
 
     Check42ApiQueryCode(@Query() query) : Boolean {
         if (query['error'] || !query['code']) {
@@ -62,12 +65,14 @@ export class AuthService {
         }
     }
 
-    UserExist(UserProfile: User) : Boolean {
-        const user = this.prisma.users.findUnique({
+    async UserExist(UserProfile: User) {
+        // console.log(UserProfile.Login);
+        let user = await this.prisma.users.findUnique({
             where: {
                 Id: UserProfile.Id,
             },
         });
+        console.log(user);
         if (user) {
             return true;
         }
@@ -111,12 +116,22 @@ export class AuthService {
         return user;
     }
 
+    async GenerateJWT(user: User) {
+        const payload = {Id: user.Id, Login: user.Login};
+        return { access_token: this.jwtTokenService.sign(payload),
+        };
+    }
+
     async SigninLogic(@Query() query): Promise<string> {
+        let UserDto: User;
         if (this.Check42ApiQueryCode(query) === true) {
             const Token = await this.GetUserToken(query['code']);
             const UserProfile = await this.ClaimUserProfile(Token, query['code']);
-            if (this.UserExist(UserProfile['data']) === false) {
-                this.AddUserToDB(this.GenerateUserDto(UserProfile['data']));
+            UserDto =this.GenerateUserDto(UserProfile['data']);
+            if (await this.UserExist(UserDto) === false) {
+                this.AddUserToDB(UserDto);
+                // let ret00 = await this.GenerateJWT(UserDto)
+                // console.log("__JSON__WEB__TOKEN__ : ", ret00);
             }
             else {
                 // Destroy Old JWT Then Set New One
@@ -126,6 +141,6 @@ export class AuthService {
         else {
             this.HandleSigninErrors(query);
         }
-        return "Default Auth Called"; // redirect to HomePage [http://localhost:3000/]
+        return `Hello ${UserDto.UsualFullName}`; // redirect to HomePage [http://localhost:3000/]
     }
 }
