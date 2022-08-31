@@ -119,9 +119,9 @@ body {
 }
 @media  only screen and (min-width: 1400px) {
   .container{
-    /* width: 1500px; */
+    width: 1500px;
     margin: 0 auto;
-    max-width: 2000px;
+    /* max-width: 2000px; */
   }
 
 }

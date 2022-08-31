@@ -498,13 +498,13 @@ export  function BottomChat(props: ChatProps) {
   margin-left: auto;
   margin-right: 10px;
   text-align: start;
-  padding :5px;
+  padding :2px 5px;
   max-width: 200px;
   `;
   const    MsgNotStyle = styled.div`
   /* align-items: flex-end; */
   text-align: start;
-  padding :5px;
+  padding :2px 5px;
   height: auto;
   align-self: flex-end;
   border-radius: 5px;

@@ -16,6 +16,9 @@ export default function Upperbar() {
         <LogoComponent/>
         <SearchBarComponent/>
         <RightCont>
+          <PlayButton href="/game">
+            Play
+          </PlayButton>
           <NotificationComponent/>
           <div  style={{position : "relative"}} onClick={(e)=>{ToggleDD(e)}}>
             <AvatarComponent/>
@@ -33,6 +36,20 @@ export default function Upperbar() {
   )
 }
 
+const PlayButton = styled.a`
+  width:150px;
+  height :40px;
+  border: none;
+  outline:none;
+  cursor:pointer;
+  color: ${props => props.theme.colors.primaryText};;;
+  background :  ${props => props.theme.colors.purple};
+  border:1px solid ${props => props.theme.colors.border};;
+  border-radius: 5px;
+  font-family: 'Michroma', sans-serif;
+
+`;
+
 const Wrraper = styled.div`
 
    width: calc(100vw - (26 * 2));
@@ -46,7 +63,7 @@ const Wrraper = styled.div`
   
 `;
 const RightCont = styled.div`
-width: 100px;
+width: 300px;
    display: flex;
    align-items:center;
    flex-direction: row;

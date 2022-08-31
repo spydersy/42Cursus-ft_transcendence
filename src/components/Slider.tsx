@@ -32,7 +32,7 @@ export default function Slider() {
                 else if (id <  main - 1)
                     classname = "emptyleft"
                 return<Slide onClick={()=>animatethis(id)} className={classname}key={id}  >
-                    data
+                    {data}
                 </Slide>
             })
         }

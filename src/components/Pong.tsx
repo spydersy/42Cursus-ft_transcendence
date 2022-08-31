@@ -17,7 +17,7 @@ export default function Pong({name}:myProps ) {
   const playerRef : any = useRef<SVGRectElement >(null);
   const player2Ref : any = useRef<SVGRectElement >(null);
   var player : number;
-  const [ready, setReady] = useState(false)
+  const [ready, setReady] = useState(true)
   const [header, setHeader] = useState("waiting")
   const [Player, setPlayer] = useState<any>()
   var UP_KEY = 38;
@@ -109,59 +109,59 @@ export default function Pong({name}:myProps ) {
       //   socket.emit("player move",x,  y )
       
     }
-    const socket = io('http://localhost:3030');
-    useEffect(() => {
+  //   const socket = io('http://localhost:3030');
+  //   useEffect(() => {
     
-      var args = {
-        name : name,
-        room : "room1"
-      }
-      socket.emit("joinRoom", args)
+  //     var args = {
+  //       name : name,
+  //       room : "room1"
+  //     }
+  //     socket.emit("joinRoom", args)
  
-      socket.on('RoomJoined', (id : number ) => {
-        console.log(id)
-          setHeader( name +" joined room Player " + id )
-          if (id === 1)
-          {
-            player = 1
+  //     socket.on('RoomJoined', (id : number ) => {
+  //       console.log(id)
+  //         setHeader( name +" joined room Player " + id )
+  //         if (id === 1)
+  //         {
+  //           player = 1
 
-            }
-            else
-            {
-              player = 2
-          }
-          console.log(player)
+  //           }
+  //           else
+  //           {
+  //             player = 2
+  //         }
+  //         console.log(player)
 
-      });
-      socket.on('roomFilled', (id : number ) => {
-          setHeader(name +" joined room Watcher  " + id )
-      });
-      socket.on('StartGame', (id : number ) => {
-          setReady(true)
-      });
-      socket.on('disconnected', function() {
+  //     });
+  //     socket.on('roomFilled', (id : number ) => {
+  //         setHeader(name +" joined room Watcher  " + id )
+  //     });
+  //     socket.on('StartGame', (id : number ) => {
+  //         setReady(true)
+  //     });
+  //     socket.on('disconnected', function() {
 
-        socket.emit('leaveRoom', args);
+  //       socket.emit('leaveRoom', args);
 
-    });
-     if (ready)
-     {
-      const wp2 = parseInt(player2Ref.current.getAttribute('width'));
-      player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 50)
-      player2Ref.current.setAttribute('y' , 0)
-      playerRef.current.setAttribute('x' ,  50)
-      playerRef.current.setAttribute('y' , 0)
-      console.log("Player : " + player)
+  //   });
+  //    if (ready)
+  //    {
+  //     const wp2 = parseInt(player2Ref.current.getAttribute('width'));
+  //     player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 50)
+  //     player2Ref.current.setAttribute('y' , 0)
+  //     playerRef.current.setAttribute('x' ,  50)
+  //     playerRef.current.setAttribute('y' , 0)
+  //     console.log("Player : " + player)
       
-      document.addEventListener("keydown", movePlayer);
+  //     document.addEventListener("keydown", movePlayer);
 
      
 
-     }
+  //    }
      
-    return () => {
-    }
-  })
+  //   return () => {
+  //   }
+  // })
   
 
   return (

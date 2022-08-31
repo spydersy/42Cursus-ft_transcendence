@@ -16,6 +16,7 @@ import Sidebar from './components/Sidebar';
 import ProtectedLayout from './components/protected/ProtectedLayout';
 import Profile from './Pages/Profile';
 import Chat from './Pages/Chat';
+import Game from './Pages/Game';
 
 function App() {
   const [start, setstart] = useState(false)
@@ -38,7 +39,7 @@ function App() {
       sss
     </div> */}
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/game" element={<Pong name="mohamed" />} />
+            <Route path="/game" element={<Game />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/" element={<Home />} />
             <Route path="/profile/id" element={<Profile />} />
