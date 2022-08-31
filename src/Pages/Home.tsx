@@ -26,19 +26,19 @@ export default function Home() {
   return (
     <div className='container' >
       <Hero>
+      <HeadComponent title="Live Games"/>
         {/* <PlayerCard player={player} /> */}
         {/* <Stats player={player} /> */}
         
         <Slider/>
     </Hero>
      <GameModes/>
-      {/* <HeadComponent title=""/> */}
     
-    <Hero style={{marginTop : "40px"}}>
+    {/* <Hero style={{marginTop : "40px"}}>
       <History />
       <AchievementHistory />
 
-    </Hero> 
+    </Hero>  */}
 
     </div>
   )
@@ -54,6 +54,7 @@ display: flex;
 align-items: center;
 justify-content: space-around;
 border-radius: 5px;
+flex-direction: column;
 border: 2px solid  ${props => props.theme.colors.border};
 background-color: ${props => props.theme.colors.primarybg};
 @media  only screen and (max-width: 768px) {
@@ -348,9 +349,9 @@ export function HeadComponent(props: headProps) {
 }
 
 const Head = styled.div`
-margin-top: 50px;
-  width: 100%;
-  border-bottom: 3px solid #D8E4ED;
+/* margin-top: 50px; */
+  width: 90%;
+  border-bottom: 3px solid ${props => props.theme.colors.border};
   text-align: start;
   text-transform: uppercase;
   font-family: 'Poppins' , sans-serif;

@@ -62,6 +62,12 @@ const Item = styled.a`
     &:hover{
         background-color:  ${props => props.theme.colors.seconderybg};
         color : ${props => props.theme.colors.purple};
+        >svg{
+      path {
+        stroke: ${props => props.theme.colors.purple};
+      }
+    }
+        
     }
     cursor: pointer;
     >svg{

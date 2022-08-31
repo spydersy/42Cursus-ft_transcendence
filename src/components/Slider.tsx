@@ -7,12 +7,16 @@ import { ReactComponent as Left} from "../assets/imgs/left-Arrow.svg"
 const list  = [0,0 , 1 , 2 , 1 , 0, 0]
 export default function Slider() {
     const [main, setmain] = useState(2)
-    const animatethis =()=>{
-        setmain(main + 1)
+    const animatethis =(slideId: number)=>{
+        if (slideId < 0 )
+            return ;
+        if (slideId > list.length - 1 )
+            return ;
+        setmain(slideId)
     }
   return (
     <SliderStyle>
-            <LeftStyle/>
+            <LeftStyle onClick={()=>animatethis(main -1)}/>
             <SliderContainer>
             {
             list.map((data : any, id : number )=>{
@@ -27,7 +31,7 @@ export default function Slider() {
                     classname = "emptyright"
                 else if (id <  main - 1)
                     classname = "emptyleft"
-                return<Slide className={classname}key={id}  >
+                return<Slide onClick={()=>animatethis(id)} className={classname}key={id}  >
                     data
                 </Slide>
             })
@@ -49,7 +53,7 @@ export default function Slider() {
                 </Slide> */}
                 
             </SliderContainer>
-            <RightStyle onClick={animatethis}/>
+            <RightStyle onClick={()=>animatethis(main + 1)}/>
     </SliderStyle>
   )
 }
@@ -59,7 +63,7 @@ const SliderStyle = styled.div`
         display: flex;
         align-items: center;
         justify-content: space-between;
-        
+        width: 90%;
 
 `;
 const Slide = styled.div`
@@ -69,9 +73,10 @@ const Slide = styled.div`
     color:white;
     border: 2px solid  ${props => props.theme.colors.border};
     border-radius: 5px;
-    box-shadow: 0px 4px 10px 2px rgba(253, 6, 6, 0.22);
+    box-shadow: 0px 4px 10px 2px ${props => props.theme.colors.border};
     /* box-shadow: 0px 2px 2px 2px ${props => props.theme.colors.purple} ; */
-    transition-duration: 3000ms;
+    cursor: pointer;
+    transition-duration: 500ms;
 `;
 
 const SliderContainer = styled.div`
@@ -85,49 +90,53 @@ const SliderContainer = styled.div`
     .main{
         top: 50%;
         right: 50%;
+        /* left :50%; */
         width: 300px;
         height:  250px;
         z-index: 3;
+        background-color: white;
     }
     .right{
         top: 50%;
+        /* left :0; */
         right: calc(20%   );
-        width: 300px;
+        width: 250px;
         height:200px;
         z-index: 2;
     }
     .left{
         top: 50%;
-        left: calc(20% - 300px );
-        width: 300px;
+        /* right: 40%; */
+        right: calc(52% + 250px );
+        width: 250px;
         height: 200px;
         z-index: 2;
     }
     .emptyright{
         top: 50%;
-        right: 0;
+        right: -200px;
         width: 200px;
         height:150px;
         z-index: 1;
     }
     .emptyleft{
         top: 50%;
-        left: -200px;
+        right:  calc(100%  + 200px);
         width: 200px;
         height: 150px;
         z-index: 1;
     }
 `;
 const LeftStyle = styled(Left)`
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     path {
         stroke:  ${props => props.theme.colors.purple};;
     }
 `;
 const RightStyle = styled(Right)`
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     path {
         stroke:  ${props => props.theme.colors.purple};;
     }

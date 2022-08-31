@@ -7,15 +7,48 @@ import {ReactComponent as RoomIcon} from "../assets/imgs/room.svg";
 import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
 import {ReactComponent as ArrowLeft} from "../assets/imgs/arrowLeft.svg";
 import {ReactComponent as ArrowRight} from "../assets/imgs/arrowRight.svg";
+import {ReactComponent as LogoutIcon} from "../assets/imgs/logout-icon.svg";
 
 export interface barProps {
     open: boolean
     }
-    
+    const sideBarItemsList = [
+        {
+            title: "Dachboard",
+            link: "/",
+            icon: <DashIcon /> 
+        },
+        {
+            title: "Direct messages",
+            link: "/chat",
+            icon : <DMIcon />
+        },
+        {
+            title: "Rooms",
+            link: "/rooms",
+            icon : <RoomIcon />
+        },
+        {
+            title: "All Users",
+            link: "/users",
+            icon : <UsersIcon />
+        }
+    ]
 export default function Sidebar() {
     const sideBaRed : any= useRef<HTMLElement>(null);
     const [open, setopen] = useState(true)
+
+
+    const [focused, setfocused] = useState(0)
     useEffect(() => {
+        const pageName = window.location.pathname.split("/")[1];
+        var pagenum = 0;
+    
+        if (pageName === "" ) pagenum = 0;
+        else if (pageName === "chat" ) pagenum = 1;
+        else if (pageName === "rooms" ) pagenum = 2;
+        else if (pageName === "users" ) pagenum = 3;
+        setfocused(pagenum)
     // if (window.innerWidth < 1440  )
     //     setopen(false)
 
@@ -61,41 +94,30 @@ export default function Sidebar() {
         {open ? <Left onClick={openClose}   />: <Right onClick={openClose} /> }
 
 <Items>
+        {
+            sideBarItemsList.map((item : any , id : number)=>{
+                return <Item onClick={()=>setfocused(id)} active={id === focused ? true : false} href={item.link}>
+                {item.icon}
+                {
+                    open ? <div>{item.title}</div> : <ToolTip>{item.title}</ToolTip>  
+                }
+                
+            </Item>;
+            })
+        }
+       </Items> 
 
-        <Item href='/'>
-            <DashIcon />
-            {
-                open ? <div>Dashboard</div> : ""  
-            }
-            
-        </Item>
-        <Item  href='/chat' >
-            <DMIcon />
-            {
-                open ? <div>Direct messages</div> : ""  
-            }
-           
-        </Item>
-        <Item>
-            <RoomIcon />
-            {
-                open ? <div>Rooms</div> : ""  
-            }
-            
-        </Item>
-        <Item>
-            <UsersIcon />
-            {
-                open ? <div>All Users</div> : ""  
-            }
-            
-        </Item>
-
-</Items>
     </SidebarWrraper>
   )
 }
 
+
+interface ItemProps {
+ 
+    active : boolean
+
+
+  }
 const SidebarWrraper = styled.div<barProps>`
     width: 300px;
     max-width: 300px;
@@ -109,7 +131,6 @@ const SidebarWrraper = styled.div<barProps>`
     flex-direction: column;
     border-radius: 0px 10px 0 0 ;
     transition-duration: 200ms;
-    overflow: hidden;
     ${props => (props.open === false) && css`
     align-items: center ;
     width: 76px;
@@ -167,7 +188,8 @@ const Left = styled(ArrowLeft)`
 `;
 const Items = styled.div`
 
-    width: 90%;
+    width: 100%;
+    flex: auto;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -199,7 +221,35 @@ const Items = styled.div`
     
     
 `;
-const Item = styled.a`
+const ToolTip = styled.span`
+                display: inline-block;
+				position: absolute;
+				background-color:  ${props => props.theme.colors.seconderybg}; 
+				padding: 8px 12px;
+				border-radius: 3px;
+				/* margin-top: -26px; */
+				left: calc(100% + 11px);
+				opacity: 1;
+				visibility: hidden;
+				font-size: 10px;
+				letter-spacing: .5px;
+				/* border: 1px solid ${props => props.theme.colors.border}; */
+                z-index: 3;
+				&:before {
+                    z-index: 13;
+                    content: '';
+                    /* border: 1px solid ${props => props.theme.colors.border}; */
+					display: block;
+					position: absolute;
+					left: -4px;
+					top: 10px;
+					transform: rotate(45deg);
+					width: 10px;
+					height: 10px;
+					background-color: inherit;
+				}
+`;
+const Item = styled.a<ItemProps>`
 
     width: 100%;
     height: 60px;
@@ -211,7 +261,8 @@ const Item = styled.a`
     align-items: center;
     /* justify-content:  */
     flex-direction: row;
-    overflow: hidden;
+    /* overflow: hidden; */
+    position: relative;
     cursor: pointer;
     svg{
         margin: 0 19px;
@@ -223,10 +274,8 @@ const Item = styled.a`
                 stroke: ${props => props.theme.colors.seconderyText}; 
             }
     }
-position: relative;
-    &:hover{
-        /* border-left: 8px solid ; */
-        /* color :${props => props.theme.colors.primarybg};  */
+    ${props => (props.active === true) && css`
+        color : ${props => props.theme.colors.purple}; 
         &::after{
             content: "";
             position: absolute;
@@ -247,8 +296,38 @@ position: relative;
         } */
        svg{ 
             path{
-                fill: ${props => props.theme.colors.seconderyText};
-                /* stroke: ${props => props.theme.colors.primarybg};  */
+                stroke: ${props => props.theme.colors.purple}; 
+            }
+        } 
+    `}
+    &:hover{
+        > span{
+            visibility: visible;
+					opacity: 1;
+        }
+        /* border-left: 8px solid ; */
+        color : ${props => props.theme.colors.purple}; 
+        &::after{
+            content: "";
+            position: absolute;
+            left: 0;
+            height: 100%;
+            width: 5px;
+            background-color: ${props => props.theme.colors.purple};
+            border-radius: 7px ;
+        }
+        /* &::before{ ToDO
+            content: "ddd";
+            position: absolute;
+            left: 0;
+            height: 100%;
+            width: 5px;
+            background-color: ${props => props.theme.colors.border};
+            border-radius: 7px ;
+        } */
+       svg{ 
+            path{
+                stroke: ${props => props.theme.colors.purple}; 
             }
         } 
     }
