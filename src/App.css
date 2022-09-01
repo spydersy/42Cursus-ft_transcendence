@@ -113,6 +113,7 @@ body {
     width: 1140px;
     /* width: 1500px; */
     margin: 0 auto;
+    max-width: 1140px;
     /* background-color: red; */
   }
 
@@ -121,7 +122,7 @@ body {
   .container{
     width: 1500px;
     margin: 0 auto;
-    /* max-width: 2000px; */
+    max-width: 2000px;
   }
 
 }

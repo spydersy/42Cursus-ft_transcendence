@@ -24,7 +24,7 @@ export default function Pong({name}:myProps ) {
   var UP_KEY = 38;
   var DOWN_KEY = 40;
   
-  const ballSpeed : number = 11;
+  const ballSpeed : number = 5;
   var [directionX, directionY] = [ballSpeed, ballSpeed];
   function detectCollision() {
     const cx = parseInt(ballRef.current.getAttribute('cx'));
@@ -36,6 +36,20 @@ export default function Pong({name}:myProps ) {
     const w2 = parseInt(playerRef.current.getAttribute('width'));
     const h2 = parseInt(playerRef.current.getAttribute('height'));
     
+    
+    const colliding = x1 < (x2 + w2) && (x1 + w1) > x2 &&
+    y1 < (y2 + h2) && (y1 + h1) > y2;
+    return colliding;
+  }
+  function detectCollision2() {
+    const cx = parseInt(ballRef.current.getAttribute('cx'));
+    const cy = parseInt(ballRef.current.getAttribute('cy'));
+    const r = parseInt(ballRef.current.getAttribute('r'));
+    const [x1, y1, w1, h1] = [cx - r, cy - r, r * 2, r * 2];
+    const x2 = parseInt(player2Ref.current.getAttribute('x'));
+    const y2 = parseInt(player2Ref.current.getAttribute('y'));
+    const w2 = parseInt(player2Ref.current.getAttribute('width'));
+    const h2 = parseInt(player2Ref.current.getAttribute('height'));
     
     const colliding = x1 < (x2 + w2) && (x1 + w1) > x2 &&
     y1 < (y2 + h2) && (y1 + h1) > y2;
@@ -60,11 +74,17 @@ export default function Pong({name}:myProps ) {
       // directionY = -directionY;
     }
     if (detectCollision()) 
-    directionX = -directionX;
+    {
+      directionX = -directionX  ;
+      
+      directionX = directionX * 1.2;
+    }
+    if (detectCollision2()) 
+      directionX = -directionX;
     const [xPos, yPos] = [cx + directionX, cy + directionY];
-    console.log(xPos)
+    // console.log(xPos)
     if (xPos <=  ballRadius) { // player lost
-      alert('Ooops');
+      // alert('Ooops');
     } else {
       
       ballRef.current.setAttribute('cx', xPos);
@@ -75,32 +95,68 @@ export default function Pong({name}:myProps ) {
   }
   
   
-  function movePlayer(event :  KeyboardEvent)
+  function movePlayer1(event :  MouseEvent)
   {
     console.log(player)
 
-    const p = Player?.current;
-    console.log(p)
+    const p = playerRef?.current;
+    // console.log(p)
+    // const cx = parseInt(p.getAttribute('x'));
+    const cy = parseInt(p.getAttribute('y'));
+    const h = parseInt(p.getAttribute('height'));
+    console.log(event)
+    if ( event.offsetY < tableRef.current.offsetHeight - h)
+       p.setAttribute('y', event.offsetY)
+    else 
+        p.setAttribute('y', tableRef.current.offsetHeight  - h)
+    // switch( event.keyCode ) {
+    //     case 119:
+    //       if (cy - 50 >= 0)
+    //       p.setAttribute('y', cy - 50);
+    //       else
+    //       p.setAttribute('y',0);
+
+    //       break;
+    //       case 115:
+    //           if (cy + 50 <= tableRef.current.offsetHeight - h)
+    //             p.setAttribute('y', cy + 50);
+    //           else
+    //             p.setAttribute('y', tableRef.current.offsetHeight  -h)
+    //         break;
+    //     default: 
+    //         break;
+    //     }
+      //   const x = parseInt(p.getAttribute('x'));
+      // const y = parseInt(p.getAttribute('y'));
+      //   socket.emit("player move",x,  y )
+
+    }
+  function movePlayer2(event :  MouseEvent)
+  {
+    console.log(player)
+
+    const p = player2Ref?.current;
+    console.log(event)
     // const cx = parseInt(p.getAttribute('x'));
     // const cy = parseInt(p.getAttribute('y'));
     // const h = parseInt(p.getAttribute('height'));
-    // switch( event.keyCode ) {
-      //   case UP_KEY:
-      //     if (cy - 100 >= 0)
-      //     p.setAttribute('y', cy - 100);
-      //     else
-      //     p.setAttribute('y',0);
+    // // switch( event.keyCode ) {
+    // //     case UP_KEY:
+    //       // if (cy - 50 >= 0)
+    //         p.setAttribute('y',event.screenY);
+        //   else
+        //     p.setAttribute('y',0);
 
-      //     break;
-      //     case DOWN_KEY:
-      //         if (cy + 100 <= tableRef.current.offsetHeight - h)
-      //           p.setAttribute('y', cy + 100);
-      //         else
-      //           p.setAttribute('y', tableRef.current.offsetHeight  -h)
-      //       break;
-      //   default: 
-      //       break;
-      //   }
+        //   break;
+        //   case DOWN_KEY:
+        //       if (cy + 50 <= tableRef.current.offsetHeight - h)
+        //         p.setAttribute('y', cy + 50);
+        //       else
+        //         p.setAttribute('y', tableRef.current.offsetHeight  -h)
+        //     break;
+        // default: 
+        //     break;
+        // }
       //   const x = parseInt(p.getAttribute('x'));
       // const y = parseInt(p.getAttribute('y'));
       //   socket.emit("player move",x,  y )
@@ -117,6 +173,8 @@ export default function Pong({name}:myProps ) {
       }
       initData()
       moveBall()
+      tableRef.current.addEventListener("mousemove", movePlayer1)
+      // document.addEventListener("keydown", movePlayer2)
   })
   return (
     < >
@@ -143,8 +201,8 @@ export default function Pong({name}:myProps ) {
           <circle ref={ballRef} id="ball"  cx="110" cy="40" r="12" />
           <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" stroke-dasharray="10" />
 
-          <rect ref={playerRef} x="30" y="0" width="20" height="150" fill="#FFF" />
-          <rect ref={player2Ref}  y="0" width="20" height="150" fill="#FFF" />
+          <rect ref={playerRef} rx="10" x="30" y="0" width="20" height="150" fill="#FFF" />
+          <rect ref={player2Ref} rx="10 " y="0" width="20" height="150" fill="#FFF" />
 
         </svg>
     </Table> 
@@ -229,7 +287,8 @@ background-color: ${props => props.theme.colors.bg};
       fill: ${props => props.theme.colors.purple};
     }
     >rect{
-      fill: ${props => props.theme.colors.purple};
+      fill: ${props => props.theme.colors.bg};
+      stroke: ${props => props.theme.colors.purple};
     }
     >line{
       stroke: ${props => props.theme.colors.purple};
