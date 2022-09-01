@@ -27,7 +27,9 @@ export default function Upperbar() {
       
                 console.log(open)
                 setopen(false)
-              }} open={open} />
+              }} open={open} 
+              style={{bottom: "-25px" , right: '0'}}
+              />
             }
           </div>
         </RightCont>

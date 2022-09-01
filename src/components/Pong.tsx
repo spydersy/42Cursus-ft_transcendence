@@ -177,7 +177,7 @@ export default function Pong({name}:myProps ) {
       // document.addEventListener("keydown", movePlayer2)
   })
   return (
-    < >
+    <>
       <PlayerStyle>
 
         <Player1>
@@ -269,8 +269,8 @@ margin-left: auto;
 
 `;
 const Table = styled.div`
-
-width: 1000px;
+cursor: none;
+width: 100%;
 height: 700px;
 position: relative;
 background-color: ${props => props.theme.colors.bg};

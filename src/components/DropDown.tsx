@@ -7,14 +7,14 @@ import { ReactComponent as SettingIcon} from "../assets/imgs/settings.svg"
 interface DropDownProps {
     closeDropdown: () => void,
     open : boolean
-
+    style :  React.CSSProperties
 
   }
 export default function DropDown(props : DropDownProps) {
     const ref = useDetectClickOutside({ onTriggered: props.closeDropdown });
   return (<>
   {props.open && 
-    <Dstyle ref={ref} >
+    <Dstyle style={props.style}  ref={ref} >
         <Item href="/profile/id">
             <UserIcon/>
             Profile
@@ -43,7 +43,7 @@ display: flex;
 align-items: center;
 flex-direction: column;
 overflow: hidden;
-
+min-width: 120px;
 `;
 
 const Item = styled.a`
