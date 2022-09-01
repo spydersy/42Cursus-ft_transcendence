@@ -1,20 +1,22 @@
 import React, {useState}  from 'react'
-import styled from "styled-components";
+import styled ,{css}from "styled-components";
 import Avatar from "../assets/imgs/tests/guy.svg"
 import { ReactComponent as Penta} from "../assets/imgs/penta.svg"
 import { CircularProgressbar } from 'react-circular-progressbar';
-import dots from "../assets/imgs/tests/dots.svg"
+import{ReactComponent as DotsIcon }from "../assets/imgs/dots.svg"
+import rank1 from "../assets/imgs/ranks/iron.png"
+import rank2 from "../assets/imgs/ranks/gold.png"
+import rank3 from "../assets/imgs/ranks/bronze.png"
 
-///
-
+/// UserProfile Variants  
 const Backcolor = "#533483"
 const GreyBackcolor = "#282c34"
 const Barside = "#f3460fe"
 const Borderimgcolor = "white";
-const player = {  name: "Alchemist", login: "Eelaazmi",  lvl: "1", gamePlayed : 350,  lost : 150, won : 200,  }
+const player = {  name: "Alchemist", login: "Eelaazmi",  lvl: "1", gamePlayed : 350,  lost : 150, won : 200, rank : rank2}
+const green = "#238b65"
 
 //// PlayerCard Comp 
-
 export interface PlayerCardProps {
     player: {
       name: string,
@@ -22,42 +24,43 @@ export interface PlayerCardProps {
       lvl: string,
       gamePlayed : number,
       lost : number,
-      won : number
+      won : number,
+      rank:string
     }
 }
   
 export function PlayerCard(props: PlayerCardProps) {
-return (
-    <PlayerCardStyle  >
-    
-        <div className='Identity'> 
-            
-            <img src={Avatar} className="Iavatar"alt="test" />
+  return (
+      <PlayerCardStyle  >
+      
+          <div className='Identity'> 
+              
+              <img src={Avatar} className="Iavatar"alt="test" />
 
-            <div className='infoSec'>
+              <div className='infoSec'>
 
-                <div className='Bar'>  
-                    <div className='name'>
-                        Username : 
-                    </div>
-                    <div className='text' > {props.player.name} </div>
-                </div>
+                  <div className='Bar'>  
+                      <div className='name'>
+                          Username : 
+                      </div>
+                      <div className='text' > {props.player.name} </div>
+                  </div>
 
-                <div className='Bar'>  
-                    <div className='name'>
-                    Intraname : 
-                    </div>
-                    <div className='text' > {props.player.login} </div>
-                </div>
+                  <div className='Bar'>  
+                      <div className='name'>
+                      Intraname : 
+                      </div>
+                      <div className='text' > {props.player.login} </div>
+                  </div>
 
-            </div>
-            
-        </div>
+              </div>
+              
+          </div>
 
-        <Stats player={player}/>
-        
-    </PlayerCardStyle>
-)
+          <Stats player={player}/>
+          
+      </PlayerCardStyle>
+  )
 }
   
 const PlayerCardStyle = styled.div`
@@ -80,14 +83,14 @@ border-radius: 10px 10px 10px 10px;
         background-color: white;
         display: flex;
         position: absolute;
-        width : 180px;
-        height: 180px;
+        width : 150px;
+        height: 150px;
         border-radius: 50%;
         border: 4px solid ${GreyBackcolor};
-        top: 5%;
-        left: 3%;
+        top: 13%;
+        left: 6%;
         > img{
-            border-radius: 30%;
+            /* border-radius: 30%; */
             width: 100%;
             height: 100%;
         }
@@ -119,9 +122,11 @@ border-radius: 10px 10px 10px 10px;
                 margin-right: 10px;
             }
             .text{
-                color: ${GreyBackcolor};
+                color: ${props => props.theme.colors.primaryText};
                 font-size: 19px;
                 font-weight: bolder;
+                -webkit-text-stroke: 1px #44404562;
+
             }
         }
     }
@@ -130,11 +135,11 @@ border-radius: 10px 10px 10px 10px;
 `;
 
 //// Stats Comp
-
 export function Stats(props: PlayerCardProps) {
     return (
       <StatsStyle  >
         <Data>
+       
             <div className='progessCont' style={{ width: "140px", height: "140px" }}>
                 <CircularProgressbar  styles={{
                     path: {
@@ -158,28 +163,31 @@ export function Stats(props: PlayerCardProps) {
                 </div>
             </div>
             
+
             <div  id="pentagon">
+                <Penta/>
+                <img src={props.player.rank} className="Rank" />
                 <div>
-                <div id="played">
-                    {props.player.gamePlayed}
-                </div>
-                <div id="label">
+                  <div id="played">
+                      {props.player.gamePlayed}
+                  </div>
+                  <div id="label">
                     PLAYED GAMES
                 </div>
                 </div>
-            <Penta/>
+            
             </div>
 
             <div className='progessCont' style={{ width: "140px", height: "140px" }}>
                 <CircularProgressbar  styles={{
                     path: {
-                    stroke: `#3CC592`,
+                    stroke: `${green}`,
                     strokeLinecap: 'round',
                     transition: 'stroke-dashoffset 1s ease 0s',
                     transformOrigin: 'center center',
                     },
                     trail: {
-                    stroke: '#0E1117',
+                    stroke: '#000000',
                     strokeLinecap: 'round',
         
                     },
@@ -193,6 +201,7 @@ export function Stats(props: PlayerCardProps) {
                 {props.player.won} <span style={{color: "#3CC592"}}> Won </span>
                 </div>
             </div>
+       
         </Data>
       </StatsStyle>
     )
@@ -209,52 +218,60 @@ justify-content: space-between;
 gap: 40px;
 border-radius: 0px 10px 0px 0px;
 `
-
 const Data = styled.div`
-/* background-color: #00ff ff41; */
+/* background-color: #12128d ff41; */
 width: 71%;
 height: 100%;
 display: flex;
-position: absolute;
+position: relative;
 /* top: 12%; */
 /* align-items: flex-start; */
 /* flex-direction: row; */
 justify-content: space-around;
 
 .progessCont{
-    margin-top: 35px;
-
-    /* background-color: #f5f5dc19; */
+    /* padding: 0px 10px; */
+    position : relative;
+    margin-top: 30px;
     top: 10%;
     font-family: 'Poppins' , sans-serif;
     font-size:  ${props => props.theme.fontSize.l}; 
     text-transform: uppercase;
     font-weight: 600;
     width: 100%;
+
     .circularLabel{
         top: 10%;
-        /* background-color: #f5f5dc24; */
-
         text-align: center;
         display: inline-block;
         overflow: hidden;
         white-space: nowrap;
-        margin-top: 20px;
+        margin-top: 18px;
         color : ${props => props.theme.colors.primaryText};
-
-        }
-    
+        -webkit-text-stroke: 1px #44404562;
+    }
 }
 
 #pentagon {
-    top: 15%;
-    /* background-color: #f5f5dc39; */
+    top: 13%;
+    /* background-color: #a1a12d39; */
     position: relative;
-    width: 240px;
-    height: 190px;
+    width: 210px;
+    height: 180px;
+    padding: 0px 20px;
+
+    .Rank {
+      width: 40%;
+      height: 60%;
+      top: 13%;
+      left: 30%;
+      position: absolute;
+      display: flex;
+      /* background-color: #ac25a84e; */
+    }
     > div{
         position: absolute;
-        top: 35%;
+        bottom: -40%;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 90px;
@@ -265,24 +282,28 @@ justify-content: space-around;
         justify-content: space-between;
         flex-direction: column;
         #played{
+        /* background-color: aqua; */
         font-style: normal;
         font-weight: 700;
         font-size:  ${props => props.theme.fontSize.ll}; 
         line-height: 30px;
-        color:  ${props => props.theme.colors.seconderyText}; 
+        color:  ${props => props.theme.colors.primaryText};
+        -webkit-text-stroke: 1px #444045;
+ 
         }
         #label{
         /* width: ; */
+        /* background-color: aqua; */
         display: inline-block;
         overflow: hidden;
         white-space: nowrap;
-        font-style: normal;
+        font-style: bold;
         font-weight: 600;
         font-size:  ${props => props.theme.fontSize.l}; 
-        line-height: 22px;
+        line-height: 25px;
         text-transform: uppercase;
         color:  ${props => props.theme.colors.primaryText}; 
-        -webkit-text-stroke: 1px #000;
+        -webkit-text-stroke: 1px #444045b7;
         }
     }
     > svg {
@@ -326,7 +347,6 @@ align-items: center;
 
 `
 ///// UserCard Comp
-  
 export interface UserCard {
   // avatar: string;
   data: {
@@ -336,50 +356,63 @@ export interface UserCard {
     avatar: string;
   }
 }
+export interface StyleProps {
+  // avatar: string;
+
+    status: boolean;
+
+}
 
 export  function UserCard(props : UserCard) {
   const [active, setActive] = useState(false);
-return (
-  <UserCardStyle>
-    
-    <div className="status" >
-    </div>
-
-    <img src={dots} className="dots"/> 
-      <div className='List'>
-        hh
-        <div className='element' >
-            Unfriend
-        </div>
+  return (
+    <UserCardStyle status={props.data.status}>
       
+      <div className="status" >
       </div>
-    <img src={props.data.avatar} className="avatar" />
-    
-    <div className="Uname">
-        {props.data.username}
-   </div>
 
-    {/*<div className="grade">
-          {props.data.grade}
-    </div>  */}
-    
-  </UserCardStyle>
-)
+      <DotsIcon className='dots'/>
+        <div className='List'>
+          <div className='element' >
+              Unfriend
+          </div>
+        
+        </div>
+      <img src={props.data.avatar} className="avatar" />
+      
+      <div className="Uname">
+          {props.data.username}
+    </div>
+    </UserCardStyle>
+  )
 }
 
-const UserCardStyle = styled.div`
+const UserCardStyle = styled.div<StyleProps>`
   position: relative;
   background: ${Backcolor};
   margin : 10px;
-  width: 150px;
-  height: 50px;
+  width: 130px;
+  height: 60px;
   text-align: center;
   border-radius: 10px;
-  border: 1px solid  #70539b ;
+  border: 2px solid  #70539b ;
   animation: fadeIn 2s;
+  ${props => props.status == true ? css`
+  .status {
+      background-color: #3CC592;
+      /* display: none; */
+    }
+    ` :
+    css`
+    .status {
+      background-color: #e40101;
+    }
+    
+    `}
 
   .status {
-    background-color: #238f33;
+  
+
     border: 3px solid ${Backcolor};
     width: 10px;
     height: 10px;
@@ -390,60 +423,59 @@ const UserCardStyle = styled.div`
   .List {
     display: none;
   }
-  .dots {
-    display: flex;
+  > svg {
+    /* display: flex; */
+    cursor: pointer;
     position: absolute;
-    width: 20px;
-    height:15px;
+    /* width: 20px;
+    height:15px; */
     right: 3px;
     top: 3px;
-    padding: 1px 1px ;
-    > img {
-     height: 100%;
-     width: 100%;
+    /* padding: 1px 1px ; */
+    path{
+      stroke: white;
     }
     &:hover {
-      background-color: #238f33;
+      path{
+      stroke: black;
+    }
 
     }
     }
   .avatar {
     display: none;
-
   }
   .Uname {
     position: absolute;
-    color: white;
+    color: #fcfafc;
     width: 100%;
     height: auto;
     min-height: 30px;
     margin : 2px 0px;
     text-transform: capitalize;
-    font-size: 13px;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: bolder;
     bottom: 0px;
+    /* -webkit-text-stroke: 1px #929292b7; */
   }
 
   &:hover {
-    height: 100px;
+    height: 125px;
     transition: 0.8s;
-   
     .avatar {
+      border: 1px solid #fcfafc;
+      border-radius: 50%;
       position: absolute;
       display: block;
-      margin: 0px 0px 0px 50x;
-      /* margin-left: auto;
-      margin-right: auto; */
-      width: 50%;
-      top: 0px;
-      left: 25%;
-      animation: fadeIn 6s;
+      width: 60%;
+      top: 8px;
+      left: 20%;
+      animation: fadeIn 4s;
       > img {
-        width: 80px;
-        height: 80px;
+        width:70px;
+        height: 70px;
       }
     }
-
   }
 
   @keyframes fadeIn {
@@ -451,5 +483,4 @@ const UserCardStyle = styled.div`
   100% { opacity: 1; }
   }
 `;
-
 /////

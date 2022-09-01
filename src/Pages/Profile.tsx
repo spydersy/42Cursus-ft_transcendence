@@ -3,9 +3,17 @@ import styled from "styled-components"
 import Tet from "../assets/imgs/avatar/avatar1.png"
 import Navlinks from '../components/Navlinks';
 import { AchievmentComp,AchievmentCompProps }  from '../components/History'
-import  Badge1 from "../assets/imgs/avatar/avatar1.png";
-import  Badge2 from "../assets/imgs/avatar/avatar2.png";
-import  Badge3 from "../assets/imgs/avatar/avatar3.png";
+
+import  Badge2 from "../assets/imgs/avatar/a1.png";
+import  Badge3 from "../assets/imgs/avatar/a2.png";
+import  Badge4 from "../assets/imgs/avatar/a6.png";
+import  Badge5 from "../assets/imgs/avatar/a4.png";
+import  Badge6 from "../assets/imgs/avatar/a5.png";
+import  Badge7 from "../assets/imgs/avatar/a6.png";
+import  Badge8 from "../assets/imgs/avatar/a7.png";
+import  Badge9 from "../assets/imgs/avatar/a8.png";
+
+
 import  B1 from "../assets/imgs/badge1.svg";
 import  B2 from "../assets/imgs/badge2.svg";
 import  B3 from "../assets/imgs/badge3.svg";
@@ -18,7 +26,7 @@ const Barside = "#f3460fe"
 const GreyBackcolor = "#282c34"
 const Borderimgcolor = "white";
 const ProgressUser = "40%"
-const player = { name: "Alchemist", login: "Eelaazmi", lvl: "1", gamePlayed : 350, lost : 150,  won : 200, }
+const player = { name: "Alchemist", login: "Eelaazmi", lvl: "1", gamePlayed : 350, lost : 150,  won : 200, rank: "rank1"}
 
 ////
 
@@ -35,7 +43,8 @@ background-color: ${GreyBackcolor};
 border-radius: 18px;
 display: flex;
 align-items: center;
-margin-top: 8px;
+margin: 15px 0px;
+
 
 > div{
   display: flex;
@@ -52,10 +61,10 @@ margin-top: 8px;
     font-size: ${props => props.theme.fontSize.s};
     font-weight: 12px;
     color: white;
+    -webkit-text-stroke: 1px #b2a2b69a;
   }
 
 }
-
 `
 //// DefaultComp
 export default function Profile() {
@@ -91,16 +100,14 @@ export function PlayerTabsBar()
 }
 
 const PlayerAchieveStyle = styled.div`
-
-  /* margin-top: 40px; */
-  padding-top: 25px;
-  margin : 20px 0px;
+  padding-top: 20px;
+  margin : 0px 0px;
   width:  100%;
   align-items: center;
   height: auto;
   border: 1px solid ${props => props.theme.colors.primarybg};
   flex-direction: column;
-
+  -webkit-text-stroke: 1px #6560679a;
 `;
 
 //// Tab Achievements info 
@@ -114,7 +121,7 @@ const achievment1 = {
 const achievment2 = {
   name: "The Alchemist",
   desc : "You are a M9WED player by nature",
-  badge : B1,
+  badge : B3,
 }
 const achievment3 = {
   name: "MASTER",
@@ -122,7 +129,7 @@ const achievment3 = {
   badge : B1 ,
 }
 
-var listAchiev = [achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3]
+var listAchiev = [achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3]
 
 export function TabOne()
 {
@@ -138,14 +145,14 @@ export function TabOne()
 }
 
 const TabOone = styled.div`
-  margin: 20px;
+  /* margin: 20px; */
   height: 400px;
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
-  padding: 10px;
+  padding: 20px;
+  /* margin: 10px; */
   overflow-y: scroll;
-  margin: 10px;
 
   &::-webkit-scrollbar {
   width: 4px;
@@ -188,10 +195,11 @@ const TabOtwo= styled.div`
   flex-wrap: wrap;
   justify-content: left;
   padding: 10px;
-  margin: 20px 0px;
+  margin: 0px 0px;
   overflow-y: scroll;
-  height: 400px;
-  border: 1px solid white;
+  height: auto;
+  max-height: 400px;
+  /* border: 1px solid white; */
 
   overflow-y: scroll;
   &::-webkit-scrollbar {
@@ -219,36 +227,37 @@ const card = {
   username: "mohammed el-karmi",
   grade : "Yaiba",
   status : true ,
-  avatar : Badge3,
+  avatar : Badge2,
 }
 const card1 = {
   username: "elmahdi elaazmi",
   grade : "The Great Yaiba",
   status : false ,
-  avatar : Badge2,
+  avatar : Badge3,
 
 }
 const card2 = {
   username: "Mohammed Reda amali",
   grade : "Prince of Persia",
   status : true ,
-  avatar : Badge3,
+  avatar : Badge4,
 
 }
 const card3 = {
   username: "achraf belarif",
   grade : "Spydrey",
   status : true ,
-  avatar : Badge3,
+  avatar : Badge5,
 }
 const card4 = {
   username: "elmahdi elaazmi",
   grade : "alchemist",
   status : true ,
-  avatar : Badge3,
+  avatar : Badge6,
 }
 
-var listCards = [card, card4,card2, card3]
+var listCards = [card, card1,card3, card3, card2,card, card1,card3, card3, card2
+,card, card1,card3, card3, card2,card, card1,card3, card3, card2,card, card1,card3, card3, card2,card, card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2]
 
 ///// Game History Tab
 export function Tabthree()
