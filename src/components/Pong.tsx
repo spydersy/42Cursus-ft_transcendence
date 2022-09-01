@@ -6,6 +6,7 @@ import * as ReactDOM from 'react-dom';
 import styled from "styled-components"
 import axios from 'axios';
 import io from 'socket.io-client';
+import { AvatarComponent } from './Upperbar';
 
 interface myProps {
   name: string;
@@ -77,23 +78,19 @@ export default function Pong({name}:myProps ) {
   function movePlayer(event :  KeyboardEvent)
   {
     console.log(player)
-    
+
     const p = Player?.current;
     console.log(p)
     // const cx = parseInt(p.getAttribute('x'));
     // const cy = parseInt(p.getAttribute('y'));
     // const h = parseInt(p.getAttribute('height'));
-    
-    
-    
-    
     // switch( event.keyCode ) {
       //   case UP_KEY:
       //     if (cy - 100 >= 0)
       //     p.setAttribute('y', cy - 100);
       //     else
       //     p.setAttribute('y',0);
-      
+
       //     break;
       //     case DOWN_KEY:
       //         if (cy + 100 <= tableRef.current.offsetHeight - h)
@@ -107,104 +104,186 @@ export default function Pong({name}:myProps ) {
       //   const x = parseInt(p.getAttribute('x'));
       // const y = parseInt(p.getAttribute('y'));
       //   socket.emit("player move",x,  y )
-      
+
     }
+
   //   const socket = io('http://localhost:3030');
-  //   useEffect(() => {
-    
-  //     var args = {
-  //       name : name,
-  //       room : "room1"
-  //     }
-  //     socket.emit("joinRoom", args)
- 
-  //     socket.on('RoomJoined', (id : number ) => {
-  //       console.log(id)
-  //         setHeader( name +" joined room Player " + id )
-  //         if (id === 1)
-  //         {
-  //           player = 1
-
-  //           }
-  //           else
-  //           {
-  //             player = 2
-  //         }
-  //         console.log(player)
-
-  //     });
-  //     socket.on('roomFilled', (id : number ) => {
-  //         setHeader(name +" joined room Watcher  " + id )
-  //     });
-  //     socket.on('StartGame', (id : number ) => {
-  //         setReady(true)
-  //     });
-  //     socket.on('disconnected', function() {
-
-  //       socket.emit('leaveRoom', args);
-
-  //   });
-  //    if (ready)
-  //    {
-  //     const wp2 = parseInt(player2Ref.current.getAttribute('width'));
-  //     player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 50)
-  //     player2Ref.current.setAttribute('y' , 0)
-  //     playerRef.current.setAttribute('x' ,  50)
-  //     playerRef.current.setAttribute('y' , 0)
-  //     console.log("Player : " + player)
-      
-  //     document.addEventListener("keydown", movePlayer);
-
-     
-
-  //    }
-     
-  //   return () => {
-  //   }
-  // })
-  
-
+    useEffect(() => {
+      const initData =()=>{
+        player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 50)
+        player2Ref.current.setAttribute('y' , 0)
+        playerRef.current.setAttribute('x' ,  30)
+        playerRef.current.setAttribute('y' , 0)
+      }
+      initData()
+      moveBall()
+  })
   return (
-    <>
+    < >
+      <PlayerStyle>
 
-    <div>
-      Status : {header}
-    </div>
-   {ready ?  <Table ref={tableRef} >Pong
+        <Player1>
+        <div style={{width: "50px", height : "50px"}}>
+
+        <AvatarComponent/>
+        </div>
+        <div className='mesgData'>
+            <div className='name'>
+              mohamed Elkarmi
+            </div>
+            <div className='msg'>
+             Player 1
+            </div>
+        </div>
+          </Player1>
+      </PlayerStyle>
+    <Table ref={tableRef} >Pong
 
       <svg>
-          <circle ref={ballRef} id="ball"  cx="110" cy="40" r="20" fill="yellow"/>
-          <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC"  />
+          <circle ref={ballRef} id="ball"  cx="110" cy="40" r="12" />
+          <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" stroke-dasharray="10" />
 
-          <rect ref={playerRef} x="50" y="0" width="33" height="180" fill="#FFF" />
-          <rect ref={player2Ref}    y="0" width="33" height="180" fill="#FFF" />
+          <rect ref={playerRef} x="30" y="0" width="20" height="150" fill="#FFF" />
+          <rect ref={player2Ref}  y="0" width="20" height="150" fill="#FFF" />
 
         </svg>
-    </Table> :
-    <div>
-      QUEUE
-    </div>
-    }
+    </Table> 
+      <PlayerStyle>
 
+        <Player2>
+          {/* <div style={{ width: "50px", height: "50px" }}>
 
+            <AvatarComponent />
+          </div>
+          <div className='mesgData'>
+            <div className='name'>
+              mehdi Elaazmi
+            </div>
+            <div className='msg'>
+              Player 2
+            </div>
+          </div> */}
+          <Spinner/>
+        </Player2>
+
+      </PlayerStyle>
     </>
   )
 }
 
 
 //style 
+
+const PlayerStyle = styled.div`
+  display: flex;
+  width: 100% ;
+  >div{
+     .mesgData{
+      margin-left: 12px;
+      height: 40px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-direction: column;
+      .name{
+        color:  ${props => props.theme.colors.primaryText};
+
+      }
+      .msg{
+        font-size: 15px;
+        opacity: 0.7;
+        color:  ${props => props.theme.colors.seconderyText};
+      }
+  }}
+`;
+const Player1 = styled.div`
+  margin-right: auto;
+  height:70px ;
+  display: flex;
+  align-items: center;
+
+  `;
+const Player2 = styled.div`
+margin-left: auto;
+  height:70px ;
+  display: flex;
+  align-items: center;
+
+`;
 const Table = styled.div`
 
-    width: 1000px;
-    height: 700px;
-    position: relative;
-    background-color: gray;
-  svg{
+width: 1000px;
+height: 700px;
+position: relative;
+background-color: ${props => props.theme.colors.bg};
+
+    border: 1px solid ${props => props.theme.colors.purple};
+  > svg{
     position:absolute;
-    background: #666;
+    background:  ${props => props.theme.colors.bg};
     inset: 0 0 0 0;
     z-index:1;
     width: 100%;
     height: 100%;
+    >circle{
+      fill: ${props => props.theme.colors.purple};
+    }
+    >rect{
+      fill: ${props => props.theme.colors.purple};
+    }
+    >line{
+      stroke: ${props => props.theme.colors.purple};
+    }
+  }
+  >div{
+    width: 100%;
+    height: auto ;
   }
 `;
+
+export function Spinner() {
+  return (
+    <SpinnerStyle className="lds-facebook"><div></div><div></div><div></div></SpinnerStyle>
+  )
+}
+const SpinnerStyle = styled.div`
+
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+
+> div {
+  display: inline-block;
+  position: absolute;
+  left: 8px;
+  width: 10px;
+  background: ${props => props.theme.colors.primaryText};
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+  &:nth-child(1) {
+  left: 8px;
+  animation-delay: -0.24s;
+}
+&:nth-child(2) {
+  left: 32px;
+  animation-delay: -0.12s;
+}
+&:nth-child(3) {
+  left: 56px;
+  animation-delay: 0;
+}
+}
+
+@keyframes lds-facebook {
+  0% {
+    top: 8px;
+    height: 64px;
+  }
+  50%, 100% {
+    top: 24px;
+    height: 32px;
+  }
+}
+
+      
+      `;

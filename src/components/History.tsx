@@ -306,7 +306,6 @@ const AchievmentCompStyle = styled.div`
     background: ${props => props.theme.colors.bg};;
     border: 2px solid ${props => props.theme.colors.border};;
     margin-bottom: 10px;
-    margin-left: 10px;
     display: flex;
     align-items: flex-start;
     flex-direction: column;

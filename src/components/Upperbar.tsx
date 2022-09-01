@@ -47,6 +47,9 @@ const PlayButton = styled.a`
   border:1px solid ${props => props.theme.colors.border};;
   border-radius: 5px;
   font-family: 'Michroma', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
 `;
 
