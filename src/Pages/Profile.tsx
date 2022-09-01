@@ -6,14 +6,12 @@ import { AchievmentComp,AchievmentCompProps }  from '../components/History'
 import  Badge1 from "../assets/imgs/avatar/avatar1.png";
 import  Badge2 from "../assets/imgs/avatar/avatar2.png";
 import  Badge3 from "../assets/imgs/avatar/avatar3.png";
-
 import  B1 from "../assets/imgs/badge1.svg";
 import  B2 from "../assets/imgs/badge2.svg";
 import  B3 from "../assets/imgs/badge3.svg";
-
 import dots from "../assets/imgs/tests/dots.svg"
+import stats, { Stats } from "./Home"
 
-import dot from "../assets/imgs/circle.svg"
 
 const Backcolor = "#533483"
 const Barside = "#f3460fe"
@@ -54,7 +52,7 @@ export interface PlayerCardProps {
   player: {
     name: string,
     login: string,
-    lvl: number,
+    lvl: string,
     gamePlayed : number,
     lost : number,
     won : number
@@ -65,7 +63,7 @@ const player = {
   
   name: "Alchemist",
   login: "Eelaazmi",
-  lvl: 1,
+  lvl: "1",
   gamePlayed : 350,
   lost : 150,
   won : 200,
@@ -138,46 +136,46 @@ export function PlayerCard(props: PlayerCardProps) {
 
       </div>
 
+      <Stats player={player}/>
+
+
     </PlayerCardStyle>
   )
 }
 
 const PlayerCardStyle = styled.div`
-
-  /* background-color: #ffffff; */
   padding: 20px 0px;
-  width:100%;
-  height: 350px;
+  width:  100%;
+  height: 300px;
   display: flex;
   align-items: right;
   justify-content: space-between;
 
   .first{
-    width: 30%;
+    width: 20%;
     height: 100%;
     background-color: ${Backcolor};
     border-left: 20px solid ${Barside};
     border-radius: 80px 0px 0px 0px;
     .img{
       display: flex;
-          position: flex;
-          width : 80%;
-          height: 80%;
-          margin-top: 15%;
-          margin-left: 15%;
-          > img{
-            border-radius: 50%;
-            width: 80%;
-            height: 80%;
-            border: 8px solid ${Borderimgcolor};
-          }
+      position: flex;
+      width : 70%;
+      height: 70%;
+      margin-top: 30%;
+      margin-left: 20%;
+      > img{
+        border-radius: 50%;
+        width: 80%;
+        height: 80%;
+        border: 8px solid ${Borderimgcolor};
       }
+    }
   }
 
   .sec{
       width: 75%;
       height: auto;
-      /* padding-top: 50px; */
       background-color:${props => props.theme.colors.primarybg}; 
       position: flex;
       display: flex;
@@ -187,7 +185,7 @@ const PlayerCardStyle = styled.div`
       border-radius: 00px 10px 0px 00px;
       .infoSec {
         width: 100%;
-        margin-top: 50px;
+        margin-top: 40px;
       }
         .Bar{
           width: 100%;
@@ -199,36 +197,30 @@ const PlayerCardStyle = styled.div`
         .name{
           font-family: 'Michroma', sans-serif;
           font-style: normal;
-          min-width: 250px;
-          /* font-weight: 400; */
-          font-size: ${props => props.theme.fontSize.l}; 
+          font-size: 15px;//${props => props.theme.fontSize.l}; 
+          min-width: 180px;
           line-height: 40px;
           display: flex;
           align-items: right;
           color: ${props => props.theme.colors.primaryText}; 
         }
-        .texto{
-          color: #825050;
-          margin-left: 5%;
-          font-size: 10px;
-          margin: 0px 110px;
-        }
         .text{
           color: ${Backcolor};
-          font-size: 25px;
+          font-size: 20px;
           font-weight: bold;
         }
+       
         .text-w{
           color: #0cb636;
           /* color: ${Backcolor}; */
           font-weight: bold;
-          font-size: 23px;
+          font-size: 20px;
         }
         .text-l{
           color: #bc2727;
           font-weight: bold;
           /* color: ${Backcolor}; */
-          font-size: 23px;
+          font-size: 20px;
         }
   }
 `;
@@ -529,6 +521,7 @@ const UserCardStyle = styled.div`
     }
     &:hover {
       background-color: #238f33;
+
     }
     }
   .avatar {

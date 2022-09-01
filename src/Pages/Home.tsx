@@ -50,6 +50,8 @@ background-color: ${props => props.theme.colors.primarybg};
 export interface PlayerCardProps {
   player: {
     name: string;
+    login: string,
+
     lvl: string,
     gamePlayed : number,
     lost : number,
