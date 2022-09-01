@@ -11,7 +11,9 @@ import  B1 from "../assets/imgs/badge1.svg";
 import  B2 from "../assets/imgs/badge2.svg";
 import  B3 from "../assets/imgs/badge3.svg";
 
-import dots from "../assets/imgs/tests/dots-horizontal.svg"
+import dots from "../assets/imgs/tests/dots.svg"
+
+import dot from "../assets/imgs/circle.svg"
 
 const Backcolor = "#533483"
 const Barside = "#f3460fe"
@@ -333,9 +335,10 @@ const TabOone = styled.div`
   height: 400px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  padding: 20px;
+  justify-content: left;
+  padding: 10px;
   overflow-y: scroll;
+  margin: 10px;
 
   &::-webkit-scrollbar {
   width: 4px;
@@ -373,12 +376,14 @@ export function Tabtwo()
 }
 
 const TabOtwo= styled.div` 
-  height: 600px;
-  width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
-  padding: 15px 0px;
+  justify-content: left;
+  padding: 10px;
+  margin: 20px 0px;
+  overflow-y: scroll;
+  height: 400px;
+  border: 1px solid white;
 
   overflow-y: scroll;
   &::-webkit-scrollbar {
@@ -404,11 +409,10 @@ const TabOtwo= styled.div`
 
 const card = {
   username: "mohammed el-karmi",
-  grade : " The Alchemist",
+  grade : "Yaiba",
   status : true ,
-  avatar : Tet,
+  avatar : Badge3,
 }
-
 const card1 = {
   username: "elmahdi elaazmi",
   grade : "The Great Yaiba",
@@ -420,17 +424,23 @@ const card2 = {
   username: "Mohammed Reda amali",
   grade : "Prince of Persia",
   status : true ,
-  avatar : Tet,
+  avatar : Badge3,
 
 }
 const card3 = {
   username: "achraf belarif",
-  grade : "Prince of Persia",
+  grade : "Spydrey",
   status : true ,
-  avatar : Badge2,
-
+  avatar : Badge3,
 }
-var listCards = [card, card1, card2, card3,card, card1, card2, card3,card, card1, card2, card3,card, card1, card2, card3,card, card1, card2, card3,card, card1, card2, card3,card, card1, card2, card3,card, card1, card2, card3,card, card1, card2, card3,card, card1, card2, card3,card, card1, card2, card3,card, card1, card2, card3]
+const card4 = {
+  username: "elmahdi elaazmi",
+  grade : "alchemist",
+  status : true ,
+  avatar : Badge3,
+}
+
+var listCards = [card, card4,card2, card3]
 
 // User Card Comp
 export interface UserCard {
@@ -443,151 +453,127 @@ export interface UserCard {
   }
 }
 
+
+
 export  function UserCard(props : UserCard) {
+  const [active, setActive] = useState(false);
 return (
   <UserCardStyle>
-
-    <div className="dots">
-      <img src={dots} /> 
+    
+    
+    <div className="status" >
     </div>
 
-    <div className="img">
-      <img src={props.data.avatar} />
-    </div>
+    <img src={dots} className="dots"/> 
+      <div className='List'>
+        hh
+        <div className='element' >
+            Unfriend
+        </div>
+      
+      </div>
+    <img src={props.data.avatar} className="avatar" />
     
-     <div className="Uname">
-          {props.data.username}
-     </div>
+    <div className="Uname">
+        {props.data.username}
+   </div>
+
+
     
-    <div className="grade">
+
+    {/*<div className="grade">
           {props.data.grade}
-    </div> 
-    
-    {/* <div className="status">
-          {props.data.status ? <div className="text-w">online</div> : <div className="text-l">offline</div>}
     </div>  */}
-  
+
+   
+    
   </UserCardStyle>
+  
 )
 }
 
 const UserCardStyle = styled.div`
   position: relative;
-  padding: 0px;
-  margin: 10px;
-  width: 180px;
-  height: 150px;
   background: ${Backcolor};
+  margin : 10px;
+  width: 150px;
+  height: 50px;
+  text-align: center;
   border-radius: 10px;
+  border: 1px solid  #70539b ;
+  animation: fadeIn 9s;
 
-  transition: 1.2s ease-out;
-   
-  display: flex;
-      align-items: center;
-    flex-direction: column;
-  /* animation: 8ms; */
-  
-  .img{
-    position: absolute;
-    top: 54%;
-    left: 49%; 
-    transform: translate(-50%, -50%);
-    font-size: 0px;
-  
-    background-color: ${Backcolor};
-    border: 4px solid ${Backcolor};
-    border-radius: 0%;
-    > img {
-      width: 100px;
-      height:100px;
-      padding: 5px 0px 0px 0px ;
-    }
+  .status {
+    background-color: #238f33;
+    border: 3px solid ${Backcolor};
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    left: 0px;
+    transform: translate(-12%, -12%);
+  }
+  .List {
+    display: none;
   }
   .dots {
+    display: flex;
     position: absolute;
-    height: 12px;
     width: 20px;
-    background-color: #ffffff;
-    padding: 0px 0px 2px 0px;
-    border: 1.5px solid #ffffff;
-    border-radius: 30%;
-    top: 5%;
-    right: 5%;
-    font-size: 18px;
-    > img { 
-      width: 100%;
-      color: #FFFFFF;
+    height:15px;
+    right: 3px;
+    top: 3px;
+    padding: 1px 1px ;
+    > img {
+     height: 100%;
+     width: 100%;
     }
+    &:hover {
+      background-color: #238f33;
+    }
+    }
+  .avatar {
+    display: none;
+
   }
-  .Uname{
-    /* width: 0px;
-    height: 0px; */
-    color: ${Backcolor};
-  }
-  .grade{
-    color: ${Backcolor};
+  .Uname {
+    position: absolute;
+    color: white;
+    width: 100%;
+    height: auto;
+    min-height: 30px;
+    margin : 2px 0px;
+    text-transform: capitalize;
+    font-size: 13px;
+    font-weight: bold;
+    bottom: 0px;
   }
 
-  &:hover{
-    background: ${Backcolor};
-    width: 180px;
-    height: 250px;
-    transition: 0.6s ease-out;
-    .img{
+  &:hover {
+    height: 100px;
+    transition: 0.8s;
+   
+    .avatar {
       position: absolute;
-      top: 45%;
-      left: 50%; 
-      transform: translate(-50%, -50%);
-      font-size: 0px;
-      background-color: ${Backcolor};
-      border: 8px solid ${Backcolor};
-      border-radius: 20%;
-      transition: 0.9s ease-in-out;
+      display: block;
+      margin: 0px 0px 0px 50x;
+      /* margin-left: auto;
+      margin-right: auto; */
+      width: 50%;
+      top: 0px;
+      left: 25%;
+      animation: fadeIn 6s;
       > img {
-        width: 110px;
-        height:110px;
-        padding: 5px 5px 5px 5px ;
-        transition: 0.9s ease-in-out;
+        width: 80px;
+        height: 80px;
       }
     }
-    .dots {
-      position: absolute;
-      height: 17px;
-      width: 27px;
-      padding: 0px 3px 3px 3px;
-      border: 1px solid ${Backcolor};
-      border-radius: 30%;
-      transition: 0.9s ease-in-out;
-      > img { 
-        width: 100%;
-        color: #FFFFFF;
-        transition: 0.9s ease-in-out;
-      }
-    }
-    .Uname{
-      color: #ffffff;
-      background-color: ${Backcolor};
-      position: absolute;
-      padding: 0px 0px;
-      margin-top: 10px;
-      bottom: 20%;
-      font-size: 18px;
-      line-height: 25px;
-      text-transform: capitalize;
-      font-weight: bold;
-      border: 2px solid ${Backcolor};
 
-    }
-    .grade{
-        position: absolute;
-        text-align: center;
-        color: #ffffff ;
-        border: 2px solid ${Backcolor};
-
-        bottom: 10%;
-      }
   }
 
+  @keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+  }
 `;
 
 ///// Game History Tab
@@ -595,8 +581,3 @@ export function Tabthree()
 {
   return (  <div> <h1> Helloo Tab Game History </h1> </div> )
 }
-
-
-
-// State Comp in profile card 
-// game history
