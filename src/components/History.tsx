@@ -40,7 +40,17 @@ const achievment3 = {
 
 export default function History() {
   return (
-    <HistoryComponent>
+    <Conta>
+
+
+        <HistoryComponent/>
+        <AchievementHistory/>
+    </Conta>
+  )
+}
+export  function HistoryComponent() {
+  return (
+    <HistoryComponentStyle>
         <Head>
             Last matches
             <a href="#profilepage">
@@ -52,18 +62,32 @@ export default function History() {
                 return<GameComp key={id} match={match}  isFriend={true} />
             })
         }
-        {/* <GameComp match={match2} isFriend={false} />
-        <GameComp match={match1} isFriend={true} />
-        <GameComp match={match2} isFriend={false} />
-        <GameComp match={match1} isFriend={true} /> */}
-    </HistoryComponent>
+
+    </HistoryComponentStyle>
   )
 }
 
 
-const HistoryComponent = styled.div`
+const Conta = styled.div`
 
-    width: 330px;
+    width: 90%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    /* background: #171A22; */
+    flex-direction: row;
+    border-radius: 10px ;
+    padding: 0 15px;
+    gap: 5px;
+    /* border : 1px solid ${props => props.theme.colors.border};; */
+`
+const HistoryComponentStyle = styled.div`
+
+    flex: 1;
+    min-width: 330px;
+    min-height: 300px;
+    max-height: 300px;
     height: auto;
     display: flex;
     /* align-items: center; */
@@ -256,9 +280,9 @@ const AddFriendStyle = styled.div`
 
 export  function AchievementHistory() {
     return (
-      <HistoryComponent>
+      <HistoryComponentStyle>
           <Head>
-                Achievements
+                Latest Achievements
               <a href="#profilepage">
                   View all matches
               </a>
@@ -269,7 +293,7 @@ export  function AchievementHistory() {
               })
           }
    
-      </HistoryComponent>
+      </HistoryComponentStyle>
     )
   }
 
@@ -301,7 +325,7 @@ export  function AchievmentComp(props : AchievmentCompProps) {
 }
 
 const AchievmentCompStyle = styled.div`
-    width: 350px;
+    width: 100%;
     height: 60px;
     background: ${props => props.theme.colors.bg};;
     border: 2px solid ${props => props.theme.colors.border};;

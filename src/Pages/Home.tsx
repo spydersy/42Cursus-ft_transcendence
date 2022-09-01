@@ -8,7 +8,7 @@ import { ReactComponent as Penta} from "../assets/imgs/penta.svg"
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import GameModes from '../components/GameModes'
-// import History , {AchievementHistory} from '../components/History'
+import History from '../components/History'
 
 import Slider from '../components/Slider'
 
@@ -21,9 +21,14 @@ export default function Home() {
         <Slider/>
       </Hero>
       <GameModes/>
-      <Hero style={{marginTop : "40px" , flexDirection: "column"}}>
+      <Hero style={{marginTop : "40px" }}>
         <HeadComponent title="History"/>
+        <History />
       </Hero> 
+      
+      {/* <Hero style={{marginTop : "40px" }}>
+        <HeadComponent title="History"/>
+      </Hero>  */}
     </div>
   )
 }

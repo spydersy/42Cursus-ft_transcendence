@@ -145,8 +145,8 @@ const CarouselContainer = styled.section`
 		/* margin-left:-500px;
 		margin-top:-500px; */
 		/* left:18%; */
-		left: 25%;
-		top:0px;
+		left: 30%;
+		top: -50px;
 		width:600px;
 		height:100%;
 		transform: translate(-50% , -50%);

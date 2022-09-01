@@ -6,7 +6,7 @@ import styled from "styled-components"
 export default function GameModes() {
   return (
     <Game>
-        {/* <HeadComponent title="Game modes"/> */}
+        <HeadComponent title="Game modes"/>
         <Carousel/>
         {/* s */}
     </Game>
@@ -16,8 +16,9 @@ export default function GameModes() {
 
 const Game = styled.div`
 width: 100%;
+padding: 20px 0;
 
-height: 400px;
+height: 500px;
 margin-top: 20px;
 display: flex;
 align-items: center;
