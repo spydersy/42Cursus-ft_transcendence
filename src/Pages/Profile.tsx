@@ -20,6 +20,10 @@ import  B3 from "../assets/imgs/badge3.svg";
 
 import { PlayerCard , UserCard} from '../components/PlayerProfile';
 
+import{ReactComponent as ScoreBoard }from "../assets/imgs/SC1.svg"
+import{ReactComponent as Sc }from "../assets/imgs/ScoreBoard.svg"
+import {ReactComponent as Timer }from "../assets/imgs/timer.svg"
+
 /////
 const Backcolor = "#533483"
 const Barside = "#f3460fe"
@@ -257,10 +261,147 @@ const card4 = {
 }
 
 var listCards = [card, card1,card3, card3, card2,card, card1,card3, card3, card2
-,card, card1,card3, card3, card2,card, card1,card3, card3, card2,card, card1,card3, card3, card2,card, card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2]
-
+,card, card1,card3, card3, card2,card, card1,card3, card3, card2,card4, card1,card3, card3, card2,card, card1,card3, card4, card2, card, card1,card4, card3, card2,card, card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2]
 ///// Game History Tab
+
+
+export interface Game {
+    data: {
+    win: boolean;
+    timeMin: number;
+    timeSec: number;
+    player : string;   //{ name: string, avatar: string, status: boolean , score:number};
+    opponent : string; //{ name: string, avatar: string, status: boolean, score:number}; 
+    }
+  }
+
+const game1 = {
+  data: {
+    win: true,
+  timeMin: 5,
+  timeSec: 30,
+  player : "as", //{ name: "string1", avatar: "string1", status: true , score:18},
+  opponent : "as", //{ name: "string2", avatar: "string2", status: false, score:5},
+  }
+}
+const game2 = {
+  data: { win: false,
+  timeMin: 5,
+  timeSec: 30,
+  player : "asdas" , //{ name: "string", avatar: "string", status: false, score:5},
+  oppenent : "asdasd" , //{ name: "string", avatar: "string", status: true , score:18},
+  }
+}
+
+// var ListGameHistory = [game1, game2, game1, game2, game1, game2,game1, game2, game1, game2, game1, game2, game1, game2, game1, game2, game1, game2, game1, game2, game1, game2, game1, game2]
+var ListGameHistory = [game1, game2]
+
+
 export function Tabthree()
 {
-  return (  <div> <h1> Helloo Tab Game History </h1> </div> )
+  return (  
+
+      <TabOthree >
+        {
+          ListGameHistory.map((game : any, id : number )=>{
+              return<Game key={id} data={game}/>
+          })
+        }
+      </TabOthree >
+  )
 }
+
+const hieghtTab = "400px";
+
+const TabOthree= styled.div`
+  background-color: #879898d1;
+  width: 100%;
+  max-height: ${hieghtTab};
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  overflow-y: scroll;
+  border: 1px solid ${props => props.theme.colors.primarybg};
+  /* height: ${hieghtTab}; */
+  /* margin: 20px; */
+`;
+
+export  function Game(props : Game)  {
+  return (
+    <div >
+      <GameStyle > 
+        {/* Game Statistics */}
+        <ScoreBoard className='Bordo'/>
+          <Timer className='Timero'/>
+          <div className='user1'> User1 </div>
+          <div className='user2'> User2 </div>
+          <div className='score1'> 5</div>
+          <div className='score'> : </div>
+          <div className='score2'> 15</div>
+      </GameStyle>
+    </div>
+);
+}
+
+const GameStyle = styled.div`
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  width: 700px;
+  height: 100px;
+  background-color: #483d41d1;
+  border: 2px solid black;
+  margin: 10px;
+  .mainbord {
+    background-color: aqua;
+  }
+
+  .Bordo {
+    width: 100%;
+    height: 100%;
+    /* background-color: aqua; */
+  }
+  .Timero {
+    position: absolute;
+    /* background-color: aqua; */
+    left: 40%;
+    top: 11%;
+    width: 60px;
+    height: 25%;
+  }
+
+  .user1 {
+    position: absolute;
+    background-color: #e0b5c5d1;
+    left: 10%;
+    top: 42%;
+  }
+  .user2 {
+    position: absolute;
+    background-color: #cf2563d1;
+    right: 20%;
+    top: 42%;
+  }
+  
+
+
+  .score {
+    position: absolute;
+    background-color: #338e21d1;
+    right: 50%;
+    bottom: 25%;
+  }
+  .score1 {
+    position: absolute;
+    background-color: #338e21d1;
+    right: 45%;
+    bottom: 25%;
+  }
+  .score2 {
+    position: absolute;
+    background-color: #338e21d1;
+    left: 45%;
+    bottom: 25%;
+  }
+  `;
