@@ -5,6 +5,7 @@ import { AvatarComponent } from '../components/Upperbar';
 import {ReactComponent as AddIcon} from "../assets/imgs/block-icon.svg";
 import {ReactComponent as SendIcon} from "../assets/imgs/send-icon.svg";
 import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
+import Img from "../assets/imgs/avatar/a1.png";
 
 
 const msgList = [
@@ -229,7 +230,7 @@ export  function ChatMesgComponent() {
       <ChatMesgstyle>
 
         <Avatar>
-          <AvatarComponent/>
+          <AvatarComponent img={Img}/>
         </Avatar>
         <div className='mesgData'>
           <div className='name'>
@@ -299,7 +300,7 @@ export  function Top() {
       <div style={{flex:"auto"}}>
         <div style={{width: "40px" , height: "40px"}}>
 
-        <AvatarComponent/>
+        <AvatarComponent img={Img}/>
         </div >
         <div >
             mohamed elkarmi

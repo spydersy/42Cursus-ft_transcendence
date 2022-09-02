@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import styled , {css} from "styled-components"
 import SearchIcon from "../assets/imgs/searchIcon.svg"
 import {ReactComponent as BellIcon }from "../assets/imgs/bell-icon.svg"
+import {ReactComponent as Logo }from "../assets/imgs/logo.svg"
 import TestAvatar from "../assets/imgs/tests/guy.svg" 
 import DropDown from './DropDown'
 
@@ -21,7 +22,7 @@ export default function Upperbar() {
           </PlayButton>
           <NotificationComponent/>
           <div  style={{position : "relative"}} onClick={(e)=>{ToggleDD(e)}}>
-            <AvatarComponent/>
+            <AvatarComponent img={TestAvatar} />
             {
               open && <DropDown closeDropdown={ ()=>{
       
@@ -77,17 +78,18 @@ width: 300px;
 
 export  function LogoComponent() {
     return (
-      <Logo>
-          PingPong  Time 
-      </Logo>
+      <Logo/>
+      // <Logo>
+      //     One Pong
+      // </Logo>
     )
   }
-    const Logo = styled.div`
-    font-family: 'Michroma', sans-serif;
-       color:  ${props => props.theme.colors.primaryText};;
-       font-size:  ${props => props.theme.fontSize.l}; 
-       /* object-fit : contain; */
-    `;
+    // const Logo = styled.div`
+    // font-family: 'Michroma', sans-serif;
+    //    color:  ${props => props.theme.colors.primaryText};;
+    //    font-size:  ${props => props.theme.fontSize.l}; 
+    //    /* object-fit : contain; */
+    // `;
 export  function SearchBarComponent() {
     return (
       <SearchBar>
@@ -174,11 +176,14 @@ ${props => props.new && css`
  
 
 `;
-
-export  function AvatarComponent() {
+interface AvatarProps {
+  img: string,
+  // score2 : number
+}
+export  function AvatarComponent(props: AvatarProps) {
   return (
     <Avatar>
-      <img src={TestAvatar} alt='avatar' />
+      <img src={props.img} alt='avatar' />
     </Avatar>
   )
 }
@@ -187,6 +192,7 @@ const Avatar = styled.div`
   width: 100%;
   height: 100%;
   border-radius : 50%;
+
   img{
     width: 100%;
     height: 100%;

@@ -7,12 +7,39 @@ import styled from "styled-components"
 import axios from 'axios';
 import io from 'socket.io-client';
 import { AvatarComponent } from './Upperbar';
+import Img from "../assets/imgs/avatar/a1.png";
+import Img2 from "../assets/imgs/avatar/a2.png";
+import AIavatar from "../assets/imgs/avatar/Ai-lwahch.png";
+import VegaPunk from "../assets/imgs/vegapunk.png" 
 
 interface myProps {
-  name: string;
+  name: string,
+  mode : string
 
 }
-export default function Pong({name}:myProps ) {
+interface ScoreType {
+  score1: number,
+  score2 : number
+}
+interface Player2Type {
+  name: string,
+  avatar : string,
+  msg : string
+}
+
+const player2 = {
+    name: "mehdi elazmi",
+    avatar : Img,
+    msg : "Player2"
+}
+const ai1 = {
+  name: "Dr VegaPunk",
+  avatar : VegaPunk,
+  msg : "AI"
+}
+const ballSpeed : number = 5;
+var [directionX, directionY] = [ballSpeed, ballSpeed];
+export default function Pong({name, mode}:myProps ) {
   const tableRef : any= useRef<HTMLHeadingElement>(null);
   const ballRef : any = useRef<SVGCircleElement >(null);
   const playerRef : any = useRef<SVGRectElement >(null);
@@ -20,12 +47,16 @@ export default function Pong({name}:myProps ) {
   var player : number;
   const [ready, setReady] = useState(true)
   const [header, setHeader] = useState("waiting")
-  const [Player, setPlayer] = useState<any>()
+  const [Player2Data, setPlayer2] = useState<Player2Type>(player2)
+  const [score, setscore] = useState<ScoreType>({
+    score1 : 0,
+    score2 : 0,
+  })
+
   var UP_KEY = 38;
   var DOWN_KEY = 40;
   
-  const ballSpeed : number = 5;
-  var [directionX, directionY] = [ballSpeed, ballSpeed];
+
   function detectCollision() {
     const cx = parseInt(ballRef.current.getAttribute('cx'));
     const cy = parseInt(ballRef.current.getAttribute('cy'));
@@ -56,6 +87,7 @@ export default function Pong({name}:myProps ) {
     return colliding;
   }
   function moveBall() {
+
     const cx = parseInt(ballRef.current.getAttribute('cx'));
     const cy = parseInt(ballRef.current.getAttribute('cy'));
     
@@ -67,12 +99,13 @@ export default function Pong({name}:myProps ) {
     
     const [nextCX, nextCY] = [cx + directionX, cy + directionY];
     if (nextCX > rightLimit) 
-    directionX = -directionX;
-    if (nextCY < topLimit || nextCY > bottomLimit )
-    directionY = -directionY;
-    if (nextCY < topLimit) {
-      // directionY = -directionY;
+        directionX = -directionX;
+    if (nextCY > bottomLimit || nextCY < topLimit)
+    {
+
+      directionY = -directionY
     }
+
     if (detectCollision()) 
     {
       directionX = -directionX  ;
@@ -80,7 +113,10 @@ export default function Pong({name}:myProps ) {
       directionX = directionX * 1.2;
     }
     if (detectCollision2()) 
-      directionX = -directionX;
+    directionX = -directionX;
+    if (directionX  > 0)
+        moveAI(cx + directionX ,cy + directionY)
+
     const [xPos, yPos] = [cx + directionX, cy + directionY];
     // console.log(xPos)
     if (xPos <=  ballRadius) { // player lost
@@ -97,71 +133,48 @@ export default function Pong({name}:myProps ) {
   
   function movePlayer1(event :  MouseEvent)
   {
-    console.log(player)
+    // console.log(player)
 
     const p = playerRef?.current;
     // console.log(p)
     // const cx = parseInt(p.getAttribute('x'));
     const cy = parseInt(p.getAttribute('y'));
     const h = parseInt(p.getAttribute('height'));
-    console.log(event)
+
     if ( event.offsetY < tableRef.current.offsetHeight - h)
        p.setAttribute('y', event.offsetY)
     else 
         p.setAttribute('y', tableRef.current.offsetHeight  - h)
-    // switch( event.keyCode ) {
-    //     case 119:
-    //       if (cy - 50 >= 0)
-    //       p.setAttribute('y', cy - 50);
-    //       else
-    //       p.setAttribute('y',0);
 
-    //       break;
-    //       case 115:
-    //           if (cy + 50 <= tableRef.current.offsetHeight - h)
-    //             p.setAttribute('y', cy + 50);
-    //           else
-    //             p.setAttribute('y', tableRef.current.offsetHeight  -h)
-    //         break;
-    //     default: 
-    //         break;
-    //     }
-      //   const x = parseInt(p.getAttribute('x'));
-      // const y = parseInt(p.getAttribute('y'));
-      //   socket.emit("player move",x,  y )
 
     }
-  function movePlayer2(event :  MouseEvent)
+  function moveAI(xb : number, yb: number )
   {
-    console.log(player)
 
-    const p = player2Ref?.current;
-    console.log(event)
-    // const cx = parseInt(p.getAttribute('x'));
-    // const cy = parseInt(p.getAttribute('y'));
-    // const h = parseInt(p.getAttribute('height'));
-    // // switch( event.keyCode ) {
-    // //     case UP_KEY:
-    //       // if (cy - 50 >= 0)
-    //         p.setAttribute('y',event.screenY);
-        //   else
-        //     p.setAttribute('y',0);
+    const h = parseInt(player2Ref.current.getAttribute('height'));
+    const w = parseInt(tableRef.current.getAttribute('width'));
+      
+    var yp : number ;
+    var newyp : number ;
+    var xp : number ;
+    yp =  parseInt(player2Ref.current.getAttribute('y'));
+    xp =  parseInt(player2Ref.current.getAttribute('x'));
 
-        //   break;
-        //   case DOWN_KEY:
-        //       if (cy + 50 <= tableRef.current.offsetHeight - h)
-        //         p.setAttribute('y', cy + 50);
-        //       else
-        //         p.setAttribute('y', tableRef.current.offsetHeight  -h)
-        //     break;
-        // default: 
-        //     break;
-        // }
-      //   const x = parseInt(p.getAttribute('x'));
-      // const y = parseInt(p.getAttribute('y'));
-      //   socket.emit("player move",x,  y )
 
+    console.log( tableRef.current.offsetHeight - h)
+    if (xb < w / 2)
+    {
+      console.log(xb)
+      player2Ref.current.setAttribute('y', yp + 10)
+      
     }
+     if (yb + h  <  tableRef.current.offsetHeight  )
+      player2Ref.current.setAttribute('y', yb  )
+    else 
+
+        player2Ref.current.setAttribute('y', tableRef.current.offsetHeight - h  )
+
+  }
 
   //   const socket = io('http://localhost:3030');
     useEffect(() => {
@@ -170,10 +183,22 @@ export default function Pong({name}:myProps ) {
         player2Ref.current.setAttribute('y' , 0)
         playerRef.current.setAttribute('x' ,  30)
         playerRef.current.setAttribute('y' , 0)
+        console.log(mode)
+        switch(mode)
+        {
+          case "AI":
+            // alert("AI")
+            setPlayer2(ai1)
+            break ;
+            default:
+            setPlayer2(player2)
+
+        }
       }
       initData()
       moveBall()
       tableRef.current.addEventListener("mousemove", movePlayer1)
+
       // document.addEventListener("keydown", movePlayer2)
   })
   return (
@@ -181,24 +206,17 @@ export default function Pong({name}:myProps ) {
       <PlayerStyle>
 
         <Player1>
-        <div style={{width: "50px", height : "50px"}}>
+            <UserComponent Ai={false} data={player2}/>
 
-        <AvatarComponent/>
-        </div>
-        <div className='mesgData'>
-            <div className='name'>
-              mohamed Elkarmi
-            </div>
-            <div className='msg'>
-             Player 1
-            </div>
-        </div>
           </Player1>
+          <Score>
+            {score.score1} | {score.score2}
+          </Score>
       </PlayerStyle>
     <Table ref={tableRef} >Pong
 
       <svg>
-          <circle ref={ballRef} id="ball"  cx="110" cy="40" r="12" />
+          <circle ref={ballRef} id="ball"  cx="20" cy="300" r="12" />
           <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" stroke-dasharray="10" />
 
           <rect ref={playerRef} rx="10" x="30" y="0" width="20" height="150" fill="#FFF" />
@@ -209,19 +227,9 @@ export default function Pong({name}:myProps ) {
       <PlayerStyle>
 
         <Player2>
-          {/* <div style={{ width: "50px", height: "50px" }}>
-
-            <AvatarComponent />
-          </div>
-          <div className='mesgData'>
-            <div className='name'>
-              mehdi Elaazmi
-            </div>
-            <div className='msg'>
-              Player 2
-            </div>
-          </div> */}
-          <Spinner/>
+        
+        <UserComponent Ai={true} data={Player2Data}/>
+          {/* <Spinner/> */}
         </Player2>
 
       </PlayerStyle>
@@ -234,7 +242,11 @@ export default function Pong({name}:myProps ) {
 
 const PlayerStyle = styled.div`
   display: flex;
+  align-items: center;
   width: 100% ;
+  height: auto;
+  position: relative;
+  margin: 10px 0;
   >div{
      .mesgData{
       margin-left: 12px;
@@ -245,10 +257,13 @@ const PlayerStyle = styled.div`
       flex-direction: column;
       .name{
         color:  ${props => props.theme.colors.primaryText};
+        font-size:  ${props=> props.theme.fontSize.xl};
 
       }
       .msg{
         font-size: 15px;
+        font-size:  ${props=> props.theme.fontSize.ll};
+
         opacity: 0.7;
         color:  ${props => props.theme.colors.seconderyText};
       }
@@ -256,14 +271,27 @@ const PlayerStyle = styled.div`
 `;
 const Player1 = styled.div`
   margin-right: auto;
-  height:70px ;
+  height:auto ;
   display: flex;
   align-items: center;
 
   `;
+const Score = styled.div`
+  position: absolute;
+  left: 50%;
+  height: 100%;
+  transform: translateX(-50%);
+
+        color:  ${props => props.theme.colors.primaryText};
+  display: flex;
+  align-items: center;
+  font-family: "Poppins" , sans-serif;
+  font-size: ${props=> props.theme.fontSize.xl};
+
+  `;
 const Player2 = styled.div`
 margin-left: auto;
-  height:70px ;
+  height:auto ;
   display: flex;
   align-items: center;
 
@@ -346,3 +374,54 @@ const SpinnerStyle = styled.div`
 
       
       `;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+interface UserProps {
+  data : {
+
+    name: string,
+    msg : string,
+    avatar : string
+  }
+  Ai : boolean
+}
+      
+
+
+      export  function UserComponent(props: UserProps) {
+        return (
+          <>
+              <div style={{ width: "100px", height: "100px" }}>
+            {props.Ai == false ? <AvatarComponent img={props.data.avatar} /> : <AIstyle img={props.data.avatar} ></AIstyle>}
+            
+          </div>
+          <div className='mesgData'>
+            <div className='name'>
+             {props.data.name}
+            </div>
+            <div className='msg'>
+            {props.data.msg}
+            </div>
+          </div>
+
+          </>
+        )
+      }
+      const AIstyle = styled(AvatarComponent)`
+      display: none;
+        > img{
+          display: none;
+        }
+  `

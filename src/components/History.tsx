@@ -6,6 +6,7 @@ import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 import  Badge1 from "../assets/imgs/badge1.svg";
 import  Badge2 from "../assets/imgs/badge2.svg";
 import  Badge3 from "../assets/imgs/badge3.svg";
+import Img from "../assets/imgs/avatar/a1.png";
 
 const match1 = {
     name: "Melkarmi",
@@ -136,7 +137,7 @@ export  function GameComp(props : GameCardProps) {
   return (
     <GameCompStyle win={state} >
         <div style={{marginLeft : "14px"}}>
-        <AvatarComponent  />
+        <AvatarComponent img={Img} />
 
         </div>
         <Data>
