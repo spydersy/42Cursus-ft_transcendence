@@ -15,7 +15,7 @@ import Slider from '../components/Slider'
 export default function Home() {
   // const [index, setindex] = useState(1)
   return (
-    <div className='container' style={{width: "1500px" }} >
+    <div className='container' >
       <Hero>
         <HeadComponent title="Live Games"/>
         <Slider/>
