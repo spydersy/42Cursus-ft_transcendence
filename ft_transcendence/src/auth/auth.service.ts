@@ -1,15 +1,16 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Query } from '@nestjs/common';
+import { Injectable, Query, Response } from '@nestjs/common';
 import { lastValueFrom, map } from 'rxjs';
 import { User } from 'src/dtos/User.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { UserService } from 'src/user/user.service';
+import { Response as Res } from 'express';
 
 @Injectable()
 export class AuthService {
     constructor(private httpService: HttpService,
-                private prisma: PrismaService,
-                private jwtTokenService: JwtService) { }
+                private userService: UserService,
+                private jwtTokenService: JwtService) {}
 
     Check42ApiQueryCode(@Query() query) : Boolean {
         if (query['error'] || !query['code']) {
@@ -19,7 +20,8 @@ export class AuthService {
     }
 
     HandleSigninErrors(@Query() query) {
-        // Do Something ...
+        console.log("// Do Something ...");
+        return "// Do Something ...";
     }
 
     async ClaimToken(HeadersRequest) {
@@ -61,59 +63,8 @@ export class AuthService {
             return token;
         }
         catch {
-            console.log("__ERROR__OCCURED__");
+            console.log("__ERROR__ID__00");
         }
-    }
-
-    async UserExist(UserProfile: User) {
-        // console.log(UserProfile.Login);
-        let user = await this.prisma.users.findUnique({
-            where: {
-                Id: UserProfile.Id,
-            },
-        });
-        console.log(user);
-        if (user) {
-            return true;
-        }
-        return false;
-    }
-
-    async AddUserToDB(UserProfile : User) {
-        const user = await this.prisma.users.create({
-            data: {
-                Id: UserProfile.Id,
-                Email: UserProfile.Email,
-                Login: UserProfile.Login,
-                UsualFullName: UserProfile.UsualFullName,
-                DefaultAvatar: UserProfile.DefaultAvatar,
-                UploadedAvatar: UserProfile.UploadedAvatar,
-                Status: UserProfile.Status,
-                Notifications: UserProfile.Notifications,
-                Wins: UserProfile.Wins,
-                Losses: UserProfile.Losses,
-                Level: UserProfile.Level,
-                TwoFactorAuth: false,
-            },
-        });
-    }
-
-    GenerateUserDto(UserProfile) : User {
-        const user : User = {
-            Id: UserProfile['id'],
-            Email: UserProfile['email'],
-            Login: UserProfile['login'],
-            UsualFullName: UserProfile['usual_full_name'],
-            DefaultAvatar: `https://avatars.dicebear.com/api/croodles-neutral/${UserProfile['login']}.svg`,
-            UploadedAvatar: "",
-            Status: "online",
-            Notifications: {},
-            Wins: 0,
-            Losses: 0,
-            Level: 0,
-            TwoFactorAuth: false,
-        }
-        return user;
     }
 
     async GenerateJWT(user: User) {
@@ -122,20 +73,20 @@ export class AuthService {
         };
     }
 
-    async SigninLogic(@Query() query): Promise<string> {
+    async SigninLogic(@Query() query, @Response() res: Res): Promise<any> {
         let UserDto: User;
         if (this.Check42ApiQueryCode(query) === true) {
             const Token = await this.GetUserToken(query['code']);
             const UserProfile = await this.ClaimUserProfile(Token, query['code']);
-            UserDto =this.GenerateUserDto(UserProfile['data']);
-            if (await this.UserExist(UserDto) === false) {
-                this.AddUserToDB(UserDto);
-                // let ret00 = await this.GenerateJWT(UserDto)
-                // console.log("__JSON__WEB__TOKEN__ : ", ret00);
+            UserDto =this.userService.GenerateUserDto(UserProfile['data']);
+            if (await this.userService.UserExist(UserDto) === false) {
+                this.userService.AddUserToDB(UserDto);
+                let JWT = await this.GenerateJWT(UserDto);
+                return res.cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true}).json({'message': 'DONE00'});
             }
             else {
-                // Destroy Old JWT Then Set New One
-                return "User Already Exist";
+                let JWT = await this.GenerateJWT(UserDto);
+                return res.cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true}).json({'message': 'DONE01'});
             }
         }
         else {
@@ -144,3 +95,22 @@ export class AuthService {
         return `Hello ${UserDto.UsualFullName}`; // redirect to HomePage [http://localhost:3000/]
     }
 }
+/*
+__CURL__REQUEST__ :
+__COOKIES__ :  {
+  host: 'localhost:3000',
+  'user-agent': 'curl/7.79.1',
+  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NjI3MDAsIkxvZ2luIjoiYWJlbGFyaWYiLCJpYXQiOjE2NjIyMjAwNjksImV4cCI6MTY2MjgyNDg2OX0.ibeIf5T3R5Hr7TLweElwZxf6hRHxX_k4dagk3dJLg1k'
+}
+*/
+
+
+/*
+__BROWSER__REQUEST__ :
+__COOKIES__ :  {
+  host: 'localhost:3000',
+  cookie: 'Authorization=Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NjI3MDAsIkxvZ2luIjoiYWJlbGFyaWYiLCJpYXQiOjE2NjIyMjAwNjksImV4cCI6MTY2MjgyNDg2OX0.ibeIf5T3R5Hr7TLweElwZxf6hRHxX_k4dagk3dJLg1k',
+}
+*/
+
+// Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NjI3MDAsIkxvZ2luIjoiYWJlbGFyaWYiLCJpYXQiOjE2NjIyOTQwMTcsImV4cCI6MTY2Mjg5ODgxN30.TyVVmo8-uVMxZupaiqXRJFcfu0l3fvlNeFIvmHRgX8w
