@@ -1,6 +1,7 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Response, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
+import { Response as Res } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -9,7 +10,7 @@ export class AuthController {
     }
 
     @Get()
-    SigninLogic(@Query() query) {
-        return this.authservice.SigninLogic(query);
+    SigninLogic(@Query() query, @Response() res: Res) {
+        return this.authservice.SigninLogic(query, res);
     }
 }
