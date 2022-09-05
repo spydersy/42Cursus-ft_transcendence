@@ -12,6 +12,9 @@ import Img2 from "../assets/imgs/avatar/a2.png";
 import AIavatar from "../assets/imgs/avatar/Ai-lwahch.png";
 import VegaPunk from "../assets/imgs/vegapunk.png" 
 
+
+
+
 interface myProps {
   name: string,
   mode : string
@@ -45,7 +48,7 @@ export default function Pong({name, mode}:myProps ) {
   const playerRef : any = useRef<SVGRectElement >(null);
   const player2Ref : any = useRef<SVGRectElement >(null);
   var player : number;
-  const [ready, setReady] = useState(true)
+  const [start, setStart] = useState(false)
   const [header, setHeader] = useState("waiting")
   const [Player2Data, setPlayer2] = useState<Player2Type>(player2)
   const [score, setscore] = useState<ScoreType>({
@@ -55,6 +58,7 @@ export default function Pong({name, mode}:myProps ) {
 
   var UP_KEY = 38;
   var DOWN_KEY = 40;
+  var rew = 0;
   
 
   function detectCollision() {
@@ -87,7 +91,7 @@ export default function Pong({name, mode}:myProps ) {
     return colliding;
   }
   function moveBall() {
-
+    console.log(start)
     const cx = parseInt(ballRef.current.getAttribute('cx'));
     const cy = parseInt(ballRef.current.getAttribute('cy'));
     
@@ -99,41 +103,52 @@ export default function Pong({name, mode}:myProps ) {
     
     const [nextCX, nextCY] = [cx + directionX, cy + directionY];
     if (nextCX > rightLimit) 
-        directionX = -directionX;
+    directionX = -directionX;
     if (nextCY > bottomLimit || nextCY < topLimit)
     {
-
+      
       directionY = -directionY
     }
-
+    
     if (detectCollision()) 
     {
       directionX = -directionX  ;
       
-      directionX = directionX * 1.2;
+      directionX = directionX + 1;
     }
     if (detectCollision2()) 
     directionX = -directionX;
     if (directionX  > 0)
-        moveAI(cx + directionX ,cy + directionY)
-
-    const [xPos, yPos] = [cx + directionX, cy + directionY];
-    // console.log(xPos)
-    if (xPos <=  ballRadius) { // player lost
-      // alert('Ooops');
-    } else {
+    moveAI(cx + directionX ,cy + directionY)
+    
+    if (nextCX - directionX <=  ballRadius) { // player lost
+      initBall();
+      setStart(false)
+      setscore({score1: score.score1 + 0 ,score2: score.score2 + 1});
+      [directionX, directionY] = [ballSpeed, ballSpeed];
+      return ;
+      // requestAnimationFrame(moveBall);
+    } 
+    else {
+      // console.log("directionX : " + directionX + "directionY : " + directionY)
+      const [xPos, yPos] = [cx + directionX, cy + directionY];
       
       ballRef.current.setAttribute('cx', xPos);
       ballRef.current.setAttribute('cy', yPos);
-      requestAnimationFrame(moveBall);
     }
-    // requestAnimationFrame(moveBall);
+    
+    rew = requestAnimationFrame(moveBall);
+    // if (!start)
+    // {
+    //   console.log(start)
+
+    // }
   }
   
   
   function movePlayer1(event :  MouseEvent)
   {
-    // console.log(player)
+
 
     const p = playerRef?.current;
     // console.log(p)
@@ -161,7 +176,7 @@ export default function Pong({name, mode}:myProps ) {
     xp =  parseInt(player2Ref.current.getAttribute('x'));
 
 
-    console.log( tableRef.current.offsetHeight - h)
+    // console.log( tableRef.current.offsetHeight - h)
     if (xb < w / 2)
     {
       console.log(xb)
@@ -175,32 +190,56 @@ export default function Pong({name, mode}:myProps ) {
         player2Ref.current.setAttribute('y', tableRef.current.offsetHeight - h  )
 
   }
+  const  initBall =()=>{
+    ballRef.current.setAttribute('cx', tableRef.current.offsetWidth / 2);
+    ballRef.current.setAttribute('cy', tableRef.current.offsetHeight / 2);
 
-  //   const socket = io('http://localhost:3030');
-    useEffect(() => {
-      const initData =()=>{
-        player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 50)
-        player2Ref.current.setAttribute('y' , 0)
-        playerRef.current.setAttribute('x' ,  30)
-        playerRef.current.setAttribute('y' , 0)
-        console.log(mode)
-        switch(mode)
-        {
-          case "AI":
-            // alert("AI")
-            setPlayer2(ai1)
-            break ;
-            default:
-            setPlayer2(player2)
-
+}
+var requestId;
+//   const socket = io('http://localhost:3030');
+useEffect(() => {
+  const initData =()=>{
+    player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 50)
+    player2Ref.current.setAttribute('y' , 0)
+    playerRef.current.setAttribute('x' ,  30)
+    playerRef.current.setAttribute('y' , 0)
+    
+    console.log(mode)
+    switch(mode)
+    {
+      case "AI":
+        // alert("AI")
+        setPlayer2(ai1)
+        break ;
+        default:
+          setPlayer2(player2)
+          
         }
       }
+      initBall()
       initData()
-      moveBall()
+      
+      
+  
+
+        
+      console.log("salam")
       tableRef.current.addEventListener("mousemove", movePlayer1)
 
       // document.addEventListener("keydown", movePlayer2)
-  })
+  } ,[])
+  useEffect(() => {
+    if (start)
+    {
+      // initBall()
+      // alert(start)
+    console.log("makayna m3na")
+      moveBall()
+    }
+  
+
+  }, [start])
+  
   return (
     <>
       <PlayerStyle>
@@ -233,6 +272,16 @@ export default function Pong({name, mode}:myProps ) {
         </Player2>
 
       </PlayerStyle>
+      <button onClick={()=> {
+        cancelAnimationFrame(rew)
+setStart(!start)
+
+      }}>
+        {
+          start ? "Pause" : "start"
+        }
+      
+      </button>
     </>
   )
 }
@@ -374,15 +423,6 @@ const SpinnerStyle = styled.div`
 
       
       `;
-
-
-
-
-
-
-
-
-
 
 
 
