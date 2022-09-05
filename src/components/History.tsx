@@ -49,6 +49,7 @@ export default function History() {
     </Conta>
   )
 }
+
 export  function HistoryComponent() {
   return (
     <HistoryComponentStyle>
@@ -67,7 +68,6 @@ export  function HistoryComponent() {
     </HistoryComponentStyle>
   )
 }
-
 
 const Conta = styled.div`
 
@@ -132,6 +132,7 @@ export interface GameCardProps {
     },
     isFriend : boolean
 }
+
 export  function GameComp(props : GameCardProps) {
     var state : boolean =( props.match.score1 > props.match.score2) ? true : false
   return (
@@ -157,8 +158,6 @@ export  function GameComp(props : GameCardProps) {
     </GameCompStyle>
   )
 }
-
-
 
 const GameCompStyle = styled.div<GameCompProps>`
     /* width: 100%;
@@ -204,6 +203,7 @@ const GameCompStyle = styled.div<GameCompProps>`
         }
     }
 `;
+
 const Data = styled.div`
     margin-left: 14px;
     height: 40px;
@@ -298,8 +298,6 @@ export  function AchievementHistory() {
     )
   }
 
-
-
 export interface AchievmentCompProps {
     achievment: {
         name: string;
@@ -307,6 +305,8 @@ export interface AchievmentCompProps {
         badge: string,
     },
 }
+
+
 
 export  function AchievmentComp(props : AchievmentCompProps) {
     // var state : boolean =( props.match.score1 > props.match.score2) ? true : false

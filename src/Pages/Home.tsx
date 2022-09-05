@@ -83,8 +83,8 @@ export function PlayerCard(props: PlayerCardProps) {
     </PlayerCardStyle>
   )
 }
-const PlayerCardStyle = styled.div`
 
+const PlayerCardStyle = styled.div`
   width: 388px;
   height: 243px;
   display: flex;
@@ -133,11 +133,9 @@ const PlayerCardStyle = styled.div`
     /* .lvl{
 
     } */
-  }
+}
 
-  `;
-
-
+`;
 
 export function Stats(props: PlayerCardProps) {
   return (

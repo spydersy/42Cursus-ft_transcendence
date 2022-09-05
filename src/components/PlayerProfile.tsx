@@ -427,8 +427,8 @@ const UserCardStyle = styled.div<StyleProps>`
     /* display: flex; */
     cursor: pointer;
     position: absolute;
-    /* width: 20px;
-    height:15px; */
+    width: 20px;
+    height:15px;
     right: 3px;
     top: 3px;
     /* padding: 1px 1px ; */
@@ -436,6 +436,10 @@ const UserCardStyle = styled.div<StyleProps>`
       stroke: white;
     }
     &:hover {
+      transform: scale(1.5);
+
+      right: 3px;
+      top: 3px;
       path{
       stroke: black;
     }
@@ -467,9 +471,9 @@ const UserCardStyle = styled.div<StyleProps>`
       border-radius: 50%;
       position: absolute;
       display: block;
-      width: 60%;
-      top: 8px;
-      left: 20%;
+      width: 50%;
+      top: 15px;
+      left: 25%;
       animation: fadeIn 4s;
       > img {
         width:70px;

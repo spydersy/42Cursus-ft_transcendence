@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import styled from "styled-components"
+import styled , {css}from "styled-components"
 import Tet from "../assets/imgs/avatar/avatar1.png"
 import Navlinks from '../components/Navlinks';
 import { AchievmentComp,AchievmentCompProps }  from '../components/History'
@@ -9,10 +9,8 @@ import  Badge3 from "../assets/imgs/avatar/a2.png";
 import  Badge4 from "../assets/imgs/avatar/a6.png";
 import  Badge5 from "../assets/imgs/avatar/a4.png";
 import  Badge6 from "../assets/imgs/avatar/a5.png";
-import  Badge7 from "../assets/imgs/avatar/a6.png";
-import  Badge8 from "../assets/imgs/avatar/a7.png";
-import  Badge9 from "../assets/imgs/avatar/a8.png";
 
+import Img from "../assets/imgs/avatar/a1.png";
 
 import  B1 from "../assets/imgs/badge1.svg";
 import  B2 from "../assets/imgs/badge2.svg";
@@ -23,8 +21,11 @@ import { PlayerCard , UserCard} from '../components/PlayerProfile';
 import{ReactComponent as ScoreBoard }from "../assets/imgs/SC1.svg"
 import{ReactComponent as Sc }from "../assets/imgs/ScoreBoard.svg"
 import {ReactComponent as Timer }from "../assets/imgs/timer.svg"
+import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 
+import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
 /////
+
 const Backcolor = "#533483"
 const Barside = "#f3460fe"
 const GreyBackcolor = "#282c34"
@@ -194,7 +195,7 @@ export function Tabtwo()
   )
 }
 
-const TabOtwo= styled.div` 
+const TabOtwo = styled.div` 
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
@@ -264,57 +265,24 @@ var listCards = [card, card1,card3, card3, card2,card, card1,card3, card3, card2
 ,card, card1,card3, card3, card2,card, card1,card3, card3, card2,card4, card1,card3, card3, card2,card, card1,card3, card4, card2, card, card1,card4, card3, card2,card, card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2]
 ///// Game History Tab
 
-
-export interface Game {
-    data: {
-    win: boolean;
-    timeMin: number;
-    timeSec: number;
-    player : string;   //{ name: string, avatar: string, status: boolean , score:number};
-    opponent : string; //{ name: string, avatar: string, status: boolean, score:number}; 
-    }
-  }
-
-const game1 = {
-  data: {
-    win: true,
-  timeMin: 5,
-  timeSec: 30,
-  player : "as", //{ name: "string1", avatar: "string1", status: true , score:18},
-  opponent : "as", //{ name: "string2", avatar: "string2", status: false, score:5},
-  }
-}
-const game2 = {
-  data: { win: false,
-  timeMin: 5,
-  timeSec: 30,
-  player : "asdas" , //{ name: "string", avatar: "string", status: false, score:5},
-  oppenent : "asdasd" , //{ name: "string", avatar: "string", status: true , score:18},
-  }
-}
-
-// var ListGameHistory = [game1, game2, game1, game2, game1, game2,game1, game2, game1, game2, game1, game2, game1, game2, game1, game2, game1, game2, game1, game2, game1, game2, game1, game2]
-var ListGameHistory = [game1, game2]
-
-
+//////
 export function Tabthree()
 {
   return (  
-
-      <TabOthree >
-        {
-          ListGameHistory.map((game : any, id : number )=>{
-              return<Game key={id} data={game}/>
-          })
-        }
-      </TabOthree >
+    <TabOthree >
+    {
+        listGame.map((match : any, id : number )=>{
+            return<GameComp key={id} match={match}  isFriend={true} />
+        })
+    }
+    </TabOthree >
   )
 }
 
 const hieghtTab = "400px";
 
 const TabOthree= styled.div`
-  background-color: #879898d1;
+  /* background-color: #4a085a4e; */
   width: 100%;
   max-height: ${hieghtTab};
   display: flex;
@@ -326,82 +294,279 @@ const TabOthree= styled.div`
   /* margin: 20px; */
 `;
 
-export  function Game(props : Game)  {
-  return (
-    <div >
-      <GameStyle > 
-        {/* Game Statistics */}
-        <ScoreBoard className='Bordo'/>
-          <Timer className='Timero'/>
-          <div className='user1'> User1 </div>
-          <div className='user2'> User2 </div>
-          <div className='score1'> 5</div>
-          <div className='score'> : </div>
-          <div className='score2'> 15</div>
-      </GameStyle>
-    </div>
-);
+/////// game data
+
+const match1 = {
+  name: "Melkarmi",
+  score1 : 7,
+  score2 : 5,
+  img: Badge4,
+  min: 10, 
+  sec: 20,
+}
+const match2 = {
+  name: "Mamali",
+  score1 : 2,
+  score2 : 5,
+  img: Badge3,
+  min: 25, 
+  sec: 29,
+}
+const match3 = {
+  name: "achraf",
+  score1 : 17,
+  score2 : 20,
+  img: Badge5,
+  min: 5, 
+  sec: 20,
+
 }
 
-const GameStyle = styled.div`
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
-  width: 700px;
-  height: 100px;
-  background-color: #483d41d1;
-  border: 2px solid black;
-  margin: 10px;
-  .mainbord {
-    background-color: aqua;
-  }
+var listGame = [match1 , match2, match3, match1 , match2, match3, match1 , match2, match3, match1 , match2, match3, match1 , match2, match3, match1 , match2, match3, match1 , match2, match3]
 
-  .Bordo {
+export interface GameCompProps {
+    win: boolean
+}
+
+export interface GameCardProps {
+    match: {
+        name: string;
+        score1: number,
+        score2: number,
+        img: any,
+        min: number,
+        sec: number,
+    },
+    isFriend : boolean
+}
+
+////// game Comp
+
+export  function GameComp(props : GameCardProps) {
+    var state : boolean =( props.match.score1 > props.match.score2) ? true : false
+  return (
+    <GameCompStyle win={state} >
+        <div style={{marginLeft : "24px"}}>
+          <AvatarComponent img={ props.match.img} />
+        </div>
+
+        <Data>
+            <div className='name' >
+                    {props.match.name}
+            </div>
+            <div className='stat'>
+                 {props.match.score1} : {props.match.score2}
+            </div>
+
+  
+        </Data>
+        
+        {
+            props.isFriend &&
+            <div id='addFriend'>
+                <AddFriend/>
+            </div>
+        }
+
+        <ElapsedTime>
+          <Etimer className='E_timer'/>
+
+          <div className='time_min'> {props.match.min}m  </div>
+          <div className='time_sec'> {props.match.sec}s</div>
+
+        </ElapsedTime>
+
+    </GameCompStyle>
+  )
+}
+
+const GameCompStyle = styled.div<GameCompProps>`
+    
+    width: 90%;
+    height: 70px;
+    margin: 15px 0px 10px 50px ;
+
+    background: ${props => props.theme.colors.bg};
+    border-top: 2px solid  ${props => props.theme.colors.border};
+    border-bottom: 2px solid  ${props => props.theme.colors.border};
+    border-left: 2px solid  ${props => props.theme.colors.border};
+    /* margin-bottom: 10px; */
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    position: relative;
+    &::after{
+        content: "";
+        position: absolute;
+        width: 3px;
+        height: 100%;
+        top: 0;
+        right: 0;
+        background-color:  ${props => props.theme.colors.green};
+        ${props => (props.win === false) && css`
+        background-color:  ${props => props.theme.colors.danger};
+      `}
+    }
+    #addFriend{
+        position: absolute;
+        bottom: 5px;
+        right: 10px;
+        cursor: pointer;
+        &:hover{
+            transform: scale(1.1);
+        }
+    }
+`;
+
+const ElapsedTime = styled.div`
+    display: flex;
+    position: absolute;
+    left: 86%;
+    top: 0px;
+    margin: 5px 10px;
+    .E_timer {
+      path {
+          fill: #a648b7;
+      }
+      height: 25px;
+      width: 25px;
+      min-width: 25px;
+      min-height: 25px;
+      /* padding: 5px; */
+      margin: 3px 0px 0px 00px;
+    }
+    .time_min {
+        /* background-color: #d16522; */
+        color: white;
+        margin: 5px 0px 5px 5px;
+    }
+    .time_sec{
+      color: white;
+        /* background-color: #d16522; */
+        margin: 5px 0px 5px 2px;
+    }
+    overflow-y: scroll;
+      &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent; 
+    } 
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: ${props => props.theme.colors.primarybg};
+    } 
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover { 
+      background: ${props => props.theme.colors.primarybg};
+    }
+
+`;
+
+interface AvatarProps {
+  img: string,
+  // score2 : number
+}
+export  function AvatarComponent(props: AvatarProps) {
+  return (
+    <Avatar>
+      <img src={props.img} alt='avatar' />
+    </Avatar>
+  )
+}
+
+const Avatar = styled.div`
+  width: 70%;
+  height: 70%;
+  border-radius : 50%;
+  img{
     width: 100%;
     height: 100%;
-    /* background-color: aqua; */
+    object-fit: contain;
   }
-  .Timero {
-    position: absolute;
-    /* background-color: aqua; */
-    left: 40%;
-    top: 11%;
-    width: 60px;
-    height: 25%;
-  }
+  border: 3px solid   ${props => props.theme.colors.primarybg};;
 
-  .user1 {
-    position: absolute;
-    background-color: #e0b5c5d1;
-    left: 10%;
-    top: 42%;
-  }
-  .user2 {
-    position: absolute;
-    background-color: #cf2563d1;
-    right: 20%;
-    top: 42%;
-  }
-  
+`;
+
+const Data = styled.div`
+    /* width: 100%; */
+    /* margin-left: 14px;s */
+    /* height: 100%; */
+    
+    width: 20%;
+    height: 70%;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    /* font-weight: 700; */
+    color:  ${props => props.theme.colors.primaryText};
+    /* background-color: #00ffff92; */
+
+    .name{
+        font-family: 'Poppins' , sans-serif;
+        text-transform: capitalize;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 100%;
+        /* or 18px */
+        text-align: center;
+        letter-spacing: 1px;
+        /* color: #000000; */
+        /* margin: 10px 0px 3px 10px; */
+    }
+    .stat{
+        /* background-color: #b22bd0; */
+        font-family: 'Poppins' , sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 100%;
+        margin: 10px 0px;
+        /* identical to box height, or 12px */
+        text-align: center;
+        letter-spacing: 0.3px;
+        /* color: #000000; */
+    }
+`;
+
+export  function AddFriend() {
+  return (
+    <AddFriendStyle>
+        <AddIcon/>
+        Add Friend
+    </AddFriendStyle>
+  )
+}
+
+const AddFriendStyle = styled.div`
+   font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    width: 75px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
 
 
-  .score {
-    position: absolute;
-    background-color: #338e21d1;
-    right: 50%;
-    bottom: 25%;
-  }
-  .score1 {
-    position: absolute;
-    background-color: #338e21d1;
-    right: 45%;
-    bottom: 25%;
-  }
-  .score2 {
-    position: absolute;
-    background-color: #338e21d1;
-    left: 45%;
-    bottom: 25%;
-  }
-  `;
+    svg{
+ 
+        path{
+            fill: ${props => props.theme.colors.primaryText}
+        }
+    }
+    color: ${props => props.theme.colors.primaryText};
+    border: 1px solid ${props => props.theme.colors.border};
+    border-radius: 10px;
+    padding: 0 5px;
+`;
+
