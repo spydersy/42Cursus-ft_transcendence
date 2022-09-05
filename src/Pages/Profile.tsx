@@ -292,6 +292,24 @@ const TabOthree= styled.div`
   border: 1px solid ${props => props.theme.colors.primarybg};
   /* height: ${hieghtTab}; */
   /* margin: 20px; */
+  overflow-y: scroll;
+      &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent; 
+    } 
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: ${props => props.theme.colors.primarybg};
+    } 
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover { 
+      background: ${props => props.theme.colors.primarybg};
+    }
 `;
 
 /////// game data
@@ -419,51 +437,47 @@ const GameCompStyle = styled.div<GameCompProps>`
 `;
 
 const ElapsedTime = styled.div`
+    /* background-color: #325e81; */
     display: flex;
     position: absolute;
-    left: 86%;
-    top: 0px;
-    margin: 5px 10px;
+    right: 10px;
+    top: 3px;
+    /* margin: 5px 0px; */
+    width: 10%;
+    min-width: 90px;
+    height: 40%;
+    align-items: center;
+
     .E_timer {
-      path {
-          fill: #a648b7;
-      }
-      height: 25px;
-      width: 25px;
+      height: 22px;
+      width: 22px;
       min-width: 25px;
-      min-height: 25px;
-      /* padding: 5px; */
-      margin: 3px 0px 0px 00px;
+      /* min-height: 25px; */
+
+      margin: 0px 3px;
+      path {
+        fill: #a648b7;
+      }
     }
     .time_min {
         /* background-color: #d16522; */
+        /* width: auto; */
+        width: auto;
+        height: auto;
+        /* min-width: 25px; */
         color: white;
-        margin: 5px 0px 5px 5px;
+        align-items: center;
+        /* margin: 5px 0px 5px 5px; */
     }
     .time_sec{
+      height: auto;
+      width: auto;
+      /* min-width: 25px; */
       color: white;
-        /* background-color: #d16522; */
-        margin: 5px 0px 5px 2px;
+
+      /* background-color: #d16522; */
+      /* margin: 5px 0px 5px 2px; */
     }
-    overflow-y: scroll;
-      &::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent; 
-    } 
-
-    /* Handle */
-    &::-webkit-scrollbar-thumb {
-      background: ${props => props.theme.colors.primarybg};
-    } 
-
-    /* Handle on hover */
-    &::-webkit-scrollbar-thumb:hover { 
-      background: ${props => props.theme.colors.primarybg};
-    }
-
 `;
 
 interface AvatarProps {
