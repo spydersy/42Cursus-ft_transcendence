@@ -5,9 +5,11 @@ import {ReactComponent as BellIcon }from "../assets/imgs/bell-icon.svg"
 import {ReactComponent as Logo }from "../assets/imgs/logo.svg"
 import TestAvatar from "../assets/imgs/tests/guy.svg" 
 import DropDown from './DropDown'
+import Modal from './Modal'
 
 export default function Upperbar() {
   const [open, setopen] = useState(false)
+  const [hideModel, sethideModel] = useState(false)
   const ToggleDD = (e : any)=>{
     setopen(!open)
     e.stopPropagation();
@@ -17,7 +19,7 @@ export default function Upperbar() {
         <LogoComponent/>
         <SearchBarComponent/>
         <RightCont>
-          <PlayButton href="/game">
+          <PlayButton onClick={()=>{sethideModel(!hideModel)}} href="/game">
             Play
           </PlayButton>
           <NotificationComponent/>
@@ -34,6 +36,9 @@ export default function Upperbar() {
             }
           </div>
         </RightCont>
+        {/* <Modal onRequestClose={() => sethideModel(false)} hideModal={(e)=>sethideModel(e)}>
+          dvvsdbfdfb
+        </Modal> */}
     </Wrraper>
     
   )

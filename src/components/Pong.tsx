@@ -97,7 +97,7 @@ export default function Pong({name, mode}:myProps ) {
     
     const ballRadius = parseInt(ballRef.current.getAttribute('r'));
     const leftLimit = ballRadius;
-    const rightLimit = tableRef.current.offsetWidth - ballRadius;
+    const rightLimit = tableRef.current.offsetWidth;
     const topLimit = ballRadius;
     const bottomLimit = tableRef.current.offsetHeight - ballRadius;
     
@@ -121,14 +121,30 @@ export default function Pong({name, mode}:myProps ) {
     if (directionX  > 0)
     moveAI(cx + directionX ,cy + directionY)
     
-    if (nextCX - directionX <=  ballRadius) { // player lost
-      initBall();
+    if (nextCX - directionX <  ballRadius) { // player lost
       setStart(false)
       setscore({score1: score.score1 + 0 ,score2: score.score2 + 1});
-      [directionX, directionY] = [ballSpeed, ballSpeed];
-      return ;
+      setTimeout(() => {
+        [directionX, directionY] = [ballSpeed, ballSpeed];
+        initBall();
+        
+      }, 3000);
+      // return ;
       // requestAnimationFrame(moveBall);
-    } 
+    }
+    else if (nextCX - directionX > rightLimit)
+    {
+
+      setStart(false)
+      setscore({score1: score.score1 + 1 ,score2: score.score2  + 0});
+      // return ;
+      setTimeout(() => {
+        [directionX, directionY] = [ballSpeed, ballSpeed];
+        initBall();
+        
+      }, 3000);
+
+    }
     else {
       // console.log("directionX : " + directionX + "directionY : " + directionY)
       const [xPos, yPos] = [cx + directionX, cy + directionY];
@@ -199,9 +215,9 @@ var requestId;
 //   const socket = io('http://localhost:3030');
 useEffect(() => {
   const initData =()=>{
-    player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 50)
+    player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 100)
     player2Ref.current.setAttribute('y' , 0)
-    playerRef.current.setAttribute('x' ,  30)
+    playerRef.current.setAttribute('x' ,  80)
     playerRef.current.setAttribute('y' , 0)
     
     console.log(mode)
