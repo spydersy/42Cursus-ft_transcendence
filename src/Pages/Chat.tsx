@@ -55,7 +55,7 @@ export default function Chat() {
     
   }, [list ])
   return (
-    <GridContainer className='container'>
+    <GridContainer className='container' style={{width: "1500px", maxWidth: "1500px"}}>
         <div className='right'>
         <ChatSidebar/>
             

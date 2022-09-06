@@ -122,20 +122,27 @@ export default function Pong({name, mode}:myProps ) {
     moveAI(cx + directionX ,cy + directionY)
     
     if (nextCX - directionX <  ballRadius) { // player lost
-      initBall();
       setStart(false)
       setscore({score1: score.score1 + 0 ,score2: score.score2 + 1});
-      [directionX, directionY] = [ballSpeed, ballSpeed];
-      return ;
+      setTimeout(() => {
+        [directionX, directionY] = [ballSpeed, ballSpeed];
+        initBall();
+        
+      }, 3000);
+      // return ;
       // requestAnimationFrame(moveBall);
     }
     else if (nextCX - directionX > rightLimit)
     {
-      initBall();
+
       setStart(false)
       setscore({score1: score.score1 + 1 ,score2: score.score2  + 0});
-      [directionX, directionY] = [ballSpeed, ballSpeed];
-      return ;
+      // return ;
+      setTimeout(() => {
+        [directionX, directionY] = [ballSpeed, ballSpeed];
+        initBall();
+        
+      }, 3000);
 
     }
     else {
@@ -208,9 +215,9 @@ var requestId;
 //   const socket = io('http://localhost:3030');
 useEffect(() => {
   const initData =()=>{
-    player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 50)
+    player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 100)
     player2Ref.current.setAttribute('y' , 0)
-    playerRef.current.setAttribute('x' ,  30)
+    playerRef.current.setAttribute('x' ,  80)
     playerRef.current.setAttribute('y' , 0)
     
     console.log(mode)

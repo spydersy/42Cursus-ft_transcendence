@@ -137,7 +137,7 @@ export  function GameComp(props : GameCardProps) {
     var state : boolean =( props.match.score1 > props.match.score2) ? true : false
   return (
     <GameCompStyle win={state} >
-        <div style={{marginLeft : "14px"}}>
+        <div style={{marginLeft : "14px" , width: "40px" , height: "40px"}}>
         <AvatarComponent img={Img} />
 
         </div>
