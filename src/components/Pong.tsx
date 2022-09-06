@@ -97,7 +97,7 @@ export default function Pong({name, mode}:myProps ) {
     
     const ballRadius = parseInt(ballRef.current.getAttribute('r'));
     const leftLimit = ballRadius;
-    const rightLimit = tableRef.current.offsetWidth - ballRadius;
+    const rightLimit = tableRef.current.offsetWidth;
     const topLimit = ballRadius;
     const bottomLimit = tableRef.current.offsetHeight - ballRadius;
     
@@ -121,14 +121,23 @@ export default function Pong({name, mode}:myProps ) {
     if (directionX  > 0)
     moveAI(cx + directionX ,cy + directionY)
     
-    if (nextCX - directionX <=  ballRadius) { // player lost
+    if (nextCX - directionX <  ballRadius) { // player lost
       initBall();
       setStart(false)
       setscore({score1: score.score1 + 0 ,score2: score.score2 + 1});
       [directionX, directionY] = [ballSpeed, ballSpeed];
       return ;
       // requestAnimationFrame(moveBall);
-    } 
+    }
+    else if (nextCX - directionX > rightLimit)
+    {
+      initBall();
+      setStart(false)
+      setscore({score1: score.score1 + 1 ,score2: score.score2  + 0});
+      [directionX, directionY] = [ballSpeed, ballSpeed];
+      return ;
+
+    }
     else {
       // console.log("directionX : " + directionX + "directionY : " + directionY)
       const [xPos, yPos] = [cx + directionX, cy + directionY];

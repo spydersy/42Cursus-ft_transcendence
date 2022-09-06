@@ -379,6 +379,9 @@ export  function GameComp(props : GameCardProps) {
   
         </Data>
         
+        {/* <div> */}
+
+        {/* </div> */}
         {
             props.isFriend &&
             <div id='addFriend'>
@@ -443,18 +446,18 @@ const ElapsedTime = styled.div`
     right: 10px;
     top: 3px;
     /* margin: 5px 0px; */
-    width: 10%;
-    min-width: 90px;
+    /* width: 10%; */
+    /* min-width: 90px; */
     height: 40%;
     align-items: center;
-
+    gap: 5px;
     .E_timer {
-      height: 22px;
-      width: 22px;
-      min-width: 25px;
+      height: 15px;
+      width: 15px;
+      /* min-width: 25px; */
       /* min-height: 25px; */
 
-      margin: 0px 3px;
+      /* margin: 0px 3px; */
       path {
         fill: #a648b7;
       }
