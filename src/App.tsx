@@ -13,6 +13,7 @@ import SignIn from './Pages/SignIn';
 import Home from './Pages/Home';
 import Upperbar from './components/Upperbar';
 import Sidebar from './components/Sidebar';
+import Test from './components/Test';
 import ProtectedLayout from './components/protected/ProtectedLayout';
 import Profile from './Pages/Profile';
 import Chat from './Pages/Chat';
@@ -41,6 +42,7 @@ function App() {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/game" element={<Game />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/testing" element={<Test />} />
             <Route path="/" element={<Home />} />
             <Route path="/profile/id" element={<Profile />} />
           </Routes>

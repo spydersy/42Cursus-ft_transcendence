@@ -97,7 +97,7 @@ export default function Sidebar() {
 <Items>
         {
             sideBarItemsList.map((item : any , id : number)=>{
-                return <Item onClick={()=>setfocused(id)} active={id === focused ? true : false} href={item.link}>
+                return <Item key={id} onClick={()=>setfocused(id)} active={id === focused ? true : false} href={item.link}>
                 {item.icon}
                 {
                     open ? <div>{item.title}</div> : <ToolTip>{item.title}</ToolTip>  
