@@ -15,8 +15,8 @@ import  B2 from "../assets/imgs/badge2.svg";
 import  B3 from "../assets/imgs/badge3.svg";
 
 import { PlayerCard , UserCard} from '../components/PlayerProfile';
-import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
-import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
+
+import { GameComp } from "../components/PlayerProfile";
 /////
 
 const Backcolor = "#533483"
@@ -48,7 +48,7 @@ var listAchiev = [achievment1 , achievment2 , achievment3,achievment3,achievment
   achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,
   achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3]
 
-  //-----//
+//-----//
 const card = {
   username: "mohammed el-karmi",
   grade : "Yaiba",
@@ -122,22 +122,9 @@ const match3 = {
 var listGame = [match1 , match2, match3, match1 , match2, match3, match1 , match2, match3,
    match1 , match2, match3, match1 , match2, match3, match1 , match2, match3, match1 , match2, match3]
 
-export interface GameCompProps {
-    win: boolean
-}
-
-export interface GameCardProps {
-    match: {
-        name: string;
-        score1: number,
-        score2: number,
-        img: any,
-        min: number,
-        sec: number,
-    },
-    isFriend : boolean
-}
 //-----//
+
+
 
 //// Default function Profile
 export default function Profile() {
@@ -194,6 +181,8 @@ margin: 15px 0px;
 `
 
 ///// PlayerTabs Section
+const linkslist = [" ACHIEVEMENTS", " FRIENDS" , " GAME HISTORY", "PENDING REQUESTS", "MY BLACK LIST"]
+
 export function PlayerTabsBar()
 {
   const [index, setindex] = useState(0)
@@ -219,25 +208,7 @@ const PlayerAchieveStyle = styled.div`
   -webkit-text-stroke: 1px #6560679a;
 `;
 
-/// To be added : Other users profile // Rooms Page /// All users page // 
-
-export function Tabfour()
-{
-  return (
-    <div> Tab FOUR </div>
-  )
-}
-
-export function Tabfive()
-{
-  return (
-    <div> Tab Five </div>
-  )
-}
-
 //#1  Tab Achievements info 
-const linkslist = [" ACHIEVEMENTS", " FRIENDS" , " GAME HISTORY", "PENDING REQUESTS", "MY BLACK LIST"]
-
 export function TabOne()
 {
   return (
@@ -371,231 +342,51 @@ const TabOthree= styled.div`
     }
 `;
 
-////// game Comp
-export  function GameComp(props : GameCardProps) {
-    var state : boolean =( props.match.score1 > props.match.score2) ? true : false
+//#4  Pending Requests
+export function Tabfour()
+{
   return (
-    <GameCompStyle win={state} >
-        <div style={{marginLeft : "24px"}}>
-          <AvatarComponent img={ props.match.img} />
-        </div>
-
-        <Data>
-            <div className='name' >
-                    {props.match.name}
-            </div>
-            <div className='stat'>
-                 {props.match.score1} : {props.match.score2}
-            </div>
-
-  
-        </Data>
-        
-        {/* <div> */}
-
-        {/* </div> */}
-        {
-            props.isFriend &&
-            <div id='addFriend'>
-                <AddFriend/>
-            </div>
-        }
-
-        <ElapsedTime>
-          <Etimer className='E_timer'/>
-
-          <div className='time_min'> {props.match.min}m  </div>
-          <div className='time_sec'> {props.match.sec}s</div>
-
-        </ElapsedTime>
-
-    </GameCompStyle>
-  )
-}
-
-const GameCompStyle = styled.div<GameCompProps>`
+    <TabOfour>
     
-    width: 90%;
-    height: 70px;
-    margin: 15px 0px 10px 50px ;
-
-    background: ${props => props.theme.colors.bg};
-    border-top: 2px solid  ${props => props.theme.colors.border};
-    border-bottom: 2px solid  ${props => props.theme.colors.border};
-    border-left: 2px solid  ${props => props.theme.colors.border};
-    /* margin-bottom: 10px; */
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    position: relative;
-    &::after{
-        content: "";
-        position: absolute;
-        width: 3px;
-        height: 100%;
-        top: 0;
-        right: 0;
-        background-color:  ${props => props.theme.colors.green};
-        ${props => (props.win === false) && css`
-        background-color:  ${props => props.theme.colors.danger};
-      `}
-    }
-    #addFriend{
-        position: absolute;
-        bottom: 5px;
-        right: 10px;
-        cursor: pointer;
-        &:hover{
-            transform: scale(1.1);
-        }
-    }
-`;
-
-const ElapsedTime = styled.div`
-    /* background-color: #325e81; */
-    display: flex;
-    position: absolute;
-    right: 10px;
-    top: 3px;
-    /* margin: 5px 0px; */
-    /* width: 10%; */
-    /* min-width: 90px; */
-    height: 40%;
-    align-items: center;
-    gap: 5px;
-    .E_timer {
-      height: 15px;
-      width: 15px;
-      /* min-width: 25px; */
-      /* min-height: 25px; */
-
-      /* margin: 0px 3px; */
-      path {
-        fill: #a648b7;
-      }
-    }
-    .time_min {
-        /* background-color: #d16522; */
-        /* width: auto; */
-        width: auto;
-        height: auto;
-        /* min-width: 25px; */
-        color: white;
-        align-items: center;
-        /* margin: 5px 0px 5px 5px; */
-    }
-    .time_sec{
-      height: auto;
-      width: auto;
-      /* min-width: 25px; */
-      color: white;
-
-      /* background-color: #d16522; */
-      /* margin: 5px 0px 5px 2px; */
-    }
-`;
-
-interface AvatarProps {
-  img: string,
-  // score2 : number
-}
-export  function AvatarComponent(props: AvatarProps) {
-  return (
-    <Avatar>
-      <img src={props.img} alt='avatar' />
-    </Avatar>
-  )
-}
-
-const Avatar = styled.div`
-  width: 70%;
-  height: 70%;
-  border-radius : 50%;
-  img{
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  border: 3px solid   ${props => props.theme.colors.primarybg};;
-
-`;
-
-const Data = styled.div`
-    /* width: 100%; */
-    /* margin-left: 14px;s */
-    /* height: 100%; */
+       Tab FOUR
     
-    width: 20%;
-    height: 70%;
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    flex-direction: column;
-    font-family: 'Poppins', sans-serif;
-    font-style: normal;
-    /* font-weight: 700; */
-    color:  ${props => props.theme.colors.primaryText};
-    /* background-color: #00ffff92; */
-
-    .name{
-        font-family: 'Poppins' , sans-serif;
-        text-transform: capitalize;
-        font-style: normal;
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 100%;
-        /* or 18px */
-        text-align: center;
-        letter-spacing: 1px;
-        /* color: #000000; */
-        /* margin: 10px 0px 3px 10px; */
-    }
-    .stat{
-        /* background-color: #b22bd0; */
-        font-family: 'Poppins' , sans-serif;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 15px;
-        line-height: 100%;
-        margin: 10px 0px;
-        /* identical to box height, or 12px */
-        text-align: center;
-        letter-spacing: 0.3px;
-        /* color: #000000; */
-    }
-`;
-
-export  function AddFriend() {
-  return (
-    <AddFriendStyle>
-        <AddIcon/>
-        Add Friend
-    </AddFriendStyle>
+    </TabOfour>
   )
 }
 
-const AddFriendStyle = styled.div`
-   font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 10px;
-    width: 75px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
+const TabOfour= styled.div`
+  background-color: #8f1cac4e;
 
-
-    svg{
- 
-        path{
-            fill: ${props => props.theme.colors.primaryText}
-        }
+  overflow-y: scroll;
+      &::-webkit-scrollbar {
+      width: 4px;
     }
-    color: ${props => props.theme.colors.primaryText};
-    border: 1px solid ${props => props.theme.colors.border};
-    border-radius: 10px;
-    padding: 0 5px;
+
+    &::-webkit-scrollbar-track {
+      background: transparent; 
+    } 
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: ${props => props.theme.colors.primarybg};
+    } 
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover { 
+      background: ${props => props.theme.colors.primarybg};
+    }
 `;
+
+
+//#5  My Black List
+export function Tabfive()
+{
+  return (
+    <div> Tab Five </div>
+  )
+}
+
+/// To be added : Other users profile // Rooms Page /// All users page // 
+
+
 

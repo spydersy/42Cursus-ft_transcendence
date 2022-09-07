@@ -7,6 +7,9 @@ import{ReactComponent as DotsIcon }from "../assets/imgs/dots.svg"
 import rank1 from "../assets/imgs/ranks/iron.png"
 import rank2 from "../assets/imgs/ranks/gold.png"
 import rank3 from "../assets/imgs/ranks/bronze.png"
+import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
+import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
+
 
 /// UserProfile Variants  
 const Backcolor = "#533483"
@@ -487,4 +490,242 @@ const UserCardStyle = styled.div<StyleProps>`
   100% { opacity: 1; }
   }
 `;
-/////
+
+/// Game History tab //
+export interface GameCompProps {
+  win: boolean
+}
+
+export interface GameCardProps {
+  match: {
+      name: string;
+      score1: number,
+      score2: number,
+      img: any,
+      min: number,
+      sec: number,
+  },
+  isFriend : boolean
+}
+
+export  function GameComp(props : GameCardProps) {
+  var state : boolean =( props.match.score1 > props.match.score2) ? true : false
+return (
+  <GameCompStyle win={state} >
+      <div style={{marginLeft : "24px"}}>
+        <AvatarComponent img={ props.match.img} />
+      </div>
+
+      <Dataa>
+          <div className='name' >
+                  {props.match.name}
+          </div>
+          <div className='stat'>
+               {props.match.score1} : {props.match.score2}
+          </div>
+
+
+      </Dataa>
+      {
+          props.isFriend &&
+          <div id='addFriend'>
+              <AddFriend/>
+          </div>
+      }
+
+      <ElapsedTime>
+        <Etimer className='E_timer'/>
+
+        <div className='time_min'> {props.match.min}m  </div>
+        <div className='time_sec'> {props.match.sec}s</div>
+
+      </ElapsedTime>
+
+  </GameCompStyle>
+)
+}
+
+const GameCompStyle = styled.div<GameCompProps>`
+  
+  width: 90%;
+  height: 70px;
+  margin: 15px 0px 10px 50px ;
+
+  background: ${props => props.theme.colors.bg};
+  border-top: 2px solid  ${props => props.theme.colors.border};
+  border-bottom: 2px solid  ${props => props.theme.colors.border};
+  border-left: 2px solid  ${props => props.theme.colors.border};
+  /* margin-bottom: 10px; */
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  position: relative;
+  &::after{
+      content: "";
+      position: absolute;
+      width: 3px;
+      height: 100%;
+      top: 0;
+      right: 0;
+      background-color:  ${props => props.theme.colors.green};
+      ${props => (props.win === false) && css`
+      background-color:  ${props => props.theme.colors.danger};
+    `}
+  }
+  #addFriend{
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+      cursor: pointer;
+      &:hover{
+          transform: scale(1.1);
+      }
+  }
+`;
+
+const ElapsedTime = styled.div`
+  /* background-color: #325e81; */
+  display: flex;
+  position: absolute;
+  right: 10px;
+  top: 3px;
+  /* margin: 5px 0px; */
+  /* width: 10%; */
+  /* min-width: 90px; */
+  height: 40%;
+  align-items: center;
+  gap: 5px;
+  .E_timer {
+    height: 15px;
+    width: 15px;
+    /* min-width: 25px; */
+    /* min-height: 25px; */
+
+    /* margin: 0px 3px; */
+    path {
+      fill: #a648b7;
+    }
+  }
+  .time_min {
+      /* background-color: #d16522; */
+      /* width: auto; */
+      width: auto;
+      height: auto;
+      /* min-width: 25px; */
+      color: white;
+      align-items: center;
+      /* margin: 5px 0px 5px 5px; */
+  }
+  .time_sec{
+    height: auto;
+    width: auto;
+    /* min-width: 25px; */
+    color: white;
+
+    /* background-color: #d16522; */
+    /* margin: 5px 0px 5px 2px; */
+  }
+`;
+
+interface AvatarProps { img: string, }
+
+export  function AvatarComponent(props: AvatarProps) {
+return (
+  <Avatarr>
+    <img src={props.img} alt='avatar' />
+  </Avatarr>
+)
+}
+
+const Avatarr = styled.div`
+width: 70%;
+height: 70%;
+border-radius : 50%;
+img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+border: 3px solid   ${props => props.theme.colors.primarybg};;
+
+`;
+
+const Dataa = styled.div`
+  /* width: 100%; */
+  /* margin-left: 14px;s */
+  /* height: 100%; */
+  
+  width: 20%;
+  height: 70%;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  /* font-weight: 700; */
+  color:  ${props => props.theme.colors.primaryText};
+  /* background-color: #00ffff92; */
+
+  .name{
+      font-family: 'Poppins' , sans-serif;
+      text-transform: capitalize;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 100%;
+      /* or 18px */
+      text-align: center;
+      letter-spacing: 1px;
+      /* color: #000000; */
+      /* margin: 10px 0px 3px 10px; */
+  }
+  .stat{
+      /* background-color: #b22bd0; */
+      font-family: 'Poppins' , sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 100%;
+      margin: 10px 0px;
+      /* identical to box height, or 12px */
+      text-align: center;
+      letter-spacing: 0.3px;
+      /* color: #000000; */
+  }
+`;
+
+export  function AddFriend() {
+return (
+  <AddFriendStyle>
+      <AddIcon/>
+      Add Friend
+  </AddFriendStyle>
+)
+}
+
+const AddFriendStyle = styled.div`
+ font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  width: 75px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+
+
+  svg{
+
+      path{
+          fill: ${props => props.theme.colors.primaryText}
+      }
+  }
+  color: ${props => props.theme.colors.primaryText};
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: 10px;
+  padding: 0 5px;
+`;
+/// Game History tab //
