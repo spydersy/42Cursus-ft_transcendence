@@ -11,7 +11,11 @@ export default function Test() {
     <Cocoachraf>
         <input type="file" onChange={handlePhotoChange}/>
         <button onClick={()=>{
-            axios.put("127.0.0.1:3030/updateUser/id", data, { withCredentials: true }).then(
+            axios.put("127.0.0.1:3030/updateUser/id", 
+       data, { withCredentials: true , headers: {  
+        'Access-Control-Allow-Origin' : '*',
+       'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',}
+    }).then(
                 (x)=>{
                     console.log("uploaded")
                 }
