@@ -1,23 +1,29 @@
 import React from 'react'
 import { useSpringCarousel } from 'react-spring-carousel'
 import styled  from "styled-components"
+import Marin from "../../assets/imgs/marinford.png";
+import Punk from "../../assets/imgs/punkhazard.png";
 
 
 export default function GameModal() {
     interface ChatProps {
         
-        title: string
+        title: string,
+        banner :string 
       
       }
     const mockedItems : any = [{
-        title: "map1"
+        title: "MarinFord",
+        banner :Marin 
 
     },
     {
-        title: "map1"
+      title: "Punk Hazard",
+      banner :Punk 
     },
     {
-        title: "map1"
+      title: "map1",
+      banner :Marin 
     }]
     const { carouselFragment } = useSpringCarousel({
 
@@ -29,6 +35,7 @@ export default function GameModal() {
           id: id,
           renderItem: (
             <CaoussalItem >
+            <img src={i.banner} alt="mapimage" />
               {i.title}
             </CaoussalItem>
           ),
@@ -51,14 +58,23 @@ export default function GameModal() {
 }
 
 const CaoussalItem = styled.div`
-    width: 300px;
-    height: 250px;
+    width: 250px;
+    height: 200px;
     border-radius: 5px;
-    background-color: black;
+    /* background-color: black; */
+    background-color: transparent;
+    position: relative;
+    >img{
+      position: absolute;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 `;
 
 const CaroussalContainer = styled.div`
-    width: 300px;
+    width: 250px;
     margin: 0 auto;
     overflow: hidden;
 `;

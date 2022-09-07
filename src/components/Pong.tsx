@@ -9,6 +9,9 @@ import io from 'socket.io-client';
 import { AvatarComponent } from './Upperbar';
 import Img from "../assets/imgs/avatar/a1.png";
 import Img2 from "../assets/imgs/avatar/a2.png";
+import Marin from "../assets/imgs/marinford.png";
+import Punk from "../assets/imgs/punkhazard.png";
+
 import AIavatar from "../assets/imgs/avatar/Ai-lwahch.png";
 import VegaPunk from "../assets/imgs/vegapunk.png" 
 
@@ -123,7 +126,7 @@ export default function Pong({name, mode}:myProps ) {
     
     if (nextCX - directionX <  ballRadius) { // player lost
       setStart(false)
-      setscore({score1: score.score1 + 0 ,score2: score.score2 + 1});
+      setscore({score1: score.score1  ,score2: score.score2 + 1});
       setTimeout(() => {
         [directionX, directionY] = [ballSpeed, ballSpeed];
         initBall();
@@ -136,7 +139,7 @@ export default function Pong({name, mode}:myProps ) {
     {
 
       setStart(false)
-      setscore({score1: score.score1 + 1 ,score2: score.score2  + 0});
+      setscore({score1: score.score1 + 1 ,score2: score.score2 });
       // return ;
       setTimeout(() => {
         [directionX, directionY] = [ballSpeed, ballSpeed];
@@ -268,7 +271,7 @@ useEffect(() => {
             {score.score1} | {score.score2}
           </Score>
       </PlayerStyle>
-    <Table ref={tableRef} >Pong
+    <Table ref={tableRef} >
 
       <svg>
           <circle ref={ballRef} id="ball"  cx="20" cy="300" r="12" />
@@ -363,6 +366,8 @@ margin-left: auto;
 `;
 const Table = styled.div`
 cursor: none;
+background-image: url(${Punk});
+
 width: 100%;
 height: 700px;
 position: relative;
@@ -371,7 +376,7 @@ background-color: ${props => props.theme.colors.bg};
     border: 1px solid ${props => props.theme.colors.purple};
   > svg{
     position:absolute;
-    background:  ${props => props.theme.colors.bg};
+    /* background:  ${props => props.theme.colors.bg}; */
     inset: 0 0 0 0;
     width: 100%;
     height: 100%;
