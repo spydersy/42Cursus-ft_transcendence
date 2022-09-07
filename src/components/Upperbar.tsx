@@ -6,6 +6,7 @@ import {ReactComponent as Logo }from "../assets/imgs/logo.svg"
 import TestAvatar from "../assets/imgs/tests/guy.svg" 
 import DropDown from './DropDown'
 import Modal from './Modal'
+import GameModal from './modals/GameModal'
 
 export default function Upperbar() {
   const [open, setopen] = useState(false)
@@ -14,12 +15,19 @@ export default function Upperbar() {
     setopen(!open)
     e.stopPropagation();
   }
+  
+  const bg = {
+    overlay: {
+      background: "#FFFF00"
+    }
+  };
+ 
   return (
     <Wrraper>
         <LogoComponent/>
         <SearchBarComponent/>
         <RightCont>
-          <PlayButton onClick={()=>{sethideModel(!hideModel)}} href="/game">
+          <PlayButton onClick={()=>{sethideModel(!hideModel)}} >
             Play
           </PlayButton>
           <NotificationComponent/>
@@ -36,15 +44,24 @@ export default function Upperbar() {
             }
           </div>
         </RightCont>
-        {/* <Modal onRequestClose={() => sethideModel(false)} hideModal={(e)=>sethideModel(e)}>
-          dvvsdbfdfb
-        </Modal> */}
+        {hideModel &&  <Modal
+        isOpen={hideModel}
+        onRequestClose={() => sethideModel(false)}
+        hideModal={() => sethideModel(false)}
+        styles={bg}
+      >
+        {/* <AppCommingSoon
+          hideModal={() => sethideModel(false)}
+          showAuth={showAuth}
+        /> */}
+        <GameModal/>
+      </Modal>}
     </Wrraper>
     
   )
 }
 
-const PlayButton = styled.a`
+const PlayButton = styled.button`
   width:150px;
   height :40px;
   border: none;

@@ -373,7 +373,6 @@ background-color: ${props => props.theme.colors.bg};
     position:absolute;
     background:  ${props => props.theme.colors.bg};
     inset: 0 0 0 0;
-    z-index:1;
     width: 100%;
     height: 100%;
     >circle{

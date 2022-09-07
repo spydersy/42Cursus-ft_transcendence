@@ -351,7 +351,7 @@ export  function ChallengeFriend() {
   )
 }
 const BlockFriendStyle = styled.div`
-   font-family: 'Poppins';
+   font-family: 'Poppins' , sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 10px;

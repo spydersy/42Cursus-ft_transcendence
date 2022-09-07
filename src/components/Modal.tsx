@@ -2,18 +2,29 @@ import React from "react";
 import ReactModal from "react-modal";
 import styled from "styled-components";
 // import Button from "./Button";
-import { ReactComponent as CloseIcon } from "../assets/imgs/dm.svg";
+import { ReactComponent as CloseIcon } from "../assets/imgs/close-icon.svg";
 
 ReactModal.setAppElement("#root");
 
 interface ChatProps {
     hideModal: (e : any) => void,
     onRequestClose: (e : any) => void,
-}
+    children: any,
+    isOpen : boolean,
+    styles : any;
+} 
+
+
 
 const Modal = (props : ChatProps) => {
   return (
-    <ModalStyle {...props}>
+    <ModalStyle
+    style={{
+      overlay: {
+        background: 'rgba(255, 255, 255, 0.2)',
+      },
+     }}
+    {...props}>
       <ModalContentStyle>
         <button  onClick={props.hideModal}>
           <CloseIcon />
@@ -27,23 +38,27 @@ export default Modal;
 
 const ModalStyle = styled(ReactModal)`
   position: fixed;
+  z-index: 3;
   top: 50%;
   left: 50%;
   right: auto;
   bottom: auto;
   transform: translate(-50%, -50%);
   box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.07);
-  background-color: red !important;
+  background-color: ${props => props.theme.colors.primarybg};
   border: 1px solid black;
   width: clamp(575px, 500px, 100%);
   max-height: 85vh;
+  /* min-height: 85vh; */
   padding: 0 100px;
   overflow: hidden;
   padding-bottom: 0px;
+  border-radius: 5px;
   display: flex;
   :focus {
     outline: none;
   }
+
   @media (max-width: 576px) {
     width: 100%;
     top: auto;
@@ -64,14 +79,15 @@ const ModalContentStyle = styled.div`
     position: absolute;
     right: -75px;
     top: 15px;
-    padding: 20px;
+    padding: 5px;
+    background-color: transparent;
     svg {
-      max-height: 10px;
-      min-height: 10px;
-      max-width: 10px;
-      min-width: 10px;
+      max-height: 20px;
+      min-height: 20px;
+      max-width: 20px;
+      min-width: 20px;
       path {
-        fill: white;
+        stroke: white;
       }
     }
     @media (max-width: 576px) {
