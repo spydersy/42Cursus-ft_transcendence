@@ -79,7 +79,7 @@ export class AuthService {
             const Token = await this.GetUserToken(query['code']);
             const UserProfile = await this.ClaimUserProfile(Token, query['code']);
             UserDto =this.userService.GenerateUserDto(UserProfile['data']);
-            if (await this.userService.UserExist(UserDto) === false) {
+            if (await this.userService.UserExist(UserDto.Login) === false) {
                 this.userService.AddUserToDB(UserDto);
                 let JWT = await this.GenerateJWT(UserDto);
                 return res.cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true}).json({'message': 'DONE00'});
@@ -95,22 +95,3 @@ export class AuthService {
         return `Hello ${UserDto.UsualFullName}`; // redirect to HomePage [http://localhost:3000/]
     }
 }
-/*
-__CURL__REQUEST__ :
-__COOKIES__ :  {
-  host: 'localhost:3000',
-  'user-agent': 'curl/7.79.1',
-  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NjI3MDAsIkxvZ2luIjoiYWJlbGFyaWYiLCJpYXQiOjE2NjIyMjAwNjksImV4cCI6MTY2MjgyNDg2OX0.ibeIf5T3R5Hr7TLweElwZxf6hRHxX_k4dagk3dJLg1k'
-}
-*/
-
-
-/*
-__BROWSER__REQUEST__ :
-__COOKIES__ :  {
-  host: 'localhost:3000',
-  cookie: 'Authorization=Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NjI3MDAsIkxvZ2luIjoiYWJlbGFyaWYiLCJpYXQiOjE2NjIyMjAwNjksImV4cCI6MTY2MjgyNDg2OX0.ibeIf5T3R5Hr7TLweElwZxf6hRHxX_k4dagk3dJLg1k',
-}
-*/
-
-// Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NjI3MDAsIkxvZ2luIjoiYWJlbGFyaWYiLCJpYXQiOjE2NjIyOTQwMTcsImV4cCI6MTY2Mjg5ODgxN30.TyVVmo8-uVMxZupaiqXRJFcfu0l3fvlNeFIvmHRgX8w
