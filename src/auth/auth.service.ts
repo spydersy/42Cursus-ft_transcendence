@@ -81,13 +81,14 @@ export class AuthService {
             UserDto =this.userService.GenerateUserDto(UserProfile['data']);
             if (await this.userService.UserExist(UserDto.Login) === false) {
                 this.userService.AddUserToDB(UserDto);
-                let JWT = await this.GenerateJWT(UserDto);
-                return res.cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true}).redirect("http://localhost:3001");
             }
-            else {
-                let JWT = await this.GenerateJWT(UserDto);
-                return res.cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true}).redirect("http://localhost:3001");
-            }
+            let JWT = await this.GenerateJWT(UserDto);
+            return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000, http://localhost:3001',
+                            'Access-Control-Allow-Credentials': "true",
+                            'Access-Control-Allow-Methods': "GET, POST",
+                            'Access-Control-Allow-Headers': "*"}
+                            )
+                        .cookie('Authorization', 'Bearer ' + JWT.access_token).redirect("http://localhost:3001");
         }
         else {
             this.HandleSigninErrors(query);

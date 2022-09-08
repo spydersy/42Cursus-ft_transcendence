@@ -5,10 +5,11 @@ import { Request } from 'express';
 
 let cookieExtractor = function( req: Request) {
     var token : String = null;
-    if (req && req.headers.cookie) {
-        token = decodeURI(req.headers.cookie);
-        if (token.indexOf('Authorization') != -1) {
-            token = token.substring(token.indexOf('Authorization') + 14 + 7);
+    console.log("__REQ__HEADERS__ : ", req.headers);
+    if (req && req.headers && req.headers['authorization']) {
+        token = decodeURI(req.headers['authorization']);
+        if (token.indexOf('Bearer') != -1) {
+            token = token.substring(token.indexOf('Bearer') + 7);
         }
     }
     console.log("__JWT__TOKEN__ : >>", token, "<<");
