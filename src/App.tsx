@@ -2,12 +2,14 @@ import  React, { useEffect , useRef , useState  }  from 'react';
 import styled from "styled-components"
 import {theme} from './theme'
 import { ThemeProvider } from 'styled-components';
+import Cookies from 'universal-cookie';
 import './App.css';
 import Pong from './components/Pong';
 import {
   BrowserRouter,
   Routes, // instead of "Switch"
   Route,
+  useNavigate
 } from "react-router-dom";
 import SignIn from './Pages/SignIn';
 import Home from './Pages/Home';
@@ -20,19 +22,38 @@ import Chat from './Pages/Chat';
 import Game from './Pages/Game';
 import axios from 'axios';
 
+
 function App() {
   const [start, setstart] = useState(false)
   const [logedIn, setlogedIn] = useState(false)
   const [name, setname] = useState("")
   const inputRef : any= useRef<any>(null);
+  // const navigate = useNavigate();
+
+
   useEffect(() => {
-    axios.get("http://127.0.0.1:3000/profile", {
-    headers: {  
-      'Access-Control-Allow-Origin' : '*',
-     'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',}
+    const cookies = new Cookies();
+    // const coc = Cookieequiredy
+    // axios.defaults.withCredentials = true;
+  //  console.log( Cookies.set)
+    axios.get("http://127.0.0.1:3000/profile", 
+    
+    {
+      
+    // withCredentials: true,
+    headers: {
+      'Authorization': cookies.get('Authorization'),
+      // 'Access-Control-Allow-Origin' : 'http://127.0.0.1:3001'
+    }
   
-  } ).then((x)=>{console.log(x)}).catch((err)=>{
+    
+  
+  } 
+  ).then((res)=>{
+    console.log(res.data)}
+    ).catch((err)=>{
         console.log(err)
+        // navigate('/signin')
         // history.pushState("/signin");
 
     })

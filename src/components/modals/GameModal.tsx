@@ -3,6 +3,9 @@ import { useSpringCarousel } from 'react-spring-carousel'
 import styled , {css} from "styled-components"
 import Marin from "../../assets/imgs/marinford.png";
 import Punk from "../../assets/imgs/punkhazard.png";
+import Dress from "../../assets/imgs/dressRosa.jpg";
+import Wano from "../../assets/imgs/wano.jpg";
+import Fish from "../../assets/imgs/fishman.jpeg";
 
 
 export default function GameModal() {
@@ -24,16 +27,16 @@ export default function GameModal() {
       banner :Punk 
     },
     {
-      title: "map3",
-      banner :Marin 
+      title: "Dressrosa",
+      banner :Dress 
     },
     {
-      title: "map4",
-      banner :Punk 
+      title: "Wano",
+      banner :Wano 
     },
     {
-      title: "map5",
-      banner :Marin 
+      title: "Fishman Island",
+      banner :Fish 
     }]
     const { carouselFragment } = useSpringCarousel({
 
@@ -50,7 +53,7 @@ export default function GameModal() {
 
               }} selected={id  == selected ? true : false} >
             <img src={i.banner} alt="mapimage" />
-              {i.title}
+              {/* {i.title} */}
             </CaoussalItem>
           ),
         })),
@@ -63,11 +66,11 @@ export default function GameModal() {
          <span id="span">{mockedItems[selected].title}</span>
         </Title>
         <CaroussalContainer>{carouselFragment}</CaroussalContainer>
-        
+
         <Title>
         <div>Rounds :</div>
 
-        <Input id="number" type="number"  max='10' placeholder='Enter rounds ..' />
+        <Input id="number" type="number" min='3' max='10' placeholder='Enter rounds ..' />
         </Title>
 
     </GameModalStyle>
@@ -95,8 +98,9 @@ const CaoussalItem = styled.div<CaroItemStyle>`
     }
     cursor: pointer;
     ${props => (props.selected === true) && css`
-    box-shadow: 0px 1px 1px 1px ${props => props.theme.colors.primaryText};
+    /* box-shadow: 0px 1px 1px 1px ${props => props.theme.colors.primaryText}; */
     border: 3px solid ${props => props.theme.colors.primaryText};
+    /* transform: scale(1.1); */
     `}
 `;
 
