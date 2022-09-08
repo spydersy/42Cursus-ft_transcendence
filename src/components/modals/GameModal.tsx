@@ -1,17 +1,19 @@
-import React from 'react'
+import React , {useState} from 'react'
 import { useSpringCarousel } from 'react-spring-carousel'
-import styled  from "styled-components"
+import styled , {css} from "styled-components"
 import Marin from "../../assets/imgs/marinford.png";
 import Punk from "../../assets/imgs/punkhazard.png";
 
 
 export default function GameModal() {
-    interface ChatProps {
+  const [selected, setselected] = useState(2)
+    interface GameModalProps {
         
         title: string,
         banner :string 
       
       }
+   
     const mockedItems : any = [{
         title: "MarinFord",
         banner :Marin 
@@ -22,19 +24,31 @@ export default function GameModal() {
       banner :Punk 
     },
     {
-      title: "map1",
+      title: "map3",
+      banner :Marin 
+    },
+    {
+      title: "map4",
+      banner :Punk 
+    },
+    {
+      title: "map5",
       banner :Marin 
     }]
     const { carouselFragment } = useSpringCarousel({
 
         // width : "350px",
-        itemsPerSlide: 1,
+        itemsPerSlide: 3,
         withLoop: true,
 
-        items: mockedItems.map((i : ChatProps, id:number) => ({
+        items: mockedItems.map((i : GameModalProps, id:number) => ({
           id: id,
           renderItem: (
-            <CaoussalItem >
+            <CaoussalItem onClick={()=>{
+              setselected(id)
+                document.getElementById("span")?.classList.toggle("anime")
+
+              }} selected={id  == selected ? true : false} >
             <img src={i.banner} alt="mapimage" />
               {i.title}
             </CaoussalItem>
@@ -45,25 +59,33 @@ export default function GameModal() {
   return (
     <GameModalStyle>
         <Title>
-        Maps :
+          <div>Map :</div>
+         <span id="span">{mockedItems[selected].title}</span>
         </Title>
         <CaroussalContainer>{carouselFragment}</CaroussalContainer>
+        
         <Title>
-        Rounds :
+        <div>Rounds :</div>
+
         <Input id="number" type="number"  max='10' placeholder='Enter rounds ..' />
         </Title>
 
     </GameModalStyle>
   )
 }
-
-const CaoussalItem = styled.div`
-    width: 250px;
-    height: 200px;
+interface CaroItemStyle {
+        
+  selected :boolean
+  
+  }
+const CaoussalItem = styled.div<CaroItemStyle>`
+    width: 150px;
+    height: 100px;
     border-radius: 5px;
     /* background-color: black; */
     background-color: transparent;
     position: relative;
+    overflow: hidden;
     >img{
       position: absolute;
       z-index: -1;
@@ -71,10 +93,15 @@ const CaoussalItem = styled.div`
       height: 100%;
       object-fit: cover;
     }
+    cursor: pointer;
+    ${props => (props.selected === true) && css`
+    box-shadow: 0px 1px 1px 1px ${props => props.theme.colors.primaryText};
+    border: 3px solid ${props => props.theme.colors.primaryText};
+    `}
 `;
 
 const CaroussalContainer = styled.div`
-    width: 250px;
+    width: 100%;
     margin: 0 auto;
     overflow: hidden;
 `;
@@ -91,6 +118,29 @@ const Title = styled.div`
     margin: 15px 0px;
     display: flex;
     align-items: center;
+    >div{
+      min-width: 100px;
+    }
+    > span{
+      margin-left: 30px;
+      text-transform: uppercase;
+    color: ${props => props.theme.colors.purple};
+   font-family: 'Michroma', sans-serif;
+   .anime{
+     animation-name: animeText;
+     animation-duration: 1s;
+
+   }
+   @keyframes animeText {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+    }
 `;
 const Input = styled.input`
    font-family: 'Poppins' , sans-serif;

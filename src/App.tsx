@@ -18,12 +18,26 @@ import ProtectedLayout from './components/protected/ProtectedLayout';
 import Profile from './Pages/Profile';
 import Chat from './Pages/Chat';
 import Game from './Pages/Game';
+import axios from 'axios';
 
 function App() {
   const [start, setstart] = useState(false)
+  const [logedIn, setlogedIn] = useState(false)
   const [name, setname] = useState("")
   const inputRef : any= useRef<any>(null);
+  useEffect(() => {
+    axios.get("http://127.0.0.1:3000/profile", {
+    headers: {  
+      'Access-Control-Allow-Origin' : '*',
+     'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',}
+  
+  } ).then((x)=>{console.log(x)}).catch((err)=>{
+        console.log(err)
+        // history.pushState("/signin");
 
+    })
+  }, [])
+  
   return (
     <div className="App">
        <ThemeProvider theme={theme}>

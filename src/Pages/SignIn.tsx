@@ -3,6 +3,8 @@ import styled , {keyframes} from "styled-components"
 import CoverImg from "../assets/imgs/cover.png"
 import PatternImg from "../assets/imgs/pattern.png"
 import FtImg from "../assets/imgs/42Icon.svg"
+//todo env file
+const url = "https://api.intra.42.fr/oauth/authorize?client_id=b645a2e7e9c3b0cc8345619af067b26396718e9a1d172c3f36fc602f6ce3cb20&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth&response_type=code"
 export default function SignIn() {
   return (
     <Wrraper>
@@ -17,7 +19,7 @@ export default function SignIn() {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae nunc in.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae nunc in. 
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae nunc in.
             </Description>
-            <LoginButton href="#api" >
+            <LoginButton href={url} >
                <img src={FtImg} alt="42logo" />
                Login with intra
             </LoginButton>
@@ -130,7 +132,7 @@ const Bloc = styled.div`
 `;
 const Title = styled.div`
    font-family: 'Poppins', sans-serif;
-   color:  ${props => props.theme.colors.seconderyText};;
+   color:  ${props => props.theme.colors.primarybg};;
    font-size:  ${props => props.theme.fontSize.xl}; 
    font-weight: 500;
    margin-bottom: 15px;
@@ -138,7 +140,7 @@ const Title = styled.div`
 `;
 const Description = styled.div`
 font-family: 'Poppins', sans-serif;
-   color:  ${props => props.theme.colors.seconderyText};;
+   color:  ${props => props.theme.colors.primarybg};;
    font-size:  ${props => props.theme.fontSize.l}; 
    font-weight: 500;
 

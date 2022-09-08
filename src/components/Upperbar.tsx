@@ -10,7 +10,7 @@ import GameModal from './modals/GameModal'
 
 export default function Upperbar() {
   const [open, setopen] = useState(false)
-  const [hideModel, sethideModel] = useState(false)
+  const [hideModel, sethideModel] = useState(true)
   const ToggleDD = (e : any)=>{
     setopen(!open)
     e.stopPropagation();
