@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
@@ -43,18 +43,42 @@ export class UserService {
     }
 
    async    GetUser(username: string) : Promise<any> {
+    console.log(username);
     let user = await this.prisma.users.findUnique({
         where: {
             Login: username,
         },
     });
+    console.log(user);
     return user;
    }
 
-    async UserExist(UserProfile: User) {
+    async   UpdateLogin(userJWT, @Query() query) {
+        try {
+            const updateUser = await this.prisma.users.update({
+                where: {
+                    Id: userJWT.userId,
+                },
+                data: {
+                    Login: "hkhalil",
+                },
+            });
+            console.log("__UPDATED__USER__ : ",  updateUser);
+            return {"statusCode":200,
+                    "message": "UserName Updated Successfully!"
+                };
+        }
+        catch {
+            return {"statusCode":405,
+                    "message": "UserName Already Exist!"
+                };
+        }
+    }
+
+    async UserExist(UserLogin: string) {
         let user = await this.prisma.users.findUnique({
             where: {
-                Id: UserProfile.Id,
+                Login: UserLogin,
             },
         });
         if (user) {

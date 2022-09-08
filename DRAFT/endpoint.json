@@ -1,0 +1,31 @@
+
+{
+    "errors": {
+        "statusCode": "Error Code [XXX]",
+        "message":"Error Description",
+        "error":"Not Found, Forbidden, Method Not Allowed, Something like this ... "
+    },
+    "/profile": {
+        "Login":"abelarif",
+        "UsualFullName":"Achraf Belarif",
+        "Avatar":"https://avatars.dicebear.com/api/croodles-neutral/abelarif.svg",
+        "Status":"online",
+        "Notifications":{},
+        "MatchHistory":{},
+        "Wins":0,
+        "Losses":0,
+        "Level":0
+    },
+    "/users/{id}": {
+        "Email":"abelarif@student.1337.ma",
+        "Login":"abelarif",
+        "UsualFullName":"Achraf Belarif",
+        "Avatar":"https://avatars.dicebear.com/api/croodles-neutral/abelarif.svg",
+        "Status":"online",
+        "Notifications":{},
+        "MatchHistory":{},
+        "Wins":0,
+        "Losses":0,
+        "Level":0
+    }
+}
