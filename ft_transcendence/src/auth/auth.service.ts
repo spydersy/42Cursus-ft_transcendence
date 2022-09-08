@@ -82,11 +82,11 @@ export class AuthService {
             if (await this.userService.UserExist(UserDto.Login) === false) {
                 this.userService.AddUserToDB(UserDto);
                 let JWT = await this.GenerateJWT(UserDto);
-                return res.cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true}).json({'message': 'DONE00'});
+                return res.cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true}).redirect("http://localhost:3001");
             }
             else {
                 let JWT = await this.GenerateJWT(UserDto);
-                return res.cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true}).json({'message': 'DONE01'});
+                return res.cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true}).redirect("http://localhost:3001");
             }
         }
         else {
