@@ -83,16 +83,18 @@ export class AuthService {
                 this.userService.AddUserToDB(UserDto);
             }
             let JWT = await this.GenerateJWT(UserDto);
-            return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000, http://localhost:3001',
-                            'Access-Control-Allow-Credentials': "true",
-                            'Access-Control-Allow-Methods': "GET, POST",
-                            'Access-Control-Allow-Headers': "*"}
-                            )
-                        .cookie('Authorization', 'Bearer ' + JWT.access_token).redirect("http://localhost:3001");
+            return res
+                    .set({
+                        'Access-Control-Allow-Credentials':true,
+                        'Access-Control-Allow-Origin': 'http://localhost:3001',
+                        'Access-Control-Allow-Headers': 'http://localhost:3001'
+                    })
+                    .cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true})
+                    .redirect("http://localhost:3001");
         }
         else {
             this.HandleSigninErrors(query);
         }
-        return `Hello ${UserDto.UsualFullName}`; // redirect to HomePage [http://localhost:3000/]
+        return `Hello ${UserDto.UsualFullName}`;
     }
 }

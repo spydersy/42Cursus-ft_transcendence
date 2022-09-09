@@ -45,14 +45,22 @@ export class AppController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  async profile(@Req() req) {
+  async profile(@Req() req , @Res() res: Response) {
     let ForbiddenString : string = "";
     let TestUserNameDTO: UserName ={
       UserName: ForbiddenString,
     }
     console.log("__TEST__USER_NNAME__DTO__ : ", TestUserNameDTO);
-    return await this.userService.GetUser(req.user.username);
+    let profile = await this.userService.GetUser(req.user.username);
+    return res.set({'Access-Control-Allow-Origin': 'http://localhost:3001'}).send(profile);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('AddFriend')
+  AddFriend(@Req() req, @Query() query, @Res() res: Response) {
+
+  }
+
 
 
   @UseGuards(JwtAuthGuard)
