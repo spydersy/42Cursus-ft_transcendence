@@ -10,6 +10,8 @@ import rank3 from "../assets/imgs/ranks/bronze.png"
 import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
 import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 
+import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
+import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 
 /// UserProfile Variants  
 const Backcolor = "#533483"
@@ -729,3 +731,240 @@ const AddFriendStyle = styled.div`
   padding: 0 5px;
 `;
 /// Game History tab //
+
+/// Pending Request tab //
+export interface UserInvitCard {
+  data: {
+    username: string;
+    avatar: string;
+  }
+}
+export interface StyleProps {
+    status: boolean;
+}
+
+export  function UserInvitCard(props : UserInvitCard) {
+  const [active, setActive] = useState(false);
+  return (
+    <UserInvitCardStyle >
+
+      <div className="YN"> 
+
+        <Deny className='Bdeny'/>
+        <Accepte className='Adeny'/>
+
+      </div>
+
+      <img src={props.data.avatar} className="avatar" />
+      <div className="Uname"> {props.data.username}  </div>
+    
+    </UserInvitCardStyle>
+  )
+}
+
+const UserInvitCardStyle = styled.div`
+
+  position: relative;
+  background: #70539b68;
+  margin : 10px;
+  width: 130px;
+  height: 130px;
+  text-align: center;
+  border-radius: 10px;
+  border: 2px solid  #70539b ;
+  animation: fadeIn 2s;
+
+  .YN {
+    /* background-color: #0228ff; */
+    position: absolute;
+    top: 0px;
+
+    width: 100%;
+    height: 20%;
+    .Bdeny {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      
+      top: 4px;
+      left: 5px;
+
+      &:hover {
+        cursor: pointer;
+        fill: #f50000a6;
+        width: 27px;
+        height: 27px;
+      }
+
+    } 
+    .Adeny {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      
+      top: 4px;
+      right: 5px;
+
+      &:hover {
+        cursor: pointer;
+        fill: #12c006a8;
+        width: 27px;
+        height: 27px;
+      }
+    }
+  }
+
+  .avatar {
+      border: 1px solid #fcfafc;
+      border-radius: 50%;
+      position: absolute;
+      display: block;
+      width: 50%;
+      top: 20%;
+      left: 25%;
+      animation: fadeIn 4s;
+      > img {
+        width:70px;
+        height: 70px;
+      }   
+    }
+
+    .Uname {
+    position: absolute;
+    color: #fcfafc;
+    width: 100%;
+    height: auto;
+    min-height: 30px;
+    margin : 2px 0px;
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: bolder;
+    bottom: 0px;
+    /* -webkit-text-stroke: 1px #929292b7; */
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    &:hover {
+      cursor: pointer;
+      background: #70539bdb;
+
+    }
+`;
+
+/// Blocked Users ///
+export interface UserBlockedCard {
+  data: {
+    username: string;
+    avatar: string;
+  }
+}
+export interface StyleProps {
+    status: boolean;
+}
+
+export  function UserBlockedCard(props : UserInvitCard) {
+  const [active, setActive] = useState(false);
+  return (
+    <UserBlockedCardStyle >
+      <div className="YN"> 
+        <Deny className='Bdeny'/>
+      </div>
+      <img src={props.data.avatar} className="avatar" />
+      <div className="Uname"> {props.data.username}  </div>
+    </UserBlockedCardStyle>
+  )
+}
+
+const UserBlockedCardStyle = styled.div`
+
+  position: relative;
+  background: #000000;
+  margin : 10px;
+  width: 130px;
+  height: 130px;
+  text-align: center;
+  border-radius: 10px;
+  border: 2px solid  #433f49 ;
+  animation: fadeIn 2s;
+
+  .YN {
+    position: absolute;
+    top: 0px;
+
+    width: 100%;
+    height: 20%;
+    .Bdeny {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      
+      top: 4px;
+      left: 5px;
+
+      &:hover {
+        cursor: pointer;
+        fill: #f50000a6;
+        width: 27px;
+        height: 27px;
+      }
+
+    } 
+    .Adeny {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      
+      top: 4px;
+      right: 5px;
+
+      &:hover {
+        cursor: pointer;
+        fill: #12c006a8;
+      }
+    }
+  }
+
+  .avatar {
+      border: 1px solid #fcfafc;
+      border-radius: 50%;
+      position: absolute;
+      display: block;
+      width: 50%;
+      top: 20%;
+      left: 25%;
+      animation: fadeIn 4s;
+      > img {
+        width:70px;
+        height: 70px;
+      }   
+    }
+
+    .Uname {
+    position: absolute;
+    color: #fcfafc;
+    width: 100%;
+    height: auto;
+    min-height: 30px;
+    margin : 2px 0px;
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: bolder;
+    bottom: 0px;
+    /* -webkit-text-stroke: 1px #929292b7; */
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    &:hover {
+      cursor: pointer;
+      background: #282c34;
+
+    }
+`;

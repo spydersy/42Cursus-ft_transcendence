@@ -1,31 +1,33 @@
 import React, {useState} from 'react'
 import styled , {css}from "styled-components"
-import Tet from "../assets/imgs/avatar/avatar1.png"
 import Navlinks from '../components/Navlinks';
 import { AchievmentComp,AchievmentCompProps }  from '../components/History'
-
 import  Badge2 from "../assets/imgs/avatar/a1.png";
 import  Badge3 from "../assets/imgs/avatar/a2.png";
 import  Badge4 from "../assets/imgs/avatar/a6.png";
 import  Badge5 from "../assets/imgs/avatar/a4.png";
 import  Badge6 from "../assets/imgs/avatar/a5.png";
-
 import  B1 from "../assets/imgs/badge1.svg";
 import  B2 from "../assets/imgs/badge2.svg";
 import  B3 from "../assets/imgs/badge3.svg";
-
 import { PlayerCard , UserCard} from '../components/PlayerProfile';
-
 import { GameComp } from "../components/PlayerProfile";
-/////
+import { UserInvitCard } from "../components/PlayerProfile";
+import { UserBlockedCard } from "../components/PlayerProfile";
+
+import {ReactComponent as Warningo} from "../assets/imgs/warning.svg";
+
+//-- Global Data --//
 
 const Backcolor = "#533483"
 const Barside = "#f3460fe"
 const GreyBackcolor = "#282c34"
 const ProgressUser = "40%"
 const player = { name: "Alchemist", login: "Eelaazmi", lvl: "1", gamePlayed : 350, lost : 150,  won : 200, rank: "rank1"}
+const hieghtTab = "500px";
 
-//-----//
+//-- Global User Data --//
+
 const achievment1 = {
   name: "SERGENT",
   desc : "you played 20 game without any loss",
@@ -48,7 +50,8 @@ var listAchiev = [achievment1 , achievment2 , achievment3,achievment3,achievment
   achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,
   achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3]
 
-//-----//
+//------//
+
 const card = {
   username: "mohammed el-karmi",
   grade : "Yaiba",
@@ -88,6 +91,7 @@ card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, ca
 card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2]
 
 //-----//
+
 const match1 = {
   match:{
   name: "Melkarmi",
@@ -118,13 +122,70 @@ const match3 = {
   sec: 20},
   isFriend: true,
 }
-
 var listGame = [match1 , match2, match3, match1 , match2, match3, match1 , match2, match3,
    match1 , match2, match3, match1 , match2, match3, match1 , match2, match3, match1 , match2, match3]
 
 //-----//
 
+const UserInvit = {
+username: "Admiral Akainu",
+avatar : Badge3,
+}
+const UserInvit1 = {
+  username: "Admiral Kizaro",
+  avatar : Badge2,
+}
+const UserInvit2 = {
+  username: "Admiral Aokij",
+  avatar : Badge4,
+}
+const UserInvit3 = {
+  username: "Admiral Garb",
+  avatar : Badge5,
+}
+const UserInvit4 = {
+  username: "Yonko shanks",
+  avatar : Badge6,
+}
+const UserInvit5 = {
+  username: "Yonko Kaido",
+  avatar : Badge2,
+}
+const UserInvit6 = {
+  username: "Yonko Big mom",
+  avatar : Badge6,
+}
+const UserInvit7 = {
+  username: "Yonko Whitebeard",
+  avatar : Badge4,
+}
+const UserInvit8 = {
+  username: "Gold Roger",
+  avatar : Badge2,
+}
+var listInvit = [UserInvit  , UserInvit1 , UserInvit2, UserInvit3, UserInvit4, UserInvit5, UserInvit6, UserInvit7, UserInvit8, UserInvit , 
+                 UserInvit1 , UserInvit2 , UserInvit3, UserInvit4, UserInvit5, UserInvit6, UserInvit7, UserInvit8, UserInvit , UserInvit1,
+                 UserInvit2, UserInvit3, UserInvit4, UserInvit5, UserInvit6, UserInvit7, UserInvit8]
 
+const BlockedUser = {
+  username: "Nami San",
+  avatar : Badge2,
+}
+const BlockedUser1 = {
+  username: "Nico Robin",
+  avatar : Badge3,
+}
+const BlockedUser2 = {
+  username: "Franky",
+  avatar : Badge4,
+}
+const BlockedUser3 = {
+  username: "Brook",
+  avatar : Badge5,
+}
+var listBlocked = [BlockedUser , BlockedUser1 , BlockedUser2 , BlockedUser3]
+
+//-----------------------//
 
 //// Default function Profile
 export default function Profile() {
@@ -181,7 +242,7 @@ margin: 15px 0px;
 `
 
 ///// PlayerTabs Section
-const linkslist = [" ACHIEVEMENTS", " FRIENDS" , " GAME HISTORY", "PENDING REQUESTS", "MY BLACK LIST"]
+const linkslist = [" ACHIEVEMENTS", " FRIENDS" , " GAME HISTORY", "PENDING REQUESTS", "MY BLACK LIST", "SETTINGS"]
 
 export function PlayerTabsBar()
 {
@@ -223,7 +284,7 @@ export function TabOne()
 }
 const TabOone = styled.div`
   /* margin: 20px; */
-  height: 400px;
+  height: ${hieghtTab};
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
@@ -273,7 +334,7 @@ const TabOtwo = styled.div`
   margin: 0px 0px;
   overflow-y: scroll;
   height: auto;
-  max-height: 400px;
+  max-height: ${hieghtTab};
   /* border: 1px solid white; */
 
   overflow-y: scroll;
@@ -297,8 +358,6 @@ const TabOtwo = styled.div`
 `;
 
 //#3  Game History Tab
-const hieghtTab = "400px";
-
 export function Tabthree()
 {
   return (  
@@ -312,7 +371,6 @@ export function Tabthree()
   )
 }
 const TabOthree= styled.div`
-  /* background-color: #4a085a4e; */
   width: 100%;
   max-height: ${hieghtTab};
   display: flex;
@@ -320,22 +378,17 @@ const TabOthree= styled.div`
   justify-content: left;
   overflow-y: scroll;
   border: 1px solid ${props => props.theme.colors.primarybg};
-  /* height: ${hieghtTab}; */
-  /* margin: 20px; */
   overflow-y: scroll;
       &::-webkit-scrollbar {
       width: 4px;
     }
-
     &::-webkit-scrollbar-track {
       background: transparent; 
     } 
-
     /* Handle */
     &::-webkit-scrollbar-thumb {
       background: ${props => props.theme.colors.primarybg};
     } 
-
     /* Handle on hover */
     &::-webkit-scrollbar-thumb:hover { 
       background: ${props => props.theme.colors.primarybg};
@@ -347,18 +400,25 @@ export function Tabfour()
 {
   return (
     <TabOfour>
-    
-       Tab FOUR
-    
+    {
+        listInvit.map((invit : any, id : number )=>{
+            return<UserInvitCard key={id} data={invit} />
+        })
+    }
+       
     </TabOfour>
   )
 }
-
 const TabOfour= styled.div`
-  background-color: #8f1cac4e;
 
-  overflow-y: scroll;
-      &::-webkit-scrollbar {
+    /* background-color: #cccccc4e; */
+    max-height: ${hieghtTab};
+    margin: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
       width: 4px;
     }
 
@@ -377,16 +437,59 @@ const TabOfour= styled.div`
     }
 `;
 
-
 //#5  My Black List
 export function Tabfive()
 {
   return (
-    <div> Tab Five </div>
+    <TabOfive> 
+      <div className="Title">
+        <Warningo className="icon" /> 
+      </div>
+        {
+          listBlocked.map((invit : any, id : number )=>{
+              return<UserBlockedCard key={id} data={invit} />
+          })
+        }  
+      
+      </TabOfive>
   )
 }
+const TabOfive= styled.div`
+
+    /* background-color: rgba(80, 22, 22, 0.313);  */
+    max-height: ${hieghtTab};
+    margin: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    overflow-y: scroll;
+    .Title {
+      position: absolute;
+      width: 100%;
+      opacity: 0.2;
+      left: 10%;
+      bottom: 20%;
+
+    }
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent; 
+    } 
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: ${props => props.theme.colors.primarybg};
+    } 
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover { 
+      background: ${props => props.theme.colors.primarybg};
+    }
+`;
 
 /// To be added : Other users profile // Rooms Page /// All users page // 
-
 
 
