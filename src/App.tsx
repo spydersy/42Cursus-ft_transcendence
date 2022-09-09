@@ -51,7 +51,7 @@ function App() {
   return (
     <div className="App">
        <ThemeProvider theme={theme}>
-        <main>
+        <Main>
           <ProtectedLayout body={<Upperbar/>} />
           <Cont >
             <ProtectedLayout body={ <Sidebar/>} />
@@ -64,7 +64,7 @@ function App() {
               <Route path="/profile/id" element={<Profile />} />
             </Routes>
           </Cont>
-        </main>
+        </Main>
        </ThemeProvider>
     </div>
   );
@@ -74,5 +74,25 @@ const Cont = styled.div`
   height: calc(100% - 70px);
   display: flex;
   flex-direction: row;
+`;
+const Main = styled.main`
+  
+  &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent; 
+    } 
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: ${props => props.theme.colors.primarybg};
+    } 
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover { 
+      background: ${props => props.theme.colors.primarybg};
+    }
 `;
 export default App;

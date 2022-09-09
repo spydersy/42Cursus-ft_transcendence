@@ -99,14 +99,17 @@ const PlayButton = styled.button`
 
 const Wrraper = styled.div`
 
-   width: calc(100vw - (26 * 2));
+   width: calc(100%);
    height: 70px;
    background-color: ${props => props.theme.colors.primarybg};;
    display: flex;
    align-items:center;
    flex-direction: row;
    justify-content: space-between;
-  padding: 0 26px;
+  /* padding: 0 26px; */
+  position: fixed;
+  top: 0;
+  left: 0;
   
 `;
 const RightCont = styled.div`

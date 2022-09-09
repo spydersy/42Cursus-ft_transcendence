@@ -91,6 +91,7 @@ export default function Sidebar() {
     }, [setopen, setfocused ])
     
   return (
+    <Test  open={open}>
     <SidebarWrraper ref={sideBaRed} open={open}>
         {open ? <Left onClick={openClose}   />: <Right onClick={openClose} /> }
 
@@ -115,6 +116,8 @@ export default function Sidebar() {
                 
             </Item>;
     </SidebarWrraper>
+    </Test>
+
   )
 }
 
@@ -125,18 +128,56 @@ interface ItemProps {
 
 
   }
+  
 const SidebarWrraper = styled.div<barProps>`
     width: 300px;
     max-width: 300px;
-    height: calc(100%);
+    height: calc(100% - 70px);
+    top: 70px;
     background-color: ${props => props.theme.colors.primarybg}; 
-    
+    position: fixed;
+    left: 0;
     
     
     display: flex;
     align-items: flex-end;
     flex-direction: column;
-    border-radius: 0px 10px 0 0 ;
+    /* border-radius: 0px 10px 0 0 ; */
+    transition-duration: 200ms;
+    ${props => (props.open === false) && css`
+    align-items: center ;
+    width: 76px;
+    `
+  }
+  @media  only screen and (max-width: 768px) {
+
+  max-width: 100%;
+  width :100%;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  > svg{
+      display: none;
+  }
+}
+
+    
+`;
+const Test = styled.div<barProps>`
+    width: 300px;
+    max-width: 300px;
+    height: calc(100% - 70px);
+    top: 70px;
+    background-color: ${props => props.theme.colors.primarybg}; 
+
+    
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    /* border-radius: 0px 10px 0 0 ; */
     transition-duration: 200ms;
     ${props => (props.open === false) && css`
     align-items: center ;
