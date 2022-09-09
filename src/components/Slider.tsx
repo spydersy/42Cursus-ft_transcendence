@@ -84,6 +84,7 @@ const SliderContainer = styled.div`
     height: 400px;
     position: relative;
     overflow: hidden;
+    z-index: 1;
     /* display: flex;
     align-items: center;
     justify-content: space-between; */

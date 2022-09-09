@@ -72,8 +72,10 @@ export default function GameModal() {
 
         <Input id="number" type="number" min='3' max='10' placeholder='Enter rounds ..' />
         </Title>
-
-    </GameModalStyle>
+        <PlayButton href='game'>
+          Start
+        </PlayButton>
+      </GameModalStyle>
   )
 }
 interface CaroItemStyle {
@@ -160,3 +162,20 @@ const Input = styled.input`
 
 `;
 
+const PlayButton = styled.a`
+  width:150px;
+  height :40px;
+  border: none;
+  outline:none;
+  margin: 0 auto;
+  cursor:pointer;
+  color: ${props => props.theme.colors.primaryText};;;
+  background :  ${props => props.theme.colors.purple};
+  border:1px solid ${props => props.theme.colors.border};;
+  border-radius: 5px;
+  font-family: 'Michroma', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+`;

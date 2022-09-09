@@ -28,34 +28,23 @@ function App() {
   const [logedIn, setlogedIn] = useState(false)
   const [name, setname] = useState("")
   const inputRef : any= useRef<any>(null);
-  // const navigate = useNavigate();
-
-
+  
+  
+  const navigate = useNavigate();
   useEffect(() => {
     const cookies = new Cookies();
     // const coc = Cookieequiredy
     // axios.defaults.withCredentials = true;
   //  console.log( Cookies.set)
-    axios.get("http://127.0.0.1:3000/profile", 
-    
-    {
-      
-    // withCredentials: true,
-    headers: {
-      'Authorization': cookies.get('Authorization'),
-      // 'Access-Control-Allow-Origin' : 'http://127.0.0.1:3001'
-    }
-  
-    
-  
-  } 
+    axios.get("http://localhost:3000/profile", 
+    {withCredentials: true} 
   ).then((res)=>{
-    console.log(res.data)}
-    ).catch((err)=>{
+    console.log(res.data)
+    localStorage.setItem("user", JSON.stringify(res.data))
+  }).catch((err)=>{
         console.log(err)
-        // navigate('/signin')
+        navigate('/signin')
         // history.pushState("/signin");
-
     })
   }, [])
   
@@ -64,27 +53,17 @@ function App() {
        <ThemeProvider theme={theme}>
         <main>
           <ProtectedLayout body={<Upperbar/>} />
-        {/* <Upperbar/> */}
-        {/* <Sidebar/> */}
-        <Cont >
-          <ProtectedLayout body={ <Sidebar/>} />
-    
-          <BrowserRouter>
-          <Routes>
-    {/* <div>
-      sss
-    </div> */}
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/game" element={<Game />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/testing" element={<Test />} />
-            <Route path="/" element={<Home />} />
-            <Route path="/profile/id" element={<Profile />} />
-          </Routes>
-        </BrowserRouter>
-
-</Cont>
-
+          <Cont >
+            <ProtectedLayout body={ <Sidebar/>} />
+            <Routes>
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/game" element={<Game />} />
+              <Route path="/chat" element={<Chat />} />
+              <Route path="/testing" element={<Test />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/profile/id" element={<Profile />} />
+            </Routes>
+          </Cont>
         </main>
        </ThemeProvider>
     </div>
@@ -92,16 +71,7 @@ function App() {
 }
 
 const Cont = styled.div`
-height: calc(100% - 70px);
-/* position: absolute;
-
-  width: calc(100% - 250px);
-  top: 70px;
-  left: 250px;
-  padding-right: 1.5rem;
-  padding-left: 1.5rem; */
-  /* margin-right: auto; */
-  /* margin-left: auto; */
+  height: calc(100% - 70px);
   display: flex;
   flex-direction: row;
 `;

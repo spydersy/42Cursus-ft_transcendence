@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import $ from 'jquery'; 
 import { gsap, TweenMax , Quint , Expo} from 'gsap';
 
-import FriendImg from "../assets/imgs/1vf.png"
-import RandImg from "../assets/imgs/1vr.png"
-import AiImg from "../assets/imgs/1vai.png"
-import Tidk from "../assets/imgs/tidk.png"
+import FriendImg from "../assets/imgs/tag.svg"
+import RandImg from "../assets/imgs/classic.svg"
+import AiImg from "../assets/imgs/cp.svg"
+import Tidk from "../assets/imgs/challenge.svg"
 
 export default function Carousel() {
     var w, container, carousel : Object, item, radius : number, itemLength, rY, ticker, fps; 
@@ -145,7 +145,7 @@ const CarouselContainer = styled.section`
 		/* margin-left:-500px;
 		margin-top:-500px; */
 		/* left:18%; */
-		left: 30%;
+		left: 25%;
 		top: -50px;
 		width:600px;
 		height:100%;
@@ -181,7 +181,7 @@ const CarouselItem = styled.figure`
 const CarouselItemInner = styled.div`
         /* overflow: hidden; */
 cursor: pointer;
-    width: 300px;
+    width: 350px;
     height:200px;
     position:absolute;
     background-color:  ${props => props.theme.colors.primarybg};

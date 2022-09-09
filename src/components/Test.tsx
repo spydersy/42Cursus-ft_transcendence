@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React , {useState}from 'react'
 import styled from "styled-components"
-
+import { ReactComponent as Qr } from '../assets/imgs/QRtest.svg'
 export default function Test() {
     const [data, setdata] = useState(null)
     const handlePhotoChange = (e : React.ChangeEvent<HTMLInputElement>)=>{
@@ -9,8 +9,8 @@ export default function Test() {
     }
   return (
     <Cocoachraf>
-        <input type="file" onChange={handlePhotoChange}/>
-        <button onClick={()=>{
+        {/* <input type="file" onChange={handlePhotoChange}/> */}
+        {/* <button onClick={()=>{
             axios.put("http://127.0.0.1:3030/test", 
        data, {  headers: {  
         'Access-Control-Allow-Origin' : '*',
@@ -26,7 +26,8 @@ export default function Test() {
             )
         }}>
             Upload
-        </button>
+        </button> */}
+        <Qr/>
     </Cocoachraf>
   )
 }

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState , useEffect} from 'react'
 import styled , {css} from "styled-components"
 import SearchIcon from "../assets/imgs/searchIcon.svg"
 import {ReactComponent as BellIcon }from "../assets/imgs/bell-icon.svg"
@@ -8,9 +8,16 @@ import DropDown from './DropDown'
 import Modal from './Modal'
 import GameModal from './modals/GameModal'
 
+
+
+interface UserProp {
+  DefaultAvatar: string,
+
+}
 export default function Upperbar() {
   const [open, setopen] = useState(false)
-  const [hideModel, sethideModel] = useState(true)
+  const [hideModel, sethideModel] = useState(false)
+  const [currentUser, setcurrentUser] = useState< UserProp>()
   const ToggleDD = (e : any)=>{
     setopen(!open)
     e.stopPropagation();
@@ -21,7 +28,16 @@ export default function Upperbar() {
       background: "#FFFF00"
     }
   };
- 
+  useEffect(() => {
+    // setcurrentUser(localStorage.getItem("user"))
+    var s : string | null = localStorage.getItem('user');
+
+    const data : UserProp =  JSON.parse(s || '{}');
+    setcurrentUser(data)
+    console.log(data)
+  
+  }, [setcurrentUser])
+  
   return (
     <Wrraper>
         <LogoComponent/>
@@ -32,7 +48,10 @@ export default function Upperbar() {
           </PlayButton>
           <NotificationComponent/>
           <div  style={{position : "relative"}} onClick={(e)=>{ToggleDD(e)}}>
-            <AvatarComponent img={TestAvatar} />
+            <div style={{width : "40px", height :"40px"}}>
+            <AvatarComponent img={currentUser?.DefaultAvatar!} />
+
+            </div>
             {
               open && <DropDown closeDropdown={ ()=>{
       
@@ -214,12 +233,12 @@ const Avatar = styled.div`
   width: 100%;
   height: 100%;
   border-radius : 50%;
-
+  background-color: white;
   img{
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
-  border: 2px solid   ${props => props.theme.colors.primarybg};;
+  border: 2px solid   ${props => props.theme.colors.purple};;
 
 `;

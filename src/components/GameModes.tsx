@@ -18,7 +18,7 @@ const Game = styled.div`
 width: 100%;
 padding: 20px 0;
 
-height: 500px;
+height: 400px;
 margin-top: 20px;
 display: flex;
 align-items: center;

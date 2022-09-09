@@ -38,7 +38,7 @@ export default Modal;
 
 const ModalStyle = styled(ReactModal)`
   position: fixed;
-  z-index: 3;
+  z-index: 10;
   top: 50%;
   left: 50%;
   right: auto;
