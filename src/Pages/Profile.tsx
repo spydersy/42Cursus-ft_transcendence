@@ -190,7 +190,7 @@ var listBlocked = [BlockedUser , BlockedUser1 , BlockedUser2 , BlockedUser3]
 //// Default function Profile
 export default function Profile() {
   return (
-    <div className='container' style={{marginTop: "50px"}}>
+    <div className='container' style={{marginTop: "100px"}}>
           <TheBox>
               <PlayerCard player={player} />
               <ProgressBar>

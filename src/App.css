@@ -73,6 +73,7 @@ body {
 .container{
   /* width: 1500px; */
   margin: 0 auto;
+  margin-top: 70px;
 }
 @media  only screen and (max-width: 576px) {
   .container{

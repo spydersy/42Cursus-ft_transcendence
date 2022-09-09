@@ -20,8 +20,10 @@ const Modal = (props : ChatProps) => {
   return (
     <ModalStyle
     style={{
+      
       overlay: {
         background: 'rgba(255, 255, 255, 0.2)',
+        zIndex: '3'
       },
      }}
     {...props}>

@@ -1,7 +1,7 @@
 import React, {useState , useEffect} from 'react'
 import styled , {css} from "styled-components"
 import SearchIcon from "../assets/imgs/searchIcon.svg"
-import {ReactComponent as BellIcon }from "../assets/imgs/bell-icon.svg"
+import {ReactComponent as BellIcon }from "../assets/imgs/bell.svg"
 import {ReactComponent as Logo }from "../assets/imgs/logo.svg"
 import TestAvatar from "../assets/imgs/tests/guy.svg" 
 import DropDown from './DropDown'
@@ -113,27 +113,24 @@ const Wrraper = styled.div`
   
 `;
 const RightCont = styled.div`
-width: 300px;
+/* width: 200px; */
    display: flex;
    align-items:center;
    flex-direction: row;
-   justify-content: space-between;
+   /* justify-content: space-between; */
+   gap: 10px;
+   margin-right :10px;
 `;
 
 export  function LogoComponent() {
     return (
-      <Logo/>
-      // <Logo>
-      //     One Pong
-      // </Logo>
+      <a style={{marginLeft :"10px"}}href='/'>
+
+        < Logo/>
+      </a>
     )
   }
-    // const Logo = styled.div`
-    // font-family: 'Michroma', sans-serif;
-    //    color:  ${props => props.theme.colors.primaryText};;
-    //    font-size:  ${props => props.theme.fontSize.l}; 
-    //    /* object-fit : contain; */
-    // `;
+
 export  function SearchBarComponent() {
     return (
       <SearchBar>
@@ -198,7 +195,13 @@ new: boolean
 const Notification= styled.div<SearchProps>`
 width: auto;
 position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
 >svg{
+  height: 30px;
+  width: 30px;
+
   path{
     stroke: ${props => props.theme.colors.primaryText};
 
@@ -242,6 +245,6 @@ const Avatar = styled.div`
     height: 100%;
     object-fit: contain;
   }
-  border: 2px solid   ${props => props.theme.colors.purple};;
+  border: 2px solid   ${props => props.theme.colors.border};;
 
 `;
