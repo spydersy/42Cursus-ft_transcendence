@@ -32,20 +32,20 @@ function App() {
   
   const navigate = useNavigate();
   useEffect(() => {
-    const cookies = new Cookies();
-    // const coc = Cookieequiredy
-    // axios.defaults.withCredentials = true;
-  //  console.log( Cookies.set)
-    axios.get("http://localhost:3000/profile", 
-    {withCredentials: true} 
-  ).then((res)=>{
-    console.log(res.data)
-    localStorage.setItem("user", JSON.stringify(res.data))
-  }).catch((err)=>{
-        console.log(err)
-        navigate('/signin')
-        // history.pushState("/signin");
-    })
+  //   const cookies = new Cookies();
+  //   // const coc = Cookieequiredy
+  //   // axios.defaults.withCredentials = true;
+  // //  console.log( Cookies.set)
+  //   axios.get("http://localhost:3000/profile", 
+  //   {withCredentials: true} 
+  // ).then((res)=>{
+  //   console.log(res.data)
+  //   localStorage.setItem("user", JSON.stringify(res.data))
+  // }).catch((err)=>{
+  //       console.log(err)
+  //       navigate('/signin')
+  //       // history.pushState("/signin");
+  //   })
   }, [])
   
   return (

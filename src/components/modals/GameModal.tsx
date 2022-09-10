@@ -19,8 +19,7 @@ export default function GameModal() {
    
     const mockedItems : any = [{
         title: "MarinFord",
-        banner :Marin 
-
+        banner :Marin,
     },
     {
       title: "Punk Hazard",

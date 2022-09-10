@@ -94,10 +94,10 @@ const PlayButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-
 `;
 
 const Wrraper = styled.div`
+  z-index: 20;
 
    width: calc(100%);
    height: 70px;

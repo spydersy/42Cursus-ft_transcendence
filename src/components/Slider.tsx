@@ -63,7 +63,7 @@ const SliderStyle = styled.div`
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 90%;
+        width: 100%;
 
 `;
 const Slide = styled.div`
@@ -80,7 +80,8 @@ const Slide = styled.div`
 `;
 
 const SliderContainer = styled.div`
-    width: 900px;
+    /* width: 100%; */
+    flex: 1;
     height: 400px;
     position: relative;
     overflow: hidden;
@@ -100,7 +101,7 @@ const SliderContainer = styled.div`
     .right{
         top: 50%;
         /* left :0; */
-        right: calc(20%   );
+        right: calc(140px );
         width: 250px;
         height:200px;
         z-index: 2;
@@ -108,7 +109,7 @@ const SliderContainer = styled.div`
     .left{
         top: 50%;
         /* right: 40%; */
-        right: calc(52% + 250px );
+        right: calc(100% - 140px);
         width: 250px;
         height: 200px;
         z-index: 2;
@@ -129,6 +130,7 @@ const SliderContainer = styled.div`
     }
 `;
 const LeftStyle = styled(Left)`
+    margin: 0 15px;
     width: 40px;
     height: 40px;
     path {
@@ -136,6 +138,8 @@ const LeftStyle = styled(Left)`
     }
 `;
 const RightStyle = styled(Right)`
+    margin: 0 15px;
+
     width: 40px;
     height: 40px;
     path {
