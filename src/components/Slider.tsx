@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import styled from "styled-components"
 import { ReactComponent as Right} from "../assets/imgs/right-Arrow.svg"
 import { ReactComponent as Left} from "../assets/imgs/left-Arrow.svg"
+import { ReactComponent as BattleIcon} from "../assets/imgs/battle-icon.svg"
 
 
 const list  = [0,0 , 1 , 2 , 1 , 0, 0]
@@ -32,25 +33,32 @@ export default function Slider() {
                 else if (id <  main - 1)
                     classname = "emptyleft"
                 return<Slide onClick={()=>animatethis(id)} className={classname}key={id}  >
-                    {data}
+                    <div className='center'>
+x
+                    </div>
+                    <div className='bottom'>
+                        <div>
+                        Yaiba
+
+                        </div>
+                        <div>
+
+                        7
+                        <BattleIcon/>
+                        0
+                        </div>
+                        <div>
+                        mehdi
+
+                        </div>
+                        
+                         
+                    </div>
+                    {/* {data} */}
                 </Slide>
             })
         }
-                {/* <Slide className='main'>
-                    main
-                </Slide>
-                <Slide className='right'>
-                    right
-                </Slide>
-                <Slide className='left'>
-                    left
-                </Slide>
-                <Slide className='emptyright'>
-                    khawi
-                </Slide>
-                <Slide className='emptyleft'>
-                    khawi
-                </Slide> */}
+
                 
             </SliderContainer>
             <RightStyle onClick={()=>animatethis(main + 1)}/>
@@ -67,16 +75,46 @@ const SliderStyle = styled.div`
 
 `;
 const Slide = styled.div`
+overflow: hidden;
     position: absolute;
     transform: translate(50% , -50%);
     background-color: #000;
     color:white;
     border: 2px solid  ${props => props.theme.colors.border};
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0px 4px 10px 2px ${props => props.theme.colors.border};
     /* box-shadow: 0px 2px 2px 2px ${props => props.theme.colors.purple} ; */
     cursor: pointer;
     transition-duration: 500ms;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    .center{
+        width: 100%;
+        flex: 1;
+
+    }
+    .bottom{
+        font-family: 'Michroma', sans-serif;
+        color  :${props => props.theme.colors.seconderyText};;
+        width: 100%;
+        height: 60px;
+        background-color: ${props => props.theme.colors.purple};
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+       
+        >div{
+            margin: 0 15px;
+            display: flex;
+            align-items: center;
+            >svg{
+            path{
+                stroke: ${props => props.theme.colors.seconderyText};
+            }
+        }
+        }
+    }
 `;
 
 const SliderContainer = styled.div`

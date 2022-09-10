@@ -37,9 +37,9 @@ export interface ThemeProps {
       bg: "#0E1117",
       seconderybg: '#171A22',
       green: '#3CC592',
-      border: '#2F373F',
+      border: '#171A22',
       danger: "#F13950",
-      purple:'#590696'
+      purple:'#51002c'
 
     },
     fontSize: {

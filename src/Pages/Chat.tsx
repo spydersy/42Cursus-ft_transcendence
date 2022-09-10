@@ -11,7 +11,7 @@ import Img from "../assets/imgs/avatar/a1.png";
 const msgList = [
   {
     id: "0",
-    msg : "salam merhba", 
+    msg : "salam merhba salam merhba salam merhba salam merhba salam merhba salam merhba", 
   },
   {
     id: "0",
@@ -55,7 +55,7 @@ export default function Chat() {
     
   }, [list ])
   return (
-    <GridContainer className='container' style={{width: "1500px", maxWidth: "1500px"}}>
+    <GridContainer className='container' style={{ marginTop: "100px" , width: "1500px", maxWidth: "1500px"}}>
         <div className='right'>
         <ChatSidebar/>
             
@@ -433,7 +433,7 @@ export  function BottomChat(props: ChatProps) {
 
      }
      >button{
-      background-color:  ${props => props.theme.colors.bg};
+      background-color:  ${props => props.theme.colors.purple};
       border: 1px solid ${props => props.theme.colors.border};
 
       height: 100%;
@@ -465,9 +465,20 @@ export  function BottomChat(props: ChatProps) {
         {
           props.list.map((object: any , i : number)=>{
             if (object.id === "0")
-              return <div key={i} >  <MsgNotStyle>{object.msg} </MsgNotStyle></div>
+              return <div key={i} >  <MsgNotStyle>
+                
+                <div className='name'>Dosker </div>
+                {object.msg} 
+              <span>
+                7:20pm
+              </span>
+              </MsgNotStyle></div>
               else
-              return <div key={i}  >  <MsgStyle>{object.msg} </MsgStyle></div>
+              return <div key={i}  >  <MsgStyle>{object.msg}
+               <span>
+                7:20pm
+              </span>
+               </MsgStyle></div>
 
           })
         }
@@ -482,38 +493,94 @@ export  function BottomChat(props: ChatProps) {
   >div{
    display: flex;
     width: 100%;
-    margin: 5px 10px;
+    margin: 5px 20px;
     height: auto;
 
      align-items: flex-end; 
     flex-direction: row; 
+    color: ${props => props.theme.colors.seconderyText};
   }
   
 `;
   const    MsgStyle = styled.div`
   background-color: ${props => props.theme.colors.purple};
-  /* min-width: 300px; */
-  min-height: 26px;
-  /* align-items: flex-end; */
-  border-radius: 5px;
+  
+  border-radius: 10px;
   margin-left: auto;
   margin-right: 10px;
   text-align: start;
-  padding :2px 5px;
-  max-width: 200px;
+  padding : 10px 8px 20px 8px;
+
+  max-width: 300px;
+  min-width: 150px;
+  display: flex;
+  gap: 15px;
+  position: relative;
+  &:before {
+                    z-index: 13;
+                    content: '';
+                    /* border: 1px solid ${props => props.theme.colors.border}; */
+					display: block;
+					position: absolute;
+					right: -4px;
+					top: 10px;
+					transform: rotate(45deg);
+					width: 10px;
+					height: 10px;
+					background-color: inherit;
+				}
+  >span{
+    opacity: 0.5;
+    font-size: 12px;
+   position: absolute;
+   right: 5px;
+   bottom: 5px;
+   
+  }
   `;
   const    MsgNotStyle = styled.div`
-  /* align-items: flex-end; */
+
   text-align: start;
-  padding :2px 5px;
+  padding : 10px 8px 20px 8px;
   height: auto;
   align-self: flex-end;
-  border-radius: 5px;
-  /* min-height: 26px; */
-  background-color: #D9D9D9;
-  max-width: 200px;
+  border-radius: 10px;
+
+  background-color:  ${props => props.theme.colors.primarybg};
+  max-width: 300px;
+  min-width: 150px;
+  /* min-height: 35px; */
   margin-right: auto;
   margin-left: 10px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+ flex-direction: column;
+ &:before {
+                    z-index: 13;
+                    content: '';
+                    /* border: 1px solid ${props => props.theme.colors.border}; */
+					display: block;
+					position: absolute;
+					left: -4px;
+					top: 10px;
+					transform: rotate(45deg);
+					width: 10px;
+					height: 10px;
+					background-color: inherit;
+				}
+ .name{
+ color: ${props => props.theme.colors.purple};
+ font-weight: 600;
+ }
+  >span{
+    opacity: 0.5;
+    font-size: 12px;
+   position: absolute;
+   right: 5px;
+   bottom: 5px;
+   
+  }
   /* min-width: ; */
   
 `;
