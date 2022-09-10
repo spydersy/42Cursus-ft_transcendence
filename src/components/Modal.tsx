@@ -52,7 +52,7 @@ const ModalStyle = styled(ReactModal)`
   width: clamp(575px, 500px, 100%);
   max-height: 85vh;
   /* min-height: 85vh; */
-  padding: 0 100px;
+  padding: 0 50px;
   overflow: hidden;
   padding-bottom: 0px;
   border-radius: 5px;
@@ -79,7 +79,7 @@ const ModalContentStyle = styled.div`
   color: white;
   > button:first-child {
     position: absolute;
-    right: -75px;
+    right: -30px;
     top: 15px;
     padding: 5px;
     background-color: transparent;

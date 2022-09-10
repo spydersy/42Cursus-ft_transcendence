@@ -5,7 +5,10 @@ import { AvatarComponent } from '../components/Upperbar';
 import {ReactComponent as AddIcon} from "../assets/imgs/block-icon.svg";
 import {ReactComponent as SendIcon} from "../assets/imgs/send-icon.svg";
 import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
+import {ReactComponent as Group} from "../assets/imgs/users.svg";
 import Img from "../assets/imgs/avatar/a1.png";
+import Modal from '../components/Modal';
+import CreateGroup from '../components/modals/CreateGroup';
 
 
 const msgList = [
@@ -122,14 +125,30 @@ display: flex;
 `;
 
 
-
+const bg = {
+  overlay: {
+    background: "#FFFF00"
+  }
+};
 
 export  function ChatSidebar() {
+  const [hide, sethide] = useState(false)
   return (
     <ChatSidebarStyle>
         
         <div className='title'>
             Chat
+            <button onClick={()=>sethide(!hide)} >
+
+               <Group/>
+            </button>
+            {hide &&  <Modal
+        isOpen={hide}
+        onRequestClose={() => sethide(false)}
+        hideModal={() => sethide(false)}
+        styles={bg}>
+                <CreateGroup/>
+      </Modal>}
         </div>
         <div className='searchbar'>
             <SearchIcon/>
@@ -170,6 +189,22 @@ const ChatSidebarStyle = styled.div`
         font-family: 'Poppins', sans-serif;
         font-weight : 600;
         text-align: start ;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        >button{
+          background-color:${props => props.theme.colors.purple};
+          border : 1px solid ${props => props.theme.colors.border};
+          border-radius: 5px;
+          padding: 10px 20px;
+          >svg{
+  
+     
+            path {
+              stroke:${props => props.theme.colors.seconderyText};
+            }
+        }
+        }
     }
     .searchbar{
 
@@ -517,8 +552,8 @@ export  function BottomChat(props: ChatProps) {
   gap: 15px;
   position: relative;
   &:before {
-                    z-index: 13;
-                    content: '';
+          z-index: 1;
+          content: '';
                     /* border: 1px solid ${props => props.theme.colors.border}; */
 					display: block;
 					position: absolute;
@@ -557,7 +592,7 @@ export  function BottomChat(props: ChatProps) {
   align-items: flex-start;
  flex-direction: column;
  &:before {
-                    z-index: 13;
+                    z-index: 1;
                     content: '';
                     /* border: 1px solid ${props => props.theme.colors.border}; */
 					display: block;
