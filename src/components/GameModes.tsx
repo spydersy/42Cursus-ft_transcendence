@@ -1,7 +1,9 @@
-import React from 'react'
+import React , {useState} from 'react'
 import { HeadComponent } from '../Pages/Home'
 import Carousel from './Carousel'
 import styled from "styled-components"
+import Modal from './Modal'
+import GameModal from './modals/GameModal'
 
 import FriendImg from "../assets/imgs/luffyAce.svg"
 import  RandImg from "../assets/imgs/aokiji.svg"
@@ -47,7 +49,20 @@ const modes : any = [
 
   }
 ]
-export default function GameModes() {
+
+interface GameModesProps {
+    
+  settheme: (e : any)=> void,
+  // banner :string 
+  
+}
+const bg = {
+  overlay: {
+    background: "#FFFF00"
+  }
+};
+export default function GameModes(props : GameModesProps) {
+  const [hideModel, sethideModel] = useState(false)
 
   const { carouselFragment ,      slideToNextItem } = useSpringCarousel({
 
@@ -58,7 +73,7 @@ export default function GameModes() {
     items: modes.map((data : any, id:number) => ({
       id: id,
       renderItem: (
-        <Card style={{background : data.background}} key={id}  >
+        <Card onClick={(e)=>sethideModel(!hideModel)} style={{background : data.background}} key={id}  >
     
         <div>
           <div className='title'>
@@ -82,7 +97,18 @@ export default function GameModes() {
 
       {carouselFragment}
       </GameContainer>
-        
+      {hideModel &&  <Modal
+        isOpen={hideModel}
+        onRequestClose={() => sethideModel(false)}
+        hideModal={() => sethideModel(false)}
+        styles={bg}
+      >
+        {/* <AppCommingSoon
+          hideModal={() => sethideModel(false)}
+          showAuth={showAuth}
+        /> */}
+        <GameModal setmode={(e)=>props.settheme(e)}/>
+      </Modal>}
       <Swipeicon onClick={slideToNextItem} />
     </Game>
   )

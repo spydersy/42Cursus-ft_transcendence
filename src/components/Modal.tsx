@@ -49,7 +49,7 @@ const ModalStyle = styled(ReactModal)`
   box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.07);
   background-color: ${props => props.theme.colors.primarybg};
   border: 1px solid black;
-  width: clamp(575px, 500px, 100%);
+  width: clamp(475px, 400px, 100%);
   max-height: 85vh;
   /* min-height: 85vh; */
   padding: 0 50px;

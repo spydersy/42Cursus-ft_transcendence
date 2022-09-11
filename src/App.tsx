@@ -5,6 +5,12 @@ import { ThemeProvider } from 'styled-components';
 import Cookies from 'universal-cookie';
 import './App.css';
 import Pong from './components/Pong';
+import Marin from "./assets/imgs/marinford.png";
+import Punk from "./assets/imgs/punkhazard.png";
+import Dress from "./assets/imgs/dressRosa.jpg";
+import Wano from "./assets/imgs/wano.jpg";
+import Fish from "./assets/imgs/fishman.jpeg";
+
 import {
   BrowserRouter,
   Routes, // instead of "Switch"
@@ -21,10 +27,31 @@ import Profile from './Pages/Profile';
 import Chat from './Pages/Chat';
 import Game from './Pages/Game';
 import axios from 'axios';
-
+import Setting from './Pages/Setting';
+const mockedItems : any = [{
+  title: "MarinFord",
+  banner :Marin,
+},
+{
+  title: "Punk Hazard",
+  banner :Punk 
+},
+{
+  title: "Dressrosa",
+  banner :Dress 
+},
+{
+  title: "Wano",
+  banner :Wano 
+},
+{
+  title: "Fishman Island",
+  banner :Fish 
+}]
 
 function App() {
   const [start, setstart] = useState(false)
+  const [gametheme, setGametheme] = useState({map :mockedItems[1], rounds : 5})
   const [logedIn, setlogedIn] = useState(false)
   const [name, setname] = useState("")
   const inputRef : any= useRef<any>(null);
@@ -52,16 +79,17 @@ function App() {
     <div className="App">
        <ThemeProvider theme={theme}>
         <Main>
-          <ProtectedLayout body={<Upperbar/>} />
+          <ProtectedLayout body={<Upperbar />} />
           <Cont >
             <ProtectedLayout body={ <Sidebar/>} />
             <Routes>
               <Route path="/signin" element={<SignIn />} />
-              <Route path="/game" element={<Game />} />
+              <Route path="/game" element={<Game theme={gametheme}  />} />
               <Route path="/chat" element={<Chat />} />
+              <Route path="/setting" element={<Setting />} />
               <Route path="/testing" element={<Test />} />
-              <Route path="/" element={<Home />} />
-              <Route path="/profile/id" element={<Profile />} />
+              <Route path="/" element={<Home settheme={(e: any)=> setGametheme(e)} />} />
+              <Route path="/profile/id" element={<Profile  />} />
             </Routes>
           </Cont>
         </Main>

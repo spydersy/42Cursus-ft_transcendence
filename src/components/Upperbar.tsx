@@ -4,14 +4,26 @@ import SearchIcon from "../assets/imgs/searchIcon.svg"
 import {ReactComponent as BellIcon }from "../assets/imgs/bell.svg"
 import {ReactComponent as Logo }from "../assets/imgs/logo.svg"
 import TestAvatar from "../assets/imgs/tests/guy.svg" 
-import DropDown from './DropDown'
+import DropDown, { NotifDropDown } from './DropDown'
 import Modal from './Modal'
-import GameModal from './modals/GameModal'
+import { ReactComponent as UserIcon} from "../assets/imgs/user-icon.svg"
+import { ReactComponent as SettingIcon} from "../assets/imgs/settings.svg"
+import { theme } from '../theme'
 
+interface ListTypes {
+  title : string,
+  icon :  any,
+  href: string
 
+}
+const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/id"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
 
 interface UserProp {
   DefaultAvatar: string,
+
+}
+interface NotifProps {
+  setopen: (e : boolean) => void,
 
 }
 export default function Upperbar() {
@@ -23,15 +35,10 @@ export default function Upperbar() {
     e.stopPropagation();
   }
   
-  const bg = {
-    overlay: {
-      background: "#FFFF00"
-    }
-  };
+
   useEffect(() => {
     // setcurrentUser(localStorage.getItem("user"))
     var s : string | null = localStorage.getItem('user');
-
     const data : UserProp =  JSON.parse(s || '{}');
     setcurrentUser(data)
     console.log(data)
@@ -43,10 +50,10 @@ export default function Upperbar() {
         <LogoComponent/>
         <SearchBarComponent/>
         <RightCont>
-          <PlayButton onClick={()=>{sethideModel(!hideModel)}} >
+          {/* <PlayButton onClick={()=>{sethideModel(!hideModel)}} >
             Play
-          </PlayButton>
-          <NotificationComponent/>
+          </PlayButton> */}
+          <NotificationComponent setopen={(e)=>setopen(e)} />
           <div  style={{position : "relative"}} onClick={(e)=>{ToggleDD(e)}}>
             <div style={{width : "40px", height :"40px"}}>
             <AvatarComponent img={currentUser?.DefaultAvatar!} />
@@ -59,22 +66,12 @@ export default function Upperbar() {
                 setopen(false)
               }} open={open} 
               style={{bottom: "-25px" , right: '0'}}
+              list={list}
               />
             }
           </div>
         </RightCont>
-        {hideModel &&  <Modal
-        isOpen={hideModel}
-        onRequestClose={() => sethideModel(false)}
-        hideModal={() => sethideModel(false)}
-        styles={bg}
-      >
-        {/* <AppCommingSoon
-          hideModal={() => sethideModel(false)}
-          showAuth={showAuth}
-        /> */}
-        <GameModal/>
-      </Modal>}
+       
     </Wrraper>
     
   )
@@ -87,7 +84,9 @@ const PlayButton = styled.button`
   outline:none;
   cursor:pointer;
   color: ${props => props.theme.colors.primaryText};;;
-  background :  ${props => props.theme.colors.purple};
+  /* background :  ${props => props.theme.colors.purple};
+   */
+  background: linear-gradient(266.44deg, #51002C 2.64%, #50002C 55.22%, #0E1117 97.6%);
   border:1px solid ${props => props.theme.colors.border};;
   border-radius: 5px;
   font-family: 'Michroma', sans-serif;
@@ -113,11 +112,11 @@ const Wrraper = styled.div`
   
 `;
 const RightCont = styled.div`
-/* width: 200px; */
+width: 100px;
    display: flex;
    align-items:center;
    flex-direction: row;
-   /* justify-content: space-between; */
+   justify-content: space-between;
    gap: 10px;
    margin-right :10px;
 `;
@@ -181,10 +180,26 @@ export  function SearchBarComponent() {
   `;
 
 
-export  function NotificationComponent() {
+export  function NotificationComponent(props: NotifProps) {
+  const [openNotif, setopenNotif] = useState(false)
+
   return (
-    <Notification new={true}  >
-    <BellIcon/>
+    <Notification onClick={(e)=>{
+      console.log(openNotif)
+      setopenNotif(!openNotif)
+      e.stopPropagation()
+      props.setopen(false)
+      }} new={true}  >
+      <BellIcon/>
+      {
+              openNotif && <NotifDropDown closeDropdown={ ()=>{
+                console.log(openNotif)
+                setopenNotif(false)
+              }} open={openNotif} 
+              style={{bottom: "-25px" , right: '0'}}
+              // list={list}
+              />
+            }
     </Notification>
   )
 }

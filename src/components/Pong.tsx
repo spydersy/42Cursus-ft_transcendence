@@ -16,11 +16,21 @@ import AIavatar from "../assets/imgs/avatar/Ai-lwahch.png";
 import VegaPunk from "../assets/imgs/vegapunk.png" 
 
 
+interface GameModalProps {
+    
+  title: string,
+  banner :string 
+  
+}
 
 
 interface myProps {
   name: string,
-  mode : string
+  mode : string,
+  theme : {
+    map : GameModalProps,
+    rounds : number
+  }
 
 }
 interface ScoreType {
@@ -45,7 +55,7 @@ const ai1 = {
 }
 const ballSpeed : number = 5;
 var [directionX, directionY] = [ballSpeed, ballSpeed];
-export default function Pong({name, mode}:myProps ) {
+export default function Pong({theme ,name, mode}:myProps ) {
   const tableRef : any= useRef<HTMLHeadingElement>(null);
   const ballRef : any = useRef<SVGCircleElement >(null);
   const playerRef : any = useRef<SVGRectElement >(null);
@@ -217,6 +227,8 @@ export default function Pong({name, mode}:myProps ) {
 var requestId;
 //   const socket = io('http://localhost:3030');
 useEffect(() => {
+  console.log(theme.map.title)
+
   const initData =()=>{
     player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 100)
     player2Ref.current.setAttribute('y' , 0)
@@ -271,7 +283,7 @@ useEffect(() => {
             {score.score1} | {score.score2}
           </Score>
       </PlayerStyle>
-    <Table ref={tableRef} >
+    <Table bgimg={theme.map.banner} ref={tableRef} >
 
       <svg>
           <circle ref={ballRef} id="ball"  cx="20" cy="300" r="12" />
@@ -364,10 +376,16 @@ margin-left: auto;
   align-items: center;
 
 `;
-const Table = styled.div`
+interface Tableprops {
+    
+  bgimg : string
+  
+}
+const Table = styled.div<Tableprops>`
 cursor: none;
-background-image: url(${Punk});
-
+background-image: url(${props => props.bgimg});
+background-size: contain;
+/* background-repeat: no-repeat; */
 width: 100%;
 height: 700px;
 position: relative;

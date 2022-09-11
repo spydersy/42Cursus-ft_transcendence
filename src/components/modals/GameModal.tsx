@@ -6,37 +6,50 @@ import Punk from "../../assets/imgs/punkhazard.png";
 import Dress from "../../assets/imgs/dressRosa.jpg";
 import Wano from "../../assets/imgs/wano.jpg";
 import Fish from "../../assets/imgs/fishman.jpeg";
+import {
 
-
-export default function GameModal() {
+  useNavigate
+} from "react-router-dom";
+interface GmaemodelProps {
+  setmode : (mode: any)=>void
+}
+export default function GameModal(props: GmaemodelProps) {
   const [selected, setselected] = useState(2)
-    interface GameModalProps {
-        
-        title: string,
-        banner :string 
-      
-      }
-   
-    const mockedItems : any = [{
-        title: "MarinFord",
-        banner :Marin,
-    },
-    {
-      title: "Punk Hazard",
-      banner :Punk 
-    },
-    {
-      title: "Dressrosa",
-      banner :Dress 
-    },
-    {
-      title: "Wano",
-      banner :Wano 
-    },
-    {
-      title: "Fishman Island",
-      banner :Fish 
-    }]
+  const navigate = useNavigate();
+  
+  interface GameModalProps {
+    
+    title: string,
+    banner :string 
+    
+  }
+  
+  const mockedItems : any = [{
+    title: "MarinFord",
+    banner :Marin,
+  },
+  {
+    title: "Punk Hazard",
+    banner :Punk 
+  },
+  {
+    title: "Dressrosa",
+    banner :Dress 
+  },
+  {
+    title: "Wano",
+    banner :Wano 
+  },
+  {
+    title: "Fishman Island",
+    banner :Fish 
+  }]
+  const changemode = ()=>{
+    var theme = {map : mockedItems[selected] , rounds : 5 }
+    props.setmode(theme)
+
+    navigate("/game")
+  }
     const { carouselFragment } = useSpringCarousel({
 
         // width : "350px",
@@ -71,7 +84,7 @@ export default function GameModal() {
 
         <Input id="number" type="number" min='3' max='10' placeholder='Enter rounds ..' />
         </Title>
-        <PlayButton href='game'>
+        <PlayButton onClick={changemode}>
           Start
         </PlayButton>
       </GameModalStyle>
@@ -161,7 +174,7 @@ const Input = styled.input`
 
 `;
 
-const PlayButton = styled.a`
+const PlayButton = styled.button`
   width:150px;
   height :40px;
   border: none;

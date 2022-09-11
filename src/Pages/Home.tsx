@@ -12,7 +12,15 @@ import History from '../components/History'
 
 import Slider from '../components/Slider'
 
-export default function Home() {
+interface HomeProps {
+    
+  settheme: (e : any)=> void,
+  // banner :string 
+  
+}
+
+
+export default function Home(props: HomeProps) {
   // const [index, setindex] = useState(1)
   return (
     <div className='container' >
@@ -20,7 +28,7 @@ export default function Home() {
         <HeadComponent title="Live Games"/>
         <Slider/>
       </Hero>
-      <GameModes/>
+      <GameModes settheme={(e: any)=> props.settheme(e)} />
       <Hero style={{marginTop : "40px" }}>
         <HeadComponent title="History"/>
         <History />
