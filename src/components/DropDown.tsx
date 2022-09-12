@@ -49,7 +49,9 @@ align-items: center;
 flex-direction: column;
 overflow: hidden;
 min-width: 120px;
+background-color: ${props => props.theme.colors.bg};;
 `;
+
 
 const Item = styled.a`
     min-width: 120px;
@@ -119,6 +121,8 @@ bottom: -25px;
 transform: translateY(100%);
 min-height: 200px;
 border-radius: 8px;
+background-color: ${props => props.theme.colors.bg};;
+
 border:1px solid ${props => props.theme.colors.seconderyText};;
 /* padding: 0 15px; */
 /* lef:t: ; */
