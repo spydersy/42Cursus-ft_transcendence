@@ -7,6 +7,7 @@ import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
 import {ReactComponent as ArrowLeft} from "../assets/imgs/arrowLeft.svg";
 import {ReactComponent as ArrowRight} from "../assets/imgs/arrowRight.svg";
 import {ReactComponent as LogoutIcon} from "../assets/imgs/logout-icon.svg";
+import {ReactComponent as LeaderIcon} from "../assets/imgs/leader-icon.svg";
 
 export interface barProps {
     open: boolean
@@ -31,6 +32,11 @@ export interface barProps {
             title: "All Users",
             link: "/users",
             icon : <UsersIcon />
+        },
+        {
+            title: "Leader Board",
+            link: "/leaderboard",
+            icon : <LeaderIcon />
         }
     ]
 export default function Sidebar() {
@@ -65,6 +71,7 @@ export default function Sidebar() {
         else if (pageName === "chat" ) pagenum = 1;
         else if (pageName === "rooms" ) pagenum = 2;
         else if (pageName === "users" ) pagenum = 3;
+        else if (pageName === "leaderboard" ) pagenum = 4;
         changeFocus(pagenum)
 
     window.addEventListener("resize", (e : any)=>{

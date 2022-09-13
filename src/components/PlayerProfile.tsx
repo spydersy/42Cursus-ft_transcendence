@@ -640,8 +640,8 @@ return (
 }
 
 const Avatarr = styled.div`
-width: 70%;
-height: 70%;
+width: 100%;
+height: 100%;
 border-radius : 50%;
 img{
   width: 100%;
