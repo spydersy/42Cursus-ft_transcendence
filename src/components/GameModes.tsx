@@ -142,9 +142,10 @@ cursor: pointer;
     margin-top: 50px;
     text-align: start;
     max-width: 225px;
-  font-size: 10px;
-    opacity: 0.8;
-    font-family: 'Michroma', sans-serif;
+  font-size: 15px;
+    opacity: 0.9;
+    font-family: 'Poppins', sans-serif;
+    font-weight : 600;
   }
 }
 > img{

@@ -1,8 +1,9 @@
 import React from 'react'
 import styled  from "styled-components"
 import SearchIcon from "../../assets/imgs/searchIcon.svg"
-import { AvatarComponent } from '../Upperbar'
+
 import Img from "../../assets/imgs/avatar/a1.png";
+import { AvatarComponent } from '../PlayerProfile';
 
 export default function AddFriendsModal() {
     const handleFriend= (e : any)=>{

@@ -6,7 +6,8 @@ import * as ReactDOM from 'react-dom';
 import styled from "styled-components"
 import axios from 'axios';
 import io from 'socket.io-client';
-import { AvatarComponent } from './Upperbar';
+import { AvatarComponent } from '../components/PlayerProfile';
+
 import Img from "../assets/imgs/avatar/a1.png";
 import Img2 from "../assets/imgs/avatar/a2.png";
 import Marin from "../assets/imgs/marinford.png";
@@ -225,7 +226,7 @@ export default function Pong({theme ,name, mode}:myProps ) {
 
 }
 var requestId;
-//   const socket = io('http://localhost:3030');
+
 useEffect(() => {
   console.log(theme.map.title)
 

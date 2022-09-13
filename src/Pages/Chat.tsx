@@ -2,6 +2,7 @@ import React , {useEffect, useState, useRef}from 'react'
 import styled  from "styled-components"
 import { ReactComponent as SearchIcon}  from "../assets/imgs/searchIcon.svg"
 import { AvatarComponent } from '../components/PlayerProfile';
+import io from 'socket.io-client';
 
 import {ReactComponent as AddIcon} from "../assets/imgs/block-icon.svg";
 import {ReactComponent as SendIcon} from "../assets/imgs/send-icon.svg";
@@ -104,11 +105,12 @@ display: flex;
     }
     .right{
       width: 400px;
+      background-color: ${props => props.theme.colors.seconderybg}; ;
    
     }
     .top{
       background-color: ${props => props.theme.colors.seconderybg}; ;
-      height: 100px;
+      height: 60px;
       width: 100%;
       border-bottom: 1px solid ${props => props.theme.colors.border};
       color:  ${props => props.theme.colors.primaryText};
@@ -401,7 +403,7 @@ const TopStyle = styled.div`
       align-items: center;
       flex-direction: row;
       align-items: center;
-      height :70px;
+      height :60px;
       gap: 15px;
     }
     >svg{
@@ -435,24 +437,25 @@ const BlockFriendStyle = styled.div`
     font-size: 10px;
     /* width: 75px; */
     gap: 5px;
-    height: 20px;
+    height: 25px;
     display: flex;
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    color: ${props => props.theme.colors.bg};
-    background-color: ${props => props.theme.colors.primaryText};
+    color: ${props => props.theme.colors.seconderyText};
+    background-color: ${props => props.theme.colors.bg};
+    border: 1px solid ${props => props.theme.colors.seconderyText};
     cursor: pointer;
 
     svg{
  
         path{
-            stroke: ${props => props.theme.colors.bg};
+            stroke: ${props => props.theme.colors.seconderyText};
         }
     }
-    border: 1px solid ${props => props.theme.colors.border};
+    /* border: 1px solid ${props => props.theme.colors.border}; */
     border-radius: 10px;
-    padding: 0 5px;
+    padding: 0 10px;
 `;
 
 
@@ -536,7 +539,12 @@ export  function BottomChat(props: ChatProps) {
 
   
   export  function ChatBody(props: ChatProps) {
- 
+    // useEffect(() => {
+    //   const socket = io('http://localhost:3030');
+    //   socket.on('coco' , ()=>{
+    //     console.log("coco")
+    //   })
+    // }, [])
     
     return (
       <ChatBodyStyle>

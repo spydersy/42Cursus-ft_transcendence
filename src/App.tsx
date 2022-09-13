@@ -29,6 +29,7 @@ import Game from './Pages/Game';
 import axios from 'axios';
 import Setting from './Pages/Setting';
 import Leader from './Pages/Leader';
+
 const mockedItems : any = [{
   title: "MarinFord",
   banner :Marin,
@@ -74,6 +75,7 @@ function App() {
   //       navigate('/signin')
   //       // history.pushState("/signin");
   //   })
+    console.log("hey")
   }, [])
   
   return (

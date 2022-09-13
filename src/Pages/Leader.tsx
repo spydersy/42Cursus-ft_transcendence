@@ -89,6 +89,8 @@ export default function Leader() {
                 <AvatarComponent img={list[3].img}/>
             </div> */}
         </Header>
+        <Body>
+
         <Table>
         <tr>
             <th>rank</th>
@@ -130,12 +132,14 @@ export default function Leader() {
         }
         
         </Table>
+        </Body>
     </LeaderStyle>
   )
 }
 
 const LeaderStyle = styled.div`
-    widtd: 100%;
+    width: 100%;
+
 height: auto;
 padding: 20px 0;
 margin-top: 100px;
@@ -147,6 +151,12 @@ flex-direction: column;
 border: 2px solid  ${props => props.theme.colors.border};
 color : ${props => props.theme.colors.primaryText};
 background-color: ${props => props.theme.colors.primarybg};
+
+`;
+const Body = styled.div`
+      width: 100%;
+      flex; 1;
+      overflow: scroll;
 
 `;
 
@@ -176,9 +186,10 @@ background-color: ${props => props.theme.colors.primarybg};
 `;
 
 const Table = styled.table`
+    flex : 1;
     width: 95%;
     margin: 50px auto;
-    /* background-color: red; */
+    height : 100px !important;
     >tr{
         color: #c8d0d974;
         border-bottom : 1px solid ${props => props.theme.colors.primaryText}; ;

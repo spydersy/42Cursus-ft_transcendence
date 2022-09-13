@@ -354,15 +354,13 @@ const Item = styled.a<ItemProps>`
             visibility: visible;
 					opacity: 1;
         }
-        &::after{
-            content: "";
-            position: absolute;
-            left: 0;
-            height: 100%;
-            width: 5px;
-            background-color: ${props => props.theme.colors.purple};
-            border-radius: 7px ;
-        }
+        color : ${props => props.theme.colors.purple}; 
+
+        svg{ 
+            path{
+                stroke: ${props => props.theme.colors.purple}; 
+            }
+        } 
         /* &::before{ ToDO
             content: "ddd";
             position: absolute;

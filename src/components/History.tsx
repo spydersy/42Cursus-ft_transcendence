@@ -1,4 +1,4 @@
-import React from 'react'
+import React , {useState} from 'react'
 import styled , {css} from "styled-components"
 import { HeadComponent } from '../Pages/Home'
 import { AvatarComponent } from './PlayerProfile';
@@ -9,6 +9,8 @@ import  Badge2 from "../assets/imgs/badge2.svg";
 import  Badge3 from "../assets/imgs/badge3.svg";
 import Img from "../assets/imgs/avatar/a1.png";
 import { ReactComponent as BattleIcon} from "../assets/imgs/battle-icon.svg"
+import Modal from './Modal';
+import AchievmentModal from './modals/AchievmentModal';
 
 const match1 = {
     name: "Melkafdsfdsfsfdsfrmi",
@@ -333,12 +335,27 @@ export interface AchievmentCompProps {
     },
 }
 
-
+const bg = {
+    overlay: {
+      background: "#FFFF00"
+    }
+  };
 
 export  function AchievmentComp(props : AchievmentCompProps) {
+    const [hideModel, sethideModel] = useState(false)
+
     // var state : boolean =( props.match.score1 > props.match.score2) ? true : false
   return (
-    <AchievmentCompStyle  >
+    <AchievmentCompStyle  onClick={(e)=>sethideModel(!hideModel)}  >
+         {hideModel &&  <Modal
+        isOpen={hideModel}
+        onRequestClose={() => sethideModel(false)}
+        hideModal={() => sethideModel(false)}
+        styles={bg}
+      >
+
+        <AchievmentModal achiev={props.achievment}/>
+      </Modal>}
        <div id="title">
             {props.achievment.name}
        </div>
@@ -364,7 +381,7 @@ const AchievmentCompStyle = styled.div`
     position: relative;
     cursor: pointer;
     /* justify-content: ; */
-    color: ${props => props.theme.colors.primaryText};;
+    color: ${props => props.theme.colors.purple};;
     #title{
         font-family: 'Poppins' , sans-serif;
         font-style: normal;
@@ -379,6 +396,8 @@ const AchievmentCompStyle = styled.div`
         margin: 10px 0px 3px 10px;
     }
     #desc{
+    color: ${props => props.theme.colors.seconderyText};;
+
         font-family: 'Poppins' , sans-serif;
         font-style: normal;
         font-weight: 400;

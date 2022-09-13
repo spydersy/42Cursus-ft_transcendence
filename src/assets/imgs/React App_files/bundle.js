@@ -7163,7 +7163,7 @@ function Pong(_ref) {
     ballRef.current.setAttribute('cy', tableRef.current.offsetHeight / 2);
   };
 
-  var requestId; //   const socket = io('http://localhost:3030');
+  var requestId; 
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const initData = () => {

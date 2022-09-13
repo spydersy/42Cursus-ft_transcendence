@@ -9,6 +9,8 @@ import Modal from './Modal'
 import { ReactComponent as UserIcon} from "../assets/imgs/user-icon.svg"
 import { ReactComponent as SettingIcon} from "../assets/imgs/settings.svg"
 import { theme } from '../theme'
+import Melkarmi from "../assets/imgs/avatar/melkarmi.jpeg";
+import { AvatarComponent } from './PlayerProfile'
 
 interface ListTypes {
   title : string,
@@ -29,7 +31,7 @@ interface NotifProps {
 export default function Upperbar() {
   const [open, setopen] = useState(false)
   const [hideModel, sethideModel] = useState(false)
-  const [currentUser, setcurrentUser] = useState< UserProp>()
+  const [currentUser, setcurrentUser] = useState< UserProp>({DefaultAvatar : Melkarmi})
   const ToggleDD = (e : any)=>{
     setopen(!open)
     e.stopPropagation();
@@ -39,9 +41,14 @@ export default function Upperbar() {
   useEffect(() => {
     // setcurrentUser(localStorage.getItem("user"))
     var s : string | null = localStorage.getItem('user');
-    const data : UserProp =  JSON.parse(s || '{}');
-    setcurrentUser(data)
-    console.log(data)
+    if (s)
+    {
+      const data : UserProp =  JSON.parse(s || '{}');
+
+      setcurrentUser(data)
+      console.log(data)
+    }
+
   
   }, [setcurrentUser])
   
@@ -241,24 +248,3 @@ interface AvatarProps {
   img: string,
   // score2 : number
 }
-export  function AvatarComponent(props: AvatarProps) {
-  return (
-    <Avatar>
-      <img src={props.img} alt='avatar' />
-    </Avatar>
-  )
-}
-
-const Avatar = styled.div`
-  width: 100%;
-  height: 100%;
-  border-radius : 50%;
-  background-color: white;
-  img{
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  border: 2px solid   ${props => props.theme.colors.border};;
-
-`;

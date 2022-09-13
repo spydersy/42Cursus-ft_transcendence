@@ -1,7 +1,7 @@
 import React, {useState , useEffect} from 'react'
 import styled , {css} from "styled-components"
 import { HeadComponent } from '../../Pages/Home';
-import { AvatarComponent } from '../Upperbar';
+
 // import Image from "../../assets/imgs/image.svg";
 import Image from "../../assets/imgs/users.svg";
 import {ReactComponent as Edit} from "../../assets/imgs/edit.svg";
