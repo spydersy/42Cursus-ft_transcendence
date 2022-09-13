@@ -353,7 +353,8 @@ const Head = styled.div`
   font-family: 'Michroma', sans-serif;
 
   font-size:  ${props => props.theme.fontSize.ll};
-  color:  ${props => props.theme.colors.purple};;
+  color:  ${props => props.theme.colors.purple};
+  
   padding: 4px 0px;
 `;
 
