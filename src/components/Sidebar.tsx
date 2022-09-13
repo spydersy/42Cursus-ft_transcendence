@@ -29,11 +29,6 @@ export interface barProps {
             icon : <RoomIcon />
         },
         {
-            title: "All Users",
-            link: "/users",
-            icon : <UsersIcon />
-        },
-        {
             title: "Leader Board",
             link: "/leaderboard",
             icon : <LeaderIcon />
@@ -70,8 +65,7 @@ export default function Sidebar() {
         if (pageName === "" ) pagenum = 0;
         else if (pageName === "chat" ) pagenum = 1;
         else if (pageName === "rooms" ) pagenum = 2;
-        else if (pageName === "users" ) pagenum = 3;
-        else if (pageName === "leaderboard" ) pagenum = 4;
+        else if (pageName === "leaderboard" ) pagenum = 3;
         changeFocus(pagenum)
 
     window.addEventListener("resize", (e : any)=>{

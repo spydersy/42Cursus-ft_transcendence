@@ -2,79 +2,128 @@ import React from 'react'
 import styled , {css} from "styled-components"
 import { AvatarComponent } from '../components/PlayerProfile';
 import { HeadComponent } from './Home';
-import Img from "../assets/imgs/avatar/a1.png";
+import { ReactComponent as Hat} from "../assets/imgs/hat.svg"
+
+import Melkarmi from "../assets/imgs/avatar/melkarmi.jpeg";
+import Mamali from "../assets/imgs/avatar/mamali.jpeg";
+import Hfadyl from "../assets/imgs/avatar/hfadyl.jpeg";
+import Fadi from "../assets/imgs/avatar/ael-fadi.jpeg";
 
 
-const list = [{
+const list = [
+    {
+        name : "Docker",
+        wins : 150,
+        lost : 100,
+        played : 250,
+        img : Hfadyl
+    
+    },
+    {
     name : "melkarmi",
     wins : 150,
     lost : 100,
     played : 250,
+    img : Melkarmi
 },
 {
     name : "mamali",
     wins : 150,
     lost : 100,
     played : 250,
+    img : Mamali
+
 },
 {
-    name : "Elmehdi",
+    name : "Achraf",
     wins : 150,
     lost : 100,
     played : 250,
-},
-{
-    name : "keddib",
+    img : Fadi
+
+}, {
+    name : "Docker",
     wins : 150,
     lost : 100,
     played : 250,
+    img : Hfadyl
+
+},
+{
+name : "melkarmi",
+wins : 150,
+lost : 100,
+played : 250,
+img : Melkarmi
+},
+{
+name : "mamali",
+wins : 150,
+lost : 100,
+played : 250,
+img : Mamali
+
+},
+{
+name : "Achraf",
+wins : 150,
+lost : 100,
+played : 250,
+img : Fadi
+
 }]
 export default function Leader() {
   return (
     <LeaderStyle className='container' style={{marginTop : "100px"}}>
         <HeadComponent title='Leader Board' />
         <Header>
-            <div style={{width: "100px" , height: "100px"}}>
-                <AvatarComponent img={Img}/>
-            </div>
+            {/* <div style={{width: "100px" , height: "100px"}}>
+                <AvatarComponent img={list[1].img}/>
+            </div> */}
             <div style={{width: "200px" , height: "200px"}}>
-                <AvatarComponent img={Img}/>
+                <AvatarComponent img={list[0].img}/>
+            <Hat/>
+
             </div>
-            <div style={{width: "100px" , height: "100px"}}>
-                <AvatarComponent img={Img}/>
-            </div>
+            {/* <div style={{width: "100px" , height: "100px"}}>
+                <AvatarComponent img={list[3].img}/>
+            </div> */}
         </Header>
         <Table>
         <tr>
             <th>rank</th>
             <th className='name'>name</th>
-            <th>matches Played</th>
+            <th>Xp</th>
+            <th>Played</th>
             <th>wins</th>
             <th>lost</th>
         </tr>
         {
         list.map((data : any , id : number)=>{
             return <Rank>
-                <th> {id + 1}</th>
-                <th>
+                <td className='id'> {id + 1}</td>
+                <td>
                     <div>
                         <div style={{width: "40px" , height: "40px"}}>
-                            <AvatarComponent img={Img}/>
+                            <AvatarComponent img={data.img}/>
                         </div>
                         <div>
-                            {data.namr}
+                            {data.name}
                         </div>
                     </div>
-                </th>
-                <th>
+                </td>
+                <td>
+                   10000
+                </td>
+                <td>
                    {data.played}
-                </th>
-                <th>
+                </td>
+                <td>
                     {data.wins}
-                </th>
-                <th>
+                </td>
+                <td>
                     {data.lost}
-                </th>
+                </td>
 
         </Rank>
         })
@@ -86,7 +135,7 @@ export default function Leader() {
 }
 
 const LeaderStyle = styled.div`
-    width: 100%;
+    widtd: 100%;
 height: auto;
 padding: 20px 0;
 margin-top: 100px;
@@ -102,6 +151,8 @@ background-color: ${props => props.theme.colors.primarybg};
 `;
 
 const Header = styled.div`
+margin-top: 50px;
+
 gap: 50px;
 width: 100%;
 display: flex;
@@ -113,7 +164,15 @@ justify-content: center;
 border: 2px solid  ${props => props.theme.colors.border};
 color : ${props => props.theme.colors.primaryText};
 background-color: ${props => props.theme.colors.primarybg}; 
-    
+    >div{
+        position: relative;
+        >svg{
+            top: -80px;
+            left: 50%;
+            transform :translateX(-50%);
+            position : absolute
+        }
+    }
 `;
 
 const Table = styled.table`
@@ -121,13 +180,13 @@ const Table = styled.table`
     margin: 50px auto;
     /* background-color: red; */
     >tr{
-        text-transform: uppercase;
         color: #c8d0d974;
         border-bottom : 1px solid ${props => props.theme.colors.primaryText}; ;
         .name{
             width: 60%;
         }
         >th{
+            text-transform: uppercase;
             padding: 10px;
             text-align: start;
             width: auto;
@@ -140,21 +199,29 @@ const Rank = styled.tr`
 /* border-bottom : 1px solid ${props => props.theme.colors.primaryText}; ; */
     width: 100%;
     /* background-color: red; */
-    >th{
+    font-family: 'Poppins', sans-serif;
+        font-weight : 600;
+    >td{
         color: ${props => props.theme.colors.seconderyText};
+        padding: 10px;
+        text-align: start;
         
         >div{
             width: 100%;
-
             display: flex;
             align-items: center;
             flex-direction: row;
-            gap: 10px;
+            gap: 20px;
         }
-            padding: 20px;
-            text-align: start;
             /* width: 200px; */
-         
-    }
+        }
+        .id{
+            /* color: #c8d0d974; */
+        color: ${props => props.theme.colors.purple};
+
+
+        font-family: 'Michroma', sans-serif;
+
+        }
 
 `;

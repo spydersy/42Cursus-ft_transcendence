@@ -643,12 +643,13 @@ const Avatarr = styled.div`
 width: 100%;
 height: 100%;
 border-radius : 50%;
+overflow: hidden;
 img{
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
-border: 3px solid   ${props => props.theme.colors.primarybg};;
+border: 3px solid   ${props => props.theme.colors.purple};;
 
 `;
 

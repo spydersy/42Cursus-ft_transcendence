@@ -1,14 +1,23 @@
 import React , {useEffect, useState, useRef}from 'react'
 import styled  from "styled-components"
 import { ReactComponent as SearchIcon}  from "../assets/imgs/searchIcon.svg"
-import { AvatarComponent } from '../components/Upperbar';
+import { AvatarComponent } from '../components/PlayerProfile';
+
 import {ReactComponent as AddIcon} from "../assets/imgs/block-icon.svg";
 import {ReactComponent as SendIcon} from "../assets/imgs/send-icon.svg";
 import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
 import {ReactComponent as Group} from "../assets/imgs/users.svg";
+import {ReactComponent as Dots} from "../assets/imgs/dotsvertical.svg";
 import Img from "../assets/imgs/avatar/a1.png";
 import Modal from '../components/Modal';
 import CreateGroup from '../components/modals/CreateGroup';
+import DropDown from '../components/DropDown';
+import { ReactComponent as UserIcon} from "../assets/imgs/user-icon.svg"
+import { ReactComponent as SettingIcon} from "../assets/imgs/settings.svg"
+import Melkarmi from "../assets/imgs/avatar/melkarmi.jpeg";
+import Mamali from "../assets/imgs/avatar/mamali.jpeg";
+import Hfadyl from "../assets/imgs/avatar/hfadyl.jpeg";
+import Fadi from "../assets/imgs/avatar/ael-fadi.jpeg";
 
 
 const msgList = [
@@ -99,7 +108,7 @@ display: flex;
     }
     .top{
       background-color: ${props => props.theme.colors.seconderybg}; ;
-      height: 70px;
+      height: 100px;
       width: 100%;
       border-bottom: 1px solid ${props => props.theme.colors.border};
       color:  ${props => props.theme.colors.primaryText};
@@ -329,20 +338,46 @@ const Avatar = styled.div`
   `;
 
 
+interface ListTypes {
+  title : string,
+  icon :  any,
+  href: string
+
+}
+const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/id"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
+
 export  function Top() {
+  const [open, setopen] = useState(false)
+  const ToggleDD = (e : any)=>{
+
+    console.log("hello")
+    setopen(!open)
+    e.stopPropagation();
+  }
   return (
     <TopStyle>
-      <div style={{flex:"auto"}}>
+      <div className='cont'>
         <div style={{width: "40px" , height: "40px"}}>
 
-        <AvatarComponent img={Img}/>
+        <AvatarComponent img={Hfadyl}/>
         </div >
         <div >
             mohamed elkarmi
         </div>
       </div>
       <ChallengeFriend/>
-      <BlockFriend/>
+      {/* <BlockFriend/> */}
+      
+      <Dots onClick={ToggleDD} />
+      {
+        open && <DropDown closeDropdown={ ()=>{
+      
+          console.log(open)
+          setopen(false)
+        }} open={open} 
+        style={{bottom: "-25px" , right: '0'}}
+        list={list}  /> 
+      }
     </TopStyle>
   )
 }
@@ -350,7 +385,7 @@ export  function Top() {
 
 const TopStyle = styled.div`
 
-    
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -360,12 +395,20 @@ const TopStyle = styled.div`
       margin: 0 auto;
       gap: 5px;
 
-    >div{
+    .cont{
+      flex: 1;
       display: flex;
       align-items: center;
       flex-direction: row;
       align-items: center;
+      height :70px;
       gap: 15px;
+    }
+    >svg{
+      path {
+      stroke : ${props => props.theme.colors.primaryText};
+
+      }
     }
 `;
 

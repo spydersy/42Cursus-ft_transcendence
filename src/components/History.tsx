@@ -1,7 +1,8 @@
 import React from 'react'
 import styled , {css} from "styled-components"
 import { HeadComponent } from '../Pages/Home'
-import { AvatarComponent } from './Upperbar'
+import { AvatarComponent } from './PlayerProfile';
+
 import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 import  Badge1 from "../assets/imgs/badge1.svg";
 import  Badge2 from "../assets/imgs/badge2.svg";

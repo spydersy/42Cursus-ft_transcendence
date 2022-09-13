@@ -57,7 +57,6 @@ export default function Upperbar() {
           <div  style={{position : "relative"}} onClick={(e)=>{ToggleDD(e)}}>
             <div style={{width : "40px", height :"40px"}}>
             <AvatarComponent img={currentUser?.DefaultAvatar!} />
-
             </div>
             {
               open && <DropDown closeDropdown={ ()=>{

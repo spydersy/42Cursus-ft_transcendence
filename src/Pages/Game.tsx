@@ -9,7 +9,7 @@ interface GameProps {
 }
 export default function Game(props : GameProps) {
   return (
-    <div style={{marginTop: "50px"}}className="container">
+    <div style={{marginTop: "100px"}}className="container">
         
         <Pong theme={props.theme} mode="AI" name="mohamed"/>
     </div>

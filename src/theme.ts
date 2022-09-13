@@ -39,7 +39,7 @@ export interface ThemeProps {
       green: '#3CC592',
       border: '#171A22',
       danger: "#F13950",
-      purple:'#51002c'
+      purple:'#58a7fe'
 
     },
     fontSize: {
