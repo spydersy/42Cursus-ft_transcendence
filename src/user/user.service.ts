@@ -1,4 +1,4 @@
-import { Injectable, Query } from '@nestjs/common';
+import { Injectable, Query, Req, Res } from '@nestjs/common';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -37,19 +37,10 @@ export class UserService {
         return true;
     }
 
-    async BlockUser(User1: string, User2: string) {
-        let FriendsStat = await this.prisma.friends.findFirst({
-            where: {
-                User1: User1Id,
-                User2: User2Id,
-            } && {
-                User1: User2Id,
-                User2: User1Id,
-            },
-        });
-    }
-
     async SendFriendRequest(User1Id: number, User2Id: number) {
+        if (User1Id === User2Id) {
+            return {"statusCode": 403, "message": 'Cant Add Yourself As Friend'};
+        }
         let FriendsStat = await this.prisma.friends.findFirst({
             where: {
                 User1: User1Id,
@@ -110,47 +101,58 @@ export class UserService {
         });
     }
 
-   async    GetUserById(Id: number) : Promise<any> {
-    let user = await this.prisma.users.findUnique({
-        where: {
-            Id: Id,
-        },
-    });
-    console.log(user);
-    return user;
-   }
+    // async   UpdateLogin(userJWT, @Query() query) {
+    //     try {
+    //         const updateUser = await this.prisma.users.update({
+    //             where: {
+    //                 Id: userJWT.userId,
+    //             },
+    //             data: {
+    //                 Login: "hkhalil",
+    //             },
+    //         });
+    //         console.log("__UPDATED__USER__ : ",  updateUser);
+    //         return {"statusCode":200,
+    //                 "message": "UserName Updated Successfully!"
+    //             };
+    //     }
+    //     catch {
+    //         return {"statusCode":405,
+    //                 "message": "UserName Already Exist!"
+    //             };
+    //     }
+    // }
 
+    async GetRequests(UserId: number, @Res() res) {
+        let requests = await this.prisma.friends.findMany({
+            where: {
+                User2: UserId,
+                Status: "Pending",
+            }
+        });
+        console.log("__PENDING__REQUESTS__ : ", requests);
+        return res.send(requests);
+    }
+
+    async    GetUserById(Id: number) : Promise<any> {
+        let user = await this.prisma.users.findUnique({
+            where: {
+                Id: Id,
+            },
+        });
+        console.log(user);
+        return user;
+    }
+    
     async    GetUserByLogin(username: string) : Promise<any> {
-    console.log(username);
-    let user = await this.prisma.users.findUnique({
-        where: {
-            Login: username,
-        },
-    });
-    console.log(user);
-    return user;
-   }
-
-    async   UpdateLogin(userJWT, @Query() query) {
-        try {
-            const updateUser = await this.prisma.users.update({
-                where: {
-                    Id: userJWT.userId,
-                },
-                data: {
-                    Login: "hkhalil",
-                },
-            });
-            console.log("__UPDATED__USER__ : ",  updateUser);
-            return {"statusCode":200,
-                    "message": "UserName Updated Successfully!"
-                };
-        }
-        catch {
-            return {"statusCode":405,
-                    "message": "UserName Already Exist!"
-                };
-        }
+        console.log(username);
+        let user = await this.prisma.users.findUnique({
+            where: {
+                Login: username,
+            },
+        });
+        console.log(user);
+        return user;
     }
 
     async FindUserByLogin(UserLogin: string) {

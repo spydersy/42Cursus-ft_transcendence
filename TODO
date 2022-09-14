@@ -1,0 +1,12 @@
+ENDPOINTS:
+- [x] GET /auth
+- [ ] GET /user/{id}?data=friends
+- [ ] PUT /user/relations/{id}?event=add [Temporary GET Request]
+- [ ] GET /profile/me?data=achievements
+- [ ] PUT /profile/update/{2fa, displayname, avatar}
+
+DATABASE:
+- [ ] Relation btwn tables.
+
+SECREt CODE:
+- [ ] Import it from .env file
