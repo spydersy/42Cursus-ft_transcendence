@@ -1,10 +1,12 @@
 import { Injectable, Query } from '@nestjs/common';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+
 @Injectable()
 export class UserService {
 
     constructor(private prisma: PrismaService) {}
+
     GenerateUserDto(UserProfile) : User {
         const user : User = {
             Id: UserProfile['id'],
@@ -21,6 +23,72 @@ export class UserService {
             TwoFactorAuth: false,
         }
         return user;
+    }
+
+    async IsBlockedUser(User1Id : number, User2Id : number) {
+        let BlockStat = await this.prisma.blocks.findFirst({
+            where: {
+                User1: User1Id,
+                User2: User2Id,
+            },
+        });
+        if (BlockStat === null)
+            return false;
+        return true;
+    }
+
+    async BlockUser(User1: string, User2: string) {
+        let FriendsStat = await this.prisma.friends.findFirst({
+            where: {
+                User1: User1Id,
+                User2: User2Id,
+            } && {
+                User1: User2Id,
+                User2: User1Id,
+            },
+        });
+    }
+
+    async SendFriendRequest(User1Id: number, User2Id: number) {
+        let FriendsStat = await this.prisma.friends.findFirst({
+            where: {
+                User1: User1Id,
+                User2: User2Id,
+            } && {
+                User1: User2Id,
+                User2: User1Id,
+            },
+        });
+        console.log("__FRIENDS__STAT__ : ", FriendsStat);
+        if (FriendsStat === null) {
+            const user = await this.prisma.friends.create({
+                data: {
+                    User1: User1Id,
+                    User2: User2Id,
+                    Status: "Pending",
+                },
+            });
+            return {"statusCode":200, "message": 'Friend Request Sent', 'status': 'Pending'};
+        }
+        else if (FriendsStat.Status === 'Pending') {
+            return {"statusCode":200, "message": `Friend Request Already Sent`, "status": 'Pending'};
+        }
+        else if (FriendsStat.Status === 'Friends') {
+            return {"statusCode":200, "message": `Already Friends`, "status": 'friends'};
+        }
+    }
+
+    async AddFriend(user1: string, user2: string) {
+        let User1Dto = await this.GetUserByLogin(user1);
+        let User2Dto = await this.GetUserByLogin(user2);
+
+        if (User2Dto === null) {
+            return {"statusCode":404, "message": `${user2} does not exist`, "error":"Not Found"};
+        }
+        else if (await this.IsBlockedUser(User2Dto.Id, User1Dto.Id) === true) {
+            return {"statusCode":403, "message": `${user2} blocked ${user1} does not exist`, "error":"Forbidden"};
+        }
+        return await this.SendFriendRequest(User1Dto.Id, User2Dto.Id);
     }
 
     async AddUserToDB(UserProfile : User) {
@@ -42,7 +110,17 @@ export class UserService {
         });
     }
 
-   async    GetUser(username: string) : Promise<any> {
+   async    GetUserById(Id: number) : Promise<any> {
+    let user = await this.prisma.users.findUnique({
+        where: {
+            Id: Id,
+        },
+    });
+    console.log(user);
+    return user;
+   }
+
+    async    GetUserByLogin(username: string) : Promise<any> {
     console.log(username);
     let user = await this.prisma.users.findUnique({
         where: {
@@ -75,12 +153,16 @@ export class UserService {
         }
     }
 
-    async UserExist(UserLogin: string) {
-        let user = await this.prisma.users.findUnique({
-            where: {
-                Login: UserLogin,
-            },
-        });
+    async FindUserByLogin(UserLogin: string) {
+        let user = await this.GetUserByLogin(UserLogin);
+        if (user) {
+            return true;
+        }
+        return false;
+    }
+
+    async FindUserById(UserId: number) {
+        let user = await this.GetUserById(UserId);
         if (user) {
             return true;
         }

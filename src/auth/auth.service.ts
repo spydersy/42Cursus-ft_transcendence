@@ -5,12 +5,13 @@ import { User } from 'src/dtos/User.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { Response as Res } from 'express';
-
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthService {
     constructor(private httpService: HttpService,
                 private userService: UserService,
-                private jwtTokenService: JwtService) {}
+                private jwtTokenService: JwtService,
+                private configService: ConfigService) {}
 
     Check42ApiQueryCode(@Query() query) : Boolean {
         if (query['error'] || !query['code']) {
@@ -26,7 +27,7 @@ export class AuthService {
 
     async ClaimToken(HeadersRequest) {
         return lastValueFrom(this.httpService
-            .post('https://api.intra.42.fr/oauth/token', HeadersRequest)
+            .post(this.configService.get<string>('42API_TOKEN_ENDPOINT'), HeadersRequest)
             .pipe(map(res_ => {
                 return (res_.data)
             }
@@ -37,13 +38,13 @@ export class AuthService {
         try {
             const HeadersRequest = {
                 'Authorization': Token['token_type'] + ' ' + Token['access_token'],
-                'clien_id': 'b645a2e7e9c3b0cc8345619af067b26396718e9a1d172c3f36fc602f6ce3cb20',
-                'client_secret': '3b1dc5f372c8dd6e2c5763598c2ed5151a465bbc33f2527c6c819d70070b6e3a',
+                'clien_id': this.configService.get<string>('42API_CLIENT_ID'),
+                'client_secret': this.configService.get<string>('42API_CLIENT_SECRET'),
                 'code': code,
-                'redirect_uri': 'http://localhost:3000/auth',
+                'redirect_uri': this.configService.get<string>('AUTH_ENDPOINT'),
             };
             return await lastValueFrom(this.httpService
-                .get('https://api.intra.42.fr/v2/me', {headers: HeadersRequest}));
+                .get(this.configService.get<string>('42API_PROFILE_ENDPOINT'), {headers: HeadersRequest}));
             }
         catch {
             console.log("__ERROR__WHILE__GETTING__USER__DATA__");
@@ -54,9 +55,9 @@ export class AuthService {
         try {
             const HeadersRequest = {
                 'grant_type': 'authorization_code',
-                'client_id': 'b645a2e7e9c3b0cc8345619af067b26396718e9a1d172c3f36fc602f6ce3cb20',
-                'client_secret': '3b1dc5f372c8dd6e2c5763598c2ed5151a465bbc33f2527c6c819d70070b6e3a',
-                'redirect_uri': 'http://localhost:3000/auth',
+                'client_id': this.configService.get<string>('42API_CLIENT_ID'),
+                'client_secret': this.configService.get<string>('42API_CLIENT_SECRET'),
+                'redirect_uri': this.configService.get<string>('AUTH_ENDPOINT'),
                 'code': code,
             };
             const token = await this.ClaimToken(HeadersRequest);
@@ -79,18 +80,18 @@ export class AuthService {
             const Token = await this.GetUserToken(query['code']);
             const UserProfile = await this.ClaimUserProfile(Token, query['code']);
             UserDto =this.userService.GenerateUserDto(UserProfile['data']);
-            if (await this.userService.UserExist(UserDto.Login) === false) {
+            if (await this.userService.FindUserById(UserDto.Id) === false) {
                 this.userService.AddUserToDB(UserDto);
             }
             let JWT = await this.GenerateJWT(UserDto);
             return res
                     .set({
                         'Access-Control-Allow-Credentials':true,
-                        'Access-Control-Allow-Origin': 'http://localhost:3001',
-                        'Access-Control-Allow-Headers': 'http://localhost:3001'
+                        'Access-Control-Allow-Origin': this.configService.get<string>('FRONTEND_URL'),
+                        'Access-Control-Allow-Headers': this.configService.get<string>('FRONTEND_URL')
                     })
                     .cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true})
-                    .redirect("http://localhost:3001");
+                    .redirect(this.configService.get<string>('FRONTEND_URL'));
         }
         else {
             this.HandleSigninErrors(query);

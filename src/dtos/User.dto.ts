@@ -4,8 +4,8 @@ export class User {
     @IsNumber()
     Id:                 number;
 
-    @IsEmail()
-    @IsNotEmpty()
+    // @IsEmail()
+    // @IsNotEmpty()
     Email:              string;
 
     @IsString()
