@@ -1,4 +1,4 @@
-import { Injectable, Query, Req, Res } from '@nestjs/common';
+import { HttpStatus, Injectable, Query, Req, Res } from '@nestjs/common';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -7,35 +7,7 @@ export class UserService {
 
     constructor(private prisma: PrismaService) {}
 
-    GenerateUserDto(UserProfile) : User {
-        const user : User = {
-            Id: UserProfile['id'],
-            Email: UserProfile['email'],
-            Login: UserProfile['login'],
-            UsualFullName: UserProfile['usual_full_name'],
-            DefaultAvatar: `https://avatars.dicebear.com/api/croodles-neutral/${UserProfile['login']}.svg`,
-            UploadedAvatar: "",
-            Status: "online",
-            Notifications: {},
-            Wins: 0,
-            Losses: 0,
-            Level: 0,
-            TwoFactorAuth: false,
-        }
-        return user;
-    }
 
-    async IsBlockedUser(User1Id : number, User2Id : number) {
-        let BlockStat = await this.prisma.blocks.findFirst({
-            where: {
-                User1: User1Id,
-                User2: User2Id,
-            },
-        });
-        if (BlockStat === null)
-            return false;
-        return true;
-    }
 
     async SendFriendRequest(User1Id: number, User2Id: number) {
         if (User1Id === User2Id) {
@@ -144,30 +116,92 @@ export class UserService {
         return user;
     }
     
-    async    GetUserByLogin(username: string) : Promise<any> {
-        console.log(username);
-        let user = await this.prisma.users.findUnique({
-            where: {
-                Login: username,
-            },
-        });
-        console.log(user);
-        return user;
-    }
+    /* 
+    *  Endpoints Calls : **************************************************************************
+    */
+        async BlockUser(username1: string, username2: string, @Res() res) {
+            let User1Dto = await this.GetUserByLogin(username1);
+            let User2Dto = await this.GetUserByLogin(username2);
+            
+            console.log(`${username1} Want To Block ${username2}`);
+            if (await this.IsBlockedUser(User1Dto.Id, User2Dto.Id) === true)
+                return res.status(HttpStatus.OK).send({"message": `${username1} Blocked ${username2}`});
+            if (await this.IsBlockedUser(User2Dto.Id, User1Dto.Id) === true)
+                return res.status(HttpStatus.FORBIDDEN).send({"message": `${username2} Already Blocked ${username1}`});
+            const user = await this.prisma.blocks.create({
+                data: {
+                    User1: User1Dto.Id,
+                    User2: User2Dto.Id,
+                },
+            });
+        }
 
-    async FindUserByLogin(UserLogin: string) {
-        let user = await this.GetUserByLogin(UserLogin);
-        if (user) {
+    /* 
+    *  Search/Find : ******************************************************************************
+    */
+
+        async    GetUserByLogin(username: string) : Promise<any> {
+            console.log(username);
+            let user = await this.prisma.users.findUnique({
+                where: {
+                    Login: username,
+                },
+            });
+            console.log(user);
+            return user;
+        }
+
+        async FindUserById(UserId: number) {
+            let user = await this.GetUserById(UserId);
+            if (user) {
+                return true;
+            }
+            return false;
+        }
+
+        async FindUserByLogin(UserLogin: string) {
+            let user = await this.GetUserByLogin(UserLogin);
+            if (user) {
+                return true;
+            }
+            return false;
+        }
+    
+    /* 
+    *  Utils : ************************************************************************************
+    */
+
+        GenerateUserDto(UserProfile) : User {
+            const user : User = {
+                Id: UserProfile['id'],
+                Email: UserProfile['email'],
+                Login: UserProfile['login'],
+                UsualFullName: UserProfile['usual_full_name'],
+                DefaultAvatar: `https://avatars.dicebear.com/api/croodles-neutral/${UserProfile['login']}.svg`,
+                UploadedAvatar: "",
+                Status: "online",
+                Notifications: {},
+                Wins: 0,
+                Losses: 0,
+                Level: 0,
+                TwoFactorAuth: false,
+            }
+            return user;
+        }
+
+    /* 
+    *  User Relations : ***************************************************************************
+    */
+
+        async IsBlockedUser(User1Id : number, User2Id : number) {
+            let BlockStat = await this.prisma.blocks.findFirst({
+                where: {
+                    User1: User1Id,
+                    User2: User2Id,
+                },
+            });
+            if (BlockStat === null)
+                return false;
             return true;
         }
-        return false;
-    }
-
-    async FindUserById(UserId: number) {
-        let user = await this.GetUserById(UserId);
-        if (user) {
-            return true;
-        }
-        return false;
-    }
 }

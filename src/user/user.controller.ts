@@ -1,4 +1,4 @@
-import { Controller, UseGuards, NotFoundException, Post, Put, Query } from '@nestjs/common';
+import { Controller, UseGuards, NotFoundException, Post, Put, Query, Res } from '@nestjs/common';
 import { Get, Req } from '@nestjs/common';
 import { query } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -24,25 +24,29 @@ export class UserController {
     }
 
     @Get('relation/:id')
-    async RelationsHandler(@Req() req, @Query() query) {
+    async RelationsHandler(@Req() req, @Query() query, @Res() res) {
         console.log("__QUERIES__DBG__ : ", query);
-        return {query};
-        if (query['event'] === 'block') {
-            console.log("__RELATIONS__ENDPOINT__CALLED__ : __BLOCK__FRIEND__");
-            return this.userService.AddFriend(req.user.username, req.params.id);
+        if (query['event']) {
+            switch (query['event']) {
+                case 'block':
+                    return await this.userService.BlockUser(req.user.username, req.params.id, res);
+                // case 'add':
+                    // return "__RELATION__HANDLER__CALLED__ : ADD";
+                // case 'accept':
+                    // return "__RELATION__HANDLER__CALLED__ : ACCEPT";
+                // case 'decline':
+                    // return "__RELATION__HANDLER__CALLED__ : DECLINE";
+                // case 'unfriend':
+                    // return "__RELATION__HANDLER__CALLED__ : DECLINE";
+
+                // case 'unblock':
+                    // return await this.userService.UnblockUser(req.user.username, req.params.id, res);
+
+                default:
+                    return {"message": "Bad Request00"};
+            }
         }
-        else if (query['event'] === 'add') {
-            console.log("__RELATIONS__ENDPOINT__CALLED__ : __ADD__FRIEND__");
-            return this.userService.AddFriend(req.user.username, req.params.id);
-        }
-        return {"message": "Bad Request"};
+        return {"message": "Bad Request01"};
     }
 
-    // @Get('block')
-    // async BlockUser(@Req() req) {
-    //     console.log(req.user.username);
-    //     console.log(req.params.id);
-    //     console.log(`${req.user.username} Want To Block ${req.params.id}`);
-    //     return this.userService.BlockUser(req.user.username, req.params.id);
-    // }
 }
