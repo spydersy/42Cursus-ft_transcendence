@@ -8,25 +8,22 @@ import  Badge4 from "../assets/imgs/avatar/a6.png";
 import  Badge5 from "../assets/imgs/avatar/a4.png";
 import  Badge6 from "../assets/imgs/avatar/a5.png";
 import  B1 from "../assets/imgs/badge1.svg";
-import  B2 from "../assets/imgs/badge2.svg";
 import  B3 from "../assets/imgs/badge3.svg";
 import { PlayerCard , UserCard} from '../components/PlayerProfile';
 import { GameComp } from "../components/PlayerProfile";
 import { UserInvitCard } from "../components/PlayerProfile";
 import { UserBlockedCard } from "../components/PlayerProfile";
-
 import {ReactComponent as Warningo} from "../assets/imgs/warning.svg";
 
 //-- Global Data --//
-
-const Backcolor = "#533483"
+const Backcolor = "#1aba1d"
 const Barside = "#f3460fe"
-const GreyBackcolor = "#282c34"
+const GreyBackcolor = "#16c447"
+
+//-- Global User Data --//
 const ProgressUser = "40%"
 const player = { name: "Alchemist", login: "Eelaazmi", lvl: "1", gamePlayed : 350, lost : 150,  won : 200, rank: "rank1"}
 const hieghtTab = "500px";
-
-//-- Global User Data --//
 
 const achievment1 = {
   name: "SERGENT",
@@ -43,13 +40,8 @@ const achievment3 = {
   desc : "you win 5 game.",
   badge : B1 ,
 }
-var listAchiev = [achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3,
-  achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,
-  achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,
-  achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3, achievment3,
-  achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,
-  achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3]
 
+var listAchiev = [achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3, achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3]
 //------//
 
 const card = {

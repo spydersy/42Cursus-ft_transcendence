@@ -1,4 +1,4 @@
-import React, {useState}  from 'react'
+import React, { useRef, useEffect, useState}  from 'react'
 import styled ,{css}from "styled-components";
 import Avatar from "../assets/imgs/tests/guy.svg"
 import { ReactComponent as Penta} from "../assets/imgs/penta.svg"
@@ -13,15 +13,22 @@ import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+
 /// UserProfile Variants  
-const Backcolor = "#533483"
+const Backcolor = css`${props => props.theme.colors.purple}`
 const GreyBackcolor = "#282c34"
-const Barside = "#f3460fe"
-const Borderimgcolor = "white";
-const player = {  name: "Alchemist", login: "Eelaazmi",  lvl: "1", gamePlayed : 350,  lost : 150, won : 200, rank : rank2}
+// const Barside = "#f3460fe"
+// const Borderimgcolor = "white";
 const green = "#238b65"
 
 //// PlayerCard Comp 
+const player = {  name: "Alchemist", login: "Eelaazmi",  lvl: "1", gamePlayed : 350,  lost : 150, won : 200, rank : rank2}
+
 export interface PlayerCardProps {
     player: {
       name: string,
@@ -140,12 +147,57 @@ border-radius: 10px 10px 10px 10px;
 `;
 
 //// Stats Comp
+
+// chart // 
+export const data = {
+
+  datasets: [
+    {
+      label: '# ofasdasd Votes',
+      data: [120, 19],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.3)',
+        // 'rgba(54, 162, 235, 0.3)',
+        'rgba(75, 192, 192, 0.3)',
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        // 'rgba(54, 162, 235, 1)',
+        'rgba(75, 192, 192, 1)',
+      ],
+      borderWidth: 2,
+    },
+    {
+      label: '# ofasdasd Votes',
+      data: [120, 19],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.3)',
+        // 'rgba(54, 162, 235, 0.3)',
+        'rgba(75, 192, 192, 0.3)',
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        // 'rgba(54, 162, 235, 1)',
+        'rgba(75, 192, 192, 1)',
+      ],
+      borderWidth: 1,
+    }, 
+    
+  
+  ],
+  labels: ['Losses', 'Win'],
+};
+////// 
+
 export function Stats(props: PlayerCardProps) {
+
+
+
     return (
       <StatsStyle  >
         <Data>
        
-            <div className='progessCont' style={{ width: "140px", height: "140px" }}>
+            {/* <div className='progessCont' style={{ width: "140px", height: "140px" }}>
                 <CircularProgressbar  styles={{
                     path: {
                     stroke: `#F13950`,
@@ -166,47 +218,27 @@ export function Stats(props: PlayerCardProps) {
                 <div className='circularLabel'>
                 {props.player.lost} <span style={{color: "#F13950"}}>Lost </span>
                 </div>
+            </div> */}
+
+            <div className='Donut'>
+              <Doughnut data={data} />
             </div>
-            
+
 
             <div  id="pentagon">
                 <Penta/>
                 <img src={props.player.rank} className="Rank" />
-                <div>
+            </div>
+
+            {/* <div>
                   <div id="played">
                       {props.player.gamePlayed}
                   </div>
                   <div id="label">
                     PLAYED GAMES
-                </div>
-                </div>
-            
-            </div>
-
-            <div className='progessCont' style={{ width: "140px", height: "140px" }}>
-                <CircularProgressbar  styles={{
-                    path: {
-                    stroke: `${green}`,
-                    strokeLinecap: 'round',
-                    transition: 'stroke-dashoffset 1s ease 0s',
-                    transformOrigin: 'center center',
-                    },
-                    trail: {
-                    stroke: '#000000',
-                    strokeLinecap: 'round',
-        
-                    },
-                    text: {
-                    fill: '#000',
-                    fontSize: '16px',
-                    },
-                }}
-                value={66}  text={`${66}%`} />
-                <div className='circularLabel'>
-                {props.player.won} <span style={{color: "#3CC592"}}> Won </span>
-                </div>
-            </div>
-       
+                  </div>
+            </div> */}
+          
         </Data>
       </StatsStyle>
     )
@@ -224,7 +256,7 @@ gap: 40px;
 border-radius: 0px 10px 0px 0px;
 `
 const Data = styled.div`
-/* background-color: #12128d ff41; */
+/* background-color: #26a757 ff41; */
 width: 71%;
 height: 100%;
 display: flex;
@@ -234,36 +266,29 @@ position: relative;
 /* flex-direction: row; */
 justify-content: space-around;
 
-.progessCont{
-    /* padding: 0px 10px; */
-    position : relative;
-    margin-top: 30px;
-    top: 10%;
-    font-family: 'Poppins' , sans-serif;
-    font-size:  ${props => props.theme.fontSize.l}; 
-    text-transform: uppercase;
-    font-weight: 600;
-    width: 100%;
+.Donut {
+    width:  calc(100% / 2);
+    height: 10px;
+    position: absolute;
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    right: 0px;
+    /* top: 5%; */
+    /* background-color: #26a757; */
 
-    .circularLabel{
-        top: 10%;
-        text-align: center;
-        display: inline-block;
-        overflow: hidden;
-        white-space: nowrap;
-        margin-top: 18px;
-        color : ${props => props.theme.colors.primaryText};
-        -webkit-text-stroke: 1px #44404562;
-    }
 }
 
 #pentagon {
-    top: 13%;
-    /* background-color: #a1a12d39; */
-    position: relative;
-    width: 210px;
-    height: 180px;
-    padding: 0px 20px;
+  left: 0px;
+
+  /* background-color: #26a757; */
+    top: 10%;
+    /* background-color: #e4e41839; */
+    position: absolute;
+    width: calc(100% / 2);
+    height: 60%;
+    /* padding: 0px 20px; */
 
     .Rank {
       width: 40%;
@@ -314,9 +339,6 @@ justify-content: space-around;
     > svg {
         width: 100%;
         height: 100%;
-        /* display: none; */
-        /* svg{ */
-
     path{
         stroke: ${props => props.theme.colors.purple}
     } 
@@ -367,7 +389,6 @@ export interface StyleProps {
     status: boolean;
 
 }
-
 export  function UserCard(props : UserCard) {
   const [active, setActive] = useState(false);
   return (
