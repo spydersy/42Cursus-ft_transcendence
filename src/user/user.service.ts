@@ -7,27 +7,25 @@ export class UserService {
 
     constructor(private prisma: PrismaService) {}
 
-
-
     async SendFriendRequest(User1Id: number, User2Id: number) {
         if (User1Id === User2Id) {
             return {"statusCode": 403, "message": 'Cant Add Yourself As Friend'};
         }
         let FriendsStat = await this.prisma.friends.findFirst({
             where: {
-                User1: User1Id,
-                User2: User2Id,
+                senderId: User1Id,
+                ReceiverId: User2Id,
             } && {
-                User1: User2Id,
-                User2: User1Id,
+                senderId: User2Id,
+                ReceiverId: User1Id,
             },
         });
         console.log("__FRIENDS__STAT__ : ", FriendsStat);
         if (FriendsStat === null) {
             const user = await this.prisma.friends.create({
                 data: {
-                    User1: User1Id,
-                    User2: User2Id,
+                    senderId: User1Id,
+                    ReceiverId: User2Id,
                     Status: "Pending",
                 },
             });
@@ -98,13 +96,13 @@ export class UserService {
     async GetRequests(UserId: number, @Res() res) {
         let requests = await this.prisma.friends.findMany({
             where: {
-                User2: UserId,
+                ReceiverId: UserId,
                 Status: "Pending",
             }
         });
         console.log("__PENDING__REQUESTS__ : ", requests);
         return res.send(requests);
-    }
+    } 
 
     async    GetUserById(Id: number) : Promise<any> {
         let user = await this.prisma.users.findUnique({
@@ -122,7 +120,7 @@ export class UserService {
         async BlockUser(username1: string, username2: string, @Res() res) {
             let User1Dto = await this.GetUserByLogin(username1);
             let User2Dto = await this.GetUserByLogin(username2);
-            
+            // await  this.prisma.users.findMany({where : {Id : 1}, select : {}})
             console.log(`${username1} Want To Block ${username2}`);
             if (await this.IsBlockedUser(User1Dto.Id, User2Dto.Id) === true)
                 return res.status(HttpStatus.OK).send({"message": `${username1} Blocked ${username2}`});
@@ -130,8 +128,8 @@ export class UserService {
                 return res.status(HttpStatus.FORBIDDEN).send({"message": `${username2} Already Blocked ${username1}`});
             const user = await this.prisma.blocks.create({
                 data: {
-                    User1: User1Dto.Id,
-                    User2: User2Dto.Id,
+                    UserId: User1Dto.Id,
+                    BlockedId: User2Dto.Id,
                 },
             });
         }
@@ -196,8 +194,8 @@ export class UserService {
         async IsBlockedUser(User1Id : number, User2Id : number) {
             let BlockStat = await this.prisma.blocks.findFirst({
                 where: {
-                    User1: User1Id,
-                    User2: User2Id,
+                    UserId: User1Id,
+                    BlockedId: User2Id,
                 },
             });
             if (BlockStat === null)

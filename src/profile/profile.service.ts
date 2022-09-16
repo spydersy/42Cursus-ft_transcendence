@@ -25,7 +25,7 @@ export class ProfileService {
     async GetRequests(@Req() req) {
         let requests = await this.prisma.friends.findMany({
             where: {
-                User2: req.user.userId,
+                Receiver: req.user.userId,
                 Status: "Pending",
             }
         });
@@ -36,10 +36,10 @@ export class ProfileService {
     async GetFriends(@Req() req) {
         let Friends = await this.prisma.friends.findMany({
             where: {
-                User2: req.user.userId,
+                Receiver: req.user.userId,
                 Status: "Friends",
             } && {
-                User1: req.user.userId,
+                Sender: req.user.userId,
                 Status: "Friends",
             }
         });
