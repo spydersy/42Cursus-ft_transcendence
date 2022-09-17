@@ -155,9 +155,25 @@ background-color: ${props => props.theme.colors.primarybg};
 `;
 const Body = styled.div`
       width: 100%;
-      flex; 1;
-      overflow: scroll;
+      flex: 1;
+      overflow-y: scroll;
+    &::-webkit-scrollbar {
+    width: 4px;
+    }
 
+    &::-webkit-scrollbar-track {
+    background: transparent; 
+    } 
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+    background: ${props => props.theme.colors.primarybg};
+    } 
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover { 
+    background: ${props => props.theme.colors.primarybg};
+    }
 `;
 
 const Header = styled.div`

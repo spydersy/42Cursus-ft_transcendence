@@ -29,6 +29,7 @@ import Game from './Pages/Game';
 import axios from 'axios';
 import Setting from './Pages/Setting';
 import Leader from './Pages/Leader';
+import Room from './Pages/Room';
 
 const mockedItems : any = [{
   title: "MarinFord",
@@ -91,6 +92,7 @@ function App() {
               <Route path="/chat" element={<Chat />} />
               <Route path="/setting" element={<Setting />} />
               <Route path="/testing" element={<Test />} />
+              <Route path="/rooms" element={<Room />} />
               <Route path="/leaderboard" element={<Leader />} />
               <Route path="/" element={<Home settheme={(e: any)=> setGametheme(e)} />} />
               <Route path="/profile/id" element={<Profile  />} />

@@ -86,6 +86,10 @@ export default function Chat() {
           
           </div>
         </div>
+        <div className='left'>
+        <ControlBar/>
+            
+        </div>
     </GridContainer>
   )
 }
@@ -107,6 +111,11 @@ display: flex;
       width: 400px;
       background-color: ${props => props.theme.colors.seconderybg}; ;
    
+    }
+    .left{
+      width: 400px;
+      background-color: ${props => props.theme.colors.seconderybg}; ;
+      
     }
     .top{
       background-color: ${props => props.theme.colors.seconderybg}; ;
@@ -671,3 +680,26 @@ export  function BottomChat(props: ChatProps) {
   
 `;
 
+
+
+
+export  function ControlBar() {
+  return (
+    <ControlBarStyle>
+      <div style={{width : "200px" , height :"200px" ,  marginTop: "100px"}}>
+        <AvatarComponent img={Hfadyl}/>
+      </div>
+    </ControlBarStyle>
+  )
+}
+
+const    ControlBarStyle = styled.div`
+   
+   width: 95%;
+   margin: 0 auto;
+   height: 100%;
+   display: flex;
+   align-items: center;
+   flex-direction: column;
+
+`;

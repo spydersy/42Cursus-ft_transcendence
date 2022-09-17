@@ -103,10 +103,7 @@ export default function GameModes(props : GameModesProps) {
         hideModal={() => sethideModel(false)}
         styles={bg}
       >
-        {/* <AppCommingSoon
-          hideModal={() => sethideModel(false)}
-          showAuth={showAuth}
-        /> */}
+
         <GameModal setmode={(e)=>props.settheme(e)}/>
       </Modal>}
       <Swipeicon onClick={slideToNextItem} />

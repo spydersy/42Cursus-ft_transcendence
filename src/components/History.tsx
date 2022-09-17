@@ -229,14 +229,14 @@ const Data = styled.div`
     justify-content: center;
     
     /* flex-direction: column; */
-    font-family: 'Michroma', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-style: normal;
     font-weight: 600;
     color:  ${props => props.theme.colors.primaryText};
     .name{
         /* font-family: 'Poppins' , sans-serif; */
         font-style: normal;
-        font-weight: 700;
+        font-weight: 500;
         font-size: 20px;
         line-height: 150%;
         /* or 18px */

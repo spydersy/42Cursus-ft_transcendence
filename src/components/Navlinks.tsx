@@ -7,7 +7,7 @@ const Container = styled.div`
   flex-direction: row;
   /* background: white; */
   height: 40px;
-  border-bottom: 2px solid #533483;
+  border-bottom: 2px solid #58a7fe;
   white-space: nowrap;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none;
@@ -39,11 +39,10 @@ const Item = styled.div<ItemProps>`
   font-weight: 500;
   font-size: 15px;
   line-height: 130%;
-  color: ${(props) => (props.active ? "#533483" : "#ffffff")};
+  color: ${(props) => (props.active ? "#58a7fe" : "#ffffff")};
   border-bottom: ${(props) =>
-    props.active ? "4px solid #533483" : "#ffffff"};
-  /* border-top: ${(props) =>
-    props.active ? "1px solid #533483" : "#ffffff"}; */
+    props.active ? "4px solid #58a7fe" : "#ffffff"};
+
   cursor: pointer;
   transition: all 200ms;
   @media (max-width: 768px) {
