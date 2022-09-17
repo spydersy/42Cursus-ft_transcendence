@@ -1,6 +1,6 @@
 STEPS :
-- [ ] Block user
-- [ ] Unblock user
+- [X] Block user
+- [X] Unblock user
 
 - [ ] Add User
 - [ ] Accept User Request
@@ -9,7 +9,7 @@ STEPS :
 
 
 ENDPOINTS :
-- [x] GET /auth
+- [X] GET /auth
 - [ ] GET /user/{id}?data={achievements, friends, matchs}
 - [ ] PUT /user/relation/{id}?event={add, block, accept, decline} [Temporary GET Request]
 - [ ] GET /profile/me?data={achievements, friends, matchs, requests, blacklist}

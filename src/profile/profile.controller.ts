@@ -14,7 +14,7 @@ export class ProfileController {
               private userService: UserService) {}
 
   @Get('me')
-  async GetUserProfile(@Req() req , @Query() query, @Res() res: Response) {
+  async GetUserProfile(@Req() req  , @Query() query, @Res() res: Response) {
     if (query['data']) {
       switch (query['data']) {
         case 'achievements':
@@ -25,7 +25,7 @@ export class ProfileController {
           break;
         case 'games':
           return res.send("this.userService.GetGames()");
-          break;        
+          break;
         case 'requests':
           return await this.userService.GetRequests(req.user.userId, res);
           break;

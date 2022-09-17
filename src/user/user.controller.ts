@@ -30,8 +30,10 @@ export class UserController {
             switch (query['event']) {
                 case 'block':
                     return await this.userService.BlockUser(req.user.username, req.params.id, res);
-                // case 'add':
-                    // return "__RELATION__HANDLER__CALLED__ : ADD";
+                case 'unblock':
+                    return await this.userService.UnblockUser(req.user.username, req.params.id, res);
+                case 'add':
+                    return this.userService.AddFriend(req.user.username, req.params.id, res);
                 // case 'accept':
                     // return "__RELATION__HANDLER__CALLED__ : ACCEPT";
                 // case 'decline':
@@ -39,8 +41,6 @@ export class UserController {
                 // case 'unfriend':
                     // return "__RELATION__HANDLER__CALLED__ : DECLINE";
 
-                // case 'unblock':
-                    // return await this.userService.UnblockUser(req.user.username, req.params.id, res);
 
                 default:
                     return {"message": "Bad Request00"};
