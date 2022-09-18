@@ -150,7 +150,10 @@ border-radius: 10px 10px 10px 10px;
 
 // chart // 
 export const data = {
-
+  options: {
+    responsive: true,
+    maintainAspectRatio: false
+  },
   datasets: [
     {
       label: '# ofasdasd Votes',
@@ -196,48 +199,13 @@ export function Stats(props: PlayerCardProps) {
     return (
       <StatsStyle  >
         <Data>
-       
-            {/* <div className='progessCont' style={{ width: "140px", height: "140px" }}>
-                <CircularProgressbar  styles={{
-                    path: {
-                    stroke: `#F13950`,
-                    strokeLinecap: 'round',
-                    transition: 'stroke-dashoffset 1s ease 0s',
-                    transformOrigin: 'center center',
-                    },
-                    trail: {
-                    stroke: '#0E1117',
-                    strokeLinecap: 'round',
-        
-                    },
-                    text: {
-                    fill: '#000',
-                    fontSize: '16px',
-                    },
-                }} value={15}  text={`${15}%`} />
-                <div className='circularLabel'>
-                {props.player.lost} <span style={{color: "#F13950"}}>Lost </span>
-                </div>
-            </div> */}
-
-            <div className='Donut'>
-              <Doughnut data={data} />
-            </div>
-
-
+          {/* <div id='Donut'> */}
+            <Doughnut style={{width : "200px" , height : "200px"}}  data={data} />
+          {/* </div> */}
             <div  id="pentagon">
                 <Penta/>
                 <img src={props.player.rank} className="Rank" />
             </div>
-
-            {/* <div>
-                  <div id="played">
-                      {props.player.gamePlayed}
-                  </div>
-                  <div id="label">
-                    PLAYED GAMES
-                  </div>
-            </div> */}
           
         </Data>
       </StatsStyle>
@@ -247,7 +215,7 @@ export function Stats(props: PlayerCardProps) {
 const StatsStyle = styled.div`
 background-color: ${GreyBackcolor};
 width: 100%;
-min-height: 240px;
+min-height: 100%;
 display: flex;
 align-items: center;
 flex-direction: column;
@@ -256,95 +224,53 @@ gap: 40px;
 border-radius: 0px 10px 0px 0px;
 `
 const Data = styled.div`
-/* background-color: #26a757 ff41; */
-width: 71%;
+background-color: #e69d0a ff41;
+width: 100%;
 height: 100%;
 display: flex;
 position: relative;
-/* top: 12%; */
-/* align-items: flex-start; */
-/* flex-direction: row; */
+background-color: red;
+display: flex;
+align-items: center;
+justify-content: center;
 justify-content: space-around;
-
-.Donut {
-    width:  calc(100% / 2);
-    height: 10px;
-    position: absolute;
-    /* display: flex; */
-    /* align-items: center; */
-    /* justify-content: center; */
-    right: 0px;
-    /* top: 5%; */
-    /* background-color: #26a757; */
-
+> canvas{
+  width: 200px;
+  height: 200px;
 }
 
+#Donut {
+
+}
+ 
 #pentagon {
   left: 0px;
+  width: 50%;
+  height: 100%;
+  background-color: #26a757;
+  position: absolute;
 
-  /* background-color: #26a757; */
-    top: 10%;
-    /* background-color: #e4e41839; */
+
+  .Rank {
+    width: 35%;
+    height: 55%;
+    top: 15%;
+    left: 33%;
     position: absolute;
-    width: calc(100% / 2);
-    height: 60%;
-    /* padding: 0px 20px; */
-
-    .Rank {
-      width: 40%;
-      height: 60%;
-      top: 13%;
-      left: 30%;
-      position: absolute;
-      display: flex;
-      /* background-color: #ac25a84e; */
-    }
-    > div{
-        position: absolute;
-        bottom: -40%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 90px;
-        height: 50px;
-        font-family: 'Poppins' , sans-serif;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-direction: column;
-        #played{
-        /* background-color: aqua; */
-        font-style: normal;
-        font-weight: 700;
-        font-size:  ${props => props.theme.fontSize.ll}; 
-        line-height: 30px;
-        color:  ${props => props.theme.colors.primaryText};
-        -webkit-text-stroke: 1px #444045;
- 
-        }
-        #label{
-        /* width: ; */
-        /* background-color: aqua; */
-        display: inline-block;
-        overflow: hidden;
-        white-space: nowrap;
-        font-style: bold;
-        font-weight: 600;
-        font-size:  ${props => props.theme.fontSize.l}; 
-        line-height: 25px;
-        text-transform: uppercase;
-        color:  ${props => props.theme.colors.primaryText}; 
-        -webkit-text-stroke: 1px #444045b7;
-        }
-    }
-    > svg {
-        width: 100%;
-        height: 100%;
-    path{
-        stroke: ${props => props.theme.colors.purple}
-    } 
-    } 
+    display: flex;
+    /* background-color: #ac25a84e; */
+  }
+  > svg {
+      width: 80%;
+      height: 100%;
+  path{
+      stroke: ${props => props.theme.colors.purple}
+  } 
+  } 
 }
 `
+
+
 const ProgressBar = styled.div`
 
 width: 90%;
@@ -546,7 +472,6 @@ return (
           <div className='stat'>
                {props.match.score1} : {props.match.score2}
           </div>
-
 
       </Dataa>
       {
