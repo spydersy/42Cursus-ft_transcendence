@@ -33,15 +33,13 @@ export class UserController {
                 case 'unblock':
                     return await this.userService.UnblockUser(req.user.username, req.params.id, res);
                 case 'add':
-                    return this.userService.AddFriend(req.user.username, req.params.id, res);
-                // case 'accept':
-                    // return "__RELATION__HANDLER__CALLED__ : ACCEPT";
-                // case 'decline':
-                    // return "__RELATION__HANDLER__CALLED__ : DECLINE";
-                // case 'unfriend':
-                    // return "__RELATION__HANDLER__CALLED__ : DECLINE";
-
-
+                    return await this.userService.AddFriend(req.user.username, req.params.id, res);
+                case 'accept':
+                    return await this.userService.AcceptFriendRequest(req.user.username, req.params.id, res);
+                case 'decline':
+                    return await this.userService.DeclineFriendRequest(req.user.username, req.params.id, res);
+                case 'unfriend':
+                    return await this.userService.UnfriendUser(req.user.username, req.params.id, res);
                 default:
                     return {"message": "Bad Request00"};
             }

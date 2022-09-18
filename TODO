@@ -2,10 +2,10 @@ STEPS :
 - [X] Block user
 - [X] Unblock user
 
-- [ ] Add User
-- [ ] Accept User Request
-- [ ] Decline User Request
-- [ ] Unfriend User
+- [X] Add User
+- [X] Accept User Request
+- [X] Decline User Request
+- [X] Unfriend User
 
 
 ENDPOINTS :
@@ -21,3 +21,23 @@ DATABASE :
 
 SECREt CODE :
 - [ ] Import it from .env file
+
+BLOCK TEST CASES :
+- [X] Block Yourself
+- [X] Blocker User Already Blocked You
+- [X] Block Simple User
+- [X] Block Friend
+
+UNBLOCK TEST CASES :
+- [X] Unblock Yourself
+- [X] Unblocker User Already Blocked You
+- [X] Unblock Simple User
+- [X] Unblock Friend
+
+ADD FRIENDS TEST CASES :
+- [X] ADD MYSELF
+- [X] ADD PENDING REQUEST
+- [X] ADD SIMPLE USER
+- [X] ADD BLOCKED USER
+- [X] ADD USER WHO BLOCKED ME
+- [X] ADD FRIEND
