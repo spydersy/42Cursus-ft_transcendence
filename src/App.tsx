@@ -54,7 +54,7 @@ const mockedItems : any = [{
 
 function App() {
   const [start, setstart] = useState(false)
-  const [gametheme, setGametheme] = useState({map :mockedItems[1], rounds : 5})
+  const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "AI"})
   const [logedIn, setlogedIn] = useState(false)
   const [name, setname] = useState("")
   const inputRef : any= useRef<any>(null);

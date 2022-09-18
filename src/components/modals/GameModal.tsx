@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 interface GmaemodelProps {
   setmode : (mode: any)=>void
+  mode : any
 }
 export default function GameModal(props: GmaemodelProps) {
   const [selected, setselected] = useState(2)
@@ -45,9 +46,9 @@ export default function GameModal(props: GmaemodelProps) {
     banner :Fish 
   }]
   const changemode = ()=>{
-    var theme = {map : mockedItems[selected] , rounds : 5 }
+    var theme = {mode : props.mode, theme : {map : mockedItems[selected] , rounds : 5 }}
     props.setmode(theme)
-
+    console.log(theme)
     navigate("/game")
   }
     const { carouselFragment } = useSpringCarousel({
@@ -73,6 +74,14 @@ export default function GameModal(props: GmaemodelProps) {
   
   return (
     <GameModalStyle>
+        <Title>
+          <div>Mode :</div>
+         <span id="span">{props.mode}</span>
+        </Title>
+        <Title>
+          <div>Rules :</div>
+         <span id="span">{props.mode}</span>
+        </Title>
         <Title>
           <div>Map :</div>
          <span id="span">{mockedItems[selected].title}</span>
@@ -143,7 +152,7 @@ const Title = styled.div`
       margin-left: 30px;
       text-transform: uppercase;
     color: ${props => props.theme.colors.purple};
-   font-family: 'Michroma', sans-serif;
+   font-family: 'Poppins', sans-serif;
    .anime{
      animation-name: animeText;
      animation-duration: 1s;

@@ -11,7 +11,7 @@ export default function Game(props : GameProps) {
   return (
     <div style={{marginTop: "100px"}}className="container">
         
-        <Pong theme={props.theme} mode="AI" name="mohamed"/>
+        <Pong themes={props.theme} mode={props.theme.mode}/>
     </div>
   )
 }

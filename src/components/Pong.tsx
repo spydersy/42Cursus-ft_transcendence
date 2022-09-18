@@ -26,11 +26,14 @@ interface GameModalProps {
 
 
 interface myProps {
-  name: string,
   mode : string,
-  theme : {
-    map : GameModalProps,
-    rounds : number
+  themes : {
+  mode : string,
+    theme: {
+      map : GameModalProps,
+      rounds : number
+
+    }
   }
 
 }
@@ -56,15 +59,16 @@ const ai1 = {
 }
 const ballSpeed : number = 5;
 var [directionX, directionY] = [ballSpeed, ballSpeed];
-export default function Pong({theme ,name, mode}:myProps ) {
+export default function Pong({themes , mode}:myProps ) {
   const tableRef : any= useRef<HTMLHeadingElement>(null);
   const ballRef : any = useRef<SVGCircleElement >(null);
   const playerRef : any = useRef<SVGRectElement >(null);
+  const lineRef : any = useRef<SVGLineElement >(null);
   const player2Ref : any = useRef<SVGRectElement >(null);
   var player : number;
   const [start, setStart] = useState(false)
   const [header, setHeader] = useState("waiting")
-  const [Player2Data, setPlayer2] = useState<Player2Type>(player2)
+  const [Player2Data, setPlayer2Data] = useState<Player2Type>(player2)
   const [score, setscore] = useState<ScoreType>({
     score1 : 0,
     score2 : 0,
@@ -73,6 +77,7 @@ export default function Pong({theme ,name, mode}:myProps ) {
   var UP_KEY = 38;
   var DOWN_KEY = 40;
   var rew = 0;
+  var Predect = 0;
   
 
   function detectCollision() {
@@ -104,8 +109,37 @@ export default function Pong({theme ,name, mode}:myProps ) {
     y1 < (y2 + h2) && (y1 + h1) > y2;
     return colliding;
   }
+
+
+  const pointScored = (side :  string)=>{
+    if (side  === "right")
+    {
+      setStart(false)
+      setscore({score1: score.score1 + 1 ,score2: score.score2 });
+      setTimeout(() => {
+        [directionX, directionY] = [ballSpeed, ballSpeed];
+        setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
+
+      }, 3000);
+
+    }
+    else if (side  === "left")
+    {
+      setStart(false)
+      setscore({score1: score.score1  ,score2: score.score2 + 1});
+      setTimeout(() => {
+        [directionX, directionY] = [ballSpeed, ballSpeed];
+        setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
+
+        
+      }, 3000);
+    }
+  }
   function moveBall() {
     console.log(start)
+    
+    const Px =  parseInt(player2Ref.current.getAttribute('x'));
+
     const cx = parseInt(ballRef.current.getAttribute('cx'));
     const cy = parseInt(ballRef.current.getAttribute('cy'));
     
@@ -114,65 +148,33 @@ export default function Pong({theme ,name, mode}:myProps ) {
     const rightLimit = tableRef.current.offsetWidth;
     const topLimit = ballRadius;
     const bottomLimit = tableRef.current.offsetHeight - ballRadius;
-    
     const [nextCX, nextCY] = [cx + directionX, cy + directionY];
+
     if (nextCX > rightLimit) 
-    directionX = -directionX;
-    if (nextCY > bottomLimit || nextCY < topLimit)
-    {
-      
+      directionX = -directionX;
+    else if (nextCY > bottomLimit || nextCY < topLimit)
       directionY = -directionY
-    }
-    
     if (detectCollision()) 
     {
       directionX = -directionX  ;
-      
       directionX = directionX + 1;
     }
     if (detectCollision2()) 
-    directionX = -directionX;
-    if (directionX  > 0)
-    moveAI(cx + directionX ,cy + directionY)
-    
-    if (nextCX - directionX <  ballRadius) { // player lost
-      setStart(false)
-      setscore({score1: score.score1  ,score2: score.score2 + 1});
-      setTimeout(() => {
-        [directionX, directionY] = [ballSpeed, ballSpeed];
-        initBall();
-        
-      }, 3000);
-      // return ;
-      // requestAnimationFrame(moveBall);
-    }
+      directionX = -directionX;
+    if (directionX > 0)
+      moveAI(cx + directionX ,cy + directionY) 
+    if (nextCX - directionX <  ballRadius)
+      pointScored("left")
     else if (nextCX - directionX > rightLimit)
-    {
-
-      setStart(false)
-      setscore({score1: score.score1 + 1 ,score2: score.score2 });
-      // return ;
-      setTimeout(() => {
-        [directionX, directionY] = [ballSpeed, ballSpeed];
-        initBall();
-        
-      }, 3000);
-
-    }
+      pointScored("right")
     else {
-      // console.log("directionX : " + directionX + "directionY : " + directionY)
       const [xPos, yPos] = [cx + directionX, cy + directionY];
-      
-      ballRef.current.setAttribute('cx', xPos);
-      ballRef.current.setAttribute('cy', yPos);
+      setBall(xPos, yPos)
+      Predect = (Px - xPos) / directionX
+      // alert(test)
+      setLine(xPos , yPos ,xPos  + (directionX  * Predect), yPos +  (directionY * Predect))
     }
-    
     rew = requestAnimationFrame(moveBall);
-    // if (!start)
-    // {
-    //   console.log(start)
-
-    // }
   }
   
   
@@ -181,8 +183,6 @@ export default function Pong({theme ,name, mode}:myProps ) {
 
 
     const p = playerRef?.current;
-    // console.log(p)
-    // const cx = parseInt(p.getAttribute('x'));
     const cy = parseInt(p.getAttribute('y'));
     const h = parseInt(p.getAttribute('height'));
 
@@ -196,6 +196,7 @@ export default function Pong({theme ,name, mode}:myProps ) {
   function moveAI(xb : number, yb: number )
   {
 
+   
     const h = parseInt(player2Ref.current.getAttribute('height'));
     const w = parseInt(tableRef.current.getAttribute('width'));
       
@@ -204,68 +205,79 @@ export default function Pong({theme ,name, mode}:myProps ) {
     var xp : number ;
     yp =  parseInt(player2Ref.current.getAttribute('y'));
     xp =  parseInt(player2Ref.current.getAttribute('x'));
-
-
-    // console.log( tableRef.current.offsetHeight - h)
-    if (xb < w / 2)
-    {
-      console.log(xb)
-      player2Ref.current.setAttribute('y', yp + 10)
+    // alert(xp - )
+    // if (xb < w / 2)
+    // {
+    //   console.log(xb)
+    //   player2Ref.current.setAttribute('y', yp + 10)
       
-    }
-     if (yb + h  <  tableRef.current.offsetHeight  )
-      player2Ref.current.setAttribute('y', yb  )
-    else 
+    // }
+    //  if (yb + h  <  tableRef.current.offsetHeight  )
+    //   player2Ref.current.setAttribute('y', yb  )
+    // else
+    //     player2Ref.current.setAttribute('y', tableRef.current.offsetHeight - h  )
 
-        player2Ref.current.setAttribute('y', tableRef.current.offsetHeight - h  )
-
+        if (yb +( directionY * Predect) > 0 && yb +( directionY * Predect) <  tableRef.current.offsetHeight )
+        { 
+          if (yb +( directionY * Predect) >   yb && yb +( directionY * Predect) < yb  + h)
+            return ;
+          else if (yp  > yb +( directionY * Predect))
+            player2Ref.current.setAttribute('y', yp - 10)
+          else if (yp + (h / 2) < yb +( directionY * Predect))
+            player2Ref.current.setAttribute('y', yp + 10)
+       
+        }
   }
-  const  initBall =()=>{
-    ballRef.current.setAttribute('cx', tableRef.current.offsetWidth / 2);
-    ballRef.current.setAttribute('cy', tableRef.current.offsetHeight / 2);
+  const  setBall =(x : number , y : number)=>{
+    ballRef.current.setAttribute('cx', x);
+    ballRef.current.setAttribute('cy', y);
 
 }
-var requestId;
+  const  setPlayer1 =(x : number , y : number)=>{
+    playerRef.current.setAttribute('x', x);
+    playerRef.current.setAttribute('y', y);
+}
+  const  setPlayer2 =(x : number , y : number)=>{
+    player2Ref.current.setAttribute('x', x);
+    player2Ref.current.setAttribute('y', y);
+}
+  const  setLine =(x1 : number , y1 : number , x2 : number , y2 : number)=>{
+    lineRef.current.setAttribute('x1', x1);
+    lineRef.current.setAttribute('y1', y1);
+    lineRef.current.setAttribute('x2', x2);
+    lineRef.current.setAttribute('y2', y2);
+}
+
+
 
 useEffect(() => {
-  console.log(theme.map.title)
+  console.log(themes.theme.map.banner)
 
   const initData =()=>{
-    player2Ref.current.setAttribute('x' , tableRef.current.offsetWidth - 100)
-    player2Ref.current.setAttribute('y' , 0)
-    playerRef.current.setAttribute('x' ,  80)
-    playerRef.current.setAttribute('y' , 0)
+    setPlayer1(80, 0)
+    setPlayer2(tableRef.current.offsetWidth - 100, 0)
     
     console.log(mode)
     switch(mode)
     {
       case "AI":
-        // alert("AI")
-        setPlayer2(ai1)
+        setPlayer2Data(ai1)
         break ;
         default:
-          setPlayer2(player2)
+          setPlayer2Data(player2)
           
         }
-      }
-      initBall()
-      initData()
-      
-      
-  
+    }
 
-        
-      console.log("salam")
-      tableRef.current.addEventListener("mousemove", movePlayer1)
-
-      // document.addEventListener("keydown", movePlayer2)
+    setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
+    initData()
+    tableRef.current.addEventListener("mousemove", movePlayer1)
   } ,[])
+
+
   useEffect(() => {
     if (start)
     {
-      // initBall()
-      // alert(start)
-    console.log("makayna m3na")
       moveBall()
     }
   
@@ -284,12 +296,12 @@ useEffect(() => {
             {score.score1} | {score.score2}
           </Score>
       </PlayerStyle>
-    <Table bgimg={theme.map.banner} ref={tableRef} >
+    <Table bgimg={themes.theme.map.banner} ref={tableRef} >
 
       <svg>
           <circle ref={ballRef} id="ball"  cx="20" cy="300" r="12" />
           <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" stroke-dasharray="10" />
-
+          <line ref={lineRef} x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" />
           <rect ref={playerRef} rx="10" x="30" y="0" width="20" height="150" fill="#FFF" />
           <rect ref={player2Ref} rx="10 " y="0" width="20" height="150" fill="#FFF" />
 
@@ -304,7 +316,7 @@ useEffect(() => {
         </Player2>
 
       </PlayerStyle>
-      <button onClick={()=> {
+      <button style={{background: "#fff"}} onClick={()=> {
         cancelAnimationFrame(rew)
 setStart(!start)
 

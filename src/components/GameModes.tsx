@@ -64,6 +64,14 @@ const bg = {
 export default function GameModes(props : GameModesProps) {
   const [hideModel, sethideModel] = useState(false)
 
+const [mode, setmode] = useState("")
+  const toggleModal = (id : number)=>{
+    // props.settheme()
+
+    if (id  === 0)
+      setmode("AI" )
+    sethideModel(!hideModel)
+  }
   const { carouselFragment ,      slideToNextItem } = useSpringCarousel({
 
     // width : "350px",
@@ -73,7 +81,7 @@ export default function GameModes(props : GameModesProps) {
     items: modes.map((data : any, id:number) => ({
       id: id,
       renderItem: (
-        <Card onClick={(e)=>sethideModel(!hideModel)} style={{background : data.background}} key={id}  >
+        <Card onClick={(e)=>toggleModal(id)} style={{background : data.background}} key={id}  >
     
         <div>
           <div className='title'>
@@ -104,7 +112,7 @@ export default function GameModes(props : GameModesProps) {
         styles={bg}
       >
 
-        <GameModal setmode={(e)=>props.settheme(e)}/>
+        <GameModal mode={mode} setmode={(e)=>props.settheme(e)}/>
       </Modal>}
       <Swipeicon onClick={slideToNextItem} />
     </Game>
