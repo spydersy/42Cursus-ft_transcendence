@@ -1,4 +1,5 @@
 import { HttpCode, HttpStatus, Injectable, Query, Req, Res } from '@nestjs/common';
+import { Relation } from '@prisma/client';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -10,22 +11,22 @@ export class UserService {
     async SendFriendRequest(User1Id: number, User2Id: number, @Res() res) {
         if (User1Id === User2Id)
             return res.status(HttpStatus.FORBIDDEN).send({ "message": 'Wach Nta 7maaaaar'});
-            let FriendsStat = await this.prisma.friends.findMany({
-            where: {
-                SenderId: User1Id,
-                ReceiverId: User2Id,
-            } || {
-                SenderId: User2Id,
-                ReceiverId: User1Id,
-            },
-        });
+            let FriendsStat = await this.prisma.userRelations.findMany({
+                where: {
+                    senderId: User1Id,
+                    receiverId: User2Id,
+                } || {
+                    senderId: User2Id,
+                    receiverId: User1Id,
+                },
+            });
         console.log("__FRIENDS__STAT__ : ", FriendsStat);
         if (FriendsStat.length === 0) {
-            const user = await this.prisma.friends.create({
+            const user = await this.prisma.userRelations.create({
                 data: {
-                    SenderId: User1Id,
-                    ReceiverId: User2Id,
-                    Status: "Pending",
+                    senderId: User1Id,
+                    receiverId: User2Id,
+                    status: Relation.PENDING,
                 },
             });
             return res.status(HttpStatus.OK).send({ "message": 'DONE00'});
@@ -35,29 +36,27 @@ export class UserService {
     }
 
     async AddUserToDB(UserProfile : User) {
-        const user = await this.prisma.users.create({
+        const user = await this.prisma.user.create({
             data: {
-                Id: UserProfile.Id,
-                Email: UserProfile.Email,
-                Login: UserProfile.Login,
-                UsualFullName: UserProfile.UsualFullName,
-                DefaultAvatar: UserProfile.DefaultAvatar,
-                UploadedAvatar: UserProfile.UploadedAvatar,
-                Status: UserProfile.Status,
+                id: UserProfile.Id,
+                login: UserProfile.Login,
+                displayName: UserProfile.UsualFullName,
+                defaultAvatar: UserProfile.DefaultAvatar,
+                uploadedAvatar: UserProfile.UploadedAvatar,
                 Notifications: UserProfile.Notifications,
-                Wins: UserProfile.Wins,
-                Losses: UserProfile.Losses,
-                Level: UserProfile.Level,
-                TwoFactorAuth: false,
+                wins: UserProfile.Wins,
+                losses: UserProfile.Losses,
+                level: UserProfile.Level,
+                twoFactorAuth: false,
             },
         });
     }
 
     async GetRequests(UserId: number, @Res() res) {
-        let requests = await this.prisma.friends.findMany({
+        let requests = await this.prisma.userRelations.findMany({
             where: {
-                ReceiverId: UserId,
-                Status: "Pending",
+                receiverId: UserId,
+                status: Relation.PENDING,
             }
         });
         console.log("__PENDING__REQUESTS__ : ", requests);
@@ -65,9 +64,9 @@ export class UserService {
     }
 
     async    GetUserById(Id: number) : Promise<any> {
-        let user = await this.prisma.users.findUnique({
+        let user = await this.prisma.user.findUnique({
             where: {
-                Id: Id,
+                id: Id,
             },
         });
         console.log(user);
@@ -127,8 +126,10 @@ export class UserService {
             let SenderDto = await this.GetUserByLogin(Sender);
             let ReceiverDto = await this.GetUserByLogin(Receiver);
 
-            if (ReceiverDto === null || SenderDto === null)
-                return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
+            if (ReceiverDto === null || SenderDto === null) // DONE =====================================
+                return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"}); //      ||
+            // ==========================================================================================
+
             if (await this.IsBlockedUser(ReceiverDto.Id, SenderDto.Id) ||
                 await this.IsBlockedUser(SenderDto.Id, ReceiverDto.Id)) {
                 return res.status(HttpStatus.FORBIDDEN).send({"message": `${Receiver} blocked ${Sender}`});
@@ -216,6 +217,18 @@ export class UserService {
             return false;
         }
 
+        async FindUsersRelation(User1: number, User2: number) : Promise<number> {
+            let RelationStat = await this.prisma.userRelations.findMany({
+                where: {
+                    senderId: User1,
+                    receiverId: User2,
+                } || {
+                    senderId: User2,
+                    receiverId: User1,
+                },
+            });
+            return RelationStat.length;
+        }
     /*
     *  Utils : ************************************************************************************
     */
@@ -243,11 +256,11 @@ export class UserService {
     */
 
         async IsBlockedUser(User : number, BlockedUserId : number) {
-            let BlockStat = await this.prisma.blocks.findFirst({
+            let BlockStat = await this.prisma.userRelations.findMany({
                 where: {
-                    UserId: User,
-                    BlockedId: BlockedUserId,
-                },
+                    senderId: User,
+                    receiverId: BlockedUserId,
+                } || ,
             });
             console.log("__BLOCK__STAT__ : ", BlockStat);
             if (BlockStat === null)

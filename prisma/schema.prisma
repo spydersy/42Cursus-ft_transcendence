@@ -13,46 +13,61 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  Id                Int        @id @unique
-  Email             String     @unique
-  Login             String     @unique
-  UsualFullName     String     @unique
-  DefaultAvatar     String
-  UploadedAvatar    String?
-  Status            String
-  Notifications     Json?
-  Wins              Int        @default(0)
-  Losses            Int        @default(0)
-  Level             Int        @default(0)
-  TwoFactorAuth     Boolean    @default(false)
-  SentRequests      Friends[]  @relation("SentRequests")
-  ReceivedRequets   Friends[]  @relation("ReceivedRequets")
-  BlackList         Blocks[]   @relation("BlackList")
-  BlockedFrom       Blocks[]   @relation("BlockedUsers")
-  LastModification  DateTime   @updatedAt
+model user {
+  id                  Int       @id @unique
+  login               String    @unique
+  displayName         String    @unique
+  defaultAvatar       String
+  uploadedAvatar      String?
+  Notifications       Json?
+  wins                Int       @default(0)
+  losses              Int       @default(0)
+  level               Int       @default(0)
+  twoFactorAuth       Boolean   @default(false)
+  twoFactorAuthSecret String?    
+  sentRequests        userRelations[] @relation("SentRequests")
+  receivedRequets     userRelations[] @relation("ReceivedRequets")
 }
 
-model Friends {
-  Id         Int     @id @default(autoincrement())
-  Sender     Users   @relation(name: "SentRequests", fields: [SenderId], references: [Id])
-  SenderId   Int
-  Receiver   Users   @relation(name: "ReceivedRequets", fields: [ReceiverId], references: [Id])
-  ReceiverId Int
-  Status     String
+model userRelations {
+  id         Int  @id @unique @default(autoincrement())
+
+  sender     user @relation(name: "SentRequests", fields: [senderId], references: [id])
+  senderId   Int
+
+  receiver   user @relation(name: "ReceivedRequets", fields: [receiverId], references: [id])
+  receiverId Int
+
+  blockedUser Int?
+  status     Relation
+
+  @@unique([senderId, receiverId])
+  @@unique([receiverId, senderId])
 }
 
-model Blocks {
-  Id        Int      @id @default(autoincrement())
+// model Friends {
+  // Id         Int     @id @default(autoincrement())
+  // Sender     Users   @relation(name: "SentRequests", fields: [SenderId], references: [Id])
+  // SenderId   Int
+  // Receiver   Users   @relation(name: "ReceivedRequets", fields: [ReceiverId], references: [Id])
+  // ReceiverId Int
+  // Status     String
+// }
 
-  User    Users   @relation(name: "BlackList", fields: [UserId], references: [Id])
-  UserId    Int
+// model Friends {
+// }
 
-  Blocked   Users   @relation(name: "BlockedUsers", fields: [BlockedId], references: [Id])
-  BlockedId Int
+// model Blocks {
+//   Id        Int      @id @default(autoincrement())
 
-  Date      DateTime @default(now())
-}
+//   User    Users   @relation(name: "BlackList", fields: [UserId], references: [Id])
+//   UserId    Int
+
+//   Blocked   Users   @relation(name: "BlockedUsers", fields: [BlockedId], references: [Id])
+//   BlockedId Int
+
+//   Date      DateTime @default(now())
+// }
 
 model MatchHistory {
   Id      Int       @id @default(autoincrement())
@@ -86,4 +101,17 @@ model Messages {
   SenderId       Int
   ChannelId      Int
   Content        String
+}
+
+enum Relation {
+  FRIENDS
+  PENDING
+  BLOCK
+  NULL
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  USER
 }
