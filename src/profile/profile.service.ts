@@ -5,7 +5,6 @@ import { UserName } from 'src/dtos/Inputs.dto';
 import { UserService } from 'src/user/user.service';
 import { Response } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Relation } from '@prisma/client';
 
 @Injectable()
 export class ProfileService {
@@ -24,10 +23,10 @@ export class ProfileService {
     }
 
     async GetRequests(@Req() req) {
-        let requests = await this.prisma.userRelations.findMany({
+        let requests = await this.prisma.friends.findMany({
             where: {
-                receiverId: req.user.userId,
-                status: Relation.PENDING,
+                Receiver: req.user.userId,
+                Status: "Pending",
             }
         });
         console.log("__PENDING__REQUESTS__ : ", requests);
@@ -35,13 +34,13 @@ export class ProfileService {
     }
 
     async GetFriends(@Req() req) {
-        let Friends = await this.prisma.userRelations.findMany({
+        let Friends = await this.prisma.friends.findMany({
             where: {
-                receiverId: req.user.userId,
-                status: Relation.FRIENDS,
+                Receiver: req.user.userId,
+                Status: "Friends",
             } && {
-                senderId: req.user.userId,
-                status: Relation.FRIENDS,
+                Sender: req.user.userId,
+                Status: "Friends",
             }
         });
         console.log("__FRIENDS__LIST__ : ", Friends);

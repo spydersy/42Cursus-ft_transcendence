@@ -1,3 +1,9 @@
+
+
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -5,4 +11,79 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Users {
+  Id                Int        @id @unique
+  Email             String     @unique
+  Login             String     @unique
+  UsualFullName     String     @unique
+  DefaultAvatar     String
+  UploadedAvatar    String?
+  Status            String
+  Notifications     Json?
+  Wins              Int        @default(0)
+  Losses            Int        @default(0)
+  Level             Int        @default(0)
+  TwoFactorAuth     Boolean    @default(false)
+  SentRequests      Friends[]  @relation("SentRequests")
+  ReceivedRequets   Friends[]  @relation("ReceivedRequets")
+  BlackList         Blocks[]   @relation("BlackList")
+  BlockedFrom       Blocks[]   @relation("BlockedUsers")
+  LastModification  DateTime   @updatedAt
+}
+
+model Friends {
+  Id         Int     @id @default(autoincrement())
+  Sender     Users   @relation(name: "SentRequests", fields: [SenderId], references: [Id])
+  SenderId   Int
+  Receiver   Users   @relation(name: "ReceivedRequets", fields: [ReceiverId], references: [Id])
+  ReceiverId Int
+  Status     String
+}
+
+model Blocks {
+  Id        Int      @id @default(autoincrement())
+
+  User    Users   @relation(name: "BlackList", fields: [UserId], references: [Id])
+  UserId    Int
+
+  Blocked   Users   @relation(name: "BlockedUsers", fields: [BlockedId], references: [Id])
+  BlockedId Int
+
+  Date      DateTime @default(now())
+}
+
+model MatchHistory {
+  Id      Int       @id @default(autoincrement())
+  Player1 Int
+  Player2 Int
+  Score1  Int       @default(0)
+  Score2  Int       @default(0)
+  Mode    String
+  Date    DateTime  @default(now())
+}
+
+model Channels {
+  Id               Int     @id @default(autoincrement())
+  Access           String
+  OwnerId          Int
+  AdministratorsId Json?
+  UsersId          Json?
+  Password         String?
+}
+
+model BannedMutedUsers {
+  Id             Int     @id @default(autoincrement())
+  UserId         Int
+  Action         String
+  ActionTime     DateTime @default(now())
+  delay          Int
+}
+
+model Messages {
+  Id             Int     @id @default(autoincrement())
+  SenderId       Int
+  ChannelId      Int
+  Content        String
 }
