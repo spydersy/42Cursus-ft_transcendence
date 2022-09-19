@@ -13,10 +13,33 @@ import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
+// import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+// ChartJS.register(ArcElement, Tooltip, Legend);
+
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+import { Radar } from 'react-chartjs-2';
+import $ from 'jquery';
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
+
+
 
 
 /// UserProfile Variants  
@@ -149,71 +172,101 @@ border-radius: 10px 10px 10px 10px;
 //// Stats Comp
 
 // chart // 
+const player1 = { PlayedGames : 350,  lostGames : [22,18,31,52,22] , WonGames :  [20, 25, 30, 52, 26], Rank : rank2};
+const player2 = { PlayedGames : 222,  lostGames : [22,18,31,52,22] , WonGames :  [0, 50, 30, 40, 26], Rank : rank2};
+
+
 export const data = {
-  options: {
-    responsive: true,
-    maintainAspectRatio: false
-  },
+  labels: ['Computer mode', 'classic', 'Tag-Team', 'Challenge Friend', 'Mode 5'],
   datasets: [
     {
-      label: '# ofasdasd Votes',
-      data: [120, 19],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.3)',
-        // 'rgba(54, 162, 235, 0.3)',
-        'rgba(75, 192, 192, 0.3)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        // 'rgba(54, 162, 235, 1)',
-        'rgba(75, 192, 192, 1)',
-      ],
+      label: 'Win-Game',
+      data: player1.WonGames,
+      backgroundColor: 'rgba(70, 180, 90, 0.275)',
+      borderColor: '#25dc43',
       borderWidth: 2,
     },
     {
-      label: '# ofasdasd Votes',
-      data: [120, 19],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.3)',
-        // 'rgba(54, 162, 235, 0.3)',
-        'rgba(75, 192, 192, 0.3)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        // 'rgba(54, 162, 235, 1)',
-        'rgba(75, 192, 192, 1)',
-      ],
-      borderWidth: 1,
-    }, 
-    
-  
+      label: 'Win-Game',
+      data: player2.WonGames,
+      backgroundColor: 'rgba(70, 180, 90, 0.275)',
+      borderColor: '#fff',
+      borderWidth: 2,
+    },
   ],
-  labels: ['Losses', 'Win'],
+  
 };
-////// 
+
+export const data1 = {
+  labels: ['Computer mode', 'classic', 'Tag-Team', 'Challenge Friend', 'Mode 5'],
+ 
+  datasets: [
+    {
+      label: 'Lost-Game',
+      data:  player1.lostGames,
+      backgroundColor: 'rgba(221, 50, 50, 0.275)',
+      borderColor: '#e31f1f',
+      borderWidth: 2,
+    },
+  ],
+};
+
+const options : any = {
+  legend: {
+    position: 'top'
+  },
+  title: {
+    display: true,
+    text: 'Chart.js Radar Chart'
+  },
+  scale: {
+    reverse: false,
+    gridLines: {
+      color: [
+        'black',
+        'red',
+        'orange',
+        'yellow',
+        'green',
+        'blue',
+        'indigo',
+        'violet'
+      ]
+    },
+    ticks: {
+      beginAtZero: true
+    }
+  }
+}
+
+
+//        // 
 
 export function Stats(props: PlayerCardProps) {
-
-
-
     return (
       <StatsStyle  >
         <Data>
-          {/* <div id='Donut'> */}
-            <Doughnut style={{width : "200px" , height : "200px"}}  data={data} />
-          {/* </div> */}
+
+            <div className='Radar'>
+              <Radar  data={data}   options={options} />
+            </div>
+            
             <div  id="pentagon">
-                <Penta/>
+                {/* <Penta/> */}
                 <img src={props.player.rank} className="Rank" />
             </div>
-          
+
+            {/* <div className='Radar1'>
+              <Radar id='radaro' data={data1} />
+            </div> */}
+
         </Data>
       </StatsStyle>
     )
 }
 
 const StatsStyle = styled.div`
-background-color: ${GreyBackcolor};
+background-color: #171A22;
 width: 100%;
 min-height: 100%;
 display: flex;
@@ -224,50 +277,77 @@ gap: 40px;
 border-radius: 0px 10px 0px 0px;
 `
 const Data = styled.div`
-background-color: #e69d0a ff41;
+/* background-color: #bacc16; */
 width: 100%;
 height: 100%;
 display: flex;
 position: relative;
-background-color: red;
 display: flex;
 align-items: center;
 justify-content: center;
 justify-content: space-around;
-> canvas{
-  width: 200px;
-  height: 200px;
+
+.Radar {
+  /* width: 50%; */
+  /* height: 70px; */
+  position: absolute;
+  right: 3%;
+  top: 0px;
+  > canvas {
+  
+    /* background-color: #ff000021; */
+    /* background-color: #a7262f53; */
+    /* background-color: black; */
+    /* width: 50%; */
+    /* height: 50%; */
+  }
 }
 
-#Donut {
-
-}
  
 #pentagon {
-  left: 0px;
-  width: 50%;
-  height: 100%;
-  background-color: #26a757;
+  /* left: 0px; */
+  /* top: 0px; */
+  width: 25%;
+  height: 80%;
+  /* background-color: #26a75854; */
   position: absolute;
 
 
   .Rank {
-    width: 35%;
-    height: 55%;
-    top: 15%;
-    left: 33%;
+    width: 60%;
+    height: 70%;
+    top: 10%;
+    left: 30%;
     position: absolute;
     display: flex;
     /* background-color: #ac25a84e; */
   }
   > svg {
-      width: 80%;
+      width: 100%;
       height: 100%;
   path{
       stroke: ${props => props.theme.colors.purple}
   } 
   } 
 }
+
+.Radar1 {
+  /* width: 50%; */
+  /* height: 70px; */
+  position: absolute;
+  left: 3%;
+  top: 0px;
+  > canvas {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    /* background-color: #00ff0820; */
+
+    /* background-color: #a7262f53; */
+    /* background-color: black; */
+    /* width: 50%; */
+    /* height: 50%; */
+  }
+}
+
 `
 
 

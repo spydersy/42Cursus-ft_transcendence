@@ -234,7 +234,7 @@ margin: 15px 0px;
 `
 
 ///// PlayerTabs Section
-const linkslist = [" ACHIEVEMENTS", " FRIENDS" , " GAME HISTORY", "PENDING REQUESTS", "MY BLACK LIST", "SETTINGS"]
+const linkslist = [" ACHIEVEMENTS", " FRIENDS" , " GAME HISTORY", "PENDING REQUESTS", "BLOCKED USERS"]
 
 export function PlayerTabsBar()
 {
