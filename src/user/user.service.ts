@@ -96,7 +96,7 @@ export class UserService {
                     BlockedId: BlockedUserDto.Id,
                 },
             });
-            this.DeleteFriend(UserDto.Id, BlockedUserDto.Id);
+            this.DeleteFriendRelation(UserDto.Id, BlockedUserDto.Id);
             return res.status(HttpStatus.OK).send({"message": "DONE"});
         }
 
@@ -182,7 +182,7 @@ export class UserService {
 
             if (ReceiverDto === null || SenderDto === null)
                 return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
-            this.DeleteFriend(SenderDto.Id, ReceiverDto.Id);
+            this.DeleteFriendRelation(SenderDto.Id, ReceiverDto.Id);
             return res.status(HttpStatus.OK).send({"message": "DONE"});
         }
 
@@ -271,17 +271,19 @@ export class UserService {
             return true;
         }
 
-        async DeleteFriend(User1: number, User2: number){
+        async DeleteFriendRelation(User1: number, User2: number){
             console.log(User1, User2);
             const Delete = await this.prisma.friends.deleteMany({
                 where: {
                     SenderId: User1,
                     ReceiverId: User2,
-                } || {
+                }
+            });
+            const Delete1 = await this.prisma.friends.deleteMany({
+                where: {
                     SenderId: User2,
                     ReceiverId: User1,
                 }
             });
-            console.log("__DELETE__FRIEND__ : ", Delete);
         }
 }
