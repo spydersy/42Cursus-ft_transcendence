@@ -1,31 +1,34 @@
 import { HttpCode, HttpStatus, Injectable, Query, Req, Res } from '@nestjs/common';
+import { RELATION } from '@prisma/client';
+import { ChatService } from 'src/chat/chat.service';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
 
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService,
+                private chatService: ChatService) {}
 
     async SendFriendRequest(User1Id: number, User2Id: number, @Res() res) {
         if (User1Id === User2Id)
             return res.status(HttpStatus.FORBIDDEN).send({ "message": 'Wach Nta 7maaaaar'});
             let FriendsStat = await this.prisma.friends.findMany({
             where: {
-                SenderId: User1Id,
-                ReceiverId: User2Id,
+                senderId: User1Id,
+                receiverId: User2Id,
             } || {
-                SenderId: User2Id,
-                ReceiverId: User1Id,
+                senderId: User2Id,
+                receiverId: User1Id,
             },
         });
         console.log("__FRIENDS__STAT__ : ", FriendsStat);
         if (FriendsStat.length === 0) {
             const user = await this.prisma.friends.create({
                 data: {
-                    SenderId: User1Id,
-                    ReceiverId: User2Id,
-                    Status: "Pending",
+                    senderId: User1Id,
+                    receiverId: User2Id,
+                    status: RELATION.PENDING,
                 },
             });
             return res.status(HttpStatus.OK).send({ "message": 'DONE00'});
@@ -37,18 +40,16 @@ export class UserService {
     async AddUserToDB(UserProfile : User) {
         const user = await this.prisma.users.create({
             data: {
-                Id: UserProfile.Id,
-                Email: UserProfile.Email,
-                Login: UserProfile.Login,
-                UsualFullName: UserProfile.UsualFullName,
-                DefaultAvatar: UserProfile.DefaultAvatar,
-                UploadedAvatar: UserProfile.UploadedAvatar,
-                Status: UserProfile.Status,
-                Notifications: UserProfile.Notifications,
-                Wins: UserProfile.Wins,
-                Losses: UserProfile.Losses,
-                Level: UserProfile.Level,
-                TwoFactorAuth: false,
+                id: UserProfile.Id,
+                login: UserProfile.Login,
+                displayName: UserProfile.UsualFullName,
+                defaultAvatar: UserProfile.DefaultAvatar,
+                uploadedAvatar: UserProfile.UploadedAvatar,
+                notifications: UserProfile.Notifications,
+                wins: UserProfile.Wins,
+                losses: UserProfile.Losses,
+                level: UserProfile.Level,
+                twoFactorAuth: false,
             },
         });
     }
@@ -56,8 +57,8 @@ export class UserService {
     async GetRequests(UserId: number, @Res() res) {
         let requests = await this.prisma.friends.findMany({
             where: {
-                ReceiverId: UserId,
-                Status: "Pending",
+                receiverId: UserId,
+                status: RELATION.PENDING,
             }
         });
         console.log("__PENDING__REQUESTS__ : ", requests);
@@ -67,7 +68,7 @@ export class UserService {
     async    GetUserById(Id: number) : Promise<any> {
         let user = await this.prisma.users.findUnique({
             where: {
-                Id: Id,
+                id: Id,
             },
         });
         console.log(user);
@@ -92,8 +93,8 @@ export class UserService {
                 return res.status(HttpStatus.FORBIDDEN).send({"message": `Cant Block this user | Reason : ${BlockedUser} Already Blocked ${User}`});
             const user = await this.prisma.blocks.create({
                 data: {
-                    UserId: UserDto.Id,
-                    BlockedId: BlockedUserDto.Id,
+                    userId: UserDto.Id,
+                    blockedId: BlockedUserDto.Id,
                 },
             });
             this.DeleteFriendRelation(UserDto.Id, BlockedUserDto.Id);
@@ -116,8 +117,8 @@ export class UserService {
 
             const Delete = await this.prisma.blocks.deleteMany({
                 where: {
-                    UserId: UserDto.Id,
-                    BlockedId: BlockedUserDto.Id,
+                    userId: UserDto.Id,
+                    blockedId: BlockedUserDto.Id,
                 }
             });
             return res.status(HttpStatus.OK).send({"message": "DONE"});
@@ -146,14 +147,15 @@ export class UserService {
                 return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
             let NewRelation = await this.prisma.friends.updateMany({
                 where: {
-                    ReceiverId: ReceiverDto.Id,
-                    SenderId: SenderDto.Id,
-                    Status: "Pending",
+                    receiverId: ReceiverDto.Id,
+                    senderId: SenderDto.Id,
+                    status: RELATION.PENDING,
                 },
                 data: {
-                    Status: "Friends",
+                    status: RELATION.FRIENDS,
                 }
             });
+            await this.chatService.CreatDMChanel(SenderDto.Id, ReceiverDto.Id);
             console.log("__NEW__RELATION__ : ", NewRelation);
             return res.status(HttpStatus.OK).send({"message": NewRelation.count});
         }
@@ -166,9 +168,9 @@ export class UserService {
                 return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
             const DeniedRequest = await this.prisma.friends.deleteMany({
                 where: {
-                    SenderId: SenderDto.Id,
-                    ReceiverId: ReceiverDto.Id,
-                    Status: "Pending"
+                    senderId: SenderDto.Id,
+                    receiverId: ReceiverDto.Id,
+                    status: RELATION.PENDING
                 }
             });
 
@@ -193,7 +195,7 @@ export class UserService {
             console.log(username);
             let user = await this.prisma.users.findUnique({
                 where: {
-                    Login: username,
+                    login: username,
                 },
             });
             console.log(user);
@@ -245,8 +247,8 @@ export class UserService {
         async IsBlockedUser(User : number, BlockedUserId : number) {
             let BlockStat = await this.prisma.blocks.findFirst({
                 where: {
-                    UserId: User,
-                    BlockedId: BlockedUserId,
+                    userId: User,
+                    blockedId: BlockedUserId,
                 },
             });
             console.log("__BLOCK__STAT__ : ", BlockStat);
@@ -261,8 +263,8 @@ export class UserService {
                     SenderId: Sender,
                     ReceiverId: Receiver
                 } && {
-                        SenderId: Receiver,
-                        ReceiverId: Sender
+                        senderId: Receiver,
+                        receiverId: Sender
                 },
             });
             console.log("__BLOCK__STAT__ : ", FriendshipStat);
@@ -275,14 +277,14 @@ export class UserService {
             console.log(User1, User2);
             const Delete = await this.prisma.friends.deleteMany({
                 where: {
-                    SenderId: User1,
-                    ReceiverId: User2,
+                    senderId: User1,
+                    receiverId: User2,
                 }
             });
             const Delete1 = await this.prisma.friends.deleteMany({
                 where: {
-                    SenderId: User2,
-                    ReceiverId: User1,
+                    senderId: User2,
+                    receiverId: User1,
                 }
             });
         }

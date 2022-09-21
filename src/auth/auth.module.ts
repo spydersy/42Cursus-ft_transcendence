@@ -10,6 +10,7 @@ import { UserModule } from 'src/user/user.module';
 import { UserService } from 'src/user/user.service';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
+import { ChatModule } from 'src/chat/chat.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
     PassportModule,
     UserModule,
     ConfigModule,
+    ChatModule,
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: {expiresIn: '604800s'}
