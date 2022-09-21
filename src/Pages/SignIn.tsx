@@ -1,119 +1,69 @@
 import React from 'react'
 import styled , {keyframes} from "styled-components"
 import CoverImg from "../assets/imgs/cover.png"
-import PatternImg from "../assets/imgs/pattern.png"
-import FtImg from "../assets/imgs/42Icon.svg"
+import PatternImg from "../assets/imgs/background.jpeg"
+import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
+import { LogoComponent } from '../components/Upperbar'
+
 //todo env file
 const url = "https://api.intra.42.fr/oauth/authorize?client_id=b645a2e7e9c3b0cc8345619af067b26396718e9a1d172c3f36fc602f6ce3cb20&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth&response_type=code"
 export default function SignIn() {
   return (
     <Wrraper>
-      <CoverCnt>
-         <div>
-            PingPong<br/>Time
+
          <Bloc>
+            <LogoComponent size={"big"}/>
             <Title>
             Welcome Back!
             </Title>
             <Description>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae nunc in.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae nunc in. 
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae nunc in.
+            “Only passions, great passiopns can elevate the soul to great things” - Zhang Jike
             </Description>
-            <LoginButton href={url} >
+            {/* <LoginButton href={url} >
                <img src={FtImg} alt="42logo" />
                Login with intra
-            </LoginButton>
+            </LoginButton> */}
+            <Button icon={<FtImg/>} text="Sign in with intra"/>
             <a id="TermsCond" href="#termscondPage">Terms & conditions</a>
          </Bloc>
-         </div>
+  
 
-      </CoverCnt>
-      <RightComponent>
-         <img src={PatternImg}/>
-      </RightComponent>
    </Wrraper>
   )
 }
 const breatheAnimation = keyframes`
- 0% { transform: translateY(0) }
+ /* 0% { transform: translateY(0) }
  50% { transform: translateY(10px)  }
- 100% { transform: translateY(0)  }
+ 100% { transform: translateY(0)  } */
 `
 const Wrraper = styled.div`
 
    width: 100vw;
    height: 100vh;
    display: flex;
-   
-`;
-
-const CoverCnt = styled.div`
-   background: url(${CoverImg})   no-repeat ;
+   background: url(${PatternImg})   no-repeat ;
+   /* background-size: cover; */
    background-size: 100% 100%;
-   width: 45%;
-   min-width: 550px;
-   height: 100%;
    position: relative;
-   @media  only screen and (max-width: 768px) {
-      width: 100%;
-      min-width: 100%;
-      >div{
-         justify-content: start;
-      }
-}
-   > div {
-      width: 100%;
-      height: 100%;
-      /* background: linear-gradient(152.83deg, rgba(138, 138, 138, 0.3) 0%, rgba(66, 134, 244, 0.3) 100%); */
-      /* opacity: 0.3; */
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      text-align: start;
-      font-family: 'Michroma';
-      font-size: 52px;
-      color: ${props => props.theme.colors.primaryText};
-      line-height: 74px;
-      margin-left: 100px;
-   }
 `;
-const RightComponent = styled.div`
-   width: 60%;
-   height: 100%;
 
-   display: flex;
-   align-items: center;
-   justify-content: space-around;
-   flex-direction: column;
-   /* overflow: hidden; */
-   @media  only screen and (max-width: 768px) {
-      display: none;
-    
-}
-   img{
-    
-      object-fit: cover;
-      width: 100%;
-      height: 100%;
-
-   }
-`;
 const Bloc = styled.div`
    position: absolute;
    top: 50%;
-   right: 20%;
-   width: 90%;
+   right: 10%;
+   width: 100%;
+   border-radius : 10px;
    min-width: 500px;
    max-width: 500px;
-   height: 400px;
-   transform: translate(100%, -50%);
-   background: #FFFFFF;
+   height: 600px;
+   transform: translateY( -50%);
+   background-color: ${props => props.theme.colors.primarybg}; 
    border-radius: 5px;
-   padding: 30px;
+   /* padding-top: 89px; */
    display: flex;
-   align-items: flex-start;
+   align-items: center;
    flex-direction: column;
+   padding-top : 89px;
    @media  only screen and (max-width: 768px) {
       width: 70%;
       min-width: 70%;
@@ -126,50 +76,68 @@ const Bloc = styled.div`
    text-align: center;
    align-items: center;
    font-size: ${props => props.theme.fontSize.s};
-   color: ${props => props.theme.colors.primarybg};
+   color: ${props => props.theme.colors.primaryText};
    text-decoration: underline;
 }
 `;
 const Title = styled.div`
    font-family: 'Poppins', sans-serif;
-   color:  ${props => props.theme.colors.primarybg};;
+   color:  ${props => props.theme.colors.primaryText};;
    font-size:  ${props => props.theme.fontSize.xl}; 
    font-weight: 500;
-   margin-bottom: 15px;
+   margin-top: 91px;
+   margin-bottom: 13px;
    /* object-fit : contain; */
-`;
+   `;
 const Description = styled.div`
+margin-bottom: 57px;
 font-family: 'Poppins', sans-serif;
-   color:  ${props => props.theme.colors.primarybg};;
+   color:  ${props => props.theme.colors.primaryText};;
    font-size:  ${props => props.theme.fontSize.l}; 
-   font-weight: 500;
+   font-family: 'Poppins' , sans-serif;
+font-style: normal;
+font-weight: 500;
+font-size: 15px;
+line-height: 22px;
+display: flex;
+text-align : start;
+width: 400px;
 
-   line-height: 25px;
-   opacity: 0.8;
-   text-align: left;
-   max-height: 170px;
-   height: 200px;
+color: #FFFFFF;
+opacity: 0.8;
 `;
-const LoginButton = styled.a`
-margin: 0 auto ;
-padding: 0 5px;
-width: 250px;
-height: 40px;
-left: 341px;
-top: 238px;
 
-background: linear-gradient(91.7deg, #1F8DD0 1%, #154A6B 99.47%);
+interface ButtonProps {
+   text? : string
+   icon? : React.ReactElement
+}
+
+export  function Button(props :ButtonProps ) {
+  return (
+    <LoginButtonStyle>
+      {props?.icon}
+      {props.text}
+    </LoginButtonStyle>
+  )
+}
+
+const LoginButtonStyle = styled.button`
+/* margin: 0 auto; */
+padding: 0 20px;
+height: 48px;
+background: linear-gradient(144deg, #437492 16.67%, #174486 100%);
 border-radius: 5px;
 
-box-shadow: 0 12px 14px rgba(21, 125, 189, 0.5);
 cursor: pointer;
 border: none;
 display: flex;
 align-items: center;
-justify-content: space-around;
-img{
-   width: 34px;
-   height: 24px;
+gap : 5px;
+>svg{
+   /* display: none; */
+   path {
+      stroke : #fff;
+   }
 }
 
    font-family: 'Poppins' sans-serif;

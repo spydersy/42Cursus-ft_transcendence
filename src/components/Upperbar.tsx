@@ -1,8 +1,9 @@
 import React, {useState , useEffect} from 'react'
 import styled , {css} from "styled-components"
-import SearchIcon from "../assets/imgs/searchIcon.svg"
-import {ReactComponent as BellIcon }from "../assets/imgs/bell.svg"
+import SearchIcon from "../assets/imgs/search.svg"
+import {ReactComponent as BellIcon }from "../assets/imgs/notfication.svg"
 import {ReactComponent as Logo }from "../assets/imgs/logo.svg"
+import {ReactComponent as BigLogo }from "../assets/imgs/biglogo.svg"
 import TestAvatar from "../assets/imgs/tests/guy.svg" 
 import DropDown, { NotifDropDown } from './DropDown'
 import Modal from './Modal'
@@ -54,7 +55,7 @@ export default function Upperbar() {
   
   return (
     <Wrraper>
-        <LogoComponent/>
+        <LogoComponent size={"small"} />
         <SearchBarComponent/>
         <RightCont>
           {/* <PlayButton onClick={()=>{sethideModel(!hideModel)}} >
@@ -126,12 +127,13 @@ width: 100px;
    gap: 10px;
    margin-right :10px;
 `;
-
-export  function LogoComponent() {
+interface LogoProps {
+  size : string
+}
+export  function LogoComponent(props : LogoProps) {
     return (
       <a style={{marginLeft :"10px"}}href='/'>
-
-        < Logo/>
+        {(props.size === "small")  ? <Logo/> : <BigLogo/>}
       </a>
     )
   }
@@ -149,13 +151,18 @@ export  function SearchBarComponent() {
   border-radius: 5px;
   display: flex;
   align-items: flex-start;
-  width: 50%;
+  width: 30%;
   max-width: 600px;
   height: 42px;
+  >svg{
+    path{
+      stroke:  ${props => props.theme.colors.seconderyText};;
 
+    }
+  }
       /* object-fit : contain; */
       position: relative;
-      padding: 0px 0px 0px 40px;
+      padding: 0px 0px 0px 49px;
       &::before{
         content: url(${SearchIcon});
         position: absolute;
@@ -165,18 +172,18 @@ export  function SearchBarComponent() {
       }
       input{
         background-color: transparent;
-        width: calc(100% - 40px);
+        width: calc(100% - 49px);
         height: 100%;
         border: none;
         margin: 0;
         padding: 0;
         outline: none;
-        color:  ${props => props.theme.colors.seconderyText};;
+        color:  ${props => props.theme.colors.primaryText};;
       font-size:  ${props => props.theme.fontSize.l}; 
         &::placeholder{
       color:  ${props => props.theme.colors.seconderyText};;
-      font-size: ${props => props.theme.fontSize.l};
-          opacity: 0.6;
+      font-size: ${props => props.theme.fontSize.s};
+          /* opacity: 0.6; */
         }
     }
     @media  only screen and (max-width: 768px) {

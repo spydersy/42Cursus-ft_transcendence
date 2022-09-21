@@ -19,6 +19,7 @@ import Melkarmi from "../assets/imgs/avatar/melkarmi.jpeg";
 import Mamali from "../assets/imgs/avatar/mamali.jpeg";
 import Hfadyl from "../assets/imgs/avatar/hfadyl.jpeg";
 import Fadi from "../assets/imgs/avatar/ael-fadi.jpeg";
+import { Button } from './SignIn';
 
 
 const msgList = [
@@ -108,12 +109,12 @@ display: flex;
       flex-direction: column;
     }
     .right{
-      width: 400px;
+      width: 350px;
       background-color: ${props => props.theme.colors.seconderybg}; ;
    
     }
     .left{
-      width: 400px;
+      width: 350px;
       background-color: ${props => props.theme.colors.seconderybg}; ;
       
     }
@@ -158,10 +159,13 @@ export  function ChatSidebar() {
         
         <div className='title'>
             Chat
-            <button onClick={()=>sethide(!hide)} >
+               
+               
+            <Button icon={<Group/>}/>
+            {/* <button onClick={()=>sethide(!hide)} >
 
                <Group/>
-            </button>
+            </button> */}
             {hide &&  <Modal
         isOpen={hide}
         onRequestClose={() => sethide(false)}
@@ -204,7 +208,6 @@ const ChatSidebarStyle = styled.div`
         margin: 0 auto;
         display: flex;
         align-items: center;
-        justify-content: center;
         font-size:  ${props => props.theme.fontSize.xl};
         font-family: 'Poppins', sans-serif;
         font-weight : 600;
@@ -212,18 +215,7 @@ const ChatSidebarStyle = styled.div`
         display: flex;
         align-items: center;
         justify-content: space-between;
-        >button{
-          background-color:${props => props.theme.colors.purple};
-          border : 1px solid ${props => props.theme.colors.border};
-          border-radius: 5px;
-          padding: 10px 20px;
-          >svg{
-  
-     
-            path {
-              stroke:${props => props.theme.colors.seconderyText};
-            }
-        }
+       
         }
     }
     .searchbar{

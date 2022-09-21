@@ -12,6 +12,7 @@ import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 
 import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
+import Melkarmi from "../assets/imgs/avatar/hfadyl.jpeg";
 
 // import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
@@ -69,8 +70,10 @@ export function PlayerCard(props: PlayerCardProps) {
       <PlayerCardStyle  >
       
           <div className='Identity'> 
-              
-              <img src={Avatar} className="Iavatar"alt="test" />
+              <div style={ {margin: "10px auto" ,width : "150px" , height : "150px"}} >
+                <AvatarComponent img={Melkarmi}/>
+              </div>
+              {/* <img src={Avatar} className="Iavatar"alt="test" /> */}
 
               <div className='infoSec'>
 
@@ -668,14 +671,14 @@ return (
 const Avatarr = styled.div`
 width: 100%;
 height: 100%;
-border-radius : 50%;
+border-radius : 5px;
 overflow: hidden;
 img{
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-border: 3px solid   ${props => props.theme.colors.purple};;
+/* border: 2px solid   ${props => props.theme.colors.purple};; */
 
 `;
 

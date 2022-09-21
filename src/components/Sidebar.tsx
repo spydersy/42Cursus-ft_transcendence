@@ -1,25 +1,26 @@
 import React , {useState , useRef, useEffect} from 'react'
 import styled , {css} from "styled-components"
-import {ReactComponent as DashIcon} from "../assets/imgs/dashboardIcon.svg";
+import {ReactComponent as DashIcon} from "../assets/imgs/home.svg";
 import {ReactComponent as DMIcon} from "../assets/imgs/dm.svg";
-import {ReactComponent as RoomIcon} from "../assets/imgs/room.svg";
+import {ReactComponent as RoomIcon} from "../assets/imgs/rooms.svg";
 import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
 import {ReactComponent as ArrowLeft} from "../assets/imgs/arrowLeft.svg";
 import {ReactComponent as ArrowRight} from "../assets/imgs/arrowRight.svg";
-import {ReactComponent as LogoutIcon} from "../assets/imgs/logout-icon.svg";
+import {ReactComponent as LogoutIcon} from "../assets/imgs/logout.svg";
 import {ReactComponent as LeaderIcon} from "../assets/imgs/leader-icon.svg";
+import {ReactComponent as SettingIcon} from "../assets/imgs/settings.svg";
 
 export interface barProps {
     open: boolean
     }
     const sideBarItemsList = [
         {
-            title: "Dachboard",
+            title: "Home",
             link: "/",
             icon: <DashIcon /> 
         },
         {
-            title: "Direct messages",
+            title: "Chat",
             link: "/chat",
             icon : <DMIcon />
         },
@@ -29,7 +30,7 @@ export interface barProps {
             icon : <RoomIcon />
         },
         {
-            title: "Leader Board",
+            title: "Leaderboard",
             link: "/leaderboard",
             icon : <LeaderIcon />
         }
@@ -94,7 +95,7 @@ export default function Sidebar() {
   return (
     <Test  open={open}>
     <SidebarWrraper ref={sideBaRed} open={open}>
-        {open ? <Left onClick={openClose}   />: <Right onClick={openClose} /> }
+        <Left collapsed={open} onClick={openClose}   />
 
 <Items>
         {
@@ -109,13 +110,21 @@ export default function Sidebar() {
             })
         }
        </Items> 
+       <Devider>c</Devider>
+       <Item  active={false} href={"/"}>
+                <SettingIcon/>
+                {
+                    open ? <div>Setting</div> : <ToolTip>LogOut</ToolTip>  
+                }
+                
+            </Item>
        <Item  active={false} href={"/"}>
                 <LogoutIcon/>
                 {
                     open ? <div>LogOut</div> : <ToolTip>LogOut</ToolTip>  
                 }
                 
-            </Item>;
+            </Item>
     </SidebarWrraper>
     </Test>
 
@@ -131,6 +140,7 @@ interface ItemProps {
   }
   
 const SidebarWrraper = styled.div<barProps>`
+border: 1px solid rgba(44, 104, 193, 0.2);
     width: 300px;
     max-width: 300px;
     height: calc(100% - 70px);
@@ -143,11 +153,11 @@ const SidebarWrraper = styled.div<barProps>`
     display: flex;
     align-items: flex-end;
     flex-direction: column;
-    /* border-radius: 0px 10px 0 0 ; */
-    transition-duration: 200ms;
+    transition: all 400ms ease-in-out;
     ${props => (props.open === false) && css`
-    align-items: center ;
+    // align-items: center ;
     width: 76px;
+
     `
   }
   @media  only screen and (max-width: 768px) {
@@ -178,8 +188,8 @@ const Test = styled.div<barProps>`
     display: flex;
     align-items: flex-end;
     flex-direction: column;
-    /* border-radius: 0px 10px 0 0 ; */
-    transition-duration: 200ms;
+    transition: all 400ms ease-in-out;
+
     ${props => (props.open === false) && css`
     align-items: center ;
     width: 76px;
@@ -208,40 +218,65 @@ const Right = styled(ArrowRight)`
          margin-top: 20px; 
          margin-bottom: 60px;
          path{
-             fill: ${props => props.theme.colors.seconderyText}; 
+             /* fill: ${props => props.theme.colors.seconderyText};  */
         }
          &:hover{
              path{
-             fill: ${props => props.theme.colors.primarybg}; 
+             /* fill: ${props => props.theme.colors.primarybg};  */
                 }
          }
          
     
 `;
-const Left = styled(ArrowLeft)`
+interface LeftStyleProps{
+    collapsed : boolean
+}
+const Left = styled(ArrowLeft)<LeftStyleProps>`
   
+
         align-items: flex-end; 
          margin-top: 20px; 
          margin-bottom: 60px;
          margin-right: 10px;
+         margin-left: 0;
          path{
-             fill: ${props => props.theme.colors.seconderyText}; 
+             /* fill: ${props => props.theme.colors.seconderyText};  */
         }
          &:hover{
              path{
-             fill: ${props => props.theme.colors.primarybg}; 
+             /* fill: ${props => props.theme.colors.primarybg};  */
                 }
          }
+         transition: all 400ms ease-in-out;
+
          
+         ${props => (props.collapsed === false) && css`
+            transform: rotate(180deg);
+            // margin : 0 auto;
+            margin-left: auto;
+            margin-right: auto;
+         `}
     
 `;
-const Items = styled.div`
 
+const Devider = styled.div`
+  
+    width:90%;
+    height: 1px;
+    background: rgba(44, 104, 193, 0.2);;
+    color: rgba(44, 104, 193, 0.2);;
+    margin : 0 auto;
+    overflow : hidden;
+
+`;
+const Items = styled.div`
+   
     width: 100%;
-    flex: auto;
+    /* flex: auto; */
     display: flex;
     align-items: center;
     flex-direction: column;
+    overflow : hidden;
     @media  only screen and (max-width: 768px) {
         flex-direction: row;
         justify-content: space-around;
@@ -267,7 +302,6 @@ const Items = styled.div`
         }
     }
 
-    
     
 `;
 const ToolTip = styled.span`
@@ -302,10 +336,10 @@ const Item = styled.a<ItemProps>`
 
     width: 100%;
     height: 60px;
-    color :${props => props.theme.colors.seconderyText}; 
+    color :${props => props.theme.colors.primaryText}; 
     font-size:  ${props => props.theme.fontSize.l};
     font-family: 'Poppins', sans-serif;
-    font-weight : 600;
+    font-weight : 500;
     display: flex;
     align-items: center;
     /* justify-content:  */
@@ -319,8 +353,7 @@ const Item = styled.a<ItemProps>`
         height: 30px;
         
         path{
-            /* fill: ${props => props.theme.colors.seconderyText}; */
-                stroke: ${props => props.theme.colors.seconderyText}; 
+                stroke: ${props => props.theme.colors.primaryText}; 
             }
     }
     ${props => (props.active === true) && css`
@@ -332,17 +365,7 @@ const Item = styled.a<ItemProps>`
             height: 100%;
             width: 5px;
             background-color: ${props => props.theme.colors.purple};
-            border-radius: 7px ;
         }
-        /* &::before{ ToDO
-            content: "ddd";
-            position: absolute;
-            left: 0;
-            height: 100%;
-            width: 5px;
-            background-color: ${props => props.theme.colors.border};
-            border-radius: 7px ;
-        } */
        svg{ 
             path{
                 stroke: ${props => props.theme.colors.purple}; 
@@ -372,7 +395,7 @@ const Item = styled.a<ItemProps>`
         } */
        
     }
-    transition: all 20ms ease-in;
+    // transition: all 20ms ease-in;
     
 `;
 

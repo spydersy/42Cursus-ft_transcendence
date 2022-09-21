@@ -45,7 +45,7 @@ export default function Home(props: HomeProps) {
 const Hero = styled.div`
 width: 100%;
 height: auto;
-padding: 20px 0;
+padding: 10px 0;
 margin-top: 100px;
 display: flex;
 align-items: center;
@@ -350,8 +350,8 @@ const Head = styled.div`
   text-align: start;
   /* text-transform: uppercase; */
   /* font-family: 'Poppins' , sans-serif; */
-  font-family: 'Michroma', sans-serif;
-
+  font-family: 'Poppins', sans-serif;
+  font-weight : 600;
   font-size:  ${props => props.theme.fontSize.ll};
   color:  ${props => props.theme.colors.purple};
   

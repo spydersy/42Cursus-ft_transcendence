@@ -57,7 +57,7 @@ const ai1 = {
   avatar : VegaPunk,
   msg : "AI"
 }
-const ballSpeed : number = 5;
+var ballSpeed : number = 5;
 var [directionX, directionY] = [ballSpeed, ballSpeed];
 export default function Pong({themes , mode}:myProps ) {
   const tableRef : any= useRef<HTMLHeadingElement>(null);
@@ -112,28 +112,37 @@ export default function Pong({themes , mode}:myProps ) {
 
 
   const pointScored = (side :  string)=>{
-    if (side  === "right")
-    {
-      setStart(false)
-      setscore({score1: score.score1 + 1 ,score2: score.score2 });
-      setTimeout(() => {
-        [directionX, directionY] = [ballSpeed, ballSpeed];
-        setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
+    
+  cancelAnimationFrame(rew)
+  setStart(!start)
+  if (side  === "right")
+  {
+    setscore({...score , score2: score.score2 + 1})
+  }
+  else if (side  === "left")
+  {
+    setscore({...score , score1: score.score1 + 1})
 
-      }, 3000);
+  }
 
-    }
-    else if (side  === "left")
-    {
-      setStart(false)
-      setscore({score1: score.score1  ,score2: score.score2 + 1});
-      setTimeout(() => {
-        [directionX, directionY] = [ballSpeed, ballSpeed];
-        setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
-
-        
-      }, 3000);
-    }
+  setTimeout(() => {
+    initBall()
+  }, 3000);
+  
+// }
+// else if (side  === "left")
+// {
+//   // setStart(false)
+//   // setscore({score1: score.score1  ,score2: score.score2 + 1});
+//     //     [directionX, directionY] = [ballSpeed, ballSpeed];
+//   setTimeout(() => {
+//     // rew = requestAnimationFrame(moveBall);
+//     //     setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
+//         console.log('D')
+    
+//   }, 3000);
+//   // rew = requestAnimationFrame(moveBall);
+//     }
   }
   function moveBall() {
     console.log(start)
@@ -165,16 +174,20 @@ export default function Pong({themes , mode}:myProps ) {
       moveAI(cx + directionX ,cy + directionY) 
     if (nextCX - directionX <  ballRadius)
       pointScored("left")
-    else if (nextCX - directionX > rightLimit)
+    else if (nextCX - directionX > rightLimit -  ballRadius)
+    {
+    // alert()
       pointScored("right")
+    }
     else {
       const [xPos, yPos] = [cx + directionX, cy + directionY];
       setBall(xPos, yPos)
       Predect = (Px - xPos) / directionX
       // alert(test)
-      setLine(xPos , yPos ,xPos  + (directionX  * Predect), yPos +  (directionY * Predect))
+      // setLine(xPos , yPos ,xPos  + (directionX  * Predect), yPos +  (directionY * Predect))
     }
     rew = requestAnimationFrame(moveBall);
+    console.log(rew)
   }
   
   
@@ -192,61 +205,72 @@ export default function Pong({themes , mode}:myProps ) {
         p.setAttribute('y', tableRef.current.offsetHeight  - h)
 
 
-    }
+  }
+
   function moveAI(xb : number, yb: number )
   {
-
-   
     const h = parseInt(player2Ref.current.getAttribute('height'));
-    const w = parseInt(tableRef.current.getAttribute('width'));
-      
     var yp : number ;
-    var newyp : number ;
     var xp : number ;
     yp =  parseInt(player2Ref.current.getAttribute('y'));
     xp =  parseInt(player2Ref.current.getAttribute('x'));
-    // alert(xp - )
-    // if (xb < w / 2)
-    // {
-    //   console.log(xb)
-    //   player2Ref.current.setAttribute('y', yp + 10)
-      
-    // }
-    //  if (yb + h  <  tableRef.current.offsetHeight  )
-    //   player2Ref.current.setAttribute('y', yb  )
-    // else
-    //     player2Ref.current.setAttribute('y', tableRef.current.offsetHeight - h  )
+    var PreditctY : number =  yb +( directionY * Predect) -( h / 2);
+    var TableH : number =   tableRef.current.offsetHeight;
 
-        if (yb +( directionY * Predect) > 0 && yb +( directionY * Predect) <  tableRef.current.offsetHeight )
+        if (PreditctY > 0 && PreditctY < TableH)
         { 
-          if (yb +( directionY * Predect) >   yb && yb +( directionY * Predect) < yb  + h)
+          if (PreditctY >  yb && PreditctY < yb  + h)
             return ;
-          else if (yp  > yb +( directionY * Predect))
+          else if (yp  > PreditctY)
             player2Ref.current.setAttribute('y', yp - 10)
-          else if (yp + (h / 2) < yb +( directionY * Predect))
+          else if (yp + (h / 2) < PreditctY)
             player2Ref.current.setAttribute('y', yp + 10)
        
         }
+        else if (PreditctY < TableH + (TableH / 2)  &&  PreditctY > TableH)
+        {
+            if (yp  + h < TableH)
+              player2Ref.current.setAttribute('y', yp + 10)
+
+        }
+        else if (PreditctY < 0  &&  PreditctY > - (TableH / 2))
+        {
+            if (yp  > 0)
+              player2Ref.current.setAttribute('y', yp - 10)
+
+        }
   }
+
+
+
   const  setBall =(x : number , y : number)=>{
     ballRef.current.setAttribute('cx', x);
     ballRef.current.setAttribute('cy', y);
-
-}
+  }
   const  setPlayer1 =(x : number , y : number)=>{
     playerRef.current.setAttribute('x', x);
     playerRef.current.setAttribute('y', y);
-}
+  }
   const  setPlayer2 =(x : number , y : number)=>{
     player2Ref.current.setAttribute('x', x);
     player2Ref.current.setAttribute('y', y);
-}
+  }
   const  setLine =(x1 : number , y1 : number , x2 : number , y2 : number)=>{
     lineRef.current.setAttribute('x1', x1);
     lineRef.current.setAttribute('y1', y1);
     lineRef.current.setAttribute('x2', x2);
     lineRef.current.setAttribute('y2', y2);
-}
+  }
+  function randomIntFromInterval(min : number, max : number) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+  const   initBall =()=>{
+    ballSpeed =randomIntFromInterval(-5 , 5);
+    var ballSpeed2 =randomIntFromInterval(-5 , 5);
+    // alert(ballSpeed);
+    [directionX, directionY] = [ballSpeed, ballSpeed2];
+    setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
+  }
 
 
 
@@ -255,7 +279,8 @@ useEffect(() => {
 
   const initData =()=>{
     setPlayer1(80, 0)
-    setPlayer2(tableRef.current.offsetWidth - 100, 0)
+
+    setPlayer2(tableRef.current.offsetWidth - 100,0 )
     
     console.log(mode)
     switch(mode)
@@ -295,13 +320,18 @@ useEffect(() => {
           <Score>
             {score.score1} | {score.score2}
           </Score>
+          <Player2>
+        
+        <UserComponent Ai={true} data={Player2Data}/>
+          {/* <Spinner/> */}
+        </Player2>
       </PlayerStyle>
-    <Table bgimg={themes.theme.map.banner} ref={tableRef} >
+    <Table bgimg={""} ref={tableRef} >
 
       <svg>
           <circle ref={ballRef} id="ball"  cx="20" cy="300" r="12" />
           <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" stroke-dasharray="10" />
-          <line ref={lineRef} x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" />
+          {/* <line ref={lineRef} x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" /> */}
           <rect ref={playerRef} rx="10" x="30" y="0" width="20" height="150" fill="#FFF" />
           <rect ref={player2Ref} rx="10 " y="0" width="20" height="150" fill="#FFF" />
 
@@ -309,11 +339,7 @@ useEffect(() => {
     </Table> 
       <PlayerStyle>
 
-        <Player2>
         
-        <UserComponent Ai={true} data={Player2Data}/>
-          {/* <Spinner/> */}
-        </Player2>
 
       </PlayerStyle>
       <button style={{background: "#fff"}} onClick={()=> {
@@ -367,6 +393,7 @@ const Player1 = styled.div`
   height:auto ;
   display: flex;
   align-items: center;
+  gap: 20px;
 
   `;
 const Score = styled.div`
@@ -387,7 +414,8 @@ margin-left: auto;
   height:auto ;
   display: flex;
   align-items: center;
-
+  flex-direction: row-reverse;
+  gap: 20px;
 `;
 interface Tableprops {
     

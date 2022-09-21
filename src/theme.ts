@@ -31,22 +31,22 @@ export interface ThemeProps {
   
   export const theme: ThemeProps = {
     colors: {
-      primaryText: "#C8D0D9",
-      seconderyText: "#EFF6FC",
+      primaryText: "#FFFFFF",
+      seconderyText: "#86888B",
       primarybg: "#171A22",
       bg: "#0E1117",
       seconderybg: '#171A22',
       green: '#3CC592',
       border: '#171A22',
       danger: "#F13950",
-      purple:'#58a7fe'
+      purple:'#157DBD'
 
     },
     fontSize: {
       xl : "30px",
       ll : "22px",
-      l : "17px",
-      s : "12px"
+      l : "20px",
+      s : "14px"
     }
     
   };

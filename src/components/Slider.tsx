@@ -72,6 +72,7 @@ const SliderStyle = styled.div`
         align-items: center;
         justify-content: space-between;
         width: 100%;
+        
 
 `;
 const Slide = styled.div`
@@ -96,7 +97,7 @@ overflow: hidden;
     }
     .bottom{
         font-family: 'Michroma', sans-serif;
-        color  :${props => props.theme.colors.seconderyText};;
+        color  :${props => props.theme.colors.primaryText};;
         width: 100%;
         height: 60px;
         background-color: ${props => props.theme.colors.purple};
@@ -110,7 +111,7 @@ overflow: hidden;
             align-items: center;
             >svg{
             path{
-                stroke: ${props => props.theme.colors.seconderyText};
+                stroke: ${props => props.theme.colors.primaryText};
             }
         }
         }
@@ -120,7 +121,7 @@ overflow: hidden;
 const SliderContainer = styled.div`
     /* width: 100%; */
     flex: 1;
-    height: 400px;
+    height: 300px;
     position: relative;
     overflow: hidden;
     z-index: 1;
