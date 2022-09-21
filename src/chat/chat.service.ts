@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CHANNEL } from '@prisma/client';
-import { userInfo } from 'os';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -12,9 +11,9 @@ export class ChatService {
             where: {
                 access: CHANNEL.DM,
             },
-            select : {
+            include: {
+                users: true
             }
         });
     }
 }
-

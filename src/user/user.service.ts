@@ -11,6 +11,8 @@ export class UserService {
                 private chatService: ChatService) {}
 
     async SendFriendRequest(User1Id: number, User2Id: number, @Res() res) {
+        console.log("ID1", User1Id)
+        console.log("ID2", User2Id)
         if (User1Id === User2Id)
             return res.status(HttpStatus.FORBIDDEN).send({ "message": 'Wach Nta 7maaaaar'});
             let FriendsStat = await this.prisma.friends.findMany({
@@ -85,19 +87,19 @@ export class UserService {
             if (UserDto === null || BlockedUserDto === null)
                 return res.status(HttpStatus.BAD_REQUEST).send({"message": "Bad Request"});
                 console.log(`${User} Want To Block ${BlockedUser}`);
-            if (UserDto.Id === BlockedUserDto.Id)
+            if (UserDto.id === BlockedUserDto.id)
                 return res.status(HttpStatus.FORBIDDEN).send({"message": "Cant Block Yourself :) "});
-            if (await this.IsBlockedUser(UserDto.Id, BlockedUserDto.Id) === true)
+            if (await this.IsBlockedUser(UserDto.id, BlockedUserDto.id) === true)
                 return res.status(HttpStatus.OK).send({"message": `${User} Already Blocked ${BlockedUser}`});
-            if (await this.IsBlockedUser(BlockedUserDto.Id, UserDto.Id) === true)
+            if (await this.IsBlockedUser(BlockedUserDto.id, UserDto.id) === true)
                 return res.status(HttpStatus.FORBIDDEN).send({"message": `Cant Block this user | Reason : ${BlockedUser} Already Blocked ${User}`});
             const user = await this.prisma.blocks.create({
                 data: {
-                    userId: UserDto.Id,
-                    blockedId: BlockedUserDto.Id,
+                    userId: UserDto.id,
+                    blockedId: BlockedUserDto.id,
                 },
             });
-            this.DeleteFriendRelation(UserDto.Id, BlockedUserDto.Id);
+            this.DeleteFriendRelation(UserDto.id, BlockedUserDto.id);
             return res.status(HttpStatus.OK).send({"message": "DONE"});
         }
 
@@ -109,16 +111,16 @@ export class UserService {
                 return res.status(HttpStatus.BAD_REQUEST).send({"message": "Bad Request"});
                 console.log(`${User} Want To Unblock ${BlockedUser}`);
 
-            if (UserDto.Id === BlockedUserDto.Id)
+            if (UserDto.id === BlockedUserDto.id)
                 return res.status(HttpStatus.FORBIDDEN).send({"message": "Cant Unblock Yourself :) "});
 
-            if (await this.IsBlockedUser(BlockedUserDto.Id, UserDto.Id) === true)
+            if (await this.IsBlockedUser(BlockedUserDto.id, UserDto.id) === true)
                 return res.status(HttpStatus.FORBIDDEN).send({"message": `Cant Unblock this user | Reason : ${BlockedUser} Already Blocked ${User}`});
 
             const Delete = await this.prisma.blocks.deleteMany({
                 where: {
-                    userId: UserDto.Id,
-                    blockedId: BlockedUserDto.Id,
+                    userId: UserDto.id,
+                    blockedId: BlockedUserDto.id,
                 }
             });
             return res.status(HttpStatus.OK).send({"message": "DONE"});
@@ -130,12 +132,14 @@ export class UserService {
 
             if (ReceiverDto === null || SenderDto === null)
                 return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
-            if (await this.IsBlockedUser(ReceiverDto.Id, SenderDto.Id) ||
-                await this.IsBlockedUser(SenderDto.Id, ReceiverDto.Id)) {
+            if (await this.IsBlockedUser(ReceiverDto.id, SenderDto.id) ||
+                await this.IsBlockedUser(SenderDto.id, ReceiverDto.id)) {
                 return res.status(HttpStatus.FORBIDDEN).send({"message": `${Receiver} blocked ${Sender}`});
             }
-            if (await this.FriendsRelationExist(SenderDto.Id, ReceiverDto.Id) === false)
-                return await this.SendFriendRequest(SenderDto.Id, ReceiverDto.Id, res);
+            console.log("AA : ", SenderDto.id);
+            console.log("BB : ", ReceiverDto.id);
+            if (await this.FriendsRelationExist(SenderDto.id, ReceiverDto.id) === false)
+                return await this.SendFriendRequest(SenderDto.id, ReceiverDto.id, res);
             return res.status(HttpStatus.OK).send({"message": "Relation Already Exist"});
         }
 
@@ -147,15 +151,15 @@ export class UserService {
                 return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
             let NewRelation = await this.prisma.friends.updateMany({
                 where: {
-                    receiverId: ReceiverDto.Id,
-                    senderId: SenderDto.Id,
+                    receiverId: ReceiverDto.id,
+                    senderId: SenderDto.id,
                     status: RELATION.PENDING,
                 },
                 data: {
                     status: RELATION.FRIENDS,
                 }
             });
-            await this.chatService.CreatDMChanel(SenderDto.Id, ReceiverDto.Id);
+            await this.chatService.CreatDMChanel(SenderDto.id, ReceiverDto.id);
             console.log("__NEW__RELATION__ : ", NewRelation);
             return res.status(HttpStatus.OK).send({"message": NewRelation.count});
         }
@@ -168,8 +172,8 @@ export class UserService {
                 return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
             const DeniedRequest = await this.prisma.friends.deleteMany({
                 where: {
-                    senderId: SenderDto.Id,
-                    receiverId: ReceiverDto.Id,
+                    senderId: SenderDto.id,
+                    receiverId: ReceiverDto.id,
                     status: RELATION.PENDING
                 }
             });
@@ -184,7 +188,7 @@ export class UserService {
 
             if (ReceiverDto === null || SenderDto === null)
                 return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
-            this.DeleteFriendRelation(SenderDto.Id, ReceiverDto.Id);
+            this.DeleteFriendRelation(SenderDto.id, ReceiverDto.id);
             return res.status(HttpStatus.OK).send({"message": "DONE"});
         }
 
