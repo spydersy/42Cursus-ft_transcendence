@@ -205,7 +205,7 @@ const TheBox = styled.div`
 const ProgressBar = styled.div`
 width: 100%;
 height: 32px;
-background-color: ${GreyBackcolor};
+background-color: ${props => props.theme.colors.primarybg};
 border-radius: 18px;
 display: flex;
 align-items: center;
@@ -219,7 +219,7 @@ margin: 15px 0px;
   align-items: flex-end;
   height: 100%;
   width: ${ProgressUser};
-  background-color:${Backcolor};
+  background-color: ${props => props.theme.colors.purple};
   border-radius: 15px;
 
   .lvl{

@@ -95,7 +95,7 @@ export default function Sidebar() {
   return (
     <Test  open={open}>
     <SidebarWrraper ref={sideBaRed} open={open}>
-        <Left collapsed={open} onClick={openClose}   />
+        <Left open={open} onClick={openClose}   />
 
 <Items>
         {
@@ -229,7 +229,7 @@ const Right = styled(ArrowRight)`
     
 `;
 interface LeftStyleProps{
-    collapsed : boolean
+    open : boolean
 }
 const Left = styled(ArrowLeft)<LeftStyleProps>`
   
@@ -250,7 +250,7 @@ const Left = styled(ArrowLeft)<LeftStyleProps>`
          transition: all 400ms ease-in-out;
 
          
-         ${props => (props.collapsed === false) && css`
+         ${props => (props.open === false) && css`
             transform: rotate(180deg);
             // margin : 0 auto;
             margin-left: auto;

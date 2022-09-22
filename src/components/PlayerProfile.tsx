@@ -17,33 +17,17 @@ import Melkarmi from "../assets/imgs/avatar/hfadyl.jpeg";
 // import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 // ChartJS.register(ArcElement, Tooltip, Legend);
+import type { ChartData, ChartOptions } from 'chart.js';
+import { Radar } from "react-chartjs-2";
 
-import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-
-import { Radar } from 'react-chartjs-2';
-import $ from 'jquery';
-
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-);
-
-
-
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 /// UserProfile Variants  
+interface RadarProps {
+  options: ChartOptions<'radar'>;
+  data: ChartData<'radar'>;
+}
 const Backcolor = css`${props => props.theme.colors.purple}`
 const GreyBackcolor = "#282c34"
 // const Barside = "#f3460fe"
@@ -105,7 +89,7 @@ const PlayerCardStyle = styled.div`
 padding: 0px 0px;
 margin-bottom: 13px;
 width:  100%;
-height: 300px;
+height: 400px;
 display: flex;
 position: relative;
 border-radius: 10px 10px 10px 10px;
@@ -113,10 +97,11 @@ border-radius: 10px 10px 10px 10px;
 .Identity{
     width: 40%;
     height: 100%;
-    background-color:${Backcolor};
+    /* background-color:${Backcolor}; */
     border-radius: 10px 0px 0px 0px;
     bottom: 0px;
-
+    background: linear-gradient(144deg, #74549C 16.67%, #3581B3 100%);
+border-radius: 10px 30px 30px 10px;
     .Iavatar{
         background-color: white;
         display: flex;
@@ -135,22 +120,16 @@ border-radius: 10px 10px 10px 10px;
     }
 
     .infoSec {
-        position: absolute;
-        height: 70px;
-        bottom: 0px;
-        justify-content: center;
-        left: 2%;
-        bottom: 5px;
-
+        padding : 10px;
         .Bar{
             margin-top: 5px;
             display: flex;
             align-items: center;
+            font-family: 'Poppins', sans-serif;
             .name{
-                font-family: 'Michroma', sans-serif;
                 font-style: normal;
                 background-color: #8841ca1b;
-                font-size: 12px;
+                font-size: 20px;
                 min-width: 90px;
                 line-height: 20px;
                 display: flex;
@@ -179,68 +158,107 @@ const player1 = { PlayedGames : 350,  lostGames : [22,18,31,52,22] , WonGames : 
 const player2 = { PlayedGames : 222,  lostGames : [22,18,31,52,22] , WonGames :  [0, 50, 30, 40, 26], Rank : rank2};
 
 
-export const data = {
-  labels: ['Computer mode', 'classic', 'Tag-Team', 'Challenge Friend', 'Mode 5'],
-  datasets: [
-    {
-      label: 'Win-Game',
-      data: player1.WonGames,
-      backgroundColor: 'rgba(70, 180, 90, 0.275)',
-      borderColor: '#25dc43',
-      borderWidth: 2,
-    },
-    {
-      label: 'Win-Game',
-      data: player2.WonGames,
-      backgroundColor: 'rgba(70, 180, 90, 0.275)',
-      borderColor: '#fff',
-      borderWidth: 2,
-    },
-  ],
+// export const data = {
+//   labels: ['Computer mode', 'classic', 'Tag-Team', 'Challenge Friend', 'Mode 5'],
+//   datasets: [
+//     {
+//       label: 'Win-Game',
+//       data: player1.WonGames,
+//       backgroundColor: 'rgba(70, 180, 90, 0.275)',
+//       borderColor: '#25dc43',
+//       borderWidth: 2,
+//     },
+//     {
+//       label: 'Win-Game',
+//       data: player2.WonGames,
+//       backgroundColor: 'rgba(70, 180, 90, 0.275)',
+//       borderColor: '#fff',
+//       borderWidth: 2,
+//     },
+//   ],
   
-};
+// };
 
-export const data1 = {
-  labels: ['Computer mode', 'classic', 'Tag-Team', 'Challenge Friend', 'Mode 5'],
+// export const data1 = {
+//   labels: ['Computer mode', 'classic', 'Tag-Team', 'Challenge Friend', 'Mode 5'],
  
+//   datasets: [
+//     {
+//       label: 'Lost-Game',
+//       data:  player1.lostGames,
+//       backgroundColor: 'rgba(221, 50, 50, 0.275)',
+//       borderColor: '#e31f1f',
+//       borderWidth: 2,
+//     },
+//   ],
+// };
+
+// const options : any = {
+//   legend: {
+//     position: 'bottom'
+//   },
+//   title: {
+//     display: true,
+//     text: 'Chart.js Radar Chart'
+//   },
+//   scale: {
+//     reverse: false,
+//     gridLines: {
+//       color: [
+//         'black',
+//         'red',
+//         'orange',
+//         'yellow',
+//         'green',
+//         'blue',
+//         'indigo',
+//         'violet'
+//       ]
+//     },
+//     ticks: {
+//       beginAtZero: true
+//     }
+//   }
+// }
+
+export const RadarData = {
+  labels: ["Finger Strength", "Power", "Endurance", "Stability", "Flexability"],
   datasets: [
     {
-      label: 'Lost-Game',
-      data:  player1.lostGames,
-      backgroundColor: 'rgba(221, 50, 50, 0.275)',
-      borderColor: '#e31f1f',
-      borderWidth: 2,
-    },
-  ],
-};
-
-const options : any = {
-  legend: {
-    position: 'top'
-  },
-  title: {
-    display: true,
-    text: 'Chart.js Radar Chart'
-  },
-  scale: {
-    reverse: false,
-    gridLines: {
-      color: [
-        'black',
-        'red',
-        'orange',
-        'yellow',
-        'green',
-        'blue',
-        'indigo',
-        'violet'
-      ]
-    },
-    ticks: {
-      beginAtZero: true
+      label: "March",
+      backgroundColor: "rgba(34, 202, 236, .2)",
+      borderColor: "rgba(34, 202, 236, 1)",
+      pointBackgroundColor: "rgba(34, 202, 236, 1)",
+      poingBorderColor: "#fff",
+      pointHoverBackgroundColor: "#fff",
+      pointHoverBorderColor: "rgba(34, 202, 236, 1)",
+      data: [13, 10, 12, 6, 5]
     }
-  }
-}
+  ]
+};
+export const RadarOptions : ChartOptions<'radar'> = {
+  // scales : {
+  //   lin    
+  // }
+  // scale: {
+  //   ticks: {
+  //     min: 0,
+  //     max: 16,
+  //     stepSize: 2,
+  //     showLabelBackdrop: false,
+  //     backdropColor: "rgba(203, 197, 11, 1)"
+  //   },
+  //   angleLines: {
+  //     color: "#FFF",
+  //     lineWidth: 1
+  //   },
+  //   gridLines: {
+  //     color: "#FFF",
+  //     circular: true
+
+  //   }
+  // }
+};
 
 
 //        // 
@@ -251,18 +269,11 @@ export function Stats(props: PlayerCardProps) {
         <Data>
 
             <div className='Radar'>
-              <Radar  data={data}   options={options} />
+              <Radar  data={RadarData}   options={RadarOptions} />
             </div>
             
-            <div  id="pentagon">
-                {/* <Penta/> */}
-                <img src={props.player.rank} className="Rank" />
-            </div>
-
-            {/* <div className='Radar1'>
-              <Radar id='radaro' data={data1} />
-            </div> */}
-
+        
+   
         </Data>
       </StatsStyle>
     )
@@ -284,26 +295,12 @@ const Data = styled.div`
 width: 100%;
 height: 100%;
 display: flex;
-position: relative;
-display: flex;
 align-items: center;
 justify-content: center;
 justify-content: space-around;
 
 .Radar {
-  /* width: 50%; */
-  /* height: 70px; */
-  position: absolute;
-  right: 3%;
-  top: 0px;
-  > canvas {
-  
-    /* background-color: #ff000021; */
-    /* background-color: #a7262f53; */
-    /* background-color: black; */
-    /* width: 50%; */
-    /* height: 50%; */
-  }
+
 }
 
  
@@ -682,7 +679,7 @@ return (
 const Avatarr = styled.div`
 width: 100%;
 height: 100%;
-border-radius : 5px;
+border-radius : 50%;
 overflow: hidden;
 background-color: white;
 img{
