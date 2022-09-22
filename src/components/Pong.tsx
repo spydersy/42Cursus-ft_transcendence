@@ -65,14 +65,14 @@ export default function Pong({themes , mode}:myProps ) {
   const playerRef : any = useRef<SVGRectElement >(null);
   const lineRef : any = useRef<SVGLineElement >(null);
   const player2Ref : any = useRef<SVGRectElement >(null);
+  const requestRef = React.useRef(0)
+  const score1Ref = React.useRef(0)
+  const score2Ref = React.useRef(0)
   var player : number;
-  const [start, setStart] = useState(false)
+  const [start, setStart] = useState(true)
   const [header, setHeader] = useState("waiting")
-  const [Player2Data, setPlayer2Data] = useState<Player2Type>(player2)
-  const [score, setscore] = useState<ScoreType>({
-    score1 : 0,
-    score2 : 0,
-  })
+  const [Player2Data, setPlayer2Data] = useState<Player2Type | null>(null)
+  const [score, setscore] = useState(0)
 
   var UP_KEY = 38;
   var DOWN_KEY = 40;
@@ -113,44 +113,31 @@ export default function Pong({themes , mode}:myProps ) {
 
   const pointScored = (side :  string)=>{
     
-  cancelAnimationFrame(rew)
-  setStart(!start)
-  if (side  === "right")
-  {
-    setscore({...score , score2: score.score2 + 1})
-  }
-  else if (side  === "left")
-  {
-    setscore({...score , score1: score.score1 + 1})
-
-  }
-
-  setTimeout(() => {
-    initBall()
-  }, 3000);
-  
-// }
-// else if (side  === "left")
-// {
-//   // setStart(false)
-//   // setscore({score1: score.score1  ,score2: score.score2 + 1});
-//     //     [directionX, directionY] = [ballSpeed, ballSpeed];
-//   setTimeout(() => {
-//     // rew = requestAnimationFrame(moveBall);
-//     //     setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
-//         console.log('D')
+    // setStart(!start)
     
-//   }, 3000);
-//   // rew = requestAnimationFrame(moveBall);
-//     }
+    // setTimeout(() => {
+        initBall()
+      // }, 3000);
+      if (side  === "right")
+      {
+        score1Ref.current += 1; 
+      }
+      else if (side  === "left")
+      {
+        // alert(score2Ref.current )
+        score2Ref.current += 1; 
+        
+      }
+      // cancelAnimationFrame(requestRef.current)
+  
   }
   function moveBall() {
-    console.log(start)
     
     const Px =  parseInt(player2Ref.current.getAttribute('x'));
 
     const cx = parseInt(ballRef.current.getAttribute('cx'));
     const cy = parseInt(ballRef.current.getAttribute('cy'));
+    // setscore(score + 1)
     
     const ballRadius = parseInt(ballRef.current.getAttribute('r'));
     const leftLimit = ballRadius;
@@ -176,18 +163,17 @@ export default function Pong({themes , mode}:myProps ) {
       pointScored("left")
     else if (nextCX - directionX > rightLimit -  ballRadius)
     {
-    // alert()
       pointScored("right")
     }
     else {
       const [xPos, yPos] = [cx + directionX, cy + directionY];
       setBall(xPos, yPos)
       Predect = (Px - xPos) / directionX
-      // alert(test)
-      // setLine(xPos , yPos ,xPos  + (directionX  * Predect), yPos +  (directionY * Predect))
     }
-    rew = requestAnimationFrame(moveBall);
-    console.log(rew)
+    requestRef.current = requestAnimationFrame(moveBall);
+  
+
+
   }
   
   
@@ -265,6 +251,7 @@ export default function Pong({themes , mode}:myProps ) {
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
   const   initBall =()=>{
+    console.log(score)
     ballSpeed =randomIntFromInterval(-5 , 5);
     var ballSpeed2 =randomIntFromInterval(-5 , 5);
     // alert(ballSpeed);
@@ -275,7 +262,6 @@ export default function Pong({themes , mode}:myProps ) {
 
 
 useEffect(() => {
-  console.log(themes.theme.map.banner)
 
   const initData =()=>{
     setPlayer1(80, 0)
@@ -288,26 +274,23 @@ useEffect(() => {
       case "AI":
         setPlayer2Data(ai1)
         break ;
-        default:
-          setPlayer2Data(player2)
-          
+        case "Classic":
+
+
+          setPlayer2Data(null)
+          break ;
+          default:
+            setPlayer2Data(player2)
+            
+          }
         }
-    }
-
-    setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
-    initData()
-    tableRef.current.addEventListener("mousemove", movePlayer1)
-  } ,[])
-
-
-  useEffect(() => {
-    if (start)
-    {
-      moveBall()
-    }
-  
-
-  }, [start])
+        
+        setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
+        initData()
+        tableRef.current.addEventListener("mousemove", movePlayer1)
+      } ,[])
+      
+      
   
   return (
     <>
@@ -318,12 +301,14 @@ useEffect(() => {
 
           </Player1>
           <Score>
-            {score.score1} | {score.score2}
+           {score}
+            {score1Ref.current} | {score2Ref.current}
           </Score>
           <Player2>
         
-        <UserComponent Ai={true} data={Player2Data}/>
-          {/* <Spinner/> */}
+        
+          {Player2Data === null ?   <Spinner/>  : <UserComponent Ai={true} data={Player2Data}/>  }
+         
         </Player2>
       </PlayerStyle>
     <Table bgimg={""} ref={tableRef} >
@@ -343,9 +328,11 @@ useEffect(() => {
 
       </PlayerStyle>
       <button style={{background: "#fff"}} onClick={()=> {
-        cancelAnimationFrame(rew)
-setStart(!start)
-
+        setStart(!start)
+        if (start === true)
+          cancelAnimationFrame(requestRef.current)
+        else
+          moveBall()
       }}>
         {
           start ? "Pause" : "start"

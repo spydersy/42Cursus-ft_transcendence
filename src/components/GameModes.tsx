@@ -1,6 +1,6 @@
 import React , {useState} from 'react'
 import { HeadComponent } from '../Pages/Home'
-import Carousel from './Carousel'
+
 import styled from "styled-components"
 import Modal from './Modal'
 import GameModal from './modals/GameModal'
@@ -70,6 +70,8 @@ const [mode, setmode] = useState("")
 
     if (id  === 0)
       setmode("AI" )
+    if (id  === 1)
+      setmode("Classic" )
     sethideModel(!hideModel)
   }
   const { carouselFragment ,      slideToNextItem } = useSpringCarousel({
