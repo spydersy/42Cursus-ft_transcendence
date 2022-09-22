@@ -43,7 +43,6 @@ let GameGateway = class GameGateway {
     }
     handleConnection(client, payload) {
         this.logger.log("client is connected " + client.id);
-        client.emit("disconnected");
     }
     handleJoinRoom(client, args) {
         this.logger.log("client " + client.id + " joined  " + args.name + " : " + args.room);

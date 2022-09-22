@@ -2,7 +2,7 @@ import { SubscribeMessage, WebSocketGateway , OnGatewayInit , OnGatewayConnectio
 import { Socket, Server } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { get } from 'http';
-
+import { Room } from './room';
 import { Controller, Get } from '@nestjs/common';
 
 @Controller('cats')
@@ -24,7 +24,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   @WebSocketServer() wss : Server
   private logger: Logger = new Logger('GameLogger')
   private roomlenght: number = 0
-  private roomArray: string[] = []
+  private roomArray: Room[] = []
 
   afterInit(server: any) {
     this.logger.log("After Init")
@@ -42,8 +42,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   @SubscribeMessage('msgToServer')
   handleConnection(client: any, payload: any): void {
     this.logger.log("client is connected "  + client.id)
-    client.emit("disconnected")
-    // console.log("client is connected")
+ 
 
   }
 
@@ -63,33 +62,10 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         client.emit("RoomJoined",this.roomArray.length )
     }
 
-    // if (_room && _room.has(client.id))
-    // {
-    //   // var r = this.wss.sockets.adapter.rooms
-    //   // var l = Object(r);
-      
-    //   // this.logger.log(l)
-    // }
-    // else
-    // {
-    //   if (this.roomlenght < 2)
-    //   {
-    //    
-      
-    //   }
-    //   else
-    //     client.emit("roomFilled",this.roomlenght )
-    //   this.roomlenght++; 
-    // }
-
-
-    // this.logger.log(this.roomlenght)
-  
-    // client.join(room[0])
     if (this.roomArray.length == 2)
         this.wss.to(args.room).emit("StartGame" )
 
-    // console.log("client is connected")
+
   }
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: any, args: any): void {
@@ -98,8 +74,5 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     if(i != -1)
 	    this.roomArray.splice(i, 1);
     client.leave(args.room)
-
-
-    // console.log("client is connected")
   }
 }
