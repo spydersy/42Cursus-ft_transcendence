@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserName } from 'src/dtos/Inputs.dto';
 import { UserService } from 'src/user/user.service';
-import { Response } from 'express';
+import { query, Response } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RELATION } from '@prisma/client';
 
@@ -13,14 +13,21 @@ export class ProfileService {
     constructor(private userService: UserService,
                 private prisma: PrismaService) {}
 
-    async me(@Req() req , @Res() res: Response) {
+    async me(@Req() req , @Query() query, @Res() res: Response) {
+        // JUST FOR TEST
         let ForbiddenString : string = "";
         let TestUserNameDTO: UserName ={
             UserName: ForbiddenString,
         }
         console.log("__TEST__USER_NNAME__DTO__ : ", TestUserNameDTO);
+        if (query['friends']) {
+            console.log("AAAAA");
+            let profile = await this.userService.GetUserByLogin(req.user.username);
+        return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000'}).send("__FRIENDS__");
+        return "test00";
+        }
         let profile = await this.userService.GetUserByLogin(req.user.username);
-        return res.set({'Access-Control-Allow-Origin': 'http://localhost:3001'}).send(profile);
+        return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000'}).send(profile);
     }
 
     async GetRequests(@Req() req) {

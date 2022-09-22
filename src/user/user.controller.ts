@@ -5,7 +5,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserService } from './user.service';
 
 @UseGuards(JwtAuthGuard)
-@Controller('user')
+@Controller('users')
 export class UserController {
 
     constructor(private userService: UserService) {}
@@ -21,6 +21,11 @@ export class UserController {
             return {"statusCode":404, "message": `${req.params.id} does not exist`, "error":"Not Found"};
         }
         return user;
+    }
+
+    @Get() 
+    async GetAllUsers(@Req() req, @Res() res){
+        this.userService.GetAllUsers(res);
     }
 
     @Get('relation/:id')

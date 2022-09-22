@@ -222,6 +222,12 @@ export class UserService {
             return false;
         }
 
+        async GetAllUsers(@Res() res) {
+            let allUser = await this.prisma.users.findMany() ;
+            console.log("__ALL__USERS__ : ", allUser)
+            return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000'}).send(allUser);
+            // return allUser;
+        }
     /*
     *  Utils : ************************************************************************************
     */

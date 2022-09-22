@@ -37,7 +37,7 @@ export class ProfileController {
           return res.send({"message": "Bad Request"});
       }
     }
-    return this.profileService.me(req, res);
+    return this.profileService.me(req, query, res);
   }
 
   @Put('update/:id')
