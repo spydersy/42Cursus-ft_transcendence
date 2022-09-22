@@ -95,7 +95,7 @@ function App() {
               <Route path="/rooms" element={<Room />} />
               <Route path="/leaderboard" element={<Leader />} />
               <Route path="/" element={<Home settheme={(e: any)=> setGametheme(e)} />} />
-              <Route path="/profile/id" element={<Profile  />} />
+              <Route path="/profile/:id" element={<Profile  />} />
             </Routes>
           </Cont>
         </Main>

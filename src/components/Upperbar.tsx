@@ -12,6 +12,7 @@ import { ReactComponent as SettingIcon} from "../assets/imgs/settings.svg"
 import { theme } from '../theme'
 import Melkarmi from "../assets/imgs/avatar/melkarmi.jpeg";
 import { AvatarComponent } from './PlayerProfile'
+import NoUserIcon from "../assets/imgs/nouser-icon.svg";
 
 interface ListTypes {
   title : string,
@@ -19,20 +20,20 @@ interface ListTypes {
   href: string
 
 }
-const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/id"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
 
 interface UserProp {
-  DefaultAvatar: string,
-
+  defaultAvatar: string,
+  login : string
 }
 interface NotifProps {
   setopen: (e : boolean) => void,
-
+  
 }
+const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/melkarmi"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
 export default function Upperbar() {
   const [open, setopen] = useState(false)
   const [hideModel, sethideModel] = useState(false)
-  const [currentUser, setcurrentUser] = useState< UserProp>({DefaultAvatar : Melkarmi})
+  const [currentUser, setcurrentUser] = useState< UserProp>({defaultAvatar : NoUserIcon , login : ""})
   const ToggleDD = (e : any)=>{
     setopen(!open)
     e.stopPropagation();
@@ -45,8 +46,8 @@ export default function Upperbar() {
     if (s)
     {
       const data : UserProp =  JSON.parse(s || '{}');
-
       setcurrentUser(data)
+      list[0].href = "/profile/" + data.login
       console.log(data)
     }
 
@@ -58,13 +59,11 @@ export default function Upperbar() {
         <LogoComponent size={"small"} />
         <SearchBarComponent/>
         <RightCont>
-          {/* <PlayButton onClick={()=>{sethideModel(!hideModel)}} >
-            Play
-          </PlayButton> */}
+
           <NotificationComponent setopen={(e)=>setopen(e)} />
           <div  style={{position : "relative"}} onClick={(e)=>{ToggleDD(e)}}>
             <div style={{width : "40px", height :"40px"}}>
-            <AvatarComponent img={currentUser?.DefaultAvatar!} />
+            <AvatarComponent  img={currentUser?.defaultAvatar!} />
             </div>
             {
               open && <DropDown closeDropdown={ ()=>{

@@ -657,10 +657,21 @@ const ElapsedTime = styled.div`
     /* margin: 5px 0px 5px 2px; */
   }
 `;
-
-interface AvatarProps { img: string, }
+interface UserProp {
+  defaultAvatar: string,
+  login : string
+}
+interface AvatarProps {img: string }
 
 export  function AvatarComponent(props: AvatarProps) {
+  var s : string | null = localStorage.getItem('user');
+ 
+  // const [image, setimage] = useState<undefined | string>()
+  useEffect(() => {
+   
+
+  }, [])
+  
 return (
   <Avatarr>
     <img src={props.img} alt='avatar' />
@@ -673,6 +684,7 @@ width: 100%;
 height: 100%;
 border-radius : 5px;
 overflow: hidden;
+background-color: white;
 img{
   width: 100%;
   height: 100%;
