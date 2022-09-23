@@ -27,7 +27,7 @@ export class ProfileController {
           return res.send("this.userService.GetGames()");
           break;
         case 'requests':
-          return await this.userService.GetRequests(req.user.userId, res);
+          return await this.profileService.GetRequests(req.user.userId, res);
           break;
         case 'blacklist':
           return res.send("this.userService.GetBlackList()");

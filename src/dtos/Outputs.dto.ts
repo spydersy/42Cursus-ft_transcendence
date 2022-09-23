@@ -17,17 +17,3 @@ export class Profile {
     Losses:         number;
     Level:          number;
 }
-
-/*
-{
-    "Id":62700,
-    "Login":"abelarif",
-    "UsualFullName":"Achraf Belarif",
-    "Avatar":"https://avatars.dicebear.com/api/croodles-neutral/abelarif.svg",
-    "Status":"online",
-    "Notifications":{},
-    "Wins":0,
-    "Losses":0,
-    "Level":0,
-}
-*/

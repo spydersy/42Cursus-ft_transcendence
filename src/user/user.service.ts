@@ -140,7 +140,7 @@ export class UserService {
             console.log("BB : ", ReceiverDto.id);
             if (await this.FriendsRelationExist(SenderDto.id, ReceiverDto.id) === false)
                 return await this.SendFriendRequest(SenderDto.id, ReceiverDto.id, res);
-            return res.status(HttpStatus.OK).send({"message": "Relation Already Exist"});
+            return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000'}).status(HttpStatus.OK).send({"message": "Relation Already Exist"});
         }
 
         async AcceptFriendRequest(Receiver: string, Sender: string, @Res() res) {
@@ -238,7 +238,7 @@ export class UserService {
                 Email: UserProfile['email'],
                 Login: UserProfile['login'],
                 UsualFullName: UserProfile['usual_full_name'],
-                DefaultAvatar: `https://avatars.dicebear.com/api/croodles-neutral/${UserProfile['login']}.svg`,
+                DefaultAvatar: `https://avatars.dicebear.com/api/croodles-neutral/${UserProfile['login']}.jpg`,
                 UploadedAvatar: "",
                 Status: "online",
                 Notifications: {},

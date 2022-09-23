@@ -30,15 +30,24 @@ export class ProfileService {
         return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000'}).send(profile);
     }
 
-    async GetRequests(@Req() req) {
+    async GetRequests( UserId: number, @Res() res) {
         let requests = await this.prisma.friends.findMany({
             where: {
-                receiver: req.user.userId,
+                receiverId: UserId,
                 status: RELATION.PENDING,
+            },
+            include: {
+                sender: {
+                    select: {
+                        login: true,
+                    }
+                }
             }
         });
-        console.log("__PENDING__REQUESTS__ : ", requests);
-        return requests;
+        console.log("__PENDING__REQUESTS__00__ : ", requests[0]);
+        console.log("__PENDING__REQUESTS__11__ : ", requests[1]);
+        return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000'}).send(requests);
+        // return res.set().send();// requests;
     }
 
     async GetFriends(@Req() req) {
