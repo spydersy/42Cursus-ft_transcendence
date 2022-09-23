@@ -1,4 +1,4 @@
-import React from 'react'
+import React , {useEffect , useState} from 'react'
 import styled , {css} from "styled-components"
 import { AvatarComponent } from '../components/PlayerProfile';
 import { HeadComponent } from './Home';
@@ -8,6 +8,7 @@ import Melkarmi from "../assets/imgs/avatar/melkarmi.jpeg";
 import Mamali from "../assets/imgs/avatar/mamali.jpeg";
 import Hfadyl from "../assets/imgs/avatar/hfadyl.jpeg";
 import Fadi from "../assets/imgs/avatar/ael-fadi.jpeg";
+import axios from 'axios';
 
 
 const list = [
@@ -72,7 +73,23 @@ played : 250,
 img : Fadi
 
 }]
+
 export default function Leader() {
+
+    const [users, setusers] = useState([])
+    useEffect(() => {
+         axios.get("http://localhost:8000/users", 
+    {withCredentials: true} 
+  ).then((res)=>{
+    // console.log(res.data)
+    setusers(res.data)
+
+  }).catch((err)=>{
+
+        // history.pushState("/signin");
+    })
+    }, [])
+    
   return (
     <LeaderStyle className='container' style={{marginTop : "100px"}}>
         <HeadComponent title='Leader Board' />
@@ -101,18 +118,18 @@ export default function Leader() {
             <th>lost</th>
         </tr>
         {
-        list.map((data : any , id : number)=>{
+        users?.map((data : any , id : number)=>{
             return <Rank>
                 <td className='id'> {id + 1}</td>
                 <td>
-                    <div>
+                    <a href={"/profile/" + data.login}>
                         <div style={{width: "40px" , height: "40px"}}>
-                            <AvatarComponent img={data.img}/>
+                            <AvatarComponent img={data.defaultAvatar}/>
                         </div>
                         <div>
-                            {data.name}
+                            {data.login}
                         </div>
-                    </div>
+                    </a>
                 </td>
                 <td>
                    10000
@@ -233,7 +250,7 @@ const Rank = styled.tr`
         padding: 10px;
         text-align: start;
         
-        >div{
+        >a{
             width: 100%;
             display: flex;
             align-items: center;

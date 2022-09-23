@@ -24,6 +24,7 @@ import { Radar } from "react-chartjs-2";
 
 import { Chart, registerables } from 'chart.js';
 import { Button } from '../Pages/SignIn';
+import axios from 'axios';
 Chart.register(...registerables);
 
 /// UserProfile Variants  
@@ -40,27 +41,22 @@ const green = "#238b65"
 //// PlayerCard Comp 
 const player = {  name: "Alchemist", login: "Eelaazmi",  lvl: "1", gamePlayed : 350,  lost : 150, won : 200, rank : rank2}
 
+interface UserProp {
+  defaultAvatar: string,
+  login : string
+  displayName : string
+}
 export interface PlayerCardProps {
   isCurrentUser : boolean,
-    player: {
-      name: string,
-      login: string,
-      defaultAvatar? : string,
-      lvl: string,
-      gamePlayed : number,
-      lost : number,
-      won : number,
-      rank:string
-    }
+    player: UserProp
 }
-  
 export function PlayerCard(props: PlayerCardProps) {
   return (
       <PlayerCardStyle  >
       
           <div className='Identity'> 
               <div className='Iavatar' style={ {width : "150px" , height : "150px"}} >
-                <AvatarComponent img={Melkarmi}/>
+                <AvatarComponent img={props.player.defaultAvatar}/>
               </div>
               {/* <img src={Avatar} className="Iavatar"alt="test" /> */}
 
@@ -70,7 +66,7 @@ export function PlayerCard(props: PlayerCardProps) {
                       <div className='name'>
                           Full name : 
                       </div>
-                      <div className='text' > {props.player.name} </div>
+                      <div className='text' > {props.player.displayName} </div>
                   </div>
 
                   <div className='Bar'>  
@@ -84,7 +80,7 @@ export function PlayerCard(props: PlayerCardProps) {
               
           </div>
 
-          <Stats isCurrentUser={props.isCurrentUser} player={player}/>
+          <Stats isCurrentUser={props.isCurrentUser} player={props.player}/>
           
       </PlayerCardStyle>
   )
@@ -168,7 +164,18 @@ interface StatusProps {
 }
 export function Stats(props: PlayerCardProps) {
   const addFriend = ()=>{
-    
+       //http://localhost:8000/users/relation/:id?evet=add
+
+      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=add", 
+      {withCredentials: true} 
+    ).then((res)=>{
+      // console.log(res.data)
+      alert("friend Request sent")
+  
+    }).catch((err)=>{
+  
+          // history.pushState("/signin");
+      })
   }
     return (
       <StatsStyle  >
@@ -177,11 +184,14 @@ export function Stats(props: PlayerCardProps) {
             <ActivityIcon/>
               Online
           </Status>
-        <Buttons>
-            <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
-            <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add Friend'/>
+          {props.isCurrentUser === false && 
+            <Buttons>
+              
+              <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
+              <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add Friend'/>
+            </Buttons>
+          }
 
-        </Buttons>
         </Header>
 
         {/* <Data>
@@ -340,10 +350,10 @@ align-items: center;
 export interface UserCard {
   // avatar: string;
   data: {
-    username: string;
-    grade: string;
-    status: boolean;
-    avatar: string;
+    login: string;
+    defaultAvatar: string;
+    // status: boolean;
+    // avatar: string;
   }
 }
 export interface StyleProps {
@@ -355,7 +365,7 @@ export interface StyleProps {
 export  function UserCard(props : UserCard) {
   const [active, setActive] = useState(false);
   return (
-    <UserCardStyle status={props.data.status}>
+    <UserCardStyle status={true}>
       
       <div className="status" >
       </div>
@@ -367,10 +377,10 @@ export  function UserCard(props : UserCard) {
           </div>
         
         </div>
-      <img src={props.data.avatar} className="avatar" />
+      <img src={props.data.defaultAvatar} className="avatar" />
       
       <div className="Uname">
-          {props.data.username}
+          {props.data.login}
     </div>
     </UserCardStyle>
   )
@@ -730,17 +740,21 @@ const AddFriendStyle = styled.div`
 
 /// Pending Request tab //
 export interface UserInvitCard {
-  data: {
-    username: string;
-    avatar: string;
-  }
+  data: UserProp
 }
 export interface StyleProps {
     status: boolean;
 }
 
 export  function UserInvitCard(props : UserInvitCard) {
+  useEffect(() => {
+ 
+  
+
+  }, )
+  
   const [active, setActive] = useState(false);
+  console.log(props.data)
   return (
     <UserInvitCardStyle >
 
@@ -751,8 +765,8 @@ export  function UserInvitCard(props : UserInvitCard) {
 
       </div>
 
-      <img src={props.data.avatar} className="avatar" />
-      <div className="Uname"> {props.data.username}  </div>
+      <img src={props.data.defaultAvatar} className="avatar" />
+      <div className="Uname"> {props.data.login}  </div>
     
     </UserInvitCardStyle>
   )
@@ -869,8 +883,8 @@ export  function UserBlockedCard(props : UserInvitCard) {
       <div className="YN"> 
         <Deny className='Bdeny'/>
       </div>
-      <img src={props.data.avatar} className="avatar" />
-      <div className="Uname"> {props.data.username}  </div>
+      <img src={props.data.defaultAvatar} className="avatar" />
+      <div className="Uname"> {props.data.login}  </div>
     </UserBlockedCardStyle>
   )
 }

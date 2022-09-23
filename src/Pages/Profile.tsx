@@ -14,6 +14,7 @@ import { GameComp } from "../components/PlayerProfile";
 import { UserInvitCard } from "../components/PlayerProfile";
 import { UserBlockedCard } from "../components/PlayerProfile";
 import {ReactComponent as Warningo} from "../assets/imgs/warning.svg";
+import axios from 'axios';
 
 
 
@@ -181,30 +182,59 @@ var listBlocked = [BlockedUser , BlockedUser1 , BlockedUser2 , BlockedUser3]
 
 //-----------------------//
 
+interface UserProp {
+  defaultAvatar: string,
+  login : string
+  displayName : string
+}
 //// Default function Profile
 export default function Profile() {
   const id = window.location.pathname.split("/")[2];
   const [isCurrentUser, setisCurrent] = useState(true)
-  const [User, setUser] = useState()
+  const [User, setUser] = useState<UserProp>({
+    defaultAvatar: "string",
+    login : "string",
+    displayName : 'string'
+  
+  })
 
 
   console.log(id);
   useEffect(() => {
+    var s : string | null = localStorage.getItem('user');
+    if (s)
+    {
+
+      const data : UserProp =  JSON.parse(s || '{}');
+      console.log(data)
+      if (id === data.login)
+      {
+       
+        setisCurrent(true)
+        setUser(data)
+      }
+      else
+      {
+        setisCurrent(false)
+        axios.get("http://localhost:8000/users/" + id, 
+        {withCredentials: true} 
+      ).then((res)=>{
+        console.log(res.data)
+        // check for the user is bloked 
+        setUser(res.data)
+      }).catch((err)=>{
+
+        // history.pushState("/signin");
+    })
+      }
+    }
 
   }, []);
-  var s : string | null = localStorage.getItem('user');
-  if (s)
-  {
-    // const data : UserProp =  JSON.parse(s || '{}');
-    // setcurrentUser(data)
-    // list[0].href = "/profile/" + data.login
-    // console.log(data)
-  }
 
   return (
     <div className='container' style={{marginTop: "100px"}}>
           <TheBox>
-              <PlayerCard  isCurrentUser={isCurrentUser} player={player} />
+              <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
               <ProgressBar>
                 <div >
                   <div className='lvl'>
@@ -327,12 +357,28 @@ const TabOone = styled.div`
 //#2  Tab Friends
 export function Tabtwo()
 {
+  const [friends, setfriends] = useState([])
+useEffect(() => {
+  
+  axios.get("http://localhost:8000/profile/me?data=friends", 
+    {withCredentials: true} 
+  ).then((res)=>{
+    console.log(res.data)
+    alert()
+    setfriends(res.data)
+
+  }).catch((err)=>{
+
+        // history.pushState("/signin");
+    })
+}, [])
+
   return (
     <TabOtwo >
       {/* <h1> Helloo Tab Friends </h1> */}
       {
-        listCards.map((match : any, id : number )=>{
-            return<UserCard key={id}data={match}  />
+        friends.map((match : any, id : number )=>{
+            return<UserCard key={id} data={match}  />
         })
       }
     </TabOtwo>
@@ -410,10 +456,25 @@ const TabOthree= styled.div`
 //#4  Pending Requests
 export function Tabfour()
 {
+  const [friends, setfriends] = useState<UserProp[]>([])
+  useEffect(() => {
+    
+    axios.get("http://localhost:8000/profile/me?data=requests", 
+      {withCredentials: true} 
+    ).then((res)=>{
+      console.log(res.data)
+
+      setfriends(res.data)
+  
+    }).catch((err)=>{
+  
+          // history.pushState("/signin");
+      })
+  }, [])
   return (
     <TabOfour>
     {
-        listInvit.map((invit : any, id : number )=>{
+        friends.map((invit : any, id : number )=>{
             return<UserInvitCard key={id} data={invit} />
         })
     }

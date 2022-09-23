@@ -1,7 +1,4 @@
 import React from 'react'
-
-
-
 import styled from "styled-components"
 import Tet from "../assets/imgs/tests/test2.png"
 import { ReactComponent as Penta} from "../assets/imgs/penta.svg"

@@ -37,7 +37,7 @@ export interface barProps {
     ]
 export default function Sidebar() {
     const sideBaRed : any= useRef<HTMLElement>(null);
-    const [open, setopen] = useState(true)
+    const [open, setopen] = useState(false)
 
 
     const [focused, setfocused] = useState(0)

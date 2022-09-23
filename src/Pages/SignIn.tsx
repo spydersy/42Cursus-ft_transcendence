@@ -6,7 +6,7 @@ import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
 import { LogoComponent } from '../components/Upperbar'
 
 //todo env file
-const url = "https://api.intra.42.fr/oauth/authorize?client_id=b645a2e7e9c3b0cc8345619af067b26396718e9a1d172c3f36fc602f6ce3cb20&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth&response_type=code"
+const url = "https://api.intra.42.fr/oauth/authorize?client_id=b645a2e7e9c3b0cc8345619af067b26396718e9a1d172c3f36fc602f6ce3cb20&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fauth&response_type=code"
 export default function SignIn() {
   return (
     <Wrraper>
@@ -23,7 +23,10 @@ export default function SignIn() {
                <img src={FtImg} alt="42logo" />
                Login with intra
             </LoginButton> */}
+            <a href={url}>
             <Button icon={<FtImg/>} text="Sign in with intra"/>
+
+            </a>
             <a id="TermsCond" href="#termscondPage">Terms & conditions</a>
          </Bloc>
   
