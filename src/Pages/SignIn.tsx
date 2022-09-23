@@ -1,5 +1,5 @@
 import React from 'react'
-import styled , {keyframes} from "styled-components"
+import styled , {keyframes , css} from "styled-components"
 import CoverImg from "../assets/imgs/cover.png"
 import PatternImg from "../assets/imgs/background.jpeg"
 import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
@@ -108,38 +108,40 @@ opacity: 0.8;
 `;
 
 interface ButtonProps {
+   type? : "ButtonStyleProps " | "secondary" ,
    text? : string
    icon? : React.ReactElement
 }
-
+interface ButtonStyleProps {
+   typeS? : string ,
+}
 export  function Button(props :ButtonProps ) {
   return (
-    <LoginButtonStyle>
+    <LoginButtonStyle typeS={props.type}>
       {props?.icon}
       {props.text}
     </LoginButtonStyle>
   )
 }
 
-const LoginButtonStyle = styled.button`
+const LoginButtonStyle = styled.button<ButtonStyleProps>`
 /* margin: 0 auto; */
-padding: 0 20px;
-height: 48px;
-background: linear-gradient(144deg, #437492 16.67%, #174486 100%);
-border-radius: 5px;
+   padding: 0 20px;
+   height: 40px;
+   background: linear-gradient(144deg, #437492 16.67%, #174486 100%);
+   border-radius: 5px;
 
-cursor: pointer;
-border: none;
-display: flex;
-align-items: center;
-gap : 5px;
->svg{
-   /* display: none; */
-   path {
-      stroke : #fff;
+   cursor: pointer;
+   border: none;
+   display: flex;
+   align-items: center;
+   gap : 5px;
+   >svg{
+      /* display: none; */
+      path {
+         stroke : #fff;
+      }
    }
-}
-
    font-family: 'Poppins' sans-serif;
    font-weight: 500;
    font-size:  ${props => props.theme.fontSize.l}; 
@@ -147,5 +149,10 @@ gap : 5px;
    animation-name: ${breatheAnimation};
    animation-duration: 3s;
    animation-iteration-count: infinite;
+   ${props => (props.typeS === "secondary") && css`
+   background: transparent;
+   border: 1px solid #FFFFFF;
 
+
+   `}
 `;

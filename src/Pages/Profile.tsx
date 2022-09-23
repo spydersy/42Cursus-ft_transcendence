@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState , useEffect} from 'react'
 import styled , {css}from "styled-components"
 import Navlinks from '../components/Navlinks';
 import { AchievmentComp,AchievmentCompProps }  from '../components/History'
@@ -14,6 +14,8 @@ import { GameComp } from "../components/PlayerProfile";
 import { UserInvitCard } from "../components/PlayerProfile";
 import { UserBlockedCard } from "../components/PlayerProfile";
 import {ReactComponent as Warningo} from "../assets/imgs/warning.svg";
+
+
 
 //-- Global Data --//
 const Backcolor = "#1aba1d"
@@ -181,10 +183,27 @@ var listBlocked = [BlockedUser , BlockedUser1 , BlockedUser2 , BlockedUser3]
 
 //// Default function Profile
 export default function Profile() {
+  const id = window.location.pathname.split("/")[2];
+  const [isCurrentUser, setisCurrent] = useState(true)
+
+
+  console.log(id);
+  useEffect(() => {
+
+  }, []);
+  var s : string | null = localStorage.getItem('user');
+  if (s)
+  {
+    // const data : UserProp =  JSON.parse(s || '{}');
+    // setcurrentUser(data)
+    // list[0].href = "/profile/" + data.login
+    // console.log(data)
+  }
+
   return (
     <div className='container' style={{marginTop: "100px"}}>
           <TheBox>
-              <PlayerCard player={player} />
+              <PlayerCard  isCurrentUser={isCurrentUser} player={player} />
               <ProgressBar>
                 <div >
                   <div className='lvl'>

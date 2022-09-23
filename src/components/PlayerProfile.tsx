@@ -12,6 +12,7 @@ import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 
 import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
+import {ReactComponent as UserAddIcon} from "../assets/imgs/user-plus.svg";
 import Melkarmi from "../assets/imgs/avatar/hfadyl.jpeg";
 
 // import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -21,6 +22,7 @@ import type { ChartData, ChartOptions } from 'chart.js';
 import { Radar } from "react-chartjs-2";
 
 import { Chart, registerables } from 'chart.js';
+import { Button } from '../Pages/SignIn';
 Chart.register(...registerables);
 
 /// UserProfile Variants  
@@ -38,6 +40,7 @@ const green = "#238b65"
 const player = {  name: "Alchemist", login: "Eelaazmi",  lvl: "1", gamePlayed : 350,  lost : 150, won : 200, rank : rank2}
 
 export interface PlayerCardProps {
+  isCurrentUser : boolean,
     player: {
       name: string,
       login: string,
@@ -54,7 +57,7 @@ export function PlayerCard(props: PlayerCardProps) {
       <PlayerCardStyle  >
       
           <div className='Identity'> 
-              <div style={ {margin: "10px auto" ,width : "150px" , height : "150px"}} >
+              <div className='Iavatar' style={ {width : "150px" , height : "150px"}} >
                 <AvatarComponent img={Melkarmi}/>
               </div>
               {/* <img src={Avatar} className="Iavatar"alt="test" /> */}
@@ -63,7 +66,7 @@ export function PlayerCard(props: PlayerCardProps) {
 
                   <div className='Bar'>  
                       <div className='name'>
-                          Username : 
+                          Full name : 
                       </div>
                       <div className='text' > {props.player.name} </div>
                   </div>
@@ -79,7 +82,7 @@ export function PlayerCard(props: PlayerCardProps) {
               
           </div>
 
-          <Stats player={player}/>
+          <Stats isCurrentUser={props.isCurrentUser} player={player}/>
           
       </PlayerCardStyle>
   )
@@ -89,13 +92,12 @@ const PlayerCardStyle = styled.div`
 padding: 0px 0px;
 margin-bottom: 13px;
 width:  100%;
-height: 400px;
 display: flex;
 position: relative;
 border-radius: 10px 10px 10px 10px;
-
+background-color: ${props => props.theme.colors.seconderybg};
 .Identity{
-    width: 40%;
+    width: 30%;
     height: 100%;
     /* background-color:${Backcolor}; */
     border-radius: 10px 0px 0px 0px;
@@ -103,20 +105,7 @@ border-radius: 10px 10px 10px 10px;
     background: linear-gradient(144deg, #74549C 16.67%, #3581B3 100%);
 border-radius: 10px 30px 30px 10px;
     .Iavatar{
-        background-color: white;
-        display: flex;
-        position: absolute;
-        width : 150px;
-        height: 150px;
-        border-radius: 50%;
-        border: 4px solid ${GreyBackcolor};
-        top: 13%;
-        left: 6%;
-        > img{
-            /* border-radius: 30%; */
-            width: 100%;
-            height: 100%;
-        }
+      margin: 40px auto; 
     }
 
     .infoSec {
@@ -129,7 +118,7 @@ border-radius: 10px 30px 30px 10px;
             .name{
                 font-style: normal;
                 background-color: #8841ca1b;
-                font-size: 20px;
+                font-size: 15px;
                 min-width: 90px;
                 line-height: 20px;
                 display: flex;
@@ -137,11 +126,12 @@ border-radius: 10px 30px 30px 10px;
                 color: ${props => props.theme.colors.primaryText};
                 padding: 0px 0px;
                 margin-right: 10px;
+                font-weight: 600;
             }
             .text{
                 color: ${props => props.theme.colors.primaryText};
                 font-size: 19px;
-                font-weight: bolder;
+                font-weight: 600;
                 -webkit-text-stroke: 1px #44404562;
 
             }
@@ -266,7 +256,13 @@ export const RadarOptions : ChartOptions<'radar'> = {
 export function Stats(props: PlayerCardProps) {
     return (
       <StatsStyle  >
-        <Data>
+        <Buttons>
+            <Button  type='secondary' text='Add Friend'/>
+            <Button icon={<UserAddIcon/>} text='Add Friend'/>
+
+        </Buttons>
+
+        {/* <Data>
 
             <div className='Radar'>
               <Radar  data={RadarData}   options={RadarOptions} />
@@ -274,22 +270,34 @@ export function Stats(props: PlayerCardProps) {
             
         
    
-        </Data>
+        </Data> */}
       </StatsStyle>
     )
 }
 
 const StatsStyle = styled.div`
 background-color: #171A22;
+padding :10px;
 width: 100%;
 min-height: 100%;
 display: flex;
 align-items: center;
 flex-direction: column;
-justify-content: space-between;
+/* justify-content: space-between; */
 gap: 40px;
 border-radius: 0px 10px 0px 0px;
 `
+const Buttons = styled.div`
+/* background-color: #bacc16; */
+width: 100%;
+height: auto;
+display: flex;
+flex-direction: row-reverse;
+align-items: flex-start;
+gap: 10px;
+/* justify-content: space-around; */
+`
+
 const Data = styled.div`
 /* background-color: #bacc16; */
 width: 100%;
@@ -326,7 +334,7 @@ justify-content: space-around;
       width: 100%;
       height: 100%;
   path{
-      stroke: ${props => props.theme.colors.purple}
+      stroke: ${props => props.theme.colors.purple};
   } 
   } 
 }
