@@ -39,6 +39,8 @@ export class UserController {
                     return await this.userService.UnblockUser(req.user.username, req.params.id, res);
                 case 'add':
                     return await this.userService.AddFriend(req.user.username, req.params.id, res);
+                case 'cancel':
+                    return await this.userService.CancelRequest(req.user.username, req.params.id, res);
                 case 'accept':
                     return await this.userService.AcceptFriendRequest(req.user.username, req.params.id, res);
                 case 'decline':

@@ -143,6 +143,23 @@ export class UserService {
             return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000'}).status(HttpStatus.OK).send({"message": "Relation Already Exist"});
         }
 
+        async CancelRequest(Sender: string, Receiver: string, @Res() res) {
+            let SenderDto = await this.GetUserByLogin(Sender);
+            let ReceiverDto = await this.GetUserByLogin(Receiver);
+
+            if (ReceiverDto === null || SenderDto === null)
+                return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
+            let relatin = await this.prisma.friends.deleteMany({
+                where: {
+                    senderId: SenderDto.id,
+                    receiverId: ReceiverDto.id,
+                    status: RELATION.PENDING,
+                }
+            })
+            console.log("__CANCEL__FRIEND__REQUEST__ : ", relatin);
+            return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000'}).status(HttpStatus.OK).send({"message": "DONE"});
+        }
+
         async AcceptFriendRequest(Receiver: string, Sender: string, @Res() res) {
             let SenderDto = await this.GetUserByLogin(Sender);
             let ReceiverDto = await this.GetUserByLogin(Receiver);
