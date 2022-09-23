@@ -110,14 +110,15 @@ opacity: 0.8;
 interface ButtonProps {
    type? : "ButtonStyleProps " | "secondary" ,
    text? : string
-   icon? : React.ReactElement
+   icon? : React.ReactElement,
+   onClick? : ()=> void;
 }
 interface ButtonStyleProps {
    typeS? : string ,
 }
 export  function Button(props :ButtonProps ) {
   return (
-    <LoginButtonStyle typeS={props.type}>
+    <LoginButtonStyle onClick={props.onClick} typeS={props.type}>
       {props?.icon}
       {props.text}
     </LoginButtonStyle>

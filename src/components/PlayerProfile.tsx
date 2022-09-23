@@ -13,6 +13,7 @@ import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import {ReactComponent as UserAddIcon} from "../assets/imgs/user-plus.svg";
+import {ReactComponent as ActivityIcon} from "../assets/imgs/activity.svg";
 import Melkarmi from "../assets/imgs/avatar/hfadyl.jpeg";
 
 // import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -44,6 +45,7 @@ export interface PlayerCardProps {
     player: {
       name: string,
       login: string,
+      defaultAvatar? : string,
       lvl: string,
       gamePlayed : number,
       lost : number,
@@ -141,33 +143,9 @@ border-radius: 10px 30px 30px 10px;
 
 `;
 
-//// Stats Comp
-
-// chart // 
 const player1 = { PlayedGames : 350,  lostGames : [22,18,31,52,22] , WonGames :  [20, 25, 30, 52, 26], Rank : rank2};
 const player2 = { PlayedGames : 222,  lostGames : [22,18,31,52,22] , WonGames :  [0, 50, 30, 40, 26], Rank : rank2};
 
-
-// export const data = {
-//   labels: ['Computer mode', 'classic', 'Tag-Team', 'Challenge Friend', 'Mode 5'],
-//   datasets: [
-//     {
-//       label: 'Win-Game',
-//       data: player1.WonGames,
-//       backgroundColor: 'rgba(70, 180, 90, 0.275)',
-//       borderColor: '#25dc43',
-//       borderWidth: 2,
-//     },
-//     {
-//       label: 'Win-Game',
-//       data: player2.WonGames,
-//       backgroundColor: 'rgba(70, 180, 90, 0.275)',
-//       borderColor: '#fff',
-//       borderWidth: 2,
-//     },
-//   ],
-  
-// };
 
 // export const data1 = {
 //   labels: ['Computer mode', 'classic', 'Tag-Team', 'Challenge Friend', 'Mode 5'],
@@ -183,84 +161,28 @@ const player2 = { PlayedGames : 222,  lostGames : [22,18,31,52,22] , WonGames : 
 //   ],
 // };
 
-// const options : any = {
-//   legend: {
-//     position: 'bottom'
-//   },
-//   title: {
-//     display: true,
-//     text: 'Chart.js Radar Chart'
-//   },
-//   scale: {
-//     reverse: false,
-//     gridLines: {
-//       color: [
-//         'black',
-//         'red',
-//         'orange',
-//         'yellow',
-//         'green',
-//         'blue',
-//         'indigo',
-//         'violet'
-//       ]
-//     },
-//     ticks: {
-//       beginAtZero: true
-//     }
-//   }
-// }
-
-export const RadarData = {
-  labels: ["Finger Strength", "Power", "Endurance", "Stability", "Flexability"],
-  datasets: [
-    {
-      label: "March",
-      backgroundColor: "rgba(34, 202, 236, .2)",
-      borderColor: "rgba(34, 202, 236, 1)",
-      pointBackgroundColor: "rgba(34, 202, 236, 1)",
-      poingBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgba(34, 202, 236, 1)",
-      data: [13, 10, 12, 6, 5]
-    }
-  ]
-};
-export const RadarOptions : ChartOptions<'radar'> = {
-  // scales : {
-  //   lin    
-  // }
-  // scale: {
-  //   ticks: {
-  //     min: 0,
-  //     max: 16,
-  //     stepSize: 2,
-  //     showLabelBackdrop: false,
-  //     backdropColor: "rgba(203, 197, 11, 1)"
-  //   },
-  //   angleLines: {
-  //     color: "#FFF",
-  //     lineWidth: 1
-  //   },
-  //   gridLines: {
-  //     color: "#FFF",
-  //     circular: true
-
-  //   }
-  // }
-};
 
 
-//        // 
-
+interface StatusProps {
+    status : "online" | "offline"
+}
 export function Stats(props: PlayerCardProps) {
+  const addFriend = ()=>{
+    
+  }
     return (
       <StatsStyle  >
+        <Header>
+          <Status status={"online"}>
+            <ActivityIcon/>
+              Online
+          </Status>
         <Buttons>
-            <Button  type='secondary' text='Add Friend'/>
-            <Button icon={<UserAddIcon/>} text='Add Friend'/>
+            <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
+            <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add Friend'/>
 
         </Buttons>
+        </Header>
 
         {/* <Data>
 
@@ -274,6 +196,33 @@ export function Stats(props: PlayerCardProps) {
       </StatsStyle>
     )
 }
+
+const Header = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+`;
+
+const Status = styled.div<StatusProps>`
+  width: 150px;
+  display: flex;
+  align-items: center;
+
+  font-family: 'Poppins' , sans-serif;
+font-style: normal;
+font-weight: 400;
+font-size: 22px;
+line-height: 33px;
+justify-content: space-around;
+>svg{
+  path {
+    stroke: ${props => props.theme.colors.green};
+  }
+}
+color: ${props => props.theme.colors.green};
+
+`
 
 const StatsStyle = styled.div`
 background-color: #171A22;
@@ -289,7 +238,7 @@ border-radius: 0px 10px 0px 0px;
 `
 const Buttons = styled.div`
 /* background-color: #bacc16; */
-width: 100%;
+ flex : 1;
 height: auto;
 display: flex;
 flex-direction: row-reverse;

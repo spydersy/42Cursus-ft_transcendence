@@ -185,6 +185,7 @@ var listBlocked = [BlockedUser , BlockedUser1 , BlockedUser2 , BlockedUser3]
 export default function Profile() {
   const id = window.location.pathname.split("/")[2];
   const [isCurrentUser, setisCurrent] = useState(true)
+  const [User, setUser] = useState()
 
 
   console.log(id);
