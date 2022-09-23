@@ -13,25 +13,30 @@ import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import {ReactComponent as UserAddIcon} from "../assets/imgs/user-plus.svg";
+import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
 import {ReactComponent as ActivityIcon} from "../assets/imgs/activity.svg";
+import {ReactComponent as CalendarIcon} from "../assets/imgs/calendar.svg";
+import {ReactComponent as RankIcon} from "../assets/imgs/rank.svg";
 import Melkarmi from "../assets/imgs/avatar/hfadyl.jpeg";
+import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
+import { Doughnut } from 'react-chartjs-2';
+import {
+  CChart,
+  // CChartBar,
 
-// import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-
-// ChartJS.register(ArcElement, Tooltip, Legend);
-import type { ChartData, ChartOptions } from 'chart.js';
-import { Radar } from "react-chartjs-2";
+  // CChartLine,
+  // CChartDoughnut,
+  // CChartRadar,
+  // CChartPie,
+  // CChartPolarArea,
+} from '@coreui/react-chartjs'
 
 import { Chart, registerables } from 'chart.js';
 import { Button } from '../Pages/SignIn';
+
 import axios from 'axios';
 Chart.register(...registerables);
 
-/// UserProfile Variants  
-interface RadarProps {
-  options: ChartOptions<'radar'>;
-  data: ChartData<'radar'>;
-}
 const Backcolor = css`${props => props.theme.colors.purple}`
 const GreyBackcolor = "#282c34"
 // const Barside = "#f3460fe"
@@ -177,6 +182,40 @@ export function Stats(props: PlayerCardProps) {
           // history.pushState("/signin");
       })
   }
+
+const option =  {
+
+  legend : {
+    // position : "bottom"
+  },
+}
+ const data = {
+  labels: ['Wins', 'Lost'],
+ 
+  datasets: [
+    {
+      label: '# of Votes',
+      data: [12, 19],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        // 'rgba(255, 206, 86, 0.2)',
+        // 'rgba(75, 192, 192, 0.2)',
+        // 'rgba(153, 102, 255, 0.2)',
+        // 'rgba(255, 159, 64, 0.2)',
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        // 'rgba(255, 206, 86, 1)',
+        // 'rgba(75, 192, 192, 1)',
+        // 'rgba(153, 102, 255, 1)',
+        // 'rgba(255, 159, 64, 1)',
+      ],
+      borderWidth: 1,
+    },
+  ],
+};
     return (
       <StatsStyle  >
         <Header>
@@ -193,16 +232,65 @@ export function Stats(props: PlayerCardProps) {
           }
 
         </Header>
+      
+        <Data>
+            <div className='data'>
+              <DataTag>
+                <RankIcon/>
+                <div>
+                Yonko
+                </div>
 
-        {/* <Data>
+              </DataTag>
+              <DataTag>
+                <UsersIcon/>
+                <div>
+                5
+                Friends
+                </div>
 
-            <div className='Radar'>
-              <Radar  data={RadarData}   options={RadarOptions} />
+              </DataTag>
+              <DataTag>
+                <GameIcon/>
+                <div>
+                
+                250
+                Games
+                </div>
+
+              </DataTag>
+              <DataTag>
+                <CalendarIcon/>
+                <div>
+                
+                
+                Mars 2020
+                </div>
+
+              </DataTag>
             </div>
+            <div className='Stats'>
+            <CChart
+            type="doughnut"
+            
+            data={{
+              labels: ['WINS', 'LOST',],
+              datasets: [
+                {
+                  backgroundColor: ['#41B883', '#E46651'],
+                  data: [40, 20],
+                },
+              ],
+            }}
+          />
+            </div>
+            {/* <div className='Radar'>
+              <Radar  data={RadarData}   options={RadarOptions} />
+            </div> */}
             
         
    
-        </Data> */}
+        </Data>
       </StatsStyle>
     )
 }
@@ -213,12 +301,32 @@ const Header = styled.div`
   align-items: center;
 
 `;
+const DataTag = styled.div`
+  /* width: 100%; */
 
-const Status = styled.div<StatusProps>`
-  width: 150px;
   display: flex;
   align-items: center;
+  gap: 20px;
+  font-family: 'Poppins' , sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 33px;
+  justify-content: space-around;
+  color : ${props => props.theme.colors.primaryText};
+  >svg{
+    path {
+      stroke: ${props => props.theme.colors.purple};
+    }
+  }
 
+`;
+
+const Status = styled.div<StatusProps>`
+  /* width: 150px; */
+  display: flex;
+  align-items: center;
+ 
   font-family: 'Poppins' , sans-serif;
 font-style: normal;
 font-weight: 400;
@@ -247,120 +355,56 @@ gap: 40px;
 border-radius: 0px 10px 0px 0px;
 `
 const Buttons = styled.div`
-/* background-color: #bacc16; */
+
  flex : 1;
 height: auto;
 display: flex;
 flex-direction: row-reverse;
 align-items: flex-start;
 gap: 10px;
-/* justify-content: space-around; */
+
 `
 
 const Data = styled.div`
-/* background-color: #bacc16; */
+
+flex: 1;
 width: 100%;
-height: 100%;
 display: flex;
+flex-direction: row;
 align-items: center;
-justify-content: center;
-justify-content: space-around;
-
-.Radar {
-
+justify-content: space-between;
+.data{
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-around;
+  
 }
-
- 
-#pentagon {
-  /* left: 0px; */
-  /* top: 0px; */
-  width: 25%;
-  height: 80%;
-  /* background-color: #26a75854; */
-  position: absolute;
+.Stats{
+  /* background-color: red; */
+  position: relative;
+ /* flex: 1; */
+ width: 200px;
+ height: 100%;
 
 
-  .Rank {
-    width: 60%;
-    height: 70%;
-    top: 10%;
-    left: 30%;
-    position: absolute;
-    display: flex;
-    /* background-color: #ac25a84e; */
-  }
-  > svg {
-      width: 100%;
-      height: 100%;
-  path{
-      stroke: ${props => props.theme.colors.purple};
-  } 
-  } 
+  
 }
-
-.Radar1 {
-  /* width: 50%; */
-  /* height: 70px; */
-  position: absolute;
-  left: 3%;
-  top: 0px;
-  > canvas {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    /* background-color: #00ff0820; */
-
-    /* background-color: #a7262f53; */
-    /* background-color: black; */
-    /* width: 50%; */
-    /* height: 50%; */
-  }
-}
-
 `
 
 
-const ProgressBar = styled.div`
-
-width: 90%;
-height: 27px;
-background-color: ${props => props.theme.colors.bg};
-border-radius: 12.3071px;
-display: flex;
-align-items: center;
-
-> div{
-    /* padding-right: 3px; */
-    
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: flex-end;
-    height: 100%;
-    width: 36%;
-    background-color: ${props => props.theme.colors.purple};
-    border-radius: 12.3071px;
-    .lvl{
-    margin-right: 10px;
-    font-size: ${props => props.theme.fontSize.s};
-    color: white;
-    }
-}
-
-`
 ///// UserCard Comp
 export interface UserCard {
-  // avatar: string;
+
   data: {
     login: string;
     defaultAvatar: string;
-    // status: boolean;
-    // avatar: string;
+
   }
 }
 export interface StyleProps {
-  // avatar: string;
-
     status: boolean;
-
 }
 export  function UserCard(props : UserCard) {
   const [active, setActive] = useState(false);

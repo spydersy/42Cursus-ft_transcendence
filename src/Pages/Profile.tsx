@@ -198,8 +198,6 @@ export default function Profile() {
   
   })
 
-
-  console.log(id);
   useEffect(() => {
     var s : string | null = localStorage.getItem('user');
     if (s)

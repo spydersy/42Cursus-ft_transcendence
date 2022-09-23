@@ -66,17 +66,17 @@ function App() {
   //   // const coc = Cookieequiredy
   //   // axios.defaults.withCredentials = true;
   // //  console.log( Cookies.set)
-    axios.get("http://localhost:8000/profile/me", 
-    {withCredentials: true} 
-  ).then((res)=>{
-    console.log(res.data)
-    localStorage.setItem("user", JSON.stringify(res.data))
-  }).catch((err)=>{
-        console.log(err)
-        navigate('/signin')
-        // history.pushState("/signin");
-    })
-    console.log("hey")
+  //   axios.get("http://localhost:8000/profile/me", 
+  //   {withCredentials: true} 
+  // ).then((res)=>{
+  //   console.log(res.data)
+  //   localStorage.setItem("user", JSON.stringify(res.data))
+  // }).catch((err)=>{
+  //       console.log(err)
+  //       navigate('/signin')
+  //       // history.pushState("/signin");
+  //   })
+  //   console.log("hey")
   }, [])
   
   return (
