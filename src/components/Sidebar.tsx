@@ -3,9 +3,7 @@ import styled , {css} from "styled-components"
 import {ReactComponent as DashIcon} from "../assets/imgs/home.svg";
 import {ReactComponent as DMIcon} from "../assets/imgs/dm.svg";
 import {ReactComponent as RoomIcon} from "../assets/imgs/rooms.svg";
-import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
 import {ReactComponent as ArrowLeft} from "../assets/imgs/arrowLeft.svg";
-import {ReactComponent as ArrowRight} from "../assets/imgs/arrowRight.svg";
 import {ReactComponent as LogoutIcon} from "../assets/imgs/logout.svg";
 import {ReactComponent as LeaderIcon} from "../assets/imgs/leader-icon.svg";
 import {ReactComponent as SettingIcon} from "../assets/imgs/settings.svg";
@@ -112,18 +110,16 @@ export default function Sidebar() {
        </Items> 
        <Devider>c</Devider>
        <Item  active={false} href={"/"}>
-                <SettingIcon/>
-                {
-                    open ? <div>Setting</div> : <ToolTip>LogOut</ToolTip>  
-                }
-                
+            <SettingIcon/>
+            {
+                open ? <div>Setting</div> : <ToolTip>LogOut</ToolTip>  
+            }
             </Item>
        <Item  active={false} href={"/"}>
-                <LogoutIcon/>
-                {
-                    open ? <div>LogOut</div> : <ToolTip>LogOut</ToolTip>  
-                }
-                
+            <LogoutIcon/>
+            {
+                open ? <div>LogOut</div> : <ToolTip>LogOut</ToolTip>  
+            }
             </Item>
     </SidebarWrraper>
     </Test>
@@ -212,22 +208,7 @@ const Test = styled.div<barProps>`
 
     
 `;
-const Right = styled(ArrowRight)`
-  
-        align-items: center; 
-         margin-top: 20px; 
-         margin-bottom: 60px;
-         path{
-             /* fill: ${props => props.theme.colors.seconderyText};  */
-        }
-         &:hover{
-             path{
-             /* fill: ${props => props.theme.colors.primarybg};  */
-                }
-         }
-         
-    
-`;
+
 interface LeftStyleProps{
     open : boolean
 }

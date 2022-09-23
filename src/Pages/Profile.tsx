@@ -7,14 +7,14 @@ import  Badge3 from "../assets/imgs/avatar/a2.png";
 import  Badge4 from "../assets/imgs/avatar/a6.png";
 import  Badge5 from "../assets/imgs/avatar/a4.png";
 import  Badge6 from "../assets/imgs/avatar/a5.png";
-import  B1 from "../assets/imgs/badge1.svg";
-import  B3 from "../assets/imgs/badge3.svg";
+
 import { PlayerCard , UserCard} from '../components/PlayerProfile';
 import { GameComp } from "../components/PlayerProfile";
 import { UserInvitCard } from "../components/PlayerProfile";
 import { UserBlockedCard } from "../components/PlayerProfile";
 import {ReactComponent as Warningo} from "../assets/imgs/warning.svg";
 import axios from 'axios';
+import Achivments from '../components/Achivments';
 
 
 
@@ -28,23 +28,23 @@ const ProgressUser = "40%"
 const player = { name: "Alchemist", login: "Eelaazmi", lvl: "1", gamePlayed : 350, lost : 150,  won : 200, rank: "rank1"}
 const hieghtTab = "500px";
 
-const achievment1 = {
-  name: "SERGENT",
-  desc : "you played 20 game without any loss",
-  badge : B1,
-}
-const achievment2 = {
-  name: "The Alchemist",
-  desc : "You are a M9WED player by nature",
-  badge : B3,
-}
-const achievment3 = {
-  name: "MASTER",
-  desc : "you win 5 game.",
-  badge : B1 ,
-}
+// const achievment1 = {
+//   name: "SERGENT",
+//   desc : "you played 20 game without any loss",
+//   badge : B1,
+// }
+// const achievment2 = {
+//   name: "The Alchemist",
+//   desc : "You are a M9WED player by nature",
+//   badge : B3,
+// }
+// const achievment3 = {
+//   name: "MASTER",
+//   desc : "you win 5 game.",
+//   badge : B1 ,
+// }
 
-var listAchiev = [achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3, achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3]
+// var listAchiev = [achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3, achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3]
 //------//
 
 const card = {
@@ -241,6 +241,7 @@ export default function Profile() {
                 </div>
               </ProgressBar>
           </TheBox>
+          <Achivments/>
           <PlayerTabsBar/>
     </div>
   )
@@ -282,7 +283,7 @@ margin: 15px 0px;
 `
 
 ///// PlayerTabs Section
-const linkslist = [" ACHIEVEMENTS", " FRIENDS" , " GAME HISTORY", "PENDING REQUESTS", "BLOCKED USERS"]
+const linkslist = [ " FRIENDS" , " GAME HISTORY", "PENDING REQUESTS", "BLOCKED USERS"]
 
 export function PlayerTabsBar()
 {
@@ -290,11 +291,11 @@ export function PlayerTabsBar()
   return ( 
     <PlayerAchieveStyle>
       <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/> 
-        {index === 0 && <TabOne/> }
-        {index === 1 && <Tabtwo/>}
-        {index === 2 && <Tabthree/>}
-        {index === 3 && <Tabfour/>}
-        {index === 4 && <Tabfive/>}
+
+        {index === 0 && <Tabtwo/>}
+        {index === 1 && <Tabthree/>}
+        {index === 2 && <Tabfour/>}
+        {index === 3 && <Tabfive/>}
     </PlayerAchieveStyle>
   )
 }
@@ -315,9 +316,9 @@ export function TabOne()
   return (
     <TabOone >
       {
-        listAchiev.map((match : any, id : number )=>{
-            return<AchievmentComp key={id}achievment={match}  />
-        })
+        // listAchiev.map((match : any, id : number )=>{
+        //     return<AchievmentComp key={id}achievment={match}  />
+        // })
       }
     </TabOone>
   )
