@@ -1,32 +1,43 @@
-import { Controller, UseGuards, NotFoundException, Post, Put, Query, Res } from '@nestjs/common';
+import { Controller, UseGuards, NotFoundException, Post, Put, Query, Res, HttpStatus } from '@nestjs/common';
 import { Get, Req } from '@nestjs/common';
 import { query } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ProfileService } from 'src/profile/profile.service';
 import { UserService } from './user.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UserController {
 
-    constructor(private userService: UserService) {}
+    constructor(private userService: UserService,
+                private profileService: ProfileService) {}
 
+                @Get() 
+                async GetAllUsers(@Req() req, @Res() res){
+                    this.userService.GetAllUsers(res);
+                }
+            
     @Get(':id')
-    async GetUserByUsername(@Req() req, @Query() query) {
-        let user: any;
-        try {
-            if ((user = await this.userService.GetUserByLogin(req.params.id)) === null)
-            throw new NotFoundException();
-        }
-        catch {
-            return {"statusCode":404, "message": `${req.params.id} does not exist`, "error":"Not Found"};
-        }
-        return user;
+    async GetUserByUsername(@Req() req, @Query() query, @Res() res) {
+        // if (query['data']) {
+        //     let UserIdDTO = await this.userService.GetUserByLogin(req.user.username);
+        //     console.log("__USER__DBG__ : ", UserIdDTO);
+        //     if (UserIdDTO === null)
+        //         return res.send("9WEEEEDTIIIIIIIIIIHA");
+        //     switch (query['data']) {
+        //         case 'achievements':
+        //           return" await this.profileService.GetFriends(req.user.userId, res)";
+        //         case 'friends':
+        //               return await this.profileService.GetFriends(UserIdDTO.id, res);
+        //         case 'games':
+        //             return" await this.profileService.GetFriends(req.user.userId, res)";
+        //         default:
+        //             return res.status(HttpStatus.BAD_REQUEST).send({"message": "Bad Request"});
+        //     }
+        // }
+        return this.userService.GetUserByUsername(req.user.username, req.params.id, res);
     }
-
-    @Get() 
-    async GetAllUsers(@Req() req, @Res() res){
-        this.userService.GetAllUsers(res);
-    }
+    @Get('relation/:id')
 
     @Get('relation/:id')
     async RelationsHandler(@Req() req, @Query() query, @Res() res) {
@@ -48,7 +59,7 @@ export class UserController {
                 case 'unfriend':
                     return await this.userService.UnfriendUser(req.user.username, req.params.id, res);
                 default:
-                    return {"message": "Bad Request00"};
+                    return res.status(HttpStatus.BAD_REQUEST).set().send({"message": "Bad Request"});
             }
         }
         return {"message": "Bad Request01"};

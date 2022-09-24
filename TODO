@@ -7,8 +7,8 @@ STEPS :
 - [X] Decline User Request
 - [X] Unfriend User
 - [X] Cancel Friend Request
-- [ ] Add Relation Between Users In Json Object
-
+- [X] Add Relation Between Users In Json Object
+- [ ] Add Validation Layer For Outputs 
 
 CHAT SERVICE :
 - [ ] Optimize Schema
@@ -18,9 +18,9 @@ CHAT SERVICE :
 
 ENDPOINTS :
 - [X] GET /auth
-- [ ] GET /user/{id}?data={achievements, friends, matchs}
-- [X] PUT /user/relation/{id}?event={add, block, accept, decline, unfriend, cancel} [Temporary GET Request]
-- [ ] GET /profile/me?data={achievements, friends, matchs, requests, blacklist}
+- [ ] GET /user/{id}?data={achievements, friends, games}
+- [X] PUT /user/relation/{id}?event={[add, block, accept, decline, unfriend, cancel]} [Temporary GET Request]
+- [X] GET /profile/me?data={achievements, matchs, ... , [friends, requests, blacklist]}
 - [ ] PUT /profile/update/{2fa, displayname}
 - [ ] POST /profile/update/avatar
 

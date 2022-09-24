@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Put, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserName } from 'src/dtos/Inputs.dto';
 import { UserService } from 'src/user/user.service';
@@ -19,22 +19,16 @@ export class ProfileController {
       switch (query['data']) {
         case 'achievements':
           return res.send("this.userService.GetAchievements()");
-          break;
         case 'friends':
-          return res.send("this.userService.GetFriends()");
-          break;
+          return await this.profileService.GetFriends(req.user.userId, res);
         case 'games':
           return res.send("this.userService.GetGames()");
-          break;
         case 'requests':
           return await this.profileService.GetRequests(req.user.userId, res);
-          break;
         case 'blacklist':
-          return res.send("this.userService.GetBlackList()");
-          break;
-
+          return await this.profileService.GetBlackList(req.user.userId, res);
         default:
-          return res.send({"message": "Bad Request"});
+          return res.status(HttpStatus.BAD_REQUEST).send({"message": "Bad Request"});
       }
     }
     return this.profileService.me(req, query, res);

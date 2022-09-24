@@ -1,14 +1,179 @@
-import { HttpCode, HttpStatus, Injectable, Query, Req, Res } from '@nestjs/common';
+import { BadRequestException, HttpCode, HttpStatus, Injectable, MethodNotAllowedException, NotFoundException, Query, Req, Res } from '@nestjs/common';
 import { RELATION } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Utilities } from 'src/app.utils';
 
 @Injectable()
 export class UserService {
 
+
     constructor(private prisma: PrismaService,
                 private chatService: ChatService) {}
+
+    /*
+    *  Endpoints Calls : **************************************************************************
+    */
+    async GetUserByUsername(Me: string, User: string, @Res() res) {
+            
+        let MeDto = await this.GetUserByLogin(Me);
+        let UserDto = await this.GetUserByLogin(User);
+
+        try {
+            if (MeDto === null || UserDto === null) {
+                throw new NotFoundException();
+            }
+        }
+        catch {
+            return res.status(HttpStatus.NOT_FOUND).send({'message' : 'User Not Found'});
+        }
+        // let user: any;
+        try {
+            if (await this.IsBlockedUser(UserDto.id, MeDto.id) === true)  {
+                throw new  MethodNotAllowedException();
+            }
+        }
+        catch {
+            return res.status(HttpStatus.FORBIDDEN).send({'message' : 'Forbidden : User Blocked you'}); // DO SOMETHING
+        }
+        let FriendsStat = await this.FriendsRelationExist(MeDto.id, UserDto.id);
+        if (FriendsStat === null)
+            UserDto['relation'] = null;
+        else
+            UserDto['relation'] = FriendsStat['status'];
+        console.log("__USER))DTO__DBG__ : ", UserDto);
+        return res.status(HttpStatus.OK).send(UserDto);
+    }
+
+    async BlockUser(User: string, BlockedUser: string, @Res() res) {
+        let UserDto = await this.GetUserByLogin(User);
+        let BlockedUserDto = await this.GetUserByLogin(BlockedUser);
+
+        if (UserDto === null || BlockedUserDto === null)
+            return res.status(HttpStatus.BAD_REQUEST).send({"message": "Bad Request"});
+            console.log(`${User} Want To Block ${BlockedUser}`);
+        if (UserDto.id === BlockedUserDto.id)
+            return res.status(HttpStatus.FORBIDDEN).send({"message": "Cant Block Yourself :) "});
+        if (await this.IsBlockedUser(UserDto.id, BlockedUserDto.id) === true)
+            return res.status(HttpStatus.OK).send({"message": `${User} Already Blocked ${BlockedUser}`});
+        if (await this.IsBlockedUser(BlockedUserDto.id, UserDto.id) === true)
+            return res.status(HttpStatus.FORBIDDEN).send({"message": `Cant Block this user | Reason : ${BlockedUser} Already Blocked ${User}`});
+        const user = await this.prisma.blocks.create({
+            data: {
+                userId: UserDto.id,
+                blockedId: BlockedUserDto.id,
+            },
+        });
+        this.DeleteFriendRelation(UserDto.id, BlockedUserDto.id);
+        return res.status(HttpStatus.OK).send({"message": "DONE"});
+    }
+
+    async UnblockUser(User: string, BlockedUser: string, @Res() res) {
+        let UserDto = await this.GetUserByLogin(User);
+        let BlockedUserDto = await this.GetUserByLogin(BlockedUser);
+
+        if (UserDto === null || BlockedUserDto === null)
+            return res.status(HttpStatus.BAD_REQUEST).send({"message": "Bad Request"});
+            console.log(`${User} Want To Unblock ${BlockedUser}`);
+
+        if (UserDto.id === BlockedUserDto.id)
+            return res.status(HttpStatus.FORBIDDEN).send({"message": "Cant Unblock Yourself :) "});
+
+        if (await this.IsBlockedUser(BlockedUserDto.id, UserDto.id) === true)
+            return res.status(HttpStatus.FORBIDDEN).send({"message": `Cant Unblock this user | Reason : ${BlockedUser} Already Blocked ${User}`});
+
+        const Delete = await this.prisma.blocks.deleteMany({
+            where: {
+                userId: UserDto.id,
+                blockedId: BlockedUserDto.id,
+            }
+        });
+        return res.status(HttpStatus.OK).send({"message": "DONE"});
+    }
+
+    async AddFriend(Sender: string, Receiver: string, @Res() res) {
+        let SenderDto = await this.GetUserByLogin(Sender);
+        let ReceiverDto = await this.GetUserByLogin(Receiver);
+
+        if (ReceiverDto === null || SenderDto === null)
+            return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
+        if (await this.IsBlockedUser(ReceiverDto.id, SenderDto.id) ||
+            await this.IsBlockedUser(SenderDto.id, ReceiverDto.id)) {
+            return res.status(HttpStatus.FORBIDDEN).send({"message": `${Receiver} blocked ${Sender}`});
+        }
+        console.log("AA : ", SenderDto.id);
+        console.log("BB : ", ReceiverDto.id);
+        if (await this.FriendsRelationExist(SenderDto.id, ReceiverDto.id) === null)
+            return await this.SendFriendRequest(SenderDto.id, ReceiverDto.id, res);
+        return res.status(HttpStatus.OK).send({"message": "Relation Already Exist"});
+    }
+
+    async CancelRequest(Sender: string, Receiver: string, @Res() res) {
+        let SenderDto = await this.GetUserByLogin(Sender);
+        let ReceiverDto = await this.GetUserByLogin(Receiver);
+
+        if (ReceiverDto === null || SenderDto === null)
+            return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
+        let relatin = await this.prisma.friends.deleteMany({
+            where: {
+                senderId: SenderDto.id,
+                receiverId: ReceiverDto.id,
+                status: RELATION.PENDING,
+            }
+        })
+        console.log("__CANCEL__FRIEND__REQUEST__ : ", relatin);
+        return res.status(HttpStatus.OK).send({"message": "DONE"});
+    }
+
+    async AcceptFriendRequest(Receiver: string, Sender: string, @Res() res) {
+        let SenderDto = await this.GetUserByLogin(Sender);
+        let ReceiverDto = await this.GetUserByLogin(Receiver);
+
+        if (ReceiverDto === null || SenderDto === null)
+            return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
+        let NewRelation = await this.prisma.friends.updateMany({
+            where: {
+                receiverId: ReceiverDto.id,
+                senderId: SenderDto.id,
+                status: RELATION.PENDING,
+            },
+            data: {
+                status: RELATION.FRIENDS,
+            }
+        });
+        await this.chatService.CreatDMChanel(SenderDto.id, ReceiverDto.id);
+        console.log("__NEW__RELATION__ : ", NewRelation);
+        return res.status(HttpStatus.OK).send({"message": NewRelation.count});
+    }
+
+    async DeclineFriendRequest(Receiver: string, Sender: string, @Res() res) {
+        let SenderDto = await this.GetUserByLogin(Sender);
+        let ReceiverDto = await this.GetUserByLogin(Receiver);
+
+        if (ReceiverDto === null || SenderDto === null)
+            return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
+        const DeniedRequest = await this.prisma.friends.deleteMany({
+            where: {
+                senderId: SenderDto.id,
+                receiverId: ReceiverDto.id,
+                status: RELATION.PENDING
+            }
+        });
+
+        console.log("__DENIED__REQUEST__ : ", DeniedRequest);
+        return res.status(HttpStatus.OK).send({"message": DeniedRequest.count});
+    }
+
+    async UnfriendUser(Receiver: string, Sender: string, @Res() res) {
+        let SenderDto = await this.GetUserByLogin(Sender);
+        let ReceiverDto = await this.GetUserByLogin(Receiver);
+
+        if (ReceiverDto === null || SenderDto === null)
+            return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
+        this.DeleteFriendRelation(SenderDto.id, ReceiverDto.id);
+        return res.status(HttpStatus.OK).send({"message": "DONE"});
+    }
 
     async SendFriendRequest(User1Id: number, User2Id: number, @Res() res) {
         console.log("ID1", User1Id)
@@ -78,138 +243,6 @@ export class UserService {
     }
 
     /*
-    *  Endpoints Calls : **************************************************************************
-    */
-        async BlockUser(User: string, BlockedUser: string, @Res() res) {
-            let UserDto = await this.GetUserByLogin(User);
-            let BlockedUserDto = await this.GetUserByLogin(BlockedUser);
-
-            if (UserDto === null || BlockedUserDto === null)
-                return res.status(HttpStatus.BAD_REQUEST).send({"message": "Bad Request"});
-                console.log(`${User} Want To Block ${BlockedUser}`);
-            if (UserDto.id === BlockedUserDto.id)
-                return res.status(HttpStatus.FORBIDDEN).send({"message": "Cant Block Yourself :) "});
-            if (await this.IsBlockedUser(UserDto.id, BlockedUserDto.id) === true)
-                return res.status(HttpStatus.OK).send({"message": `${User} Already Blocked ${BlockedUser}`});
-            if (await this.IsBlockedUser(BlockedUserDto.id, UserDto.id) === true)
-                return res.status(HttpStatus.FORBIDDEN).send({"message": `Cant Block this user | Reason : ${BlockedUser} Already Blocked ${User}`});
-            const user = await this.prisma.blocks.create({
-                data: {
-                    userId: UserDto.id,
-                    blockedId: BlockedUserDto.id,
-                },
-            });
-            this.DeleteFriendRelation(UserDto.id, BlockedUserDto.id);
-            return res.status(HttpStatus.OK).send({"message": "DONE"});
-        }
-
-        async UnblockUser(User: string, BlockedUser: string, @Res() res) {
-            let UserDto = await this.GetUserByLogin(User);
-            let BlockedUserDto = await this.GetUserByLogin(BlockedUser);
-
-            if (UserDto === null || BlockedUserDto === null)
-                return res.status(HttpStatus.BAD_REQUEST).send({"message": "Bad Request"});
-                console.log(`${User} Want To Unblock ${BlockedUser}`);
-
-            if (UserDto.id === BlockedUserDto.id)
-                return res.status(HttpStatus.FORBIDDEN).send({"message": "Cant Unblock Yourself :) "});
-
-            if (await this.IsBlockedUser(BlockedUserDto.id, UserDto.id) === true)
-                return res.status(HttpStatus.FORBIDDEN).send({"message": `Cant Unblock this user | Reason : ${BlockedUser} Already Blocked ${User}`});
-
-            const Delete = await this.prisma.blocks.deleteMany({
-                where: {
-                    userId: UserDto.id,
-                    blockedId: BlockedUserDto.id,
-                }
-            });
-            return res.status(HttpStatus.OK).send({"message": "DONE"});
-        }
-
-        async AddFriend(Sender: string, Receiver: string, @Res() res) {
-            let SenderDto = await this.GetUserByLogin(Sender);
-            let ReceiverDto = await this.GetUserByLogin(Receiver);
-
-            if (ReceiverDto === null || SenderDto === null)
-                return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
-            if (await this.IsBlockedUser(ReceiverDto.id, SenderDto.id) ||
-                await this.IsBlockedUser(SenderDto.id, ReceiverDto.id)) {
-                return res.status(HttpStatus.FORBIDDEN).send({"message": `${Receiver} blocked ${Sender}`});
-            }
-            console.log("AA : ", SenderDto.id);
-            console.log("BB : ", ReceiverDto.id);
-            if (await this.FriendsRelationExist(SenderDto.id, ReceiverDto.id) === false)
-                return await this.SendFriendRequest(SenderDto.id, ReceiverDto.id, res);
-            return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000'}).status(HttpStatus.OK).send({"message": "Relation Already Exist"});
-        }
-
-        async CancelRequest(Sender: string, Receiver: string, @Res() res) {
-            let SenderDto = await this.GetUserByLogin(Sender);
-            let ReceiverDto = await this.GetUserByLogin(Receiver);
-
-            if (ReceiverDto === null || SenderDto === null)
-                return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
-            let relatin = await this.prisma.friends.deleteMany({
-                where: {
-                    senderId: SenderDto.id,
-                    receiverId: ReceiverDto.id,
-                    status: RELATION.PENDING,
-                }
-            })
-            console.log("__CANCEL__FRIEND__REQUEST__ : ", relatin);
-            return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000'}).status(HttpStatus.OK).send({"message": "DONE"});
-        }
-
-        async AcceptFriendRequest(Receiver: string, Sender: string, @Res() res) {
-            let SenderDto = await this.GetUserByLogin(Sender);
-            let ReceiverDto = await this.GetUserByLogin(Receiver);
-
-            if (ReceiverDto === null || SenderDto === null)
-                return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
-            let NewRelation = await this.prisma.friends.updateMany({
-                where: {
-                    receiverId: ReceiverDto.id,
-                    senderId: SenderDto.id,
-                    status: RELATION.PENDING,
-                },
-                data: {
-                    status: RELATION.FRIENDS,
-                }
-            });
-            await this.chatService.CreatDMChanel(SenderDto.id, ReceiverDto.id);
-            console.log("__NEW__RELATION__ : ", NewRelation);
-            return res.status(HttpStatus.OK).send({"message": NewRelation.count});
-        }
-
-        async DeclineFriendRequest(Receiver: string, Sender: string, @Res() res) {
-            let SenderDto = await this.GetUserByLogin(Sender);
-            let ReceiverDto = await this.GetUserByLogin(Receiver);
-
-            if (ReceiverDto === null || SenderDto === null)
-                return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
-            const DeniedRequest = await this.prisma.friends.deleteMany({
-                where: {
-                    senderId: SenderDto.id,
-                    receiverId: ReceiverDto.id,
-                    status: RELATION.PENDING
-                }
-            });
-
-            console.log("__DENIED__REQUEST__ : ", DeniedRequest);
-            return res.status(HttpStatus.OK).send({"message": DeniedRequest.count});
-        }
-
-        async UnfriendUser(Receiver: string, Sender: string, @Res() res) {
-            let SenderDto = await this.GetUserByLogin(Sender);
-            let ReceiverDto = await this.GetUserByLogin(Receiver);
-
-            if (ReceiverDto === null || SenderDto === null)
-                return res.status(HttpStatus.BAD_REQUEST).send({"message": "User Not Found"});
-            this.DeleteFriendRelation(SenderDto.id, ReceiverDto.id);
-            return res.status(HttpStatus.OK).send({"message": "DONE"});
-        }
-
-    /*
     *  Search/Find : ******************************************************************************
     */
         async    GetUserByLogin(username: string) : Promise<any> {
@@ -242,7 +275,7 @@ export class UserService {
         async GetAllUsers(@Res() res) {
             let allUser = await this.prisma.users.findMany() ;
             console.log("__ALL__USERS__ : ", allUser)
-            return res.set({'Access-Control-Allow-Origin': 'http://localhost:3000'}).send(allUser);
+            return res.send(allUser);
             // return allUser;
         }
     /*
@@ -295,9 +328,7 @@ export class UserService {
                 },
             });
             console.log("__BLOCK__STAT__ : ", FriendshipStat);
-            if (FriendshipStat === null)
-                return false;
-            return true;
+            return FriendshipStat;
         }
 
         async DeleteFriendRelation(User1: number, User2: number){
