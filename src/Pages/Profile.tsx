@@ -13,6 +13,7 @@ import { GameComp } from "../components/PlayerProfile";
 import { UserInvitCard } from "../components/PlayerProfile";
 import { UserBlockedCard } from "../components/PlayerProfile";
 import {ReactComponent as Warningo} from "../assets/imgs/warning.svg";
+import {ReactComponent as LuffyAce} from "../assets/imgs/luffyAce.svg";
 import axios from 'axios';
 import Achivments from '../components/Achivments';
 
@@ -230,7 +231,7 @@ export default function Profile() {
   }, []);
 
   return (
-    <div className='container' style={{marginTop: "100px"}}>
+    <div className='container' style={{display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
           <TheBox>
               <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
               <ProgressBar>
@@ -242,7 +243,7 @@ export default function Profile() {
               </ProgressBar>
           </TheBox>
           <Achivments/>
-          <PlayerTabsBar/>
+          <PlayerTabsBar/> 
     </div>
   )
 };
@@ -283,7 +284,7 @@ margin: 15px 0px;
 `
 
 ///// PlayerTabs Section
-const linkslist = [ " FRIENDS" , " GAME HISTORY", "PENDING REQUESTS", "BLOCKED USERS"]
+const linkslist = [ " FRIENDS" , "PENDING REQUESTS", "BLOCKED USERS"]
 
 export function PlayerTabsBar()
 {
@@ -292,19 +293,19 @@ export function PlayerTabsBar()
     <PlayerAchieveStyle>
       <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/> 
 
-        {index === 0 && <Tabtwo/>}
-        {index === 1 && <Tabthree/>}
-        {index === 2 && <Tabfour/>}
-        {index === 3 && <Tabfive/>}
+        {index === 0 && <FriendsComponent/>}
+        {index === 1 && <Tabfour/>}
+        {index === 2 && <Tabfive/>}
     </PlayerAchieveStyle>
   )
 }
 const PlayerAchieveStyle = styled.div`
   padding-top: 20px;
-  margin : 0px 0px;
+  margin : 20px 0px;
   width:  100%;
+  flex: 1;
   align-items: center;
-  height: auto;
+  /* height: ; */
   border: 1px solid ${props => props.theme.colors.primarybg};
   flex-direction: column;
   -webkit-text-stroke: 1px #6560679a;
@@ -354,7 +355,7 @@ const TabOone = styled.div`
 `;
 
 //#2  Tab Friends
-export function Tabtwo()
+export function FriendsComponent()
 {
   const [friends, setfriends] = useState([])
 useEffect(() => {
@@ -363,55 +364,53 @@ useEffect(() => {
     {withCredentials: true} 
   ).then((res)=>{
     console.log(res.data)
-    alert()
-    setfriends(res.data)
+    // setfriends(res.data)
 
   }).catch((err)=>{
-
-        // history.pushState("/signin");
     })
 }, [])
 
   return (
-    <TabOtwo >
-      {/* <h1> Helloo Tab Friends </h1> */}
+    <TabOthree >
       {
+        friends.length === 0 ? 
+        <EmptyComponent text="No Friends Yet !"/>
+        : 
         friends.map((match : any, id : number )=>{
             return<UserCard key={id} data={match}  />
         })
       }
-    </TabOtwo>
+    </TabOthree>
   )
 }
-const TabOtwo = styled.div` 
+interface EmptyProps {
+  text: string
+}
+export function EmptyComponent(props: EmptyProps)
+{
+ 
+
+
+  return (
+    <Empty >
+      <LuffyAce/>
+      {props.text}
+    </Empty>
+  )
+}
+const Empty = styled.div` 
   display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
-  padding: 10px;
-  margin: 0px 0px;
-  overflow-y: scroll;
-  height: auto;
-  max-height: ${hieghtTab};
-  /* border: 1px solid white; */
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  background-color:  ${props => props.theme.colors.bg};
+ color:  ${props => props.theme.colors.seconderyText};
+ font-weight: 600;
+ justify-content: center;
+ font-size: 30px;
+ font-family: "Poppins" , sans-serif;
 
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-  width: 4px;
-}
-
-&::-webkit-scrollbar-track {
-  background: transparent; 
-} 
-
-/* Handle */
- &::-webkit-scrollbar-thumb {
-  background: ${props => props.theme.colors.primarybg};
-} 
-
-/* Handle on hover */
- &::-webkit-scrollbar-thumb:hover { 
-  background: ${props => props.theme.colors.primarybg};
-}
 `;
 
 //#3  Game History Tab
@@ -429,7 +428,9 @@ export function Tabthree()
 }
 const TabOthree= styled.div`
   width: 100%;
+  height: 100%;
   max-height: ${hieghtTab};
+
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
@@ -466,102 +467,40 @@ export function Tabfour()
       setfriends(res.data)
   
     }).catch((err)=>{
-  
-          // history.pushState("/signin");
       })
   }, [])
   return (
-    <TabOfour>
+    <TabOthree>
     {
+        friends.length === 0 ? 
+        <EmptyComponent text="No Pending Requests !"/>
+        : 
         friends.map((invit : any, id : number )=>{
             return<UserInvitCard key={id} data={invit} />
         })
     }
        
-    </TabOfour>
+    </TabOthree>
   )
 }
-const TabOfour= styled.div`
-
-    /* background-color: #cccccc4e; */
-    max-height: ${hieghtTab};
-    margin: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: left;
-    overflow-y: scroll;
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent; 
-    } 
-
-    /* Handle */
-    &::-webkit-scrollbar-thumb {
-      background: ${props => props.theme.colors.primarybg};
-    } 
-
-    /* Handle on hover */
-    &::-webkit-scrollbar-thumb:hover { 
-      background: ${props => props.theme.colors.primarybg};
-    }
-`;
 
 //#5  My Black List
 export function Tabfive()
 {
   return (
-    <TabOfive> 
-      <div className="Title">
-        <Warningo className="icon" /> 
-      </div>
+    <TabOthree> 
         {
+           listBlocked.length === 0 ? 
+           <EmptyComponent text="Empty !"/>
+           : 
           listBlocked.map((invit : any, id : number )=>{
               return<UserBlockedCard key={id} data={invit} />
           })
         }  
       
-      </TabOfive>
+      </TabOthree>
   )
 }
-const TabOfive= styled.div`
 
-    /* background-color: rgba(80, 22, 22, 0.313);  */
-    max-height: ${hieghtTab};
-    margin: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: left;
-    overflow-y: scroll;
-    .Title {
-      position: absolute;
-      width: 100%;
-      opacity: 0.2;
-      left: 10%;
-      bottom: 20%;
-
-    }
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent; 
-    } 
-
-    /* Handle */
-    &::-webkit-scrollbar-thumb {
-      background: ${props => props.theme.colors.primarybg};
-    } 
-
-    /* Handle on hover */
-    &::-webkit-scrollbar-thumb:hover { 
-      background: ${props => props.theme.colors.primarybg};
-    }
-`;
-
-/// To be added : Other users profile // Rooms Page /// All users page // 
 
 
