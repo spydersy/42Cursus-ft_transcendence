@@ -1,19 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { CHANNEL } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-
+// import { AuthenticationService } from '../authentication/authentication.service';
+import { Socket } from 'socket.io';
+import { parse } from 'cookie';
+import { WsException } from '@nestjs/websockets';
+ 
 @Injectable()
 export class ChatService {
-    constructor(private prisma: PrismaService) {}
-
-    async CreatDMChanel(User1: number, User2: number) {
-        this.prisma.channels.findMany({
-            where: {
-                access: CHANNEL.DM,
-            },
-            include: {
-                users: true
-            }
-        });
-    }
+  constructor(
+    //private readonly authenticationService: AuthenticationService,
+  ) {
+  }
+ 
+  async getUserFromSocket(socket: Socket) {
+    const cookie = socket.handshake.headers.cookie;
+    const { Authentication: authenticationToken } = parse(cookie);
+    console.log("__CLIENT__DBG__FROM__GET__USER__FROM__SOCKET__", socket);
+    return "spyder";
+    // const user = await this.authenticationService.getUserFromAuthenticationToken(authenticationToken);
+    // if (!user) {
+    //   throw new WsException('Invalid credentials.');
+    // }
+    // return user;
+  }
 }

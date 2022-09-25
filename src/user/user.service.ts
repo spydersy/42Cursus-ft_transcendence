@@ -1,6 +1,5 @@
 import { BadRequestException, HttpCode, HttpStatus, Injectable, MethodNotAllowedException, NotFoundException, Query, Req, Res } from '@nestjs/common';
 import { RELATION } from '@prisma/client';
-import { ChatService } from 'src/chat/chat.service';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Utilities } from 'src/app.utils';
@@ -9,12 +8,43 @@ import { Utilities } from 'src/app.utils';
 export class UserService {
 
 
-    constructor(private prisma: PrismaService,
-                private chatService: ChatService) {}
+    constructor(private prisma: PrismaService) {}
 
     /*
     *  Endpoints Calls : **************************************************************************
     */
+
+    async GetFriends(UserMe: string, User: string, @Res() res) {
+        let UserMeDto = await this.GetUserByLogin(UserMe);
+        let UserDto = await this.GetUserByLogin(User);
+        if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true) {
+            return res.status(HttpStatus.FORBIDDEN).send([]);
+        }
+        let FriendsRowA = await this.prisma.friends.findMany({
+            where: {
+                status: RELATION.FRIENDS,
+                senderId: UserDto.id
+            },
+            include: {
+                receiver: true
+            }
+        });
+
+        let FriendsRowB = await this.prisma.friends.findMany({ 
+            where: {
+                status: RELATION.FRIENDS,
+                receiverId: UserDto.id
+            },
+            include: {
+                sender: true
+            }
+        });
+        let AllFriends = [];
+        FriendsRowA.forEach(element => AllFriends.push(element.receiver));
+        FriendsRowB.forEach(element => AllFriends.push(element.sender));
+        return res.status(HttpStatus.OK).send(AllFriends);
+    }
+
     async GetUserByUsername(Me: string, User: string, @Res() res) {
             
         let MeDto = await this.GetUserByLogin(Me);
@@ -28,7 +58,6 @@ export class UserService {
         catch {
             return res.status(HttpStatus.NOT_FOUND).send({'message' : 'User Not Found'});
         }
-        // let user: any;
         try {
             if (await this.IsBlockedUser(UserDto.id, MeDto.id) === true)  {
                 throw new  MethodNotAllowedException();
@@ -37,10 +66,13 @@ export class UserService {
         catch {
             return res.status(HttpStatus.FORBIDDEN).send({'message' : 'Forbidden : User Blocked you'}); // DO SOMETHING
         }
+        UserDto['relation'] = null;
+        if (await this.IsBlockedUser(UserDto.id, MeDto.id) === true) {
+            UserDto['relation'] = 'BLOCKED';
+            return res.status(HttpStatus.OK).send(UserDto);
+        }
         let FriendsStat = await this.FriendsRelationExist(MeDto.id, UserDto.id);
-        if (FriendsStat === null)
-            UserDto['relation'] = null;
-        else
+        if (FriendsStat !== null)
             UserDto['relation'] = FriendsStat['status'];
         console.log("__USER))DTO__DBG__ : ", UserDto);
         return res.status(HttpStatus.OK).send(UserDto);
@@ -142,7 +174,7 @@ export class UserService {
                 status: RELATION.FRIENDS,
             }
         });
-        await this.chatService.CreatDMChanel(SenderDto.id, ReceiverDto.id);
+        //await this.chatService.CreatDMChanel(SenderDto.id, ReceiverDto.id); // DO SOMETHING . . . 
         console.log("__NEW__RELATION__ : ", NewRelation);
         return res.status(HttpStatus.OK).send({"message": NewRelation.count});
     }

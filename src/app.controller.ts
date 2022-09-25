@@ -11,7 +11,10 @@ export class AppController {
   constructor(private readonly appService: AppService,
               private userService: UserService) {}
 
-
+    @Get()
+    async Hello() {
+      return "Hello";
+    }
   // @UseGuards(JwtAuthGuard)
   // @Get('updatelogin')
   // async UpdateLogin(@Req() req, @Query() query, @Res() res: Response) {

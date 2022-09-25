@@ -10,15 +10,17 @@ STEPS :
 - [X] Add Relation Between Users In Json Object
 - [ ] Add Validation Layer For Outputs 
 
+USER SERVICE :
+- [P] Users Status
+- [ ] Two Factor Authentication
+
 CHAT SERVICE :
 - [ ] Optimize Schema
 - [ ] Create DM Channel for friends
-- [ ] Two Factor Authentication
-- [ ] Users Status
 
 ENDPOINTS :
 - [X] GET /auth
-- [ ] GET /user/{id}?data={achievements, friends, games}
+- [X] GET /user/{id}?data={achievements, friends, games}
 - [X] PUT /user/relation/{id}?event={[add, block, accept, decline, unfriend, cancel]} [Temporary GET Request]
 - [X] GET /profile/me?data={achievements, matchs, ... , [friends, requests, blacklist]}
 - [ ] PUT /profile/update/{2fa, displayname}
@@ -27,7 +29,7 @@ ENDPOINTS :
 DATABASE :
 - [ ] Relation btwn tables.
 
-SECREt CODE :
+SECRET CODE :
 - [ ] Import it from .env file
 
 

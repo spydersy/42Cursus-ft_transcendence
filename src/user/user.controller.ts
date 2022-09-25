@@ -12,32 +12,30 @@ export class UserController {
     constructor(private userService: UserService,
                 private profileService: ProfileService) {}
 
-                @Get() 
-                async GetAllUsers(@Req() req, @Res() res){
-                    this.userService.GetAllUsers(res);
-                }
+    @Get() 
+    async GetAllUsers(@Req() req, @Res() res){
+        this.userService.GetAllUsers(res);
+    }
             
     @Get(':id')
-    async GetUserByUsername(@Req() req, @Query() query, @Res() res) {
-        // if (query['data']) {
-        //     let UserIdDTO = await this.userService.GetUserByLogin(req.user.username);
-        //     console.log("__USER__DBG__ : ", UserIdDTO);
-        //     if (UserIdDTO === null)
-        //         return res.send("9WEEEEDTIIIIIIIIIIHA");
-        //     switch (query['data']) {
-        //         case 'achievements':
-        //           return" await this.profileService.GetFriends(req.user.userId, res)";
-        //         case 'friends':
-        //               return await this.profileService.GetFriends(UserIdDTO.id, res);
-        //         case 'games':
-        //             return" await this.profileService.GetFriends(req.user.userId, res)";
-        //         default:
-        //             return res.status(HttpStatus.BAD_REQUEST).send({"message": "Bad Request"});
-        //     }
-        // }
+    async GetUserByUsername(@Req() req, @Res() res) {
         return this.userService.GetUserByUsername(req.user.username, req.params.id, res);
     }
-    @Get('relation/:id')
+
+    @Get('friends/:id')
+    async GetFriends(@Req() req, @Res() res) {
+        return this.userService.GetFriends(req.user.username, req.params.id, res);
+    }
+
+    @Get('achievements/:id')
+    async GetAchievements(@Req() req, @Res() res) {
+        return res.send([]);   //"this.userService.GetAchievements(req.user.username, req.params.id, res)";
+    }
+
+    @Get('games/:id')
+    async GetGames(@Req() req, @Res() res) {
+        return res.send([]);   //"this.userService.GetGames(req.user.username, req.params.id, res)";
+    }
 
     @Get('relation/:id')
     async RelationsHandler(@Req() req, @Query() query, @Res() res) {
@@ -64,6 +62,4 @@ export class UserController {
         }
         return {"message": "Bad Request01"};
     }
-
 }
-// bigdaddy join select
