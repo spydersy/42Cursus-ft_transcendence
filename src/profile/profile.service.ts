@@ -44,6 +44,23 @@ export class ProfileService {
         return res.status(HttpStatus.CREATED).send(uploadedAvatart);
     }
 
+    async UpdateUserName(newName: string, userId: number, @Res() res) {
+        try {
+            this.prisma.users.update({
+                where: {
+                    id: userId
+                },
+                data: {
+                    displayName: newName,
+                }
+            });
+        }
+        catch {
+            return res.status(HttpStatus.FORBIDDEN).send({"message": 'Username Already Taken'});
+        }
+        return res.status(HttpStatus.CREATED).send({"new name": newName});
+    }
+
     async GetRequests( UserId: number, @Res() res) {
         let FriendRequests = await this.prisma.friends.findMany({
             where: {
@@ -54,10 +71,6 @@ export class ProfileService {
                 sender: true,
             }
         });
-        delete FriendRequests[0].id
-        delete FriendRequests[0].senderId
-        delete FriendRequests[0].receiverId
-        delete FriendRequests[0].status
         let FriendRequestsDTO = [];
         FriendRequests.forEach(element => {
             FriendRequestsDTO.push(element.sender);

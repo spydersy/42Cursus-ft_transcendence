@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Post, Query, Req, Res, UseGuards, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Post, Query, Req, Res, UseGuards, UploadedFile, UseInterceptors, Param, Put } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserService } from 'src/user/user.service';
 import { Response } from 'express';
@@ -7,7 +7,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('profile')
 export class ProfileController {
 
@@ -45,9 +45,17 @@ export class ProfileController {
       fileFilter: imageFileFilter,
     }),
   )
-  async ApdateAvatar(@Req() req, @UploadedFile() file, @Res() res) {
+  async UpdateAvatar(@Req() req, @UploadedFile() file, @Res() res) {
     const uploadedAvatarPath = `http://localhost:8000/upload/${file.filename}`;
     return this.profileService.UploadAvatar(uploadedAvatarPath, req.user.useerId, res);
     return res.send(uploadedAvatarPath);
+  }
+
+
+  @Put("updateUsername/:newname")
+  async UpdateUserName(@Req() req, @Param('newname') newName, @Res() res) {
+    this.profileService.UpdateUserName(newName, req.user.useerId, res);
+    console.log("__BODY__DBG__", name);
+    return res.send("XXXXXXXX");
   }
 }
