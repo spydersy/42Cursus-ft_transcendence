@@ -200,18 +200,18 @@ const option =  {
     return (
       <StatsStyle  >
         <Header>
-          {/* <Status status={"online"}>
+          <Status status={"online"}>
             <ActivityIcon/>
               Online
-          </Status> */}
-          {props.isCurrentUser === false && 
+          </Status>
+
+          {props.isCurrentUser === true && 
             <Buttons>
               
               <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
               <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add Friend'/>
             </Buttons>
           }
-
         </Header>
       
         <Data>
@@ -253,6 +253,8 @@ const option =  {
 
 const Header = styled.div`
   width: 100%;
+  height: 40px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
 
@@ -341,8 +343,8 @@ justify-content: space-between;
   position: relative;
  /* flex: 1; */
  height: 100%;
-  flex: 1;
-
+  /* flex: 1;/ */
+width: auto;
   
 }
 `

@@ -1,4 +1,6 @@
 import React from 'react'
+import styled from "styled-components"
+
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS  , Legend , ArcElement , Tooltip} from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -28,7 +30,7 @@ const data = {
 
 export default function DoughnutChart() {
   return (
-    <div>
+    <DoughnutStyle>
          < Doughnut  
             data={data} 
             options={
@@ -50,6 +52,13 @@ export default function DoughnutChart() {
               }
             }
             />
-    </div>
+    </DoughnutStyle>
   )
 }
+const DoughnutStyle = styled.div`
+  height: 95%;
+  display: flex;
+  /* align-items: center; */
+align-items: flex-end;
+
+`;

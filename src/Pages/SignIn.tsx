@@ -130,8 +130,8 @@ export  function Button(props :ButtonProps ) {
 
 const LoginButtonStyle = styled.button<ButtonStyleProps>`
 /* margin: 0 auto; */
-   padding: 0 20px;
-   height: 40px;
+   padding: 5px 20px;
+   /* height: 40px; */
    background: linear-gradient(144deg, #437492 16.67%, #174486 100%);
    border-radius: 5px;
 

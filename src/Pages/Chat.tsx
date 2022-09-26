@@ -541,7 +541,7 @@ export  function BottomChat(props: ChatProps) {
   
   export  function ChatBody(props: ChatProps) {
     // useEffect(() => {
-    //   const socket = io('http://localhost:3030');
+    //   const  = io('http://localhost:3030');
     //   socket.on('coco' , ()=>{
     //     console.log("coco")
     //   })

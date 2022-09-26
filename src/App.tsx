@@ -30,6 +30,7 @@ import axios from 'axios';
 import Setting from './Pages/Setting';
 import Leader from './Pages/Leader';
 import Room from './Pages/Room';
+import SocketTesting from './components/testing/SocketTesting';
 
 const mockedItems : any = [{
   title: "MarinFord",
@@ -96,6 +97,8 @@ function App() {
               <Route path="/leaderboard" element={<Leader />} />
               <Route path="/" element={<Home settheme={(e: any)=> setGametheme(e)} />} />
               <Route path="/profile/:id" element={<Profile  />} />
+              <Route path="/socketTest" element={<SocketTesting />} />
+
             </Routes>
           </Cont>
         </Main>
