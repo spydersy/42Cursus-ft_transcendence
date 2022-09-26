@@ -35,7 +35,7 @@ export default function Achivments() {
         <div className='cont'>
         {
             achiv.map((data : any, id : number )=>{
-               return <img src={data.badge} alt={data.name} />
+               return <img key={id} src={data.badge} alt={data.name} />
                 
             })
         }
@@ -68,7 +68,7 @@ align-items: flex-start;
     align-items:center;
     >img{
         margin : 0px 10px;
-        /* filter: grayscale(100%); */
+        filter: grayscale(100%);
     }
   }
 `

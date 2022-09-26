@@ -67,17 +67,17 @@ function App() {
   //   // const coc = Cookieequiredy
   //   // axios.defaults.withCredentials = true;
   // //  console.log( Cookies.set)
-  //   axios.get("http://localhost:8000/profile/me", 
-  //   {withCredentials: true} 
-  // ).then((res)=>{
-  //   console.log(res.data)
-  //   localStorage.setItem("user", JSON.stringify(res.data))
-  // }).catch((err)=>{
-  //       console.log(err)
-  //       navigate('/signin')
-  //       // history.pushState("/signin");
-  //   })
-  //   console.log("hey")
+    axios.get("http://localhost:8000/profile/me", 
+    {withCredentials: true} 
+  ).then((res)=>{
+    console.log(res.data)
+    localStorage.setItem("user", JSON.stringify(res.data))
+  }).catch((err)=>{
+        console.log(err)
+        navigate('/signin')
+        // history.pushState("/signin");
+    })
+    console.log("hey")
   }, [])
   
   return (
@@ -113,7 +113,12 @@ const Cont = styled.div`
   flex-direction: row;
 `;
 const Main = styled.main`
-  
+  .vr{
+    width: 1px;
+    height: 70%;
+    background-color: ${props => props.theme.colors.seconderyText};
+    opacity: 0.5;
+  }
   &::-webkit-scrollbar {
       width: 4px;
     }

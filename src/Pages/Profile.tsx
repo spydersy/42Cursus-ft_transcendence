@@ -19,74 +19,13 @@ import Achivments from '../components/Achivments';
 
 
 
-//-- Global Data --//
-const Backcolor = "#1aba1d"
-const Barside = "#f3460fe"
-const GreyBackcolor = "#16c447"
+//-- Global Data --
 
 //-- Global User Data --//
 const ProgressUser = "40%"
-const player = { name: "Alchemist", login: "Eelaazmi", lvl: "1", gamePlayed : 350, lost : 150,  won : 200, rank: "rank1"}
 const hieghtTab = "500px";
 
-// const achievment1 = {
-//   name: "SERGENT",
-//   desc : "you played 20 game without any loss",
-//   badge : B1,
-// }
-// const achievment2 = {
-//   name: "The Alchemist",
-//   desc : "You are a M9WED player by nature",
-//   badge : B3,
-// }
-// const achievment3 = {
-//   name: "MASTER",
-//   desc : "you win 5 game.",
-//   badge : B1 ,
-// }
 
-// var listAchiev = [achievment1 , achievment2 , achievment3,achievment3,achievment3,achievment3, achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3,achievment3]
-//------//
-
-const card = {
-  username: "mohammed el-karmi",
-  grade : "Yaiba",
-  status : true ,
-  avatar : Badge2,
-}
-const card1 = {
-  username: "elmahdi elaazmi",
-  grade : "The Great Yaiba",
-  status : false ,
-  avatar : Badge3,
-
-}
-const card2 = {
-  username: "Mohammed Reda amali",
-  grade : "Prince of Persia",
-  status : true ,
-  avatar : Badge4,
-
-}
-const card3 = {
-  username: "achraf belarif",
-  grade : "Spydrey",
-  status : true ,
-  avatar : Badge5,
-}
-const card4 = {
-  username: "elmahdi elaazmi",
-  grade : "alchemist",
-  status : true ,
-  avatar : Badge6,
-}
-var listCards = [card, card1,card3, card3, card2,card, card1,card3, card3, card2
-,card, card1,card3, card3, card2,card, card1,card3, card3, card2,card4, card1,card3,
-card3, card2,card, card1,card3, card4, card2, card, card1,card4, card3, card2,card,
-card1,card3, card3, card2, card, card1,card3, card3, card2,card, card1,card3, card3, 
-card2, card, card1,card3, card3, card2,card, card1,card3, card3, card2]
-
-//-----//
 
 const match1 = {
   match:{
@@ -123,45 +62,6 @@ var listGame = [match1 , match2, match3, match1 , match2, match3, match1 , match
 
 //-----//
 
-const UserInvit = {
-username: "Admiral Akainu",
-avatar : Badge3,
-}
-const UserInvit1 = {
-  username: "Admiral Kizaro",
-  avatar : Badge2,
-}
-const UserInvit2 = {
-  username: "Admiral Aokij",
-  avatar : Badge4,
-}
-const UserInvit3 = {
-  username: "Admiral Garb",
-  avatar : Badge5,
-}
-const UserInvit4 = {
-  username: "Yonko shanks",
-  avatar : Badge6,
-}
-const UserInvit5 = {
-  username: "Yonko Kaido",
-  avatar : Badge2,
-}
-const UserInvit6 = {
-  username: "Yonko Big mom",
-  avatar : Badge6,
-}
-const UserInvit7 = {
-  username: "Yonko Whitebeard",
-  avatar : Badge4,
-}
-const UserInvit8 = {
-  username: "Gold Roger",
-  avatar : Badge2,
-}
-var listInvit = [UserInvit  , UserInvit1 , UserInvit2, UserInvit3, UserInvit4, UserInvit5, UserInvit6, UserInvit7, UserInvit8, UserInvit , 
-                 UserInvit1 , UserInvit2 , UserInvit3, UserInvit4, UserInvit5, UserInvit6, UserInvit7, UserInvit8, UserInvit , UserInvit1,
-                 UserInvit2, UserInvit3, UserInvit4, UserInvit5, UserInvit6, UserInvit7, UserInvit8]
 
 const BlockedUser = {
   username: "Nami San",
@@ -187,6 +87,13 @@ interface UserProp {
   defaultAvatar: string,
   login : string
   displayName : string
+}
+interface InvProp {
+  sender: {
+    login : string
+  },
+  // login : string
+  // displayName : string
 }
 //// Default function Profile
 export default function Profile() {
@@ -235,7 +142,7 @@ export default function Profile() {
           <TheBox>
               <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
           </TheBox>
-          <PlayerTabsBar/> 
+          <PlayerTabsBar id={id} /> 
     </div>
   )
 };
@@ -284,15 +191,17 @@ margin: 15px 0px;
 
 ///// PlayerTabs Section
 const linkslist = [ " FRIENDS" , "PENDING REQUESTS", "BLOCKED USERS"]
-
-export function PlayerTabsBar()
+interface PlayerTabsProps {
+  id : string
+}
+export function PlayerTabsBar(props : PlayerTabsProps)
 {
   const [index, setindex] = useState(0)
   return ( 
     <PlayerAchieveStyle>
       <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/> 
 
-        {index === 0 && <FriendsComponent/>}
+        {index === 0 && <FriendsComponent id={props.id}/>}
         {index === 1 && <Tabfour/>}
         {index === 2 && <Tabfive/>}
     </PlayerAchieveStyle>
@@ -354,16 +263,19 @@ const TabOone = styled.div`
 `;
 
 //#2  Tab Friends
-export function FriendsComponent()
+interface FriendsProps {
+  id : string
+}
+export function FriendsComponent(props : FriendsProps)
 {
   const [friends, setfriends] = useState([])
 useEffect(() => {
   
-  axios.get("http://localhost:8000/profile/me?data=friends", 
+  axios.get("http://localhost:8000/users/friends/" + props.id, 
     {withCredentials: true} 
   ).then((res)=>{
     console.log(res.data)
-    // setfriends(res.data)
+    setfriends(res.data)
 
   }).catch((err)=>{
     })
@@ -455,13 +367,13 @@ const TabOthree= styled.div`
 //#4  Pending Requests
 export function Tabfour()
 {
-  const [friends, setfriends] = useState<UserProp[]>([])
+  const [friends, setfriends] = useState<InvProp[]>([])
   useEffect(() => {
     
     axios.get("http://localhost:8000/profile/me?data=requests", 
       {withCredentials: true} 
     ).then((res)=>{
-      console.log(res.data)
+      console.log(res)
 
       setfriends(res.data)
   

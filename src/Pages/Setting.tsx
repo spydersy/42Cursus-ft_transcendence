@@ -3,20 +3,18 @@ import styled , {css} from "styled-components"
 import { HeadComponent } from './Home';
 import Img from "../assets/imgs/avatar/a1.png";
 import {ReactComponent as Edit} from "../assets/imgs/edit.svg";
+import { AvatarComponent } from '../components/PlayerProfile';
+import Input from '../components/Input';
 
 export default function Setting() {
   return (
     <SetStyle className='container' style={{marginTop: "100px"}}>
         <HeadComponent title="Setting" />
         <Avatar>
-            <div className='ava'>
-                <img src={Img} alt="avatar" />
-            </div>
-            <EditStyle>
-                <Edit/>
-            </EditStyle>
+            <AvatarComponent img={""}/>
         </Avatar>
         <Line></Line>
+        
             TODO
     </SetStyle>
   )

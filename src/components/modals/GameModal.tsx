@@ -6,6 +6,7 @@ import Punk from "../../assets/imgs/punkhazard.png";
 import Dress from "../../assets/imgs/dressRosa.jpg";
 import Wano from "../../assets/imgs/wano.jpg";
 import Fish from "../../assets/imgs/fishman.jpeg";
+import InputComponent from '../Input';
 import {
 
   useNavigate
@@ -89,9 +90,7 @@ export default function GameModal(props: GmaemodelProps) {
         <CaroussalContainer>{carouselFragment}</CaroussalContainer>
 
         <Title>
-        <div>Rounds :</div>
-
-        <Input id="number" type="number" min='3' max='10' placeholder='Enter rounds ..' />
+        {/* <InputComponent type='text' lable='Username' placeholder='Enter Username' /> */}
         </Title>
         <PlayButton onClick={changemode}>
           Start
@@ -139,6 +138,7 @@ const GameModalStyle = styled.div`
     flex-direction: column;
 `;
 const Title = styled.div`
+width: 100%;
    font-family: 'Poppins' , sans-serif;
     font-size: 25px;
     color: ${props => props.theme.colors.primaryText};

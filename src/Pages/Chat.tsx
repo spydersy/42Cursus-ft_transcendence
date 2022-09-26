@@ -217,7 +217,7 @@ const ChatSidebarStyle = styled.div`
         justify-content: space-between;
        
         }
-    }
+    
     .searchbar{
 
         width: 90%;

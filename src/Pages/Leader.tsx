@@ -81,12 +81,11 @@ export default function Leader() {
          axios.get("http://localhost:8000/users", 
     {withCredentials: true} 
   ).then((res)=>{
-    // console.log(res.data)
+    console.log(res.data)
     setusers(res.data)
 
   }).catch((err)=>{
 
-        // history.pushState("/signin");
     })
     }, [])
     
@@ -135,13 +134,13 @@ export default function Leader() {
                    10000
                 </td>
                 <td>
-                   {data.played}
+                   {data.wins + data.losses}
                 </td>
                 <td>
                     {data.wins}
                 </td>
                 <td>
-                    {data.lost}
+                    {data.losses}
                 </td>
 
         </Rank>
@@ -246,7 +245,7 @@ const Rank = styled.tr`
     font-family: 'Poppins', sans-serif;
         font-weight : 600;
     >td{
-        color: ${props => props.theme.colors.seconderyText};
+        color: ${props => props.theme.colors.primaryText};
         padding: 10px;
         text-align: start;
         

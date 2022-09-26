@@ -134,7 +134,7 @@ const LoginButtonStyle = styled.button<ButtonStyleProps>`
    /* height: 40px; */
    background: linear-gradient(144deg, #437492 16.67%, #174486 100%);
    border-radius: 5px;
-
+height: auto;
    cursor: pointer;
    border: none;
    display: flex;

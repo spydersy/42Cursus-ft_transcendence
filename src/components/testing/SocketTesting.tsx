@@ -4,8 +4,6 @@ import io from 'socket.io-client';
 export default function SocketTesting() {
     useEffect(() => {
       const socket = io('http://localhost:8000');
-
-     
     }, [])
     
   return (

@@ -1,10 +1,23 @@
 import React from 'react'
 import styled from "styled-components"
 
-import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS  , Legend , ArcElement , Tooltip} from 'chart.js';
-ChartJS.register(ArcElement, Tooltip, Legend);
-
+// import { Doughnut } from 'react-chartjs-2';
+// import { Radar } from 'react-chartjs-2';
+// import { Chart as ChartJS  , RadialLinearScale,Point, Legend , ArcElement , Tooltip} from 'chart.js';
+// ChartJS.register(ArcElement,RadialLinearScale, Tooltip, Legend );
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+  defaults,
+  ArcElement
+} from 'chart.js';
+import { Doughnut, Radar } from 'react-chartjs-2';
+ChartJS.register(ArcElement, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 const data = {
     labels: ['Wins', 'Lost'],
    
@@ -26,6 +39,34 @@ const data = {
       },
     ],
   };
+const dataRadar = {
+  labels: [
+    "Classic",
+    "Tag-team",
+    "1 vs 1",
+    "(Ai) buggy",
+    "(Ai) Dr VegaPunk",
+  ],
+  datasets: [
+    {
+      label: "Wins",
+      borderWidth: 0.5,
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      
+      borderColor: 'rgba(54, 162, 235, 0.8)',
+      pointRadius: 0,
+      data: [25, 50, 75, 91, 0]
+    },
+    {
+      label: "Loss",
+      borderWidth: 0.5,
+      backgroundColor: 'rgba(235, 54, 226, 0.2)',
+      borderColor: 'rgba(235, 54, 226, 0.8)',
+      pointRadius: 0,
+      data: [0, 70, 60, 20, 100]
+    }
+  ]
+  };
 
 
 export default function DoughnutChart() {
@@ -35,9 +76,6 @@ export default function DoughnutChart() {
             data={data} 
             options={
               {
-                // elements:{
-                    
-                // },
                 maintainAspectRatio: false,
                 responsive: true,
                 plugins: {
@@ -57,8 +95,48 @@ export default function DoughnutChart() {
 }
 const DoughnutStyle = styled.div`
   height: 95%;
+  width: 350px;
   display: flex;
   /* align-items: center; */
 align-items: flex-end;
 
 `;
+
+export  function RadarChart() {
+  return (
+    <DoughnutStyle>
+         < Radar  
+            data={dataRadar} 
+            options={
+              {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position : "bottom"
+                    
+                  }
+                  
+                },
+                scales: {
+                 r:{
+                  ticks: {
+                    display : false
+                  },
+                  grid: {
+                    color: 'rgba(255, 255, 255, 0.101)',
+                  },
+                    angleLines: {
+                      color: 'rgba(255, 255, 255, 0.101)',
+
+                    }
+                 }
+                }
+                
+                
+              }
+            }
+            />
+    </DoughnutStyle>
+  )
+}

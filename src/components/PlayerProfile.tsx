@@ -29,34 +29,13 @@ import { Button } from '../Pages/SignIn';
 
 import axios from 'axios';
 import Achivments from './Achivments';
-import DoughnutChart from './charts/Charts';
+import DoughnutChart, { RadarChart } from './charts/Charts';
 
 const Backcolor = css`${props => props.theme.colors.purple}`
 const GreyBackcolor = "#282c34"
 
 
-//// PlayerCard Comp 
-const achievment1 = {
-  name: "SERGENT",
-  desc : "you played 20 game without any loss",
-  badge : Badge1,
-}
-const achievment2 = {
-  name: "The Alchemist",
-  desc : "You are a M9WED player by nature",
-  badge : Badge2,
-}
-const achievment3 = {
-  name: "MASTER",
-  desc : "you win 5 game.",
-  badge : Badge3 ,
-}
-const achievment4 = {
-  name: "MASTER",
-  desc : "you win 5 game.",
-  badge : Badge4 ,
-}
-const achiv = [achievment1 , achievment2 , achievment3 , achievment4]
+//// PlayerCard Comp
 interface UserProp {
   defaultAvatar: string,
   login : string
@@ -83,7 +62,7 @@ export function PlayerCard(props: PlayerCardProps) {
                   </div>
 
                   <div className='Bar'>  
-                      <div className='text' > {props.player.login} </div>
+                      <div className='text' > @{props.player.login} </div>
                   </div>
 
               </div>
@@ -162,7 +141,7 @@ export function Stats(props: PlayerCardProps) {
       {withCredentials: true} 
     ).then((res)=>{
       // console.log(res.data)
-      alert("friend Request sent")
+      alert("friend Request sent" + res.status)
   
     }).catch((err)=>{
   
@@ -170,50 +149,17 @@ export function Stats(props: PlayerCardProps) {
       })
   }
 
-const option =  {
 
-  legend : {
-    position : "bottom"
-  },
-}
- const data = {
-  labels: ['Wins', 'Lost'],
- 
-  datasets: [
-    {
-      label: '# of Votes',
-      data: [12, 19],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
     return (
       <StatsStyle  >
-        <Header>
+        {/* <Header>
           <Status status={"online"}>
             <ActivityIcon/>
               Online
           </Status>
 
-          {props.isCurrentUser === true && 
-            <Buttons>
-              
-              <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
-              <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add Friend'/>
-            </Buttons>
-          }
         </Header>
-      
+       */}
         <Data>
             <div className='data'>
               <div>
@@ -241,10 +187,21 @@ const option =  {
                 </DataTag>
               </div>
               <Achivments/>
+          {props.isCurrentUser === false && 
+            <Buttons>
+              
+              <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
+              <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add Friend'/>
+            </Buttons>
+          }
+
+            </div>
+            <div className='vr'>
 
             </div>
             <div className='Stats'>
-              <DoughnutChart />
+              {/* <DoughnutChart /> */}
+              < RadarChart/>
             </div>
         </Data>
       </StatsStyle>
@@ -269,7 +226,7 @@ const DataTag = styled.div`
   font-family: 'Poppins' , sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 22px;
+  font-size: 17px;
   line-height: 33px;
   color : ${props => props.theme.colors.seconderyText};
   >svg{
@@ -314,11 +271,8 @@ border-radius: 0px 10px 0px 0px;
 `
 const Buttons = styled.div`
 
- flex : 1;
-height: auto;
 display: flex;
-flex-direction: row-reverse;
-align-items: flex-start;
+flex-direction: row;
 gap: 10px;
 
 `
@@ -388,13 +342,13 @@ export  function UserCard(props : UserCard) {
 
 const UserCardStyle = styled.div<StyleProps>`
   position: relative;
-  background: ${Backcolor};
+  background: linear-gradient(144deg, #74549C 16.67%, #3581B3 100%);
+font-family: "Poppins" , sans-serif;
   margin : 10px;
   width: 130px;
   height: 60px;
   text-align: center;
   border-radius: 10px;
-  border: 2px solid  #70539b ;
   animation: fadeIn 2s;
   ${props => props.status == true ? css`
   .status {
@@ -412,7 +366,7 @@ const UserCardStyle = styled.div<StyleProps>`
   .status {
   
 
-    border: 3px solid ${Backcolor};
+    /* border: 3px solid ${Backcolor}; */
     width: 10px;
     height: 10px;
     border-radius: 50%;
@@ -473,7 +427,7 @@ const UserCardStyle = styled.div<StyleProps>`
       width: 50%;
       top: 15px;
       left: 25%;
-      animation: fadeIn 4s;
+      animation: fadeIn 3s;
       > img {
         width:70px;
         height: 70px;
@@ -739,6 +693,13 @@ const AddFriendStyle = styled.div`
 /// Game History tab //
 
 /// Pending Request tab //
+interface InvProp {
+  sender: {
+    login : string
+  },
+  // login : string
+  // displayName : string
+}
 export interface UserInvitCard {
   data: UserProp
 }
@@ -747,9 +708,21 @@ export interface StyleProps {
 }
 
 export  function UserInvitCard(props : UserInvitCard) {
+  const accepteFriend = ()=>{
+   axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=accept", 
+   {withCredentials: true} 
+ ).then((res)=>{
+   // console.log(res.data)
+   alert("friend Request Accepted" + res.status)
+
+ }).catch((err)=>{
+  alert(err)
+
+       // history.pushState("/signin");
+   })
+}
   useEffect(() => {
- 
-  
+    console.log(props.data)
 
   }, )
   
@@ -761,12 +734,12 @@ export  function UserInvitCard(props : UserInvitCard) {
       <div className="YN"> 
 
         <Deny className='Bdeny'/>
-        <Accepte className='Adeny'/>
+        <Accepte onClick={accepteFriend} className='Adeny'/>
 
       </div>
 
       <img src={props.data.defaultAvatar} className="avatar" />
-      <div className="Uname"> {props.data.login}  </div>
+      <div className="Uname"> {props?.data?.login}  </div>
     
     </UserInvitCardStyle>
   )
@@ -883,8 +856,8 @@ export  function UserBlockedCard(props : UserInvitCard) {
       <div className="YN"> 
         <Deny className='Bdeny'/>
       </div>
-      <img src={props.data.defaultAvatar} className="avatar" />
-      <div className="Uname"> {props.data.login}  </div>
+      {/* <img src={props.data.defaultAvatar} className="avatar" /> */}
+      {/* <div className="Uname"> {props.data.login}  </div> */}
     </UserBlockedCardStyle>
   )
 }
