@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Res, Param } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+  async getUploadedFile(@Param('imgpath') image, @Res() res) {
+    return res.sendFile(image, { root: './upload' });
   }
 }

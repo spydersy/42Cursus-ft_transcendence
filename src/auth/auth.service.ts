@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Query, Response } from '@nestjs/common';
+import { HttpStatus, Injectable, Query, Response } from '@nestjs/common';
 import { lastValueFrom, map } from 'rxjs';
 import { User } from 'src/dtos/User.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -35,7 +35,7 @@ export class AuthService {
             )));
     }
 
-    async ClaimUserProfile(Token, code){
+    async ClaimUserProfile(Token, code) {
         try {
             const HeadersRequest = {
                 'Authorization': Token['token_type'] + ' ' + Token['access_token'],
@@ -46,7 +46,7 @@ export class AuthService {
             };
             return await lastValueFrom(this.httpService
                 .get(this.configService.get<string>('42API_PROFILE_ENDPOINT'), {headers: HeadersRequest}));
-            }
+        }
         catch {
             console.log("__ERROR__WHILE__GETTING__USER__DATA__");
         }
@@ -86,8 +86,9 @@ export class AuthService {
             }
             let JWT = await this.GenerateJWT(UserDto);
             return res
-                    .set({
-                        'Access-Control-Allow-Credentials':true,
+                    .status(HttpStatus.OK).
+                    set({
+                        'Access-Control-Allow-Credentials': true,
                         'Access-Control-Allow-Origin': this.configService.get<string>('FRONTEND_URL'),
                         'Access-Control-Allow-Headers': this.configService.get<string>('FRONTEND_URL')
                     })

@@ -35,7 +35,7 @@ async function bootstrap() {
     allowedHeaders: ["cookie", "Cookie", "authorization", "Authorization"],
     exposedHeaders: ["cookie", "Cookie", "authorization", "Authorization"],
   });
-  // app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new VersionHeaderInterceptor());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.use(cookieParser());

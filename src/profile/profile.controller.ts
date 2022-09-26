@@ -1,10 +1,11 @@
-import { Controller, Get, HttpStatus, Put, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Post, Query, Req, Res, UseGuards, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { UserName } from 'src/dtos/Inputs.dto';
 import { UserService } from 'src/user/user.service';
 import { Response } from 'express';
 import { ProfileService } from './profile.service';
-
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { editFileName, imageFileFilter } from 'src/app.utils';
 
 @UseGuards(JwtAuthGuard)
 @Controller('profile')
@@ -34,8 +35,19 @@ export class ProfileController {
     return this.profileService.me(req, query, res);
   }
 
-  @Put('update/:id')
-  async Update2FA(@Req() req, @Query() query) {
-    return 'Update Endpoint Called';
+  @Post('updateAvatar')
+  @UseInterceptors(
+    FileInterceptor('avatar', {
+      storage: diskStorage({
+        destination: './upload',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  async ApdateAvatar(@Req() req, @UploadedFile() file, @Res() res) {
+    const uploadedAvatarPath = `http://localhost:8000/upload/${file.filename}`;
+    return this.profileService.UploadAvatar(uploadedAvatarPath, req.user.useerId, res);
+    return res.send(uploadedAvatarPath);
   }
 }

@@ -1,11 +1,13 @@
-import { HttpStatus, Injectable, Query } from '@nestjs/common';
+import { HttpStatus, Injectable, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserName } from 'src/dtos/Inputs.dto';
 import { UserService } from 'src/user/user.service';
 import { query, Response } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RELATION } from '@prisma/client';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { editFileName, imageFileFilter } from 'src/app.utils';
 
 @Injectable()
 export class ProfileService {
@@ -28,6 +30,18 @@ export class ProfileService {
         }
         let profile = await this.userService.GetUserByLogin(req.user.username);
         return res.send(profile);
+    }
+
+    async UploadAvatar(uploadedAvatart: string, userId: number, @Res() res) {
+        this.prisma.users.update({
+            where: {
+                id: userId
+            },
+            data: {
+                defaultAvatar: uploadedAvatart,
+            }
+        });
+        return res.status(HttpStatus.CREATED).send(uploadedAvatart);
     }
 
     async GetRequests( UserId: number, @Res() res) {
