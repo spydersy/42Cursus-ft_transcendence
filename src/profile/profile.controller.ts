@@ -7,7 +7,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('profile')
 export class ProfileController {
 
@@ -47,14 +47,14 @@ export class ProfileController {
   )
   async UpdateAvatar(@Req() req, @UploadedFile() file, @Res() res) {
     const uploadedAvatarPath = `http://localhost:8000/upload/${file.filename}`;
-    return this.profileService.UploadAvatar(uploadedAvatarPath, req.user.useerId, res);
+    return this.profileService.UploadAvatar(uploadedAvatarPath, req.user.userId, res);
     return res.send(uploadedAvatarPath);
   }
 
 
   @Put("updateUsername/:newname")
   async UpdateUserName(@Req() req, @Param('newname') newName, @Res() res) {
-    this.profileService.UpdateUserName(newName, req.user.useerId, res);
+    this.profileService.UpdateUserName(newName, req.user.userId, res);
     console.log("__BODY__DBG__", name);
     return res.send("XXXXXXXX");
   }

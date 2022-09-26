@@ -33,7 +33,7 @@ export class ProfileService {
     }
 
     async UploadAvatar(uploadedAvatart: string, userId: number, @Res() res) {
-        this.prisma.users.update({
+        let uploaded = await this.prisma.users.update({
             where: {
                 id: userId
             },
@@ -41,6 +41,7 @@ export class ProfileService {
                 defaultAvatar: uploadedAvatart,
             }
         });
+        console.log("__UPLOAD__uploaded__ : ", uploaded);
         return res.status(HttpStatus.CREATED).send(uploadedAvatart);
     }
 
