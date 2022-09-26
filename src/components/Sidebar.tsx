@@ -65,6 +65,7 @@ export default function Sidebar() {
         else if (pageName === "chat" ) pagenum = 1;
         else if (pageName === "rooms" ) pagenum = 2;
         else if (pageName === "leaderboard" ) pagenum = 3;
+        else if (pageName === "setting" ) pagenum = 4;
         changeFocus(pagenum)
 
     window.addEventListener("resize", (e : any)=>{
@@ -109,10 +110,10 @@ export default function Sidebar() {
         }
        </Items> 
        <Devider>c</Devider>
-       <Item  active={false} href={"/"}>
+       <Item onClick={()=>setfocused(4)} active={4 === focused ? true : false} href={"/setting"}>
             <SettingIcon/>
             {
-                open ? <div>Setting</div> : <ToolTip>LogOut</ToolTip>  
+                open ? <div>Setting</div> : <ToolTip>Setting</ToolTip>  
             }
             </Item>
        <Item  active={false} href={"/"}>

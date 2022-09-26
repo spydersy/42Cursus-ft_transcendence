@@ -9,7 +9,7 @@ export default function InputComponent(props: InputProps) {
         {props.lable}
     </label>
     <div>
-        <input disabled={props.disabled} value={props?.value}  type={props.type} placeholder={props.placeholder} />
+        <input onChange={props.onChange}  disabled={props.disabled} value={props?.value}  type={props.type} placeholder={props.placeholder} />
         
     </div>
     </InputStyle>

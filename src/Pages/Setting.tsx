@@ -1,26 +1,102 @@
-import React from 'react'
+import React, {useEffect, useState, FC, InputHTMLAttributes} from 'react'
 import styled , {css} from "styled-components"
 import { HeadComponent } from './Home';
 import Img from "../assets/imgs/avatar/a1.png";
 import {ReactComponent as Edit} from "../assets/imgs/edit.svg";
 import { AvatarComponent } from '../components/PlayerProfile';
-import Input from '../components/Input';
+import axios from 'axios';
+import { map } from 'rxjs';
+import InputComponent from '../components/Input';
+import { Button } from './SignIn';
 
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+    name: string;
+    label: string;
+}
+
+    
 export default function Setting() {
-  return (
-    <SetStyle className='container' style={{marginTop: "100px"}}>
-        <HeadComponent title="Setting" />
-        <Avatar>
-            <AvatarComponent img={""}/>
-        </Avatar>
-        <Line></Line>
+    const [query, setQuery] = useState('');
+    const [img, setImg] = useState('');
+
+    const [data, setdata] = useState({login : "", defaultAvatar : "", displayName : "", twoFactorAuth : false, email : ""})
+    const uploadFile = ()=>{
+        var e = document.getElementById("fileInput")
+        e?.click()
         
-            TODO
-    </SetStyle>
+    }
+    useEffect(() => {
+
+    axios.get("http://localhost:8000/profile/me",   {withCredentials: true} 
+    ).then((res)=>{
+        console.log(res.data)
+        setdata(res.data)
+        setImg(res.data.defaultAvatar)
+    }).catch((err)=>{
+        })
+
+
+        var e = document.getElementById("fileInput")
+        e?.addEventListener("change", (c :any)=>{
+            console.log(c.target.files[0])
+            setImg(URL.createObjectURL(c.target.files[0]))
+            var  bodyFormData = new FormData();
+            bodyFormData.append('avatar', c.target.files[0]);
+                axios.post("http://localhost:8000/profile/updateAvatar", bodyFormData, {withCredentials: true}).then((res)=>{
+                    console.log(res)
+                }   ).catch((err)=>{ 
+                    console.log(err)
+                }   )
+        })
+       
+    }, [])
+
+    const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const enteredName = event.target.value;
+        setdata({...data, displayName : enteredName})
+        setQuery(enteredName);
+      };
+
+
+
+  return (
+  
+    <SettingsStyle  className='container' style={{marginTop: "100px"}} >
+      <HeadComponent title="Setting" />
+      <Avatar onClick={uploadFile}>
+        <div className='edit'>
+            <Edit />
+        </div>
+        <AvatarComponent  img={img}  />
+        <input id="fileInput" type="file" hidden />
+
+    </Avatar>
+    <Line></Line>
+    
+    <Row>
+        {/* <div className="col"> 
+            Login : 
+            <input value={'@' + data.login} />
+        </div> */}
+        
+        {/* <div className="col1">  */}
+            {/* DisplayName : 
+            <input value={query}   onChange={inputHandler} />
+            <button>  Submit </button> */}
+            <InputComponent onChange={(e)=>{inputHandler(e)}} value={data.displayName} type='text' lable='Display Name' />
+            <InputComponent disabled={true} onChange={(e)=>{inputHandler(e)}} value={data.login} type='text' lable='Login' />
+            <Button text="save" type='primary' />
+        {/* </div> */}
+
+    </Row>
+
+
+
+    </SettingsStyle>
   )
 }
 
-const SetStyle = styled.div`
+const SettingsStyle = styled.div`
     height: 500px;
     background-color: ${props => props.theme.colors.seconderybg};
     border: 1px solid ${props => props.theme.colors.border};
@@ -38,15 +114,29 @@ const Avatar = styled.div`
     position: relative;
     border-radius: 50%;
     border: 0.5px solid ${props => props.theme.colors.primaryText};
-
-    .ava{
-        overflow: hidden;
+    overflow: hidden;
+    cursor: pointer;
+    .edit{
+        position: absolute;
+        display: none;
         width: 100%;
         height: 100%;
-        > img{
-            width: 100%;
-            height: 100%;
+        background-color: #0000004a;
+        align-items: center;
+        justify-content: center;
+        >svg{
+        width: 50px;
+        height: 50px;
+            >path{
+                stroke:  ${props => props.theme.colors.seconderyText};
         }
+        }
+    }
+    &:hover{
+        .edit{
+        display: flex;
+
+    }
     }
 `;
 const EditStyle = styled.div`
@@ -84,3 +174,15 @@ margin: 20px 0;
        
     
 `;
+
+const Row = styled.div`
+width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+   
+`;
+
+
+

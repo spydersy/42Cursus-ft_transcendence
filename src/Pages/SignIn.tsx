@@ -111,7 +111,7 @@ opacity: 0.8;
 `;
 
 interface ButtonProps {
-   type? : "ButtonStyleProps " | "secondary" ,
+   type? : "primary" | "secondary" ,
    text? : string
    icon? : React.ReactElement,
    onClick? : ()=> void;
