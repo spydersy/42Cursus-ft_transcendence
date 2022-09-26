@@ -194,8 +194,8 @@ export default function Profile() {
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
     defaultAvatar: "string",
-    login : "string",
-    displayName : 'string'
+    login : "@melkarmi",
+    displayName : 'Mohamed Elkarmi'
   
   })
 
@@ -234,19 +234,18 @@ export default function Profile() {
     <div className='container' style={{display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
           <TheBox>
               <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
-              <ProgressBar>
-                <div >
-                  <div className='lvl'>
-                    level 8 - {ProgressUser}
-                  </div>
-                </div>
-              </ProgressBar>
           </TheBox>
-          <Achivments/>
           <PlayerTabsBar/> 
     </div>
   )
 };
+const Row = styled.div`
+  width: 100%;
+  display : flex;
+  
+  align-items : center;
+  justify-content: space-between;
+`;
 const TheBox = styled.div`
   padding: 10p;
   width: 100%;

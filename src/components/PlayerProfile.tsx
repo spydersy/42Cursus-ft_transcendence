@@ -19,33 +19,44 @@ import {ReactComponent as CalendarIcon} from "../assets/imgs/calendar.svg";
 import {ReactComponent as RankIcon} from "../assets/imgs/rank.svg";
 import Melkarmi from "../assets/imgs/avatar/hfadyl.jpeg";
 import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
-import { Doughnut } from 'react-chartjs-2';
-import {
-  CChart,
-  // CChartBar,
+import Badge1 from "../assets/imgs/Archive/badge1.svg";
+import Badge2 from "../assets/imgs/Archive/badge2.svg";
+import Badge3 from "../assets/imgs/Archive/badge3.svg";
+import Badge4 from "../assets/imgs/Archive/badge4.svg";
 
-  // CChartLine,
-  // CChartDoughnut,
-  // CChartRadar,
-  // CChartPie,
-  // CChartPolarArea,
-} from '@coreui/react-chartjs'
 
-import { Chart, registerables } from 'chart.js';
 import { Button } from '../Pages/SignIn';
 
 import axios from 'axios';
-Chart.register(...registerables);
+import Achivments from './Achivments';
+import DoughnutChart from './charts/Charts';
 
 const Backcolor = css`${props => props.theme.colors.purple}`
 const GreyBackcolor = "#282c34"
-// const Barside = "#f3460fe"
-// const Borderimgcolor = "white";
-const green = "#238b65"
+
 
 //// PlayerCard Comp 
-const player = {  name: "Alchemist", login: "Eelaazmi",  lvl: "1", gamePlayed : 350,  lost : 150, won : 200, rank : rank2}
-
+const achievment1 = {
+  name: "SERGENT",
+  desc : "you played 20 game without any loss",
+  badge : Badge1,
+}
+const achievment2 = {
+  name: "The Alchemist",
+  desc : "You are a M9WED player by nature",
+  badge : Badge2,
+}
+const achievment3 = {
+  name: "MASTER",
+  desc : "you win 5 game.",
+  badge : Badge3 ,
+}
+const achievment4 = {
+  name: "MASTER",
+  desc : "you win 5 game.",
+  badge : Badge4 ,
+}
+const achiv = [achievment1 , achievment2 , achievment3 , achievment4]
 interface UserProp {
   defaultAvatar: string,
   login : string
@@ -63,21 +74,15 @@ export function PlayerCard(props: PlayerCardProps) {
               <div className='Iavatar' style={ {width : "150px" , height : "150px"}} >
                 <AvatarComponent img={props.player.defaultAvatar}/>
               </div>
-              {/* <img src={Avatar} className="Iavatar"alt="test" /> */}
 
               <div className='infoSec'>
 
                   <div className='Bar'>  
-                      <div className='name'>
-                          Full name : 
-                      </div>
+        
                       <div className='text' > {props.player.displayName} </div>
                   </div>
 
                   <div className='Bar'>  
-                      <div className='name'>
-                      Intraname : 
-                      </div>
                       <div className='text' > {props.player.login} </div>
                   </div>
 
@@ -144,24 +149,6 @@ border-radius: 10px 30px 30px 10px;
 
 `;
 
-const player1 = { PlayedGames : 350,  lostGames : [22,18,31,52,22] , WonGames :  [20, 25, 30, 52, 26], Rank : rank2};
-const player2 = { PlayedGames : 222,  lostGames : [22,18,31,52,22] , WonGames :  [0, 50, 30, 40, 26], Rank : rank2};
-
-
-// export const data1 = {
-//   labels: ['Computer mode', 'classic', 'Tag-Team', 'Challenge Friend', 'Mode 5'],
- 
-//   datasets: [
-//     {
-//       label: 'Lost-Game',
-//       data:  player1.lostGames,
-//       backgroundColor: 'rgba(221, 50, 50, 0.275)',
-//       borderColor: '#e31f1f',
-//       borderWidth: 2,
-//     },
-//   ],
-// };
-
 
 
 interface StatusProps {
@@ -186,7 +173,7 @@ export function Stats(props: PlayerCardProps) {
 const option =  {
 
   legend : {
-    // position : "bottom"
+    position : "bottom"
   },
 }
  const data = {
@@ -199,18 +186,12 @@ const option =  {
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
-        // 'rgba(255, 206, 86, 0.2)',
-        // 'rgba(75, 192, 192, 0.2)',
-        // 'rgba(153, 102, 255, 0.2)',
-        // 'rgba(255, 159, 64, 0.2)',
+
       ],
       borderColor: [
         'rgba(255, 99, 132, 1)',
         'rgba(54, 162, 235, 1)',
-        // 'rgba(255, 206, 86, 1)',
-        // 'rgba(75, 192, 192, 1)',
-        // 'rgba(153, 102, 255, 1)',
-        // 'rgba(255, 159, 64, 1)',
+
       ],
       borderWidth: 1,
     },
@@ -219,10 +200,10 @@ const option =  {
     return (
       <StatsStyle  >
         <Header>
-          <Status status={"online"}>
+          {/* <Status status={"online"}>
             <ActivityIcon/>
               Online
-          </Status>
+          </Status> */}
           {props.isCurrentUser === false && 
             <Buttons>
               
@@ -235,61 +216,36 @@ const option =  {
       
         <Data>
             <div className='data'>
-              <DataTag>
-                <RankIcon/>
-                <div>
-                Yonko
-                </div>
+              <div>
+                <DataTag> 
+                  <DataTag>
+                    <RankIcon/>
+                    Yonko
+                  </DataTag>
+                  <DataTag>
+                    <UsersIcon/>
+                    5
+                    Friends
+                  </DataTag>
+                </DataTag>
+                <DataTag>
+                  <DataTag>
+                    <GameIcon/>
+                    250
+                    Games
+                    </DataTag>
+                    <DataTag>
+                    <CalendarIcon/>
+                    Mars 2020
+                  </DataTag>
+                </DataTag>
+              </div>
+              <Achivments/>
 
-              </DataTag>
-              <DataTag>
-                <UsersIcon/>
-                <div>
-                5
-                Friends
-                </div>
-
-              </DataTag>
-              <DataTag>
-                <GameIcon/>
-                <div>
-                
-                250
-                Games
-                </div>
-
-              </DataTag>
-              <DataTag>
-                <CalendarIcon/>
-                <div>
-                
-                
-                Mars 2020
-                </div>
-
-              </DataTag>
             </div>
             <div className='Stats'>
-            <CChart
-            type="doughnut"
-            
-            data={{
-              labels: ['WINS', 'LOST',],
-              datasets: [
-                {
-                  backgroundColor: ['#41B883', '#E46651'],
-                  data: [40, 20],
-                },
-              ],
-            }}
-          />
+              <DoughnutChart />
             </div>
-            {/* <div className='Radar'>
-              <Radar  data={RadarData}   options={RadarOptions} />
-            </div> */}
-            
-        
-   
         </Data>
       </StatsStyle>
     )
@@ -306,17 +262,17 @@ const DataTag = styled.div`
 
   display: flex;
   align-items: center;
-  gap: 20px;
+  min-width : 200px;
+  gap: 10px;
   font-family: 'Poppins' , sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 22px;
   line-height: 33px;
-  justify-content: space-around;
-  color : ${props => props.theme.colors.primaryText};
+  color : ${props => props.theme.colors.seconderyText};
   >svg{
     path {
-      stroke: ${props => props.theme.colors.purple};
+      stroke: ${props => props.theme.colors.seconderyText};
     }
   }
 
@@ -350,8 +306,8 @@ min-height: 100%;
 display: flex;
 align-items: center;
 flex-direction: column;
-/* justify-content: space-between; */
-gap: 40px;
+
+gap: 5px;
 border-radius: 0px 10px 0px 0px;
 `
 const Buttons = styled.div`
@@ -378,16 +334,14 @@ justify-content: space-between;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   
 }
 .Stats{
-  /* background-color: red; */
   position: relative;
  /* flex: 1; */
- width: 200px;
  height: 100%;
-
+  flex: 1;
 
   
 }

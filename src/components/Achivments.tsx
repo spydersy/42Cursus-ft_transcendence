@@ -26,11 +26,12 @@ const achievment4 = {
     desc : "you win 5 game.",
     badge : Badge4 ,
   }
-const achiv = [achievment1 , achievment2 , achievment3 , achievment4]
+const achiv = [achievment1 , achievment2 , achievment4 , achievment3]
 export default function Achivments() {
   return (
     <AchiStyle>
-        <HeadComponent title="Achivments"/>
+        {/* <HeadComponent title="Achivments"/> */}
+        {/* <div className='head'>Achivments : </div> */}
         <div className='cont'>
         {
             achiv.map((data : any, id : number )=>{
@@ -48,24 +49,26 @@ export default function Achivments() {
 
   
 const AchiStyle = styled.div`
-height : 200px;
-width: 40%;
 border-radius : 10px;
 background:  ${props => props.theme.colors.seconderybg};
-padding: 10px;
+
 display: flex;
-/* justify-content: space-between; */
+
 flex-direction: column;
 align-items: flex-start;
+.head{
+    color : ${props => props.theme.colors.seconderyText};
+}
 .cont{
-    margin: 20px 0;
+    /* margin: 5px 0; */
     width:100%;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    align-items: flex-start;
+    align-items:center;
     >img{
-        filter: grayscale(100%);
+        margin : 0px 10px;
+        /* filter: grayscale(100%); */
     }
   }
 `
