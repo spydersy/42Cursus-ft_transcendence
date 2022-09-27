@@ -1,4 +1,4 @@
-import React, {useEffect, useState, FC, InputHTMLAttributes} from 'react'
+import React, {useEffect, useState, FC, InputHTMLAttributes, CSSProperties} from 'react'
 import styled , {css} from "styled-components"
 import { HeadComponent } from './Home';
 import Img from "../assets/imgs/avatar/a1.png";
@@ -6,35 +6,46 @@ import {ReactComponent as Edit} from "../assets/imgs/edit.svg";
 import { AvatarComponent } from '../components/PlayerProfile';
 import axios from 'axios';
 import { map } from 'rxjs';
-import InputComponent from '../components/Input';
+import InputComponent , {ToggleSwitch} from '../components/Input';
 import { Button } from './SignIn';
+import PacmanLoader from "react-spinners/PacmanLoader";
+import RingLoader from "react-spinners/RingLoader";
+import { wait } from '@testing-library/user-event/dist/utils';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-    name: string;
-    label: string;
-}
+const override: CSSProperties = {
+    display: "block",
+    // display: "flex",
+    margin: "0 auto",
+    borderColor: "red",
+  };
 
-    
+
 export default function Setting() {
     const [query, setQuery] = useState('');
     const [img, setImg] = useState('');
 
+
+    let [loading, setLoading] = useState(false);
+    let [color, setColor] = useState("#fa0137");
+
     const [data, setdata] = useState({login : "", defaultAvatar : "", displayName : "", twoFactorAuth : false, email : ""})
+    
     const uploadFile = ()=>{
         var e = document.getElementById("fileInput")
         e?.click()
         
     }
+
     useEffect(() => {
+        // setLoading(true);
 
-    axios.get("http://localhost:8000/profile/me",   {withCredentials: true} 
-    ).then((res)=>{
-        console.log(res.data)
-        setdata(res.data)
-        setImg(res.data.defaultAvatar)
-    }).catch((err)=>{
-        })
-
+        axios.get("http://localhost:8000/profile/me",   {withCredentials: true} 
+        ).then((res)=>{
+            console.log(res.data)
+            setdata(res.data)
+            setImg(res.data.defaultAvatar)
+        }).catch((err)=>{
+            })
 
         var e = document.getElementById("fileInput")
         e?.addEventListener("change", (c :any)=>{
@@ -48,56 +59,104 @@ export default function Setting() {
                     console.log(err)
                 }   )
         })
-       
+        // setTimeout(() => {
+        //     setLoading(false);
+        //   }, 2000);
     }, [])
 
     const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const enteredName = event.target.value;
+        setColor("#f29408");
+        if (!loading)
+            setLoading(!loading);
+
+        const Name = event.target.value;
+        let enteredName = "";
+
+        if (Name.trim().length >= 25)    
+        {
+            setColor("#f20808");
+            enteredName = Name.trim().slice(0, 25);
+        }
+        else
+            enteredName = Name;
+    
         setdata({...data, displayName : enteredName})
         setQuery(enteredName);
       };
 
-
-
-  return (
-  
-    <SettingsStyle  className='container' style={{marginTop: "100px"}} >
-      <HeadComponent title="Setting" />
-      <Avatar onClick={uploadFile}>
-        <div className='edit'>
-            <Edit />
-        </div>
-        <AvatarComponent  img={img}  />
-        <input id="fileInput" type="file" hidden />
-
-    </Avatar>
-    <Line></Line>
-    
-    <Row>
-        {/* <div className="col"> 
-            Login : 
-            <input value={'@' + data.login} />
-        </div> */}
+    const submitHandler = () => {
+        const name = data.displayName.trim();
+        if (name.length === 0)
+        {
+            setColor("#ff0101");
+            return;
+        }
         
-        {/* <div className="col1">  */}
-            {/* DisplayName : 
-            <input value={query}   onChange={inputHandler} />
-            <button>  Submit </button> */}
-            <InputComponent onChange={(e)=>{inputHandler(e)}} value={data.displayName} type='text' lable='Display Name' />
-            <InputComponent disabled={true} onChange={(e)=>{inputHandler(e)}} value={data.login} type='text' lable='Login' />
-            <Button text="save" type='primary' />
-        {/* </div> */}
+        setColor("#16ff01");
 
-    </Row>
+        // console.log("query = " + query)
+        // console.log("diplayName = "  + data.displayName)
+
+        axios.put("http://localhost:8000/profile/updateUsername/" + name , name, {withCredentials: true}).then((res)=>{
+            wait(2000).then(() => {
+                setColor("#ff000d");
+                setLoading(false);
+            })
+
+            // console.log("Res = ")
+            // console.log(res)
+        }   ).catch((err)=>{ 
+            wait(2000).then(() => {
+            setColor("#ff000d");})
+
+            console.log(err)
+        }   )
+
+        // console.log("submit handler /{" + name+"}")
+    };
+
+    return (
+    
+        <SettingsStyle  className='container' style={{marginTop: "100px"}} >
+        
+        {/* <div className="loader-container">
+            <div className="spinner"></div>
+        </div> */}
+
+        <HeadComponent title="Setting" />
+        <Avatar onClick={uploadFile}>
+            <div className='edit'>
+                <Edit />
+            </div>
+            <AvatarComponent  img={img}  />
+            <input id="fileInput" type="file" hidden />
+
+        </Avatar>
+        <Line></Line>
+        
+        <Row>
+                <InputComponent onChange={(e)=>{inputHandler(e)}} value={data.displayName} type='text' lable='Display Name' />
+                <InputComponent disabled={true} onChange={(e)=>{inputHandler(e)}} value={data.login} type='text' lable='Login' />
+                
+                {/* <div className=''> */}
+                {/* </div> */}
+                {/* <PacmanLoader className='spinner' color={color} loading={loading} cssOverride={override} size={20} /> */}
+                
+                <ToggleSwitch label='Two-Factor Authentication (2FA)'  />
+                <Button    onClick={submitHandler} text="save" type='primary' />
+                <RingLoader  color={color} loading={loading} cssOverride={override} size={30} />
+                    
+        </Row>
 
 
 
-    </SettingsStyle>
-  )
+        </SettingsStyle>
+    )
 }
 
+
 const SettingsStyle = styled.div`
-    height: 500px;
+    height: 650px;
     background-color: ${props => props.theme.colors.seconderybg};
     border: 1px solid ${props => props.theme.colors.border};
     border-radius: 10px;
@@ -107,6 +166,7 @@ const SettingsStyle = styled.div`
     align-items: center;
 
 `;
+
 const Avatar = styled.div`
    width: 200px;
    height: 200px;
