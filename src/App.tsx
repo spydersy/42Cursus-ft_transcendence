@@ -10,7 +10,7 @@ import Punk from "./assets/imgs/punkhazard.png";
 import Dress from "./assets/imgs/dressRosa.jpg";
 import Wano from "./assets/imgs/wano.jpg";
 import Fish from "./assets/imgs/fishman.jpeg";
-
+import { SocketContext,  SocketValue } from './context/Socket';
 import {
   BrowserRouter,
   Routes, // instead of "Switch"
@@ -78,6 +78,7 @@ function App() {
           <ProtectedLayout body={<Upperbar />} />
           <Cont >
             <ProtectedLayout body={ <Sidebar/>} />
+            <SocketContext.Provider value={SocketValue}>
             <Routes>
               <Route path="/signin" element={<SignIn />} />
               <Route path="/game" element={<Game theme={gametheme}  />} />
@@ -91,6 +92,8 @@ function App() {
               <Route path="/socketTest" element={<SocketTesting />} />
 
             </Routes>
+
+            </SocketContext.Provider>
           </Cont>
         </Main>
        </ThemeProvider>
