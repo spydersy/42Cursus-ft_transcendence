@@ -55,7 +55,7 @@ const ModalStyle = styled(ReactModal)`
   padding: 0 50px;
   overflow: hidden;
   padding-bottom: 0px;
-  border-radius: 5px;
+  border-radius: 20px;
   display: flex;
   :focus {
     outline: none;

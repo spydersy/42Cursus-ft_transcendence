@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-, "src/Pages/Profile.tsx"  ]
+, "src/Pages/Profile.tsx", "src/App.tsx"  ]
 }

@@ -10,6 +10,7 @@ import { ReactComponent as CloseIcon } from "../../assets/imgs/close-icon.svg";
 import Img from "../../assets/imgs/avatar/a1.png";
 import Modal from '../Modal';
 import AddFriendsModal from './AddFriendsModal';
+import InputComponent from '../Input';
 
 export default function CreateGroup() {
     
@@ -74,15 +75,18 @@ export default function CreateGroup() {
         <Form>
 
         <Row >
-            <div  onClick={uploadFile}className='groupImg' >
+            <div  onClick={uploadFile} className='groupImg' >
                 <input id="fileInput" type="file" hidden />
-                
                 <img style={{width : data.avatar === Image  ? "" : "100%", height : data.avatar === Image  ? "" : "100%"  }} src={data.avatar}alt="" />
                 <div >
                     <Edit/>
                 </div>
             </div>
-            <input className='inputText' type="text"  placeholder='Enter group name ..'/>
+            {/* <input className='inputText' type="text"  placeholder='Enter group name ..'/> */}
+            <div style={{flex : "1"}}>
+            <InputComponent type='text' placeholder='Enter Group name'/>
+
+            </div>
 
         </Row>
         <Row2 >
@@ -93,7 +97,10 @@ export default function CreateGroup() {
             <label>Private</label>
             <input type="radio" onChange={handleRadioChange} id="Protected" name="status" value="Protected"/>
             <label>Protected</label>
-            <InputPassWord defaultChecked={check} type="password" name="password" placeholder='Enter Password ..' />
+            <InputPassWord defaultChecked={check}>
+            <InputComponent type='password' placeholder='Group Password'/>
+
+            </InputPassWord>
         </Row2>
          <MembersCont>
             <div onClick={()=>{sethide(!hide)}} className='add'>
@@ -242,29 +249,14 @@ flex-direction: row;
 interface InpProps{
     defaultChecked: boolean
 }
-const InputPassWord= styled.input<InpProps>`
+const InputPassWord= styled.div<InpProps>`
 height: 100%;
-    background-color:${props => props.theme.colors.bg}  ;
-    border: none;
-    outline: none;
-    border: 2px solid ${props => props.theme.colors.border};
-    padding-left: 10px;
-    flex: 1;
-
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    color :${props => props.theme.colors.seconderyText}; 
-    font-size:  ${props => props.theme.fontSize.l};
-    font-family: 'Poppins', sans-serif;
-    font-weight : 400;
-    transition: all 200ms ease-in-out;
+  flex: 1;
+  
     ${props => props.defaultChecked === false && css`
     width: 0;
     flex: 0;
-    padding: 0;
-    border :none; 
+    display : none;
 
     `
   }

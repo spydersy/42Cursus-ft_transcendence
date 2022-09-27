@@ -64,7 +64,7 @@ cursor: pointer;
         align-items: center;
         >div{
             font-family: "Poppins", sans-serif;
-            color: ${props => props.theme.colors.seconderyText };
+            color: ${props => props.theme.colors.primaryText };
             width: 95%;
             margin: 0 auto ;
             display: flex;

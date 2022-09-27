@@ -24,14 +24,13 @@ import Sidebar from './components/Sidebar';
 import Test from './components/Test';
 import ProtectedLayout from './components/protected/ProtectedLayout';
 import Profile from './Pages/Profile';
-import Chat from './Pages/Chat';
+import Chat from './components/chat/Chat';
 import Game from './Pages/Game';
 import axios from 'axios';
 import Setting from './Pages/Setting';
 import Leader from './Pages/Leader';
 import Room from './Pages/Room';
 import SocketTesting from './components/testing/SocketTesting';
-import ChatTesting from './components/testing/ChatTesting';
 
 const mockedItems : any = [{
   title: "MarinFord",
@@ -68,17 +67,8 @@ function App() {
   //   // const coc = Cookieequiredy
   //   // axios.defaults.withCredentials = true;
   // //  console.log( Cookies.set)
-  //   axios.get("http://localhost:8000/profile/me", 
-  //   {withCredentials: true} 
-  // ).then((res)=>{
-  //   console.log(res.data)
-  //   localStorage.setItem("user", JSON.stringify(res.data))
-  // }).catch((err)=>{
-  //       console.log(err)
-  //       navigate('/signin')
-  //       // history.pushState("/signin");
-  //   })
-  //   console.log("hey")
+  //  
+  
   }, [])
   
   return (
@@ -99,7 +89,6 @@ function App() {
               <Route path="/" element={<Home settheme={(e: any)=> setGametheme(e)} />} />
               <Route path="/profile/:id" element={<Profile  />} />
               <Route path="/socketTest" element={<SocketTesting />} />
-              <Route path="/chatTesting" element={<ChatTesting />} />
 
             </Routes>
           </Cont>

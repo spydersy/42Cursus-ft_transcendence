@@ -161,11 +161,8 @@ export  function ChatSidebar() {
             Chat
                
                
-            <Button icon={<Group/>}/>
-            {/* <button onClick={()=>sethide(!hide)} >
+            <Button onClick={()=>sethide(!hide)} icon={<Group/>}/>
 
-               <Group/>
-            </button> */}
             {hide &&  <Modal
         isOpen={hide}
         onRequestClose={() => sethide(false)}
