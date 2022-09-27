@@ -8,6 +8,7 @@ import Navlinks from '../Navlinks';
 interface type {
     inputalue: string
 }
+
 const data1 = {
     chatRoom: '',
     username: '',
@@ -20,6 +21,7 @@ const data1 = {
         }
     ]
 };
+
 export default function ChatTesting() {
     const inputref = useRef<HTMLInputElement>(null);
     const msgref = useRef<HTMLInputElement>(null);
@@ -57,7 +59,6 @@ export default function ChatTesting() {
                 setdata({...data , rooms : datatmp})
             }
         }
-        // console.log({..data.rooms})
     }
 
     const recievedMessgae = (message: any) => {
