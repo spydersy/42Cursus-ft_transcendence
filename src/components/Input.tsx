@@ -2,6 +2,43 @@ import React from 'react'
 import styled ,{css}from "styled-components";
 // ussage <Input type='text' lable='Username' placeholder='Enter Username' />
  
+interface Togglabel{
+ label: string;
+}
+
+export function ToggleSwitch(props: Togglabel)
+{
+  return (
+    <ToggleSwitchStyle>
+        
+        {props.label}{" "}
+       
+        <div className="toggle-switch">
+        
+          <input type="checkbox" className="checkbox" 
+                name={props.label} id={props.label} />
+          <label className="label" htmlFor={props.label}>
+            <span className="inner" />
+            <span className="switch" />
+          </label>
+        </div>
+
+    </ToggleSwitchStyle>
+
+  );
+}
+
+const ToggleSwitchStyle = styled.div`
+  background-color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+
+`;
+
 export default function InputComponent(props: InputProps) {
   return (
     <InputStyle>
@@ -57,7 +94,6 @@ font-family: "Poppins", sans-serif
         
         border-radius: 10px;
         > input{
-
         border-radius: 10px;
 
             height: 42px;
