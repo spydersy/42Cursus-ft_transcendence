@@ -4,7 +4,7 @@ import { UserName } from 'src/dtos/Inputs.dto';
 import { UserService } from 'src/user/user.service';
 import { query, Response } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RELATION } from '@prisma/client';
+import { CHANNEL, RELATION } from '@prisma/client';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
@@ -121,6 +121,22 @@ export class ProfileService {
         let BlackList = [];
         BlockRow.forEach(element => BlackList.push(element.blocked));
         console.log("__BLACK__LIST__", BlackList);
+
+
+
+        this.prisma.channels.findMany({
+            where :
+            {
+                AND: [
+                    {access: CHANNEL.DM},
+                    { users: { some: {userId: 452}}},
+                    { users: { some: {userId: 123}}}
+                ],
+            }
+        });
+
+
+
         return res.status(HttpStatus.OK).send(BlackList);
     }
 }
