@@ -1,6 +1,5 @@
 import React , {useState} from 'react'
 import styled , {css} from "styled-components"
-import { HeadComponent } from '../Pages/Home'
 import { AvatarComponent } from './PlayerProfile';
 
 import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
@@ -22,32 +21,13 @@ const match2 = {
   }
 
 
-// const achievment1 = {
-//     name: "SERGENT",
-//     desc : "you played 20 game without any loss",
-//     badge : Badge1,
-//   }
-// const achievment2 = {
-//     name: "The Alchemist",
-//     desc : "You are a M9WED player by nature",
-//     badge : Badge2,
-//   }
-// const achievment3 = {
-//     name: "MASTER",
-//     desc : "you win 5 game.",
-//     badge : Badge3 ,
-//   }
 
-  var listGame = [match1 , match2 ,  , match2]
-//   var listAchiev = [achievment1 , achievment2 , achievment3]
+  var listGame = [match1 , match2 ,  match2]
 
 export default function History() {
   return (
     <Conta>
-
-
         <HistoryComponent/>
-        {/* <AchievementHistory/> */}
     </Conta>
   )
 }

@@ -1,20 +1,16 @@
-import React, {useEffect, useState, FC, InputHTMLAttributes, CSSProperties} from 'react'
-import styled , {css} from "styled-components"
+import React, {useEffect, useState, CSSProperties} from 'react'
+import styled  from "styled-components"
 import { HeadComponent } from './Home';
-import Img from "../assets/imgs/avatar/a1.png";
 import {ReactComponent as Edit} from "../assets/imgs/edit.svg";
 import { AvatarComponent } from '../components/PlayerProfile';
 import axios from 'axios';
-import { map } from 'rxjs';
 import InputComponent , {ToggleSwitch} from '../components/Input';
 import { Button } from './SignIn';
-import PacmanLoader from "react-spinners/PacmanLoader";
 import RingLoader from "react-spinners/RingLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
 
 const override: CSSProperties = {
     display: "block",
-    // display: "flex",
     margin: "0 auto",
     borderColor: "red",
   };

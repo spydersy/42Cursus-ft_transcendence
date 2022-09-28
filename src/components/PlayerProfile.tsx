@@ -1,12 +1,6 @@
-import React, { useRef, useEffect, useState}  from 'react'
+import React, { useEffect}  from 'react'
 import styled ,{css}from "styled-components";
-import Avatar from "../assets/imgs/tests/guy.svg"
-import { ReactComponent as Penta} from "../assets/imgs/penta.svg"
-import { CircularProgressbar } from 'react-circular-progressbar';
 import{ReactComponent as DotsIcon }from "../assets/imgs/dots.svg"
-import rank1 from "../assets/imgs/ranks/iron.png"
-import rank2 from "../assets/imgs/ranks/gold.png"
-import rank3 from "../assets/imgs/ranks/bronze.png"
 import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
 import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 
@@ -14,25 +8,17 @@ import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import {ReactComponent as UserAddIcon} from "../assets/imgs/user-plus.svg";
 import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
-import {ReactComponent as ActivityIcon} from "../assets/imgs/activity.svg";
 import {ReactComponent as CalendarIcon} from "../assets/imgs/calendar.svg";
 import {ReactComponent as RankIcon} from "../assets/imgs/rank.svg";
-import Melkarmi from "../assets/imgs/avatar/hfadyl.jpeg";
 import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
-import Badge1 from "../assets/imgs/Archive/badge1.svg";
-import Badge2 from "../assets/imgs/Archive/badge2.svg";
-import Badge3 from "../assets/imgs/Archive/badge3.svg";
-import Badge4 from "../assets/imgs/Archive/badge4.svg";
-
 
 import { Button } from '../Pages/SignIn';
 
 import axios from 'axios';
 import Achivments from './Achivments';
-import DoughnutChart, { RadarChart } from './charts/Charts';
+import  { RadarChart } from './charts/Charts';
 
 const Backcolor = css`${props => props.theme.colors.purple}`
-const GreyBackcolor = "#282c34"
 
 
 //// PlayerCard Comp
@@ -130,9 +116,9 @@ border-radius: 10px 30px 30px 10px;
 
 
 
-interface StatusProps {
-    status : "online" | "offline"
-}
+// interface StatusProps {
+//     status : "online" | "offline"
+// }
 export function Stats(props: PlayerCardProps) {
   const addFriend = ()=>{
        //http://localhost:8000/users/relation/:id?evet=add
@@ -152,14 +138,13 @@ export function Stats(props: PlayerCardProps) {
 
     return (
       <StatsStyle  >
-        {/* <Header>
-          <Status status={"online"}>
+
+          {/* <Status status={"online"}>
             <ActivityIcon/>
               Online
-          </Status>
+          </Status> */}
 
-        </Header>
-       */}
+        
         <Data>
             <div className='data'>
               <div>
@@ -200,7 +185,6 @@ export function Stats(props: PlayerCardProps) {
 
             </div>
             <div className='Stats'>
-              {/* <DoughnutChart /> */}
               < RadarChart/>
             </div>
         </Data>
@@ -208,14 +192,6 @@ export function Stats(props: PlayerCardProps) {
     )
 }
 
-const Header = styled.div`
-  width: 100%;
-  height: 40px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-
-`;
 const DataTag = styled.div`
   /* width: 100%; */
 
@@ -237,25 +213,25 @@ const DataTag = styled.div`
 
 `;
 
-const Status = styled.div<StatusProps>`
-  /* width: 150px; */
-  display: flex;
-  align-items: center;
+// const Status = styled.div<StatusProps>`
+//   /* width: 150px; */
+//   display: flex;
+//   align-items: center;
  
-  font-family: 'Poppins' , sans-serif;
-font-style: normal;
-font-weight: 400;
-font-size: 22px;
-line-height: 33px;
-justify-content: space-around;
->svg{
-  path {
-    stroke: ${props => props.theme.colors.green};
-  }
-}
-color: ${props => props.theme.colors.green};
+//   font-family: 'Poppins' , sans-serif;
+// font-style: normal;
+// font-weight: 400;
+// font-size: 22px;
+// line-height: 33px;
+// justify-content: space-around;
+// >svg{
+//   path {
+//     stroke: ${props => props.theme.colors.green};
+//   }
+// }
+// color: ${props => props.theme.colors.green};
 
-`
+// `
 
 const StatsStyle = styled.div`
 background-color: #171A22;
@@ -305,7 +281,7 @@ width: auto;
 
 
 ///// UserCard Comp
-export interface UserCard {
+export interface UserCardProps {
 
   data: {
     login: string;
@@ -316,8 +292,7 @@ export interface UserCard {
 export interface StyleProps {
     status: boolean;
 }
-export  function UserCard(props : UserCard) {
-  const [active, setActive] = useState(false);
+export  function UserCard(props : UserCardProps) {
   return (
     <UserCardStyle status={true}>
       
@@ -331,7 +306,7 @@ export  function UserCard(props : UserCard) {
           </div>
         
         </div>
-      <img src={props.data.defaultAvatar} className="avatar" />
+      <img alt="avatar" src={props.data.defaultAvatar} className="avatar" />
       
       <div className="Uname">
           {props.data.login}
@@ -350,7 +325,7 @@ font-family: "Poppins" , sans-serif;
   text-align: center;
   border-radius: 10px;
   animation: fadeIn 2s;
-  ${props => props.status == true ? css`
+  ${props => props.status === true ? css`
   .status {
       background-color: #3CC592;
       /* display: none; */
@@ -533,46 +508,30 @@ const GameCompStyle = styled.div<GameCompProps>`
 `;
 
 const ElapsedTime = styled.div`
-  /* background-color: #325e81; */
   display: flex;
   position: absolute;
   right: 10px;
   top: 3px;
-  /* margin: 5px 0px; */
-  /* width: 10%; */
-  /* min-width: 90px; */
   height: 40%;
   align-items: center;
   gap: 5px;
   .E_timer {
     height: 15px;
     width: 15px;
-    /* min-width: 25px; */
-    /* min-height: 25px; */
-
-    /* margin: 0px 3px; */
     path {
       fill: #a648b7;
     }
   }
   .time_min {
-      /* background-color: #d16522; */
-      /* width: auto; */
       width: auto;
       height: auto;
-      /* min-width: 25px; */
       color: white;
       align-items: center;
-      /* margin: 5px 0px 5px 5px; */
   }
   .time_sec{
     height: auto;
     width: auto;
-    /* min-width: 25px; */
     color: white;
-
-    /* background-color: #d16522; */
-    /* margin: 5px 0px 5px 2px; */
   }
 `;
 interface UserProp {
@@ -582,9 +541,7 @@ interface UserProp {
 interface AvatarProps {img: string }
 
 export  function AvatarComponent(props: AvatarProps) {
-  var s : string | null = localStorage.getItem('user');
  
-  // const [image, setimage] = useState<undefined | string>()
   useEffect(() => {
    
 
@@ -608,14 +565,10 @@ img{
   height: 100%;
   object-fit: cover;
 }
-/* border: 2px solid   ${props => props.theme.colors.purple};; */
 
 `;
 
 const Dataa = styled.div`
-  /* width: 100%; */
-  /* margin-left: 14px;s */
-  /* height: 100%; */
   
   width: 20%;
   height: 70%;
@@ -625,9 +578,7 @@ const Dataa = styled.div`
   flex-direction: column;
   font-family: 'Poppins', sans-serif;
   font-style: normal;
-  /* font-weight: 700; */
   color:  ${props => props.theme.colors.primaryText};
-  /* background-color: #00ffff92; */
 
   .name{
       font-family: 'Poppins' , sans-serif;
@@ -636,24 +587,18 @@ const Dataa = styled.div`
       font-weight: 700;
       font-size: 16px;
       line-height: 100%;
-      /* or 18px */
       text-align: center;
       letter-spacing: 1px;
-      /* color: #000000; */
-      /* margin: 10px 0px 3px 10px; */
   }
   .stat{
-      /* background-color: #b22bd0; */
       font-family: 'Poppins' , sans-serif;
       font-style: normal;
       font-weight: 400;
       font-size: 15px;
       line-height: 100%;
       margin: 10px 0px;
-      /* identical to box height, or 12px */
       text-align: center;
       letter-spacing: 0.3px;
-      /* color: #000000; */
   }
 `;
 
@@ -690,35 +635,24 @@ const AddFriendStyle = styled.div`
   border-radius: 10px;
   padding: 0 5px;
 `;
-/// Game History tab //
 
-/// Pending Request tab //
-interface InvProp {
-  sender: {
-    login : string
-  },
-  // login : string
-  // displayName : string
-}
-export interface UserInvitCard {
+
+export interface UserInvitCardProps {
   data: UserProp
 }
 export interface StyleProps {
     status: boolean;
 }
 
-export  function UserInvitCard(props : UserInvitCard) {
+export  function UserInvitCard(props : UserInvitCardProps) {
   const accepteFriend = ()=>{
    axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=accept", 
    {withCredentials: true} 
  ).then((res)=>{
-   // console.log(res.data)
    alert("friend Request Accepted" + res.status)
 
  }).catch((err)=>{
-  alert(err)
 
-       // history.pushState("/signin");
    })
 }
   useEffect(() => {
@@ -726,7 +660,6 @@ export  function UserInvitCard(props : UserInvitCard) {
 
   }, )
   
-  const [active, setActive] = useState(false);
   console.log(props.data)
   return (
     <UserInvitCardStyle >
@@ -738,7 +671,7 @@ export  function UserInvitCard(props : UserInvitCard) {
 
       </div>
 
-      <img src={props.data.defaultAvatar} className="avatar" />
+      <img alt="avatar" src={props.data.defaultAvatar} className="avatar" />
       <div className="Uname"> {props?.data?.login}  </div>
     
     </UserInvitCardStyle>
@@ -839,25 +772,24 @@ const UserInvitCardStyle = styled.div`
 `;
 
 /// Blocked Users ///
-export interface UserBlockedCard {
+export interface UserBlockedCardProps {
   data: {
-    username: string;
-    avatar: string;
+    login: string;
+    defaultAvatar: string;
   }
 }
 export interface StyleProps {
     status: boolean;
 }
 
-export  function UserBlockedCard(props : UserInvitCard) {
-  const [active, setActive] = useState(false);
+export  function UserBlockedCard(props : UserBlockedCardProps) {
   return (
     <UserBlockedCardStyle >
       <div className="YN"> 
         <Deny className='Bdeny'/>
       </div>
-      {/* <img src={props.data.defaultAvatar} className="avatar" /> */}
-      {/* <div className="Uname"> {props.data.login}  </div> */}
+      <img alt="avatar" src={props.data.defaultAvatar} className="avatar" />
+      <div className="Uname"> {props.data.login}  </div>
     </UserBlockedCardStyle>
   )
 }

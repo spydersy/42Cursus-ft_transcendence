@@ -1,5 +1,5 @@
 import React , {useState}from 'react'
-import styled , {css}from "styled-components"
+import styled from "styled-components"
 import Navlinks from '../components/Navlinks';
 import RoomComponent from '../components/RoomComponent';
 import { HeadComponent } from './Home';

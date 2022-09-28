@@ -14,11 +14,7 @@ import InputComponent from '../Input';
 
 export default function CreateGroup() {
     
-    interface GroupType{
-        name : string,
-        avatar : File | string,
-
-    }
+   
     const [members, setmembers] = useState([
        Img,
        Img,
@@ -42,9 +38,6 @@ export default function CreateGroup() {
         
     }
     const handleRadioChange = (e : any)=>{
-                    console.log(e)
-        var radio = document.getElementById("Protected")
-        console.log(e.target.id)
         if (e.target.id === "Protected")
         {
             if (e.target.checked === true)
@@ -67,7 +60,7 @@ export default function CreateGroup() {
             setdata({...data , avatar: URL.createObjectURL(c.target.files[0])})
         })
        
-    }, [])
+    }, [data])
     
   return (
     <CreateGroupStyle>

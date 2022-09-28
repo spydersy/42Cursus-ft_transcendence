@@ -6,7 +6,6 @@ import Punk from "../../assets/imgs/punkhazard.png";
 import Dress from "../../assets/imgs/dressRosa.jpg";
 import Wano from "../../assets/imgs/wano.jpg";
 import Fish from "../../assets/imgs/fishman.jpeg";
-import InputComponent from '../Input';
 import {
 
   useNavigate
@@ -65,7 +64,7 @@ export default function GameModal(props: GmaemodelProps) {
               setselected(id)
                 document.getElementById("span")?.classList.toggle("anime")
 
-              }} selected={id  == selected ? true : false} >
+              }} selected={id  === selected ? true : false} >
             <img src={i.banner} alt="mapimage" />
               {/* {i.title} */}
             </CaoussalItem>
@@ -168,19 +167,6 @@ width: 100%;
       }
 
     }
-`;
-const Input = styled.input`
-   font-family: 'Poppins' , sans-serif;
-    font-size: 15px;
-    color: ${props => props.theme.colors.primaryText};
-    margin: 15px 15px;
-    width: 200px;
-    background-color: ${props => props.theme.colors.bg};
-    outline: none;
-    border: 1px solid ${props => props.theme.colors.border};
-    height: 30px;
-    border-radius: 5px;
-
 `;
 
 const PlayButton = styled.button`

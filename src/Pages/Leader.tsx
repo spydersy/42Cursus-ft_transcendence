@@ -1,5 +1,5 @@
 import React , {useEffect , useState} from 'react'
-import styled , {css} from "styled-components"
+import styled  from "styled-components"
 import { AvatarComponent } from '../components/PlayerProfile';
 import { HeadComponent } from './Home';
 import { ReactComponent as Hat} from "../assets/imgs/hat.svg"

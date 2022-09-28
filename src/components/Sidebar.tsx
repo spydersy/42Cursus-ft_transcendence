@@ -89,7 +89,7 @@ export default function Sidebar() {
       return () => {
         
       }
-    }, [setopen, setfocused ])
+    }, [setopen, setfocused  ])
     
   return (
     <Test  open={open}>

@@ -1,5 +1,4 @@
-import React , {useEffect, useState, useRef}from 'react'
-import {ReactComponent as  SearchIcon} from "../../assets/imgs/search.svg"
+import React , { useState}from 'react'
 import {ReactComponent as Group} from "../../assets/imgs/users.svg";
 import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 
@@ -48,10 +47,6 @@ export default function ChatSidebar(props : ChatProps) {
                  </Modal>
             }
           </div>
-          {/* <div className='searchbar'>
-              <SearchIcon/>
-              <SearchBar type="text" placeholder='Search for a friend' />
-          </div> */}
           <div className='conversation'>
                 {props.list.map((data : any , id : number)=>{
                     return  < ConversationComponent onClick={()=>{
@@ -128,25 +123,7 @@ const ChatSidebarStyle = styled.div`
       
 
     }
-`;
-const SearchBar = styled.input`
-background-color:${props => props.theme.colors.bg}  ;
-  border: none;
-  outline: none;
-  border: 2px solid ${props => props.theme.colors.border};
-  padding-left: 35px;
-  width: 90%;
-  height: 100%;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  color :${props => props.theme.colors.seconderyText}; 
-font-size:  ${props => props.theme.fontSize.l};
-font-family: 'Poppins', sans-serif;
-font-weight : 400;
-`;
-
+`
 interface ConvProps{
     name : string,
     avatar : string, 
@@ -156,23 +133,8 @@ interface ConvProps{
 }
 
 export  function ConversationComponent(props : ConvProps) {
-    const [data, setdata] = useState({
-        name : "dd",
-        avatar : "dd",
 
-        messages: [
-                {id : "ss",
-                msg: "sa"
-            }
-    ]
-}
-    )
-    useEffect(() => {
-      
-    // setdata(props)
-   
-    console.log(props.messages)
-    }, [])
+
     
     return (
         <ChatMesgstyle active={props.active}onClick={props.onClick}>

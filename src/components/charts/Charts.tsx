@@ -1,10 +1,5 @@
 import React from 'react'
 import styled from "styled-components"
-
-// import { Doughnut } from 'react-chartjs-2';
-// import { Radar } from 'react-chartjs-2';
-// import { Chart as ChartJS  , RadialLinearScale,Point, Legend , ArcElement , Tooltip} from 'chart.js';
-// ChartJS.register(ArcElement,RadialLinearScale, Tooltip, Legend );
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -13,7 +8,7 @@ import {
   Filler,
   Tooltip,
   Legend,
-  defaults,
+  // defaults,
   ArcElement
 } from 'chart.js';
 import { Doughnut, Radar } from 'react-chartjs-2';

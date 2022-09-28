@@ -4,13 +4,9 @@ import SearchIcon from "../assets/imgs/search.svg"
 import {ReactComponent as BellIcon }from "../assets/imgs/notfication.svg"
 import {ReactComponent as Logo }from "../assets/imgs/logo.svg"
 import {ReactComponent as BigLogo }from "../assets/imgs/biglogo.svg"
-import TestAvatar from "../assets/imgs/tests/guy.svg" 
 import DropDown, { NotifDropDown } from './DropDown'
-import Modal from './Modal'
 import { ReactComponent as UserIcon} from "../assets/imgs/user-icon.svg"
 import { ReactComponent as SettingIcon} from "../assets/imgs/settings.svg"
-import { theme } from '../theme'
-import Melkarmi from "../assets/imgs/avatar/melkarmi.jpeg";
 import { AvatarComponent } from './PlayerProfile'
 import NoUserIcon from "../assets/imgs/nouser-icon.svg";
 
@@ -32,7 +28,6 @@ interface NotifProps {
 const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/melkarmi"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
 export default function Upperbar() {
   const [open, setopen] = useState(false)
-  const [hideModel, sethideModel] = useState(false)
   const [currentUser, setcurrentUser] = useState< UserProp>({defaultAvatar : NoUserIcon , login : ""})
   const ToggleDD = (e : any)=>{
     setopen(!open)
@@ -84,23 +79,6 @@ export default function Upperbar() {
   )
 }
 
-const PlayButton = styled.button`
-  width:150px;
-  height :40px;
-  border: none;
-  outline:none;
-  cursor:pointer;
-  color: ${props => props.theme.colors.primaryText};;;
-  /* background :  ${props => props.theme.colors.purple};
-   */
-  background: linear-gradient(266.44deg, #51002C 2.64%, #50002C 55.22%, #0E1117 97.6%);
-  border:1px solid ${props => props.theme.colors.border};;
-  border-radius: 5px;
-  font-family: 'Michroma', sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 const Wrraper = styled.div`
   z-index: 20;
@@ -251,7 +229,3 @@ ${props => props.new && css`
  
 
 `;
-interface AvatarProps {
-  img: string,
-  // score2 : number
-}

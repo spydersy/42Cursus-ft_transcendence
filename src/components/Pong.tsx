@@ -1,19 +1,12 @@
 
-import  React, { useEffect , useRef , useState ,useLayoutEffect }  from 'react';
+import  React, { useEffect , useRef , useState  }  from 'react';
 
-import * as ReactDOM from 'react-dom'; 
-// import {Draggable} from 'typescript-react-draggable';
 import styled from "styled-components"
-import axios from 'axios';
-import io from 'socket.io-client';
+
 import { AvatarComponent } from '../components/PlayerProfile';
 
 import Img from "../assets/imgs/avatar/a1.png";
-import Img2 from "../assets/imgs/avatar/a2.png";
-import Marin from "../assets/imgs/marinford.png";
-import Punk from "../assets/imgs/punkhazard.png";
 
-import AIavatar from "../assets/imgs/avatar/Ai-lwahch.png";
 import VegaPunk from "../assets/imgs/vegapunk.png" 
 
 
@@ -37,10 +30,7 @@ interface myProps {
   }
 
 }
-interface ScoreType {
-  score1: number,
-  score2 : number
-}
+
 interface Player2Type {
   name: string,
   avatar : string,
@@ -63,20 +53,13 @@ export default function Pong({themes , mode}:myProps ) {
   const tableRef : any= useRef<HTMLHeadingElement>(null);
   const ballRef : any = useRef<SVGCircleElement >(null);
   const playerRef : any = useRef<SVGRectElement >(null);
-  const lineRef : any = useRef<SVGLineElement >(null);
+  // const lineRef : any = useRef<SVGLineElement >(null);
   const player2Ref : any = useRef<SVGRectElement >(null);
   const requestRef = React.useRef(0)
   const score1Ref = React.useRef(0)
   const score2Ref = React.useRef(0)
-  var player : number;
   const [start, setStart] = useState(true)
-  const [header, setHeader] = useState("waiting")
   const [Player2Data, setPlayer2Data] = useState<Player2Type | null>(null)
-  const [score, setscore] = useState(0)
-
-  var UP_KEY = 38;
-  var DOWN_KEY = 40;
-  var rew = 0;
   var Predect = 0;
   
 
@@ -112,23 +95,15 @@ export default function Pong({themes , mode}:myProps ) {
 
 
   const pointScored = (side :  string)=>{
-    
-    // setStart(!start)
-    
-    // setTimeout(() => {
-        initBall()
-      // }, 3000);
+      initBall()
       if (side  === "right")
       {
         score1Ref.current += 1; 
       }
       else if (side  === "left")
       {
-        // alert(score2Ref.current )
         score2Ref.current += 1; 
-        
       }
-      // cancelAnimationFrame(requestRef.current)
   
   }
   function moveBall() {
@@ -137,10 +112,7 @@ export default function Pong({themes , mode}:myProps ) {
 
     const cx = parseInt(ballRef.current.getAttribute('cx'));
     const cy = parseInt(ballRef.current.getAttribute('cy'));
-    // setscore(score + 1)
-    
     const ballRadius = parseInt(ballRef.current.getAttribute('r'));
-    const leftLimit = ballRadius;
     const rightLimit = tableRef.current.offsetWidth;
     const topLimit = ballRadius;
     const bottomLimit = tableRef.current.offsetHeight - ballRadius;
@@ -179,27 +151,20 @@ export default function Pong({themes , mode}:myProps ) {
   
   function movePlayer1(event :  MouseEvent)
   {
-
-
     const p = playerRef?.current;
-    const cy = parseInt(p.getAttribute('y'));
     const h = parseInt(p.getAttribute('height'));
 
     if ( event.offsetY < tableRef.current.offsetHeight - h)
        p.setAttribute('y', event.offsetY)
     else 
         p.setAttribute('y', tableRef.current.offsetHeight  - h)
-
-
   }
 
   function moveAI(xb : number, yb: number )
   {
     const h = parseInt(player2Ref.current.getAttribute('height'));
     var yp : number ;
-    var xp : number ;
     yp =  parseInt(player2Ref.current.getAttribute('y'));
-    xp =  parseInt(player2Ref.current.getAttribute('x'));
     var PreditctY : number =  yb +( directionY * Predect) -( h / 2);
     var TableH : number =   tableRef.current.offsetHeight;
 
@@ -241,20 +206,18 @@ export default function Pong({themes , mode}:myProps ) {
     player2Ref.current.setAttribute('x', x);
     player2Ref.current.setAttribute('y', y);
   }
-  const  setLine =(x1 : number , y1 : number , x2 : number , y2 : number)=>{
-    lineRef.current.setAttribute('x1', x1);
-    lineRef.current.setAttribute('y1', y1);
-    lineRef.current.setAttribute('x2', x2);
-    lineRef.current.setAttribute('y2', y2);
-  }
+  // const  setLine =(x1 : number , y1 : number , x2 : number , y2 : number)=>{
+  //   lineRef.current.setAttribute('x1', x1);
+  //   lineRef.current.setAttribute('y1', y1);
+  //   lineRef.current.setAttribute('x2', x2);
+  //   lineRef.current.setAttribute('y2', y2);
+  // }
   function randomIntFromInterval(min : number, max : number) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
   const   initBall =()=>{
-    console.log(score)
     ballSpeed =randomIntFromInterval(-5 , 5);
     var ballSpeed2 =randomIntFromInterval(-5 , 5);
-    // alert(ballSpeed);
     [directionX, directionY] = [ballSpeed, ballSpeed2];
     setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
   }
@@ -265,10 +228,7 @@ useEffect(() => {
 
   const initData =()=>{
     setPlayer1(80, 0)
-
     setPlayer2(tableRef.current.offsetWidth - 100,0 )
-    
-    console.log(mode)
     switch(mode)
     {
       case "AI":
@@ -288,7 +248,7 @@ useEffect(() => {
         setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
         initData()
         tableRef.current.addEventListener("mousemove", movePlayer1)
-      } ,[])
+      } ,[mode])
       
       
   
@@ -297,18 +257,13 @@ useEffect(() => {
       <PlayerStyle>
 
         <Player1>
-            <UserComponent Ai={false} data={player2}/>
-
+          <UserComponent Ai={false} data={player2}/>
           </Player1>
           <Score>
-           {score}
             {score1Ref.current} | {score2Ref.current}
           </Score>
           <Player2>
-        
-        
-          {Player2Data === null ?   <Spinner/>  : <UserComponent Ai={true} data={Player2Data}/>  }
-         
+            {Player2Data === null ?   <Spinner/>  : <UserComponent Ai={true} data={Player2Data}/>  }
         </Player2>
       </PlayerStyle>
     <Table bgimg={""} ref={tableRef} >
@@ -510,7 +465,7 @@ interface UserProps {
         return (
           <>
               <div style={{ width: "100px", height: "100px" }}>
-            {props.Ai == false ? <AvatarComponent img={props.data.avatar} /> : <AIstyle img={props.data.avatar} ></AIstyle>}
+            {props.Ai === false ? <AvatarComponent img={props.data.avatar} /> : <AIstyle img={props.data.avatar} ></AIstyle>}
             
           </div>
           <div className='mesgData'>

@@ -1,32 +1,24 @@
 import React, {useState , useEffect} from 'react'
-import styled , {css}from "styled-components"
+import styled from "styled-components"
 import Navlinks from '../components/Navlinks';
-import { AchievmentComp,AchievmentCompProps }  from '../components/History'
 import  Badge2 from "../assets/imgs/avatar/a1.png";
 import  Badge3 from "../assets/imgs/avatar/a2.png";
 import  Badge4 from "../assets/imgs/avatar/a6.png";
 import  Badge5 from "../assets/imgs/avatar/a4.png";
-import  Badge6 from "../assets/imgs/avatar/a5.png";
 
 import { PlayerCard , UserCard} from '../components/PlayerProfile';
 import { GameComp } from "../components/PlayerProfile";
 import { UserInvitCard } from "../components/PlayerProfile";
 import { UserBlockedCard } from "../components/PlayerProfile";
-import {ReactComponent as Warningo} from "../assets/imgs/warning.svg";
 import {ReactComponent as LuffyAce} from "../assets/imgs/luffyAce.svg";
 import axios from 'axios';
-import Achivments from '../components/Achivments';
 
 
 
 //-- Global Data --
 
 //-- Global User Data --//
-const ProgressUser = "40%"
 const hieghtTab = "500px";
-
-
-
 const match1 = {
   match:{
   name: "Melkarmi",
@@ -135,7 +127,7 @@ export default function Profile() {
       }
     }
 
-  }, []);
+  }, [id]);
 
   return (
     <div className='container' style={{display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
@@ -146,48 +138,12 @@ export default function Profile() {
     </div>
   )
 };
-const Row = styled.div`
-  width: 100%;
-  display : flex;
-  
-  align-items : center;
-  justify-content: space-between;
-`;
+
 const TheBox = styled.div`
   padding: 10p;
   width: 100%;
   border: 0px solid ${props => props.theme.colors.primarybg};
 `;
-const ProgressBar = styled.div`
-width: 100%;
-height: 32px;
-background-color: ${props => props.theme.colors.primarybg};
-border-radius: 18px;
-display: flex;
-align-items: center;
-margin: 15px 0px;
-
-
-> div{
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: flex-end;
-  height: 100%;
-  width: ${ProgressUser};
-  background-color: ${props => props.theme.colors.purple};
-  border-radius: 15px;
-
-  .lvl{
-    margin-right: 18px;
-    font-size: ${props => props.theme.fontSize.s};
-    font-weight: 12px;
-    color: white;
-    -webkit-text-stroke: 1px #b2a2b69a;
-  }
-
-}
-`
 
 ///// PlayerTabs Section
 const linkslist = [ " FRIENDS" , "PENDING REQUESTS", "BLOCKED USERS"]
@@ -279,7 +235,7 @@ useEffect(() => {
 
   }).catch((err)=>{
     })
-}, [])
+}, [props.id])
 
   return (
     <TabOthree >

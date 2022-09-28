@@ -12,13 +12,7 @@ import Tidk from "../assets/imgs/zoro.svg"
 import { useSpringCarousel } from 'react-spring-carousel'
 import { ReactComponent as Swipeicon} from "../assets/imgs/swipe-icon.svg"
 
-interface TypeItem {
-  title : string,
-  img : SVGAElement,
-  desc : string,
-  backgroud : string,
 
-}
 const modes : any = [
   {
     title : "Computer mode",

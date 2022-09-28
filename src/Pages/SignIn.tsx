@@ -1,6 +1,5 @@
 import React from 'react'
 import styled , {keyframes , css} from "styled-components"
-import CoverImg from "../assets/imgs/cover.png"
 import PatternImg from "../assets/imgs/background.jpeg"
 import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
 import { LogoComponent } from '../components/Upperbar'

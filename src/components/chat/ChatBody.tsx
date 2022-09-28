@@ -1,12 +1,5 @@
 
-
-import React , {useEffect, useState, useRef}from 'react'
-import {ReactComponent as  SearchIcon} from "../../assets/imgs/search.svg"
-import {ReactComponent as Group} from "../../assets/imgs/users.svg";
-import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
-import {ReactComponent as Dots} from "../../assets/imgs/dotsvertical.svg";
-import {ReactComponent as UserIcon} from "../../assets/imgs/dotsvertical.svg";
-import {ReactComponent as SettingIcon} from "../../assets/imgs/dotsvertical.svg";
+import React from 'react'
 import styled  from "styled-components"
 
 

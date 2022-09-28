@@ -1,15 +1,9 @@
-import React , {useEffect, useState, useRef}from 'react'
-import {ReactComponent as  SearchIcon} from "../../assets/imgs/search.svg"
-import {ReactComponent as Group} from "../../assets/imgs/users.svg";
-import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
+import React , { useState}from 'react'
 import {ReactComponent as Dots} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as UserIcon} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as SettingIcon} from "../../assets/imgs/dotsvertical.svg";
 
 import styled  from "styled-components"
-import { Button } from '../../Pages/SignIn';
-import Modal from '../Modal';
-import CreateGroup from '../modals/CreateGroup';
 import { AvatarComponent } from '../PlayerProfile';
 import DropDown from '../DropDown';
 interface ListTypes  {
@@ -18,15 +12,9 @@ interface ListTypes  {
     href: string
   
   }
-  interface chatType {
-    id: string,
-    msg: string,
-  
-  }
   interface convType {
     name : string,
     avatar : string,
-    // messages : chatType[]
   }
   const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/id"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
   
@@ -49,8 +37,6 @@ export default function ChatHeader(props : convType) {
              {props.name}
           </div>
         </div>
-        {/* <ChallengeFriend/> */}
-        {/* <BlockFriend/> */}
         
         <Dots onClick={ToggleDD} />
         {

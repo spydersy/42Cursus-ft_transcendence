@@ -1,10 +1,7 @@
 import React , {useState} from 'react'
-import styled , {css}from "styled-components"
-import Melkarmi from "../assets/imgs/avatar/melkarmi.jpeg";
-import Mamali from "../assets/imgs/avatar/mamali.jpeg";
-import Hfadyl from "../assets/imgs/avatar/hfadyl.jpeg";
+import styled from "styled-components"
+
 import Fadi from "../assets/imgs/avatar/ael-fadi.jpeg";
-import { AvatarComponent } from './PlayerProfile';
 import Modal from './Modal';
 const bg = {
     overlay: {

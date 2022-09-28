@@ -1,12 +1,12 @@
-import axios from 'axios'
-import React , {useState}from 'react'
+// import axios from 'axios'
+import React from 'react'
 import styled from "styled-components"
 import { ReactComponent as Qr } from '../assets/imgs/QRtest.svg' // put ur qr image path here  
 export default function Test() {
-    const [data, setdata] = useState(null)
-    const handlePhotoChange = (e : React.ChangeEvent<HTMLInputElement>)=>{
-        console.log(e.target.files)
-    }
+    // const [data, setdata] = useState(null)
+    // const handlePhotoChange = (e : React.ChangeEvent<HTMLInputElement>)=>{
+    //     console.log(e.target.files)
+    // }
   return (
     <Cocoachraf>
         {/* <input type="file" onChange={handlePhotoChange}/> */}

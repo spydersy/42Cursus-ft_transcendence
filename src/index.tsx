@@ -5,9 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
   BrowserRouter,
-  Routes, // instead of "Switch"
-  Route,
-  useNavigate
 } from "react-router-dom";
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

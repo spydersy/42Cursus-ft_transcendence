@@ -60,7 +60,7 @@ export default function Navlinks(props: NavlinksProps) {
     
             props.setindex(i);
           }}
-          active={props.index == i ? true : false}
+          active={props.index === i ? true : false}
         >
           {object}
         </Item>

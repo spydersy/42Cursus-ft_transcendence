@@ -1,10 +1,8 @@
-import  React, { useEffect , useRef , useState  }  from 'react';
+import  React, { useEffect  , useState  }  from 'react';
 import styled from "styled-components"
 import {theme} from './theme'
 import { ThemeProvider } from 'styled-components';
-import Cookies from 'universal-cookie';
 import './App.css';
-import Pong from './components/Pong';
 import Marin from "./assets/imgs/marinford.png";
 import Punk from "./assets/imgs/punkhazard.png";
 import Dress from "./assets/imgs/dressRosa.jpg";
@@ -12,10 +10,9 @@ import Wano from "./assets/imgs/wano.jpg";
 import Fish from "./assets/imgs/fishman.jpeg";
 import { SocketContext,  SocketValue } from './context/Socket';
 import {
-  BrowserRouter,
   Routes, // instead of "Switch"
   Route,
-  useNavigate
+  // useNavigate
 } from "react-router-dom";
 import SignIn from './Pages/SignIn';
 import Home from './Pages/Home';
@@ -26,7 +23,7 @@ import ProtectedLayout from './components/protected/ProtectedLayout';
 import Profile from './Pages/Profile';
 import Chat from './components/chat/Chat';
 import Game from './Pages/Game';
-import axios from 'axios';
+// import axios from 'axios';
 import Setting from './Pages/Setting';
 import Leader from './Pages/Leader';
 import Room from './Pages/Room';
@@ -54,21 +51,21 @@ const mockedItems : any = [{
 }]
 
 function App() {
-  const [start, setstart] = useState(false)
   const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "AI"})
-  const [logedIn, setlogedIn] = useState(false)
-  const [name, setname] = useState("")
-  const inputRef : any= useRef<any>(null);
   
   
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useEffect(() => {
-  //   const cookies = new Cookies();
-  //   // const coc = Cookieequiredy
-  //   // axios.defaults.withCredentials = true;
-  // //  console.log( Cookies.set)
-  //  
-  
+  //   axios.get("http://localhost:8000/profile/me", 
+  //   {withCredentials: true} 
+  // ).then((res)=>{
+  //   console.log(res.data)
+  //   localStorage.setItem("user", JSON.stringify(res.data))
+  // }).catch((err)=>{
+  //       console.log(err)
+  //       navigate('/signin')
+  //       // history.pushState("/signin");
+    // })
   }, [])
   
   return (
@@ -106,6 +103,7 @@ const Cont = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
 const Main = styled.main`
   .vr{
     width: 1px;
@@ -121,12 +119,10 @@ const Main = styled.main`
       background: transparent; 
     } 
 
-    /* Handle */
     &::-webkit-scrollbar-thumb {
       background: ${props => props.theme.colors.primarybg};
     } 
 
-    /* Handle on hover */
     &::-webkit-scrollbar-thumb:hover { 
       background: ${props => props.theme.colors.primarybg};
     }

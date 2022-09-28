@@ -1,4 +1,4 @@
-import React , {useEffect, useState, useRef}from 'react'
+import React , {useEffect, useState}from 'react'
 import styled  from "styled-components"
 import ChatBody from './ChatBody'
 import ChatHeader from './ChatHeader'
@@ -11,11 +11,7 @@ interface convType {
   avatar : string,
   messages : chatType[]
 }
-interface ChatProps {
-  setList: (e : any) => void,
-  list: chatType[]
 
-}
 const msgList = [
     {
       id: "0",
@@ -98,7 +94,7 @@ export default function Chat() {
     const [list, setlist] = useState(ConversList)
     const [currentConv, setcurrentConv] = useState(0)
   
-    
+
    
     useEffect(() => {
         
@@ -133,13 +129,11 @@ export default function Chat() {
   }
   
   const GridContainer = styled.div`
-  display: flex;
-  border-radius: 20px;
-
-  
+    display: flex;
+    border-radius: 20px;
+    overflow : hidden;
       border: 1px solid ${props => props.theme.colors.border};
       font-family: 'Poppins' , sans-serif; 
-      /* background : red; */
       .bodyy{
   
         flex: 1;
