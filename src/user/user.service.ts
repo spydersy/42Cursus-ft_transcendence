@@ -14,6 +14,37 @@ export class UserService {
     *  Endpoints Calls : **************************************************************************
     */
 
+    async GetnbFriends(UserMe: string, User: string) {
+        let UserMeDto = await this.GetUserByLogin(UserMe);
+        let UserDto = await this.GetUserByLogin(User);
+        if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true) {
+            return 0;
+        }
+        let FriendsRowA = await this.prisma.friends.findMany({
+            where: {
+                status: RELATION.FRIENDS,
+                senderId: UserDto.id
+            },
+            include: {
+                receiver: true
+            }
+        });
+
+        let FriendsRowB = await this.prisma.friends.findMany({ 
+            where: {
+                status: RELATION.FRIENDS,
+                receiverId: UserDto.id
+            },
+            include: {
+                sender: true
+            }
+        });
+        let AllFriends = [];
+        FriendsRowA.forEach(element => AllFriends.push(element.receiver));
+        FriendsRowB.forEach(element => AllFriends.push(element.sender));
+        return AllFriends.length;
+    }
+
     async GetFriends(UserMe: string, User: string, @Res() res) {
         let UserMeDto = await this.GetUserByLogin(UserMe);
         let UserDto = await this.GetUserByLogin(User);
@@ -74,7 +105,8 @@ export class UserService {
         let FriendsStat = await this.FriendsRelationExist(MeDto.id, UserDto.id);
         if (FriendsStat !== null)
             UserDto['relation'] = FriendsStat['status'];
-        console.log("__USER))DTO__DBG__ : ", UserDto);
+            UserDto['nbFriends'] = this.GetnbFriends(Me, Me);
+        console.log("__USER__DTO__DBG__ : ", UserDto);
         return res.status(HttpStatus.OK).send(UserDto);
     }
 

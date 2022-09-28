@@ -122,21 +122,16 @@ export class ProfileService {
         BlockRow.forEach(element => BlackList.push(element.blocked));
         console.log("__BLACK__LIST__", BlackList);
 
-
-
-        this.prisma.channels.findMany({
-            where :
-            {
-                AND: [
-                    {access: CHANNEL.DM},
-                    { users: { some: {userId: 452}}},
-                    { users: { some: {userId: 123}}}
-                ],
-            }
-        });
-
-
-
+        // this.prisma.channels.findMany({
+        //     where :
+        //     {
+        //         AND: [
+        //             {access: CHANNEL.DM},
+        //             { users: { some: {userId: 452}}},
+        //             { users: { some: {userId: 123}}}
+        //         ],
+        //     }
+        // });
         return res.status(HttpStatus.OK).send(BlackList);
     }
 }

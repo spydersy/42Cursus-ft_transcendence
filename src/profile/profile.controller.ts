@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Post, Query, Req, Res, UseGuards, UploadedFile, UseInterceptors, Param, Put } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Post, Query, Req, Res, UseGuards, UploadedFile, UseInterceptors, Param, Put, Body } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserService } from 'src/user/user.service';
 import { Response } from 'express';
@@ -48,9 +48,12 @@ export class ProfileController {
   async UpdateAvatar(@Req() req, @UploadedFile() file, @Res() res) {
     const uploadedAvatarPath = `http://localhost:8000/upload/${file.filename}`;
     return this.profileService.UploadAvatar(uploadedAvatarPath, req.user.userId, res);
-    return res.send(uploadedAvatarPath);
   }
 
+  // @Post('update2FA')
+  // async Update2FA(@Body('enable') status) {
+
+  // }
 
   @Put("updateUsername/:newname")
   async UpdateUserName(@Req() req, @Param('newname') newName, @Res() res) {

@@ -9,11 +9,15 @@ STEPS :
 - [X] Cancel Friend Request
 - [X] Add Relation Between Users In Json Object
 - [ ] Add Validation Layer For Outputs
-- [ ] Real Time Search Engine 
-- [ ] Add nb Friends in user Object
+- [ ] Real Time Search Engine [Channel Search]
+- [X] Add nb Friends in user Object
 - [ ] Two Factor Authentication
 - [ ] Users Status
 - [ ] Channel Creation Endpoint
+- [ ] Username need Input Validation
+- [P] Create DM Channel After Accepting Friend Request
+- [ ] Logout Endpoint
+- [ ] Update 2fa Status
 
 USER SERVICE :
 
