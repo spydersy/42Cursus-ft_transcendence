@@ -9,6 +9,7 @@ import { ReactComponent as UserIcon} from "../assets/imgs/user-icon.svg"
 import { ReactComponent as SettingIcon} from "../assets/imgs/settings.svg"
 import { AvatarComponent } from './PlayerProfile'
 import NoUserIcon from "../assets/imgs/nouser-icon.svg";
+import Dropdown from 'react-dropdown';
 
 interface ListTypes {
   title : string,
@@ -26,6 +27,7 @@ interface NotifProps {
   
 }
 const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/melkarmi"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
+
 export default function Upperbar() {
   const [open, setopen] = useState(false)
   const [currentUser, setcurrentUser] = useState< UserProp>({defaultAvatar : NoUserIcon , login : ""})
@@ -79,7 +81,6 @@ export default function Upperbar() {
   )
 }
 
-
 const Wrraper = styled.div`
   z-index: 20;
 
@@ -105,6 +106,7 @@ width: 100px;
    gap: 10px;
    margin-right :10px;
 `;
+
 interface LogoProps {
   size : string
 }
@@ -116,60 +118,96 @@ export  function LogoComponent(props : LogoProps) {
     )
   }
 
+
+// export function UserCard() {
+
+//   return ( 
+//     <div>Cardasdasd</div>
+//   )
+// }
+
 export  function SearchBarComponent() {
+  const [search, setsearch] = useState("")
+  const [Users, setUsers] = useState([])
+
+  const InputSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setsearch(event.target.value)
+    console.log("Value = ", event.target.value)
+  };
+
     return (
       <SearchBar>
+        <input  onChange={InputSearchHandler} type="text" placeholder='Search ..' />
 
-        <input  type="text" placeholder='Search ..' />
+        {
+          // search.length > 0 && <Dropdown open={true} style={{top: "50px" , left: '0'}} list={Users} />
+          //   <UsersTable>
+          //   <div className='so'> Users </div>
+          //   {          
+          //     Users.map((invit : any, id : number )=>{
+          //     return<UserCard key={id}  /> })
+          //   }
+          // </UsersTable>
+        }
+
       </SearchBar>
     )
   }
-  const SearchBar = styled.div`
-  background:  ${props => props.theme.colors.bg};
-  border-radius: 5px;
-  display: flex;
-  align-items: flex-start;
-  width: 30%;
-  max-width: 600px;
-  height: 42px;
-  >svg{
-    path{
-      stroke:  ${props => props.theme.colors.seconderyText};;
 
-    }
+const UsersTable = styled.div`
+
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+`;
+
+const SearchBar = styled.div`
+background:  ${props => props.theme.colors.bg};
+border-radius: 5px;
+display: flex;
+align-items: flex-start;
+width: 30%;
+max-width: 600px;
+height: 42px;
+>svg{
+  path{
+    stroke:  ${props => props.theme.colors.seconderyText};;
+
   }
-      /* object-fit : contain; */
-      position: relative;
-      padding: 0px 0px 0px 49px;
-      &::before{
-        content: url(${SearchIcon});
-        position: absolute;
-        left: 10px; 
-        top: 55%; 
-        transform: translateY(-50%);
+}
+    /* object-fit : contain; */
+    position: relative;
+    padding: 0px 0px 0px 49px;
+    &::before{
+      content: url(${SearchIcon});
+      position: absolute;
+      left: 10px; 
+      top: 55%; 
+      transform: translateY(-50%);
+    }
+    input{
+      background-color: transparent;
+      width: calc(100% - 49px);
+      height: 100%;
+      border: none;
+      margin: 0;
+      padding: 0;
+      outline: none;
+      color:  ${props => props.theme.colors.primaryText};;
+    font-size:  ${props => props.theme.fontSize.l}; 
+      &::placeholder{
+    color:  ${props => props.theme.colors.seconderyText};;
+    font-size: ${props => props.theme.fontSize.s};
+        /* opacity: 0.6; */
       }
-      input{
-        background-color: transparent;
-        width: calc(100% - 49px);
-        height: 100%;
-        border: none;
-        margin: 0;
-        padding: 0;
-        outline: none;
-        color:  ${props => props.theme.colors.primaryText};;
-      font-size:  ${props => props.theme.fontSize.l}; 
-        &::placeholder{
-      color:  ${props => props.theme.colors.seconderyText};;
-      font-size: ${props => props.theme.fontSize.s};
-          /* opacity: 0.6; */
-        }
-    }
-    @media  only screen and (max-width: 768px) {
-      width: 150px;
-  max-width: 200px;
-    }
-  `;
-
+  }
+  @media  only screen and (max-width: 768px) {
+    width: 150px;
+max-width: 200px;
+  }
+`;
 
 export  function NotificationComponent(props: NotifProps) {
   const [openNotif, setopenNotif] = useState(false)
