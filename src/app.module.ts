@@ -13,12 +13,14 @@ import { ProfileModule } from './profile/profile.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProfileController } from './profile/profile.controller';
 import { PrismaService } from './prisma/prisma.service';
+import { SearchModule } from './search/search.module';
+import { SearchService } from './search/search.service';
 
 
 
 @Module({
-  imports: [AuthModule, PrismaModule, UserModule, ProfileModule, ConfigModule.forRoot()],
+  imports: [AuthModule, PrismaModule, UserModule, ProfileModule, ConfigModule.forRoot(), SearchModule],
   controllers: [AppController, UserController, ProfileController],
-  providers: [AppService, UserService, ProfileService, PrismaService],
+  providers: [AppService, UserService, ProfileService, PrismaService, SearchService],
 })
 export class AppModule {}

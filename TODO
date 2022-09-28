@@ -8,11 +8,14 @@ STEPS :
 - [X] Unfriend User
 - [X] Cancel Friend Request
 - [X] Add Relation Between Users In Json Object
-- [ ] Add Validation Layer For Outputs 
+- [ ] Add Validation Layer For Outputs
+- [ ] Real Time Search Engine 
+- [ ] Add nb Friends in user Object
+- [ ] Two Factor Authentication
+- [ ] Users Status
+- [ ] Channel Creation Endpoint
 
 USER SERVICE :
-- [P] Users Status
-- [ ] Two Factor Authentication
 
 CHAT SERVICE :
 - [ ] Optimize Schema
@@ -60,3 +63,12 @@ NOTES :
     - [X] ADD BLOCKED USER
     - [X] ADD USER WHO BLOCKED ME
     - [X] ADD FRIEND
+
+=== Channel Creation Endpoint =====================================================================
+    - [ ] Channel Name
+    - [ ] Channel Picture 
+    - [ ] Channel Type
+    - [ ] Channel Password
+    - [ ] Owner id
+    - [ ] Admins ids
+    - [ ] Members ids
