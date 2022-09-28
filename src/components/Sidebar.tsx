@@ -89,6 +89,7 @@ export default function Sidebar() {
       return () => {
         
       }
+      // eslint-disable-next-line 
     }, [setopen, setfocused  ])
     
   return (

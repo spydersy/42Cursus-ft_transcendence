@@ -1,28 +1,36 @@
 import React, {useEffect, useState, CSSProperties} from 'react'
-import styled  from "styled-components"
+import styled , {css} from "styled-components"
 import { HeadComponent } from './Home';
 import {ReactComponent as Edit} from "../assets/imgs/edit.svg";
 import { AvatarComponent } from '../components/PlayerProfile';
 import axios from 'axios';
-import InputComponent from '../components/Input';
+import { map } from 'rxjs';
+import InputComponent  from '../components/Input';
 import { Button } from './SignIn';
 import RingLoader from "react-spinners/RingLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
 
-const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderColor: "red", };
+const override: CSSProperties = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+  };
 
 export default function Setting() {
-    // const [query, setQuery] = useState('');
-    
+    const [query, setQuery] = useState('');
     const [img, setImg] = useState('');
+
     const [loading, setLoading] = useState(false);
     const [color, setColor] = useState("#fa0137");
+
     const [data, setdata] = useState({login : "", defaultAvatar : "", displayName : "", twoFactorAuth : false, email : ""})
+    
     const [checked, setchecked] = useState(false);
 
     const uploadFile = ()=>{
         var e = document.getElementById("fileInput")
         e?.click()
+        
     }
 
     useEffect(() => {
@@ -33,28 +41,33 @@ export default function Setting() {
             setdata(res.data)
             setImg(res.data.defaultAvatar)
             setchecked(res.data.twoFactorAuth)
-
         }).catch((err)=>{
-            // ERROR
-        })
+            })
 
         var e = document.getElementById("fileInput")
         e?.addEventListener("change", (c :any)=>{
             console.log(c.target.files[0])
             setImg(URL.createObjectURL(c.target.files[0]))
             var  bodyFormData = new FormData();
-
+            bodyFormData.append('avatar', c.target.files[0]);
+            
             setColor("#16ff01");
 
-            bodyFormData.append('avatar', c.target.files[0]);
-                axios.post("http://localhost:8000/profile/updateAvatar", bodyFormData, {withCredentials: true}).then((res)=>{
-                    console.log(res)
-                    wait(2000).then(() => { setLoading(false);  })
+            axios.post("http://localhost:8000/profile/updateAvatar", bodyFormData, {withCredentials: true}).then((res)=>{
+                console.log(res)
 
-                }   ).catch((err)=>{ 
-                    wait(2000).then(() => {  setColor("#ff000d");})
-                    console.log(err)
-                }   )
+                wait(2000).then(() => {
+                    // setColor("#ff000d");
+                    setLoading(false);
+                })
+
+            }   ).catch((err)=>{ 
+                
+                wait(2000).then(() => {
+                    setColor("#ff000d");})
+
+                console.log(err)
+            }   )
         })
     }, [])
 
@@ -73,20 +86,21 @@ export default function Setting() {
         }
         else
             enteredName = Name;
-    
-        setdata({...data, displayName : enteredName})
-        // setQuery(enteredName);
-      };
 
-      const TwoHandler = () => {
-        setchecked(!checked)
-        setColor("#f29408");
-        if (!loading)
-            setLoading(!loading);
-        }
+        setdata({...data, displayName : enteredName})
+        setQuery(enteredName);
+    };
+
+    const TwoHandler = () => {
+    setchecked(!checked)
+    setColor("#f29408");
+    if (!loading)
+        setLoading(!loading);
+    }
 
     const submitHandler = () => {
         const name = data.displayName.trim();
+
         if (name.length === 0)
         {
             setColor("#ff0101");
@@ -95,13 +109,16 @@ export default function Setting() {
         
         setColor("#16ff01");
 
-
+        // console.log("query = " + query)
+        // console.log("diplayName = "  + data.displayName)
+        
+        // console.log("2FA  /{" + data.twoFactorAuth +"}")
+        
         console.log("2FA  /{" + checked +"}")
-
 
         axios.put("http://localhost:8000/profile/updateUsername/" + name , name, {withCredentials: true}).then((res)=>{
             wait(2000).then(() => {
-                setColor("#ff000d");
+                // setColor("#ff000d");
                 setLoading(false);
             })
 
@@ -116,8 +133,12 @@ export default function Setting() {
 
         axios.put("http://localhost:8000/profile/update2fa/" + checked , { checked}, {withCredentials: true}).then((res)=>{
             wait(2000).then(() => {
-                setLoading(false); })
+                // setColor("#ff000d");
+                setLoading(false);
+            })
 
+            // console.log("Res = ")
+            // console.log(res)
         }   ).catch((err)=>{ 
             wait(2000).then(() => {
             setColor("#ff000d");})
@@ -131,7 +152,7 @@ export default function Setting() {
     return (
     
         <SettingsStyle  className='container' style={{marginTop: "100px"}} >
-
+        
             <HeadComponent title="Setting" />
             <Avatar onClick={uploadFile}>
                 <div className='edit'>
@@ -144,18 +165,16 @@ export default function Setting() {
             <Line></Line>
             
             <Row>
-                    <InputComponent onChange={(e)=>{inputHandler(e)}} value={data.displayName} type='text' lable='Display Name' />
-                    <InputComponent disabled={true} onChange={(e)=>{inputHandler(e)}} value={data.login} type='text' lable='Login' />
-                    
-                    <TwofaStyle >
-                        <label> Two-Factor Authentication (2FA)</label>
-                        <input type="checkbox" id="toggle" name="toggle" checked={checked} onChange={TwoHandler} />
-                    </TwofaStyle>
-
-                    
-                    <Button    onClick={submitHandler} text="save" type='primary' />
-                    <RingLoader  color={color} loading={loading} cssOverride={override} size={30} />
-                        
+                <InputComponent onChange={(e)=>{inputHandler(e)}} value={data.displayName} type='text' lable='Display Name' />
+                <InputComponent disabled={true} onChange={(e)=>{inputHandler(e)}} value={data.login} type='text' lable='Login' />
+                
+                <TwofaStyle >
+                    <label> Two-Factor Authentication (2FA)</label>
+                    <input type="checkbox" id="toggle" name="toggle" checked={checked} onChange={TwoHandler} />
+                </TwofaStyle>
+                
+                <Button    onClick={submitHandler} text="save" type='primary' />
+                <RingLoader  color={color} loading={loading} cssOverride={override} size={30} />
             </Row>
 
         </SettingsStyle>
@@ -224,6 +243,30 @@ const Avatar = styled.div`
     }
     }
 `;
+const EditStyle = styled.div`
+position: absolute;
+    width: 30px;
+            height: 30px;
+        background-color: ${props => props.theme.colors.bg};
+
+        bottom: 11px;
+        right: 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center ;
+        cursor: pointer;
+            /* background-color: ; */
+        >svg{
+            width: 20px;
+            height: 20px;
+      
+            /* height: ; */
+            path {
+                stroke: ${props => props.theme.colors.seconderyText};;
+            }
+        }
+`;
 
 const Line = styled.div`
 margin: 20px 0;
@@ -237,11 +280,12 @@ margin: 20px 0;
 `;
 
 const Row = styled.div`
-width: 50%;
+    width: 50%;
     display: flex;
     flex-direction: column;
     gap: 10px;
     align-items: center;
+   
 `;
 
 
