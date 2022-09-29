@@ -11,7 +11,6 @@ interface ChatProps {
     onRequestClose: (e : any) => void,
     children: any,
     isOpen : boolean,
-    styles : any;
 } 
 
 
@@ -22,8 +21,8 @@ const Modal = (props : ChatProps) => {
     style={{
       
       overlay: {
-        background: 'rgba(255, 255, 255, 0.2)',
-        zIndex: '3'
+        background: 'rgba(255, 255, 255, 0.1)',
+        zIndex: '89'
       },
      }}
     {...props}>

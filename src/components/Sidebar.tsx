@@ -94,7 +94,7 @@ export default function Sidebar() {
     
   return (
     <Test  open={open}>
-    <SidebarWrraper ref={sideBaRed} open={open}>
+    <SidebarWrraper ref={sideBaRed} >
         <Left open={open} onClick={openClose}   />
 
 <Items>
@@ -110,14 +110,14 @@ export default function Sidebar() {
             })
         }
        </Items> 
-       <Devider>c</Devider>
-       <Item onClick={()=>setfocused(4)} active={4 === focused ? true : false} href={"/setting"}>
+       <Devider></Devider>
+       <Item  className='item' onClick={()=>setfocused(4)} active={4 === focused ? true : false} href={"/setting"}>
             <SettingIcon/>
             {
                 open ? <div>Setting</div> : <ToolTip>Setting</ToolTip>  
             }
             </Item>
-       <Item  active={false} href={"/"}>
+       <Item className='item'   active={false} href={"/"}>
             <LogoutIcon/>
             {
                 open ? <div>LogOut</div> : <ToolTip>LogOut</ToolTip>  
@@ -137,71 +137,45 @@ interface ItemProps {
 
   }
   
-const SidebarWrraper = styled.div<barProps>`
-border: 1px solid rgba(44, 104, 193, 0.2);
-    width: 300px;
-    max-width: 300px;
-    height: calc(100% - 70px);
-    top: 70px;
-    background-color: ${props => props.theme.colors.primarybg}; 
-    position: fixed;
-    left: 0;
-    
-    
-    display: flex;
+const SidebarWrraper = styled.div`
+    height : 100%;
+    width : 100%;   
     align-items: flex-end;
-    flex-direction: column;
-    transition: all 400ms ease-in-out;
-    ${props => (props.open === false) && css`
-    // align-items: center ;
-    width: 76px;
+    flex-direction: column;  
+    @media  only screen and (max-width: 768px) {
+        > .item{
+            display: none;
+        }
 
-    `
-  }
-  @media  only screen and (max-width: 768px) {
-
-  max-width: 100%;
-  width :100%;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 70px;
-  display: flex;
+      top: calc(100% - 70px);
+      display: flex;
   align-items: center;
   > svg{
       display: none;
   }
 }
-
-    
 `;
 const Test = styled.div<barProps>`
     width: 300px;
-    max-width: 300px;
     height: calc(100% - 70px);
+    background-color: red;
+    position: fixed;
     top: 70px;
     background-color: ${props => props.theme.colors.primarybg}; 
-
-    
-    display: flex;
     align-items: flex-end;
     flex-direction: column;
     transition: all 400ms ease-in-out;
-
-    ${props => (props.open === false) && css`
-    align-items: center ;
-    width: 76px;
-    `
-  }
+    ${props => (props.open === false) && `
+        align-items: center ;
+        width: 76px;
+    `}
   @media  only screen and (max-width: 768px) {
-
-  max-width: 100%;
-  width :100%;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 70px;
-  display: flex;
+      max-width: 100%;
+      width :100%;
+      height: 70px;
+      position: fixed;
+      top: calc(100% - 70px);
+      display: flex;
   align-items: center;
   > svg{
       display: none;

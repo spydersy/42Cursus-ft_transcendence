@@ -146,11 +146,6 @@ display: flex;
 `;
 
 
-const bg = {
-  overlay: {
-    background: "#FFFF00"
-  }
-};
 
 export  function ChatSidebar() {
   const [hide, sethide] = useState(false)
@@ -167,7 +162,7 @@ export  function ChatSidebar() {
         isOpen={hide}
         onRequestClose={() => sethide(false)}
         hideModal={() => sethide(false)}
-        styles={bg}>
+      >
                 <CreateGroup/>
       </Modal>}
         </div>

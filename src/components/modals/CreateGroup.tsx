@@ -48,11 +48,7 @@ export default function CreateGroup() {
 
         
     }
-    const bg = {
-        overlay: {
-          background: "#FFFF00"
-        }
-      };
+
     useEffect(() => {
         var e = document.getElementById("fileInput")
         e?.addEventListener("change", (c :any)=>{
@@ -102,7 +98,7 @@ export default function CreateGroup() {
                         isOpen={hide}
                         onRequestClose={() => sethide(false)}
                         hideModal={() => sethide(false)}
-                        styles={bg}>
+                        >
                             <AddFriendsModal/>
                         </Modal>}
             </div>
@@ -139,7 +135,7 @@ flex-direction: row;
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 1px solid  ${props => props.theme.colors.primaryText};
+    border: 2px solid  ${props => props.theme.colors.purple};
     display: flex;
     align-items: center;
 justify-content: center;
@@ -321,6 +317,7 @@ export  function Member(props:MemberProp ) {
 }
 
 const MembersStyle= styled.div`
+    margin: 0 4px;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -349,7 +346,7 @@ const MembersStyle= styled.div`
         border-radius: 50%;
         top: 0;
         right: -5px;
-        background-color:  ${props => props.theme.colors.danger};;
+        background-color:  ${props => props.theme.colors.purple};;
         display: flex;
         align-items: center;
         justify-content: center;

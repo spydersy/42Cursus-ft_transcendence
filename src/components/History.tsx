@@ -311,11 +311,6 @@ export interface AchievmentCompProps {
     },
 }
 
-const bg = {
-    overlay: {
-      background: "#FFFF00"
-    }
-  };
 
 export  function AchievmentComp(props : AchievmentCompProps) {
     const [hideModel, sethideModel] = useState(false)
@@ -327,7 +322,7 @@ export  function AchievmentComp(props : AchievmentCompProps) {
         isOpen={hideModel}
         onRequestClose={() => sethideModel(false)}
         hideModal={() => sethideModel(false)}
-        styles={bg}
+       
       >
 
         <AchievmentModal achiev={props.achievment}/>

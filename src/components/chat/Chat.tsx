@@ -102,12 +102,19 @@ export default function Chat() {
       
     }, [list ])
     return (
-      <GridContainer className='container' style={{ marginTop: "100px" }}>
-          <div className='right'>
-          <ChatSidebar setcurrentConv={(e)=> setcurrentConv(e)} currentConv={currentConv} list={list}  />
+      <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
+          <div id="right" className='right'>
+          <ChatSidebar setcurrentConv={(e)=>{ setcurrentConv(e)
+            var test = document.getElementById("test");
+            if (test)
+            {
+              test.style.zIndex = "1"
+
+            }
+          }} currentConv={currentConv} list={list}  />
               
           </div>
-          <div className='bodyy'>
+          <div id="body"className='bodyy'>
             <div  className='top'>
               <ChatHeader name={list[currentConv].name} avatar={list[currentConv].avatar} />
             </div>
@@ -140,11 +147,23 @@ export default function Chat() {
         display: flex;
         align-items: center;
         flex-direction: column;
+        height: 100%;
+        @media  only screen and (max-width: 768px) {
+          width: 90%;
+           min-width: 900%;
+           /* position: absolute; */
+        }
       }
       .right{
         width: 350px;
+        height: 100%;
+
         background-color: ${props => props.theme.colors.seconderybg}; ;
-     
+        @media  only screen and (max-width: 768px) {
+          width: 90%;
+           min-width: 90%;
+           /* position: absolute; */
+        }
       }
       .left{
         width: 350px;
@@ -162,7 +181,9 @@ export default function Chat() {
         flex: 1;
         width: 100%;
         overflow-y: scroll;
-  
+        @media  only screen and (max-width: 768px) {
+          width: 100%;
+        }
       }
       .bottom{
         height: 70px;

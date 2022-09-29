@@ -4,6 +4,33 @@ import Navlinks from '../components/Navlinks';
 import RoomComponent from '../components/RoomComponent';
 import { HeadComponent } from './Home';
 
+const  roomListDummy = [
+  {
+    isLocked : true,
+    roomBanner: "string",
+    roomName : "string"
+  }, 
+  {
+    isLocked : true,
+    roomBanner: "string",
+    roomName : "string"
+  },
+  {
+    isLocked : false,
+    roomBanner: "string",
+    roomName : "string"
+  },
+  {
+    isLocked : true,
+    roomBanner: "string",
+    roomName : "string"
+  },
+  {
+    isLocked : false,
+    roomBanner: "string",
+    roomName : "string"
+  }
+]
 export default function Room() {
 const linkslist = ["Public", "Protected" , "My Rooms"]
 
@@ -14,14 +41,12 @@ const linkslist = ["Public", "Protected" , "My Rooms"]
         <PlayerAchieveStyle>
         <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/>
             <Warraper>
-                    <RoomComponent/>
-                    <RoomComponent/>
-                    <RoomComponent/>
-                    <RoomComponent/>
-                    <RoomComponent/>
-                    <RoomComponent/>
-                    <RoomComponent/>
-                    <RoomComponent/>
+              {
+                roomListDummy.map((data : any , id : number)=>{
+                  return<RoomComponent roomMembers={5} roomName={data.roomName} roomBanner={data.roomBanner} isLocked={data.isLocked} />        
+                })
+              }
+                  
             </Warraper>
         </PlayerAchieveStyle>
     </RoomStyle>

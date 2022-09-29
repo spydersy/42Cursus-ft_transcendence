@@ -7,11 +7,7 @@ import { Button } from '../../Pages/SignIn';
 import Modal from '../Modal';
 import CreateGroup from '../modals/CreateGroup';
 import { AvatarComponent } from '../PlayerProfile';
-const bg = {
-    overlay: {
-      background: "#FFFF00"
-    }
-  };
+
   interface chatType {
     id: string,
     msg: string,
@@ -42,7 +38,7 @@ export default function ChatSidebar(props : ChatProps) {
                     isOpen={hide}
                     onRequestClose={() => sethide(false)}
                     hideModal={() => sethide(false)}
-                    styles={bg}>
+                 >
                   <CreateGroup/>
                  </Modal>
             }

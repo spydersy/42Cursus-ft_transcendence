@@ -50,11 +50,7 @@ interface GameModesProps {
   // banner :string 
   
 }
-const bg = {
-  overlay: {
-    background: "#FFFF00"
-  }
-};
+
 export default function GameModes(props : GameModesProps) {
   const [hideModel, sethideModel] = useState(false)
 
@@ -105,7 +101,7 @@ const [mode, setmode] = useState("")
         isOpen={hideModel}
         onRequestClose={() => sethideModel(false)}
         hideModal={() => sethideModel(false)}
-        styles={bg}
+        
       >
 
         <GameModal mode={mode} setmode={(e)=>props.settheme(e)}/>

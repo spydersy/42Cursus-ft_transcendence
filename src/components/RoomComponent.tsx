@@ -3,12 +3,15 @@ import styled from "styled-components"
 
 import Fadi from "../assets/imgs/avatar/ael-fadi.jpeg";
 import Modal from './Modal';
-const bg = {
-    overlay: {
-      background: "#FFFF00"
-    }
-  };
-export default function RoomComponent() {
+
+
+  interface RoomProps{
+    isLocked : boolean,
+    roomBanner: string,
+    roomName : string,
+    roomMembers : number
+  }
+export default function RoomComponent(props : RoomProps) {
   const [hideModel, sethideModel] = useState(false)
 
   return (
@@ -18,7 +21,7 @@ export default function RoomComponent() {
         </div>
         <div className='desc'>
             <div>
-            mohamed
+                    mohamed
                 <div>
                     51 member
                 </div>
@@ -28,7 +31,6 @@ export default function RoomComponent() {
         isOpen={hideModel}
         onRequestClose={() => sethideModel(false)}
         hideModal={() => sethideModel(false)}
-        styles={bg}
       >
     joinRoomModal
       </Modal>}
