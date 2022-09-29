@@ -44,7 +44,7 @@ export default function Upperbar() {
     {
       const data : UserProp =  JSON.parse(s || '{}');
       setcurrentUser(data)
-      console.log(data)
+      // console.log(data)
 
       list[0].href = "/profile/" + data.login
     }

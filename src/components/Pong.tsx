@@ -1,5 +1,5 @@
 
-import  React, { useEffect , useRef , useState  }  from 'react';
+import  React, { useEffect , useRef , useState , useContext, RefObject }  from 'react';
 
 import styled from "styled-components"
 
@@ -8,6 +8,8 @@ import { AvatarComponent } from '../components/PlayerProfile';
 import Img from "../assets/imgs/avatar/a1.png";
 
 import VegaPunk from "../assets/imgs/vegapunk.png" 
+import { SocketContext } from '../context/Socket';
+import axios from 'axios';
 
 
 interface GameModalProps {
@@ -30,36 +32,58 @@ interface myProps {
   }
 
 }
-
+interface UserProp {
+  defaultAvatar: string,
+  login : string
+}
 interface Player2Type {
   name: string,
   avatar : string,
-  msg : string
+  // msg : string
 }
 
 const player2 = {
     name: "mehdi elazmi",
     avatar : Img,
-    msg : "Player2"
+    // msg : "Player2"
 }
 const ai1 = {
-  name: "Dr VegaPunk",
-  avatar : VegaPunk,
-  msg : "AI"
+  login: "Dr VegaPunk",
+  defaultAvatar  : VegaPunk,
+  // msg : "AI"
 }
 var ballSpeed : number = 5;
+
 var [directionX, directionY] = [ballSpeed, ballSpeed];
 export default function Pong({themes , mode}:myProps ) {
+
   const tableRef : any= useRef<HTMLHeadingElement>(null);
   const ballRef : any = useRef<SVGCircleElement >(null);
   const playerRef : any = useRef<SVGRectElement >(null);
   // const lineRef : any = useRef<SVGLineElement >(null);
   const player2Ref : any = useRef<SVGRectElement >(null);
+  const player : any = useRef<SVGRectElement >(null);
   const requestRef = React.useRef(0)
   const score1Ref = React.useRef(0)
   const score2Ref = React.useRef(0)
   const [start, setStart] = useState(true)
-  const [Player2Data, setPlayer2Data] = useState<Player2Type | null>(null)
+  // const [player, setplayer] = useState<any| null >(null) 
+  const [user, setUser] = useState<UserProp>({
+    login : "ss",
+    defaultAvatar : "sss"
+  })
+  // const [player2, setplayer2] = useState<UserProp>({
+  //   login : "ss",
+  //   defaultAvatar : "sss"
+  // })
+  const [Player2Data, setPlayer2Data] = useState<UserProp | null>(
+    null
+  )
+
+
+
+  const gamesocket = useContext(SocketContext)
+
   var Predect = 0;
   
 
@@ -151,13 +175,23 @@ export default function Pong({themes , mode}:myProps ) {
   
   function movePlayer1(event :  MouseEvent)
   {
-    const p = playerRef?.current;
+
+    const p = player.current;
+    // console.log(player)
     const h = parseInt(p.getAttribute('height'));
 
     if ( event.offsetY < tableRef.current.offsetHeight - h)
-       p.setAttribute('y', event.offsetY)
+    {
+      p.setAttribute('y', event.offsetY)
+      // gamesocket.emit("playermove" , event.offsetY)/
+
+    }
     else 
-        p.setAttribute('y', tableRef.current.offsetHeight  - h)
+    {
+      p.setAttribute('y', tableRef.current.offsetHeight  - h)
+      // gamesocket.emit("playermove" , event.offsetY)
+
+    }
   }
 
   function moveAI(xb : number, yb: number )
@@ -188,8 +222,8 @@ export default function Pong({themes , mode}:myProps ) {
         {
             if (yp  > 0)
               player2Ref.current.setAttribute('y', yp - 10)
-
         }
+
   }
 
 
@@ -225,29 +259,83 @@ export default function Pong({themes , mode}:myProps ) {
 
 
 useEffect(() => {
+  var  data : UserProp ;
+  var s : string | null = localStorage.getItem('user');
+  if (s)
+  {
+     data =  JSON.parse(s || '{}');
+    setUser(data)
+    // console.log(data)
+    gamesocket.emit("playerConnect" , data.login)
 
+  }
   const initData =()=>{
     setPlayer1(80, 0)
     setPlayer2(tableRef.current.offsetWidth - 100,0 )
+   
+    console.log(mode)
     switch(mode)
     {
+      
       case "AI":
         setPlayer2Data(ai1)
         break ;
-        case "Classic":
+        case "classic":
 
-
-          setPlayer2Data(null)
+          // setPlayer2Data(null)
           break ;
           default:
-            setPlayer2Data(player2)
+            // setPlayer2Data(player2)
             
           }
         }
         
         setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
+
         initData()
         tableRef.current.addEventListener("mousemove", movePlayer1)
+
+
+
+        gamesocket.on("startGame" , (datatmp)=>{
+
+    
+          if (datatmp.player1 === data.login)
+          {
+                   player.current = playerRef.current
+
+            console.log("is Player1")
+            axios.get("http://localhost:8000/users/" + datatmp.player2, 
+            {withCredentials: true} 
+             ).then((res)=>{
+              setPlayer2Data(
+                res.data
+              )
+          }).catch((err)=>{
+            })
+          }
+          else
+          {
+            player.current = player2Ref.current
+            console.log("is Player2")
+            axios.get("http://localhost:8000/users/" + datatmp.player1, 
+            {withCredentials: true} 
+             ).then((res)=>{
+        
+              setUser(res.data)
+          }).catch((err)=>{
+        
+            })
+              setPlayer2Data(data)
+            
+          }
+
+        })
+        gamesocket.on("endGame" , ()=>{
+          // setStart(true)
+          // alert("endGame")
+          console.log("endGame")
+        })
       } ,[mode])
       
       
@@ -257,7 +345,7 @@ useEffect(() => {
       <PlayerStyle>
 
         <Player1>
-          <UserComponent Ai={false} data={player2}/>
+          <UserComponent Ai={false} data={user}/>
           </Player1>
           <Score>
             {score1Ref.current} | {score2Ref.current}
@@ -270,7 +358,7 @@ useEffect(() => {
 
       <svg>
           <circle ref={ballRef} id="ball"  cx="20" cy="300" r="12" />
-          <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" stroke-dasharray="10" />
+          <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC"  />
           {/* <line ref={lineRef} x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" /> */}
           <rect ref={playerRef} rx="10" x="30" y="0" width="20" height="150" fill="#FFF" />
           <rect ref={player2Ref} rx="10 " y="0" width="20" height="150" fill="#FFF" />
@@ -449,31 +537,27 @@ const SpinnerStyle = styled.div`
 
 
 
-interface UserProps {
-  data : {
-
-    name: string,
-    msg : string,
-    avatar : string
-  }
+interface UserComponetProps {
+  data : UserProp
   Ai : boolean
 }
       
 
 
-      export  function UserComponent(props: UserProps) {
+      export  function UserComponent(props: UserComponetProps) {
         return (
           <>
               <div style={{ width: "100px", height: "100px" }}>
-            {props.Ai === false ? <AvatarComponent img={props.data.avatar} /> : <AIstyle img={props.data.avatar} ></AIstyle>}
+            {props.Ai === false ? <AvatarComponent img={props.data.defaultAvatar} /> : <AIstyle img={props.data.defaultAvatar} ></AIstyle>}
             
           </div>
           <div className='mesgData'>
             <div className='name'>
-             {props.data.name}
+             {props.data.login}
             </div>
             <div className='msg'>
-            {props.data.msg}
+            {/* {props.data.msg} */}
+            ghadi tslkh
             </div>
           </div>
 

@@ -12,7 +12,7 @@ import { SocketContext,  SocketValue } from './context/Socket';
 import {
   Routes, // instead of "Switch"
   Route,
-  // useNavigate
+  useNavigate
 } from "react-router-dom";
 import SignIn from './Pages/SignIn';
 import Home from './Pages/Home';
@@ -23,7 +23,7 @@ import ProtectedLayout from './components/protected/ProtectedLayout';
 import Profile from './Pages/Profile';
 import Chat from './components/chat/Chat';
 import Game from './Pages/Game';
-// import axios from 'axios';
+import axios from 'axios';
 import Setting from './Pages/Setting';
 import Leader from './Pages/Leader';
 import Room from './Pages/Room';
@@ -51,21 +51,21 @@ const mockedItems : any = [{
 }]
 
 function App() {
-  const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "AI"})
+  const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
   
   
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
-  //   axios.get("http://localhost:8000/profile/me", 
-  //   {withCredentials: true} 
-  // ).then((res)=>{
-  //   console.log(res.data)
-  //   localStorage.setItem("user", JSON.stringify(res.data))
-  // }).catch((err)=>{
-  //       console.log(err)
-  //       navigate('/signin')
-  //       // history.pushState("/signin");
-    // })
+    axios.get("http://localhost:8000/profile/me", 
+    {withCredentials: true} 
+  ).then((res)=>{
+    console.log(res.data)
+    localStorage.setItem("user", JSON.stringify(res.data))
+  }).catch((err)=>{
+        console.log(err)
+        navigate('/signin')
+        // history.pushState("/signin");
+    })
   }, [])
   
   return (
