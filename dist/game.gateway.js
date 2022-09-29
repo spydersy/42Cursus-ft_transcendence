@@ -14,6 +14,7 @@ const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const common_1 = require("@nestjs/common");
 const common_2 = require("@nestjs/common");
+const room_1 = require("./room");
 let CatsController = class CatsController {
     findAll() {
         return 'This action returns all cats';
@@ -32,37 +33,90 @@ exports.CatsController = CatsController;
 let GameGateway = class GameGateway {
     constructor() {
         this.logger = new common_1.Logger('GameLogger');
-        this.roomlenght = 0;
+        this.roomslenght = 0;
         this.roomArray = [];
     }
     afterInit(server) {
         this.logger.log("After Init");
     }
+    playerExist(client, login) {
+        for (let i = 0; i < this.roomArray.length; i++) {
+            var room = this.roomArray[i];
+            var player = room.getPlayerbyLogin(login);
+            if (player)
+                return true;
+        }
+        return false;
+    }
+    JoinPlayer(client, login) {
+        var roomslenght = this.roomArray.length;
+        if (this.roomArray[roomslenght - 1].roomPlayers.length === 2) {
+            var roomName = this.roomArray[roomslenght - 1].roomName;
+            var lastRoomPlayers = this.roomArray[roomslenght - 1].roomPlayers;
+            this.wss.to(roomName).emit("startGame", { player1: lastRoomPlayers[0].login, player2: lastRoomPlayers[1].login });
+            this.logger.log("startgame emited");
+        }
+    }
+    RemovePlayer(client, id) {
+        console.log("remove : " + id);
+        for (let i = 0; i < this.roomArray.length; i++) {
+            var room = this.roomArray[i];
+            var player = room.getPlayer(id);
+            console.log(player);
+            if (!player)
+                continue;
+            if (room.roomPlayers.includes(player)) {
+                console.log("removed : " + player.login);
+                client.leave(room.roomName);
+                room.roomPlayers.splice(0, 2);
+                this.roomArray.splice(i, 1);
+                this.wss.to(room.roomName).emit("endGame");
+                return;
+            }
+        }
+    }
+    AddtoRoomArray(client, login) {
+        this.logger.log("After Init");
+        var roomslenght = this.roomArray.length;
+        if (roomslenght === 0) {
+            const newRoom = new room_1.Room("room" + (roomslenght + 1));
+            newRoom.joinPlayer(login, client.id);
+            this.roomArray.push(newRoom);
+            roomName = this.roomArray[roomslenght].roomName;
+        }
+        else {
+            roomName = this.roomArray[roomslenght - 1].roomName;
+            if (this.roomArray[roomslenght - 1].roomPlayers.length < 2) {
+                this.roomArray[roomslenght - 1].joinPlayer(login, client.id);
+            }
+            else {
+                const newRoom = new room_1.Room("room" + (roomslenght + 1));
+                newRoom.joinPlayer(login, client.id);
+                this.roomArray.push(newRoom);
+            }
+        }
+        var roomName = this.roomArray[this.roomArray.length - 1].roomName;
+        client.join(roomName);
+    }
     handleDisconnect(client) {
         this.logger.log("client is disconnected");
+        this.RemovePlayer(client, client.id);
+        for (let index = 0; index < this.roomArray.length; index++) {
+            this.roomArray[index].debug();
+        }
     }
     handleConnection(client, payload) {
         this.logger.log("client is connected " + client.id);
     }
-    handleJoinRoom(client, args) {
-        this.logger.log("client " + client.id + " joined  " + args.name + " : " + args.room);
-        var _room = this.wss.sockets.adapter.rooms.get(args.room);
-        if (this.roomArray.includes(args.name)) {
+    playerConnect(client, payload) {
+        this.logger.log("player connected:  " + client.id + " : " + payload);
+        if (this.playerExist(client, payload) === false) {
+            this.AddtoRoomArray(client, payload);
+            this.JoinPlayer(client, payload);
+            for (let index = 0; index < this.roomArray.length; index++) {
+                this.roomArray[index].debug();
+            }
         }
-        else {
-            client.join(args.room);
-            this.roomArray.push(args.name);
-            client.emit("RoomJoined", this.roomArray.length);
-        }
-        if (this.roomArray.length == 2)
-            this.wss.to(args.room).emit("StartGame");
-    }
-    handleLeaveRoom(client, args) {
-        this.logger.log("mattet");
-        var i = this.roomArray.indexOf(args.name);
-        if (i != -1)
-            this.roomArray.splice(i, 1);
-        client.leave(args.room);
     }
 };
 __decorate([
@@ -76,17 +130,11 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], GameGateway.prototype, "handleConnection", null);
 __decorate([
-    (0, websockets_1.SubscribeMessage)('joinRoom'),
+    (0, websockets_1.SubscribeMessage)('playerConnect'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
-], GameGateway.prototype, "handleJoinRoom", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)('leaveRoom'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", void 0)
-], GameGateway.prototype, "handleLeaveRoom", null);
+], GameGateway.prototype, "playerConnect", null);
 GameGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {

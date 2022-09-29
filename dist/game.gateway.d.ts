@@ -6,11 +6,14 @@ export declare class CatsController {
 export declare class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     wss: Server;
     private logger;
-    private roomlenght;
+    private roomslenght;
     private roomArray;
     afterInit(server: any): void;
+    playerExist(client: any, login: string): boolean;
+    JoinPlayer(client: any, login: string): void;
+    RemovePlayer(client: any, id: string): void;
+    AddtoRoomArray(client: any, login: string): void;
     handleDisconnect(client: any): void;
     handleConnection(client: any, payload: any): void;
-    handleJoinRoom(client: any, args: any): void;
-    handleLeaveRoom(client: any, args: any): void;
+    playerConnect(client: any, payload: any): void;
 }
