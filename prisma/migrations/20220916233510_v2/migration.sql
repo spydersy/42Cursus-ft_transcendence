@@ -1,2 +1,0 @@
--- AddForeignKey
-ALTER TABLE "Blocks" ADD CONSTRAINT "Blocks_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "Users"("Id") ON DELETE RESTRICT ON UPDATE CASCADE;

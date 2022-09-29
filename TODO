@@ -10,14 +10,15 @@ STEPS :
 - [X] Add Relation Between Users In Json Object
 - [ ] Add Validation Layer For Outputs
 - [ ] Real Time Search Engine [Channel Search]
-- [X] Add nb Friends in user Object
+- [ ] Add nb Friends in user Object
 - [ ] Two Factor Authentication
 - [ ] Users Status
-- [ ] Channel Creation Endpoint
+- [ ] Create Rooms Endpoint
 - [ ] Username need Input Validation
-- [P] Create DM Channel After Accepting Friend Request
+- [X] Create DM Channel After Accepting Friend Request
 - [ ] Logout Endpoint
 - [ ] Update 2fa Status
+- [ ] Route Of Created Rooms
 
 USER SERVICE :
 

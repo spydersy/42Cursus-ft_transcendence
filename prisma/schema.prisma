@@ -120,9 +120,9 @@ model channelsUsers {
 
   permission      PERMISSION
 
-  restriction     RESCTRICTION
+  restriction     RESCTRICTION @default(NULL)
   restrictionTime DateTime     @updatedAt
-  duration        Int
+  duration        Int          @default(0)
 
   @@unique([userId, channelId])
 }

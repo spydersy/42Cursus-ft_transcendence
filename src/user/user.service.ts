@@ -3,18 +3,20 @@ import { RELATION } from '@prisma/client';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Utilities } from 'src/app.utils';
+import { ChatService } from 'src/chat/chat.service';
 
 @Injectable()
 export class UserService {
 
 
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService,
+                private chatService: ChatService) {}
 
     /*
     *  Endpoints Calls : **************************************************************************
     */
 
-    async GetnbFriends(UserMe: string, User: string) {
+    async GetnbFriends(UserMe: string, User: string) : Promise<number> {
         let UserMeDto = await this.GetUserByLogin(UserMe);
         let UserDto = await this.GetUserByLogin(User);
         if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true) {
@@ -42,6 +44,7 @@ export class UserService {
         let AllFriends = [];
         FriendsRowA.forEach(element => AllFriends.push(element.receiver));
         FriendsRowB.forEach(element => AllFriends.push(element.sender));
+        console.log("__NB__FIRNEDS__DBG__ : ", AllFriends.length);
         return AllFriends.length;
     }
 
@@ -206,7 +209,7 @@ export class UserService {
                 status: RELATION.FRIENDS,
             }
         });
-        //await this.chatService.CreatDMChanel(SenderDto.id, ReceiverDto.id); // DO SOMETHING . . . 
+        await this.chatService.CreatDMChannel(SenderDto.id, ReceiverDto.id); // DO SOMETHING . . . 
         console.log("__NEW__RELATION__ : ", NewRelation);
         return res.status(HttpStatus.OK).send({"message": NewRelation.count});
     }

@@ -29,6 +29,7 @@ export class ProfileService {
         return "test00";
         }
         let profile = await this.userService.GetUserByLogin(req.user.username);
+        console.log("__USER__PROFILE__ : ", profile);
         return res.send(profile);
     }
 
@@ -121,17 +122,7 @@ export class ProfileService {
         let BlackList = [];
         BlockRow.forEach(element => BlackList.push(element.blocked));
         console.log("__BLACK__LIST__", BlackList);
-
-        // this.prisma.channels.findMany({
-        //     where :
-        //     {
-        //         AND: [
-        //             {access: CHANNEL.DM},
-        //             { users: { some: {userId: 452}}},
-        //             { users: { some: {userId: 123}}}
-        //         ],
-        //     }
-        // });
+        
         return res.status(HttpStatus.OK).send(BlackList);
     }
 }

@@ -5,9 +5,10 @@ import { UserService } from 'src/user/user.service';
 import { ProfileController } from './profile.controller';
 import { ProfileService } from './profile.service';
 import { MulterModule } from '@nestjs/platform-express';
+import { ChatModule } from 'src/chat/chat.module';
 
 @Module({
-  imports: [PrismaModule, ProfileModule, MulterModule.register({
+  imports: [PrismaModule, ProfileModule, ChatModule, MulterModule.register({
     dest: './upload',
   })],
   providers: [ProfileService, UserService, ],
