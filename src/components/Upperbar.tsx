@@ -118,21 +118,49 @@ export  function LogoComponent(props : LogoProps) {
     )
   }
 
+//////////////
 
-// export function UserCard() {
+export interface UserCardProps {
+  login: string;
+}
 
-//   return ( 
-//     <div>Cardasdasd</div>
-//   )
-// }
+export  function UserName() {
+  
+return (
+  <div> asd </div>
+)
+}
+
+export  function UserCard() {
+  
+return (
+  <div> </div>
+)
+}
 
 export  function SearchBarComponent() {
+
   const [search, setsearch] = useState("")
-  const [Users, setUsers] = useState([])
+  // const [Users, setUsers] = useState([])
+  const [Users, setUsers] = useState([{"login" : "mohammed", "avatar" : NoUserIcon }, {"login" : "mehdi", "avatar" : NoUserIcon}, 
+  {"login" : "achraf", "avatar" : NoUserIcon}, {"login" : "achraf", "avatar" : NoUserIcon}, {"login" : "achraf", "avatar" : NoUserIcon}, {"login" : "achraf", "avatar" : NoUserIcon},
+  , {"login" : "achraf", "avatar" : NoUserIcon}, {"login" : "achraf", "avatar" : NoUserIcon}, {"login" : "achraf", "avatar" : NoUserIcon}])
+  
+  const [open, setopen] = useState(false)
 
   const InputSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setsearch(event.target.value)
+    if (event.target.value.length > 0)
+    {
+      setopen(true)
+    }
+    else
+    {
+      setopen(false)
+    }
+    
     console.log("Value = ", event.target.value)
+
   };
 
     return (
@@ -140,30 +168,76 @@ export  function SearchBarComponent() {
         <input  onChange={InputSearchHandler} type="text" placeholder='Search ..' />
 
         {
-          // search.length > 0 && <Dropdown open={true} style={{top: "50px" , left: '0'}} list={Users} />
-          //   <UsersTable>
-          //   <div className='so'> Users </div>
-          //   {          
-          //     Users.map((invit : any, id : number )=>{
-          //     return<UserCard key={id}  /> })
-          //   }
-          // </UsersTable>
+          (Users.length === 0 && open ) ? 
+            <UsersTable> 
+                
+                <UsersNotFound>   User 404 Not Found  </UsersNotFound>
+
+            </UsersTable> 
+
+          : (open) ? 
+          
+            <UsersTable style={{  height: "250px" } }> 
+          
+              {
+                Users.map((user : any, index)=>{
+                  return (
+                      <UserFound>
+                        <img style={{ backgroundColor:"white" , margin:"0px 8px"}}src={user.avatar} />
+                        {user.login}
+                      </UserFound>
+                  )})
+              }
+
+            </UsersTable >
+          : 
+            <div></div>
         }
 
       </SearchBar>
     )
   }
 
+const UserFound = styled.div`
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: ${props => props.theme.colors.primarybg};
+  }
+`;
+
+const UsersNotFound = styled.div`
+
+position: absolute;
+display: flex;
+top: 50%;
+width: 100%;
+height: 100px;
+background-color: ${props => props.theme.colors.bg};
+font-size: 29px;
+text-align: center;
+justify-content: center;
+border-radius: 10px;
+color: #813088;
+`;
+
 const UsersTable = styled.div`
 
   position: absolute;
-  top: 100%;
-  left: 0;
+  top: 110%;
+  right: 0;
   width: 100%;
-  background-color: white;
+  height: 50px;
+  background-color:  ${props => props.theme.colors.bg};
+  overflow-y: scroll;
 `;
 
 const SearchBar = styled.div`
+/* background-color: aqua; */
 background:  ${props => props.theme.colors.bg};
 border-radius: 5px;
 display: flex;
@@ -171,23 +245,25 @@ align-items: flex-start;
 width: 30%;
 max-width: 600px;
 height: 42px;
->svg{
-  path{
-    stroke:  ${props => props.theme.colors.seconderyText};;
+position: relative;
+padding: 0px 0px 0px 49px;
 
-  }
-}
-    /* object-fit : contain; */
-    position: relative;
-    padding: 0px 0px 0px 49px;
-    &::before{
-      content: url(${SearchIcon});
-      position: absolute;
-      left: 10px; 
-      top: 55%; 
-      transform: translateY(-50%);
+  >svg{
+    path{
+      stroke:  ${props => props.theme.colors.seconderyText};;
+
     }
-    input{
+  }
+   
+  &::before{
+    content: url(${SearchIcon});
+    position: absolute;
+    left: 10px; 
+    top: 55%; 
+    transform: translateY(-50%);
+  }
+
+  input{
       background-color: transparent;
       width: calc(100% - 49px);
       height: 100%;
@@ -205,9 +281,11 @@ height: 42px;
   }
   @media  only screen and (max-width: 768px) {
     width: 150px;
-max-width: 200px;
+    max-width: 200px;
   }
 `;
+
+//////////////
 
 export  function NotificationComponent(props: NotifProps) {
   const [openNotif, setopenNotif] = useState(false)
