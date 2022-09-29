@@ -138,6 +138,17 @@ return (
 )
 }
 
+// interface SearchUser {
+//   login: string;
+//   avatar: string;
+// }
+
+// const  SearchingUser = (props: string) => 
+// {
+//   // TODO
+//   console.log("Go to user")
+// };
+
 export  function SearchBarComponent() {
 
   const [search, setsearch] = useState("")
@@ -149,19 +160,28 @@ export  function SearchBarComponent() {
   const [open, setopen] = useState(false)
 
   const InputSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    
     setsearch(event.target.value)
-    if (event.target.value.length > 0)
-    {
-      setopen(true)
-    }
-    else
-    {
-      setopen(false)
-    }
+
+    if (event.target.value.length > 0) {  setopen(true)   }
+    else { setopen(false)  }
     
     console.log("Value = ", event.target.value)
 
   };
+
+  
+  const SearchingUser = () => {
+    
+    // setsearch(event.target.value)
+
+    // if (event.target.value.length > 0) {  setopen(true)   }
+    // else { setopen(false)  }
+    
+    console.log("Value = MOH ")
+
+  };
+
 
     return (
       <SearchBar>
@@ -182,7 +202,7 @@ export  function SearchBarComponent() {
               {
                 Users.map((user : any, index)=>{
                   return (
-                      <UserFound>
+                      <UserFound onChange={SearchingUser} >
                         <img style={{ backgroundColor:"white" , margin:"0px 8px"}}src={user.avatar} />
                         {user.login}
                       </UserFound>
