@@ -126,5 +126,22 @@ const Main = styled.main`
     &::-webkit-scrollbar-thumb:hover { 
       background: ${props => props.theme.colors.primarybg};
     }
+    div{
+      &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent; 
+    } 
+
+    &::-webkit-scrollbar-thumb {
+      background: ${props => props.theme.colors.primarybg};
+    } 
+
+    &::-webkit-scrollbar-thumb:hover { 
+      background: ${props => props.theme.colors.primarybg};
+    }
+    }
 `;
 export default App;

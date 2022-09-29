@@ -54,7 +54,7 @@ interface ChatProps {
   flex-direction: column;
   height : 100%;
   max-height : 100%;
-  overflow: scroll;
+  overflow-y: scroll;
   >div{
    display: flex;
     width: 100%;
