@@ -122,7 +122,16 @@ export class ProfileService {
         let BlackList = [];
         BlockRow.forEach(element => BlackList.push(element.blocked));
         console.log("__BLACK__LIST__", BlackList);
-        
+
         return res.status(HttpStatus.OK).send(BlackList);
     }
 }
+
+
+
+/* 
+    POST http://localhost:8000/chat/createRoom
+
+    Query: Members;
+    Body : Name + Pictue + Type + Password;
+*/

@@ -105,6 +105,8 @@ enum RESCTRICTION {
 model channels {
   id       Int     @id @default(autoincrement())
   access   CHANNEL
+  name     String?
+  picture  String?
   password String?
   users    channelsUsers[] @relation("ChannelsUsers")
 }
@@ -134,6 +136,3 @@ model Messages {
   content   String
 }
 // ================================================================================================ //
-
-
-

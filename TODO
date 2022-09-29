@@ -70,10 +70,9 @@ NOTES :
     - [X] ADD FRIEND
 
 === Channel Creation Endpoint =====================================================================
-    - [ ] Channel Name
-    - [ ] Channel Picture 
-    - [ ] Channel Type
-    - [ ] Channel Password
-    - [ ] Owner id
-    - [ ] Admins ids
-    - [ ] Members ids
+    - [N] Channel Name
+    - [N] Channel Picture 
+    - [N] Channel Type
+    - [N] Channel Password
+    - [D] Owner id
+    - [N] Members ids
