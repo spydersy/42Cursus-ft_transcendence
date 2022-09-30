@@ -1,4 +1,4 @@
-import React, {useState , useEffect} from 'react'
+import React, {useState , useEffect , useRef} from 'react'
 import styled , {css} from "styled-components"
 import { HeadComponent } from '../../Pages/Home';
 
@@ -12,28 +12,25 @@ import Modal from '../Modal';
 import AddFriendsModal from './AddFriendsModal';
 import InputComponent from '../Input';
 import { Button } from '../../Pages/SignIn';
+import axios from 'axios';
 
 export default function CreateGroup() {
     
    
     const [members, setmembers] = useState([
-       Img,
-       Img,
-
-       Img,
-       Img,
-       Img,
-       Img,
-       Img,
+     
     ])
     const [data, setdata] = useState({
         name : "",
-        avatar : Image, 
-
+        icone : '',
+        type : "",
+        password : "",
+        members :[]
     })
-    const [check, setcheck] = useState(false)
+    const [check, setcheck] = useState("")
     const [hide, sethide] = useState(false)
-    // const groupName = useRef(second)
+    const [img, setimg] = useState("")
+    const groupName = useRef(null)
     // const first = useRef(second)
     const uploadFile = ()=>{
         var e = document.getElementById("fileInput")
@@ -41,18 +38,52 @@ export default function CreateGroup() {
         
     }
     const handleRadioChange = (e : any)=>{
-        if (e.target.id === "Protected")
+        if (e.target.id === "protected")
         {
             if (e.target.checked === true)
-                setcheck(true)
-        }
-        else
-            setcheck(false)
+            {
+                setcheck("protected")
+                setdata({...data, type: "protected"})
 
-        
+            }
+        }
+        else if (e.target.id === "public")
+        {
+            if (e.target.checked === true)
+            {
+                setdata({...data, type: "public"})
+                setcheck("public")
+            }
+        }
+        else if (e.target.id === "private")
+        {
+            if (e.target.checked === true)
+            {
+
+                setdata({...data, type: "private"})
+                setcheck("private")
+            }
+        }
+        console.log(e.target)
     }
     const createGroup = ()=>{
-      
+        //check for valid input
+        var  bodyFormData = new FormData();
+
+        bodyFormData.append('icone',data.icone);
+        bodyFormData.append('name',data.name);
+        bodyFormData.append('members', JSON.stringify(data.members));
+        bodyFormData.append('type',data.type);
+        console.log(data);
+        axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
+        {withCredentials: true} 
+      ).then((res)=>{
+        console.log(res.data)
+    
+      }).catch((err)=>{
+        console.log(err)
+    
+        })
         
     }
 
@@ -60,7 +91,9 @@ export default function CreateGroup() {
         var e = document.getElementById("fileInput")
         e?.addEventListener("change", (c :any)=>{
             console.log(c.target.files[0])
-            setdata({...data , avatar: URL.createObjectURL(c.target.files[0])})
+          
+            setimg( URL.createObjectURL(c.target.files[0]))
+            setdata({...data , icone: c.target.files[0]})
         })
        
     }, [data])
@@ -73,27 +106,29 @@ export default function CreateGroup() {
         <Row >
             <div  onClick={uploadFile} className='groupImg' >
                 <input id="fileInput" type="file" hidden />
-                <img style={{width : data.avatar === Image  ? "" : "100%", height : data.avatar === Image  ? "" : "100%"  }} src={data.avatar}alt="" />
+                <img style={{width : img === Image  ? "" : "100%", height : img === Image  ? "" : "100%"  }} src={img}alt="" />
                 <div >
                     <Edit/>
                 </div>
             </div>
             {/* <input className='inputText' type="text"  placeholder='Enter group name ..'/> */}
             <div style={{flex : "1"}}>
-            <InputComponent type='text' placeholder='Enter Group name'/>
+            <InputComponent onChange={(e)=>{
+             setdata({...data , name : e.target.value})
+            }} type='text' placeholder='Enter Group name'/>
 
             </div>
 
         </Row>
         <Row2 >
 
-            <input type="radio"   onChange={handleRadioChange} id="Public" name="status" value="Public"/>
+            <input type="radio"   onChange={handleRadioChange} id="public" name="status" value="public"/>
             <label>Public</label>
-            <input type="radio" onChange={handleRadioChange} id="Private" name="status" value="Private"/>
+            <input type="radio" onChange={handleRadioChange} id="private" name="status" value="private"/>
             <label>Private</label>
-            <input type="radio" onChange={handleRadioChange} id="Protected" name="status" value="Protected"/>
+            <input type="radio" onChange={handleRadioChange} id="protected" name="status" value="protected"/>
             <label>Protected</label>
-            <InputPassWord defaultChecked={check}>
+            <InputPassWord defaultChecked={(check === "protected")}>
             <InputComponent type='password' placeholder='Group Password'/>
 
             </InputPassWord>
@@ -115,8 +150,8 @@ export default function CreateGroup() {
                 })
             }
         </MembersCont> 
-        <Button type='primary' text='Create' onClick={createGroup} />
         </Form>
+        <Button type='primary' text='Create' onClick={createGroup} />
     </CreateGroupStyle>
   )
 }
