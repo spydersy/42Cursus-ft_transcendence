@@ -10,6 +10,7 @@ import { ReactComponent as SettingIcon} from "../assets/imgs/settings.svg"
 import { AvatarComponent } from './PlayerProfile'
 import NoUserIcon from "../assets/imgs/nouser-icon.svg";
 import Dropdown from 'react-dropdown';
+import axios from 'axios'
 
 interface ListTypes {
   title : string,
@@ -160,7 +161,14 @@ export  function SearchBarComponent() {
   const [open, setopen] = useState(false)
 
   const InputSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    
+    axios.get("http://localhost:8000/search/allUsers?input=" + event.target.value, 
+    {withCredentials: true} 
+  ).then((res)=>{
+    console.log(res.data)
+
+  }).catch((err)=>{
+
+    })
     setsearch(event.target.value)
 
     if (event.target.value.length > 0) {  setopen(true)   }

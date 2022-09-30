@@ -11,6 +11,7 @@ import Img from "../../assets/imgs/avatar/a1.png";
 import Modal from '../Modal';
 import AddFriendsModal from './AddFriendsModal';
 import InputComponent from '../Input';
+import { Button } from '../../Pages/SignIn';
 
 export default function CreateGroup() {
     
@@ -32,6 +33,8 @@ export default function CreateGroup() {
     })
     const [check, setcheck] = useState(false)
     const [hide, sethide] = useState(false)
+    // const groupName = useRef(second)
+    // const first = useRef(second)
     const uploadFile = ()=>{
         var e = document.getElementById("fileInput")
         e?.click()
@@ -46,6 +49,10 @@ export default function CreateGroup() {
         else
             setcheck(false)
 
+        
+    }
+    const createGroup = ()=>{
+      
         
     }
 
@@ -108,6 +115,7 @@ export default function CreateGroup() {
                 })
             }
         </MembersCont> 
+        <Button type='primary' text='Create' onClick={createGroup} />
         </Form>
     </CreateGroupStyle>
   )

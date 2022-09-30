@@ -63,19 +63,16 @@ export default function Pong({themes , mode}:myProps ) {
   // const lineRef : any = useRef<SVGLineElement >(null);
   const player2Ref : any = useRef<SVGRectElement >(null);
   const player : any = useRef<SVGRectElement >(null);
+  const otherplayer : any = useRef<SVGRectElement >(null);
   const requestRef = React.useRef(0)
   const score1Ref = React.useRef(0)
   const score2Ref = React.useRef(0)
   const [start, setStart] = useState(true)
-  // const [player, setplayer] = useState<any| null >(null) 
   const [user, setUser] = useState<UserProp>({
     login : "ss",
     defaultAvatar : "sss"
   })
-  // const [player2, setplayer2] = useState<UserProp>({
-  //   login : "ss",
-  //   defaultAvatar : "sss"
-  // })
+
   const [Player2Data, setPlayer2Data] = useState<UserProp | null>(
     null
   )
@@ -179,19 +176,24 @@ export default function Pong({themes , mode}:myProps ) {
     const p = player.current;
     // console.log(player)
     const h = parseInt(p.getAttribute('height'));
+    var nextY;
 
-    if ( event.offsetY < tableRef.current.offsetHeight - h)
+    if (event.offsetY < 0)
+      nextY = 0;   
+    else if ( event.offsetY > tableRef.current.offsetHeight - h)
     {
-      p.setAttribute('y', event.offsetY)
-      // gamesocket.emit("playermove" , event.offsetY)/
-
+      nextY = tableRef.current.offsetHeight  - h ;
     }
-    else 
+    else
     {
-      p.setAttribute('y', tableRef.current.offsetHeight  - h)
-      // gamesocket.emit("playermove" , event.offsetY)
-
+      nextY = event.offsetY;   
     }
+    p.setAttribute('y', nextY)
+    if (p.getAttribute('x') === '80')
+      gamesocket.emit("player1move" , nextY)
+    else
+      gamesocket.emit("player2move" , nextY)
+
   }
 
   function moveAI(xb : number, yb: number )
@@ -281,11 +283,17 @@ useEffect(() => {
         setPlayer2Data(ai1)
         break ;
         case "classic":
+          gamesocket.on("player1moved" , (datatmp)=>{
+            playerRef.current.setAttribute('y' , datatmp)
+          })
+          gamesocket.on("player2moved" , (datatmp)=>{
+            // otherplayer.setAttribute('y' , datatmp)
+            player2Ref.current.setAttribute('y' , datatmp)
 
-          // setPlayer2Data(null)
+          })
           break ;
           default:
-            // setPlayer2Data(player2)
+
             
           }
         }
@@ -298,13 +306,13 @@ useEffect(() => {
 
 
         gamesocket.on("startGame" , (datatmp)=>{
-
-    
+          
+          console.log(datatmp)
           if (datatmp.player1 === data.login)
           {
                    player.current = playerRef.current
+                   otherplayer.current = player2Ref.current
 
-            console.log("is Player1")
             axios.get("http://localhost:8000/users/" + datatmp.player2, 
             {withCredentials: true} 
              ).then((res)=>{
@@ -317,11 +325,11 @@ useEffect(() => {
           else
           {
             player.current = player2Ref.current
+            otherplayer.current = playerRef.current
             console.log("is Player2")
             axios.get("http://localhost:8000/users/" + datatmp.player1, 
             {withCredentials: true} 
              ).then((res)=>{
-        
               setUser(res.data)
           }).catch((err)=>{
         
