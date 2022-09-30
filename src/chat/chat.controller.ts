@@ -15,7 +15,7 @@ export class ChatController {
 
     @Post('createRoom')
     @UseInterceptors(
-        FileInterceptor('avatar', {
+        FileInterceptor('icone', {
           storage: diskStorage({
             destination: './upload',
             filename: editFileName,
