@@ -62,6 +62,17 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       // console.log(client.adapter)
     }
   }
+
+  getRoombyPlayerId(id : string )
+  {
+    for (let i = 0; i < this.roomArray.length; i++) {
+      const element = this.roomArray[i].getPlayer(id);
+      if (element)
+          return this.roomArray[i];
+    }
+    return null
+  }
+
   RemovePlayer(client : any , id : string)
   {
     console.log("remove : " + id)
@@ -153,5 +164,25 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
   }
 
+  @SubscribeMessage('player1move')
+  player1moved(client: any, payload: any): void {
+    var room = this.getRoombyPlayerId(client.id)
+    if (room)
+    {
+      this.wss.to(room.roomName).emit("player1moved" , payload)
+    }
+  }
+  @SubscribeMessage('player2move')
+  player2moved(client: any, payload: any): void {
+    var room = this.getRoombyPlayerId(client.id)
+    if (room)
+    {
+      this.wss.to(room.roomName).emit("player2moved" , payload)
+    }
+    // console.log("player1 moved" + payload)
+
+
+    
+  }
 }
 
