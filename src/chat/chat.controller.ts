@@ -1,4 +1,4 @@
-import { Controller, HttpStatus, Post, Get, Query, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, HttpStatus, Post, Get, Query, Req, Res, UploadedFile, UseGuards, UseInterceptors, Body } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -13,7 +13,7 @@ export class ChatController {
 
     constructor(private chatService: ChatService) {}
 
-    @Post('createRoom')
+    @Get('createRoom')
     @UseInterceptors(
         FileInterceptor('icone', {
           storage: diskStorage({
@@ -24,23 +24,22 @@ export class ChatController {
         }),
     )
     async CreateRoom(@Req() req, @UploadedFile() file,
-    @Query() query, @Res() res) {
+    @Body('channelData') channelData, @Res() res) {
       console.log("__NAME__DBG__    : ", query['name']);
       console.log("__TYPE__DBG__    : ", query['type']);
       console.log("__MEMBERS__DBG__ : ", query['members']);
+      if (channelData === undefined || channelData['name'] === undefined || channelData['type'] === undefined
+      &&  channelData['members'] === undefined) {
+        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
+      }
+      if (channelData['type'] === 'protected' && channelData['password'] === undefined)
+        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
 
       const ChannelIcone = `http://localhost:8000/upload/${file.filename}`;
-      if (query['name'] !== undefined
-          && query['type'] !== undefined
-          &&  query['members'] !== undefined)
-      {
-        if (query['type'] === 'protected' && query['password'] === undefined)
-          return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
-        if (query['type'] === 'protected' && query['password'] !== undefined)
-          return this.chatService.CreateRoom(req.user.userId, query['name'], query['type'], query['members'], query['password'], ChannelIcone, res);
-        return this.chatService.CreateRoom(req.user.userId, query['name'], query['type'], query['members'], "", ChannelIcone, res);
-      }
-      return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
+
+      if (channelData['type'] === 'protected' && channelData['password'] !== undefined)
+        return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], channelData['password'], ChannelIcone, res);
+      return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], "", ChannelIcone, res);
     }
 
 }
