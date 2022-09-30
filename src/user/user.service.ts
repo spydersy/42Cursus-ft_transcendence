@@ -278,7 +278,6 @@ export class UserService {
                 login: UserProfile.Login,
                 displayName: UserProfile.UsualFullName,
                 defaultAvatar: UserProfile.DefaultAvatar,
-                uploadedAvatar: UserProfile.UploadedAvatar,
                 notifications: UserProfile.Notifications,
                 wins: UserProfile.Wins,
                 losses: UserProfile.Losses,

@@ -15,7 +15,14 @@ STEPS :
 - [ ] Users Status
 - [ ] Create Rooms Endpoint
 - [ ] Username need Input Validation
+
 - [X] Create DM Channel After Accepting Friend Request
+- [ ] Create Channels
+- [ ] Update Channels
+- [ ] Remove Channel
+- [ ] Update Users Permissions
+- [ ] Delete User from Channel
+- [ ] Get users In Channel
 - [ ] Logout Endpoint
 - [ ] Update 2fa Status
 - [ ] Route Of Created Rooms

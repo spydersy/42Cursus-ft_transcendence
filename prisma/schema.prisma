@@ -20,20 +20,20 @@ model users {
   login               String     @unique
   displayName         String     @unique
   defaultAvatar       String
-  uploadedAvatar      String?
-  notifications       Json?
+  notifications       Json[]
   wins                Int        @default(0)
   losses              Int        @default(0)
   level               Int        @default(0)
   twoFactorAuth       Boolean    @default(false)
   twoFactorAuthSecret String?
   sentRequests        Friends[]  @relation("SentRequests")
-  receivedRequets     Friends[]  @relation("ReceivedRequets") //Get It To List Received Frind Request In Notifications
+  receivedRequets     Friends[]  @relation("ReceivedRequets")
   blackList           Blocks[]   @relation("BlackList")
   blockedFrom         Blocks[]   @relation("BlockedUsers")
   channels            channelsUsers[] @relation("Channels")
   lastModification    DateTime   @updatedAt
 }
+
 // ================================================================================================ //
 
 
@@ -112,7 +112,7 @@ model channels {
 }
 
 model channelsUsers {
-  id              Int          @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
 
   user            users    @relation(name: "Channels", fields: [userId], references: [id])
   userId          Int
