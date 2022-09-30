@@ -1,4 +1,4 @@
-import React, {useState , useEffect} from 'react'
+import React, {useState , useEffect, useRef, CSSProperties} from 'react'
 import styled , {css} from "styled-components"
 import SearchIcon from "../assets/imgs/search.svg"
 import {ReactComponent as BellIcon }from "../assets/imgs/notfication.svg"
@@ -9,8 +9,11 @@ import { ReactComponent as UserIcon} from "../assets/imgs/user-icon.svg"
 import { ReactComponent as SettingIcon} from "../assets/imgs/settings.svg"
 import { AvatarComponent } from './PlayerProfile'
 import NoUserIcon from "../assets/imgs/nouser-icon.svg";
-import Dropdown from 'react-dropdown';
 import axios from 'axios'
+import {Link} from 'react-router-dom'
+import { useClickOutside } from "react-haiku"
+import HashLoader from "react-spinners/HashLoader";
+import { wait } from '@testing-library/user-event/dist/utils';
 
 interface ListTypes {
   title : string,
@@ -120,124 +123,112 @@ export  function LogoComponent(props : LogoProps) {
   }
 
 //////////////
-
-export interface UserCardProps {
-  login: string;
-}
-
-export  function UserName() {
-  
-return (
-  <div> asd </div>
-)
-}
-
-export  function UserCard() {
-  
-return (
-  <div> </div>
-)
-}
-
-// interface SearchUser {
-//   login: string;
-//   avatar: string;
-// }
-
-// const  SearchingUser = (props: string) => 
-// {
-//   // TODO
-//   console.log("Go to user")
-// };
+const override: CSSProperties = {  display: "grid",  margin: "0 auto",  borderColor: "white", };
 
 export  function SearchBarComponent() {
+    // const [search, setsearch] = useState("")
+    const [Users, setUsers] = useState([])
+    const [open, setopen] = useState(false)
+    const ref = useRef(null)
+    const [loading, setLoading] = useState(false);
+    const [color, setColor] = useState("#ffffff");
 
-  const [search, setsearch] = useState("")
-  // const [Users, setUsers] = useState([])
-  const [Users, setUsers] = useState([{"login" : "mohammed", "avatar" : NoUserIcon }, {"login" : "mehdi", "avatar" : NoUserIcon}, 
-  {"login" : "achraf", "avatar" : NoUserIcon}, {"login" : "achraf", "avatar" : NoUserIcon}, {"login" : "achraf", "avatar" : NoUserIcon}, {"login" : "achraf", "avatar" : NoUserIcon},
-  , {"login" : "achraf", "avatar" : NoUserIcon}, {"login" : "achraf", "avatar" : NoUserIcon}, {"login" : "achraf", "avatar" : NoUserIcon}])
+    const InputSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setColor("#ffffff");
+      event.target.value.length > 0 ? setLoading(true) : setLoading(false);
+
+      axios.get("http://localhost:8000/search/allUsers?input=" + event.target.value,  {withCredentials: true}  ).then((res)=>{
+
+      // console.log(res.data)
+      setUsers(res.data)
+      res.data.length > 0 ? setColor("#0eac1b") : setColor("#ac0e0e");
   
-  const [open, setopen] = useState(false)
+      }).catch((err)=>{  })
 
-  const InputSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    axios.get("http://localhost:8000/search/allUsers?input=" + event.target.value, 
-    {withCredentials: true} 
-  ).then((res)=>{
-    console.log(res.data)
+      // setsearch(event.target.value)
 
-  }).catch((err)=>{
+      if (event.target.value.length > 0) {  setopen(true)   }
+      else { setopen(false)  }
+      
+      console.log("Value = ", event.target.value)
+    };
 
-    })
-    setsearch(event.target.value)
+    const handleClickOutside = () => {
+      setopen(false);
+      wait (3000).then(() => { setLoading(false); });
+    };
 
-    if (event.target.value.length > 0) {  setopen(true)   }
-    else { setopen(false)  }
-    
-    console.log("Value = ", event.target.value)
-
-  };
-
-  
-  const SearchingUser = () => {
-    
-    // setsearch(event.target.value)
-
-    // if (event.target.value.length > 0) {  setopen(true)   }
-    // else { setopen(false)  }
-    
-    console.log("Value = MOH ")
-
-  };
-
+    useClickOutside(ref, handleClickOutside);
 
     return (
       <SearchBar>
         <input  onChange={InputSearchHandler} type="text" placeholder='Search ..' />
-
         {
-          (Users.length === 0 && open ) ? 
-            <UsersTable> 
-                
-                <UsersNotFound>   User 404 Not Found  </UsersNotFound>
-
-            </UsersTable> 
-
-          : (open) ? 
-          
-            <UsersTable style={{  height: "250px" } }> 
-          
-              {
-                Users.map((user : any, index)=>{
-                  return (
-                      <UserFound onChange={SearchingUser} >
-                        <img style={{ backgroundColor:"white" , margin:"0px 8px"}}src={user.avatar} />
-                        {user.login}
-                      </UserFound>
-                  )})
-              }
-
-            </UsersTable >
-          : 
-            <div></div>
+          (open) ? 
+            (Users.length === 0) ?            
+                <UsersTable ref={ref}  > 
+                  <UsersNotFound>404 Not Found</UsersNotFound>
+                </UsersTable>
+              : 
+                <UsersTable ref={ref} style={{  height: "300px" } }> 
+                  {
+                    Users.map((user : any, index)=>{
+                      return (
+                          <UserFound to={`/profile/${user.login}`} >
+                            
+                            <AvatarStyle > <img  alt="" src={user.defaultAvatar} />  </AvatarStyle>
+                            <LoginStyle>@{user.login}</LoginStyle>
+                          </UserFound> )})
+                  }
+                  <p/>
+                </UsersTable >
+            : null
         }
-
+        <HashLoader  className='s'  color={color} loading={loading} cssOverride={override} size={22} />
       </SearchBar>
     )
   }
 
-const UserFound = styled.div`
+const LoginStyle = styled.div`
+  width: 50%;
+  display: flex;
+  font-size: 22px;
+  left: 2%;
+  position: relative;
+`;
+const AvatarStyle = styled.div`
+  width: 15%;
+  height: 90%;
+  display: flex;
+  position: relative;
+
+  img {
+
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    transform: translate(-0%, -50%);
+    font-size: 18px;
+    width: 60%;
+    height: 80%;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid #61dafb;
+  }
+`;
+const UserFound = styled(Link)`
+  width: 100%;
+  height: 16%;
   color: white;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 10px;
   cursor: pointer;
   &:hover {
     background-color: ${props => props.theme.colors.primarybg};
   }
 `;
-
 const UsersNotFound = styled.div`
 
 position: absolute;
@@ -252,20 +243,23 @@ justify-content: center;
 border-radius: 10px;
 color: #813088;
 `;
-
 const UsersTable = styled.div`
 
   position: absolute;
   top: 110%;
   right: 0;
   width: 100%;
-  height: 50px;
+  height: 130px;
+  min-height: 200px;
   background-color:  ${props => props.theme.colors.bg};
   overflow-y: scroll;
+  p {
+    border: 0.5px solid white;
+    width: 90%;
+    margin: 15px auto;
+  }
 `;
-
 const SearchBar = styled.div`
-/* background-color: aqua; */
 background:  ${props => props.theme.colors.bg};
 border-radius: 5px;
 display: flex;
@@ -275,7 +269,10 @@ max-width: 600px;
 height: 42px;
 position: relative;
 padding: 0px 0px 0px 49px;
-
+  .s {
+    position: absolute;
+    top: 25%;
+  }
   >svg{
     path{
       stroke:  ${props => props.theme.colors.seconderyText};;
@@ -290,7 +287,6 @@ padding: 0px 0px 0px 49px;
     top: 55%; 
     transform: translateY(-50%);
   }
-
   input{
       background-color: transparent;
       width: calc(100% - 49px);
@@ -312,7 +308,6 @@ padding: 0px 0px 0px 49px;
     max-width: 200px;
   }
 `;
-
 //////////////
 
 export  function NotificationComponent(props: NotifProps) {
