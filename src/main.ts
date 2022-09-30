@@ -32,8 +32,8 @@ async function bootstrap() {
     origin: 'http://localhost:3000',
     methods: ["GET", "POST", "PUT"],
     credentials: true,
-    allowedHeaders: ["cookie", "Cookie", "authorization", "Authorization"],
-    exposedHeaders: ["cookie", "Cookie", "authorization", "Authorization"],
+    allowedHeaders: ["cookie", "Cookie", "authorization", "Authorization", "content-type"],
+    exposedHeaders: ["cookie", "Cookie", "authorization", "Authorization", "content-type"],
   });
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new VersionHeaderInterceptor());

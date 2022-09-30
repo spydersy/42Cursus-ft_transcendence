@@ -7,13 +7,44 @@ import { fileURLToPath } from 'url';
 import { query } from 'express';
 import { ChatService } from './chat.service';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('chat')
 export class ChatController {
 
     constructor(private chatService: ChatService) {}
 
-    @Get('createRoom')
+    // @Post('createRoom')
+    // @UseInterceptors(
+    //     FileInterceptor('icone', {
+    //       storage: diskStorage({
+    //         destination: './upload',
+    //         filename: editFileName,
+    //       }),
+    //       fileFilter: imageFileFilter,
+    //     }),
+    // )
+    // async CreateRoom(@Req() req, @UploadedFile() file,
+    // @Body() bb, @Body('channelData') channelData, @Res() res) {
+    //   console.log("__BODY__DBG__ : ", bb);
+    //   console.log("__CHANNELDATA__DBG__ : ", channelData);
+
+    //   if (channelData === undefined || channelData['name'] === undefined || channelData['type'] === undefined
+    //   &&  channelData['members'] === undefined) {
+    //     return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
+    //   }
+    //   if (channelData['type'] === 'protected' && channelData['password'] === undefined)
+    //     return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
+
+    //     console.log("___FILE___ : ", file);
+    //   const ChannelIcone = `http://localhost:8000/upload/${file.filename}`;
+
+    //   if (channelData['type'] === 'protected' && channelData['password'] !== undefined)
+    //     return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], channelData['password'], ChannelIcone, res);
+    //   return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], "", ChannelIcone, res);
+    // }
+
+
+    @Post('createRoom')
     @UseInterceptors(
         FileInterceptor('icone', {
           storage: diskStorage({
@@ -23,23 +54,22 @@ export class ChatController {
           fileFilter: imageFileFilter,
         }),
     )
-    async CreateRoom(@Req() req, @UploadedFile() file,
-    @Body('channelData') channelData, @Res() res) {
-      console.log("__NAME__DBG__    : ", query['name']);
-      console.log("__TYPE__DBG__    : ", query['type']);
-      console.log("__MEMBERS__DBG__ : ", query['members']);
-      if (channelData === undefined || channelData['name'] === undefined || channelData['type'] === undefined
-      &&  channelData['members'] === undefined) {
-        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
-      }
-      if (channelData['type'] === 'protected' && channelData['password'] === undefined)
-        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
+    async CreateRoom(@UploadedFile() file, @Req() req,
+    @Body() bb, @Res() res) {
+      console.log("__BODY__DBG__ : ", bb);
 
+      // if (channelData === undefined || channelData['name'] === undefined || channelData['type'] === undefined
+      // &&  channelData['members'] === undefined) {
+      //   return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
+      // }
+      // if (channelData['type'] === 'protected' && channelData['password'] === undefined)
+      //   return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
+
+      console.log("___FILE___ : ", file);
       const ChannelIcone = `http://localhost:8000/upload/${file.filename}`;
-
-      if (channelData['type'] === 'protected' && channelData['password'] !== undefined)
-        return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], channelData['password'], ChannelIcone, res);
-      return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], "", ChannelIcone, res);
+      res.status(HttpStatus.OK).send(ChannelIcone);
+      // if (channelData['type'] === 'protected' && channelData['password'] !== undefined)
+      //   return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], channelData['password'], ChannelIcone, res);
+      // return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], "", ChannelIcone, res);
     }
-
 }
