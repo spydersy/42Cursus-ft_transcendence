@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 import { query } from 'express';
 import { ChatService } from './chat.service';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('chat')
 export class ChatController {
 
@@ -55,21 +55,19 @@ export class ChatController {
         }),
     )
     async CreateRoom(@UploadedFile() file, @Req() req,
-    @Body() bb, @Res() res) {
-      console.log("__BODY__DBG__ : ", bb);
-
-      // if (channelData === undefined || channelData['name'] === undefined || channelData['type'] === undefined
-      // &&  channelData['members'] === undefined) {
-      //   return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
-      // }
-      // if (channelData['type'] === 'protected' && channelData['password'] === undefined)
-      //   return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
-
+    @Body() channelData, @Res() res) {
+      console.log("__BODY__DBG__ : ", channelData);
       console.log("___FILE___ : ", file);
-      const ChannelIcone = `http://localhost:8000/upload/${file.filename}`;
-      res.status(HttpStatus.OK).send(ChannelIcone);
-      // if (channelData['type'] === 'protected' && channelData['password'] !== undefined)
-      //   return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], channelData['password'], ChannelIcone, res);
-      // return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], "", ChannelIcone, res);
+      const ChannelIcone = encodeURI(`http://localhost:8000/upload/${file.filename}`);
+
+      if (channelData === undefined || channelData['name'] === undefined || channelData['type'] === undefined
+      &&  channelData['members'] === undefined) {
+        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
+      }
+      if (channelData['type'] === 'protected' && channelData['password'] === undefined)
+        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
+      if (channelData['type'] === 'protected' && channelData['password'] !== undefined)
+        return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], channelData['password'], ChannelIcone, res);
+      return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], "", ChannelIcone, res);
     }
 }

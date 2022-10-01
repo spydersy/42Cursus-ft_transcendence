@@ -2,7 +2,7 @@ import { HttpStatus, Injectable, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CHANNEL, PERMISSION, Prisma, RESCTRICTION } from '@prisma/client';
 
-    
+
 interface ManyUsers {
     userId:    number;
     channelId: number;
@@ -42,19 +42,27 @@ export class ChatService {
 
     async CreateRoom(me: number, channelName: string, type: string,
         members: number[], password: string, channelIcone: string, @Res() res) {
-        let channel = await this.prisma.channels.create({ 
+        let access = null;
+        if (type === 'private')
+            access = CHANNEL.PRIVATE
+        else if (type === 'public')
+            access = CHANNEL.PUBLIC
+        else if (type === 'protected')
+            access = CHANNEL.PROTECTED
+        let channel = await this.prisma.channels.create({
             data: {
-                access: CHANNEL[type],
+                access: access,
                 name: channelName,
                 picture: channelIcone,
                 password: password
             }
         });
-        
-        let owner = await this.prisma.channelsUsers.create({
+
+        await this.prisma.channelsUsers.create({
             data: {userId: me, channelId: channel.id, permission: PERMISSION.OWNER}
         });
 
+        console.log("__members__ : ", members);
         let manyUsers : ManyUsers[];
         members.forEach(element => {
             manyUsers.push({userId: element, channelId: channel.id, permission: PERMISSION.USER});
