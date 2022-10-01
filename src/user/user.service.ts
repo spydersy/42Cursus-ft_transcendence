@@ -108,7 +108,7 @@ export class UserService {
         let FriendsStat = await this.FriendsRelationExist(MeDto.id, UserDto.id);
         if (FriendsStat !== null)
             UserDto['relation'] = FriendsStat['status'];
-            UserDto['nbFriends'] = this.GetnbFriends(Me, Me);
+        UserDto['nbFriends'] = await this.GetnbFriends(Me, Me);
         console.log("__USER__DTO__DBG__ : ", UserDto);
         return res.status(HttpStatus.OK).send(UserDto);
     }

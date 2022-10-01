@@ -29,6 +29,7 @@ export class ProfileService {
         return "test00";
         }
         let profile = await this.userService.GetUserByLogin(req.user.username);
+        profile['nbFriends'] = await this.userService.GetnbFriends(req.user.username, req.user.username);
         console.log("__USER__PROFILE__ : ", profile);
         return res.send(profile);
     }
