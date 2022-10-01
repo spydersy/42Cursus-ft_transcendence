@@ -172,13 +172,13 @@ export function Stats(props: PlayerCardProps) {
                 </DataTag>
               </div>
               <Achivments/>
-          {props.isCurrentUser === false && 
-            <Buttons>
-              
-              <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
-              <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add Friend'/>
-            </Buttons>
-          }
+              {props.isCurrentUser === false && 
+                <Buttons>
+                  
+                  <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
+                  <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add Friend'/>
+                </Buttons>
+              }
 
             </div>
             <div className='vr'>
@@ -194,7 +194,7 @@ export function Stats(props: PlayerCardProps) {
 
 const DataTag = styled.div`
   /* width: 100%; */
-
+  background-color: #bdd4d4;
   display: flex;
   align-items: center;
   min-width : 200px;

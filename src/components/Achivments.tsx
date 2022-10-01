@@ -48,11 +48,11 @@ export default function Achivments() {
 
   
 const AchiStyle = styled.div`
+background-color: #1f55847d;
 border-radius : 10px;
-background:  ${props => props.theme.colors.seconderybg};
+/* background:  ${props => props.theme.colors.seconderybg}; */
 
 display: flex;
-
 flex-direction: column;
 align-items: flex-start;
 .head{
@@ -60,6 +60,7 @@ align-items: flex-start;
 }
 .cont{
     /* margin: 5px 0; */
+  
     width:100%;
     display: flex;
     justify-content: space-between;
