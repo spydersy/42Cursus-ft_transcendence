@@ -61,15 +61,18 @@ export class ChatService {
         await this.prisma.channelsUsers.create({
             data: {userId: me, channelId: channel.id, permission: PERMISSION.OWNER}
         });
-
-        console.log("__members__ : ", members);
-        let manyUsers : ManyUsers[];
-        members.forEach(element => {
-            manyUsers.push({userId: element, channelId: channel.id, permission: PERMISSION.USER});
-        });
-        let addedUseres = await this.prisma.channelsUsers.createMany({
-            data: manyUsers,
-        });
+        if (members.length !== 0) {
+            console.log("__members__ : ", members);
+            let manyUsers : ManyUsers[];
+            console.log("__many__members__00__ : ", manyUsers);
+            members.forEach(element => {
+                manyUsers.push({userId: element, channelId: channel.id, permission: PERMISSION.USER});
+            });
+            console.log("__MANY__members__ : ", manyUsers);
+            let addedUseres = await this.prisma.channelsUsers.createMany({
+                data: manyUsers,
+            });
+        }
         return res.status(HttpStatus.CREATED).send({'message': "Channel Created Successfully"});
     }
 }

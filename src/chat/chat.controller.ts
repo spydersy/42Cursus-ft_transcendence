@@ -64,10 +64,13 @@ export class ChatController {
       &&  channelData['members'] === undefined) {
         return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
       }
+
+      var membersObj = JSON.parse(channelData['members']);
+      console.log("__MEMBERS__OBJ__DBG__ : ", membersObj);
       if (channelData['type'] === 'protected' && channelData['password'] === undefined)
         return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
       if (channelData['type'] === 'protected' && channelData['password'] !== undefined)
-        return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], channelData['password'], ChannelIcone, res);
-      return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], "", ChannelIcone, res);
+        return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], membersObj, channelData['password'], ChannelIcone, res);
+      return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], membersObj, "", ChannelIcone, res);
     }
 }
