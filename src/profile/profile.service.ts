@@ -49,7 +49,7 @@ export class ProfileService {
 
     async UpdateUserName(newName: string, userId: number, @Res() res) {
         try {
-            this.prisma.users.update({
+            await this.prisma.users.update({
                 where: {
                     id: userId
                 },

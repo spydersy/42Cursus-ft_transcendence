@@ -57,8 +57,7 @@ export class ProfileController {
 
   @Put("updateUsername/:newname")
   async UpdateUserName(@Req() req, @Param('newname') newName, @Res() res) {
-    this.profileService.UpdateUserName(newName, req.user.userId, res);
-    console.log("__BODY__DBG__", name);
-    return res.send("XXXXXXXX");
+    console.log("__BODY__DBG__", newName);
+    return this.profileService.UpdateUserName(newName, req.user.userId, res);
   }
 }
