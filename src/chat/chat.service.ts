@@ -41,7 +41,7 @@ export class ChatService {
     }
 
     async CreateRoom(me: number, channelName: string, type: string,
-        members: number[], password: string, channelIcone: string, @Res() res) {
+        members: string[], password: string, channelIcone: string, @Res() res) {
         let access = null;
         if (type === 'private')
             access = CHANNEL.PRIVATE
@@ -66,7 +66,7 @@ export class ChatService {
             let manyUsers : ManyUsers[];
             console.log("__many__members__00__ : ", manyUsers);
             members.forEach(element => {
-                manyUsers.push({userId: element, channelId: channel.id, permission: PERMISSION.USER});
+                manyUsers.push({userId: parseInt(element, 10), channelId: channel.id, permission: PERMISSION.USER});
             });
             console.log("__MANY__members__ : ", manyUsers);
             let addedUseres = await this.prisma.channelsUsers.createMany({
