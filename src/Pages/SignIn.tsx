@@ -113,7 +113,7 @@ interface ButtonProps {
    type? : "primary" | "secondary" ,
    text? : string
    icon? : React.ReactElement,
-   onClick? : ()=> void;
+   onClick? : (e?: any)=> void;
 }
 interface ButtonStyleProps {
    typeS? : string ,

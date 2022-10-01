@@ -31,6 +31,7 @@ export default function CreateGroup() {
     const [hide, sethide] = useState(false)
     const [img, setimg] = useState("")
     const groupName = useRef(null)
+    const passRef = useRef<HTMLInputElement>(null)
     // const first = useRef(second)
     const uploadFile = ()=>{
         var e = document.getElementById("fileInput")
@@ -72,9 +73,22 @@ export default function CreateGroup() {
 
         bodyFormData.append('icone',data.icone);
         bodyFormData.append('name',data.name);
-        bodyFormData.append('members', JSON.stringify(data.members));
+        bodyFormData.append('members', JSON.stringify(members));
         bodyFormData.append('type',data.type);
-        console.log(data);
+        if (data.type === "protected" )
+        {
+
+            if (passRef.current != null)
+            {
+
+                var pass = passRef.current.value;
+                if (pass != "")
+                {
+                    bodyFormData.append('password',pass);
+                }
+            }
+        }
+        console.log(bodyFormData.get("members"))
         axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 
       ).then((res)=>{
@@ -128,8 +142,8 @@ export default function CreateGroup() {
             <label>Private</label>
             <input type="radio" onChange={handleRadioChange} id="protected" name="status" value="protected"/>
             <label>Protected</label>
-            <InputPassWord defaultChecked={(check === "protected")}>
-            <InputComponent type='password' placeholder='Group Password'/>
+            <InputPassWord  defaultChecked={(check === "protected")}>
+            <InputComponent refs={passRef} type='password' placeholder='Group Password'/>
 
             </InputPassWord>
         </Row2>
@@ -141,7 +155,7 @@ export default function CreateGroup() {
                         onRequestClose={() => sethide(false)}
                         hideModal={() => sethide(false)}
                         >
-                            <AddFriendsModal/>
+                            <AddFriendsModal members={members} setmembers={(e : any)=>{setmembers(e)}}/>
                         </Modal>}
             </div>
             {

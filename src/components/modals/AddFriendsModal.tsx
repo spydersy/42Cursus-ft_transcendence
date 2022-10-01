@@ -1,14 +1,46 @@
-import React from 'react'
+import React , {useState , useEffect} from 'react'
 import styled  from "styled-components"
 import SearchIcon from "../../assets/imgs/searchIcon.svg"
 
 import Img from "../../assets/imgs/avatar/a1.png";
 import { AvatarComponent } from '../PlayerProfile';
-
-export default function AddFriendsModal() {
+import axios from 'axios';
+import { Button } from '../../Pages/SignIn';
+interface UserProp {
+    defaultAvatar: string,
+    login : string
+    displayName : string
+    relation? : string
+    nbFriends? : string
+    wins : number
+    losses : number
+  }
+export default function AddFriendsModal(props : {members : string[] , setmembers : (e : any)=>void}) {
+    const [friends, setfriends] = useState([])
     const handleFriend= (e : any)=>{
         e.stopPropagation();
     }
+    useEffect(() => {
+        var s : string | null = localStorage.getItem('user');
+        if (s)
+        {
+    
+          const data : UserProp =  JSON.parse(s || '{}');
+          axios.get("http://localhost:8000/users/friends/" + data.login, 
+          {withCredentials: true} 
+        ).then((res)=>{
+  
+  
+          setfriends(res.data)
+          console.log(res.data[0])
+        }).catch((err)=>{
+         
+          })
+        }
+    
+ 
+    }  , [])
+    
   return (
     <AddFriendsModalStyle>
          <SearchBar>
@@ -16,62 +48,29 @@ export default function AddFriendsModal() {
         <input onClick={(e)=>e.stopPropagation()} type="text" placeholder='Search ..' />
     </SearchBar>
 
-    <Friend>
-        <div>
-            <div style={{width : '35px' , height :'35px'}}>
-                <AvatarComponent img={Img}/>
+    { 
+        friends.map((data : any , id :number)=>{
+            return <Friend key={id}>
+                    <div>
+                        <div style={{width : '35px' , height :'35px'}}>
+                            <AvatarComponent img={data.defaultAvatar}/>
 
-            </div>
-            <div className='name'>
-                Nico Robin
-            </div>
-        </div>
-        <button onClick={handleFriend}>
-            Add
-        </button>
-    </Friend>
-    <Friend>
-        <div>
-            <div style={{width : '35px' , height :'35px'}}>
-                <AvatarComponent img={Img}/>
+                        </div>
+                        <div className='name'>
+                            {data.displayName}
+                        </div>
+                    </div>
 
-            </div>
-            <div className='name'>
-                Nico Robin
-            </div>
-        </div>
-        <button onClick={handleFriend}>
-            Add
-        </button>
-    </Friend>
-    <Friend>
-        <div>
-            <div style={{width : '35px' , height :'35px'}}>
-                <AvatarComponent img={Img}/>
 
-            </div>
-            <div className='name'>
-                Nico Robin
-            </div>
-        </div>
-        <button onClick={handleFriend}>
-            Add
-        </button>
-    </Friend>
-    <Friend>
-        <div>
-            <div style={{width : '35px' , height :'35px'}}>
-                <AvatarComponent img={Img}/>
-
-            </div>
-            <div className='name'>
-                Nico Robin
-            </div>
-        </div>
-        <button onClick={handleFriend}>
-            Add
-        </button>
-    </Friend>
+                    <Button onClick={(e)=>{handleFriend(e)
+                           var test = props.members;
+                           test.push(data.defaultAvatar)
+                            props.setmembers([test])
+                    }} text='Add'/>
+                    </Friend>
+        })
+    }
+    
     </AddFriendsModalStyle>
 
   )
@@ -145,11 +144,11 @@ font-family: 'Poppins', sans-serif;
     color:  ${props => props.theme.colors.primaryText};;
 
   }
-  >button{
+  /* >button{
     color:  ${props => props.theme.colors.seconderyText};
         width: 100px;
         height: 30px;
         border-radius: 5px;
         background-color: ${props => props.theme.colors.purple};; ;
-  }
+  } */
 `;

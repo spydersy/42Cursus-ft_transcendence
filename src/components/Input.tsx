@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Ref } from 'react'
 import styled from "styled-components";
 // ussage <Input type='text' lable='Username' placeholder='Enter Username' />
  
@@ -41,12 +41,12 @@ const ToggleSwitchStyle = styled.div`
 
 export default function InputComponent(props: InputProps) {
   return (
-    <InputStyle>
+    <InputStyle >
     <label>
         {props.lable}
     </label>
     <div>
-        <input onChange={props.onChange}  disabled={props.disabled} value={props?.value}  type={props.type} placeholder={props.placeholder} />
+        <input ref={props.refs}  onChange={props.onChange}  disabled={props.disabled} value={props?.value}  type={props.type} placeholder={props.placeholder} />
         
     </div>
     </InputStyle>
@@ -60,6 +60,7 @@ interface InputProps{
     onChange? : (e : any)=>void,
     alert? : boolean,
     disabled? : boolean
+    refs? : any
  }
 interface InputPropsStyle{
 
