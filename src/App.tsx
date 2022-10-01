@@ -73,8 +73,8 @@ function App() {
        <ThemeProvider theme={theme}>
         <Main>
           <ProtectedLayout body={<Upperbar />} />
-          <Cont >
-            <ProtectedLayout body={ <Sidebar/>} />
+          <ProtectedLayout body={ <Sidebar/>} />
+          <Cont  >
             <SocketContext.Provider value={SocketValue}>
             <Routes>
               <Route path="/signin" element={<SignIn />} />
@@ -87,9 +87,7 @@ function App() {
               <Route path="/" element={<Home settheme={(e: any)=> setGametheme(e)} />} />
               <Route path="/profile/:id" element={<Profile  />} />
               <Route path="/socketTest" element={<SocketTesting />} />
-
             </Routes>
-
             </SocketContext.Provider>
           </Cont>
         </Main>
@@ -102,9 +100,20 @@ const Cont = styled.div`
   height: calc(100% - 70px);
   display: flex;
   flex-direction: row;
+  flex: 1;
+  @media  only screen and (max-width: 1270px) {
+    width: calc(100% - 70px);
+  }
+  @media  only screen and (max-width: 560) {
+    width: 100%;
+  }
 `;
 
 const Main = styled.main`
+
+
+display: flex;
+  flex-direction: row;
   .vr{
     width: 1px;
     height: 70%;

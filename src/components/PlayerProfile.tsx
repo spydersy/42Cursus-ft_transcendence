@@ -1,4 +1,4 @@
-import React, { useEffect}  from 'react'
+import React, { useEffect , useState}  from 'react'
 import styled ,{css}from "styled-components";
 import{ReactComponent as DotsIcon }from "../assets/imgs/dots.svg"
 import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
@@ -26,6 +26,10 @@ interface UserProp {
   defaultAvatar: string,
   login : string
   displayName : string
+  relation? : string
+  nbFriends? : string
+  wins : number
+  losses : number
 }
 export interface PlayerCardProps {
   isCurrentUser : boolean,
@@ -69,18 +73,25 @@ display: flex;
 position: relative;
 border-radius: 10px 10px 10px 10px;
 background-color: ${props => props.theme.colors.seconderybg};
+@media  only screen and (max-width: 1090px) {
+  flex-direction: column;
+  .Identity{
+    /* width: 1500px; */
+    width: 100% !important;
+    margin: 0 auto;
+    /* width: 90%; */
+
+  }
+}
 .Identity{
-    width: 30%;
+    width: 250px;
     height: 100%;
-    /* background-color:${Backcolor}; */
-    border-radius: 10px 0px 0px 0px;
-    bottom: 0px;
+
     background: linear-gradient(144deg, #74549C 16.67%, #3581B3 100%);
 border-radius: 10px 30px 30px 10px;
     .Iavatar{
       margin: 40px auto; 
     }
-
     .infoSec {
         padding : 10px;
         .Bar{
@@ -120,6 +131,7 @@ border-radius: 10px 30px 30px 10px;
 //     status : "online" | "offline"
 // }
 export function Stats(props: PlayerCardProps) {
+  const [relationStatus, setrelationStatus] = useState<string | undefined>("")
   const addFriend = ()=>{
        //http://localhost:8000/users/relation/:id?evet=add
 
@@ -134,7 +146,11 @@ export function Stats(props: PlayerCardProps) {
           // history.pushState("/signin");
       })
   }
-
+  useEffect(() => {
+      setrelationStatus(props.player?.relation)
+      console.log(props.player?.relation)
+  })
+  
 
     return (
       <StatsStyle  >
@@ -155,14 +171,14 @@ export function Stats(props: PlayerCardProps) {
                   </DataTag>
                   <DataTag>
                     <UsersIcon/>
-                    5
-                    Friends
+                   {props.player.nbFriends}
+                    {" Friends"}
                   </DataTag>
                 </DataTag>
                 <DataTag>
                   <DataTag>
                     <GameIcon/>
-                    250
+                    {  props.player?.wins +   props.player?.losses}
                     Games
                     </DataTag>
                     <DataTag>
@@ -175,8 +191,16 @@ export function Stats(props: PlayerCardProps) {
               {props.isCurrentUser === false && 
                 <Buttons>
                   
+                  {
+                    relationStatus === "FRIENDS" ? 
+                    <Button  type='secondary' onClick={addFriend} icon={<UserAddIcon/>} text='Friend'/>
+                    :
+                    relationStatus === 'PENDING' ? 
+                    <Button onClick={addFriend} icon={<UserAddIcon/>} text='Accept'/>
+                    : 
+                    <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
+                  }
                   <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
-                  <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add Friend'/>
                 </Buttons>
               }
 
@@ -194,10 +218,11 @@ export function Stats(props: PlayerCardProps) {
 
 const DataTag = styled.div`
   /* width: 100%; */
-  background-color: #bdd4d4;
+  /* background-color: #bdd4d4; */
   display: flex;
   align-items: center;
   min-width : 200px;
+  /* padding: 10px; */
   gap: 10px;
   font-family: 'Poppins' , sans-serif;
   font-style: normal;
@@ -213,30 +238,13 @@ const DataTag = styled.div`
 
 `;
 
-// const Status = styled.div<StatusProps>`
-//   /* width: 150px; */
-//   display: flex;
-//   align-items: center;
- 
-//   font-family: 'Poppins' , sans-serif;
-// font-style: normal;
-// font-weight: 400;
-// font-size: 22px;
-// line-height: 33px;
-// justify-content: space-around;
-// >svg{
-//   path {
-//     stroke: ${props => props.theme.colors.green};
-//   }
-// }
-// color: ${props => props.theme.colors.green};
 
-// `
 
 const StatsStyle = styled.div`
 background-color: #171A22;
 padding :10px;
-width: 100%;
+/* width: 100%; */
+flex: 1;
 min-height: 100%;
 display: flex;
 align-items: center;
@@ -254,6 +262,7 @@ gap: 10px;
 `
 
 const Data = styled.div`
+/* flex: 1; */
 
 flex: 1;
 width: 100%;
@@ -261,6 +270,11 @@ display: flex;
 flex-direction: row;
 align-items: center;
 justify-content: space-between;
+@media  only screen and (max-width: 750px) {
+  flex-direction: column;
+
+}
+
 .data{
   height: 100%;
   display: flex;

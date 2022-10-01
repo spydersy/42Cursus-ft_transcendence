@@ -79,6 +79,10 @@ interface UserProp {
   defaultAvatar: string,
   login : string
   displayName : string
+  relation? : string
+  nbFriends? : string
+  wins : number
+  losses : number
 }
 interface InvProp {
   sender: {
@@ -93,10 +97,15 @@ export default function Profile() {
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
     defaultAvatar: "string",
-    login : "@melkarmi",
-    displayName : 'Mohamed Elkarmi'
+    login : "melkarmi",
+    displayName : 'Mohamed Elkarmi',
+    relation : "",
+    nbFriends : "0",
+    wins : 0,
+    losses : 0,
   
   })
+
 
   useEffect(() => {
     var s : string | null = localStorage.getItem('user');
@@ -130,7 +139,7 @@ export default function Profile() {
   }, [id]);
 
   return (
-    <div className='container' style={{display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
+    <div className='container' style={{  display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
           <TheBox>
               <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
           </TheBox>
@@ -140,7 +149,7 @@ export default function Profile() {
 };
 
 const TheBox = styled.div`
-  padding: 10p;
+  /* padding: 10p; */
   width: 100%;
   border: 0px solid ${props => props.theme.colors.primarybg};
 `;

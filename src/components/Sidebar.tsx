@@ -35,22 +35,35 @@ export interface barProps {
     ]
 export default function Sidebar() {
     const sideBaRed : any= useRef<HTMLElement>(null);
+    const sideBaref : any= useRef<HTMLElement>(null);
     const [open, setopen] = useState(false)
 
 
     const [focused, setfocused] = useState(0)
     const openClose=  ()=>
-    {   
-        if ( window.innerWidth < 800)
+    {   if (sideBaRed.current)
         {
-            sideBaRed.current.style.width = "100%" 
-            return ;
+
+            if ( window.innerWidth < 800)
+            {
+                sideBaRed.current.style.width = "100%" 
+                sideBaref.current.style.width = "100%" 
+                return ;
+            }
+            if (open)
+            {
+
+                sideBaRed.current.style.width = "76px"
+                sideBaref.current.style.width = "76px"
+            }
+            else
+            {
+
+                sideBaRed.current.style.width = "300px"
+                sideBaref.current.style.width = "300px"
+            }
+            setopen(!open)
         }
-        if (open)
-            sideBaRed.current.style.width = "76px"
-        else
-            sideBaRed.current.style.width = "300px"
-        setopen(!open)
     }
     const changeFocus=  (page : number)=>
     {   
@@ -68,34 +81,37 @@ export default function Sidebar() {
         else if (pageName === "setting" ) pagenum = 4;
         changeFocus(pagenum)
 
-    window.addEventListener("resize", (e : any)=>{
-        if ( e.currentTarget?.innerWidth >= 700)
-        {
-            if (e.currentTarget?.innerWidth< 1440 )
-            {
-                console.log(e.currentTarget?.innerWidth)
-                openClose()
+    // window.addEventListener("resize", (e : any)=>{
+    //     if ( e.currentTarget?.innerWidth >= 700)
+    //     {
+    //         if (e.currentTarget?.innerWidth< 1440 )
+    //         {
+    //             console.log(e.currentTarget?.innerWidth)
+    //             // openClose()
+    //             // setopen(false)
   
-            }
-        }
-        else
-        {
-            openClose()
-        }
+    //         }
+    //     }
+    //     else
+    //     {
+    //         // openClose()
+    //         // setopen(true)
+
+    //     }
 
 
-    })
+    // })
     
       return () => {
         
       }
       // eslint-disable-next-line 
-    }, [setopen, setfocused  ])
+    }, [open, setfocused ,])
     
   return (
-    <Test  open={open}>
-    <SidebarWrraper ref={sideBaRed} >
-        <Left open={open} onClick={openClose}   />
+    <Test className='test'  ref={sideBaRed} open={open}>
+    <SidebarWrraper >
+        <Left open={open} ref={sideBaref}   onClick={openClose}   />
 
 <Items>
         {
@@ -138,10 +154,11 @@ interface ItemProps {
   }
   
 const SidebarWrraper = styled.div`
-    height : 100%;
-    width : 100%;   
+    height: 100%;
     align-items: flex-end;
     flex-direction: column;  
+    position: fixed;
+    top: 70px;
     @media  only screen and (max-width: 768px) {
         > .item{
             display: none;
@@ -157,11 +174,10 @@ const SidebarWrraper = styled.div`
 `;
 const Test = styled.div<barProps>`
     width: 300px;
-    height: calc(100% - 70px);
-    background-color: red;
-    position: fixed;
-    top: 70px;
-    background-color: ${props => props.theme.colors.primarybg}; 
+    height: 100%;
+    background-color: transparent;
+    position: relative;
+    /* background-color: ${props => props.theme.colors.primarybg};  */
     align-items: flex-end;
     flex-direction: column;
     transition: all 400ms ease-in-out;

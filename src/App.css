@@ -73,60 +73,11 @@ body {
 .container{
   /* width: 1500px; */
   margin: 0 auto;
-  margin-top: 70px;
-}
-@media  only screen and (max-width: 576px) {
-  .container{
-    /* width: 1500px; */
-    margin: 0 auto;
-    width: 90%;
-
-  }
+  /* background-color: blue; */
+  width: 100%;
+  max-width: 1200px;
 }
 
-@media  only screen and (min-width: 576px) {
-  .container{
-    /* width: 1500px; */
-    margin: 0 auto;
-    width: 540px;
-
-  }
-}
-@media  only screen and (min-width: 768px) {
-  .container{
-    width: 780px;
-    /* width: 1500px; */
-    margin: 0 auto;
-  }
-}
-@media  only screen and (min-width: 992px) {
-  .container{
-    /* width: 1500px; */
-    margin: 0 auto;
-    max-width: 960px;
-    width: 960px;
-    
-  }
-}
-@media  only screen and (min-width: 1200px) {
-  .container{
-    /* max-width: 1140px; */
-    width: 1140px;
-    /* width: 1500px; */
-    margin: 0 auto;
-    max-width: 1140px;
-    /* background-color: red;  */
-  }
-
-}
-@media  only screen and (min-width: 1400px) {
-  .container{
-    width: 1140px;
-    margin: 0 auto;
-    max-width: 1140px;
-  }
-
-}
 
 button{
   outline: none;

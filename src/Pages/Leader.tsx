@@ -108,6 +108,7 @@ export default function Leader() {
         <Body>
 
         <Table>
+            <thead>
         <tr>
             <th>rank</th>
             <th className='name'>name</th>
@@ -116,36 +117,41 @@ export default function Leader() {
             <th>wins</th>
             <th>lost</th>
         </tr>
-        {
-        users?.map((data : any , id : number)=>{
-            return <Rank>
-                <td className='id'> {id + 1}</td>
-                <td>
-                    <a href={"/profile/" + data.login}>
-                        <div style={{width: "40px" , height: "40px"}}>
-                            <AvatarComponent img={data.defaultAvatar}/>
-                        </div>
-                        <div>
-                            {data.login}
-                        </div>
-                    </a>
-                </td>
-                <td>
-                   10000
-                </td>
-                <td>
-                   {data.wins + data.losses}
-                </td>
-                <td>
-                    {data.wins}
-                </td>
-                <td>
-                    {data.losses}
-                </td>
 
-        </Rank>
-        })
-        }
+            </thead>
+            <tbody>
+
+                {
+                users?.map((data : any , id : number)=>{
+                    return <Rank key={id}>
+                        <td className='id'> {id + 1}</td>
+                        <td>
+                            <a href={"/profile/" + data.login}>
+                                <div style={{width: "40px" , height: "40px"}}>
+                                    <AvatarComponent img={data.defaultAvatar}/>
+                                </div>
+                                <div>
+                                    {data.login}
+                                </div>
+                            </a>
+                        </td>
+                        <td>
+                        10000
+                        </td>
+                        <td>
+                        {data.wins + data.losses}
+                        </td>
+                        <td>
+                            {data.wins}
+                        </td>
+                        <td>
+                            {data.losses}
+                        </td>
+
+                </Rank>
+                })
+                }
+            </tbody>
         
         </Table>
         </Body>
@@ -222,18 +228,21 @@ const Table = styled.table`
     width: 95%;
     margin: 50px auto;
     height : 100px !important;
-    >tr{
-        color: #c8d0d974;
-        border-bottom : 1px solid ${props => props.theme.colors.primaryText}; ;
-        .name{
-            width: 60%;
-        }
-        >th{
-            text-transform: uppercase;
-            padding: 10px;
-            text-align: start;
-            width: auto;
-            /* width: 200px; */
+    >thead{
+
+        >tr{
+            color: #c8d0d974;
+            border-bottom : 1px solid ${props => props.theme.colors.primaryText}; ;
+            .name{
+                width: 60%;
+            }
+            >th{
+                text-transform: uppercase;
+                padding: 10px;
+                text-align: start;
+                width: auto;
+                /* width: 200px; */
+            }
         }
     }
     
