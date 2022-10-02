@@ -70,7 +70,11 @@ export class AuthService {
     }
 
     async GenerateJWT(user: User) {
-        const payload = {Id: user.Id, Login: user.Login};
+        const payload = {Id: user.Id,
+                        Login: user.Login,
+                        TwoFactorAuth: user.TwoFactorAuth,
+                        Email: user.Email
+                    };
         return { access_token: this.jwtTokenService.sign(payload),
         };
     }
@@ -85,6 +89,9 @@ export class AuthService {
                 this.userService.AddUserToDB(UserDto);
             }
             let JWT = await this.GenerateJWT(UserDto);
+            if (UserDto.TwoFactorAuth === true) {
+                // Do Something . . .
+            }
             return res
                     .status(HttpStatus.OK).
                     set({

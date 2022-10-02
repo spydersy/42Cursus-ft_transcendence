@@ -9,12 +9,14 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
 import { ConfigService } from '@nestjs/config';
+import { TfaService } from 'src/tfa/tfa.service';
 
 @Injectable()
 export class ProfileService {
 
     constructor(private userService: UserService,
-                private prisma: PrismaService) {}
+                private prisma: PrismaService,
+                private tfaService: TfaService) {}
 
     async me(@Req() req , @Query() query, @Res() res: Response) {
         // JUST FOR TEST
@@ -118,15 +120,33 @@ export class ProfileService {
     }
 
     async Update2FA(me: number, status: string, @Res() res) {
-        if (status === 'true' || status === 'false') {
+        if (status === 'true') {
             let user = await this.userService.GetUserById(me);
-            if (user.twoFactorAuth === false && status === 'true') {
+            if (user.twoFactorAuthSecret === null) {
+                const _2faData = await this.tfaService.generateTwoFactorAuthenticationSecret(me, user.email);
+                console.log("__TFA__DATA__ : ", _2faData);
                 await this.prisma.users.update({
                     where: { id: me },
-                    data: { twoFactorAuth: true},
+                    data: {
+                        twoFactorAuth: true ,
+                        twoFactorAuthSecret: _2faData.secret
+                    },
                 });
-                return this.Logout(res);
             }
+            else {
+                await this.prisma.users.update({
+                    where: { id: me },
+                    data: { twoFactorAuth: true },
+                });
+            }
+            return this.Logout(res);
+        }
+        else if (status === 'false') {
+            await this.prisma.users.update({
+                where: { id: me },
+                data: {twoFactorAuth: false },
+            });
+            return res.status(HttpStatus.OK).send({'message': "TFA False"});
         }
         return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
     }
