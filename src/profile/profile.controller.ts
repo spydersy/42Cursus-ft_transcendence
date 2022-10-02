@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Post, Query, Req, Res, UseGuards, UploadedFile, UseInterceptors, Param, Put, Body } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Post, Query, Req, Res, Header, UseGuards, UploadedFile, UseInterceptors, Param, Put, Body } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserService } from 'src/user/user.service';
 import { Response } from 'express';
@@ -13,6 +13,9 @@ export class ProfileController {
 
   constructor(private profileService: ProfileService,
               private userService: UserService) {}
+
+  @Header("Access-Control-Allow-Origin", "http://localhost:3000")
+
 
   @Get('me')
   async GetUserProfile(@Req() req  , @Query() query, @Res() res: Response) {
@@ -50,10 +53,18 @@ export class ProfileController {
     return this.profileService.UploadAvatar(uploadedAvatarPath, req.user.userId, res);
   }
 
-  // @Post('update2FA')
-  // async Update2FA(@Body('enable') status) {
+  @Get('logout')
+  async Logout(@Res() res) {
+    return this.profileService.Logout(res);
+  }
 
-  // }
+  @Get('update2FA')
+  async Update2FA(@Req() req, @Query('status') status, @Res() res) {
+    if (status === undefined) {
+      return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Request'});
+    }
+    return this.profileService.Update2FA(req.user.userId, status, res);
+  }
 
   @Put("updateUsername/:newname")
   async UpdateUserName(@Req() req, @Param('newname') newName, @Res() res) {

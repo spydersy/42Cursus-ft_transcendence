@@ -28,6 +28,7 @@ export class VersionHeaderInterceptor implements NestInterceptor {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {cors: true});
+  app.useGlobalInterceptors(new VersionHeaderInterceptor());
   app.enableCors({
     origin: 'http://localhost:3000',
     methods: ["GET", "POST", "PUT"],
@@ -35,9 +36,8 @@ async function bootstrap() {
     allowedHeaders: ["cookie", "Cookie", "authorization", "Authorization", "content-type"],
     exposedHeaders: ["cookie", "Cookie", "authorization", "Authorization", "content-type"],
   });
-  app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalInterceptors(new VersionHeaderInterceptor());
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  // app.useGlobalPipes(new ValidationPipe());
+  // app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.use(cookieParser());
   const config = new DocumentBuilder()
     .setTitle('42Cursus-ft_transcendence')

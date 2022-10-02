@@ -8,6 +8,7 @@ import { CHANNEL, RELATION } from '@prisma/client';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ProfileService {
@@ -110,6 +111,26 @@ export class ProfileService {
         return res.status(HttpStatus.OK).send(AllFriends);
     }
 
+    async Logout(@Res() res) {
+        return res.status(HttpStatus.OK)
+                    .clearCookie('Authorization', {httpOnly: true})
+                    .redirect('http://localhost:3000/signin');
+    }
+
+    async Update2FA(me: number, status: string, @Res() res) {
+        if (status === 'true' || status === 'false') {
+            let user = await this.userService.GetUserById(me);
+            if (user.twoFactorAuth === false && status === 'true') {
+                await this.prisma.users.update({
+                    where: { id: me },
+                    data: { twoFactorAuth: true},
+                });
+                return this.Logout(res);
+            }
+        }
+        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
+    }
+
     async GetBlackList(UserId: number, @Res() res) {
         let BlockRow = await this.prisma.blocks.findMany({
             where: {
@@ -127,12 +148,3 @@ export class ProfileService {
         return res.status(HttpStatus.OK).send(BlackList);
     }
 }
-
-
-
-/* 
-    POST http://localhost:8000/chat/createRoom
-
-    Query: Members;
-    Body : Name + Pictue + Type + Password;
-*/
