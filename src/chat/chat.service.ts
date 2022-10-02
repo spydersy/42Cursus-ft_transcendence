@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable, Res } from '@nestjs/common';
+import { HttpStatus, Injectable, Req, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CHANNEL, PERMISSION, Prisma, RESCTRICTION } from '@prisma/client';
 
@@ -38,6 +38,15 @@ export class ChatService {
             console.log("__DM__USERS__DBG__ : ", Users);
         }
         console.log("__DM__CHANNEL__DBG__ : ", DMChannel);
+    }
+
+    async GetMyRooms(me: number, @Res() res) {
+        this.prisma.channelsUsers.findMany({
+            where: {
+
+            }
+        });
+        return res.status(HttpStatus.OK).send();
     }
 
     async CreateRoom(me: number, channelName: string, type: string,

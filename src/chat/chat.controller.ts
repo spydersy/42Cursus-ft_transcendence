@@ -43,6 +43,10 @@ export class ChatController {
     //   return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], channelData['members'], "", ChannelIcone, res);
     // }
 
+    @Get('myChannles')
+    async GetMyRooms(@Req() req, @Res() res) {
+      return this.chatService.GetMyRooms(req.user.userId, res);
+    }
 
     @Post('createRoom')
     @UseInterceptors(

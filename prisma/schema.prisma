@@ -16,22 +16,23 @@ datasource db {
 // [Users Data] : ================================================================================= //
 
 model users {
-  id                  Int        @id @unique
-  login               String     @unique
-  displayName         String     @unique
+  id                  Int             @id @unique
+  login               String          @unique
+  displayName         String          @unique
   defaultAvatar       String
   notifications       Json[]
-  wins                Int        @default(0)
-  losses              Int        @default(0)
-  level               Int        @default(0)
-  twoFactorAuth       Boolean    @default(false)
+  wins                Int             @default(0)
+  losses              Int             @default(0)
+  level               Int             @default(0)
+  twoFactorAuth       Boolean         @default(false)
   twoFactorAuthSecret String?
-  sentRequests        Friends[]  @relation("SentRequests")
-  receivedRequets     Friends[]  @relation("ReceivedRequets")
-  blackList           Blocks[]   @relation("BlackList")
-  blockedFrom         Blocks[]   @relation("BlockedUsers")
+  sentRequests        Friends[]       @relation("SentRequests")
+  receivedRequets     Friends[]       @relation("ReceivedRequets")
+  blackList           Blocks[]        @relation("BlackList")
+  blockedFrom         Blocks[]        @relation("BlockedUsers")
   channels            channelsUsers[] @relation("Channels")
-  lastModification    DateTime   @updatedAt
+  messages            Messages[]      @relation("Messages")
+  lastModification    DateTime        @default(now())
 }
 
 // ================================================================================================ //
@@ -109,6 +110,7 @@ model channels {
   picture  String?
   password String?
   users    channelsUsers[] @relation("ChannelsUsers")
+  messages Messages[]      @relation("ChannelMessages")
 }
 
 model channelsUsers {
@@ -130,9 +132,15 @@ model channelsUsers {
 }
 
 model Messages {
-  id        Int     @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
+
+  sender    users     @relation("Messages", fields: [senderId], references: [id])
   senderId  Int
+
+  channel   channels  @relation("ChannelMessages", fields: [channelId], references: [id])
   channelId Int
+
   content   String
+  date      DateTime  @default(now())
 }
 // ================================================================================================ //
