@@ -14,6 +14,7 @@ import {Link} from 'react-router-dom'
 import { useClickOutside } from "react-haiku"
 import HashLoader from "react-spinners/HashLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
+import { EmptyComponent } from '../Pages/Profile';
 
 interface ListTypes {
   title : string,
@@ -101,6 +102,7 @@ const Wrraper = styled.div`
   left: 0;
   
 `;
+
 const RightCont = styled.div`
 width: 100px;
    display: flex;
@@ -114,6 +116,7 @@ width: 100px;
 interface LogoProps {
   size : string
 }
+
 export  function LogoComponent(props : LogoProps) {
     return (
       <a style={{marginLeft :"10px"}}href='/'>
@@ -126,7 +129,6 @@ export  function LogoComponent(props : LogoProps) {
 const override: CSSProperties = {  display: "grid",  margin: "0 auto",  borderColor: "white", };
 
 export  function SearchBarComponent() {
-    // const [search, setsearch] = useState("")
     const [Users, setUsers] = useState([])
     const [open, setopen] = useState(false)
     const ref = useRef(null)
@@ -150,7 +152,7 @@ export  function SearchBarComponent() {
       if (event.target.value.length > 0) {  setopen(true)   }
       else { setopen(false)  }
       
-      console.log("Value = ", event.target.value)
+      // console.log("Value = ", event.target.value)
     };
 
     const handleClickOutside = () => {
@@ -162,12 +164,12 @@ export  function SearchBarComponent() {
 
     return (
       <SearchBar>
-        <input  onChange={InputSearchHandler} type="text" placeholder='Search ..' />
+        <input  onChange={InputSearchHandler} type="text" placeholder='Search users, rooms..' />
         {
           (open) ? 
             (Users.length === 0) ?            
                 <UsersTable ref={ref}  > 
-                  <UsersNotFound>404 Not Found</UsersNotFound>
+                  <EmptyComponent text="WALO MAKAYNSH" />
                 </UsersTable>
               : 
                 <UsersTable ref={ref} style={{  height: "300px" } }> 
@@ -176,12 +178,15 @@ export  function SearchBarComponent() {
                       return (
                           <UserFound to={`/profile/${user.login}`} >
                             
-                            <AvatarStyle > <img  alt="" src={user.defaultAvatar} />  </AvatarStyle>
-                            <LoginStyle>@{user.login}</LoginStyle>
+                            <AvatarStyle > <img  alt="avatar" src={user.defaultAvatar} />  </AvatarStyle>
+                            <div>
+                              <NameStyle>{user.displayName}</NameStyle>
+                              <LoginStyle>@{user.login}</LoginStyle>
+                            </div>
                           </UserFound> )})
                   }
-                  <p/>
                 </UsersTable >
+            
             : null
         }
         <HashLoader  className='s'  color={color} loading={loading} cssOverride={override} size={22} />
@@ -189,34 +194,45 @@ export  function SearchBarComponent() {
     )
   }
 
-const LoginStyle = styled.div`
-  width: 50%;
+const NameStyle = styled.div`
+  width: 100%;
   display: flex;
-  font-size: 22px;
-  left: 2%;
+  font-size: 18px;
   position: relative;
 `;
+
+const LoginStyle = styled.div`
+  width: 100%;
+  display: flex;
+  font-size: 18px;
+  position: relative;
+`;
+
 const AvatarStyle = styled.div`
-  width: 15%;
-  height: 90%;
+  /* background-color: #389c71; */
   display: flex;
   position: relative;
-
+  width: 25%;
+  height: 50%;
+  min-height: 40px;
+  min-width: 40px;
+  max-width: 80px;
+  max-height: 80px;
   img {
-
     position: absolute;
     top: 50%;
-    right: 0%;
-    transform: translate(-0%, -50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 18px;
     width: 60%;
-    height: 80%;
+    height: 100%;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     border: 2px solid #61dafb;
   }
 `;
+
 const UserFound = styled(Link)`
   width: 100%;
   height: 16%;
@@ -229,27 +245,14 @@ const UserFound = styled(Link)`
     background-color: ${props => props.theme.colors.primarybg};
   }
 `;
-const UsersNotFound = styled.div`
 
-position: absolute;
-display: flex;
-top: 50%;
-width: 100%;
-height: 100px;
-background-color: ${props => props.theme.colors.bg};
-font-size: 29px;
-text-align: center;
-justify-content: center;
-border-radius: 10px;
-color: #813088;
-`;
 const UsersTable = styled.div`
 
   position: absolute;
   top: 110%;
   right: 0;
   width: 100%;
-  height: 130px;
+  height: 300px;
   min-height: 200px;
   background-color:  ${props => props.theme.colors.bg};
   overflow-y: scroll;
@@ -259,6 +262,7 @@ const UsersTable = styled.div`
     margin: 15px auto;
   }
 `;
+
 const SearchBar = styled.div`
 background:  ${props => props.theme.colors.bg};
 border-radius: 5px;
@@ -333,6 +337,7 @@ export  function NotificationComponent(props: NotifProps) {
     </Notification>
   )
 }
+
 export interface SearchProps {
 new: boolean
 }

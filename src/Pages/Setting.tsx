@@ -96,7 +96,7 @@ export default function Setting() {
         setColor("#16ff01");
 
 
-        console.log("2FA  /{" + checked +"}")
+        // console.log("2FA  /{" + checked +"}")
 
 
         axios.put("http://localhost:8000/profile/updateUsername/" + name , name, {withCredentials: true}).then((res)=>{
@@ -105,7 +105,7 @@ export default function Setting() {
                 setLoading(false);
             })
 
-            // console.log("Res = ")
+            console.log("Res = ", res)
             // console.log(res)
         }   ).catch((err)=>{ 
             wait(2000).then(() => {
@@ -125,7 +125,7 @@ export default function Setting() {
             console.log(err)
         }   )
 
-        // console.log("submit handler /{" + name+"}")
+        console.log("submit handler /{" + name+"}")
     };
 
     return (
