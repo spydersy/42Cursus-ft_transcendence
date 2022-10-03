@@ -92,17 +92,31 @@ interface convType {
 }
 
 const ConversList : convType[] = [
+
 {
   id: '0',
   messages: [],
   avatar: Mamali,
   users: [
     {
-      name: 'reda',
-      message: ['kkk'],
+      name: 'ali',
+      message: [],
     },
 ]
 },
+
+// {
+//   id: '1',
+//   messages: ["kmkmk"],
+//   avatar: Mamali,
+//   users: [
+//     {
+//       name: 'reda',
+//       message: [],
+//     },
+// ]
+// },
+
 ];
 
 export default function Chat() {

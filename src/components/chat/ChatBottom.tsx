@@ -55,9 +55,7 @@ export default function ChatBottom(props: ChatProps) {
           message: payload
         }
         listtmp[props.index].users.push(obj);
-        // listtmp[props.index].messages.push(obj.message);
-        // console.log('yopi')
-        // console.log(listtmp[props.index].messages);
+        listtmp[props.index].messages.push(obj.message);
         props.setList([...listtmp ]);
     }
 

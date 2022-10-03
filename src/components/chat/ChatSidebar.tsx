@@ -31,6 +31,7 @@ export default function ChatSidebar(props : ChatProps) {
     const [hide, sethide] = useState(false)
     console.log('heeey');
     console.log(props.list[0].messages);
+    // props.list.messages[props.list.messages.lenght - 1];
     return (
       <ChatSidebarStyle>
           <div className='title'>
@@ -49,7 +50,7 @@ export default function ChatSidebar(props : ChatProps) {
                 {props.list.map((data : any , id : number)=>{
                     return  < ConversationComponent onClick={()=>{
                         props.setcurrentConv(id)
-                    }} key={id} messages={data.messages[data.messages.lenght - 1] } name={data.users[props.currentConv].name} avatar={data.avatar}  active={id === props.currentConv} />
+                    }} key={id} messages={data.messages} name={data.users[id].name} avatar={data.avatar}  active={id === props.currentConv} />
                 })}
     
           </div>
@@ -131,12 +132,8 @@ interface ConvProps{
 }
 
 export  function ConversationComponent(props : ConvProps) {
-
-
-    
     return (
         <ChatMesgstyle active={props.active}onClick={props.onClick}>
-  
           <Avatar>
             <AvatarComponent img={Mamali}/>
           </Avatar>
@@ -146,15 +143,13 @@ export  function ConversationComponent(props : ConvProps) {
             </div>
               {
               <div className='msg'>
-              {props.messages}
+              {props.messages[props.messages.length - 1]}
             </div>
               }
           </div>
           <div className='time'>
             3min ago
           </div>
-  
-          
         </ChatMesgstyle>
     )
   }
