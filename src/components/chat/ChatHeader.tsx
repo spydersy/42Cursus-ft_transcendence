@@ -2,7 +2,6 @@ import React , { useState}from 'react'
 import {ReactComponent as Dots} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as UserIcon} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as SettingIcon} from "../../assets/imgs/dotsvertical.svg";
-
 import styled  from "styled-components"
 import { AvatarComponent } from '../PlayerProfile';
 import DropDown from '../DropDown';
@@ -21,8 +20,6 @@ interface ListTypes  {
 export default function ChatHeader(props : convType) {
     const [open, setopen] = useState(false)
     const ToggleDD = (e : any)=>{
-  
-      console.log("hello")
       setopen(!open)
       e.stopPropagation();
     }

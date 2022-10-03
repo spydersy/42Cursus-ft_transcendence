@@ -6,11 +6,6 @@ import ChatSidebar from './ChatSidebar'
 import ChatBottom from './ChatBottom'
 import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 
-interface convType {
-  name : string,
-  avatar : string,
-  messages : chatType[]
-}
 
 const msgList = [
     {
@@ -56,50 +51,65 @@ const msgList2 = [
     },
     {
       id: "0",
-      msg : "labas", 
+      msg : "malabasch", 
     }
    
   ]
+
+
+// const ConversList : convType[] = [
+//     {
+//         name : "",
+//         avatar : '',
+//         messages: msgList
+//     },
+    // {
+
+    //     name : "hfdyl",
+    //     avatar : Mamali,
+    //     messages: msgList
+
+    // },
+    // {
+
+    //     name : "ozakkare",
+    //     avatar : Mamali,
+    //     messages: msgList2
+
+    // }
+// ]
+
+interface chatType {
+  name: string,
+  message: string[],
+}
+
+interface convType {
+  id: string,
+  messages: string[],
+  avatar : string,
+  users: chatType[]
+}
+
 const ConversList : convType[] = [
+{
+  id: '0',
+  messages: [],
+  avatar: Mamali,
+  users: [
     {
-
-        name : "mamali",
-        avatar : Mamali,
-        messages: msgList
-
+      name: 'reda',
+      message: ['kkk'],
     },
-    {
-
-        name : "hfdyl",
-        avatar : Mamali,
-        messages: msgList1
-
-    },
-    {
-
-        name : "ozakkare",
-        avatar : Mamali,
-        messages: msgList2
-
-    }
-] 
-  interface chatType {
-    id: string,
-    msg: string,
-  
-  }
-
+]
+},
+];
 
 export default function Chat() {
     const [list, setlist] = useState(ConversList)
     const [currentConv, setcurrentConv] = useState(0)
-  
-
-   
     useEffect(() => {
-        
-      console.log(list)
-      
+      // console.log(list)
     }, [list ])
     return (
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
@@ -107,24 +117,19 @@ export default function Chat() {
           <ChatSidebar setcurrentConv={(e)=>{ setcurrentConv(e)
             var test = document.getElementById("test");
             if (test)
-            {
               test.style.zIndex = "1"
-
-            }
-          }} currentConv={currentConv} list={list}  />
-              
+          }} currentConv={currentConv} list={list} />
           </div>
           <div id="body"className='bodyy'>
             <div  className='top'>
-              <ChatHeader name={list[currentConv].name} avatar={list[currentConv].avatar} />
+              <ChatHeader name={list[currentConv].users[currentConv].name} avatar={list[currentConv].avatar} />
             </div>
             <div className='center'>
   
-            <ChatBody list={list[currentConv].messages} setList={(e)=>{setlist(e)}}/>
+            <ChatBody list={list[currentConv].users} setList={(e)=>{setlist(e)}} />
             </div>
             <div className='bottom'>
               <ChatBottom index={currentConv} list={list} setList={(e)=>{setlist(e)}}  />
-            
             </div>
           </div>
           <div className='left'>

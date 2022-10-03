@@ -2,16 +2,18 @@
 import React from 'react'
 import styled  from "styled-components"
 
-
+// interface chatType {
+//     id: string,
+//     msg: string,
+//   }
 interface chatType {
-    id: string,
-    msg: string,
-  
-  }
+  name: string,
+  message: string[],
+
+}
 interface ChatProps {
     setList: (e : any) => void,
     list: chatType[]
-  
   }
 
   export default function ChatBody(props: ChatProps) {
@@ -21,27 +23,26 @@ interface ChatProps {
     //     console.log("coco")
     //   })
     // }, [])
-    
+    // console.log('allah' + props.list)
+    // console.log(props.list.length);
     return (
       <ChatBodyStyle>
         {
           props.list.map((object: any , i : number)=>{
             if (object.id === "0")
               return <div key={i} >  <MsgNotStyle>
-                
                 <div className='name'>Dosker </div>
-                {object.msg} 
+                {object.message}
               <span>
                 7:20pm
               </span>
               </MsgNotStyle></div>
-              else
-              return <div key={i}  >  <MsgStyle>{object.msg}
-               <span>
+            else
+              return <div key={i} > <MsgStyle>{object.message}
+                <span>
                 7:20pm
               </span>
-               </MsgStyle></div>
-
+                </MsgStyle></div>
           })
         }
       </ChatBodyStyle>

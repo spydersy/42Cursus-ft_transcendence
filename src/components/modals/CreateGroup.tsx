@@ -80,7 +80,6 @@ export default function CreateGroup() {
 
             if (passRef.current != null)
             {
-
                 var pass = passRef.current.value;
                 if (pass != "")
                 {
@@ -111,7 +110,7 @@ export default function CreateGroup() {
         })
        
     }, [data])
-    
+    // console.log("__MEMBERS__DBG__ : ", members);
   return (
     <CreateGroupStyle>
         <HeadComponent title={"New Group"}/>

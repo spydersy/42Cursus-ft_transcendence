@@ -1,53 +1,76 @@
-
-
-import React , { useRef}from 'react'
+import React , {useEffect,useState ,useContext, useRef}from 'react'
+import {ReactComponent as  SearchIcon} from "../../assets/imgs/search.svg"
+import {ReactComponent as Group} from "../../assets/imgs/users.svg";
+import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 import {ReactComponent as SendIcon} from "../../assets/imgs/send-icon.svg";
-
+import { SocketContext } from '../../context/Socket';
 import styled  from "styled-components"
 
-interface chatType {
-    id: string,
-    msg: string,
+// interface chatType {
+//     id: string,
+//     msg: string,
   
-  }
-  interface convType {
-    name : string,
-    avatar : string,
-    messages : chatType[]
-  }
+// }
+// interface convType {
+//   name : string,
+//   avatar : string,
+//   messages : chatType[]
+// }
+
+interface chatType {
+  name: string,
+  message: string[],
+}
+
+interface convType {
+  id: string,
+  messages: string[],
+  avatar : string,
+  users: chatType[]
+}
 interface ChatProps {
-    setList: (e : any) => void,
-    list: convType[],
-    index : number
-  }
+  setList: (e : any) => void,
+  list: convType[],
+  index : number
+}
 
 export default function ChatBottom(props: ChatProps) {
-
+    const socket = useContext(SocketContext)
     const inputRef = useRef<HTMLTextAreaElement>(null)
+    var mesg : string = "";
     const addMessage = ()=>{
-  
-        var mesg : string = "";
         if (inputRef.current?.value)
         {
-          mesg =  inputRef.current.value
-          inputRef.current.value = ""
+          mesg =  inputRef.current.value;
+          inputRef.current.value = "";
         }
-        
-        if (mesg === "")
-          return ;
-        var msgtmp : chatType =  {
-          id: "1",
-          msg: mesg
-        }
-        var listtmp =  props.list;
-
-        //
-        
-        listtmp[props.index].messages.push(msgtmp)
-
-        props.setList([...listtmp ])
+        var msgtmp : string =  mesg;
+        //validation layer (restrictions)
+        socket.emit('chatToServer', msgtmp);
     }
-   
+    const recievedMessgae = (payload: any) => {
+        var listtmp =  props.list;
+        const obj = {
+          name: "reda",
+          message: payload
+        }
+        listtmp[props.index].users.push(obj);
+        // listtmp[props.index].messages.push(obj.message);
+        // console.log('yopi')
+        // console.log(listtmp[props.index].messages);
+        props.setList([...listtmp ]);
+    }
+
+    useEffect(() => {
+      socket.on('connect', () => {
+      });
+      socket.on('chatToClient', (payload) => {
+          recievedMessgae(payload);
+      });
+      return () => {
+
+      }
+  }, [])
     return (
       <BottomChatStyle>
         <textarea ref={inputRef} 

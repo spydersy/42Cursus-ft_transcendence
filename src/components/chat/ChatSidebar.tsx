@@ -9,10 +9,10 @@ import CreateGroup from '../modals/CreateGroup';
 import { AvatarComponent } from '../PlayerProfile';
 
   interface chatType {
-    id: string,
-    msg: string,
-  
+    name: string,
+    message: string[],
   }
+  
   interface ChatProps {
     // setList: (e : any) => void,
     list:  convType[]
@@ -20,17 +20,19 @@ import { AvatarComponent } from '../PlayerProfile';
     currentConv : number,
   }
   interface convType {
-    name : string,
+    id: string,
+    messages: string[],
     avatar : string,
-    messages : chatType[]
+    users: chatType[]
   }
 
 export default function ChatSidebar(props : ChatProps) {
  
     const [hide, sethide] = useState(false)
+    console.log('heeey');
+    console.log(props.list[0].messages);
     return (
       <ChatSidebarStyle>
-          
           <div className='title'>
               Chat
               <Button onClick={()=>sethide(!hide)} icon={<Group/>}/>
@@ -47,7 +49,7 @@ export default function ChatSidebar(props : ChatProps) {
                 {props.list.map((data : any , id : number)=>{
                     return  < ConversationComponent onClick={()=>{
                         props.setcurrentConv(id)
-                    }} key={id} messages={data.messages} name={data.name} avatar={data.avatar}  active={id === props.currentConv} />
+                    }} key={id} messages={data.messages[data.messages.lenght - 1] } name={data.users[props.currentConv].name} avatar={data.avatar}  active={id === props.currentConv} />
                 })}
     
           </div>
@@ -123,7 +125,7 @@ const ChatSidebarStyle = styled.div`
 interface ConvProps{
     name : string,
     avatar : string, 
-    messages: chatType[],
+    messages: string[],
     onClick : ()=>void,
     active : boolean
 }
@@ -144,7 +146,7 @@ export  function ConversationComponent(props : ConvProps) {
             </div>
               {
               <div className='msg'>
-              {props.messages[props.messages.length - 1].msg}
+              {props.messages}
             </div>
               }
           </div>
