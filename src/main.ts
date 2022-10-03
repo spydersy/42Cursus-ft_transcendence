@@ -27,7 +27,7 @@ export class VersionHeaderInterceptor implements NestInterceptor {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {cors: true});
+  const app = await NestFactory.create(AppModule);
   app.useGlobalInterceptors(new VersionHeaderInterceptor());
   app.enableCors({
     origin: 'http://localhost:3000',
