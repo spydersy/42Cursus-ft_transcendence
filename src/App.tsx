@@ -80,7 +80,7 @@ function App() {
             <Routes>
               <Route path="/signin" element={<SignIn />} />
               <Route path="/game" element={<Game theme={gametheme}  />} />
-              <Route path="/chat" element={<Chat />} />
+              <Route path="/chat/:id" element={<Chat />} />
               <Route path="/setting" element={<Setting />} />
               <Route path="/testing" element={<Test />} />
               <Route path="/rooms" element={<Room />} />

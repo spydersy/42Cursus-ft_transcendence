@@ -50,6 +50,7 @@ export default function ChatBottom(props: ChatProps) {
     }
     const recievedMessgae = (payload: any) => {
         var listtmp =  props.list;
+        alert(payload +  props.index);
         const obj = {
           name: "reda",
           message: payload

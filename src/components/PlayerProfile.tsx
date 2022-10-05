@@ -193,7 +193,14 @@ export function Stats(props: PlayerCardProps) {
                   
                   {
                     relationStatus === "FRIENDS" ? 
+                    <>
                     <Button  type='secondary' onClick={addFriend} icon={<UserAddIcon/>} text='Friend'/>
+                    <a href="/chat/id">
+                    <Button onClick={addFriend} icon={<UserAddIcon/>} text='send messqge'/>
+
+                    </a>
+                    
+                    </>
                     :
                     relationStatus === 'PENDING' ? 
                     <Button onClick={addFriend} icon={<UserAddIcon/>} text='Accept'/>

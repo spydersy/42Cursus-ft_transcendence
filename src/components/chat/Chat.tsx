@@ -7,77 +7,6 @@ import ChatBottom from './ChatBottom'
 import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 
 
-const msgList = [
-    {
-      id: "0",
-      msg : "salam merhba salam merhba salam merhba salam merhba salam merhba salam merhba", 
-    },
-    {
-      id: "0",
-      msg : "kidayr", 
-    }
-    , {
-      id: "1",
-      msg : "hamdulah unta ach fiha", 
-    }
-    , {
-      id: "0",
-      msg : "mafiha walo hh", 
-    }
-    , {
-      id: "1",
-      msg : "hh", 
-    },
-    {
-      id: "0",
-      msg : "ewa", 
-    }
-  ]
-const msgList1 = [
-    {
-      id: "0",
-      msg : "salam merhba salam merhba salam merhba salam merhba salam merhba salam merhba", 
-    },
-    {
-      id: "0",
-      msg : "kidayr", 
-    }
-   
-  ]
-const msgList2 = [
-    {
-      id: "0",
-      msg : "salam merhba salam merhba salam merhba salam merhba salam merhba salam merhba", 
-    },
-    {
-      id: "0",
-      msg : "malabasch", 
-    }
-   
-  ]
-
-
-// const ConversList : convType[] = [
-//     {
-//         name : "",
-//         avatar : '',
-//         messages: msgList
-//     },
-    // {
-
-    //     name : "hfdyl",
-    //     avatar : Mamali,
-    //     messages: msgList
-
-    // },
-    // {
-
-    //     name : "ozakkare",
-    //     avatar : Mamali,
-    //     messages: msgList2
-
-    // }
-// ]
 
 interface chatType {
   name: string,
@@ -92,7 +21,6 @@ interface convType {
 }
 
 const ConversList : convType[] = [
-
 {
   id: '0',
   messages: [],
@@ -104,18 +32,17 @@ const ConversList : convType[] = [
     },
 ]
 },
-
-// {
-//   id: '1',
-//   messages: ["kmkmk"],
-//   avatar: Mamali,
-//   users: [
-//     {
-//       name: 'reda',
-//       message: [],
-//     },
-// ]
-// },
+{
+  id: '0',
+  messages: [],
+  avatar: Mamali,
+  users: [
+    {
+      name: 'reda',
+      message: [],
+    },
+]
+}
 
 ];
 
@@ -129,14 +56,14 @@ export default function Chat() {
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
           <div id="right" className='right'>
           <ChatSidebar setcurrentConv={(e)=>{ setcurrentConv(e)
-            var test = document.getElementById("test");
-            if (test)
-              test.style.zIndex = "1"
+            // var test = document.getElementById("test");
+            // if (test)
+            //   test.style.zIndex = "1"
           }} currentConv={currentConv} list={list} />
           </div>
           <div id="body"className='bodyy'>
             <div  className='top'>
-              <ChatHeader name={list[currentConv].users[currentConv].name} avatar={list[currentConv].avatar} />
+              <ChatHeader name={list[currentConv].users[0].name} avatar={list[currentConv].avatar} />
             </div>
             <div className='center'>
   

@@ -70,14 +70,12 @@ export default function CreateGroup() {
     const createGroup = ()=>{
         //check for valid input
         var  bodyFormData = new FormData();
-
         bodyFormData.append('icone',data.icone);
         bodyFormData.append('name',data.name);
         bodyFormData.append('members', JSON.stringify(members));
         bodyFormData.append('type',data.type);
         if (data.type === "protected" )
         {
-
             if (passRef.current != null)
             {
                 var pass = passRef.current.value;
@@ -87,19 +85,16 @@ export default function CreateGroup() {
                 }
             }
         }
-        console.log(bodyFormData.get("members"))
+        console.log("__MEMBERS__DBG__ : ",bodyFormData.get("members"))
         axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 
       ).then((res)=>{
         console.log(res.data)
-    
       }).catch((err)=>{
         console.log(err)
-    
         })
         
     }
-
     useEffect(() => {
         var e = document.getElementById("fileInput")
         e?.addEventListener("change", (c :any)=>{
@@ -108,7 +103,6 @@ export default function CreateGroup() {
             setimg( URL.createObjectURL(c.target.files[0]))
             setdata({...data , icone: c.target.files[0]})
         })
-       
     }, [data])
     // console.log("__MEMBERS__DBG__ : ", members);
   return (

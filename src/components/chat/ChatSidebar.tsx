@@ -29,8 +29,9 @@ import { AvatarComponent } from '../PlayerProfile';
 export default function ChatSidebar(props : ChatProps) {
  
     const [hide, sethide] = useState(false)
-    console.log('heeey');
-    console.log(props.list[0].messages);
+    console.log('pchaakh');
+    console.log(props.list);
+    // console.log(props.list[0].messages);
     // props.list.messages[props.list.messages.lenght - 1];
     return (
       <ChatSidebarStyle>
@@ -50,7 +51,7 @@ export default function ChatSidebar(props : ChatProps) {
                 {props.list.map((data : any , id : number)=>{
                     return  < ConversationComponent onClick={()=>{
                         props.setcurrentConv(id)
-                    }} key={id} messages={data.messages} name={data.users[id].name} avatar={data.avatar}  active={id === props.currentConv} />
+                    }} key={id} messages={data.messages} name={data.users[0].name} avatar={data.avatar}  active={id === props.currentConv} />
                 })}
     
           </div>
