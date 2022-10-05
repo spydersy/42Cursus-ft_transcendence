@@ -41,12 +41,14 @@ export class ChatService {
     }
 
     async GetMyRooms(me: number, @Res() res) {
-        this.prisma.channelsUsers.findMany({
+        let myChannels = await this.prisma.channels.findMany({
             where: {
-
-            }
+                users: { some: { userId: me} }
+            },
+            include: { users: true }
         });
-        return res.status(HttpStatus.OK).send();
+        console.log("__MY__CHANNELS__ : ", myChannels);
+        return res.status(HttpStatus.OK).send(myChannels);
     }
 
     async CreateRoom(me: number, channelName: string, type: string,

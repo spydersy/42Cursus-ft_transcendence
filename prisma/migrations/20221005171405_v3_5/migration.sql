@@ -16,14 +16,13 @@ CREATE TABLE "users" (
     "login" TEXT NOT NULL,
     "displayName" TEXT NOT NULL,
     "defaultAvatar" TEXT NOT NULL,
-    "uploadedAvatar" TEXT,
-    "notifications" JSONB,
+    "notifications" JSONB[],
     "wins" INTEGER NOT NULL DEFAULT 0,
     "losses" INTEGER NOT NULL DEFAULT 0,
     "level" INTEGER NOT NULL DEFAULT 0,
     "twoFactorAuth" BOOLEAN NOT NULL DEFAULT false,
     "twoFactorAuthSecret" TEXT,
-    "lastModification" TIMESTAMP(3) NOT NULL,
+    "lastModification" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -65,7 +64,11 @@ CREATE TABLE "MatchHistory" (
 CREATE TABLE "channels" (
     "id" SERIAL NOT NULL,
     "access" "CHANNEL" NOT NULL,
+    "name" TEXT,
+    "picture" TEXT,
     "password" TEXT,
+    "nbMessages" INTEGER NOT NULL DEFAULT 0,
+    "lastUpdate" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "channels_pkey" PRIMARY KEY ("id")
 );
@@ -89,6 +92,7 @@ CREATE TABLE "Messages" (
     "senderId" INTEGER NOT NULL,
     "channelId" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Messages_pkey" PRIMARY KEY ("id")
 );
@@ -122,3 +126,9 @@ ALTER TABLE "channelsUsers" ADD CONSTRAINT "channelsUsers_userId_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "channelsUsers" ADD CONSTRAINT "channelsUsers_channelId_fkey" FOREIGN KEY ("channelId") REFERENCES "channels"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_channelId_fkey" FOREIGN KEY ("channelId") REFERENCES "channels"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

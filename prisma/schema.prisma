@@ -101,13 +101,15 @@ enum RESCTRICTION {
 }
 
 model channels {
-  id       Int     @id @default(autoincrement())
-  access   CHANNEL
-  name     String?
-  picture  String?
-  password String?
-  users    channelsUsers[] @relation("ChannelsUsers")
-  messages Messages[]      @relation("ChannelMessages")
+  id         Int             @id @default(autoincrement())
+  access     CHANNEL
+  name       String?
+  picture    String?
+  password   String?
+  nbMessages Int             @default(0)
+  users      channelsUsers[] @relation("ChannelsUsers")
+  messages   Messages[]      @relation("ChannelMessages")
+  lastUpdate DateTime        @updatedAt
 }
 
 model channelsUsers {
