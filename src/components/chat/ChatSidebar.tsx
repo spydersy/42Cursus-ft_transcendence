@@ -8,9 +8,19 @@ import Modal from '../Modal';
 import CreateGroup from '../modals/CreateGroup';
 import { AvatarComponent } from '../PlayerProfile';
 
-  interface chatType {
+interface UserProp {
+  defaultAvatar: string,
+  login : string
+  displayName : string
+  relation? : string
+  nbFriends? : string
+  wins : number
+  losses : number
+}
+
+  interface usersType {
     name: string,
-    message: string[],
+    user: UserProp
   }
   
   interface ChatProps {
@@ -20,12 +30,13 @@ import { AvatarComponent } from '../PlayerProfile';
     currentConv : number,
   }
   interface convType {
+    access : string,
     id: string,
-    messages: string[],
-    avatar : string,
-    users: chatType[]
+    name: string;
+    password: string,
+    picture : string,
+    users: usersType[]
   }
-
 export default function ChatSidebar(props : ChatProps) {
  
     const [hide, sethide] = useState(false)
@@ -49,11 +60,10 @@ export default function ChatSidebar(props : ChatProps) {
           </div>
           <div className='conversation'>
                 {props.list.map((data : any , id : number)=>{
-                    return  < ConversationComponent onClick={()=>{
+                    return < ConversationComponent onClick={()=>{
                         props.setcurrentConv(id)
-                    }} key={id} messages={data.messages} name={data.users[0].name} avatar={data.avatar}  active={id === props.currentConv} />
+                    }} key={id}  data={data} active={props.currentConv === id} />
                 })}
-    
           </div>
   
       </ChatSidebarStyle>
@@ -125,32 +135,56 @@ const ChatSidebarStyle = styled.div`
     }
 `
 interface ConvProps{
-    name : string,
-    avatar : string, 
-    messages: string[],
     onClick : ()=>void,
     active : boolean
+    data : convType
 }
 
 export  function ConversationComponent(props : ConvProps) {
     return (
         <ChatMesgstyle active={props.active}onClick={props.onClick}>
-          <Avatar>
-            <AvatarComponent img={Mamali}/>
+          {
+            props.data.access === "DM" ?
+            <>
+              <Avatar>
+            <AvatarComponent img={props.data?.users[0].user.defaultAvatar}/>
           </Avatar>
           <div className='mesgData'>
             <div className='name'>
-             { props.name}
+             { props.data?.users[0].user.displayName}
             </div>
               {
               <div className='msg'>
-              {props.messages[props.messages.length - 1]}
+              {/* {props.messages[props.messages.length - 1]} */}
             </div>
               }
           </div>
           <div className='time'>
             3min ago
           </div>
+            </>
+            :
+            <>
+              <Avatar>
+            <AvatarComponent img={props.data.picture}/>
+          </Avatar>
+          <div className='mesgData'>
+            <div className='name'>
+             { props.data.name}
+            </div>
+              {
+              <div className='msg'>
+              {/* {props.messages[props.messages.length - 1]} */}
+            </div>
+              }
+          </div>
+          <div className='time'>
+            3min ago
+          </div>
+            </>
+
+          }
+        
         </ChatMesgstyle>
     )
   }

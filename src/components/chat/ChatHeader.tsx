@@ -5,6 +5,22 @@ import {ReactComponent as SettingIcon} from "../../assets/imgs/dotsvertical.svg"
 import styled  from "styled-components"
 import { AvatarComponent } from '../PlayerProfile';
 import DropDown from '../DropDown';
+import { data } from 'jquery';
+
+interface UserProp {
+  defaultAvatar: string,
+  login : string
+  displayName : string
+  relation? : string
+  nbFriends? : string
+  wins : number
+  losses : number
+}
+
+  interface usersType {
+    name: string,
+    user: UserProp
+  }
 interface ListTypes  {
     title : string,
     icon :  any,
@@ -12,12 +28,21 @@ interface ListTypes  {
   
   }
   interface convType {
-    name : string,
-    avatar : string,
+    access : string,
+    id: string,
+    name: string;
+    password: string,
+    picture : string,
+    users: usersType[]
   }
+
+  interface chatHeaderProps {
+    data : convType
+  }
+
   const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/id"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
   
-export default function ChatHeader(props : convType) {
+export default function ChatHeader(props : chatHeaderProps) {
     const [open, setopen] = useState(false)
     const ToggleDD = (e : any)=>{
       setopen(!open)
@@ -25,15 +50,31 @@ export default function ChatHeader(props : convType) {
     }
     return (
       <TopStyle>
+          {
+            props.data?.access === "DM" ? 
         <div className='cont'>
+
           <div style={{width: "40px" , height: "40px"}}>
   
-          <AvatarComponent img={props.avatar}/>
+          <AvatarComponent img={props.data?.users[0].user.defaultAvatar}/>
           </div >
           <div >
-             {props.name}
+             {props.data?.users[0].user.displayName}
           </div>
         </div>
+          :
+          <div className='cont'>
+
+            <div style={{width: "40px" , height: "40px"}}>
+    
+            <AvatarComponent img={props.data?.picture}/>
+            </div >
+            <div >
+              {props.data?.name}
+            </div>
+          </div>
+
+          }
         
         <Dots onClick={ToggleDD} />
         {

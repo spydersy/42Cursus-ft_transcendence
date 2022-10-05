@@ -5,53 +5,53 @@ import ChatHeader from './ChatHeader'
 import ChatSidebar from './ChatSidebar'
 import ChatBottom from './ChatBottom'
 import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
+import axios from 'axios'
 
-
-
-interface chatType {
-  name: string,
-  message: string[],
+interface UserProp {
+  defaultAvatar: string,
+  login : string
+  displayName : string
+  relation? : string
+  nbFriends? : string
+  wins : number
+  losses : number
 }
 
-interface convType {
-  id: string,
-  messages: string[],
-  avatar : string,
-  users: chatType[]
-}
-
-const ConversList : convType[] = [
-{
-  id: '0',
-  messages: [],
-  avatar: Mamali,
-  users: [
-    {
-      name: 'ali',
-      message: [],
-    },
-]
-},
-{
-  id: '0',
-  messages: [],
-  avatar: Mamali,
-  users: [
-    {
-      name: 'reda',
-      message: [],
-    },
-]
-}
-
-];
+  interface usersType {
+    name: string,
+    user: UserProp
+  }
+interface ListTypes  {
+    title : string,
+    icon :  any,
+    href: string
+  
+  }
+  interface convType {
+    access : string,
+    id: string,
+    name: string;
+    password: string,
+    picture : string,
+    users: usersType[]
+  }
 
 export default function Chat() {
-    const [list, setlist] = useState(ConversList)
+    const [list, setlist] = useState<convType[]>([])
     const [currentConv, setcurrentConv] = useState(0)
     useEffect(() => {
       // console.log(list)
-    }, [list ])
+      axios.get("http://localhost:8000/chat/myChannles", 
+      {withCredentials: true} 
+    ).then((res)=>{
+      console.log(res.data)
+      setlist(res.data);
+      console.log(res.data[currentConv])
+    }).catch((err)=>{
+          console.log(err)
+          // history.pushState("/signin");
+      })
+    },[])
     return (
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
           <div id="right" className='right'>
@@ -63,15 +63,15 @@ export default function Chat() {
           </div>
           <div id="body"className='bodyy'>
             <div  className='top'>
-              <ChatHeader name={list[currentConv].users[0].name} avatar={list[currentConv].avatar} />
+              <ChatHeader data={list[currentConv]} />
             </div>
-            <div className='center'>
+            {/* <div className='center'>
   
             <ChatBody list={list[currentConv].users} setList={(e)=>{setlist(e)}} />
             </div>
             <div className='bottom'>
               <ChatBottom index={currentConv} list={list} setList={(e)=>{setlist(e)}}  />
-            </div>
+            </div> */}
           </div>
           <div className='left'>
           {/* <ControlBar/> */}
