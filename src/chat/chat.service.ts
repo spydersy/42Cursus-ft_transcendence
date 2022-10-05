@@ -43,9 +43,9 @@ export class ChatService {
     async GetMyRooms(me: number, @Res() res) {
         let myChannels = await this.prisma.channels.findMany({
             where: {
-                users: { some: { userId: me} }
+                users: {some: { userId: me}}
             },
-            include: { users: true }
+            include: {users: {include: { user: true }}}
         });
         console.log("__MY__CHANNELS__ : ", myChannels);
         return res.status(HttpStatus.OK).send(myChannels);
