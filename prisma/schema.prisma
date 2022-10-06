@@ -101,7 +101,11 @@ enum RESCTRICTION {
 }
 
 model channels {
-  id         Int             @id @default(autoincrement())
+  // id         Int             @id @default(autoincrement())
+
+  id             String       @id @default(uuid())
+
+
   access     CHANNEL
   name       String?
   picture    String?
@@ -119,7 +123,7 @@ model channelsUsers {
   userId          Int
 
   channel         channels @relation("ChannelsUsers", fields: [channelId], references: [id])
-  channelId       Int
+  channelId       String
 
   permission      PERMISSION
 
@@ -137,7 +141,7 @@ model Messages {
   senderId  Int
 
   channel   channels  @relation("ChannelMessages", fields: [channelId], references: [id])
-  channelId Int
+  channelId String
 
   content   String
   date      DateTime  @default(now())

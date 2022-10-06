@@ -48,6 +48,11 @@ export class ChatController {
       return this.chatService.GetMyRooms(req.user.userId, res);
     }
 
+    // @Post('sendMessage')
+    // async SendMessage() {
+
+    // }
+
     @Post('createRoom')
     @UseInterceptors(
         FileInterceptor('icone', {

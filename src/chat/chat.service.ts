@@ -6,7 +6,7 @@ import { channel } from 'diagnostics_channel';
 
 interface ManyUsers {
     userId:    number;
-    channelId: number;
+    channelId: string;
     permission: PERMISSION;
 }
 
@@ -104,14 +104,10 @@ export class ChatService {
                     displayName: user.user.displayName,
                     defaultAvatar: user.user.defaultAvatar,
                 };
-                if (user.user.id === me) {
-                    console.log("___AAA___");
+                if (user.user.id === me)
                     Channel.users.splice(0, 0, userdto);
-                }
-                else {
-                    console.log("___BBB___");
+                else
                     Channel.users.push(userdto);
-                }
             });
             myChannels.push(Channel);
         });
