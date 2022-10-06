@@ -1,7 +1,8 @@
-import { HttpStatus, Injectable, Req, Res } from '@nestjs/common';
+import { Body, HttpStatus, Injectable, Req, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CHANNEL, PERMISSION, RESCTRICTION } from '@prisma/client';
 import { channel } from 'diagnostics_channel';
+import e from 'express';
 
 
 interface ManyUsers {
@@ -112,6 +113,38 @@ export class ChatService {
             myChannels.push(Channel);
         });
         return myChannels;
+    }
+
+    async PostMessageValidationLayer(me: number, messageContent: string, channelId: string) : Promise<boolean> {
+        // Do Something . . .
+        return true;
+    }
+
+    async GetMessageValidationLayer(me: number, messageContent: string, channelId: string) : Promise<boolean> {
+        // Do Something . . .
+        return true;
+    }
+
+    async SendMessage(me: number, @Body() messageData, @Res() res) {
+        let messageContent: string = messageData['content'];
+        let channelId: string = messageData['channelId'];
+        if (await this.PostMessageValidationLayer(me, messageContent, channelId) === true) {
+            this.prisma.messages.create({
+                data: {
+                    senderId: me,
+                    channelId: channelId,
+                    content: messageContent,
+                }
+            });
+            this.prisma.channels.update({
+                where: {id: channelId},
+                data: {nbMessages: {increment: 1}},
+            });
+            return res
+            .status(HttpStatus.CREATED)
+            .send({'message': "Message Sent"});
+        }
+        return res.status(HttpStatus.FORBIDDEN).send({'message': "Method Not Allowed"});
     }
 
     async GetMyRooms(me: number, @Res() res) {

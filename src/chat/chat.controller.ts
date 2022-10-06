@@ -48,10 +48,14 @@ export class ChatController {
       return this.chatService.GetMyRooms(req.user.userId, res);
     }
 
-    // @Post('sendMessage')
-    // async SendMessage() {
-
-    // }
+    @Post('sendMessage')
+    async SendMessage(@Req() req, @Body() messageData, @Res() res) {
+      if (messageData === undefined || messageData['content'] === undefined
+        || messageData['channelId'] === undefined) {
+        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Request Malformed"});
+      }
+      return this.chatService.SendMessage(req.user.userId, messageData, res);
+    }
 
     @Post('createRoom')
     @UseInterceptors(
