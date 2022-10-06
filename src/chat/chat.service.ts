@@ -1,12 +1,50 @@
 import { HttpStatus, Injectable, Req, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CHANNEL, PERMISSION, Prisma, RESCTRICTION } from '@prisma/client';
+import { CHANNEL, PERMISSION, RESCTRICTION } from '@prisma/client';
+import { channel } from 'diagnostics_channel';
 
 
 interface ManyUsers {
     userId:    number;
     channelId: number;
     permission: PERMISSION;
+}
+
+// {
+//     "id": 1,
+//     "userId": 62700,
+//     "channelId": 1,
+//     "permission": "USER",
+//     "restriction": "NULL",
+//     "restrictionTime": "2022-10-06T13:02:15.939Z",
+//     "duration": 0,
+//     "user": {
+//       "login": "abelarif",
+//       "displayName": "Achraf Belarif",
+//       "defaultAvatar": "https://avatars.dicebear.com/api/croodles-neutral/abelarif.jpg",
+//     }
+//   },
+
+
+export interface userInChannel {
+    permission:      string,
+    restriction:     string,
+    restrictionTime: string,
+    duration:        number,
+    login:           string,
+    displayName:     string,
+    defaultAvatar:   string,
+}
+
+export interface myChannelsDto {
+    channelId:  number,
+    access:     CHANNEL,
+    name:       string,
+    picture:    string,
+    password:   string,
+    nbMessages: number,
+    lastUpdate: Date,
+    users:      userInChannel[],
 }
 
 @Injectable()
@@ -40,15 +78,54 @@ export class ChatService {
         console.log("__DM__CHANNEL__DBG__ : ", DMChannel);
     }
 
+    async generateChannelDto(me: number, channels: any) : Promise<myChannelsDto[]> {
+        let myChannels: myChannelsDto[] = [];
+
+
+        channels.forEach(chnl => {
+
+            let Channel: myChannelsDto = {
+                channelId:  chnl.id,
+                access:     chnl.access,
+                name:       chnl.name,
+                picture:    chnl.picture,
+                password:   chnl.password,
+                nbMessages: chnl.nbMessages,
+                lastUpdate: chnl.lastUpdate,
+                users:      [],
+            };
+            chnl.users.forEach(user => {
+                let userdto: userInChannel = {
+                    permission: user.permission,
+                    restriction: user.restriction,
+                    restrictionTime: user.restrictionTime,
+                    duration: user.duration,
+                    login: user.user.login,
+                    displayName: user.user.displayName,
+                    defaultAvatar: user.user.defaultAvatar,
+                };
+                if (user.user.id === me) {
+                    console.log("___AAA___");
+                    Channel.users.splice(0, 0, userdto);
+                }
+                else {
+                    console.log("___BBB___");
+                    Channel.users.push(userdto);
+                }
+            });
+            myChannels.push(Channel);
+        });
+        return myChannels;
+    }
+
     async GetMyRooms(me: number, @Res() res) {
-        let myChannels = await this.prisma.channels.findMany({
+        let allChannels = await this.prisma.channels.findMany({
             where: {
                 users: {some: { userId: me}}
             },
             include: {users: {include: { user: true }}}
         });
-        console.log("__MY__CHANNELS__ : ", myChannels);
-        return res.status(HttpStatus.OK).send(myChannels);
+        return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, allChannels));
     }
 
     async CreateRoom(me: number, channelName: string, type: string,
