@@ -119,7 +119,8 @@ export class ChatService {
             where: {
                 users: {some: { userId: me}}
             },
-            include: {users: {include: { user: true }}}
+            include: {users: {include: { user: true }}},
+            orderBy: {lastUpdate: 'desc'},
         });
         return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, allChannels));
     }
