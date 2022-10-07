@@ -19,10 +19,11 @@ import { ChatModule } from './chat/chat.module';
 import { TfaService } from './tfa/tfa.service';
 import { TfaController } from './tfa/tfa.controller';
 import { TfaModule } from './tfa/tfa.module';
+import { ChatGateway } from './chat.gateway';
 
 @Module({
   imports: [AuthModule, PrismaModule, UserModule, ProfileModule, ConfigModule.forRoot(), SearchModule, ChatModule, TfaModule],
   controllers: [AppController, UserController, ProfileController, ChatController, TfaController],
-  providers: [AppService, UserService, ProfileService, PrismaService, SearchService, ChatService, TfaService],
+  providers: [AppService, UserService, ProfileService, PrismaService, SearchService, ChatService, TfaService, ChatGateway],
 })
 export class AppModule {}

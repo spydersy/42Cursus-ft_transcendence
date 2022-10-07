@@ -57,6 +57,11 @@ export class ChatController {
       return this.chatService.SendMessage(req.user.userId, messageData, res);
     }
 
+    @Get('messages/:channelId')
+    async GetMessages(@Req() req, @Res() res) {
+      return this.chatService.GetChannelMessages(req.user.userId, req.params.channelId, res);
+    }
+
     @Post('createRoom')
     @UseInterceptors(
         FileInterceptor('icone', {

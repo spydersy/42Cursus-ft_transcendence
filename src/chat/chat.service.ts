@@ -1,31 +1,13 @@
 import { Body, HttpStatus, Injectable, Req, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CHANNEL, PERMISSION, RESCTRICTION } from '@prisma/client';
-import { channel } from 'diagnostics_channel';
-import e from 'express';
-
+import internal from 'stream';
 
 interface ManyUsers {
     userId:    number;
     channelId: string;
     permission: PERMISSION;
 }
-
-// {
-//     "id": 1,
-//     "userId": 62700,
-//     "channelId": 1,
-//     "permission": "USER",
-//     "restriction": "NULL",
-//     "restrictionTime": "2022-10-06T13:02:15.939Z",
-//     "duration": 0,
-//     "user": {
-//       "login": "abelarif",
-//       "displayName": "Achraf Belarif",
-//       "defaultAvatar": "https://avatars.dicebear.com/api/croodles-neutral/abelarif.jpg",
-//     }
-//   },
-
 
 export interface userInChannel {
     permission:      string,
@@ -115,14 +97,58 @@ export class ChatService {
         return myChannels;
     }
 
+    // async BannedUser() : Promise<boolean> {
+    //     return false;
+    // }
+
+    async GetChannelById(channelId: string) {
+        let channel = await this.prisma.channels.findUnique({
+            where: {id: channelId}
+        });
+        return channel;
+    }
+
+    async FindUserInChannel(userId: number, channelId: string) {
+        let userChannel = await this.prisma.channelsUsers.findUnique({
+            where: {
+                userId_channelId: {userId, channelId},
+            },
+        });
+        return userChannel;
+    }
+
     async PostMessageValidationLayer(me: number, messageContent: string, channelId: string) : Promise<boolean> {
-        // Do Something . . .
+        // All Cases:
+            // 1) This user exist in this channel ?
+            // 2) The User have the right to send message (Banned/Muted) ?
+            // 3)
+
         return true;
     }
 
     async GetMessageValidationLayer(me: number, messageContent: string, channelId: string) : Promise<boolean> {
         // Do Something . . .
         return true;
+    }
+
+    async GetChannelMessages(me: number, channelId: string, @Res() res) {
+    // All validations needed:
+        // 1) Is a public/private/protected/dm channel ?
+        let channel = await this.GetChannelById(channelId);
+        if (channel === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'Channel Not Found'});
+        // 2) user exist in this channel ?
+        let userChannel = await this.FindUserInChannel(me, channelId);
+        if (userChannel === null)
+            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Forbidden'});
+        // 3) user have rights to get content ?
+        if (userChannel.restriction === RESCTRICTION.BANNED
+        || userChannel.restriction === RESCTRICTION.MUTED) {
+            let now = new Date();
+            let restrictionTime = new Date();
+            // console.log("__DIFF__ : ", restrictionTime - now);
+            // if ()
+        }
     }
 
     async SendMessage(me: number, @Body() messageData, @Res() res) {

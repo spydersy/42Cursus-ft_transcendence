@@ -12,6 +12,18 @@ datasource db {
 
 // [Users Data] : ================================================================================= //
 
+enum SOCKET {
+  GAME
+  ONLLINE
+}
+
+model websockets{
+  id       Int    @id @default(autoincrement())
+  socketId String
+  userId   Int
+  type     SOCKET
+}
+
 model users {
   id                  Int             @id @unique
   login               String          @unique
@@ -101,10 +113,7 @@ enum RESCTRICTION {
 }
 
 model channels {
-  // id         Int             @id @default(autoincrement())
-
   id             String       @id @default(uuid())
-
 
   access     CHANNEL
   name       String?
