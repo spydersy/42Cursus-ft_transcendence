@@ -5,6 +5,7 @@ import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 import {ReactComponent as SendIcon} from "../../assets/imgs/send-icon.svg";
 import { SocketContext } from '../../context/Socket';
 import styled  from "styled-components"
+import axios from 'axios';
 
 // interface chatType {
 //     id: string,
@@ -17,16 +18,25 @@ import styled  from "styled-components"
 //   messages : chatType[]
 // }
 
-interface chatType {
-  name: string,
-  message: string[],
+interface usersType {
+
+  defaultAvatar: string,
+  login : string
+  displayName : string,
+  restriction: string,
+  restrictionTime: string,
+  duration: number,
 }
 
 interface convType {
-  id: string,
-  messages: string[],
-  avatar : string,
-  users: chatType[]
+  nbMessages: number,
+  lastUpdate: string,
+  access : string,
+  channelId: number,
+  name: string;
+  password: string,
+  picture : string,
+  users: usersType[]
 }
 interface ChatProps {
   setList: (e : any) => void,
@@ -47,17 +57,34 @@ export default function ChatBottom(props: ChatProps) {
         var msgtmp : string =  mesg;
         //validation layer (restrictions)
         socket.emit('chatToServer', msgtmp);
+        /////
+
+        var  bodyFormData = new FormData();
+        console.log(props.list[props.index].channelId )
+        bodyFormData.append('content',msgtmp);
+        bodyFormData.append('channelId',props.list[props.index].channelId + "");
+        console.log(bodyFormData.getAll('content'))
+        //
+        axios.post("http://localhost:8000/chat/sendMessage" ,{ "content" : msgtmp,
+        'channelId' : props.list[props.index].channelId + ""
+      }, 
+        {withCredentials: true} 
+      ).then((res)=>{
+        console.log(res.data)
+      }).catch((err)=>{
+        console.log(err)
+        })
     }
     const recievedMessgae = (payload: any) => {
-        var listtmp =  props.list;
-        alert(payload +  props.index);
-        const obj = {
-          name: "reda",
-          message: payload
-        }
-        listtmp[props.index].users.push(obj);
-        listtmp[props.index].messages.push(obj.message);
-        props.setList([...listtmp ]);
+        // var listtmp =  props.list;
+        // alert(payload +  props.index);
+        // const obj = {
+        //   name: "reda",
+        //   message: payload
+        // }
+        // listtmp[props.index].users.push(obj);
+        // listtmp[props.index].messages.push(obj.message);
+        // props.setList([...listtmp ]);
     }
 
     useEffect(() => {
@@ -69,7 +96,7 @@ export default function ChatBottom(props: ChatProps) {
       return () => {
 
       }
-  }, [])
+  }, [props.index])
     return (
       <BottomChatStyle>
         <textarea ref={inputRef} 

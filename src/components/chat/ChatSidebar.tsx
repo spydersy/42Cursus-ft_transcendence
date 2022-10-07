@@ -18,24 +18,32 @@ interface UserProp {
   losses : number
 }
 
-  interface usersType {
-    name: string,
-    user: UserProp
-  }
-  
+interface usersType {
+
+  defaultAvatar: string,
+  login : string
+  displayName : string,
+  restriction: string,
+  restrictionTime: string,
+  duration: number,
+}
+
+interface convType {
+  nbMessages: number,
+  lastUpdate: string,
+  access : string,
+  channelId: number,
+  name: string;
+  password: string,
+  picture : string,
+  users: usersType[]
+}
+
   interface ChatProps {
     // setList: (e : any) => void,
     list:  convType[]
     setcurrentConv : (e: number)=>void,
     currentConv : number,
-  }
-  interface convType {
-    access : string,
-    id: string,
-    name: string;
-    password: string,
-    picture : string,
-    users: usersType[]
   }
 export default function ChatSidebar(props : ChatProps) {
  
@@ -147,11 +155,11 @@ export  function ConversationComponent(props : ConvProps) {
             props.data.access === "DM" ?
             <>
               <Avatar>
-            <AvatarComponent img={props.data?.users[0].user.defaultAvatar}/>
+            <AvatarComponent img={props.data?.users[1].defaultAvatar}/>
           </Avatar>
           <div className='mesgData'>
             <div className='name'>
-             { props.data?.users[0].user.displayName}
+             { props.data?.users[1].displayName}
             </div>
               {
               <div className='msg'>

@@ -18,18 +18,20 @@ interface UserProp {
 }
 
   interface usersType {
-    name: string,
-    user: UserProp
+
+    defaultAvatar: string,
+    login : string
+    displayName : string,
+    restriction: string,
+    restrictionTime: string,
+    duration: number,
   }
-interface ListTypes  {
-    title : string,
-    icon :  any,
-    href: string
-  
-  }
+
   interface convType {
+    nbMessages: number,
+    lastUpdate: string,
     access : string,
-    id: string,
+    channelId: number,
     name: string;
     password: string,
     picture : string,
@@ -37,11 +39,13 @@ interface ListTypes  {
   }
 
 export default function Chat() {
+  const pageName = window.location.pathname.split("/")[2];
+
     const [list, setlist] = useState<convType[]>([])
-    const [currentConv, setcurrentConv] = useState(0)
+    const [currentConv, setcurrentConv] = useState(parseInt(pageName))
     useEffect(() => {
       // console.log(list)
-      axios.get("http://localhost:8000/chat/myChannles", 
+      axios.get("http://localhost:8000/chat/myChannels", 
       {withCredentials: true} 
     ).then((res)=>{
       console.log(res.data)
@@ -56,22 +60,22 @@ export default function Chat() {
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
           <div id="right" className='right'>
           <ChatSidebar setcurrentConv={(e)=>{ setcurrentConv(e)
-            // var test = document.getElementById("test");
-            // if (test)
-            //   test.style.zIndex = "1"
+            var test = document.getElementById("test");
+            if (test)
+              test.style.zIndex = "1"
           }} currentConv={currentConv} list={list} />
           </div>
           <div id="body"className='bodyy'>
             <div  className='top'>
               <ChatHeader data={list[currentConv]} />
             </div>
-            {/* <div className='center'>
+            <div className='center'>
   
-            <ChatBody list={list[currentConv].users} setList={(e)=>{setlist(e)}} />
+            <ChatBody list={[]} />
             </div>
             <div className='bottom'>
               <ChatBottom index={currentConv} list={list} setList={(e)=>{setlist(e)}}  />
-            </div> */}
+            </div>
           </div>
           <div className='left'>
           {/* <ControlBar/> */}

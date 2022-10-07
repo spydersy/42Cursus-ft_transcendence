@@ -70,7 +70,7 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
                     </Friend>
         })
     }
-    
+    {/* <Button onClick={} text="Done" /> */}
     </AddFriendsModalStyle>
 
   )

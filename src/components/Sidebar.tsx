@@ -19,7 +19,7 @@ export interface barProps {
         },
         {
             title: "Chat",
-            link: "/chat",
+            link: "/chat/0",
             icon : <DMIcon />
         },
         {

@@ -12,7 +12,7 @@ interface chatType {
 
 }
 interface ChatProps {
-    setList: (e : any) => void,
+    // setList: (e : any) => void,
     list: chatType[]
   }
 

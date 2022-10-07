@@ -36,7 +36,6 @@ export default function CreateGroup() {
     const uploadFile = ()=>{
         var e = document.getElementById("fileInput")
         e?.click()
-        
     }
     const handleRadioChange = (e : any)=>{
         if (e.target.id === "protected")
@@ -86,13 +85,13 @@ export default function CreateGroup() {
             }
         }
         console.log("__MEMBERS__DBG__ : ",bodyFormData.get("members"))
-        axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
-        {withCredentials: true} 
-      ).then((res)=>{
-        console.log(res.data)
-      }).catch((err)=>{
-        console.log(err)
-        })
+    //     axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
+    //     {withCredentials: true} 
+    //   ).then((res)=>{
+    //     console.log(res.data)
+    //   }).catch((err)=>{
+    //     console.log(err)
+    //     })
         
     }
     useEffect(() => {

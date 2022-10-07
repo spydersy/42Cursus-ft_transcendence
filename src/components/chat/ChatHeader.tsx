@@ -17,23 +17,31 @@ interface UserProp {
   losses : number
 }
 
-  interface usersType {
-    name: string,
-    user: UserProp
-  }
+interface usersType {
+
+  defaultAvatar: string,
+  login : string
+  displayName : string,
+  restriction: string,
+  restrictionTime: string,
+  duration: number,
+}
+
+interface convType {
+  nbMessages: number,
+  lastUpdate: string,
+  access : string,
+  channelId: number,
+  name: string;
+  password: string,
+  picture : string,
+  users: usersType[]
+}
 interface ListTypes  {
     title : string,
     icon :  any,
     href: string
   
-  }
-  interface convType {
-    access : string,
-    id: string,
-    name: string;
-    password: string,
-    picture : string,
-    users: usersType[]
   }
 
   interface chatHeaderProps {
@@ -56,10 +64,10 @@ export default function ChatHeader(props : chatHeaderProps) {
 
           <div style={{width: "40px" , height: "40px"}}>
   
-          <AvatarComponent img={props.data?.users[0].user.defaultAvatar}/>
+          <AvatarComponent img={props.data?.users[1].defaultAvatar}/>
           </div >
           <div >
-             {props.data?.users[0].user.displayName}
+             {props.data?.users[1].displayName}
           </div>
         </div>
           :
