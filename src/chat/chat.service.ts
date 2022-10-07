@@ -155,7 +155,7 @@ export class ChatService {
         let messageContent: string = messageData['content'];
         let channelId: string = messageData['channelId'];
         if (await this.PostMessageValidationLayer(me, messageContent, channelId) === true) {
-            this.prisma.messages.create({
+            await this.prisma.messages.create({
                 data: {
                     senderId: me,
                     channelId: channelId,
