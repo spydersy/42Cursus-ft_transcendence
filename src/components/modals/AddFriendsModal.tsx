@@ -15,10 +15,16 @@ interface UserProp {
     wins : number
     losses : number
   }
-export default function AddFriendsModal(props : {members : string[] , setmembers : (e : any)=>void}) {
+export default function AddFriendsModal(props : {members : string[] , setmembers : (e : any)=>void , closeModal : ()=> void} ) {
     const [friends, setfriends] = useState([])
     const handleFriend= (e : any)=>{
+
         e.stopPropagation();
+    }
+
+    const done = ()=>{
+      console.log(props.members)
+        props.closeModal()
     }
     useEffect(() => {
         var s : string | null = localStorage.getItem('user');
@@ -60,17 +66,30 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
                             {data.displayName}
                         </div>
                     </div>
+              {
+                !props.members.includes(data.login ) ? 
+                <Button onClick={(e)=>{handleFriend(e)
+                  var test = props.members;
+                  test.push(data.login)
+      console.log(test)
 
-
+                   props.setmembers([...test])
+                    }} text={  "add" }/>
+                    :
+                      
                     <Button onClick={(e)=>{handleFriend(e)
-                           var test = props.members;
-                           test.push(data.defaultAvatar)
-                            props.setmembers([test])
-                    }} text='Add'/>
+                      var test = props.members;
+                      test.splice(id , 1)
+                      props.setmembers([...test])
+              }} text='Added' type='secondary'/>
+              }
+
+                
                     </Friend>
         })
+
     }
-    {/* <Button onClick={} text="Done" /> */}
+    <Button onClick={done} text="Done" />
     </AddFriendsModalStyle>
 
   )

@@ -76,7 +76,7 @@ function App() {
           <ProtectedLayout body={<Upperbar />} />
           <ProtectedLayout body={ <Sidebar/>} />
           <Cont  >
-            <SocketContext.Provider value={SocketValue}>
+            {/* <SocketContext.Provider value={SocketValue}> */}
             <Routes>
               <Route path="/signin" element={<SignIn />} />
               <Route path="/game" element={<Game theme={gametheme}  />} />
@@ -89,7 +89,7 @@ function App() {
               <Route path="/profile/:id" element={<Profile  />} />
               <Route path="/socketTest" element={<SocketTesting />} />
             </Routes>
-            </SocketContext.Provider>
+            {/* </SocketContext.Provider> */}
           </Cont>
         </Main>
        </ThemeProvider>

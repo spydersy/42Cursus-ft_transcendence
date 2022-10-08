@@ -25,7 +25,7 @@ const data1 = {
 export default function ChatTesting() {
     const inputref = useRef<HTMLInputElement>(null);
     const msgref = useRef<HTMLInputElement>(null);
-    const socket = io("http://localhost:3001");
+    // const socket = io("http://localhost:3001");
     const [data, setdata] = useState(data1)
     const [list1, setlist1] = useState<string[]>([])
     const [index, setindex] = useState(0)
@@ -35,7 +35,7 @@ export default function ChatTesting() {
             name: data.username,
             text: data.text
         }
-        socket.emit("chatToServer", msg);
+        // socket.emit("chatToServer", msg);
     }
     const existRoom = () => {
         for (let index = 0; index < data.chatn; index++) {
@@ -74,25 +74,25 @@ export default function ChatTesting() {
         //     }
         // }
     }
-    useEffect(() => {
-        socket.on('connect', () => {
-            // alert('hellooooo');
-        });
-        socket.on('chatToClient', (message) => {
-            console.log(message.chatRoom);
-            recievedMessgae(message);
-        });
-        var list : string[] = [];
-        data.rooms.map((data : any , id : number)=>{
-                list.push(data.name)
+    // useEffect(() => {
+    //     socket.on('connect', () => {
+    //         // alert('hellooooo');
+    //     });
+    //     socket.on('chatToClient', (message) => {
+    //         console.log(message.chatRoom);
+    //         recievedMessgae(message);
+    //     });
+    //     var list : string[] = [];
+    //     data.rooms.map((data : any , id : number)=>{
+    //             list.push(data.name)
                 
-            }
-        ) 
-        setlist1([...list])
-        return () => {
+    //         }
+    //     ) 
+    //     setlist1([...list])
+    //     return () => {
 
-        }
-    }, [data])
+    //     }
+    // }, [data])
 
     return (
         <Cont style={{ marginTop: "200px" }} className='container'>

@@ -45,7 +45,7 @@ const Wrraper = styled.div`
    display: flex;
    background: url(${PatternImg})   no-repeat ;
    /* background-size: cover; */
-   background-size: 100% 100%;
+   background-size: cover;
    position: relative;
 `;
 
@@ -130,7 +130,11 @@ export  function Button(props :ButtonProps ) {
 const LoginButtonStyle = styled.button<ButtonStyleProps>`
 /* margin: 0 auto; */
    padding: 5px 10px;
-   /* height: 40px; */
+   width: 100px;
+   align-items: center;
+   display: flex;
+   align-items: center;
+   height: 40px;
    background: linear-gradient(144deg, #437492 16.67%, #174486 100%);
    border-radius: 5px;
 height: auto;

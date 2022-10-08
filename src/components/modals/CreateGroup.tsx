@@ -3,7 +3,7 @@ import styled , {css} from "styled-components"
 import { HeadComponent } from '../../Pages/Home';
 
 // import Image from "../../assets/imgs/image.svg";
-import Image from "../../assets/imgs/users.svg";
+import { ReactComponent as Image} from "../../assets/imgs/users.svg";
 import {ReactComponent as Edit} from "../../assets/imgs/edit.svg";
 import {ReactComponent as Add} from "../../assets/imgs/plus.svg";
 import { ReactComponent as CloseIcon } from "../../assets/imgs/close-icon.svg";
@@ -84,14 +84,14 @@ export default function CreateGroup() {
                 }
             }
         }
-        console.log("__MEMBERS__DBG__ : ",bodyFormData.get("members"))
-    //     axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
-    //     {withCredentials: true} 
-    //   ).then((res)=>{
-    //     console.log(res.data)
-    //   }).catch((err)=>{
-    //     console.log(err)
-    //     })
+        console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("members"))
+        axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
+        {withCredentials: true} 
+      ).then((res)=>{
+        console.log(res.data)
+      }).catch((err)=>{
+        console.log(err)
+        })
         
     }
     useEffect(() => {
@@ -112,33 +112,35 @@ export default function CreateGroup() {
         <Row >
             <div  onClick={uploadFile} className='groupImg' >
                 <input id="fileInput" type="file" hidden />
-                <img style={{width : img === Image  ? "" : "100%", height : img === Image  ? "" : "100%"  }} src={img}alt="" />
-                <div >
-                    <Edit/>
-                </div>
+                {img === ""? < Image/> :  <img style={{width  : "100%", height : "100%"  }} src={img}alt="xx" />}
+               
             </div>
             {/* <input className='inputText' type="text"  placeholder='Enter group name ..'/> */}
-            <div style={{flex : "1"}}>
+            <div className='con' >
             <InputComponent onChange={(e)=>{
              setdata({...data , name : e.target.value})
             }} type='text' placeholder='Enter Group name'/>
-
-            </div>
-
-        </Row>
-        <Row2 >
-
+<Row2>
             <input type="radio"   onChange={handleRadioChange} id="public" name="status" value="public"/>
             <label>Public</label>
             <input type="radio" onChange={handleRadioChange} id="private" name="status" value="private"/>
             <label>Private</label>
             <input type="radio" onChange={handleRadioChange} id="protected" name="status" value="protected"/>
             <label>Protected</label>
+
+</Row2>
+            </div>
+
+
+        </Row>
+        {/* <Row2 > */}
+
+
             <InputPassWord  defaultChecked={(check === "protected")}>
             <InputComponent refs={passRef} type='password' placeholder='Group Password'/>
 
             </InputPassWord>
-        </Row2>
+        {/* </Row2> */}
          <MembersCont>
             <div onClick={()=>{sethide(!hide)}} className='add'>
                 <Add/>
@@ -147,7 +149,7 @@ export default function CreateGroup() {
                         onRequestClose={() => sethide(false)}
                         hideModal={() => sethide(false)}
                         >
-                            <AddFriendsModal members={members} setmembers={(e : any)=>{setmembers(e)}}/>
+                            <AddFriendsModal closeModal={() => sethide(false)} members={members} setmembers={(e : any)=>{setmembers(e)}}/>
                         </Modal>}
             </div>
             {
@@ -179,12 +181,20 @@ width: 100%;
 display:flex;
 align-items: flex-start;
 flex-direction: row;
+.con{
+    display: flex;
+    flex: 1;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    flex-direction: column;
+}
 .groupImg{
     overflow: hidden;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid  ${props => props.theme.colors.purple};
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    border: 2px solid  ${props => props.theme.colors.seconderyText};
     display: flex;
     align-items: center;
 justify-content: center;
@@ -195,37 +205,25 @@ cursor: pointer;
         opacity: 0;
     } */
     >img{
-        object-fit: contain;
+        object-fit: cover;
     }
-    >div{
-        width: 15px;
-        height: 15px;
-        
-        position: absolute;
-        bottom: -5px;
-        right: -5px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center ;
-            /* background-color: ; */
+  
         >svg{
-            width: 10px;
-            height: 10px;
-      
-            /* height: ; */
+             width: 50px;
+             height: 50px;
+            /* height: 10px; */
             path {
-                stroke: ${props => props.theme.colors.primaryText};;
+                stroke: ${props => props.theme.colors.seconderyText};;
             }
         }
-    }
+    
 }
 >input{
     height: 40px;
     background-color:${props => props.theme.colors.bg}  ;
   border: none;
   outline: none;
-  border: 2px solid ${props => props.theme.colors.border};
+  /* border: 2px solid ${props => props.theme.colors.border}; */
   padding-left: 10px;
   flex: 1;
 
@@ -249,7 +247,9 @@ height: 40px;
 flex-direction: row;
 
     > label{
-        margin-right: 5px;
+        margin-right: 10px;
+        font-family: "Poppins" , sans-serif;
+            font-weight: 600;
     }
         > input[type="radio"] {
             /* outline: none; */
@@ -289,7 +289,9 @@ interface InpProps{
 }
 const InputPassWord= styled.div<InpProps>`
 height: 100%;
+width: 100%;
   flex: 1;
+  margin: 5px 0;
   
     ${props => props.defaultChecked === false && css`
     width: 0;
@@ -301,15 +303,16 @@ height: 100%;
 `;
 
 const MembersCont= styled.div`
-margin-top: 15px;
+margin: 15px 0;
   width: calc(100% - 10px);
   /* min-height: 50px; */
   max-height: 200px;
   display: flex;
   gap: 5px;
   padding: 10px 5px;
+  flex-wrap: wrap;
   /* align-items: center; */
-  border: 1px solid ${props => props.theme.colors.primaryText};
+  border: 1px solid ${props => props.theme.colors.purple};
   /* height: 40px; */
  border-radius: 10px;
   /* background-color: red;0 */
@@ -323,14 +326,14 @@ margin-top: 15px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border : 1px dashed  ${props => props.theme.colors.primaryText}; 
+        border : 1px dashed  ${props => props.theme.colors.purple}; 
 
         >svg{
             width: 30px;
             height: 30px;
             path{
                 fill: transparent;
-                stroke:  ${props => props.theme.colors.primaryText};;
+                stroke:  ${props => props.theme.colors.purple};
             }
         }
     }
@@ -339,13 +342,30 @@ margin-top: 15px;
 
 
 interface  MemberProp{
-    members : string[]
+    members : string[],
     setmembers: (e : any) => void,
     id: string
 }
 
 
 export  function Member(props:MemberProp ) {
+    const [img, setimg] = useState("")
+    
+    useEffect(() => {
+
+          axios.get("http://localhost:8000/users/" + props.id, 
+          {withCredentials: true} 
+        ).then((res)=>{
+  
+
+            setimg(res.data.defaultAvatar)
+        }).catch((err)=>{
+         
+          })
+        
+    
+ 
+    }  , [])
     const deleteMember = ()=>{
         var list = props.members
         var index = list.indexOf(props.id)
@@ -356,7 +376,7 @@ export  function Member(props:MemberProp ) {
   return (
     <MembersStyle>
         <div className='cont'>
-            <img src={props.id} alt="" />
+            <img src={img} alt="" />
         </div>
         <div onClick={deleteMember} className='btn'>
         <CloseIcon/>
