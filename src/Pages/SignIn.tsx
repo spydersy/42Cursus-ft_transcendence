@@ -110,17 +110,19 @@ opacity: 0.8;
 `;
 
 interface ButtonProps {
+   isIcon? : boolean,
    type? : "primary" | "secondary" ,
    text? : string
    icon? : React.ReactElement,
    onClick? : (e?: any)=> void;
 }
 interface ButtonStyleProps {
+   isIcon? : boolean,
    typeS? : string ,
 }
 export  function Button(props :ButtonProps ) {
   return (
-    <LoginButtonStyle onClick={props.onClick} typeS={props.type}>
+    <LoginButtonStyle isIcon={props?.isIcon} onClick={props.onClick} typeS={props.type}>
       {props?.icon}
       {props.text}
     </LoginButtonStyle>
@@ -130,18 +132,15 @@ export  function Button(props :ButtonProps ) {
 const LoginButtonStyle = styled.button<ButtonStyleProps>`
 /* margin: 0 auto; */
    padding: 5px 10px;
-   width: 100px;
-   align-items: center;
-   display: flex;
-   align-items: center;
-   height: 40px;
-   background: linear-gradient(144deg, #437492 16.67%, #174486 100%);
+   min-width: 100px;
+   background: ${props => props.theme.colors.purple};;
    border-radius: 5px;
 height: auto;
    cursor: pointer;
    border: none;
    display: flex;
    align-items: center;
+   justify-content: center;
    gap : 5px;
    >svg{
       /* display: none; */
@@ -162,4 +161,35 @@ height: auto;
 
 
    `}
+   ${props => (props.isIcon === true) && css`
+  min-width: auto;
+  width: auto;
+
+   `}
+   z-index: 20;
+   position: relative;
+   overflow: hidden;
+   &:after {
+  background: #fff;
+  content: "";
+  height: 155px;
+  left: -75px;
+  opacity: .2;
+  position: absolute;
+  top: -50px;
+  width: 50px;
+  -webkit-transition: all 950ms cubic-bezier(0.19, 1, 0.22, 1);
+          transition: all 950ms cubic-bezier(0.19, 1, 0.22, 1);
+  -webkit-transform: rotate(35deg);
+      -ms-transform: rotate(35deg);
+          transform: rotate(35deg);
+  z-index: -10;
+}
+
+&:hover:after {
+  left: 120%;
+  -webkit-transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+          transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
 `;

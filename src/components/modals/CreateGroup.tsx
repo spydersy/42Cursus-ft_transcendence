@@ -14,7 +14,10 @@ import InputComponent from '../Input';
 import { Button } from '../../Pages/SignIn';
 import axios from 'axios';
 
-export default function CreateGroup() {
+interface ModalProps{
+closeModal : ()=>void
+  }
+export default function CreateGroup(props : ModalProps) {
     
    
     const [members, setmembers] = useState([
@@ -88,6 +91,7 @@ export default function CreateGroup() {
         axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 
       ).then((res)=>{
+        props.closeModal()
         console.log(res.data)
       }).catch((err)=>{
         console.log(err)

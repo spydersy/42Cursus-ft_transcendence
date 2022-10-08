@@ -57,8 +57,8 @@ export default function ChatBottom(props: ChatProps) {
         var msgtmp : string =  mesg;
         //validation layer (restrictions)
         socket.emit('chatToServer', msgtmp);
-        /////
-
+        ///// this the the current channel li tsift fiha lmesg
+        console.log(props.list[props.index])
         var  bodyFormData = new FormData();
         console.log(props.list[props.index].channelId )
         bodyFormData.append('content',msgtmp);

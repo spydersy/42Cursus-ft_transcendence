@@ -151,32 +151,7 @@ export  function ChatSidebar() {
   const [hide, sethide] = useState(false)
   return (
     <ChatSidebarStyle>
-        
-        <div className='title'>
-            Chat
-               
-               
-            <Button onClick={()=>sethide(!hide)} icon={<Group/>}/>
-
-            {hide &&  <Modal
-        isOpen={hide}
-        onRequestClose={() => sethide(false)}
-        hideModal={() => sethide(false)}
-      >
-                <CreateGroup/>
-      </Modal>}
-        </div>
-        <div className='searchbar'>
-            <SearchIcon/>
-            <SearchBar type="text" placeholder='Search for a friend' />
-        </div>
-        <div className='conversation'>
-            <ChatMesgComponent />
-            <ChatMesgComponent />
-            <ChatMesgComponent />
-            <ChatMesgComponent />
-            <ChatMesgComponent />
-        </div>
+   
 
     </ChatSidebarStyle>
   )

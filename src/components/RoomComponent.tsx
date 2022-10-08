@@ -3,6 +3,7 @@ import styled from "styled-components"
 
 import Fadi from "../assets/imgs/avatar/ael-fadi.jpeg";
 import Modal from './Modal';
+import JoinGroupModal from './modals/JoinGroupModal';
 
 
   interface RoomProps{
@@ -32,7 +33,7 @@ export default function RoomComponent(props : RoomProps) {
         onRequestClose={() => sethideModel(false)}
         hideModal={() => sethideModel(false)}
       >
-    joinRoomModal
+    <JoinGroupModal isLocked={props.isLocked} />
       </Modal>}
     </RoomStyle>
   )

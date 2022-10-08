@@ -40,15 +40,18 @@ interface UserProp {
 
 export default function Chat() {
   const pageName = window.location.pathname.split("/")[2];
-
+  
     const [list, setlist] = useState<convType[]>([])
     const [currentConv, setcurrentConv] = useState(parseInt(pageName))
     useEffect(() => {
       // console.log(list)
+      //
+
       axios.get("http://localhost:8000/chat/myChannels", 
       {withCredentials: true} 
     ).then((res)=>{
       console.log(res.data)
+      // res.data this is the array of my channels
       setlist(res.data);
       console.log(res.data[currentConv])
     }).catch((err)=>{

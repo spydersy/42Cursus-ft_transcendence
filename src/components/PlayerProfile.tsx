@@ -138,9 +138,10 @@ export function Stats(props: PlayerCardProps) {
       axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=add", 
       {withCredentials: true} 
     ).then((res)=>{
-      // console.log(res.data)
-      alert("friend Request sent" + res.status)
-  
+      console.log(res.data)
+      // alert("friend Request sent" + res.status)
+      setrelationStatus("PENDING")
+      console.log(relationStatus)
     }).catch((err)=>{
   
           // history.pushState("/signin");
@@ -149,7 +150,7 @@ export function Stats(props: PlayerCardProps) {
   useEffect(() => {
       setrelationStatus(props.player?.relation)
       console.log(props.player?.relation)
-  })
+  } , [])
   
 
     return (
@@ -186,8 +187,6 @@ export function Stats(props: PlayerCardProps) {
                     Mars 2020
                   </DataTag>
                 </DataTag>
-              </div>
-              <Achivments/>
               {props.isCurrentUser === false && 
                 <Buttons>
                   
@@ -203,13 +202,15 @@ export function Stats(props: PlayerCardProps) {
                     </>
                     :
                     relationStatus === 'PENDING' ? 
-                    <Button onClick={addFriend} icon={<UserAddIcon/>} text='Accept'/>
+                    <Button onClick={addFriend}  text='Pending'/>
                     : 
                     <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
                   }
-                  <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
+                  {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/> */}
                 </Buttons>
               }
+              </div>
+              <Achivments/>
 
             </div>
             <div className='vr'>

@@ -189,10 +189,10 @@ export default function Pong({themes , mode}:myProps ) {
       nextY = event.offsetY;   
     }
     p.setAttribute('y', nextY)
-    if (p.getAttribute('x') === '80')
-      gamesocket.emit("player1move" , nextY)
-    else
-      gamesocket.emit("player2move" , nextY)
+    // if (p.getAttribute('x') === '80')
+    //   gamesocket.emit("player1move" , nextY)
+    // else
+    //   gamesocket.emit("player2move" , nextY)
 
   }
 

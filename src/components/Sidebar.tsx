@@ -159,6 +159,7 @@ const SidebarWrraper = styled.div`
     flex-direction: column;  
     position: fixed;
     top: 70px;
+    background-color: ${props => props.theme.colors.primarybg}; 
     @media  only screen and (max-width: 768px) {
         > .item{
             display: none;
