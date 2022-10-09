@@ -61,6 +61,19 @@ export class ChatService {
         console.log("__DM__CHANNEL__DBG__ : ", DMChannel);
     }
 
+    async AddUserToChannel(me: number, @Body() DataTransfer, @Res() res) {
+
+    }
+
+    async UpdateUserInChannel(me: number, @Body() DataTransfer, @Res() res) {
+
+    }
+
+    async DeleteUserFromChannel(me: number, @Body() DataTransfer, @Res() res) {
+
+    }
+
+
     async generateChannelDto(me: number, channels: any) : Promise<myChannelsDto[]> {
         let myChannels: myChannelsDto[] = [];
 
@@ -132,23 +145,27 @@ export class ChatService {
     }
 
     async GetChannelMessages(me: number, channelId: string, @Res() res) {
-    // All validations needed:
-        // 1) Is a public/private/protected/dm channel ?
-        let channel = await this.GetChannelById(channelId);
-        if (channel === null)
-            return res.status(HttpStatus.NOT_FOUND).send({'message': 'Channel Not Found'});
-        // 2) user exist in this channel ?
-        let userChannel = await this.FindUserInChannel(me, channelId);
-        if (userChannel === null)
-            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Forbidden'});
-        // 3) user have rights to get content ?
-        if (userChannel.restriction === RESCTRICTION.BANNED
-        || userChannel.restriction === RESCTRICTION.MUTED) {
-            let now = new Date();
-            let restrictionTime = new Date();
-            // console.log("__DIFF__ : ", restrictionTime - now);
-            // if ()
-        }
+    // // All validations needed:
+    //     // 1) Is a public/private/protected/dm channel ?
+    //     let channel = await this.GetChannelById(channelId);
+    //     if (channel === null)
+    //         return res.status(HttpStatus.NOT_FOUND).send({'message': 'Channel Not Found'});
+    //     // 2) user exist in this channel ?
+    //     let userChannel = await this.FindUserInChannel(me, channelId);
+    //     if (userChannel === null)
+    //         return res.status(HttpStatus.FORBIDDEN).send({'message': 'Forbidden'});
+    //     // 3) user have rights to get content ?
+    //     if (userChannel.restriction === RESCTRICTION.BANNED
+    //     || userChannel.restriction === RESCTRICTION.MUTED) {
+    //         let now = new Date();
+    //         let restrictionTime = new Date();
+    //         // console.log("__DIFF__ : ", restrictionTime - now);
+    //         // if ()
+    //     }
+        let messages = await this.prisma.messages.findMany({
+            where: {senderId: me, channelId: channelId}
+        });
+        res.status(HttpStatus.OK).send(messages);
     }
 
     async SendMessage(me: number, @Body() messageData, @Res() res) {
