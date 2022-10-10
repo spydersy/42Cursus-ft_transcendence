@@ -1,0 +1,30 @@
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "chat alerts";
+}
+
+section.chat {
+    grid-area: chat;
+}
+
+section.alerts {
+    grid-area: alerts;
+}
+#messages{
+    height:300px;
+    overflow-y: scroll;
+   }
+   
+#app {
+margin-top: 2rem;
+}
+
+.tab-row {
+    padding-top: 20px;
+}
+
+.tab-btn.active{
+    background: blue;
+    color: white;
+}
