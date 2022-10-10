@@ -61,19 +61,6 @@ export class ChatService {
         console.log("__DM__CHANNEL__DBG__ : ", DMChannel);
     }
 
-    async AddUserToChannel(me: number, @Body() DataTransfer, @Res() res) {
-
-    }
-
-    async UpdateUserInChannel(me: number, @Body() DataTransfer, @Res() res) {
-
-    }
-
-    async DeleteUserFromChannel(me: number, @Body() DataTransfer, @Res() res) {
-
-    }
-
-
     async generateChannelDto(me: number, channels: any) : Promise<myChannelsDto[]> {
         let myChannels: myChannelsDto[] = [];
 
@@ -179,7 +166,7 @@ export class ChatService {
                     content: messageContent,
                 }
             });
-            this.prisma.channels.update({
+            await this.prisma.channels.update({
                 where: {id: channelId},
                 data: {nbMessages: {increment: 1}},
             });

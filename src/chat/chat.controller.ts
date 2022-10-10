@@ -42,24 +42,6 @@ export class ChatController {
 
     // }
 
-    @Post('usersCRUD/:channelId')
-    async UsersCRUD(@Req() req, @Query() query, @Body() data, @Res() res) {
-      if (query['event']) {
-        switch (query['event']) {
-          case 'add':
-            return this.chatService.AddUserToChannel(req.user.userId, data, res);
-          // case 'update':
-            // return this.chatService.UpdateUserInChannel(req.user.userId, data, res);
-          // case 'delete':
-            // return this.chatService.DeleteUserFromChannel(req.user.userId, data, res);
-          default:
-            return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Request'});
-        }
-      }
-      // ADD USER
-      // UPDATE USER
-      // DELETE USER
-    }
 
     @Get('messages/:channelId')
     async GetMessages(@Req() req, @Res() res) {
@@ -80,7 +62,7 @@ export class ChatController {
     @Body() channelData, @Res() res) {
       console.log("__BODY__DBG__ : ", channelData);
       console.log("___FILE___ : ", file);
-      let ChannelIcone: string = "";
+      let ChannelIcone: string = "http://localhost:8000/upload/defaultChannelIcon.jpg";
       if (file !== undefined)
         ChannelIcone = encodeURI(`http://localhost:8000/upload/${file.filename}`);
       if (channelData === undefined || channelData['name'] === undefined || channelData['type'] === undefined
