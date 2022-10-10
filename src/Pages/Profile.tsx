@@ -16,7 +16,9 @@ interface UserProp {
   nbFriends? : string
   wins : number
   losses : number
+  createdTime: string
 }
+
 interface InvProp {
   sender: {
     login : string
@@ -30,13 +32,13 @@ export default function Profile() {
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
     defaultAvatar: "string",
-    login : "melkarmi",
-    displayName : 'Mohamed Elkarmi',
+    login : "default login",
+    displayName : 'default displayName',
     relation : "",
-    nbFriends : "0",
-    wins : 0,
-    losses : 0
-  
+    nbFriends : "+999",
+    wins : 999,
+    losses : 999,
+    createdTime: "15 Mars 2020"
   })
 
 
@@ -86,11 +88,16 @@ const TheBox = styled.div`
   width: 100%;
   border: 0px solid ${props => props.theme.colors.primarybg};
 `;
-///// PlayerTabs Section
-const linkslist = [ " FRIENDS" , "PENDING REQUESTS", "BLOCKED USERS"]
+
 interface PlayerTabsProps {
   id : string
 }
+
+
+
+///// PlayerTabs Section
+const linkslist = [ " FRIENDS" , "PENDING REQUESTS", "BLOCKED USERS"]
+
 export function PlayerTabsBar(props : PlayerTabsProps)
 {
   const [index, setindex] = useState(0)
@@ -116,39 +123,8 @@ const PlayerAchieveStyle = styled.div`
   -webkit-text-stroke: 1px #6560679a;
 `;
 
-//#2  Tab Friends
-interface FriendsProps {
-  id : string
-}
 
-export function FriendsComponent(props : FriendsProps)
-{
-  const [friends, setfriends] = useState([])
-useEffect(() => {
-  
-  axios.get("http://localhost:8000/users/friends/" + props.id, 
-    {withCredentials: true} 
-  ).then((res)=>{
-    console.log(res.data)
-    setfriends(res.data)
-
-  }).catch((err)=>{
-    })
-}, [props.id])
-
-  return (
-    <TabOthree >
-      {
-        friends.length === 0 ? 
-        <EmptyComponent text="No Friends Yet !"/>
-        : 
-        friends.map((match : any, id : number )=>{
-            return<UserCard key={id} data={match}  />
-        })
-      }
-    </TabOthree>
-  )
-}
+/// empty
 interface EmptyProps {
   text: string
 }
@@ -178,7 +154,72 @@ const Empty = styled.div`
 
 `;
 
-const TabOthree= styled.div`
+
+//#1  Tab Friends
+export function FriendsComponent(props : FriendsProps)
+{
+  const [friends, setfriends] = useState([])
+useEffect(() => {
+  
+  axios.get("http://localhost:8000/users/friends/" + props.id, 
+    {withCredentials: true} 
+  ).then((res)=>{
+    console.log(res.data)
+    setfriends(res.data)
+
+  }).catch((err)=>{
+    })
+}, [props.id])
+
+  return (
+    <TabfourStyle >
+      {
+        friends.length === 0 ? 
+        <EmptyComponent text="No Friends Yet !"/>
+        : 
+        friends.map((match : any, id : number )=>{
+            return<UserCard key={id} data={match}  />
+        })
+      }
+    </TabfourStyle>
+  )
+}
+
+interface FriendsProps {
+  id : string
+}
+
+//#2  Pending Requests
+export function Tabfour()
+{
+  const [friends, setfriends] = useState<InvProp[]>([])
+  useEffect(() => {
+    
+    axios.get("http://localhost:8000/profile/me?data=requests", 
+      {withCredentials: true} 
+    ).then((res)=>{
+      console.log(res)
+
+      setfriends(res.data)
+  
+    }).catch((err)=>{
+      })
+  }, [])
+  return (
+    <TabfourStyle>
+    {
+        friends.length === 0 ? 
+        <EmptyComponent text="No Pending Requests !"/>
+        : 
+        friends.map((invit : any, id : number )=>{
+            return<UserInvitCard key={id} data={invit} />
+        })
+    }
+       
+    </TabfourStyle>
+  )
+}
+const TabfourStyle= styled.div`
   width: 100%;
   height: 100%;
   max-height: 500px;
@@ -205,45 +246,14 @@ const TabOthree= styled.div`
     }
 `;
 
-//#4  Pending Requests
-export function Tabfour()
-{
-  const [friends, setfriends] = useState<InvProp[]>([])
-  useEffect(() => {
-    
-    axios.get("http://localhost:8000/profile/me?data=requests", 
-      {withCredentials: true} 
-    ).then((res)=>{
-      console.log(res)
-
-      setfriends(res.data)
-  
-    }).catch((err)=>{
-      })
-  }, [])
-  return (
-    <TabOthree>
-    {
-        friends.length === 0 ? 
-        <EmptyComponent text="No Pending Requests !"/>
-        : 
-        friends.map((invit : any, id : number )=>{
-            return<UserInvitCard key={id} data={invit} />
-        })
-    }
-       
-    </TabOthree>
-  )
-}
-
-//#5  My Black List
+//#3  My Black List
 export function Tabfive()
 {
   // eslint-disable-next-line 
   const [listBlocked, setlistBlocked] = useState<InvProp[]>([])
  
   return (
-    <TabOthree> 
+    <TabfourStyle> 
         {
            listBlocked.length === 0 ? 
            <EmptyComponent text="Peaceful User !"/>
@@ -252,9 +262,6 @@ export function Tabfive()
               return<UserBlockedCard key={id} data={invit} />
           })
         }  
-    </TabOthree>
+    </TabfourStyle>
   )
 }
-
-
-

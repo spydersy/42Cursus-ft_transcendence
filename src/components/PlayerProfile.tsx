@@ -30,6 +30,7 @@ interface UserProp {
   nbFriends? : string
   wins : number
   losses : number
+  createdTime : string 
 }
 export interface PlayerCardProps {
   isCurrentUser : boolean,
@@ -180,11 +181,11 @@ export function Stats(props: PlayerCardProps) {
                   <DataTag>
                     <GameIcon/>
                     {  props.player?.wins +   props.player?.losses}
-                    Games
+                      {"  "}
                     </DataTag>
                     <DataTag>
                     <CalendarIcon/>
-                    Mars 2020
+                    {props.player.createdTime} 
                   </DataTag>
                 </DataTag>
               {props.isCurrentUser === false && 
