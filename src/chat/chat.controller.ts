@@ -80,8 +80,9 @@ export class ChatController {
     @Body() channelData, @Res() res) {
       console.log("__BODY__DBG__ : ", channelData);
       console.log("___FILE___ : ", file);
-      const ChannelIcone = encodeURI(`http://localhost:8000/upload/${file.filename}`);
-
+      let ChannelIcone: string = "";
+      if (file !== undefined)
+        ChannelIcone = encodeURI(`http://localhost:8000/upload/${file.filename}`);
       if (channelData === undefined || channelData['name'] === undefined || channelData['type'] === undefined
       &&  channelData['members'] === undefined) {
         return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
