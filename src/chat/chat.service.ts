@@ -34,7 +34,7 @@ export interface myChannelsDto {
 export class ChatService {
     constructor(private prisma: PrismaService) {}
 
-
+    // DONE
     async CreatDMChannel(SenderId: number, ReceiverId: number) {
         let DMChannel = await this.prisma.channels.findMany({
             where :
@@ -96,10 +96,6 @@ export class ChatService {
         });
         return myChannels;
     }
-
-    // async BannedUser() : Promise<boolean> {
-    //     return false;
-    // }
 
     async GetChannelById(channelId: string) {
         let channel = await this.prisma.channels.findUnique({
