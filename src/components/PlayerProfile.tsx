@@ -30,7 +30,7 @@ interface UserProp {
   nbFriends? : string
   wins : number
   losses : number
-  createdTime : string 
+  lastModification : string 
 }
 export interface PlayerCardProps {
   isCurrentUser : boolean,
@@ -126,100 +126,138 @@ border-radius: 10px 30px 30px 10px;
 
 `;
 
-
+interface UserProp {
+  defaultAvatar: string,
+  login : string
+  displayName : string
+  relation? : string
+  nbFriends? : string
+  wins : number
+  losses : number
+  lastModification: string
+}
 
 // interface StatusProps {
 //     status : "online" | "offline"
 // }
 export function Stats(props: PlayerCardProps) {
   const [relationStatus, setrelationStatus] = useState<string | undefined>("")
+  
+  const id = window.location.pathname.split("/")[2];
+
+  const [createdTime, setcreatedTime] = useState<string | undefined>("")
+  const [grade, setgrade] = useState<string | undefined>("Unranked")
+  const Grades = ["Shinobi","ShiboKay","Hokage","Yonko","3anKoub","XX","XXXX","XXXXX","XXXXX"]
+
+
   const addFriend = ()=>{
        //http://localhost:8000/users/relation/:id?evet=add
 
       axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=add", 
       {withCredentials: true} 
     ).then((res)=>{
-      console.log(res.data)
+      // console.log(res.data)
       // alert("friend Request sent" + res.status)
       setrelationStatus("PENDING")
-      console.log(relationStatus)
+      // console.log(relationStatus)
     }).catch((err)=>{
   
           // history.pushState("/signin");
       })
   }
+
   useEffect(() => {
       setrelationStatus(props.player?.relation)
-      console.log(props.player?.relation)
-  } , [])
+      // console.log("relation : ", props.player?.relation, "\n")
+
+      // get user data  from server
+      axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}).then((res)=>{
+
+      console.log(" Profiel res : " , res.data, "\n")
+      
+      // set grade
+      if (res.data.level)
+        setgrade(Grades[res.data.level])
+      else
+        setgrade("Unranked")
+
+      // set created time
+      // props.player.lastModification
+      const date = new Date(res.data.lastModification)
+      setcreatedTime(date.toString().split("GMT")[0])
+      
+      // props.player.lastModification = date.toString().split("GMT")[0]
+      // console.log("date : ", date.toString())
+      // console.log(">lastM : ", props.player.lastModification)
+      console.log("> createdTime : ", createdTime)
+      console.log("> grade : ", grade, "\n")
+
+    }).catch((err)=>{  // history.pushState("/signin"); ***//
+    
+    })
+
+  } , [grade])
   
 
     return (
       <StatsStyle  >
-
+          
           {/* <Status status={"online"}>
             <ActivityIcon/>
               Online
           </Status> */}
 
-        
         <Data>
+
             <div className='data'>
+              
               <div>
+               
                 <DataTag> 
-                  <DataTag>
-                    <RankIcon/>
-                    Yonko
-                  </DataTag>
-                  <DataTag>
-                    <UsersIcon/>
-                   {props.player.nbFriends}
-                    {" Friends"}
-                  </DataTag>
+                  <DataTag>   <RankIcon/>  {grade}  </DataTag>
+                  <DataTag>   <UsersIcon/> {props.player.nbFriends} {" Friends"} </DataTag>
                 </DataTag>
+
                 <DataTag>
-                  <DataTag>
-                    <GameIcon/>
-                    {  props.player?.wins +   props.player?.losses}
-                      {"  "}
-                    </DataTag>
-                    <DataTag>
-                    <CalendarIcon/>
-                    {props.player.createdTime} 
-                  </DataTag>
+                  <DataTag>     <GameIcon/> {props.player?.wins +   props.player?.losses} {"  Game"} </DataTag>
+                  {/* <DataTag>     <CalendarIcon/> {props.player.lastModification}  </DataTag> */}
+                  <DataTag>     <CalendarIcon/> {createdTime}  </DataTag>
                 </DataTag>
-              {props.isCurrentUser === false && 
-                <Buttons>
-                  
-                  {
-                    relationStatus === "FRIENDS" ? 
-                    <>
-                    <Button  type='secondary' onClick={addFriend} icon={<UserAddIcon/>} text='Friend'/>
-                    <a href="/chat/id">
-                    <Button onClick={addFriend} icon={<UserAddIcon/>} text='send messqge'/>
 
-                    </a>
+                {props.isCurrentUser === false && 
+                  <Buttons>
                     
-                    </>
-                    :
-                    relationStatus === 'PENDING' ? 
-                    <Button onClick={addFriend}  text='Pending'/>
-                    : 
-                    <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
-                  }
-                  {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/> */}
-                </Buttons>
-              }
+                    {
+                      relationStatus === "FRIENDS" ? 
+                      <>
+                      <Button  type='secondary' onClick={addFriend} icon={<UserAddIcon/>} text='Friend'/>
+                      <a href="/chat/id">
+                        <Button onClick={addFriend} icon={<UserAddIcon/>} text='send messqge'/>
+                      </a>
+                      
+                      </>
+                      :
+                      relationStatus === 'PENDING' ? 
+                      <Button onClick={addFriend}  text='Pending'/>
+                      : 
+                      <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
+                    }
+                    {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/> */}
+                  </Buttons>
+                }
+
               </div>
-              <Achivments/>
+            
+              <div className="Achiv"> <Achivments/> </div>
 
             </div>
-            <div className='vr'>
 
-            </div>
+            <div className='vr'> </div>
+
             <div className='Stats'>
               < RadarChart/>
             </div>
+
         </Data>
       </StatsStyle>
     )
@@ -267,6 +305,7 @@ const Buttons = styled.div`
 display: flex;
 flex-direction: row;
 gap: 10px;
+/* background-color: red; */
 
 `
 
@@ -292,6 +331,14 @@ justify-content: space-between;
   justify-content: space-between;
   
 }
+.Achiv {
+  position: relative;
+  display: flex;
+  /* background-color: aliceblue; */
+  bottom: 10%;
+
+
+}
 .Stats{
   position: relative;
  /* flex: 1; */
@@ -315,6 +362,7 @@ export interface UserCardProps {
 export interface StyleProps {
     status: boolean;
 }
+
 export  function UserCard(props : UserCardProps) {
   return (
     <UserCardStyle status={true}>
@@ -683,7 +731,7 @@ export  function UserInvitCard(props : UserInvitCardProps) {
 
   }, )
   
-  console.log(props.data)
+  // console.log(props.data)
   return (
     <UserInvitCardStyle >
 

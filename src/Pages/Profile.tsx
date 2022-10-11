@@ -1,4 +1,4 @@
-import React, {useState , useEffect} from 'react'
+import React, {useState , useEffect, useCallback} from 'react'
 import styled from "styled-components"
 import Navlinks from '../components/Navlinks';
 import { PlayerCard , UserCard} from '../components/PlayerProfile';
@@ -6,6 +6,10 @@ import { UserInvitCard } from "../components/PlayerProfile";
 import { UserBlockedCard } from "../components/PlayerProfile";
 import {ReactComponent as LuffyAce} from "../assets/imgs/luffyAce.svg";
 import axios from 'axios';
+
+import Particles from "react-particles";
+import type { Container, Engine } from "tsparticles-engine";
+import { loadFull } from "tsparticles";
 
 //-----------------------//
 interface UserProp {
@@ -16,7 +20,8 @@ interface UserProp {
   nbFriends? : string
   wins : number
   losses : number
-  createdTime: string
+  lastModification: string
+  Achievements: any
 }
 
 interface InvProp {
@@ -26,21 +31,31 @@ interface InvProp {
   // login : string
   // displayName : string
 }
+
 //// Default function Profile
 export default function Profile() {
   const id = window.location.pathname.split("/")[2];
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
-    defaultAvatar: "string",
-    login : "default login",
-    displayName : 'default displayName',
+    defaultAvatar: "",
+    login : "",
+    displayName : '',
     relation : "",
-    nbFriends : "+999",
-    wins : 999,
-    losses : 999,
-    createdTime: "15 Mars 2020"
+    nbFriends : "",
+    wins : 0,
+    losses : 0,
+    lastModification: "",
+    Achievements: []
   })
 
+  const particlesInit = useCallback(async (engine: Engine) => { 
+    console.log(engine);   
+    await loadFull(engine);
+   }, []);
+
+   const particlesLoaded = useCallback(async (container: Container | undefined) => {
+     console.log(container);
+  }, []);
 
   useEffect(() => {
     var s : string | null = localStorage.getItem('user');
@@ -61,7 +76,7 @@ export default function Profile() {
         axios.get("http://localhost:8000/users/" + id, 
         {withCredentials: true} 
       ).then((res)=>{
-        console.log(res.data)
+        console.log("res : " , res.data, "\n")
         // check for the user is bloked 
         setUser(res.data)
       }).catch((err)=>{
@@ -75,10 +90,101 @@ export default function Profile() {
 
   return (
     <div className='container' style={{  display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
-          <TheBox>
-              <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
-          </TheBox>
-          <PlayerTabsBar id={id} /> 
+        <div className='bg_img' style={{position: "absolute",width: "100%", height: "100%", zIndex: -1, top: 0,   left: 0  }}>
+            <Particles
+                  id="tsparticles"
+                  init={particlesInit}
+                  loaded={particlesLoaded}
+                  options={{
+                    background: {
+                      color: {
+                        value: "#100f110",
+                      },
+                      opacity: 0.1,
+                    },
+                    fpsLimit: 150,
+                    interactivity: {
+                      events: {
+                        onClick: {
+                          enable: true,
+                          mode: "push",
+                        },
+                        onHover: {
+                          enable: true,
+                          mode: "repulse",
+                        },
+                        resize: true,
+                      },
+                      modes: {
+                        push: {
+                          quantity: 4,
+                        },
+                        repulse: {
+                          distance: 200,
+                          duration: 0.5,
+                        },
+                      },
+                    },
+                    particles: {
+                      color: {
+                        value: "#296390",
+                      },
+                      links: {
+                        color: "#194b64",
+                        distance: 180,
+                        enable: true,
+                        opacity: 0.2,
+                        width: 1.5,
+                      },
+                      collisions: {
+                        enable: true,
+                      },
+                      move: {
+                        direction: "none",
+                        enable: true,
+                        outModes: {
+                          default: "bounce",
+                        },
+                        random: true,
+                        speed: 2,
+                        straight: true,
+                      },
+                      number: {
+                        density: {
+                          enable: true,
+                          area: 1000,
+                        },
+                        value: 90,
+                      },
+                      opacity: {
+                        value: 0.5,
+                      },
+                      shape: {
+                        type: "polygon",
+                      },
+                      size: {
+                        value: { min: 1, max: 5 },
+                      },
+                    },
+                    detectRetina: true,
+                  }}
+                  // style={{
+                  //   position: "absolute",
+                  //   width: "100%",
+                  //    height: "100%",
+                  //     zIndex: 5,
+                  //     top: 0,
+                  //     left: 0 
+                  // }}
+                  // className="particles"
+            />
+        </div>
+
+        <TheBox> 
+            <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
+        </TheBox>
+
+        <PlayerTabsBar id={id} /> 
     </div>
   )
 };
@@ -129,6 +235,7 @@ interface EmptyProps {
   text: string
 }
 
+
 export function EmptyComponent(props: EmptyProps)
 {
   return (
@@ -146,12 +253,11 @@ const Empty = styled.div`
   height: 100%;
   flex-direction: column;
   background-color:  ${props => props.theme.colors.bg};
- color:  ${props => props.theme.colors.seconderyText};
- font-weight: 600;
- justify-content: center;
- font-size: 30px;
- font-family: "Poppins" , sans-serif;
-
+  color:  ${props => props.theme.colors.seconderyText};
+  font-weight: 600;
+  justify-content: center;
+  font-size: 30px;
+  font-family: "Poppins" , sans-serif;
 `;
 
 
@@ -220,10 +326,11 @@ export function Tabfour()
   )
 }
 const TabfourStyle= styled.div`
+  background-color:  ${props => props.theme.colors.bg};
+  color:  ${props => props.theme.colors.seconderyText};
   width: 100%;
   height: 100%;
   max-height: 500px;
-
   display: flex;
   flex-wrap: wrap;
   justify-content: left;

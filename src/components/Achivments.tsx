@@ -15,14 +15,14 @@ const achievment2 = {
     name: "The Alchemist",
     desc : "You are a M9WED player by nature",
     badge : Badge2,
-    on: false,
+    on: true,
 
   }
 const achievment3 = {
     name: "MASTER",
     desc : "you win 5 game.",
     badge : Badge3 ,
-    on: false,
+    on: true,
 
   }
 const achievment4 = {
@@ -36,7 +36,9 @@ const achievment4 = {
   export interface StyleProps {
     status: boolean;
 }
+
 const achiv = [achievment1 , achievment2 , achievment4 , achievment3]
+
 export default function Achivments() {
   return (
     <AchiStyle>
@@ -45,13 +47,17 @@ export default function Achivments() {
         <div className='cont'>
         {
             achiv.map((data : any, id : number )=>{
-               return <div className='conty' style={{ filter: "grayscale(100%) " }} ><img key={id} src={data.badge} alt={data.name} /> </div>
+               return (
+                   ( data.on) ?
+                  <div className='conty' style={{ filter: "grayscale(-50%) " }} >
+                        <img key={id} src={data.badge} alt={data.name} />
+                  </div> :  
+
+                  null
+                )
                 
             })
         }
-
-    
-
         </div>
     </AchiStyle>
   )
@@ -59,20 +65,21 @@ export default function Achivments() {
 
   
 const AchiStyle = styled.div`
-background-color: #1f55847d;
+background-color: #8519798b;
 border-radius : 10px;
 /* background:  ${props => props.theme.colors.seconderybg}; */
-
+width: 100%;
 display: flex;
 flex-direction: column;
 align-items: flex-start;
+
 .head{
     color : ${props => props.theme.colors.seconderyText};
 }
 
 .cont{
     /* margin: 5px 0; */
-  
+
     width:100%;
     display: flex;
     justify-content: space-between;
@@ -92,6 +99,8 @@ align-items: flex-start;
     justify-content: space-between;
     flex-direction: row;
     align-items:center;
+    padding: 0px 15px;
+
     >img{
       margin : 0px 10px;
       /* filter: grayscale(50%); */
