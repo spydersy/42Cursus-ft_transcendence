@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable, Query } from '@nestjs/common';
 import { Req, Res } from '@nestjs/common';
-import { UserName } from 'src/dtos/Inputs.dto';
+import { UserNameDto } from 'src/dtos/Inputs.dto';
 import { UserService } from 'src/user/user.service';
 import { Response } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -17,7 +17,7 @@ export class ProfileService {
     async me(@Req() req , @Query() query, @Res() res: Response) {
         // JUST FOR TEST
         let ForbiddenString : string = "";
-        let TestUserNameDTO: UserName ={
+        let TestUserNameDTO: UserNameDto ={
             newname: ForbiddenString,
         }
         console.log("__TEST__USER_NNAME__DTO__ : ", TestUserNameDTO);

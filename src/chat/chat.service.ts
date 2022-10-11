@@ -171,6 +171,7 @@ export class ChatService {
         if (members.length !== 0) {
             console.log("__members__ : ", members);
             let manyUsers : ManyUsers[];
+            manyUsers = [];
             console.log("__many__members__00__ : ", manyUsers);
             members.forEach(element => {
                 manyUsers.push({userId: parseInt(element, 10), channelId: channel.id, permission: PERMISSION.USER});

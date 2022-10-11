@@ -6,8 +6,6 @@ import { ProfileService } from './profile.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
-import { UserName } from 'src/dtos/Inputs.dto';
-import { IsString } from 'class-validator';
 
 @UseGuards(JwtAuthGuard)
 @Controller('profile')

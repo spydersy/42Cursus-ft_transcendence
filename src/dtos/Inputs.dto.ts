@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsString, IsUUID, Matches } from "class-validator";
+import { IsNotEmpty, IsString, IsUUID, Matches, MaxLength } from "class-validator";
 
-export class UserName {
+export class UserNameDto {
     @IsString()
     @IsNotEmpty()
     @Matches(/[a-zA-Z0-9_-]{4,10}/)
@@ -14,5 +14,6 @@ export class MessageDataDto {
 
     @IsString()
     @IsNotEmpty()
+    @MaxLength(300)
     content: string;
 }

@@ -1,9 +1,6 @@
 import { Controller, ForbiddenException, Get, NotFoundException, Query, Req, UseGuards, Res, Post, Body, Put, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 import { UserService } from './user/user.service';
-import { UserName } from './dtos/Inputs.dto';
-import { Response } from 'express';
-// import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 
 @Controller()
