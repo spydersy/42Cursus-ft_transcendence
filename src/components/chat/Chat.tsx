@@ -50,20 +50,18 @@ export default function Chat() {
     const [state, setstae] = useState(x)
     const [currentConv, setcurrentConv] = useState(parseInt(pageName))
     useEffect(() => {
-      // console.log(list)
-      //
 
       axios.get("http://localhost:8000/chat/myChannels", 
       {withCredentials: true} 
     ).then((res)=>{
-      console.log(res.data)
-      // res.data this is the array of my channels
       setlist(res.data);
       console.log(res.data[currentConv])
     }).catch((err)=>{
           console.log(err)
-          // history.pushState("/signin");
       })
+      ///
+
+
       window.addEventListener("resize" , (e)=>{
         if (window.innerWidth  < 900 )
            setstae(1);
@@ -71,8 +69,22 @@ export default function Chat() {
           setstae(-1)
       }
       )
+      
 
-    },[])
+    },[currentConv])
+
+    useEffect(() => {
+      // alert()
+      axios.get("http://localhost:8000/chat/messages/" + list[currentConv]?.channelId, 
+      {withCredentials: true} 
+    ).then((res)=>{
+     setmsgs(res.data)
+    }).catch((err)=>{
+     console.log(err)
+      })
+     
+    }, [currentConv , list])
+    
     return (
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
           
@@ -96,7 +108,7 @@ export default function Chat() {
           <ChatBody setmsgs={(e : any)=>setmsgs} msgs={msgs} setcurrentConv={(e)=>{ setcurrentConv(e) }}  list={list[currentConv]} />
           </div>
           <div className='bottom'>
-            <ChatBottom setmsgs={(e : any)=>setmsgs} msgs={msgs} index={currentConv} list={list} setList={(e)=>{setlist(e)}}  />
+            <ChatBottom setcurrentConv={(e)=>setcurrentConv(e)} msgs={msgs} currentConv={currentConv} list={list} setList={(e)=>{setlist(e)}}  />
           </div>
         </div>
           
