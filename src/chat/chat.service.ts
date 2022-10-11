@@ -116,9 +116,7 @@ export class ChatService {
         res.status(HttpStatus.OK).send(messages);
     }
 
-    async SendMessage(me: number, @Body() messageData, @Res() res) {
-        let messageContent: string = messageData['content'];
-        let channelId: string = messageData['channelId'];
+    async SendMessage(me: number, messageContent: string, channelId: string, @Res() res) {
         if (await this.PostMessageValidationLayer(me, messageContent, channelId) === true) {
             await this.prisma.messages.create({
                 data: {

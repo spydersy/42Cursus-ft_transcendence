@@ -20,13 +20,14 @@ export class ChatController {
     }
 
     @Post('sendMessage')
-    async SendMessage(@Req() req, @Body() messageData, @Res() res) {
-      if (messageData === undefined || messageData['content'] === undefined
-        || messageData['channelId'] === undefined) {
-        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Request Malformed"});
-      }
+    async SendMessage(@Req() req, @Body() messageData: MessageDataDto, @Res() res) {
+      // if (messageData === undefined || messageData['content'] === undefined
+      //   || messageData['channelId'] === undefined) {
+      //   return res.status(HttpStatus.BAD_REQUEST).send({'message': "Request Malformed"});
+      // }
       console.log("__MESSAGE__DATA__DBG__ : ", messageData);
-      return this.chatService.SendMessage(req.user.userId, messageData, res);
+      // return res.send({'__MESSAGE__DATA__DBGq__ : ': messageData});
+      return this.chatService.SendMessage(req.user.userId, messageData.content, messageData.channelId, res);
     }
 
     // @Post('AddUser/:channelId')
