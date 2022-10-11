@@ -8,11 +8,11 @@ import {
  } from '@nestjs/websockets';
  import { Logger } from '@nestjs/common';
  import { Socket, Server } from 'socket.io';
+
  
  interface Person {
-  name: string,
-  text: string,
-  room: string,
+  content: string,
+  channelId: string
  }
  @WebSocketGateway(3001, {
    cors: {
@@ -30,10 +30,19 @@ import {
   private logger: Logger = new Logger('ChatGateway');
 //The handleMessage() function is also decorated with @SubscribeMessage() which makes it listen to an event named msgToServer.
   @SubscribeMessage('chatToServer')
-  handleMessage(client: Socket, payload: string): void {
-    console.log(payload);
+  handleMessage(client: Socket, payload: Person): void {
+    // console.log(payload.channelId);
     //We make use of the instance in our handleMessage() function where we send data to all clients connected to the server using the emit() function   
-    this.server.emit('chatToClient', payload);
+    this.server.to(payload.channelId).emit('chatToClient', payload);
+    // axios.post("http://localhost:8000/chat/sendMessage" ,{ "content" : payload.content,
+    //   'channelId' : payload.channelId + ""
+    // }, 
+    //   {withCredentials: true} 
+    // ).then((res)=>{
+    //   console.log(res.data)
+    // }).catch((err)=>{
+    //   console.log(err)
+    //   })
   }
  
   @SubscribeMessage('joinRoom')
