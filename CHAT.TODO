@@ -1,27 +1,27 @@
-- [ ] TASKS RELATED TO USERS IN CHANNEL:
+- [ ] TASK_XX: TASKS RELATED TO USERS IN CHANNEL:
     // Create:
-    - [ ] Add User
+    - [ ] TASK_01: Add User
 
     // Read:
-    - [ ] Get Users In Channel
+    - [ ] TASK_02: Get Users In Channel
 
     // Update:
-    - [ ] Update User In Channel [Mute, Block, Change Permission]
+    - [ ] TASK_03: Update User In Channel [Mute, Block, Change Permission]
 
     // Delete:
-    - [ ] Bann User In Channel.
+    - [ ] TASK_04: Bann User In Channel.
 
-- [ ] TASKS RELATRED TO CHANNELS:
+- [ ] TASK_YY: TASKS RELATRED TO CHANNELS:
     // Create:
-    - [ ] Create Channel
+    - [ ] TASK_05: Create Channel
 
     // Read:
-    - [X] Get My Channels
-    - [ ] Get All Public Channels
+    - [X] TASK_06: Get My Channels
+    - [ ] TASK_07: Get All Public Channels
 
     // Update:
-    - [ ] Update Channel [private, public, protected]
-    - [ ] Send Message
+    - [ ] TASK_08: Update Channel [private, public, protected]
+    - [X] TASK_09: Send Message
 
     // Delete:
-    - [ ] Delete Channel
+    - [ ] TASK_10: Delete Channel

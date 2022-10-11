@@ -14,20 +14,23 @@ export class ChatController {
 
     constructor(private chatService: ChatService) {}
 
+    // TASK_01 - NTYT
+    @Post('AddUser')
+    async AddUserToChannel(@Req() req, @Body() body: ) {
+
+    }
+
+    // TASK_06 - DONE
     @Get('myChannels')
     async GetMyRooms(@Req() req, @Res() res) {
       return this.chatService.GetMyChannels(req.user.userId, res);
     }
 
+    // TASK_09 - DONE
     @Post('sendMessage')
     async SendMessage(@Req() req, @Body() messageData: MessageDataDto, @Res() res) {
       return this.chatService.SendMessage(req.user.userId, messageData.content, messageData.channelId, res);
     }
-
-    // @Post('AddUser/:channelId')
-    // async AddUserToChannel() {
-
-    // }
 
     // @Post('UpdateUser/:channelId')
     // async UpdateUserInChannel() {

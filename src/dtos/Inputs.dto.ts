@@ -17,3 +17,14 @@ export class MessageDataDto {
     @MaxLength(300)
     content: string;
 }
+
+export class ChannelUserDto {
+    @IsUUID()
+    @IsNotEmpty()
+    channelId: string;
+
+    @IsString()
+    @IsNotEmpty()
+    @MaxLength(300)
+    content: string;
+}
