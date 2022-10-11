@@ -10,16 +10,16 @@ STEPS :
 - [X] Add Relation Between Users In Json Object
 - [ ] Add Validation Layer For Outputs
 - [ ] Real Time Search Engine [Channel Search]
-- [ ] Add nb Friends in user Object
+- [X] Add nb Friends in user Object
 - [ ] Two Factor Authentication
 - [ ] Users Status
-- [ ] Create Rooms Endpoint
+- [X] Create Rooms Endpoint
 - [ ] Username need Input Validation
 
 - [X] Create DM Channel After Accepting Friend Request
-- [ ] Create Channels
-- [ ] Update Channels
-- [ ] Remove Channel
+- [X] Create Channels
+- [P] Update Channels
+- [P] Remove Channel
 - [ ] Update Users Permissions
 - [ ] Delete User from Channel
 - [ ] Get users In Channel
@@ -52,6 +52,29 @@ LEAR ABOUT MCD MODEL LOGIC DES DONNEES
 
 NOTES : 
 - [ ] RAAAAAAAAAANDOOOOOOOOOOOOOOM https://random.imagecdn.app/1000/1000
+
+=== OPERATIONS IN CHANNELS  :  ====================================================================
+ - [ ] CREATE CHANNEL
+ - [ ] UPDATE CHANNEL
+ - [ ] DELETE CHANNEL
+
+=== OPERATIONS IN CHANNELS  :  ====================================================================
+ - [ ] ADD USER TO CHANNEL
+ - [ ] UPDATE USER IN CHANNEL
+ - [ ] DELETE USER FROM CHANNEL
+ - [ ] 
+ - [ ]
+ - [ ]
+ - [ ]
+ - [ ]
+ - [ ]
+ - [ ]
+ - [ ]
+ - [ ]
+ - [ ]
+ - [ ]
+
+
 
 
 

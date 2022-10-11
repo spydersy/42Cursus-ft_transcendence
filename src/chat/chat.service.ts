@@ -61,41 +61,6 @@ export class ChatService {
         console.log("__DM__CHANNEL__DBG__ : ", DMChannel);
     }
 
-    async generateChannelDto(me: number, channels: any) : Promise<myChannelsDto[]> {
-        let myChannels: myChannelsDto[] = [];
-
-
-        channels.forEach(chnl => {
-
-            let Channel: myChannelsDto = {
-                channelId:  chnl.id,
-                access:     chnl.access,
-                name:       chnl.name,
-                picture:    chnl.picture,
-                password:   chnl.password,
-                nbMessages: chnl.nbMessages,
-                lastUpdate: chnl.lastUpdate,
-                users:      [],
-            };
-            chnl.users.forEach(user => {
-                let userdto: userInChannel = {
-                    permission: user.permission,
-                    restriction: user.restriction,
-                    restrictionTime: user.restrictionTime,
-                    duration: user.duration,
-                    login: user.user.login,
-                    displayName: user.user.displayName,
-                    defaultAvatar: user.user.defaultAvatar,
-                };
-                if (user.user.id === me)
-                    Channel.users.splice(0, 0, userdto);
-                else
-                    Channel.users.push(userdto);
-            });
-            myChannels.push(Channel);
-        });
-        return myChannels;
-    }
 
     async GetChannelById(channelId: string) {
         let channel = await this.prisma.channels.findUnique({
@@ -219,4 +184,42 @@ export class ChatService {
         }
         return res.status(HttpStatus.CREATED).send({'message': "Channel Created Successfully"});
     }
+
+    /* Helper Functions : ************************************************************************ */
+    async generateChannelDto(me: number, channels: any) : Promise<myChannelsDto[]> {
+        let myChannels: myChannelsDto[] = [];
+
+
+        channels.forEach(chnl => {
+
+            let Channel: myChannelsDto = {
+                channelId:  chnl.id,
+                access:     chnl.access,
+                name:       chnl.name,
+                picture:    chnl.picture,
+                password:   chnl.password,
+                nbMessages: chnl.nbMessages,
+                lastUpdate: chnl.lastUpdate,
+                users:      [],
+            };
+            chnl.users.forEach(user => {
+                let userdto: userInChannel = {
+                    permission: user.permission,
+                    restriction: user.restriction,
+                    restrictionTime: user.restrictionTime,
+                    duration: user.duration,
+                    login: user.user.login,
+                    displayName: user.user.displayName,
+                    defaultAvatar: user.user.defaultAvatar,
+                };
+                if (user.user.id === me)
+                    Channel.users.splice(0, 0, userdto);
+                else
+                    Channel.users.push(userdto);
+            });
+            myChannels.push(Channel);
+        });
+        return myChannels;
+    }
+
 }
