@@ -6,18 +6,21 @@ import { editFileName, imageFileFilter } from 'src/app.utils';
 import { fileURLToPath } from 'url';
 import { query } from 'express';
 import { ChatService } from './chat.service';
-import { MessageDataDto } from 'src/dtos/Inputs.dto';
+import { ChannelUserDto, MessageDataDto } from 'src/dtos/Inputs.dto';
+import { UserService } from 'src/user/user.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('chat')
 export class ChatController {
 
-    constructor(private chatService: ChatService) {}
+    constructor(private chatService: ChatService,
+                //private userService: UserService
+                ) {}
 
-    // TASK_01 - NTYT
+    // TASK_01 - DONE
     @Post('AddUser')
-    async AddUserToChannel(@Req() req, @Body() body: ) {
-
+    async AddUserToChannel(@Req() req, @Body() userChannelPair: ChannelUserDto, @Res() res) {
+      return this.chatService.AddUserToChannel(req.user.userId, userChannelPair.user, userChannelPair.channelId, res);
     }
 
     // TASK_06 - DONE

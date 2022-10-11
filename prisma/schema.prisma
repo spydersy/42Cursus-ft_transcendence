@@ -65,13 +65,10 @@ model Friends {
 
 model Blocks {
   id        Int      @id @default(autoincrement())
-
   user      users    @relation(name: "BlackList", fields: [userId], references: [id])
   userId    Int
-
   blocked   users   @relation(name: "BlockedUsers", fields: [blockedId], references: [id])
   blockedId Int
-
   date      DateTime @default(now())
 }
 // ================================================================================================ //
@@ -113,8 +110,7 @@ enum RESCTRICTION {
 }
 
 model channels {
-  id             String       @id @default(uuid())
-
+  id         String       @id @default(uuid())
   access     CHANNEL
   name       String?
   picture    String?
@@ -127,31 +123,23 @@ model channels {
 
 model channelsUsers {
   id              Int      @id @default(autoincrement())
-
   user            users    @relation(name: "Channels", fields: [userId], references: [id])
   userId          Int
-
   channel         channels @relation("ChannelsUsers", fields: [channelId], references: [id])
   channelId       String
-
   permission      PERMISSION
-
   restriction     RESCTRICTION @default(NULL)
   restrictionTime DateTime     @updatedAt
   duration        Int          @default(0)
-
   @@unique([userId, channelId])
 }
 
 model Messages {
   id        Int       @id @default(autoincrement())
-
   sender    users     @relation("Messages", fields: [senderId], references: [id])
   senderId  Int
-
   channel   channels  @relation("ChannelMessages", fields: [channelId], references: [id])
   channelId String
-
   content   String
   date      DateTime  @default(now())
 }

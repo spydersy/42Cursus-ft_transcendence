@@ -1,6 +1,6 @@
 - [ ] TASK_XX: TASKS RELATED TO USERS IN CHANNEL:
     // Create:
-    - [ ] TASK_01: Add User
+    - [X] TASK_01: Add User
 
     // Read:
     - [ ] TASK_02: Get Users In Channel

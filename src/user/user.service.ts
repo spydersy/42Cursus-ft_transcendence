@@ -1,4 +1,4 @@
-import { BadRequestException, HttpCode, HttpStatus, Injectable, MethodNotAllowedException, NotFoundException, Query, Req, Res } from '@nestjs/common';
+import { BadRequestException, forwardRef, HttpCode, HttpStatus, Inject, Injectable, MethodNotAllowedException, NotFoundException, Query, Req, Res } from '@nestjs/common';
 import { RELATION } from '@prisma/client';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -9,7 +9,8 @@ import { ChatService } from 'src/chat/chat.service';
 export class UserService {
 
 
-    constructor(private prisma: PrismaService,
+    constructor( @Inject(forwardRef(() => ChatService))
+                private prisma: PrismaService,
                 private chatService: ChatService) {}
 
     /*

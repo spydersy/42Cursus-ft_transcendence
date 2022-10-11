@@ -25,6 +25,5 @@ export class ChannelUserDto {
 
     @IsString()
     @IsNotEmpty()
-    @MaxLength(300)
-    content: string;
+    user: string;
 }

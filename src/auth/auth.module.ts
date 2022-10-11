@@ -10,6 +10,7 @@ import { UserService } from 'src/user/user.service';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { ChatModule } from 'src/chat/chat.module';
+import { ChatService } from 'src/chat/chat.service';
 
 export const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -26,7 +27,7 @@ export const JWT_SECRET = process.env.JWT_SECRET;
       signOptions: {expiresIn: '604800s'}
     }),
   ],
-  providers: [AuthService, UserService, JwtStrategy],
+  providers: [AuthService, UserService, JwtStrategy, ChatService],
   controllers: [AuthController],
   exports: [AuthService],
 })

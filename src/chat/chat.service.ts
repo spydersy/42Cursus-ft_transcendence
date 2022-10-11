@@ -1,7 +1,7 @@
-import { Body, HttpStatus, Injectable, Req, Res } from '@nestjs/common';
+import { Body, forwardRef, HttpStatus, Inject, Injectable, Req, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CHANNEL, PERMISSION, RESCTRICTION } from '@prisma/client';
-import internal from 'stream';
+import { UserService } from 'src/user/user.service';
 
 interface ManyUsers {
     userId:    number;
@@ -32,7 +32,9 @@ export interface myChannelsDto {
 
 @Injectable()
 export class ChatService {
-    constructor(private prisma: PrismaService) {}
+    constructor(@Inject(forwardRef(() => UserService))
+                private userService: UserService,
+                private prisma: PrismaService) {}
 
     // DONE
     async CreatDMChannel(SenderId: number, ReceiverId: number) {
@@ -145,6 +147,44 @@ export class ChatService {
             orderBy: {lastUpdate: 'desc'},
         });
         return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, allChannels));
+    }
+
+    async CanUpdateChannel(userId: number, channelId: string) : Promise<boolean> {
+        const userChannelPair = await this.prisma.channelsUsers.findUnique({
+            where: {
+                userId_channelId: {userId, channelId},
+            },
+        });
+        if (userChannelPair === null
+        || userChannelPair.permission === PERMISSION.USER)
+            return false;
+        return true;
+    }
+
+    async AddUserToChannel(me: number, user: string, channelId: string, @Res() res) {
+        if (await this.CanUpdateChannel(me, channelId) === true) {
+            const channel = await this.prisma.channels.findUnique({
+                where: {id: channelId},
+            });
+            if (channel === null || channel.access === CHANNEL.DM || channel.access === CHANNEL.PROTECTED)
+               return res.status(HttpStatus.FORBIDDEN).send({'message': 'Cant Add User'});
+               const userProfile = await this.userService.GetUserByLogin(user);
+               if (userProfile === null) {
+                    return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+               }
+            try {
+               await this.prisma.channelsUsers.create({
+                    data: {
+                        userId: userProfile.id ,
+                        channelId: channelId,
+                        permission: PERMISSION.USER
+                    }
+                });
+            } catch {
+                return res.status(HttpStatus.CONFLICT).send({'message': 'User Already Exist'});
+            }
+        }
+        return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
     }
 
     async CreateRoom(me: number, channelName: string, type: string,
