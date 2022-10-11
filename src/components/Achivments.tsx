@@ -38,6 +38,7 @@ const achievment4 = {
 }
 
 const achiv = [achievment1 , achievment2 , achievment4 , achievment3]
+const achiv2 = [achievment2 , achievment1 , achievment3, achievment4]
 
 export default function Achivments() {
   return (
@@ -46,7 +47,30 @@ export default function Achivments() {
         {/* <div className='head'>Achivments : </div> */}
         <div className='cont'>
         {
-            achiv.map((data : any, id : number )=>{
+            achiv.map((data : any, id : number)=>{
+               return (
+                   ( data.on) ?
+                  <div className='conty' style={{ filter: "grayscale(-50%) " }} >
+                        <img key={id} src={data.badge} alt={data.name} />
+                  </div> :  
+
+                  null
+                )
+                
+            })
+        }
+        </div>
+    </AchiStyle>
+  )
+}
+export  function Achivments2() {
+  return (
+    <AchiStyle>
+        {/* <HeadComponent title="Achivments"/> */}
+        {/* <div className='head'>Achivments : </div> */}
+        <div className='cont'>
+        {
+            achiv2.map((data : any, id : number)=>{
                return (
                    ( data.on) ?
                   <div className='conty' style={{ filter: "grayscale(-50%) " }} >

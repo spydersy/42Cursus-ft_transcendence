@@ -37,16 +37,19 @@ export default function Profile() {
   const id = window.location.pathname.split("/")[2];
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
-    defaultAvatar: "",
-    login : "",
-    displayName : '',
-    relation : "",
-    nbFriends : "",
-    wins : 0,
+    defaultAvatar: "defaultAvatar",
+    login : "login",
+    displayName : 'displayName',
+    relation : "relation",
+    nbFriends : "999",
+    wins : 9999,
     losses : 0,
-    lastModification: "",
-    Achievements: []
+    lastModification: "XXX XX XXX XXXX XX:XX:XX",
+    Achievements: [1,2,3,4]
   })
+
+  const [connection, setconnection] = useState(true);
+
 
   const particlesInit = useCallback(async (engine: Engine) => { 
     console.log(engine);   
@@ -79,9 +82,13 @@ export default function Profile() {
         console.log("res : " , res.data, "\n")
         // check for the user is bloked 
         setUser(res.data)
+        setconnection(true)
+
       }).catch((err)=>{
 
         // history.pushState("/signin");
+        setconnection(false)
+
     })
       }
     }
@@ -89,103 +96,110 @@ export default function Profile() {
   }, [id]);
 
   return (
-    <div className='container' style={{  display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
-        <div className='bg_img' style={{position: "absolute",width: "100%", height: "100%", zIndex: -1, top: 0,   left: 0  }}>
-            <Particles
-                  id="tsparticles"
-                  init={particlesInit}
-                  loaded={particlesLoaded}
-                  options={{
-                    background: {
-                      color: {
-                        value: "#100f110",
-                      },
-                      opacity: 0.1,
-                    },
-                    fpsLimit: 150,
-                    interactivity: {
-                      events: {
-                        onClick: {
-                          enable: true,
-                          mode: "push",
-                        },
-                        onHover: {
-                          enable: true,
-                          mode: "repulse",
-                        },
-                        resize: true,
-                      },
-                      modes: {
-                        push: {
-                          quantity: 4,
-                        },
-                        repulse: {
-                          distance: 200,
-                          duration: 0.5,
-                        },
-                      },
-                    },
-                    particles: {
-                      color: {
-                        value: "#296390",
-                      },
-                      links: {
-                        color: "#194b64",
-                        distance: 180,
-                        enable: true,
-                        opacity: 0.2,
-                        width: 1.5,
-                      },
-                      collisions: {
-                        enable: true,
-                      },
-                      move: {
-                        direction: "none",
-                        enable: true,
-                        outModes: {
-                          default: "bounce",
-                        },
-                        random: true,
-                        speed: 2,
-                        straight: true,
-                      },
-                      number: {
-                        density: {
-                          enable: true,
-                          area: 1000,
-                        },
-                        value: 90,
-                      },
-                      opacity: {
-                        value: 0.5,
-                      },
-                      shape: {
-                        type: "polygon",
-                      },
-                      size: {
-                        value: { min: 1, max: 5 },
-                      },
-                    },
-                    detectRetina: true,
-                  }}
-                  // style={{
-                  //   position: "absolute",
-                  //   width: "100%",
-                  //    height: "100%",
-                  //     zIndex: 5,
-                  //     top: 0,
-                  //     left: 0 
-                  // }}
-                  // className="particles"
-            />
-        </div>
+  <>
+      {
+        (connection) ? 
+          <div className='container' style={{  display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
+              <div className='bg_img' style={{position: "absolute",width: "100%", height: "100%", zIndex: -1, top: 0,   left: 0  }}>
+                  <Particles
+                        id="tsparticles"
+                        init={particlesInit}
+                        loaded={particlesLoaded}
+                        options={{
+                          background: {
+                            color: {
+                              value: "#100f110",
+                            },
+                            opacity: 0.2,
+                          },
+                          fpsLimit: 50,
+                          interactivity: {
+                            events: {
+                              onClick: {
+                                enable: true,
+                                mode: "push",
+                              },
+                              onHover: {
+                                enable: true,
+                                mode: "repulse",
+                              },
+                              resize: true,
+                            },
+                            modes: {
+                              push: {
+                                quantity: 4,
+                              },
+                              repulse: {
+                                distance: 200,
+                                duration: 0.8,
+                              },
+                            },
+                          },
+                          particles: {
+                            color: {
+                              value: "#296390",
+                            },
+                            links: {
+                              color: "#194b64",
+                              distance: 180,
+                              enable: true,
+                              opacity: 0.2,
+                              width: 1.8,
+                            },
+                            collisions: {
+                              enable: true,
+                            },
+                            move: {
+                              direction: "none",
+                              enable: true,
+                              outModes: {
+                                default: "bounce",
+                              },
+                              random: true,
+                              speed: 2,
+                              straight: true,
+                            },
+                            number: {
+                              density: {
+                                enable: true,
+                                area: 1000,
+                              },
+                              value: 90,
+                            },
+                            opacity: {
+                              value: 0.5,
+                            },
+                            shape: {
+                              type: "circle",
+                            },
+                            size: {
+                              value: { min: 1, max: 5 },
+                            },
+                          },
+                          detectRetina: true,
+                        }}
+                        // style={{
+                        //   position: "absolute",
+                        //   width: "100%",
+                        //    height: "100%",
+                        //     zIndex: 5,
+                        //     top: 0,
+                        //     left: 0 
+                        // }}
+                        // className="particles"
+                  />
+              </div>
 
-        <TheBox> 
-            <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
-        </TheBox>
+              <TheBox> 
+                  <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
+              </TheBox>
 
-        <PlayerTabsBar id={id} /> 
-    </div>
+              <PlayerTabsBar id={id} /> 
+          </div>
+        :
+        <div style={{color:"white", position: "absolute", fontSize: "100px" , textAlign:"center", top: "25%", left: "25%" }}> Hors-Ligne (D3IF) </div>
+      }
+  </>
   )
 };
 

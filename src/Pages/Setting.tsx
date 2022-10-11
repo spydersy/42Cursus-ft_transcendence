@@ -1,4 +1,4 @@
-import React, {useEffect, useState, CSSProperties} from 'react'
+import React, {useEffect, useState, CSSProperties, useCallback} from 'react'
 import styled  from "styled-components"
 import { HeadComponent } from './Home';
 import {ReactComponent as Edit} from "../assets/imgs/edit.svg";
@@ -8,6 +8,10 @@ import InputComponent from '../components/Input';
 import { Button } from './SignIn';
 import RingLoader from "react-spinners/RingLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
+
+import Particles from "react-particles";
+import type { Container, Engine } from "tsparticles-engine";
+import { loadFull } from "tsparticles";
 
 const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderColor: "red", };
 
@@ -20,6 +24,17 @@ export default function Setting() {
     const [data, setdata] = useState({login : "", defaultAvatar : "", displayName : "", twoFactorAuth : false, email : ""})
     const [checked, setchecked] = useState(false);
 
+    const particlesInit = useCallback(async (engine: Engine) => { 
+        console.log(engine);   
+        await loadFull(engine);
+       }, []);
+    
+       const particlesLoaded = useCallback(async (container: Container | undefined) => {
+         console.log(container);
+      }, []);
+
+    const [connection, setconnection] = useState(false);
+
     const uploadFile = ()=>{
         var e = document.getElementById("fileInput")
         e?.click()
@@ -30,12 +45,15 @@ export default function Setting() {
         axios.get("http://localhost:8000/profile/me",   {withCredentials: true} 
         ).then((res)=>{
             console.log(res.data)
+            
             setdata(res.data)
             setImg(res.data.defaultAvatar)
             setchecked(res.data.twoFactorAuth)
+            setconnection(true)
 
         }).catch((err)=>{
             // ERROR
+            setconnection(false)
         })
 
         var e = document.getElementById("fileInput")
@@ -129,36 +147,142 @@ export default function Setting() {
     };
 
     return (
-    
-        <SettingsStyle  className='container' style={{marginTop: "100px"}} >
-
-            <HeadComponent title="Setting" />
-            <Avatar onClick={uploadFile}>
-                <div className='edit'>
-                    <Edit />
-                </div>
-                <AvatarComponent  img={img}  />
-                <input id="fileInput" type="file" hidden />
-
-            </Avatar>
-            <Line></Line>
+        <div style={{position:"absolute"}}>
+            <div className='bg_img' style={{position: "absolute",width: "100%", height: "100%", zIndex: -1, top: 0,   left: 0  }}>
+                        <Particles
+                                id="tsparticles"
+                                init={particlesInit}
+                                loaded={particlesLoaded}
+                                options={{
+                                background: {
+                                    color: {
+                                    value: "#100f110",
+                                    },
+                                    opacity: 0.1,
+                                },
+                                fpsLimit: 150,
+                                interactivity: {
+                                    events: {
+                                    onClick: {
+                                        enable: true,
+                                        mode: "push",
+                                    },
+                                    onHover: {
+                                        enable: true,
+                                        mode: "repulse",
+                                    },
+                                    resize: true,
+                                    },
+                                    modes: {
+                                    push: {
+                                        quantity: 4,
+                                    },
+                                    repulse: {
+                                        distance: 200,
+                                        duration: 0.5,
+                                    },
+                                    },
+                                },
+                                particles: {
+                                    color: {
+                                    value: "#296390",
+                                    },
+                                    links: {
+                                    color: "#194b64",
+                                    distance: 180,
+                                    enable: true,
+                                    opacity: 0.2,
+                                    width: 1.5,
+                                    },
+                                    collisions: {
+                                    enable: true,
+                                    },
+                                    move: {
+                                    direction: "none",
+                                    enable: true,
+                                    outModes: {
+                                        default: "bounce",
+                                    },
+                                    random: true,
+                                    speed: 2,
+                                    straight: true,
+                                    },
+                                    number: {
+                                    density: {
+                                        enable: true,
+                                        area: 1000,
+                                    },
+                                    value: 90,
+                                    },
+                                    opacity: {
+                                    value: 0.5,
+                                    },
+                                    shape: {
+                                    type: "polygon",
+                                    },
+                                    size: {
+                                    value: { min: 1, max: 5 },
+                                    },
+                                },
+                                detectRetina: true,
+                                }}
+                                // style={{
+                                //   position: "absolute",
+                                //   width: "100%",
+                                //    height: "100%",
+                                //     zIndex: 5,
+                                //     top: 0,
+                                //     left: 0 
+                                // }}
+                                // className="particles"
+                            />
+            </div>
+        {
+        
+            (connection) ? 
             
-            <Row>
-                    <InputComponent onChange={(e)=>{inputHandler(e)}} value={data.displayName} type='text' lable='Display Name' />
-                    <InputComponent disabled={true} onChange={(e)=>{inputHandler(e)}} value={data.login} type='text' lable='Login' />
-                    
-                    <TwofaStyle >
-                        <label> Two-Factor Authentication (2FA)</label>
-                        <input type="checkbox" id="toggle" name="toggle" checked={checked} onChange={TwoHandler} />
-                    </TwofaStyle>
 
+            (
+                <SettingsStyle  className='container' style={{ display:"flex", right:"300px",  width: "800px", marginTop: "100px", marginLeft: "30px"}} >
+
+                    <div className='all'>
                     
-                    <Button    onClick={submitHandler} text="save" type='primary' />
-                    <RingLoader  color={color} loading={loading} cssOverride={override} size={30} />
+                        <HeadComponent title="Setting" />
+                    
+                        <Avatar onClick={uploadFile}>
+                            <div className='edit'>
+                                <Edit />
+                            </div>
+                            <AvatarComponent  img={img}  />
+                            <input id="fileInput" type="file" hidden />
+                        </Avatar>
+                        <Line></Line>
+                
+                        <Row>
+                                <InputComponent onChange={(e)=>{inputHandler(e)}} value={data.displayName} type='text' lable='Display Name' />
+                                <InputComponent disabled={true} onChange={(e)=>{inputHandler(e)}} value={data.login} type='text' lable='Login' />
                         
-            </Row>
+                                <TwofaStyle >
+                                    <label> Two-Factor Authentication (2FA)</label>
+                                    <input type="checkbox" id="toggle" name="toggle" checked={checked} onChange={TwoHandler} />
+                                </TwofaStyle>
+                        
+                                <Button    onClick={submitHandler} text="save" type='primary' />
+                                <RingLoader  color={color} loading={loading} cssOverride={override} size={30} />
+                            
+                        </Row> 
+                    </div>
+                </SettingsStyle>
 
-        </SettingsStyle>
+            )
+
+            :
+
+            <button style={{color:"white", position: "relative", fontSize: "100px", top:"300px", left:"300px" , cursor:"progress"}}> Hors-Ligne (D3IF) </button>
+
+        }
+        </div>
+
     )
 }
 
@@ -189,7 +313,15 @@ const SettingsStyle = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    .all {
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 `;
 
 const Avatar = styled.div`

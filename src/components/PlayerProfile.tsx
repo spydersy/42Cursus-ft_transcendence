@@ -15,7 +15,7 @@ import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
 import { Button } from '../Pages/SignIn';
 
 import axios from 'axios';
-import Achivments from './Achivments';
+import Achivments , {Achivments2} from './Achivments';
 import  { RadarChart } from './charts/Charts';
 
 const Backcolor = css`${props => props.theme.colors.purple}`
@@ -145,7 +145,7 @@ export function Stats(props: PlayerCardProps) {
   
   const id = window.location.pathname.split("/")[2];
 
-  const [createdTime, setcreatedTime] = useState<string | undefined>("")
+  const [createdTime, setcreatedTime] = useState<string | undefined>("XXX XX XXX XXX XX:XX:XX ")
   const [grade, setgrade] = useState<string | undefined>("Unranked")
   const Grades = ["Shinobi","ShiboKay","Hokage","Yonko","3anKoub","XX","XXXX","XXXXX","XXXXX"]
 
@@ -248,7 +248,8 @@ export function Stats(props: PlayerCardProps) {
 
               </div>
             
-              <div className="Achiv"> <Achivments/> </div>
+              <div className="Achivv"> <Achivments/> </div>
+              <div className="Achiv"> <Achivments2/> </div>
 
             </div>
 
@@ -330,6 +331,14 @@ justify-content: space-between;
   flex-direction: column;
   justify-content: space-between;
   
+}
+.Achivv {
+  position: relative;
+  display: flex;
+  /* background-color: aliceblue; */
+  bottom: 0%;
+
+
 }
 .Achiv {
   position: relative;
