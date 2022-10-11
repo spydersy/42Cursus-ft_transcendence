@@ -32,7 +32,7 @@ export class UserService {
             }
         });
 
-        let FriendsRowB = await this.prisma.friends.findMany({ 
+        let FriendsRowB = await this.prisma.friends.findMany({
             where: {
                 status: RELATION.FRIENDS,
                 receiverId: UserDto.id
@@ -51,9 +51,14 @@ export class UserService {
     async GetFriends(UserMe: string, User: string, @Res() res) {
         let UserMeDto = await this.GetUserByLogin(UserMe);
         let UserDto = await this.GetUserByLogin(User);
-        if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true) {
+
+        console.log("__USER__ME__DTO__ : ", UserMeDto);
+        console.log("__USER__DTO__     : ", UserDto);
+        if (UserMeDto === null || UserDto === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+        if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true)
             return res.status(HttpStatus.FORBIDDEN).send([]);
-        }
+
         let FriendsRowA = await this.prisma.friends.findMany({
             where: {
                 status: RELATION.FRIENDS,
@@ -64,7 +69,7 @@ export class UserService {
             }
         });
 
-        let FriendsRowB = await this.prisma.friends.findMany({ 
+        let FriendsRowB = await this.prisma.friends.findMany({
             where: {
                 status: RELATION.FRIENDS,
                 receiverId: UserDto.id
@@ -80,7 +85,7 @@ export class UserService {
     }
 
     async GetUserByUsername(Me: string, User: string, @Res() res) {
-            
+
         let MeDto = await this.GetUserByLogin(Me);
         let UserDto = await this.GetUserByLogin(User);
 
@@ -209,7 +214,7 @@ export class UserService {
                 status: RELATION.FRIENDS,
             }
         });
-        await this.chatService.CreatDMChannel(SenderDto.id, ReceiverDto.id); // DO SOMETHING . . . 
+        await this.chatService.CreatDMChannel(SenderDto.id, ReceiverDto.id); // DO SOMETHING . . .
         console.log("__NEW__RELATION__ : ", NewRelation);
         return res.status(HttpStatus.OK).send({"message": NewRelation.count});
     }

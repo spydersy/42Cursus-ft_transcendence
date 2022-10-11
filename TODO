@@ -48,9 +48,9 @@ SECRET CODE :
 - [ ] Import it from .env file
 
 
-LEAR ABOUT MCD MODEL LOGIC DES DONNEES 
+LEAR ABOUT MCD MODEL LOGIC DES DONNEES
 
-NOTES : 
+NOTES :
 - [ ] RAAAAAAAAAANDOOOOOOOOOOOOOOM https://random.imagecdn.app/1000/1000
 
 === OPERATIONS IN CHANNELS  :  ====================================================================
@@ -62,7 +62,7 @@ NOTES :
  - [ ] ADD USER TO CHANNEL
  - [ ] UPDATE USER IN CHANNEL
  - [ ] DELETE USER FROM CHANNEL
- - [ ] 
+ - [ ]
  - [ ]
  - [ ]
  - [ ]
@@ -101,7 +101,7 @@ NOTES :
 
 === Channel Creation Endpoint =====================================================================
     - [N] Channel Name
-    - [N] Channel Picture 
+    - [N] Channel Picture
     - [N] Channel Type
     - [N] Channel Password
     - [D] Owner id

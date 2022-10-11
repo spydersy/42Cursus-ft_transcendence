@@ -7,6 +7,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
 import { UserName } from 'src/dtos/Inputs.dto';
+import { IsString } from 'class-validator';
 
 @UseGuards(JwtAuthGuard)
 @Controller('profile')
@@ -54,7 +55,7 @@ export class ProfileController {
     return this.profileService.UploadAvatar(uploadedAvatarPath, req.user.userId, res);
   }
 
-  @Get('logout')
+  @Post('logout')
   async Logout(@Res() res) {
     return this.profileService.Logout(res);
   }
@@ -68,8 +69,10 @@ export class ProfileController {
   }
 
   @Put("updateUsername/:newname")
-  async UpdateUserName(@Req() req, @Param('newname') newName: UserName, @Res() res) {
-    console.log("__BODY__DBG__", newName);
-    return this.profileService.UpdateUserName(newName.UserName, req.user.userId, res);
+  async UpdateUserName(@Req() req, @Param('newname') newname: string, @Res() res) {
+    console.log("__BODY__DBG__", newname);
+    // let newNameDto: UserName ={};
+    // newNameDto.newname = newname;
+    return this.profileService.UpdateUserName(newname, req.user.userId, res);
   }
 }

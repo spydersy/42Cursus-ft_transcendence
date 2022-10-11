@@ -1,0 +1,27 @@
+- [ ] TASKS RELATED TO USERS IN CHANNEL:
+    // Create:
+    - [ ] Add User
+
+    // Read:
+    - [ ] Get Users In Channel
+
+    // Update:
+    - [ ] Update User In Channel [Mute, Block, Change Permission]
+
+    // Delete:
+    - [ ] Bann User In Channel.
+
+- [ ] TASKS RELATRED TO CHANNELS:
+    // Create:
+    - [ ] Create Channel
+
+    // Read:
+    - [ ] Get My Channels
+    - [ ] Get All Public Channels
+
+    // Update:
+    - [ ] Update Channel [private, public, protected]
+    - [ ] Send Message
+
+    // Delete:
+    - [ ] Delete Channel

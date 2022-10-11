@@ -18,7 +18,7 @@ export class ProfileService {
         // JUST FOR TEST
         let ForbiddenString : string = "";
         let TestUserNameDTO: UserName ={
-            UserName: ForbiddenString,
+            newname: ForbiddenString,
         }
         console.log("__TEST__USER_NNAME__DTO__ : ", TestUserNameDTO);
         if (query['friends']) {
@@ -47,8 +47,9 @@ export class ProfileService {
     }
 
     async UpdateUserName(newName: string, userId: number, @Res() res) {
+        console.log("__NEW__NAME__ : ", newName);
         try {
-            await this.prisma.users.update({
+            let resultOfUpdate = await this.prisma.users.update({
                 where: {
                     id: userId
                 },
@@ -56,10 +57,13 @@ export class ProfileService {
                     displayName: newName,
                 }
             });
+            console.log("__RESULT__OF__UPDATE__ : ", resultOfUpdate);
         }
         catch {
+            console.log("XXX");
             return res.status(HttpStatus.FORBIDDEN).send({"message": 'Username Already Taken'});
         }
+        console.log("YYY");
         return res.status(HttpStatus.CREATED).send({"new name": newName});
     }
 
