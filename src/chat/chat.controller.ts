@@ -6,6 +6,7 @@ import { editFileName, imageFileFilter } from 'src/app.utils';
 import { fileURLToPath } from 'url';
 import { query } from 'express';
 import { ChatService } from './chat.service';
+import { MessageDataDto } from 'src/dtos/Inputs.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('chat')
@@ -15,7 +16,7 @@ export class ChatController {
 
     @Get('myChannels')
     async GetMyRooms(@Req() req, @Res() res) {
-      return this.chatService.GetMyRooms(req.user.userId, res);
+      return this.chatService.GetMyChannels(req.user.userId, res);
     }
 
     @Post('sendMessage')
@@ -24,6 +25,7 @@ export class ChatController {
         || messageData['channelId'] === undefined) {
         return res.status(HttpStatus.BAD_REQUEST).send({'message': "Request Malformed"});
       }
+      console.log("__MESSAGE__DATA__DBG__ : ", messageData);
       return this.chatService.SendMessage(req.user.userId, messageData, res);
     }
 

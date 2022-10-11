@@ -111,7 +111,7 @@ export class ChatService {
             // if ()
         }
         let messages = await this.prisma.messages.findMany({
-            where: {senderId: me, channelId: channelId}
+            where: {channelId: channelId}
         });
         res.status(HttpStatus.OK).send(messages);
     }
@@ -138,7 +138,7 @@ export class ChatService {
         return res.status(HttpStatus.FORBIDDEN).send({'message': "Method Not Allowed"});
     }
 
-    async GetMyRooms(me: number, @Res() res) {
+    async GetMyChannels(me: number, @Res() res) {
         let allChannels = await this.prisma.channels.findMany({
             where: {
                 users: {some: { userId: me}}
