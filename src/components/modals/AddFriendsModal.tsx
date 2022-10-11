@@ -7,6 +7,7 @@ import { AvatarComponent } from '../PlayerProfile';
 import axios from 'axios';
 import { Button } from '../../Pages/SignIn';
 interface UserProp {
+  id : string , 
     defaultAvatar: string,
     login : string
     displayName : string
@@ -45,7 +46,7 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
         }
     
  
-    }  , [])
+    }  , [ props.setmembers])
     
   return (
     <AddFriendsModalStyle>
@@ -67,12 +68,10 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
                         </div>
                     </div>
               {
-                !props.members.includes(data.login ) ? 
+                !props.members.includes(data.id ) ? 
                 <Button onClick={(e)=>{handleFriend(e)
                   var test = props.members;
-                  test.push(data.login)
-      console.log(test)
-
+                  test.push(data.id)
                    props.setmembers([...test])
                     }} text={  "add" }/>
                     :
@@ -145,12 +144,13 @@ max-width: 200px;
 `;
 
 const Friend = styled.div`
-    width: 100%;
+    width: 95%;
   height: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 5px;
+  margin:  0 auto;
   border-bottom: 0.5px solid  ${props => props.theme.colors.bg} ;
 font-family: 'Poppins', sans-serif;
 
@@ -161,7 +161,7 @@ font-family: 'Poppins', sans-serif;
     gap: 10px;
     font-size: 20px;
     color:  ${props => props.theme.colors.primaryText};;
-
+    margin-bottom: 20px;
   }
   /* >button{
     color:  ${props => props.theme.colors.seconderyText};

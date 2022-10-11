@@ -1,6 +1,8 @@
 import React from 'react'
 import styled  from "styled-components"
 import { useDetectClickOutside } from 'react-detect-click-outside';
+import { FriendRequest } from './Notifications/NotifComponents';
+import Mamali from "../assets/imgs/avatar/mamali.jpeg";
 
 interface ListTypes {
   title : string,
@@ -98,15 +100,17 @@ export  function NotifDropDown(props : NotifDropDownProps) {
 return (<>
     {props.open && 
       <NotifD style={props.style}  ref={refs} >
-          <div>
+          {/* <div> */}
             <Head>
               <div>Notifications</div>
-              <span>Clear</span>
+              <span>Clear all</span>
             </Head>
             <Notif>
-              TODO
+              
+              <FriendRequest name="moahmed" img={Mamali} msg={"Send a Friend request ."} check={()=>{}}  clear={()=>{}} />
+              <FriendRequest name="moahmed" img={Mamali} msg={"Is challenging you."} check={()=>{}}  clear={()=>{}} />
             </Notif>
-          </div>
+          {/* </div> */}
       </NotifD>}
 </>
 )
@@ -115,15 +119,15 @@ return (<>
 
 const NotifD = styled.div`
 position: absolute;
-min-width: 300px;
-width: 300px;
+min-width: 400px;
+width: 400px;
 bottom: -25px;
 transform: translateY(100%);
-min-height: 200px;
+min-height: 300px;
 border-radius: 8px;
 background-color: ${props => props.theme.colors.bg};;
 
-border:1px solid ${props => props.theme.colors.seconderyText};;
+border:2px solid ${props => props.theme.colors.seconderyText};;
 /* padding: 0 15px; */
 /* lef:t: ; */
 right: 0;
@@ -133,24 +137,20 @@ align-items: center;
 flex-direction: column;
 overflow: hidden;
 min-width: 120px;
->div{
-  width: 95%;
-  height: 100%;
-  margin: 0 auto;
-}
+
 `;
 
 const Head = styled.div`
-  width: 100%;
+  width: 95%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 60px;
   font-family: 'Poppins', sans-serif;
   color: ${props => props.theme.colors.primaryText};
-  border-bottom: 0.5px solid ${props => props.theme.colors.primaryText};
+  border-bottom: 0.5px solid ${props => props.theme.colors.seconderyText};
   >div{
-    font-weight: 6000;
+    font-weight: 600;
     font-size: 20px;
   }
   >span{
@@ -159,14 +159,19 @@ const Head = styled.div`
 `;
 const Notif = styled.div`
   width: 100%;
+  flex: 1;
+  /* height: 100%; */
+  gap: 10px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 60px;
+  flex-direction: column;
   font-family: 'Poppins', sans-serif;
   color: ${props => props.theme.colors.primaryText};
   /* border-bottom: 0.5px solid   #c8d0d97b; */
   border-radius: 10px;
   margin: 10px 0;
-  background-color: ${props => props.theme.colors.seconderybg};;
+  /* background-color: ${props => props.theme.colors.purple};; */
 `;
+
+
+

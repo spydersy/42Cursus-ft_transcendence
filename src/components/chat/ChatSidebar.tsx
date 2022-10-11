@@ -43,6 +43,8 @@ interface convType {
     // setList: (e : any) => void,
     list:  convType[]
     setcurrentConv : (e: number)=>void,
+    setState : (e: number)=>void,
+    state : number,
     currentConv : number,
   }
 export default function ChatSidebar(props : ChatProps) {
@@ -70,6 +72,8 @@ export default function ChatSidebar(props : ChatProps) {
                 {props.list.map((data : any , id : number)=>{
                     return < ConversationComponent onClick={()=>{
                         props.setcurrentConv(id)
+                        if (props.state != -1 )
+                          props.setState(1)
                     }} key={id}  data={data} active={props.currentConv === id} />
                 })}
           </div>

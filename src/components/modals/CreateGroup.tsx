@@ -14,10 +14,7 @@ import InputComponent from '../Input';
 import { Button } from '../../Pages/SignIn';
 import axios from 'axios';
 
-interface ModalProps{
-closeModal : ()=>void
-  }
-export default function CreateGroup(props : ModalProps) {
+export default function CreateGroup(props :{closeModal : ()=>void}) {
     
    
     const [members, setmembers] = useState([
@@ -91,7 +88,6 @@ export default function CreateGroup(props : ModalProps) {
         axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 
       ).then((res)=>{
-        props.closeModal()
         console.log(res.data)
       }).catch((err)=>{
         console.log(err)
@@ -255,33 +251,35 @@ flex-direction: row;
         font-family: "Poppins" , sans-serif;
             font-weight: 600;
     }
-        > input[type="radio"] {
-            /* outline: none; */
-        /* ...existing styles */
-     
-        background-color: #fff;
-        accent-color: ${props => props.theme.colors.purple};
-        width: 20px;
-        height: 20px;
+
+    >input[type="radio"] {
+        appearance: none;
+        background-color: transparent;
+        margin: 5px;
+        font: inherit;
+        color : blue;
+        width: 1.5em;
+        height: 1.5em;
+        border: 0.15em solid ${props => props.theme.colors.purple};
         border-radius: 50%;
+        transform: translateY(-0.075em);
         display: grid;
         place-content: center;
-
         &::before {
-            content: "";
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            transform: scale(0);
-            transition: 120ms transform ease-in-out;
-            box-shadow: inset 1em 1em ${props => props.theme.colors.purple};
+        content: "";
+        width: 0.9em;
+        height: 0.9em;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: 250ms transform ease-in-out;
+        box-shadow: inset 1em 1em ${props => props.theme.colors.purple};;
         }
-            &:checked {
-                
-            transform: scale(1);
-                border: 0.15em solid  ${props => props.theme.colors.purple};
-                outline-color: ${props => props.theme.colors.purple};
-            }
+}
+
+
+
+        >input[type="radio"]:checked::before {
+        transform: scale(1);
         }
 
        
@@ -326,12 +324,11 @@ margin: 15px 0;
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        /* background-color:  ${props => props.theme.colors.bg}; */
         display: flex;
         align-items: center;
         justify-content: center;
         border : 1px dashed  ${props => props.theme.colors.purple}; 
-
+        
         >svg{
             width: 30px;
             height: 30px;
@@ -340,6 +337,16 @@ margin: 15px 0;
                 stroke:  ${props => props.theme.colors.purple};
             }
         }
+        &:hover{
+            border : 1px solid  ${props => props.theme.colors.bg}; 
+            background-color:  ${props => props.theme.colors.purple};
+
+            path{
+                fill: transparent;
+                stroke:  ${props => props.theme.colors.primaryText};
+                
+        }
+    }
     }
   
 `;

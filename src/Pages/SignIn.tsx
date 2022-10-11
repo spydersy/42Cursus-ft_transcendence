@@ -115,14 +115,17 @@ interface ButtonProps {
    text? : string
    icon? : React.ReactElement,
    onClick? : (e?: any)=> void;
+   size ? : "small" | "big"; 
+
 }
 interface ButtonStyleProps {
    isIcon? : boolean,
    typeS? : string ,
+   size ? : "small" | "big"; 
 }
 export  function Button(props :ButtonProps ) {
   return (
-    <LoginButtonStyle isIcon={props?.isIcon} onClick={props.onClick} typeS={props.type}>
+    <LoginButtonStyle size={props.size} isIcon={props?.isIcon} onClick={props.onClick} typeS={props.type}>
       {props?.icon}
       {props.text}
     </LoginButtonStyle>
@@ -142,6 +145,10 @@ height: auto;
    align-items: center;
    justify-content: center;
    gap : 5px;
+   ${props => (props.size === "small") && `
+
+padding: 3px 5px;
+`}
    >svg{
       /* display: none; */
       path {
@@ -166,6 +173,7 @@ height: auto;
   width: auto;
 
    `}
+
    z-index: 20;
    position: relative;
    overflow: hidden;

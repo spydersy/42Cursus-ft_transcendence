@@ -7,6 +7,7 @@ import {ReactComponent as ArrowLeft} from "../assets/imgs/arrowLeft.svg";
 import {ReactComponent as LogoutIcon} from "../assets/imgs/logout.svg";
 import {ReactComponent as LeaderIcon} from "../assets/imgs/leader-icon.svg";
 import {ReactComponent as SettingIcon} from "../assets/imgs/settings.svg";
+import { Button } from '../Pages/SignIn';
 
 export interface barProps {
     open: boolean
@@ -46,21 +47,21 @@ export default function Sidebar() {
 
             if ( window.innerWidth < 800)
             {
-                sideBaRed.current.style.width = "100%" 
-                sideBaref.current.style.width = "100%" 
+                // sideBaRed.current.style.width = "100%" 
+                // sideBaref.current.style.width = "100%" 
                 return ;
             }
             if (open)
             {
 
-                sideBaRed.current.style.width = "76px"
-                sideBaref.current.style.width = "76px"
+                // sideBaRed.current.style.width = "76px"
+                // sideBaref.current.style.width = "76px"
             }
             else
             {
 
-                sideBaRed.current.style.width = "300px"
-                sideBaref.current.style.width = "300px"
+                // sideBaRed.current.style.width = "300px"
+                // sideBaref.current.style.width = "300px"
             }
             setopen(!open)
         }
@@ -81,45 +82,39 @@ export default function Sidebar() {
         else if (pageName === "setting" ) pagenum = 4;
         changeFocus(pagenum)
 
-    // window.addEventListener("resize", (e : any)=>{
-    //     if ( e.currentTarget?.innerWidth >= 700)
-    //     {
-    //         if (e.currentTarget?.innerWidth< 1440 )
-    //         {
-    //             console.log(e.currentTarget?.innerWidth)
-    //             // openClose()
-    //             // setopen(false)
-  
-    //         }
-    //     }
-    //     else
-    //     {
-    //         // openClose()
-    //         // setopen(true)
+         window.addEventListener("resize", (e : any)=>{
 
-    //     }
-
-
-    // })
+        if (window.innerWidth < 1400 )
+            setopen(false)
+        else
+            setopen(true)
+   
+    })
     
       return () => {
         
       }
-      // eslint-disable-next-line 
-    }, [open, setfocused ,])
+    }, [open, setopen ])
+    
+
     
   return (
-    <Test className='test'  ref={sideBaRed} open={open}>
-    <SidebarWrraper >
-        <Left open={open} ref={sideBaref}   onClick={openClose}   />
+    <Test className='test' ref={sideBaRed} open={open}>
+    <SidebarWrraper ref={sideBaref}  >
+    <Left open={open}   onClick={openClose} >
+
+        <Button  size={"small"}isIcon={true} icon={<ArrowLeft/>}/>
+    </Left>
+       
 
 <Items>
         {
             sideBarItemsList.map((item : any , id : number)=>{
-                return <Item key={id} onClick={()=>setfocused(id)} active={id === focused ? true : false} href={item.link}>
+                return <Item  open={open}key={id} onClick={()=>setfocused(id)} active={id === focused ? true : false} href={item.link}>
                 {item.icon}
                 {
-                    open ? <div>{item.title}</div> : <ToolTip>{item.title}</ToolTip>  
+                   <div>{item.title}</div> 
+                //    : <ToolTip>{item.title}</ToolTip>  
                 }
                 
             </Item>;
@@ -127,18 +122,20 @@ export default function Sidebar() {
         }
        </Items> 
        <Devider></Devider>
-       <Item  className='item' onClick={()=>setfocused(4)} active={4 === focused ? true : false} href={"/setting"}>
+       {/* <Item open={open}  className='item' onClick={()=>setfocused(4)} active={4 === focused ? true : false} href={"/setting"}>
             <SettingIcon/>
             {
-                open ? <div>Setting</div> : <ToolTip>Setting</ToolTip>  
+               <div>Setting</div> 
+            //    : <ToolTip>Setting</ToolTip>  
             }
             </Item>
-       <Item className='item'   active={false} href={"/"}>
+       <Item open={open} className='item'   active={false} href={"/"}>
             <LogoutIcon/>
             {
-                open ? <div>LogOut</div> : <ToolTip>LogOut</ToolTip>  
+               <div>LogOut</div> 
+            //    : <ToolTip>LogOut</ToolTip>  
             }
-            </Item>
+            </Item> */}
     </SidebarWrraper>
     </Test>
 
@@ -149,6 +146,7 @@ export default function Sidebar() {
 interface ItemProps {
  
     active : boolean
+    open : boolean
 
 
   }
@@ -159,6 +157,8 @@ const SidebarWrraper = styled.div`
     flex-direction: column;  
     position: fixed;
     top: 70px;
+    transition: all 400ms ease-in-out;
+
     background-color: ${props => props.theme.colors.primarybg}; 
     @media  only screen and (max-width: 768px) {
         > .item{
@@ -174,15 +174,21 @@ const SidebarWrraper = styled.div`
 }
 `;
 const Test = styled.div<barProps>`
-    width: 300px;
+    width: 200px;
     height: 100%;
     background-color: transparent;
     position: relative;
     /* background-color: ${props => props.theme.colors.primarybg};  */
     align-items: flex-end;
     flex-direction: column;
-    transition: all 400ms ease-in-out;
+   
+    -webkit-transition: width 500ms ease-in-out;
+    -moz-transition: width 500ms ease-in-out;
+    -o-transition: width 500ms ease-in-out;
+    transition: width 500ms ease-in-out;
     ${props => (props.open === false) && `
+    transition: width 500ms ease-in-out;
+
         align-items: center ;
         width: 76px;
     `}
@@ -205,31 +211,41 @@ const Test = styled.div<barProps>`
 interface LeftStyleProps{
     open : boolean
 }
-const Left = styled(ArrowLeft)<LeftStyleProps>`
+const Left = styled.div<LeftStyleProps>`
   
-
+        
+        width: 99%;
+        display: flex;
         align-items: flex-end; 
-         margin-top: 20px; 
-         margin-bottom: 60px;
-         margin-right: 10px;
-         margin-left: 0;
+        flex-direction: row-reverse;
+         margin-top: 10px; 
+         margin-bottom: 70px; 
          path{
              /* fill: ${props => props.theme.colors.seconderyText};  */
         }
          &:hover{
-             path{
-             /* fill: ${props => props.theme.colors.primarybg};  */
+     
+                > button{
+                   
                 }
          }
-         transition: all 400ms ease-in-out;
-
          
-         ${props => (props.open === false) && css`
-            transform: rotate(180deg);
-            // margin : 0 auto;
-            margin-left: auto;
-            margin-right: auto;
-         `}
+         > button{
+             margin-right: 13px;
+             >svg{
+                transition: all 500ms ease-in-out;
+
+             }
+             ${props => (props.open === false) && css`
+            /* margin-right: 10px; */
+         
+                     >svg{
+
+                          transform: rotate(180deg);
+                 
+                        }
+                        `}
+                    }
     
 `;
 
@@ -245,7 +261,7 @@ const Devider = styled.div`
 `;
 const Items = styled.div`
    
-    width: 100%;
+    width: auto;
     /* flex: auto; */
     display: flex;
     align-items: center;
@@ -308,18 +324,33 @@ const ToolTip = styled.span`
 `;
 const Item = styled.a<ItemProps>`
 
-    width: 100%;
+    /* width: 100%; */
     height: 60px;
     color :${props => props.theme.colors.primaryText}; 
     font-size:  ${props => props.theme.fontSize.l};
     font-family: 'Poppins', sans-serif;
     font-weight : 500;
     display: flex;
-    align-items: center;
-    /* justify-content:  */
+    align-items: flex-start;
     flex-direction: row;
-    /* overflow: hidden; */
     position: relative;
+
+    >div{
+        text-align: start;
+        width: 170px;
+
+        -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
+
+    ${props => (props.open === false) && `
+        width: 0px;
+        opacity : 0;        
+    `}
+    }
+
+
     cursor: pointer;
     svg{
         margin: 0 19px;
@@ -358,18 +389,7 @@ const Item = styled.a<ItemProps>`
                 stroke: ${props => props.theme.colors.purple}; 
             }
         } 
-        /* &::before{ ToDO
-            content: "ddd";
-            position: absolute;
-            left: 0;
-            height: 100%;
-            width: 5px;
-            background-color: ${props => props.theme.colors.border};
-            border-radius: 7px ;
-        } */
-       
     }
-    // transition: all 20ms ease-in;
     
 `;
 

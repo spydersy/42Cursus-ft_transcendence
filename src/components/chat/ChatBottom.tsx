@@ -41,7 +41,9 @@ interface convType {
 interface ChatProps {
   setList: (e : any) => void,
   list: convType[],
-  index : number
+  index : number,
+  setmsgs : (e : any)=>void,
+  msgs : any
 }
 
 export default function ChatBottom(props: ChatProps) {
@@ -76,20 +78,21 @@ export default function ChatBottom(props: ChatProps) {
         })
     }
     const recievedMessgae = (payload: any) => {
-        // var listtmp =  props.list;
-        // alert(payload +  props.index);
-        // const obj = {
-        //   name: "reda",
-        //   message: payload
-        // }
-        // listtmp[props.index].users.push(obj);
-        // listtmp[props.index].messages.push(obj.message);
-        // props.setList([...listtmp ]);
-    }
+      var listtmp =  props.msgs;
+      const obj = {
+        content : "reda",
+        senderId : "dsdd", 
+        // message: payload
+      }
+      listtmp.push(obj);
 
+      props.setmsgs([...listtmp ]);
+    }
     useEffect(() => {
       socket.on('connect', () => {
       });
+      // rooms dyal client 
+      //roo
       socket.on('chatToClient', (payload) => {
           recievedMessgae(payload);
       });

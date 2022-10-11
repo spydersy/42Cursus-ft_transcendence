@@ -2,6 +2,7 @@ import React , { useState}from 'react'
 import {ReactComponent as Dots} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as UserIcon} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as SettingIcon} from "../../assets/imgs/dotsvertical.svg";
+import {ReactComponent as BackIcon} from "../../assets/imgs/arrowLeft.svg";
 import styled  from "styled-components"
 import { AvatarComponent } from '../PlayerProfile';
 import DropDown from '../DropDown';
@@ -45,7 +46,9 @@ interface ListTypes  {
   }
 
   interface chatHeaderProps {
-    data : convType
+    data : convType,
+    setState : (e: number)=>void,
+    state : number,
   }
 
   const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/id"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
@@ -58,6 +61,7 @@ export default function ChatHeader(props : chatHeaderProps) {
     }
     return (
       <TopStyle>
+       {props.state === 1 && <BackIcon onClick={()=>props.setState(0)} />}
           {
             props.data?.access === "DM" ? 
         <div className='cont'>

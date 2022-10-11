@@ -1,48 +1,79 @@
 
-import React from 'react'
+import axios from 'axios'
+import React , {useEffect , useState} from 'react'
 import styled  from "styled-components"
+interface usersType {
+  id : string,
+  defaultAvatar: string,
+  login : string
+  displayName : string,
+  restriction: string,
+  restrictionTime: string,
+  duration: number,
+}
 
-// interface chatType {
-//     id: string,
-//     msg: string,
-//   }
-interface chatType {
-  name: string,
-  message: string[],
-
+interface convType {
+  nbMessages: number,
+  lastUpdate: string,
+  access : string,
+  channelId: number,
+  name: string;
+  password: string,
+  picture : string,
+  users: usersType[]
 }
 interface ChatProps {
     // setList: (e : any) => void,
-    list: chatType[]
+    list: convType,
+    setmsgs : (e : any)=>void,
+    msgs : any
+    setcurrentConv : (e : number)=>void
   }
 
   export default function ChatBody(props: ChatProps) {
-    // useEffect(() => {
-    //   const  = io('http://localhost:3030');
-    //   socket.on('coco' , ()=>{
-    //     console.log("coco")
-    //   })
-    // }, [])
+  const [list, setlist] = useState([])
+    useEffect(() => {
+      // const  = io('http://localhost:3030');
+      // socket.on('coco' , ()=>{
+      // })
+      axios.get("http://localhost:8000/chat/messages/" + props?.list?.channelId, 
+      {withCredentials: true} 
+    ).then((res)=>{
+      props.setmsgs(res.data)
+    }).catch((err)=>{
+  console.log(err)
+      })
+    }, [props.list])
     // console.log('allah' + props.list)
     // console.log(props.list.length);
     return (
       <ChatBodyStyle>
         {
-          props.list.map((object: any , i : number)=>{
-            if (object.id === "0")
-              return <div key={i} >  <MsgNotStyle>
-                <div className='name'>Dosker </div>
-                {object.message}
-              <span>
-                7:20pm
-              </span>
-              </MsgNotStyle></div>
-            else
-              return <div key={i} > <MsgStyle>{object.message}
+          props.msgs.map((object: any , i : number)=>{
+            var s : string | null = localStorage.getItem('user');
+            var data: usersType ;
+            if (s)
+            {
+        
+              data  =  JSON.parse(s || '{}');
+              if (object.senderId != data.id)
+                return <div key={i} >  <MsgNotStyle>
+                  <div className='name'>Dosker </div>
+                  {object.content}
+                <span>
+                  7:20pm
+                </span>
+                </MsgNotStyle></div>
+              else
+              return <div key={i} > <MsgStyle>
+
+                {object.content}
                 <span>
                 7:20pm
               </span>
                 </MsgStyle></div>
+            }
+
           })
         }
       </ChatBodyStyle>
