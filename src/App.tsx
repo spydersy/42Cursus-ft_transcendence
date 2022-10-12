@@ -59,12 +59,12 @@ function App() {
   const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
   
   const particlesInit = useCallback(async (engine: Engine) => { 
-    console.log(engine);   
+    // console.log(engine);   
     await loadFull(engine);
    }, []);
 
    const particlesLoaded = useCallback(async (container: Container | undefined) => {
-      console.log(container);
+      // console.log(container);
     }, []);
 
 
@@ -73,7 +73,7 @@ function App() {
     axios.get("http://localhost:8000/profile/me", 
     {withCredentials: true} 
   ).then((res)=>{
-    console.log(res.data)
+    // console.log(res.data)
     localStorage.setItem("user", JSON.stringify(res.data))
   }).catch((err)=>{
         console.log(err)

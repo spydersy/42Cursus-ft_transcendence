@@ -3,7 +3,6 @@ import styled ,{css}from "styled-components";
 import{ReactComponent as DotsIcon }from "../assets/imgs/dots.svg"
 import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
 import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
-
 import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import {ReactComponent as UserAddIcon} from "../assets/imgs/user-plus.svg";
@@ -11,16 +10,12 @@ import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
 import {ReactComponent as CalendarIcon} from "../assets/imgs/calendar.svg";
 import {ReactComponent as RankIcon} from "../assets/imgs/rank.svg";
 import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
-
 import { Button } from '../Pages/SignIn';
-
 import axios from 'axios';
 import Achivments  from './Achivments';
 import  { RadarChart } from './charts/Charts';
-import { data } from 'jquery';
 
 const Backcolor = css`${props => props.theme.colors.purple}`
-
 
 //// PlayerCard Comp
 interface UserProp {
@@ -34,10 +29,8 @@ interface UserProp {
   lastModification : string 
 }
 
-export interface PlayerCardProps {
-  isCurrentUser : boolean,
-    player: UserProp
-}
+export interface PlayerCardProps { isCurrentUser : boolean,  player: UserProp }
+
 export function PlayerCard(props: PlayerCardProps) {
   return (
       <PlayerCardStyle  >
@@ -142,7 +135,7 @@ interface UserProp {
 
 export function Stats(props: PlayerCardProps) {
   
-  const [relationStatus, setrelationStatus] = useState<string | undefined>("")
+  const [relationStatus, setrelationStatus] = useState<string | undefined>("");
   const id = window.location.pathname.split("/")[2];
  
   const [createdTime, setcreatedTime] = useState<string | undefined>("XXX XX XXX XXX XX:XX:XX ")
@@ -151,68 +144,56 @@ export function Stats(props: PlayerCardProps) {
   
   const Grades = ["Shinobi","ShiboKay","Hokage","Yonko","3anKoub","XX","XXXX","XXXXX","XXXXX"]
 
-  const [AChievements, setAChievements] = useState< {} | any>(
+  const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
 
-    [true, false, false, true, true, false, true, false]
-  )
-
-  const addFriend = ()=>{
-       //http://localhost:8000/users/relation/:id?evet=add
-
-      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=add", 
-      {withCredentials: true} 
-    ).then((res)=>{
-      // console.log(res.data)
-      // alert("friend Request sent" + res.status)
-      setrelationStatus("PENDING")
-      // console.log(relationStatus)
-    }).catch((err)=>{
-  
+    const addFriend = ()=>{
+        //http://localhost:8000/users/relation/:id?evet=add
+        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=add", 
+        {withCredentials: true} 
+        ).then((res)=>{
+        // console.log(res.data)
+        // alert("friend Request sent" + res.status)
+        setrelationStatus("PENDING")
+        // console.log(relationStatus)
+        }).catch((err)=>{
           // history.pushState("/signin");
-      })
-  }
+        })
+    }
 
-  useEffect(() => {
-      setrelationStatus(props.player?.relation)
-      // console.log("relation : ", props.player?.relation, "\n")
+    useEffect(() => {
+        setrelationStatus(props.player?.relation)
+        console.log( "- 1Relation <" , props.player?.relation, "> \n")
+        console.log( "- 2Relation <" , relationStatus, "> \n")
+        // get user data  from server
+        axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}).then((res)=>{
+          // set grade
 
-      // get user data  from server
-      axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}).then((res)=>{
+          //Rank
+          if (res.data.level)
+            setgrade(Grades[res.data.level])
+          else
+            setgrade("Unranked")
+       
+          //CreatedTime
+          const date = new Date(res.data.lastModification)
+          setcreatedTime(date.toString().split("GMT")[0])
 
-      console.log(" Profiel res : " , res.data, "\n")
-      
-      // set grade
-      if (res.data.level)
-        setgrade(Grades[res.data.level])
-      else
-        setgrade("Unranked")
+          console.log("> createdTime : ", createdTime)
+          console.log("> grade : ", grade, "\n")
 
-      // set created time
-      // props.player.lastModification
-      const date = new Date(res.data.lastModification)
-      setcreatedTime(date.toString().split("GMT")[0])
-      
-      // props.player.lastModification = date.toString().split("GMT")[0]
-      // console.log("date : ", date.toString())
-      // console.log(">lastM : ", props.player.lastModification)
-      console.log("> createdTime : ", createdTime)
-      console.log("> grade : ", grade, "\n")
-      console.log("AChievements : ", AChievements)
+        }).catch((err)=>{  // history.pushState("/signin"); ***// 
+        })
 
-    }).catch((err)=>{  // history.pushState("/signin"); ***//
-    
-    })
+        axios.get("http://localhost:8000/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
+          // Achievenments          
+          setAChievements(res.data)
+          console.log("> Achievements : ", AChievements)
+        })
+    }, [])
 
-  } , [grade])
-  
+
     return (
       <StatsStyle  >
-          
-          {/* <Status status={"online"}>
-            <ActivityIcon/>
-              Online
-          </Status> */}
-
         <Data>
 
             <div className='data'>
@@ -238,7 +219,7 @@ export function Stats(props: PlayerCardProps) {
                       <>
                       <Button  type='secondary' onClick={addFriend} icon={<UserAddIcon/>} text='Friend'/>
                       <a href="/chat/id">
-                        <Button onClick={addFriend} icon={<UserAddIcon/>} text='send messqge'/>
+                        <Button onClick={addFriend} icon={<UserAddIcon/>} text='send message'/>
                       </a>
                       
                       </>
@@ -248,7 +229,9 @@ export function Stats(props: PlayerCardProps) {
                       : 
                       <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
                     }
+
                     {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/> */}
+
                   </Buttons>
                 }
 
@@ -271,12 +254,10 @@ export function Stats(props: PlayerCardProps) {
 }
 
 const DataTag = styled.div`
-  /* width: 100%; */
   /* background-color: #bdd4d4; */
   display: flex;
   align-items: center;
   min-width : 200px;
-  /* padding: 10px; */
   gap: 10px;
   font-family: 'Poppins' , sans-serif;
   font-style: normal;
@@ -294,18 +275,15 @@ const DataTag = styled.div`
 const StatsStyle = styled.div`
 background-color: #171A22;
 padding :10px;
-/* width: 100%; */
 flex: 1;
 min-height: 100%;
 display: flex;
 align-items: center;
 flex-direction: column;
-
 gap: 5px;
 border-radius: 0px 10px 0px 0px;
 `
 const Buttons = styled.div`
-
 display: flex;
 flex-direction: row;
 gap: 15px;
@@ -314,7 +292,6 @@ margin: 15px 0px;
 `
 
 const Data = styled.div`
-/* flex: 1; */
 flex: 1;
 width: 100%;
 display: flex;
@@ -360,20 +337,10 @@ justify-content: space-between;
   
 }
 `
-
-
 ///// UserCard Comp
-export interface UserCardProps {
+export interface UserCardProps { data: { ogin: string; defaultAvatar: string; login: string;} }
 
-  data: {
-    login: string;
-    defaultAvatar: string;
-
-  }
-}
-export interface StyleProps {
-    status: boolean;
-}
+export interface StyleProps { status: boolean; }
 
 export  function UserCard(props : UserCardProps) {
   return (
@@ -500,9 +467,7 @@ font-family: "Poppins" , sans-serif;
 `;
 
 /// Game History tab //
-export interface GameCompProps {
-  win: boolean
-}
+export interface GameCompProps { win: boolean }
 
 export interface GameCardProps {
   match: {

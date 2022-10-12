@@ -1,93 +1,12 @@
-import React from 'react'
+import React , {useState}from 'react'
 import styled from "styled-components"
-import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-  // defaults,
-  ArcElement
-} from 'chart.js';
+import { Chart as ChartJS,  RadialLinearScale,
+  PointElement, LineElement, Filler, Tooltip, 
+  Legend, ArcElement } from 'chart.js';
 import { Doughnut, Radar } from 'react-chartjs-2';
+
 ChartJS.register(ArcElement, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
-const data = {
-    labels: ['Wins', 'Lost'],
-   
-    datasets: [
-      {
-        label: '# of Votes',
-        data: [12, 19],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-  
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-  
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
-const dataRadar = {
-  labels: [
-    "Classic",
-    "Tag-team",
-    "1 vs 1",
-    "(Ai) buggy",
-    "(Ai) Dr VegaPunk",
-  ],
-  datasets: [
-    {
-      label: "Wins",
-      borderWidth: 0.5,
-      backgroundColor: 'rgba(54, 162, 235, 0.2)',
-      
-      borderColor: 'rgba(54, 162, 235, 0.8)',
-      pointRadius: 0,
-      data: [25, 50, 75, 91, 0]
-    },
-    {
-      label: "Loss",
-      borderWidth: 0.5,
-      backgroundColor: 'rgba(235, 54, 226, 0.2)',
-      borderColor: 'rgba(235, 54, 226, 0.8)',
-      pointRadius: 0,
-      data: [0, 70, 60, 20, 100]
-    }
-  ]
-  };
 
-
-export default function DoughnutChart() {
-  return (
-    <DoughnutStyle>
-         < Doughnut  
-            data={data} 
-            options={
-              {
-                maintainAspectRatio: false,
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position : "bottom"
-                    
-                  }
-                  
-                }
-                
-                
-              }
-            }
-            />
-    </DoughnutStyle>
-  )
-}
 const DoughnutStyle = styled.div`
   height: 95%;
   width: 350px;
@@ -98,6 +17,52 @@ align-items: flex-end;
 `;
 
 export  function RadarChart() {
+
+  const [Ewins, setwins] = useState< number[] | any>([12, 15, 15, 12, 10])
+  const [Elosses, setlosses] = useState< number[] | any>([10, 17, 13, 12, 15])
+  const [Edraws, setdraws] = useState< number[] | any>([2, 17, 5, 8, 10])
+
+  // Wins [classic, tag-team, 1vs1, (Ai)buggy, (Ai)Dr VegaPunk]
+  // Loss [classic, tag-team, 1vs1, (Ai)buggy, (Ai)Dr VegaPunk]
+  // Draws [classic, tag-team, 1vs1, (Ai)buggy, (Ai)Dr VegaPunk]
+  
+  const dataRadar = {
+    labels: [
+      "Classic",
+      "Tag-Team",
+      "1 vs 1",
+      "(Ai)-Buggy",
+      "(Ai)-Dr VegaPunk",
+    ],
+    datasets: [
+      {
+        label: "Wins",
+        borderWidth: 0.5,
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        
+        borderColor: 'rgba(54, 162, 235, 0.8)',
+        pointRadius: 1,
+        data: Ewins,
+      },
+      {
+        label: "Losses",
+        borderWidth: 0.5,
+        backgroundColor: 'rgba(235, 54, 226, 0.2)',
+        borderColor: 'rgba(235, 54, 226, 0.8)',
+        pointRadius: 1,
+        data: Elosses
+      },
+      {
+        label: "Draws",
+        borderWidth: 0.5,
+        backgroundColor: 'rgba(206, 140, 107, 0.438)',
+        borderColor: 'rgba(226, 128, 30, 0.8)',
+        pointRadius: 1,
+        data: Edraws
+      }
+    ]
+    };
+
   return (
     <DoughnutStyle>
          < Radar  
@@ -106,29 +71,16 @@ export  function RadarChart() {
               {
                 maintainAspectRatio: false,
                 responsive: true,
-                plugins: {
-                  legend: {
-                    position : "bottom"
-                    
-                  }
-                  
-                },
+                plugins: { legend: {  position : "bottom"  } },
                 scales: {
                  r:{
                   ticks: {
-                    display : false
+                    display : false,
                   },
-                  grid: {
-                    color: 'rgba(255, 255, 255, 0.101)',
-                  },
-                    angleLines: {
-                      color: 'rgba(255, 255, 255, 0.101)',
-
-                    }
-                 }
+                  grid: { color: 'rgba(145, 102, 102, 0.37)', },
+                          angleLines: {color: 'rgba(91, 91, 103, 0.776)',  }
+                        }
                 }
-                
-                
               }
             }
             />

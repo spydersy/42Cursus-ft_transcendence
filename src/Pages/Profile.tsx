@@ -7,10 +7,6 @@ import { UserBlockedCard } from "../components/PlayerProfile";
 import {ReactComponent as LuffyAce} from "../assets/imgs/luffyAce.svg";
 import axios from 'axios';
 
-// import Particles from "react-particles";
-// import type { Container, Engine } from "tsparticles-engine";
-// import { loadFull } from "tsparticles";
-
 //-----------------------//
 interface UserProp {
   defaultAvatar: string,
@@ -21,7 +17,7 @@ interface UserProp {
   wins : number
   losses : number
   lastModification: string
-  Achievements: any
+  Achievements: boolean[]
 }
 
 interface InvProp {
@@ -45,49 +41,40 @@ export default function Profile() {
     wins : 9999,
     losses : 0,
     lastModification: "XXX XX XXX XXXX XX:XX:XX",
-    Achievements: [1,2,3,4]
+    Achievements: [false, false, false, false, false, false, false, false]
   })
 
-  const [connection, setconnection] = useState(true);
+  // const [connection, setconnection] = useState(true);
 
   useEffect(() => {
     var s : string | null = localStorage.getItem('user');
     if (s)
     {
-
       const data : UserProp =  JSON.parse(s || '{}');
-      console.log(data)
+      // console.log(data)
       if (id === data.login)
       {
-       
         setisCurrent(true)
         setUser(data)
       }
       else
       {
         setisCurrent(false)
-        axios.get("http://localhost:8000/users/" + id, 
-        {withCredentials: true} 
-      ).then((res)=>{
-        console.log("res : " , res.data, "\n")
-        // check for the user is bloked 
-        setUser(res.data)
-        setconnection(true)
-
-      }).catch((err)=>{
-
-        // history.pushState("/signin");
-        setconnection(false)
-
-    })
+        axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}
+        ).then((res)=>{
+              // check for the user is bloked 
+              setUser(res.data)
+              // setconnection(true)
+            }).catch((err)=>{ })
       }
+      console.log("> User Data < " , User, ">\n")
     }
 
   }, [id]);
 
   return (
         <div className='container' style={{  display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
-  
+
               <TheBox> 
                   <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
               </TheBox>
@@ -97,17 +84,9 @@ export default function Profile() {
   )
 };
 
-const TheBox = styled.div`
-  /* padding: 10p; */
-  width: 100%;
-  border: 0px solid ${props => props.theme.colors.primarybg};
-`;
+const TheBox = styled.div` width: 100%;  border: 0px solid ${props => props.theme.colors.primarybg}; `;
 
-interface PlayerTabsProps {
-  id : string
-}
-
-
+interface PlayerTabsProps { id : string }
 
 ///// PlayerTabs Section
 const linkslist = [ " FRIENDS" , "PENDING REQUESTS", "BLOCKED USERS"]
@@ -137,12 +116,8 @@ const PlayerAchieveStyle = styled.div`
   -webkit-text-stroke: 1px #6560679a;
 `;
 
-
 /// empty
-interface EmptyProps {
-  text: string
-}
-
+interface EmptyProps { text: string }
 
 export function EmptyComponent(props: EmptyProps)
 {
@@ -167,7 +142,6 @@ const Empty = styled.div`
   font-size: 30px;
   font-family: "Poppins" , sans-serif;
 `;
-
 
 //#1  Tab Friends
 export function FriendsComponent(props : FriendsProps)
@@ -199,9 +173,7 @@ useEffect(() => {
   )
 }
 
-interface FriendsProps {
-  id : string
-}
+interface FriendsProps { id : string }
 
 //#2  Pending Requests
 export function Tabfour()
@@ -233,6 +205,7 @@ export function Tabfour()
     </TabfourStyle>
   )
 }
+
 const TabfourStyle= styled.div`
   background-color:  ${props => props.theme.colors.bg};
   color:  ${props => props.theme.colors.seconderyText};
