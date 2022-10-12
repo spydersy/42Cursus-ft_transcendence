@@ -1,4 +1,4 @@
-import React , {useEffect, useState}from 'react'
+import React , {useEffect, useState , useContext}from 'react'
 import styled  from "styled-components"
 import ChatBody from './ChatBody'
 import ChatHeader from './ChatHeader'
@@ -6,6 +6,7 @@ import ChatSidebar from './ChatSidebar'
 import ChatBottom from './ChatBottom'
 import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 import axios from 'axios'
+import { SocketContext } from '../../context/Socket';
 
 interface UserProp {
   defaultAvatar: string,
@@ -39,6 +40,8 @@ id : string,
   }
 
 export default function Chat() {
+  const socket = useContext(SocketContext)
+
   const pageName = window.location.pathname.split("/")[2];
   const [msgs, setmsgs] = useState([])
 
@@ -49,16 +52,27 @@ export default function Chat() {
 
     const [state, setstae] = useState(x)
     const [currentConv, setcurrentConv] = useState(parseInt(pageName))
-    useEffect(() => {
-
-      axios.get("http://localhost:8000/chat/myChannels", 
+     useEffect(() => {
+      const fetchData = async () => {
+        await axios.get("http://localhost:8000/chat/myChannels", 
       {withCredentials: true} 
     ).then((res)=>{
       setlist(res.data);
-      console.log(res.data[currentConv])
+
+       axios.get("http://localhost:8000/chat/messages/" + res.data[currentConv]?.channelId, 
+       {withCredentials: true} 
+     ).then((res)=>{
+       console.log(res.data)
+      setmsgs(res.data)
+     }).catch((err)=>{
+      console.log(err)
+       })
     }).catch((err)=>{
           console.log(err)
       })
+      }
+      fetchData()
+
       ///
 
 
@@ -69,21 +83,39 @@ export default function Chat() {
           setstae(-1)
       }
       )
-      
-
     },[currentConv])
-
     useEffect(() => {
-      // alert()
-      axios.get("http://localhost:8000/chat/messages/" + list[currentConv]?.channelId, 
-      {withCredentials: true} 
-    ).then((res)=>{
-     setmsgs(res.data)
-    }).catch((err)=>{
-     console.log(err)
-      })
+      const recievedMessgae  = async () => {
+        if (list[currentConv]?.channelId  != undefined)
+        {
+          console.log(list[currentConv]?.channelId)
+          await axios.get("http://localhost:8000/chat/messages/" + list[currentConv]?.channelId, 
+           {withCredentials: true} 
+         ).then((res)=>{
+           console.log(res.data)
+          setmsgs(res.data)
+         }).catch((err)=>{
+          console.log(err)
+           })
+        }
+        
+    }
+
+    socket.on('chatToClient', (payload) => {
+      // console.log("pyload : " )
+      // console.log( payload)
+      recievedMessgae();
+  });
+    //   axios.get("http://localhost:8000/chat/messages/" + list[currentConv]?.channelId, 
+    //   {withCredentials: true} 
+    // ).then((res)=>{
+
+    //  setmsgs(res.data)
+    // }).catch((err)=>{
+    //  console.log(err)
+    //   })
      
-    }, [currentConv , list])
+    }, [  list])
     
     return (
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
@@ -108,7 +140,7 @@ export default function Chat() {
           <ChatBody setmsgs={(e : any)=>setmsgs} msgs={msgs} setcurrentConv={(e)=>{ setcurrentConv(e) }}  list={list[currentConv]} />
           </div>
           <div className='bottom'>
-            <ChatBottom setcurrentConv={(e)=>setcurrentConv(e)} msgs={msgs} currentConv={currentConv} list={list} setList={(e)=>{setlist(e)}}  />
+            <ChatBottom   setcurrentConv={(e)=>setcurrentConv(e)} msgs={msgs} currentConv={currentConv} list={list} setList={(e)=>{setlist(e)}}  />
           </div>
         </div>
           
