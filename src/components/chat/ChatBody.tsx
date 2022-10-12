@@ -36,14 +36,8 @@ interface ChatProps {
       // const  = io('http://localhost:3030');
       // socket.on('coco' , ()=>{
       // })
-      axios.get("http://localhost:8000/chat/messages/" + props?.list?.channelId, 
-      {withCredentials: true} 
-    ).then((res)=>{
-      props.setmsgs(res.data)
-    }).catch((err)=>{
-  console.log(err)
-      })
-    }, [props.list])
+      
+    }, [props.msgs])
     // console.log('allah' + props.list)
     // console.log(props.list.length);
     return (
@@ -52,9 +46,10 @@ interface ChatProps {
           props.msgs.map((object: any , i : number)=>{
             var s : string | null = localStorage.getItem('user');
             var data: usersType ;
+
             if (s)
             {
-        
+              
               data  =  JSON.parse(s || '{}');
               if (object.senderId != data.id)
                 return <div key={i} >  <MsgNotStyle>

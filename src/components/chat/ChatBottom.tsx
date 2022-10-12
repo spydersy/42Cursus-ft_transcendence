@@ -41,8 +41,8 @@ interface convType {
 interface ChatProps {
   setList: (e : any) => void,
   list: convType[],
-  index : number,
-  setmsgs : (e : any)=>void,
+  currentConv : number,
+  setcurrentConv : (e : number)=>void,
   msgs : any
 }
 
@@ -59,23 +59,24 @@ export default function ChatBottom(props: ChatProps) {
         var msgtmp : string =  mesg;
         //validation layer (restrictions)
         socket.emit('chatToServer', msgtmp);
-        ///// this the the current channel li tsift fiha lmesg
-        console.log(props.list[props.index])
+
         var  bodyFormData = new FormData();
-        console.log(props.list[props.index].channelId )
+        console.log(props.list[props.currentConv].channelId )
         bodyFormData.append('content',msgtmp);
-        bodyFormData.append('channelId',props.list[props.index].channelId + "");
+        bodyFormData.append('channelId',props.list[props.currentConv].channelId + "");
         console.log(bodyFormData.getAll('content'))
         //
         axios.post("http://localhost:8000/chat/sendMessage" ,{ "content" : msgtmp,
-        'channelId' : props.list[props.index].channelId + ""
+        'channelId' : props.list[props.currentConv].channelId + ""
       }, 
         {withCredentials: true} 
       ).then((res)=>{
-        console.log(res.data)
+        
+        props.setcurrentConv(props.currentConv)
+        
       }).catch((err)=>{
         console.log(err)
-        })
+      })
     }
     const recievedMessgae = (payload: any) => {
       var listtmp =  props.msgs;
@@ -86,7 +87,7 @@ export default function ChatBottom(props: ChatProps) {
       }
       listtmp.push(obj);
 
-      props.setmsgs([...listtmp ]);
+      // props.setmsgs([...listtmp ]);
     }
     useEffect(() => {
       socket.on('connect', () => {
@@ -99,7 +100,7 @@ export default function ChatBottom(props: ChatProps) {
       return () => {
 
       }
-  }, [props.index])
+  }, [props.currentConv])
     return (
       <BottomChatStyle>
         <textarea ref={inputRef} 

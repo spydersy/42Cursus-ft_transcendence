@@ -42,7 +42,7 @@ export  function FriendRequest(props : NotifProps) {
 
 const FriendRequestStyle = styled.div`
     width: 95%;
-    padding: 0 1%;
+    padding: 10px 1%;
     display: flex;
     align-items: center;
     justify-content: space-between;

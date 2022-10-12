@@ -8,7 +8,7 @@ import Punk from "./assets/imgs/punkhazard.png";
 import Dress from "./assets/imgs/dressRosa.jpg";
 import Wano from "./assets/imgs/wano.jpg";
 import Fish from "./assets/imgs/fishman.jpeg";
-import { SocketContext,  SocketValue } from './context/Socket';
+// import { SocketContext,  SocketValue } from './context/Socket';
 import {
   Routes, // instead of "Switch"
   Route,

@@ -50,10 +50,6 @@ interface convType {
 export default function ChatSidebar(props : ChatProps) {
  
     const [hide, sethide] = useState(false)
-    console.log('pchaakh');
-    console.log(props.list);
-    // console.log(props.list[0].messages);
-    // props.list.messages[props.list.messages.lenght - 1];
     return (
       <ChatSidebarStyle>
           <div className='title'>
