@@ -1,9 +1,16 @@
+import Tooltip from '@mui/material/Tooltip';
 import React from 'react'
-import styled from "styled-components";
+import styled , {css} from "styled-components";
 import Badge1 from "../assets/imgs/Archive/badge1.svg";
 import Badge2 from "../assets/imgs/Archive/badge2.svg";
 import Badge3 from "../assets/imgs/Archive/badge3.svg";
 import Badge4 from "../assets/imgs/Archive/badge4.svg";
+import Badge5 from "../assets/imgs/Archive/badge5.svg";
+import Badge6 from "../assets/imgs/Archive/badge6.svg";
+import Badge7 from "../assets/imgs/Archive/badge7.svg";
+import Badge8 from "../assets/imgs/Archive/badge8.svg";
+
+
 
 const achievment1 = {
     name: "SERGENT",
@@ -30,71 +37,64 @@ const achievment4 = {
     desc : "you win 5 game.",
     badge : Badge4 ,
     on: true,
-
   }
 
-  export interface StyleProps {
-    status: boolean;
-}
+export interface StyleProps { status: boolean; }
 
-const achiv = [achievment1 , achievment2 , achievment4 , achievment3]
-const achiv2 = [achievment2 , achievment1 , achievment3, achievment4]
+const achiv = [achievment1 , achievment2 , achievment3 , achievment4, achievment2, achievment4, achievment3, achievment3]
 
-export default function Achivments() {
+export interface AchivementsProps { data: [] }
+
+export interface AchiveStyleProps { status: boolean; }
+
+const ContyStyle = styled.div<AchiveStyleProps>`
+  display: flex;
+  flex-direction: row;
+  align-items:center;
+  /* border: 1px solid #af1998; */
+  /* border-style: inset; */
+  >img{
+    margin : 3px 15px;
+    padding: 3px;
+    ${props => props.status === true ? css`
+      filter: grayscale(0%); ` :
+    css`
+      /* filter: grayscale(100%); */
+      /* filter: blur(0.9px); */
+      filter: brightness(20%);
+
+      `}
+  }
+`
+
+export default function Achivments(props: AchivementsProps) {
   return (
     <AchiStyle>
-        {/* <HeadComponent title="Achivments"/> */}
-        {/* <div className='head'>Achivments : </div> */}
+      
         <div className='cont'>
         {
             achiv.map((data : any, id : number)=>{
                return (
-                   ( data.on) ?
-                  <div className='conty' style={{ filter: "grayscale(-50%) " }} >
-                        <img key={id} src={data.badge} alt={data.name} />
-                  </div> :  
-
-                  null
-                )
-                
+                 <ContyStyle status={props.data[id]} >
+                    <Tooltip title={data.name} arrow>
+                      <img key={id} src={data.badge} alt={data.name} />
+                    </Tooltip>
+                  </ContyStyle>
+              )
             })
         }
         </div>
-    </AchiStyle>
-  )
-}
-export  function Achivments2() {
-  return (
-    <AchiStyle>
-        {/* <HeadComponent title="Achivments"/> */}
-        {/* <div className='head'>Achivments : </div> */}
-        <div className='cont'>
-        {
-            achiv2.map((data : any, id : number)=>{
-               return (
-                   ( data.on) ?
-                  <div className='conty' style={{ filter: "grayscale(-50%) " }} >
-                        <img key={id} src={data.badge} alt={data.name} />
-                  </div> :  
 
-                  null
-                )
-                
-            })
-        }
-        </div>
     </AchiStyle>
   )
 }
 
-  
 const AchiStyle = styled.div`
-background-color: #8519798b;
+/* background-color: #85197936; */
 border-radius : 10px;
-/* background:  ${props => props.theme.colors.seconderybg}; */
-width: 100%;
+width: 80%;
 display: flex;
-flex-direction: column;
+flex-direction: row;
 align-items: flex-start;
 
 .head{
@@ -102,32 +102,14 @@ align-items: flex-start;
 }
 
 .cont{
-    /* margin: 5px 0; */
-
-    width:100%;
+    min-width:100%;
     display: flex;
-    justify-content: space-between;
     flex-direction: row;
     align-items:center;
+    flex-wrap: wrap;
     >img{
-        margin : 0px 10px;
+        margin : 0px 5px;
         filter: grayscale(100%);
     }
 }
-
-.conty{
-    /* margin: 5px 0; */
-  
-    width:100%;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    align-items:center;
-    padding: 0px 15px;
-
-    >img{
-      margin : 0px 10px;
-      /* filter: grayscale(50%); */
-    }
-  }
 `

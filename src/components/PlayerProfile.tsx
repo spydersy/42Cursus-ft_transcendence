@@ -15,8 +15,9 @@ import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
 import { Button } from '../Pages/SignIn';
 
 import axios from 'axios';
-import Achivments , {Achivments2} from './Achivments';
+import Achivments  from './Achivments';
 import  { RadarChart } from './charts/Charts';
+import { data } from 'jquery';
 
 const Backcolor = css`${props => props.theme.colors.purple}`
 
@@ -32,6 +33,7 @@ interface UserProp {
   losses : number
   lastModification : string 
 }
+
 export interface PlayerCardProps {
   isCurrentUser : boolean,
     player: UserProp
@@ -137,18 +139,22 @@ interface UserProp {
   lastModification: string
 }
 
-// interface StatusProps {
-//     status : "online" | "offline"
-// }
-export function Stats(props: PlayerCardProps) {
-  const [relationStatus, setrelationStatus] = useState<string | undefined>("")
-  
-  const id = window.location.pathname.split("/")[2];
 
+export function Stats(props: PlayerCardProps) {
+  
+  const [relationStatus, setrelationStatus] = useState<string | undefined>("")
+  const id = window.location.pathname.split("/")[2];
+ 
   const [createdTime, setcreatedTime] = useState<string | undefined>("XXX XX XXX XXX XX:XX:XX ")
+  
   const [grade, setgrade] = useState<string | undefined>("Unranked")
+  
   const Grades = ["Shinobi","ShiboKay","Hokage","Yonko","3anKoub","XX","XXXX","XXXXX","XXXXX"]
 
+  const [AChievements, setAChievements] = useState< {} | any>(
+
+    [true, false, false, true, true, false, true, false]
+  )
 
   const addFriend = ()=>{
        //http://localhost:8000/users/relation/:id?evet=add
@@ -191,6 +197,7 @@ export function Stats(props: PlayerCardProps) {
       // console.log(">lastM : ", props.player.lastModification)
       console.log("> createdTime : ", createdTime)
       console.log("> grade : ", grade, "\n")
+      console.log("AChievements : ", AChievements)
 
     }).catch((err)=>{  // history.pushState("/signin"); ***//
     
@@ -198,7 +205,6 @@ export function Stats(props: PlayerCardProps) {
 
   } , [grade])
   
-
     return (
       <StatsStyle  >
           
@@ -225,7 +231,7 @@ export function Stats(props: PlayerCardProps) {
                 </DataTag>
 
                 {props.isCurrentUser === false && 
-                  <Buttons>
+                  <Buttons className='Btp' >
                     
                     {
                       relationStatus === "FRIENDS" ? 
@@ -248,8 +254,8 @@ export function Stats(props: PlayerCardProps) {
 
               </div>
             
-              <div className="Achivv"> <Achivments/> </div>
-              <div className="Achiv"> <Achivments2/> </div>
+            <Achivments  data={AChievements} /> 
+              {/* <div className="Achiv"> <Achivments2/> </div> */}
 
             </div>
 
@@ -283,10 +289,7 @@ const DataTag = styled.div`
       stroke: ${props => props.theme.colors.seconderyText};
     }
   }
-
 `;
-
-
 
 const StatsStyle = styled.div`
 background-color: #171A22;
@@ -305,14 +308,13 @@ const Buttons = styled.div`
 
 display: flex;
 flex-direction: row;
-gap: 10px;
+gap: 15px;
+margin: 15px 0px;
 /* background-color: red; */
-
 `
 
 const Data = styled.div`
 /* flex: 1; */
-
 flex: 1;
 width: 100%;
 display: flex;
@@ -336,7 +338,8 @@ justify-content: space-between;
   position: relative;
   display: flex;
   /* background-color: aliceblue; */
-  bottom: 0%;
+  /* bottom: 5%; */
+  /* margin-bottom: 5px; */
 
 
 }
@@ -344,16 +347,16 @@ justify-content: space-between;
   position: relative;
   display: flex;
   /* background-color: aliceblue; */
-  bottom: 10%;
+  /* bottom: 5%; */
+  /* margin-bottom: 5px; */
 
 
 }
 .Stats{
   position: relative;
+  height: 100%;
+  width: auto;
  /* flex: 1; */
- height: 100%;
-  /* flex: 1;/ */
-width: auto;
   
 }
 `
