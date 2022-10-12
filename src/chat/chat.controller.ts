@@ -32,7 +32,7 @@ export class ChatController {
     // TASK_09 - DONE
     @Post('sendMessage')
     async SendMessage(@Req() req, @Body() messageData: MessageDataDto, @Res() res) {
-      return this.chatService.SendMessage(req.user.userId, messageData.content, messageData.channelId, res);
+      return this.chatService.SendMessage(req.user.userId, messageData.content, messageData.channelId);
     }
 
     // @Post('UpdateUser/:channelId')

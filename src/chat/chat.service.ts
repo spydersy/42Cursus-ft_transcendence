@@ -118,7 +118,7 @@ export class ChatService {
         res.status(HttpStatus.OK).send(messages);
     }
 
-    async SendMessage(me: number, messageContent: string, channelId: string, @Res() res) {
+    async SendMessage(me: number, messageContent: string, channelId: string) {
         if (await this.PostMessageValidationLayer(me, messageContent, channelId) === true) {
             await this.prisma.messages.create({
                 data: {
@@ -131,11 +131,11 @@ export class ChatService {
                 where: {id: channelId},
                 data: {nbMessages: {increment: 1}},
             });
-            return res
-            .status(HttpStatus.CREATED)
-            .send({'message': "Message Sent"});
+            // return res
+            // .status(HttpStatus.CREATED)
+            // .send({'message': "Message Sent"});
         }
-        return res.status(HttpStatus.FORBIDDEN).send({'message': "Method Not Allowed"});
+        // return res.status(HttpStatus.FORBIDDEN).send({'message': "Method Not Allowed"});
     }
 
     async GetMyChannels(me: number, @Res() res) {

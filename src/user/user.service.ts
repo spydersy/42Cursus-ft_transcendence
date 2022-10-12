@@ -20,6 +20,10 @@ export class UserService {
     async GetnbFriends(UserMe: string, User: string) : Promise<number> {
         let UserMeDto = await this.GetUserByLogin(UserMe);
         let UserDto = await this.GetUserByLogin(User);
+        console.log("__USER__ME__ : ", UserMe);
+        console.log("__USER__     : ", User);
+        console.log("__USER__ME__DTO__ : ", UserMeDto);
+        console.log("__USER__DTO__     : ", UserDto);
         if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true) {
             return 0;
         }
@@ -114,6 +118,7 @@ export class UserService {
         let FriendsStat = await this.FriendsRelationExist(MeDto.id, UserDto.id);
         if (FriendsStat !== null)
             UserDto['relation'] = FriendsStat['status'];
+        console.log("WEWE22");
         UserDto['nbFriends'] = await this.GetnbFriends(Me, Me);
         console.log("__USER__DTO__DBG__ : ", UserDto);
         return res.status(HttpStatus.OK).send(UserDto);

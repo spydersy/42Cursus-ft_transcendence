@@ -7,7 +7,8 @@ export const JWT_SECRET = process.env.JWT_SECRET;
 
 let cookieExtractor = function( req: Request) {
     var token : String = null;
-        if (req && req.headers.cookie) {
+    console.log("__DBG__COOKIES__JWT__ : ", req.headers.cookie);
+    if (req && req.headers.cookie) {
         token = decodeURI(req.headers.cookie);
         if (token.indexOf('Authorization') != -1) {
             token = token.substring(token.indexOf('Authorization') + 14 + 7);

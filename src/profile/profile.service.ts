@@ -6,6 +6,7 @@ import { Response } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RELATION } from '@prisma/client';
 import { TfaService } from 'src/tfa/tfa.service';
+import { Console } from 'console';
 
 @Injectable()
 export class ProfileService {
@@ -28,6 +29,7 @@ export class ProfileService {
         return "test00";
         }
         let profile = await this.userService.GetUserByLogin(req.user.username);
+        console.log("WEWE11");
         profile['nbFriends'] = await this.userService.GetnbFriends(req.user.username, req.user.username);
         console.log("__USER__PROFILE__ : ", profile);
         return res.send(profile);
