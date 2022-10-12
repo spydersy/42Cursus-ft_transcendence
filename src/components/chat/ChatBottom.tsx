@@ -19,7 +19,7 @@ import axios from 'axios';
 // }
 
 interface usersType {
-
+  id : string ,
   defaultAvatar: string,
   login : string
   displayName : string,
@@ -43,7 +43,8 @@ interface ChatProps {
   list: convType[],
   currentConv : number,
   setcurrentConv : (e : number)=>void,
-  msgs : any
+  msgs : any,
+  // socket : Socket,
 }
 
 export default function ChatBottom(props: ChatProps) {
@@ -51,56 +52,39 @@ export default function ChatBottom(props: ChatProps) {
     const inputRef = useRef<HTMLTextAreaElement>(null)
     var mesg : string = "";
     const addMessage = ()=>{
-        if (inputRef.current?.value)
+      var s : string | null = localStorage.getItem('user');
+      var data: usersType ;
+      console.log( props.list[props.currentConv])
+      if (s )
+      {
+
+        data  =  JSON.parse(s || '{}');
+
+        if (inputRef.current?.value && inputRef.current?.value != "")
         {
+          
           mesg =  inputRef.current.value;
           inputRef.current.value = "";
+          var msgtmp = {
+            userId: data.id,
+            content: mesg,
+            channelId:  props.list[props.currentConv]?.channelId
+          }
+          //validation layer (restrictions)
+          socket.emit('chatToServer', msgtmp , );
         }
-        var msgtmp : string =  mesg;
-        //validation layer (restrictions)
-        socket.emit('chatToServer', msgtmp);
 
-        var  bodyFormData = new FormData();
-        console.log(props.list[props.currentConv].channelId )
-        bodyFormData.append('content',msgtmp);
-        bodyFormData.append('channelId',props.list[props.currentConv].channelId + "");
-        console.log(bodyFormData.getAll('content'))
-        //
-        axios.post("http://localhost:8000/chat/sendMessage" ,{ "content" : msgtmp,
-        'channelId' : props.list[props.currentConv].channelId + ""
-      }, 
-        {withCredentials: true} 
-      ).then((res)=>{
-        
-        props.setcurrentConv(props.currentConv)
-        
-      }).catch((err)=>{
-        console.log(err)
-      })
-    }
-    const recievedMessgae = (payload: any) => {
-      var listtmp =  props.msgs;
-      const obj = {
-        content : "reda",
-        senderId : "dsdd", 
-        // message: payload
       }
-      listtmp.push(obj);
 
-      // props.setmsgs([...listtmp ]);
     }
+
     useEffect(() => {
-      socket.on('connect', () => {
+      window.addEventListener('keydown', (e : any)=>{
+        if (e.code === "Enter")
+          addMessage()
+        
       });
-      // rooms dyal client 
-      //roo
-      socket.on('chatToClient', (payload) => {
-          recievedMessgae(payload);
-      });
-      return () => {
-
-      }
-  }, [props.currentConv])
+  })
     return (
       <BottomChatStyle>
         <textarea ref={inputRef} 

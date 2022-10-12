@@ -36,14 +36,14 @@ interface ChatProps {
       // const  = io('http://localhost:3030');
       // socket.on('coco' , ()=>{
       // })
-      
+      setlist(props.msgs)
     }, [props.msgs])
     // console.log('allah' + props.list)
     // console.log(props.list.length);
     return (
       <ChatBodyStyle>
         {
-          props.msgs.map((object: any , i : number)=>{
+          list.map((object: any , i : number)=>{
             var s : string | null = localStorage.getItem('user');
             var data: usersType ;
 
@@ -53,7 +53,7 @@ interface ChatProps {
               data  =  JSON.parse(s || '{}');
               if (object.senderId != data.id)
                 return <div key={i} >  <MsgNotStyle>
-                  <div className='name'>Dosker </div>
+                  <div className='name'>{object.displayName}</div>
                   {object.content}
                 <span>
                   7:20pm
