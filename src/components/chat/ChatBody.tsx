@@ -53,7 +53,7 @@ interface ChatProps {
               data  =  JSON.parse(s || '{}');
               if (object.senderId != data.id)
                 return <div key={i} >  <MsgNotStyle>
-                  <div className='name'>Dosker </div>
+                  <div className='name'>{object.displayName}</div>
                   {object.content}
                 <span>
                   7:20pm

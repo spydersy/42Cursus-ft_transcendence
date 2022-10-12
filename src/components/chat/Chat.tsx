@@ -7,6 +7,7 @@ import ChatBottom from './ChatBottom'
 import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 import axios from 'axios'
 import { SocketContext } from '../../context/Socket';
+import ChatControlBar from './ChatControlBar'
 
 interface UserProp {
   defaultAvatar: string,
@@ -54,22 +55,22 @@ export default function Chat() {
     const [currentConv, setcurrentConv] = useState(parseInt(pageName))
      useEffect(() => {
       const fetchData = async () => {
-        await axios.get("http://localhost:8000/chat/myChannels", 
-      {withCredentials: true} 
-    ).then((res)=>{
-      setlist(res.data);
+            await axios.get("http://localhost:8000/chat/myChannels", 
+          {withCredentials: true} 
+        ).then((res)=>{
+          setlist(res.data);
 
-       axios.get("http://localhost:8000/chat/messages/" + res.data[currentConv]?.channelId, 
-       {withCredentials: true} 
-     ).then((res)=>{
-       console.log(res.data)
-      setmsgs(res.data)
-     }).catch((err)=>{
-      console.log(err)
-       })
-    }).catch((err)=>{
+          axios.get("http://localhost:8000/chat/messages/" + res.data[currentConv]?.channelId, 
+          {withCredentials: true} 
+        ).then((res)=>{
+          console.log(res.data)
+          setmsgs(res.data)
+        }).catch((err)=>{
           console.log(err)
-      })
+          })
+        }).catch((err)=>{
+              console.log(err)
+          })
       }
       fetchData()
 
@@ -102,18 +103,10 @@ export default function Chat() {
     }
 
     socket.on('chatToClient', (payload) => {
-      // console.log("pyload : " )
-      // console.log( payload)
+
       recievedMessgae();
   });
-    //   axios.get("http://localhost:8000/chat/messages/" + list[currentConv]?.channelId, 
-    //   {withCredentials: true} 
-    // ).then((res)=>{
 
-    //  setmsgs(res.data)
-    // }).catch((err)=>{
-    //  console.log(err)
-    //   })
      
     }, [  list])
     
@@ -147,7 +140,7 @@ export default function Chat() {
           }
          {(state === -1 || state === 3) && 
           <div className='left'>
-            
+            <ChatControlBar data={list[currentConv]}/>
           </div>
          }
       </GridContainer>
