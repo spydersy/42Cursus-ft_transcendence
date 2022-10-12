@@ -138,7 +138,7 @@ export class ChatService {
             include: {sender: true},
         });
         messages.forEach(message => {
-            message['login'] = message.sender.login;
+            message['displayName'] = message.sender.displayName;
             delete message.sender;
         });
         console.log("__MESSAGES__DGB__ : ", messages);
