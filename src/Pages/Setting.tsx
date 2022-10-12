@@ -8,6 +8,7 @@ import InputComponent from '../components/Input';
 import { Button } from './SignIn';
 import RingLoader from "react-spinners/RingLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
+import avataro from "../assets/imgs/avatar/avatar2.png";
 
 // import Particles from "react-particles";
 // import type { Container, Engine } from "tsparticles-engine";
@@ -18,7 +19,7 @@ const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderC
 export default function Setting() {
     // const [query, setQuery] = useState('');
     
-    const [img, setImg] = useState('');
+    const [img, setImg] = useState(avataro);
     const [loading, setLoading] = useState(false);
     const [color, setColor] = useState("#fa0137");
     const [data, setdata] = useState({login : "", defaultAvatar : "", displayName : "", twoFactorAuth : false, email : ""})
@@ -225,6 +226,7 @@ const SettingsStyle = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    opacity: 0.8;
     .all {
         height: 100%;
         width: 100%;

@@ -36,11 +36,11 @@ import { loadFull } from "tsparticles";
 
 const mockedItems : any = [{
   title: "MarinFord",
-  banner :Marin,
+  banner : Marin,
 },
 {
   title: "Punk Hazard",
-  banner :Punk 
+  banner : Punk 
 },
 {
   title: "Dressrosa",
@@ -77,7 +77,7 @@ function App() {
     localStorage.setItem("user", JSON.stringify(res.data))
   }).catch((err)=>{
         console.log(err)
-        navigate('/signin')
+        // navigate('/signin')
         // history.pushState("/signin");
     })
      // eslint-disable-next-line
@@ -198,8 +198,6 @@ function App() {
           </Cont>
         </Main>
        </ThemeProvider>
-
-
 
     </div>
   );

@@ -3,6 +3,7 @@ import styled , {css} from "styled-components"
 import SearchIcon from "../assets/imgs/search.svg"
 import {ReactComponent as BellIcon }from "../assets/imgs/notfication.svg"
 import {ReactComponent as Logo }from "../assets/imgs/logo.svg"
+
 import {ReactComponent as BigLogo }from "../assets/imgs/biglogo.svg"
 import DropDown, { NotifDropDown } from './DropDown'
 import { ReactComponent as UserIcon} from "../assets/imgs/user-icon.svg"

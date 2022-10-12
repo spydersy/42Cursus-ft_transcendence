@@ -6,6 +6,7 @@ import { UserInvitCard } from "../components/PlayerProfile";
 import { UserBlockedCard } from "../components/PlayerProfile";
 import {ReactComponent as LuffyAce} from "../assets/imgs/luffyAce.svg";
 import axios from 'axios';
+import avataro from "../assets/imgs/avatar/avatar2.png";
 
 //-----------------------//
 interface UserProp {
@@ -33,10 +34,10 @@ export default function Profile() {
   const id = window.location.pathname.split("/")[2];
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
-    defaultAvatar: "defaultAvatar",
-    login : "login",
-    displayName : 'displayName',
-    relation : "relation",
+    defaultAvatar: avataro,
+    login : "Xxxxxxxxxxxxxxxxxxxx",
+    displayName : 'Xxxxxxxxxxxxxxxxxxxxxx',
+    relation : "",
     nbFriends : "999",
     wins : 9999,
     losses : 0,
@@ -211,6 +212,7 @@ const TabfourStyle= styled.div`
   color:  ${props => props.theme.colors.seconderyText};
   width: 100%;
   height: 100%;
+  opacity: 0.8;
   max-height: 500px;
   display: flex;
   flex-wrap: wrap;

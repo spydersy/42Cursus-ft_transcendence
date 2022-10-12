@@ -13,35 +13,54 @@ import Badge8 from "../assets/imgs/Archive/badge8.svg";
 
 
 const achievment1 = {
-    name: "SERGENT",
+    name: "NEW 3ANKOUB",
     desc : "you played 20 game without any loss",
     badge : Badge1,
-    on: true,
   }
+
 const achievment2 = {
-    name: "The Alchemist",
+    name: "ONLY ALCHEMIST",
     desc : "You are a M9WED player by nature",
     badge : Badge2,
-    on: true,
 
   }
+
 const achievment3 = {
-    name: "MASTER",
+    name: "3anKouuuuB",
     desc : "you win 5 game.",
     badge : Badge3 ,
-    on: true,
 
   }
+  
 const achievment4 = {
-    name: "MASTER",
+    name: "MOGIWARA (9owat Sada9a)",
     desc : "you win 5 game.",
     badge : Badge4 ,
-    on: true,
+  }
+const achievment5 = {
+    name: "MADARA (MODMIR aka Yaiba)",
+    desc : "you win 5 game.",
+    badge : Badge5 ,
+  }
+const achievment6 = {
+    name: "ROOOOM",
+    desc : "you win 5 game.",
+    badge : Badge6 ,
+  }
+const achievment7 = {
+    name: "SASAGAYO (Only Golden Promo)",
+    desc : "you win 5 game.",
+    badge : Badge7 ,
+  }
+const achievment8 = {
+    name: "OYAJI (Only Golden Promo)",
+    desc : "you win 5 game.",
+    badge : Badge8 ,
   }
 
 export interface StyleProps { status: boolean; }
 
-const achiv = [achievment1 , achievment2 , achievment3 , achievment4, achievment2, achievment4, achievment3, achievment3]
+const achiv = [achievment1 , achievment2 , achievment3 , achievment4, achievment5, achievment6, achievment7, achievment8]
 
 export interface AchivementsProps { data: [] }
 
@@ -54,8 +73,8 @@ const ContyStyle = styled.div<AchiveStyleProps>`
   /* border: 1px solid #af1998; */
   /* border-style: inset; */
   >img{
-    margin : 3px 15px;
-    padding: 3px;
+    margin : 3px 9px;
+    padding: 0px;
     ${props => props.status === true ? css`
       filter: grayscale(0%); ` :
     css`
