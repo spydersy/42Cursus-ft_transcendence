@@ -29,6 +29,7 @@ model users {
   login               String          @unique
   displayName         String          @unique
   defaultAvatar       String
+  achievement         Boolean[]       @default([false, false, false, false, false, false, false, false])
   notifications       Json[]
   wins                Int             @default(0)
   losses              Int             @default(0)
@@ -75,14 +76,35 @@ model Blocks {
 
 
 // [Played Matches Data] : ======================================================================== //
+enum MODE {
+  CLASSIC
+  TAGTEAM
+  ONEVONE
+  AIBUGGY
+  AIDRVEGA
+}
+
 model MatchHistory {
-  id      Int       @id @default(autoincrement())
-  player1 Int
-  player2 Int
-  score1  Int       @default(0)
-  score2  Int       @default(0)
-  mode    String
-  date    DateTime  @default(now())
+  id        Int       @id @default(autoincrement())
+
+  // player1   users
+  player1Id Int
+
+  // player2   users
+  player2Id Int
+
+  // player3   users
+  player3Id Int?
+
+  // player4   users
+  player4Id Int?
+
+  score1    Int       @default(0)
+
+  score2    Int       @default(0)
+
+  mode      MODE
+  date      DateTime  @default(now())
 }
 // ================================================================================================ //
 
@@ -144,3 +166,4 @@ model Messages {
   date      DateTime  @default(now())
 }
 // ================================================================================================ //
+
