@@ -94,6 +94,27 @@ export class ChatService {
         return true;
     }
 
+    // {
+    //     id: 4,
+    //     senderId: 62700,
+    //     channelId: 'dad96272-5425-4a7f-8dd4-8710c0f91db5',
+    //     content: 'allo',
+    //     date: 2022-10-12T03:07:49.651Z,
+    //     sender: {
+    //       id: 62700,
+    //       login: 'abelarif',
+    //       displayName: 'Achraf Belarif',
+    //       defaultAvatar: 'https://avatars.dicebear.com/api/croodles-neutral/abelarif.jpg',
+    //       notifications: [Array],
+    //       wins: 0,
+    //       losses: 0,
+    //       level: 0,
+    //       twoFactorAuth: false,
+    //       twoFactorAuthSecret: null,
+    //       lastModification: 2022-10-12T03:05:26.522Z
+    //     }
+    //   },
+
     async GetChannelMessages(me: number, channelId: string, @Res() res) {
     // All validations needed:
         // 1) Is a public/private/protected/dm channel ?
@@ -113,8 +134,14 @@ export class ChatService {
             // if ()
         }
         let messages = await this.prisma.messages.findMany({
-            where: {channelId: channelId}
+            where: {channelId: channelId},
+            include: {sender: true},
         });
+        messages.forEach(message => {
+            message['login'] = message.sender.login;
+            delete message.sender;
+        });
+        console.log("__MESSAGES__DGB__ : ", messages);
         res.status(HttpStatus.OK).send(messages);
     }
 
