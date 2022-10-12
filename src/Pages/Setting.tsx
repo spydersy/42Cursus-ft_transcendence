@@ -9,9 +9,9 @@ import { Button } from './SignIn';
 import RingLoader from "react-spinners/RingLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
 
-import Particles from "react-particles";
-import type { Container, Engine } from "tsparticles-engine";
-import { loadFull } from "tsparticles";
+// import Particles from "react-particles";
+// import type { Container, Engine } from "tsparticles-engine";
+// import { loadFull } from "tsparticles";
 
 const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderColor: "red", };
 
@@ -24,14 +24,14 @@ export default function Setting() {
     const [data, setdata] = useState({login : "", defaultAvatar : "", displayName : "", twoFactorAuth : false, email : ""})
     const [checked, setchecked] = useState(false);
 
-    const particlesInit = useCallback(async (engine: Engine) => { 
-        console.log(engine);   
-        await loadFull(engine);
-       }, []);
+    // const particlesInit = useCallback(async (engine: Engine) => { 
+    //     console.log(engine);   
+    //     await loadFull(engine);
+    //    }, []);
     
-       const particlesLoaded = useCallback(async (container: Container | undefined) => {
-         console.log(container);
-      }, []);
+    //    const particlesLoaded = useCallback(async (container: Container | undefined) => {
+    //      console.log(container);
+    //   }, []);
 
     const [connection, setconnection] = useState(false);
 
@@ -147,99 +147,11 @@ export default function Setting() {
     };
 
     return (
-        <div style={{position:"absolute"}}>
-            <div className='bg_img' style={{position: "absolute",width: "100%", height: "100%", zIndex: -1, top: 0,   left: 0  }}>
-                        <Particles
-                                id="tsparticles"
-                                init={particlesInit}
-                                loaded={particlesLoaded}
-                                options={{
-                                background: {
-                                    color: {
-                                    value: "#100f110",
-                                    },
-                                    opacity: 0.1,
-                                },
-                                fpsLimit: 150,
-                                interactivity: {
-                                    events: {
-                                    onClick: {
-                                        enable: true,
-                                        mode: "push",
-                                    },
-                                    onHover: {
-                                        enable: true,
-                                        mode: "repulse",
-                                    },
-                                    resize: true,
-                                    },
-                                    modes: {
-                                    push: {
-                                        quantity: 4,
-                                    },
-                                    repulse: {
-                                        distance: 200,
-                                        duration: 0.5,
-                                    },
-                                    },
-                                },
-                                particles: {
-                                    color: {
-                                    value: "#296390",
-                                    },
-                                    links: {
-                                    color: "#194b64",
-                                    distance: 180,
-                                    enable: true,
-                                    opacity: 0.2,
-                                    width: 1.5,
-                                    },
-                                    collisions: {
-                                    enable: true,
-                                    },
-                                    move: {
-                                    direction: "none",
-                                    enable: true,
-                                    outModes: {
-                                        default: "bounce",
-                                    },
-                                    random: true,
-                                    speed: 2,
-                                    straight: true,
-                                    },
-                                    number: {
-                                    density: {
-                                        enable: true,
-                                        area: 1000,
-                                    },
-                                    value: 90,
-                                    },
-                                    opacity: {
-                                    value: 0.5,
-                                    },
-                                    shape: {
-                                    type: "polygon",
-                                    },
-                                    size: {
-                                    value: { min: 1, max: 5 },
-                                    },
-                                },
-                                detectRetina: true,
-                                }}
-                                // style={{
-                                //   position: "absolute",
-                                //   width: "100%",
-                                //    height: "100%",
-                                //     zIndex: 5,
-                                //     top: 0,
-                                //     left: 0 
-                                // }}
-                                // className="particles"
-                            />
-            </div>
-        {
+        // <div className='container' >
+            
+        // {
         
-            (connection) ? 
+            // (connection) ? 
             
 
             (
@@ -247,7 +159,7 @@ export default function Setting() {
 
                     <div className='all'>
                     
-                        <HeadComponent title="Setting" />
+                        <HeadComponent title="Settings" />
                     
                         <Avatar onClick={uploadFile}>
                             <div className='edit'>
@@ -276,12 +188,12 @@ export default function Setting() {
 
             )
 
-            :
+            // :
 
-            <button style={{color:"white", position: "relative", fontSize: "100px", top:"300px", left:"300px" , cursor:"progress"}}> Hors-Ligne (D3IF) </button>
+            // <button style={{color:"white", position: "relative", fontSize: "100px", top:"300px", left:"300px" , cursor:"progress"}}> Hors-Ligne (D3IF) </button>
 
-        }
-        </div>
+        // }
+        // </div>
 
     )
 }
