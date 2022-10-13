@@ -10,51 +10,47 @@ import Badge6 from "../assets/imgs/Archive/badge6.svg";
 import Badge7 from "../assets/imgs/Archive/badge7.svg";
 import Badge8 from "../assets/imgs/Archive/badge8.svg";
 
-
-
 const achievment1 = {
-    name: "NEW 3ANKOUB",
+    name: "NEW-3ANKOUB",
     desc : "you played 20 game without any loss",
     badge : Badge1,
   }
 
 const achievment2 = {
-    name: "ONLY ALCHEMIST",
+    name: "ONLY-ALCHEMIST",
     desc : "You are a M9WED player by nature",
     badge : Badge2,
-
   }
 
 const achievment3 = {
-    name: "3anKouuuuB",
+    name: "3ANKOUB-MASTER",
     desc : "you win 5 game.",
     badge : Badge3 ,
-
   }
   
 const achievment4 = {
-    name: "MOGIWARA (9owat Sada9a)",
-    desc : "you win 5 game.",
+    name: "MOGIWARA",
+    desc : " (9owat Sada9a).",
     badge : Badge4 ,
   }
 const achievment5 = {
-    name: "MADARA (MODMIR aka Yaiba)",
-    desc : "you win 5 game.",
+    name: "ROOOOM",
+    desc : "(MODMIR aka Yaiba)",
     badge : Badge5 ,
   }
 const achievment6 = {
-    name: "ROOOOM",
+    name: "SASAGAYO",
     desc : "you win 5 game.",
     badge : Badge6 ,
   }
 const achievment7 = {
-    name: "SASAGAYO (Only Golden Promo)",
-    desc : "you win 5 game.",
+    name: "OYAJI",
+    desc : "(Only Golden Promo)",
     badge : Badge7 ,
   }
 const achievment8 = {
-    name: "OYAJI (Only Golden Promo)",
-    desc : "you win 5 game.",
+    name: "MADARA ",
+    desc : "(Only Golden Promo)",
     badge : Badge8 ,
   }
 
@@ -73,15 +69,14 @@ const ContyStyle = styled.div<AchiveStyleProps>`
   /* border: 1px solid #af1998; */
   /* border-style: inset; */
   >img{
-    margin : 3px 9px;
+    margin : 2px 8px;
     padding: 0px;
     ${props => props.status === true ? css`
       filter: grayscale(0%); ` :
     css`
       /* filter: grayscale(100%); */
       /* filter: blur(0.9px); */
-      filter: brightness(20%);
-
+      filter: brightness(12%);
       `}
   }
 `
