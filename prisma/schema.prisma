@@ -24,15 +24,37 @@ model websockets{
   type     SOCKET
 }
 
+enum NOTIFICATION {
+  REQUEST
+  ACCEPT
+  MESSAGE
+  GAMEINVITAION
+}
+
+model notifications {
+  id     Int      @id @default(autoincrement())
+  user   users    @relation(name: "Notifications", fields: [userId], references: [id])
+  userId Int
+  type   NOTIFICATION
+  // Request & Accept & Game Invitation
+  displayName   String?
+  login         String?
+  defaultAvatar String?
+  // MESSAGE
+  channelName   String?
+  channelType   CHANNEL?
+  Date   DateTime @default(now())
+}
+
 model users {
   id                  Int             @id @unique
   login               String          @unique
   displayName         String          @unique
   defaultAvatar       String
   achievement         Boolean[]       @default([false, false, false, false, false, false, false, false])
-  notifications       Json[]
-  wins                Int             @default(0)
-  losses              Int             @default(0)
+  notifications       notifications[] @relation("Notifications")
+  wins                Int[]           @default([0, 0, 0, 0, 0])
+  losses              Int[]           @default([0, 0, 0, 0, 0])
   level               Int             @default(0)
   twoFactorAuth       Boolean         @default(false)
   twoFactorAuthSecret String?
