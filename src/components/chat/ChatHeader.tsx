@@ -67,7 +67,7 @@ export default function ChatHeader(props : chatHeaderProps) {
             props.data?.access === "DM" ? 
         <div className='cont'>
 
-          <div style={{width: "40px" , height: "40px"}}>
+          <div style={{width: "50px" , height: "50px"}}>
   
           <AvatarComponent img={props.data?.users[1].defaultAvatar}/>
           </div >
@@ -78,7 +78,7 @@ export default function ChatHeader(props : chatHeaderProps) {
           :
           <div className='cont'>
 
-            <div style={{width: "40px" , height: "40px"}}>
+            <div style={{width: "50px" , height: "50px"}}>
     
             <AvatarComponent img={props.data?.picture}/>
             </div >
@@ -122,7 +122,7 @@ const TopStyle = styled.div`
       align-items: center;
       flex-direction: row;
       align-items: center;
-      height :60px;
+      height :70px;
       gap: 15px;
     }
     >svg{

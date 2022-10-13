@@ -196,7 +196,7 @@ export default function Chat() {
       }
       .top{
         background-color: ${props => props.theme.colors.seconderybg}; ;
-        height: 60px;
+        height: 70px;
         width: 100%;
         border-bottom: 1px solid ${props => props.theme.colors.border};
         color:  ${props => props.theme.colors.primaryText};

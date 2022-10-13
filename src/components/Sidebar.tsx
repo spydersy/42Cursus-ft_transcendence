@@ -8,7 +8,8 @@ import {ReactComponent as LogoutIcon} from "../assets/imgs/logout.svg";
 import {ReactComponent as LeaderIcon} from "../assets/imgs/leader-icon.svg";
 import {ReactComponent as SettingIcon} from "../assets/imgs/settings.svg";
 import { Button } from '../Pages/SignIn';
-
+import { Link ,   useNavigate} from 'react-router-dom';
+import axios from 'axios';
 export interface barProps {
     open: boolean
     }
@@ -38,6 +39,7 @@ export default function Sidebar() {
     const sideBaRed : any= useRef<HTMLElement>(null);
     const sideBaref : any= useRef<HTMLElement>(null);
     const [open, setopen] = useState(false)
+    const navigate = useNavigate();
 
 
     const [focused, setfocused] = useState(0)
@@ -110,7 +112,7 @@ export default function Sidebar() {
 <Items>
         {
             sideBarItemsList.map((item : any , id : number)=>{
-                return <Item  open={open}key={id} onClick={()=>setfocused(id)} active={id === focused ? true : false} href={item.link}>
+                return <Item  open={open}key={id} onClick={()=>setfocused(id)} active={id === focused ? true : false} to={item.link}>
                 {item.icon}
                 {
                    <div>{item.title}</div> 
@@ -122,20 +124,30 @@ export default function Sidebar() {
         }
        </Items> 
        <Devider></Devider>
-       {/* <Item open={open}  className='item' onClick={()=>setfocused(4)} active={4 === focused ? true : false} href={"/setting"}>
+       <Item open={open}  className='item' onClick={()=>setfocused(4)} active={4 === focused ? true : false} to={"/setting"}>
             <SettingIcon/>
             {
                <div>Setting</div> 
             //    : <ToolTip>Setting</ToolTip>  
             }
             </Item>
-       <Item open={open} className='item'   active={false} href={"/"}>
+       <Item open={open} onClick={()=>{
+           axios.post("http://localhost:8000/profile/logout", 
+           {withCredentials: true} 
+         ).then((res)=>{
+           navigate('/signin')
+         }).catch((err)=>{
+               console.log(err)
+               // history.pushState("/signin");
+           })
+
+       }} className='item'   active={false} to={""}>
             <LogoutIcon/>
             {
                <div>LogOut</div> 
             //    : <ToolTip>LogOut</ToolTip>  
             }
-            </Item> */}
+            </Item>
     </SidebarWrraper>
     </Test>
 
@@ -322,7 +334,7 @@ const ToolTip = styled.span`
 					background-color: inherit;
 				}
 `;
-const Item = styled.a<ItemProps>`
+const Item = styled(Link)<ItemProps>`
 
     /* width: 100%; */
     height: 60px;
@@ -332,6 +344,8 @@ const Item = styled.a<ItemProps>`
     font-weight : 500;
     display: flex;
     align-items: flex-start;
+    justify-content:center;
+
     flex-direction: row;
     position: relative;
 

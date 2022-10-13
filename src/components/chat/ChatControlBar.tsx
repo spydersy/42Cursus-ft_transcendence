@@ -1,7 +1,13 @@
-import { data } from 'jquery';
-import React from 'react'
+import React  , {useState} from 'react'
 import styled  from "styled-components"
 import { AvatarComponent } from '../PlayerProfile';
+import {ReactComponent as Group} from "../../assets/imgs/users.svg";
+import {ReactComponent as Ban} from "../../assets/imgs/ban.svg";
+import {ReactComponent as Mute} from "../../assets/imgs/mute.svg";
+import { Button } from '../../Pages/SignIn';
+import Modal from '../Modal';
+import MembersChatModal from '../modals/MembersChatModal';
+
 interface UserProp {
     defaultAvatar: string,
     login : string
@@ -34,7 +40,10 @@ interface UserProp {
   }
 
 
-export default function ChatControlBar(props :{data : convType} ) {
+export default function ChatControlBar(props :{data : convType }) {
+
+  const [hide, sethide] = useState(false)
+
   return (
     <ContoleStyle>
         <div className='avatar'>
@@ -58,7 +67,21 @@ export default function ChatControlBar(props :{data : convType} ) {
                 
         </div>
             }
- 
+   <div className='buttons'>
+                
+   <Button isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/>
+   {hide &&  <Modal
+                    isOpen={hide}
+                    onRequestClose={() => sethide(false)}
+                    hideModal={() => sethide(false)}
+                 >
+                  <MembersChatModal closeModal={()=>sethide(false) } />
+                 </Modal>
+            }
+   <Button isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
+   <Button  isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
+        </div>
+
     </ContoleStyle>
   )
 }
@@ -68,7 +91,6 @@ const ContoleStyle = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    /* justify-content: space-between; */
       flex-direction: column;
       width: 95%;
       height: 100%;
@@ -76,16 +98,15 @@ const ContoleStyle = styled.div`
       gap: 5px;
       font-family: 'Poppins', sans-serif;
 
-        .avatar{
+        >.avatar{
             margin-top: 100px;
             width: 200px;
             height: 200px;
         }
-        .name{
+        >.name{
             color : #FFF;
-            margin-top: 30px;
             /* width: 100%; */
-            margin:  0 auto;
+            margin:  15px auto;
             font-size:  ${props => props.theme.fontSize.xl};
             font-weight : 600;
             text-align: start ;
@@ -95,5 +116,17 @@ const ContoleStyle = styled.div`
             /* width: 200px;
             height: 200px; */
         }
+       > .buttons{
+          margin:  0 auto;
+          display: flex;
+          gap: 10px;
+        }
+        >.members{
+          width: 100%;
+          margin:  30px auto;
+          display: flex;
+          gap: 10px;
+        }
     
 `;
+
