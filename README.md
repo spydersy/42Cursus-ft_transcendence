@@ -1,4 +1,7 @@
 
+
+# to Run the FRONTEND
+    sh init_front
 # Alchemist Todo List
 
 ## - [ ] 1/ Profile page
