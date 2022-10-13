@@ -51,26 +51,7 @@ export default function GameModal(props: GmaemodelProps) {
     console.log(theme)
     navigate("/game")
   }
-    const { carouselFragment } = useSpringCarousel({
 
-        // width : "350px",
-        itemsPerSlide: 3,
-        withLoop: true,
-
-        items: mockedItems.map((i : GameModalProps, id:number) => ({
-          id: id,
-          renderItem: (
-            <CaoussalItem onClick={()=>{
-              setselected(id)
-                document.getElementById("span")?.classList.toggle("anime")
-
-              }} selected={id  === selected ? true : false} >
-            <img src={i.banner} alt="mapimage" />
-              {/* {i.title} */}
-            </CaoussalItem>
-          ),
-        })),
-      });
   
   return (
     <GameModalStyle>
@@ -88,17 +69,17 @@ export default function GameModal(props: GmaemodelProps) {
 
         </Title>
 
-        <div className=' miniGame'>
-            <svg>
-              <circle ref={""} id="ball"  cx="20" cy="300" r="12" />
+        <Table className=' miniGame'> 
+             <svg>
+              <circle  id="ball"  cx="20" cy="300" r="12" />
               <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC"  />
     
-              <rect ref={"="} rx="10" x="30" y="0" width="20" height="150" fill="#FFF" />
-              <rect ref={""} rx="10 " y="0" width="20" height="150" fill="#FFF" />
+              <rect  rx="5" x="30" y="0" width="15" height="50" fill="#FFF" />
+              <rect  rx="5" y="0" width="15" height="50" fill="#FFF" />
 
             </svg>
-        </div>
-        <PlayButton onClick={changemode}>
+        </Table>
+         <PlayButton onClick={changemode}>
           Start
         </PlayButton>
       </GameModalStyle>
@@ -109,18 +90,18 @@ const Table = styled.div`
 cursor: none;
 
 background-size: contain;
-/* background-repeat: no-repeat; */
 width: 300px;
-height: 200px;
+height: 150px;
 position: relative;
-background-color: ${props => props.theme.colors.bg};
 
     border: 1px solid ${props => props.theme.colors.purple};
   > svg{
     position:absolute;
-    /* background:  ${props => props.theme.colors.bg}; */
+
     inset: 0 0 0 0;
     width: 100%;
+    stroke: ${props => props.theme.colors.purple};
+
     height: 100%;
     >circle{
       fill: ${props => props.theme.colors.purple};
@@ -141,44 +122,13 @@ background-color: ${props => props.theme.colors.bg};
 
 
 
-interface CaroItemStyle {
-        
-  selected :boolean
-  
-  }
-const CaoussalItem = styled.div<CaroItemStyle>`
-    width: 150px;
-    height: 100px;
-    border-radius: 5px;
-    /* background-color: black; */
-    background-color: transparent;
-    position: relative;
-    overflow: hidden;
-    >img{
-      position: absolute;
-      z-index: -1;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    cursor: pointer;
-    ${props => (props.selected === true) && css`
-    /* box-shadow: 0px 1px 1px 1px ${props => props.theme.colors.primaryText}; */
-    border: 3px solid ${props => props.theme.colors.primaryText};
-    /* transform: scale(1.1); */
-    `}
-`;
-
-const CaroussalContainer = styled.div`
-    width: 100%;
-    margin: 0 auto;
-    overflow: hidden;
-`;
-
 const GameModalStyle = styled.div`
     display: flex;
     align-items: flex-start;
     flex-direction: column;
+    .miniGame{
+      margin: 0 auto;
+    }
 `;
 const Title = styled.div`
 width: 100%;
