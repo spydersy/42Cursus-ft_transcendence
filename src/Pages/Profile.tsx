@@ -21,13 +21,7 @@ interface UserProp {
   Achievements: boolean[]
 }
 
-interface InvProp {
-  sender: {
-    login : string
-  },
-  // login : string
-  // displayName : string
-}
+
 
 //// Default function Profile
 export default function Profile() {
@@ -35,13 +29,13 @@ export default function Profile() {
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
     defaultAvatar: avataro,
-    login : "Xxxxxxxxxxxxxxxxxxxx",
-    displayName : 'Xxxxxxxxxxxxxxxxxxxxxx',
+    login : "DefaultUserLogin",
+    displayName : 'Default DisplayName',
     relation : "",
-    nbFriends : "999",
-    wins : 9999,
+    nbFriends : "100",
+    wins : 100,
     losses : 0,
-    lastModification: "XXX XX XXX XXXX XX:XX:XX",
+    lastModification: "Mon 12 Oct 1963 12:00:00",
     Achievements: [false, false, false, false, false, false, false, false]
   })
 
@@ -100,15 +94,15 @@ export function PlayerTabsBar(props : PlayerTabsProps)
       <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/> 
 
         {index === 0 && <FriendsComponent id={props.id}/>}
-        {index === 1 && <Tabfour/>}
-        {index === 2 && <Tabfive/>}
+        {index === 1 && <PendingRequests/>}
+        {index === 2 && <BlockedUsers/>}
     </PlayerAchieveStyle>
   )
 }
 
 const PlayerAchieveStyle = styled.div`
   padding-top: 20px;
-  margin : 20px 0px;
+  margin : 30px 0px;
   width:  100%;
   flex: 1;
   align-items: center;
@@ -145,9 +139,28 @@ const Empty = styled.div`
 `;
 
 //#1  Tab Friends
+interface FriendsProps { id : string }
+
 export function FriendsComponent(props : FriendsProps)
 {
-  const [friends, setfriends] = useState([])
+  const [friends, setfriends] = useState(
+    [
+      {
+          status: "ONLINE",
+          defaultAvatar:avataro,
+          login: "DefaultUser1",
+      },
+      {
+        status: "OFFLINE",
+        defaultAvatar:avataro,
+        login: "DefaultUser2"
+      },
+      {
+        status: "ONGAME",
+        defaultAvatar:avataro,
+        login: "DefaultUser3"
+      }
+    ])
   
   useEffect(() => {
       axios.get("http://localhost:8000/users/friends/" + props.id,   {withCredentials: true}  ).then((res)=>{
@@ -170,12 +183,37 @@ export function FriendsComponent(props : FriendsProps)
   )
 }
 
-interface FriendsProps { id : string }
 
 //#2  Pending Requests
-export function Tabfour()
+interface InvProp {  sender: { login : string },
+  // login : string
+  // displayName : string
+}
+
+export function PendingRequests()
 {
-  const [friends, setfriends] = useState<InvProp[]>([])
+  const [friends, setfriends] = useState(
+    [
+      {
+        status: "ONLINE",
+        defaultAvatar:avataro,
+        login: "DefaultUser1",
+      },
+      {
+        status: "OFFLINE",
+        defaultAvatar:avataro,
+        login: "DefaultUser2"
+      },
+      {
+        status: "ONGAME",
+        defaultAvatar:avataro,
+        login: "DefaultUser3"
+      }
+    ]
+    )
+  
+
+
   useEffect(() => {
     
     axios.get("http://localhost:8000/profile/me?data=requests", 
@@ -199,6 +237,44 @@ export function Tabfour()
         })
     }
        
+    </TabfourStyle>
+  )
+}
+
+//#3  My Black List
+export function BlockedUsers()
+{
+  // eslint-disable-next-line 
+  const [listBlocked, setlistBlocked] = useState(
+    [
+      {
+        status: "ONLINE",
+        defaultAvatar:avataro,
+        login: "DefaultUser1",
+      },
+      {
+        status: "OFFLINE",
+        defaultAvatar:avataro,
+        login: "DefaultUser2"
+      },
+      {
+        status: "ONGAME",
+        defaultAvatar:avataro,
+        login: "DefaultUser3"
+      }
+    ]
+    )
+ 
+  return (
+    <TabfourStyle> 
+        {
+           listBlocked.length === 0 ? 
+           <EmptyComponent text="Peaceful User !"/>
+           : 
+          listBlocked.map((invit : any, id : number )=>{
+              return<UserBlockedCard key={id} data={invit} />
+          })
+        }  
     </TabfourStyle>
   )
 }
@@ -231,23 +307,3 @@ const TabfourStyle= styled.div`
       background: ${props => props.theme.colors.primarybg};
     }
 `;
-
-//#3  My Black List
-export function Tabfive()
-{
-  // eslint-disable-next-line 
-  const [listBlocked, setlistBlocked] = useState<InvProp[]>([])
- 
-  return (
-    <TabfourStyle> 
-        {
-           listBlocked.length === 0 ? 
-           <EmptyComponent text="Peaceful User !"/>
-           : 
-          listBlocked.map((invit : any, id : number )=>{
-              return<UserBlockedCard key={id} data={invit} />
-          })
-        }  
-    </TabfourStyle>
-  )
-}

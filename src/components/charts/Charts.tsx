@@ -21,14 +21,14 @@ export  function RadarChart() {
 
 
 
-  let Ewins = [12, 15, 15, 12, 10]
-  let Elosses = [10, 17, 13, 12, 15]
-  let Edraws = [2, 17, 5, 8, 10]
+  let Ewins = [8, 9, 10, 11, 12]
+  let Elosses = [12, 12, 13, 14, 15]
+  let Edraws = [5, 6, 7, 8, 9]
 
 
-  Edraws = []
-  Elosses = []
-  Ewins = []
+  // Edraws = []
+  // Elosses = []
+  // Ewins = []
 
   // Wins [classic, tag-team, 1vs1, (Ai)buggy, (Ai)Dr VegaPunk]
   // Loss [classic, tag-team, 1vs1, (Ai)buggy, (Ai)Dr VegaPunk]

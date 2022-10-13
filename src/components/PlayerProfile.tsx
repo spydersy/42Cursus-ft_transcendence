@@ -45,7 +45,8 @@ export function PlayerCard(props: PlayerCardProps) {
     return (
       <PlayerCardStyle  >
       
-          <div className='Identity'> 
+          <div className='Identity'>
+              {/* <>Status: </> */}
               <div className='Iavatar' style={ {width : "150px" , height : "150px"}} >
                 <AvatarComponent img={props.player.defaultAvatar}/>
               </div>
@@ -149,9 +150,9 @@ export function Stats(props: PlayerCardProps) {
   
     const [relationStatus, setrelationStatus] = useState<string>("BLOCKED");
     const id = window.location.pathname.split("/")[2];
-    const [createdTime, setcreatedTime] = useState<string | undefined>("XXX XX XXX XXX XX:XX:XX ")
-    const [grade, setgrade] = useState<string | undefined>("Unranked")
-    const Grades = ["Shinobi","ShiboKay","Hokage","Yonko","3anKoub","XX","XXXX","XXXXX","XXXXX"]
+    const [createdTime, setcreatedTime] = useState<string | undefined>("Mon 12 Oct 1963 12:00:00 ")
+    const Grades = ["Unranked","Shinobi","ShiboKay","Hokage","Yonko","3ANKOUB","XX","XXXX","XXXXX","XXXXX"]
+    const [grade, setgrade] = useState<string | undefined>(Grades[5])
     const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
 
     const addFriend = ()=>{
@@ -359,26 +360,34 @@ justify-content: space-between;
 }
 `
 ///// UserCard Comp
-export interface UserCardProps { data: { ogin: string; defaultAvatar: string; login: string;} }
+export interface UserCardProps { data: { status: string; defaultAvatar: string; login: string;} }
 
-export interface StyleProps { status: number; }
+export interface StyleProps { status: string; }
 
-const override: CSSProperties = {  display: "grid",  margin: "0 auto",  borderColor: "white", };
+const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderColor: "black",};
 
 
 export  function UserCard(props : UserCardProps) {
 
 const [loading, setLoading] = useState(true);
-const [color, setColor] = useState("#12d418");
+
+let color = ("#d21f2e");
+
+if (props.data.status === "ONLINE")
+   color = ("#1ea122") 
+else if (props.data.status === "ONGAME")
+  color = ("#ee900c");
 
 
+  // console.log("status: " , props.data.status , "\n")
   // setLoading(true);
+
   return (
-    <UserCardStyle status={1}>
+    <UserCardStyle status={color}>
       
       <div className="status" >       
         {/* <HashLoader   color={color} loading={loading} cssOverride={override} size={22} /> */}
-        {/* <CircleLoader   color={color} loading={loading} cssOverride={override} size={20} /> */}
+        <CircleLoader   color={color} loading={loading} cssOverride={override} size={20} />
       </div>
 
       <DotsIcon className='dots'>
@@ -392,22 +401,22 @@ const [color, setColor] = useState("#12d418");
   )
 }
 
-let Statuscolor = "#12d418"
+// let Statuscolor = "#12d418"
 
 const UserCardStyle = styled.div<StyleProps>`
   position: relative;
   background: linear-gradient(144deg, #5c5861 16.67%, #1f2e39 100%);
   font-family: "Poppins" , sans-serif;
   margin : 20px;
-  width: 130px;
+  width: 120px;
   height: 140px;
   text-align: center;
   border-radius: 13px;
   animation: fadeIn 8s;
-  border:${Statuscolor} 2px solid;
-  -webkit-box-shadow: 3px 3px 5px 6px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-  -moz-box-shadow:    3px 3px 5px 6px #1b9ad4;  /* Firefox 3.5 - 3.6 */
-  box-shadow:         1px 1px 4px 4px ${Statuscolor}; 
+  /* border: ${props => props.status} 2px solid; */
+  /* -webkit-box-shadow: 3px 3px 5px 6px #ccc;   */
+  /* -moz-box-shadow:    3px 3px 5px 6px #1b9ad4;   */
+   box-shadow:         1px 1px 1px 1px ${props => props.status}; 
 
   .status {
 
@@ -416,24 +425,12 @@ const UserCardStyle = styled.div<StyleProps>`
     border-radius: 50%;
     left: 0px;
     top: 0px;
-    border: #726969 1px solid;
-    /* border: 10px solid ; */
-    transform: translate(10%, 10%);
-    background-color: ${Statuscolor};
+    border: ${props=> props.status} 3px solid;
+    /* border: 3px solid ; */
+    /* transform: translate(-10%, -10%); */
+    background-color: #f9f9f984;
   }
-  /* ${
-      props => props.status === 1 ? 
-      Statuscolor = "#12d418" : 
-      props.status === 2 ?
-      Statuscolor = "#d4b31b" :
-      Statuscolor = "#d41b1b" 
 
-      //   css` .status { background-color: #00ffa2;  } ` 
-      //   : props => props.status === 2 ? 
-      //   css`  .status { background-color: #e40101; }  ` 
-      // : 
-      //   css`  .status { background-color: #218ab4; }  `
-    } */
 
   .List {
     display: flex;
@@ -449,10 +446,10 @@ const UserCardStyle = styled.div<StyleProps>`
       top: 3px;
       /* padding: 1px 1px ; */
       path{
-        stroke: white;
+        stroke: ${props=> props.status} ;
       }
       &:hover {
-        transform: scale(1.3);
+        transform: scale(1.4);
         right:10px;
         top: 3px;
         path{
@@ -493,7 +490,7 @@ const UserCardStyle = styled.div<StyleProps>`
   }
 
   @keyframes fadeIn {
-  0% { opacity: 0; }
+  0% { opacity: 0.4; }
   100% { opacity: 1; }
   }
 `;
@@ -721,20 +718,19 @@ export interface UserInvitCardProps {
   data: UserProp
 }
 export interface StyleProps {
-    status: number;
+    status: string;
 }
 
 export  function UserInvitCard(props : UserInvitCardProps) {
+  
   const accepteFriend = ()=>{
-   axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=accept", 
-   {withCredentials: true} 
- ).then((res)=>{
-   alert("friend Request Accepted" + res.status)
-
- }).catch((err)=>{
-
-   })
-}
+   axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=accept",  {withCredentials: true} 
+            ).then((res)=>{
+   
+        alert("friend Request Accepted" + res.status) }).catch((err)=>{  })
+              
+  }
+  
   useEffect(() => {
     console.log(props.data)
 
@@ -859,7 +855,7 @@ export interface UserBlockedCardProps {
   }
 }
 export interface StyleProps {
-    status: number;
+    status: string;
 }
 
 export  function UserBlockedCard(props : UserBlockedCardProps) {
