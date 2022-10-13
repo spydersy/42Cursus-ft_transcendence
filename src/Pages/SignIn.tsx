@@ -23,7 +23,7 @@ export default function SignIn() {
                Login with intra
             </LoginButton> */}
             <a href={url}>
-            <Button icon={<FtImg/>} text="Sign in with intra"/>
+            <Button  icon={<FtImg/>} text="Sign in with intra"/>
 
             </a>
             <a id="TermsCond" href="#termscondPage">Terms & conditions</a>
@@ -119,13 +119,13 @@ interface ButtonProps {
 
 }
 interface ButtonStyleProps {
-   isIcon? : boolean,
+   isIcon? : boolean | undefined,
    typeS? : string ,
    size ? : "small" | "big"; 
 }
 export  function Button(props :ButtonProps ) {
   return (
-    <LoginButtonStyle size={props.size} isIcon={props?.isIcon} onClick={props.onClick} typeS={props.type}>
+    <LoginButtonStyle size={props.size} isIcon={props.isIcon} onClick={props.onClick} typeS={props.type}>
       {props?.icon}
       {props.text}
     </LoginButtonStyle>

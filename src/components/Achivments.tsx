@@ -1,4 +1,4 @@
-import Tooltip from '@mui/material/Tooltip';
+// import Tooltip from '@mui/material/Tooltip';
 import React from 'react'
 import styled , {css} from "styled-components";
 import Badge1 from "../assets/imgs/Archive/badge1.svg";
@@ -95,9 +95,9 @@ export default function Achivments(props: AchivementsProps) {
             achiv.map((data : any, id : number)=>{
                return (
                  <ContyStyle status={props.data[id]} >
-                    <Tooltip title={data.name} arrow>
+                    {/* <Tooltip title={data.name} arrow> */}
                       <img key={id} src={data.badge} alt={data.name} />
-                    </Tooltip>
+                    {/* </Tooltip>  */}
                   </ContyStyle>
               )
             })

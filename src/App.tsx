@@ -86,6 +86,8 @@ function App() {
   return (
     <div className="App">
        
+
+       <ThemeProvider theme={theme}>
       <div className='bg_img' style={{position: "absolute",width: "100%", height: "100%", zIndex: -1, top: 0,   left: 0  }}>
                         <Particles
                                 id="tsparticles"
@@ -175,8 +177,6 @@ function App() {
                                 // className="particles"
                             />
       </div>
-
-       <ThemeProvider theme={theme}>
         <Main>
           <ProtectedLayout body={<Upperbar />} />
           <ProtectedLayout body={ <Sidebar/>} />
