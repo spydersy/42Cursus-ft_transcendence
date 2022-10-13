@@ -1,4 +1,4 @@
-import React, { useEffect , useState}  from 'react'
+import React, { useEffect , useState, CSSProperties}  from 'react'
 import styled ,{css}from "styled-components";
 import{ReactComponent as DotsIcon }from "../assets/imgs/dots.svg"
 import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
@@ -14,15 +14,15 @@ import { Button } from '../Pages/SignIn';
 import axios from 'axios';
 import Achivments  from './Achivments';
 import  { RadarChart } from './charts/Charts';
-
-const Backcolor = css`${props => props.theme.colors.purple}`
+import HashLoader from 'react-spinners/HashLoader';
+import CircleLoader from "react-spinners/CircleLoader";
 
 //// PlayerCard Comp
 interface UserProp {
   defaultAvatar: string,
   login : string
   displayName : string
-  relation? : string
+  relation : string
   nbFriends? : string
   wins : number
   losses : number
@@ -32,7 +32,17 @@ interface UserProp {
 export interface PlayerCardProps { isCurrentUser : boolean,  player: UserProp }
 
 export function PlayerCard(props: PlayerCardProps) {
-  return (
+
+  let username = props.player.displayName;
+  let name = username.split(" ");
+
+  if (name.length > 2)
+    username = name[1] + " " +  name[2];
+
+  if (username === "Elmahdi Elaazmi" ) 
+    username = "Alchemist"
+  
+    return (
       <PlayerCardStyle  >
       
           <div className='Identity'> 
@@ -44,7 +54,7 @@ export function PlayerCard(props: PlayerCardProps) {
 
                   <div className='Bar'>  
         
-                      <div className='text' > {props.player.displayName} </div>
+                      <div className='text' > {username} </div>
                   </div>
 
                   <div className='Bar'>  
@@ -94,6 +104,7 @@ border-radius: 10px 30px 30px 10px;
             margin-top: 5px;
             display: flex;
             align-items: center;
+            align-content: flex-start;
             font-family: 'Poppins', sans-serif;
             .name{
                 font-style: normal;
@@ -112,6 +123,7 @@ border-radius: 10px 30px 30px 10px;
                 color: ${props => props.theme.colors.primaryText};
                 font-size: 19px;
                 font-weight: 600;
+                text-align: left;
                 -webkit-text-stroke: 1px #44404562;
 
             }
@@ -125,7 +137,7 @@ interface UserProp {
   defaultAvatar: string,
   login : string
   displayName : string
-  relation? : string
+  relation : string
   nbFriends? : string
   wins : number
   losses : number
@@ -135,16 +147,12 @@ interface UserProp {
 
 export function Stats(props: PlayerCardProps) {
   
-  const [relationStatus, setrelationStatus] = useState<string | undefined>("");
-  const id = window.location.pathname.split("/")[2];
- 
-  const [createdTime, setcreatedTime] = useState<string | undefined>("XXX XX XXX XXX XX:XX:XX ")
-  
-  const [grade, setgrade] = useState<string | undefined>("Unranked")
-  
-  const Grades = ["Shinobi","ShiboKay","Hokage","Yonko","3anKoub","XX","XXXX","XXXXX","XXXXX"]
-
-  const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
+    const [relationStatus, setrelationStatus] = useState<string>("BLOCKED");
+    const id = window.location.pathname.split("/")[2];
+    const [createdTime, setcreatedTime] = useState<string | undefined>("XXX XX XXX XXX XX:XX:XX ")
+    const [grade, setgrade] = useState<string | undefined>("Unranked")
+    const Grades = ["Shinobi","ShiboKay","Hokage","Yonko","3anKoub","XX","XXXX","XXXXX","XXXXX"]
+    const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
 
     const addFriend = ()=>{
         //http://localhost:8000/users/relation/:id?evet=add
@@ -159,11 +167,12 @@ export function Stats(props: PlayerCardProps) {
           // history.pushState("/signin");
         })
     }
-
     useEffect(() => {
-        setrelationStatus(props.player?.relation)
-        console.log( "- 1Relation <" , props.player?.relation, "> \n")
+        
+        setrelationStatus(props.player.relation)
+        console.log( "- 1Relation <" , props.player.relation, "> \n")
         console.log( "- 2Relation <" , relationStatus, "> \n")
+        
         // get user data  from server
         axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}).then((res)=>{
           // set grade
@@ -181,15 +190,17 @@ export function Stats(props: PlayerCardProps) {
           console.log("> createdTime : ", createdTime)
           console.log("> grade : ", grade, "\n")
 
-        }).catch((err)=>{  // history.pushState("/signin"); ***// 
+        }).catch((err)=>{   
         })
 
         axios.get("http://localhost:8000/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
           // Achievenments          
           setAChievements(res.data)
           console.log("> Achievements : ", AChievements)
+        }).catch((err)=>{
         })
-    }, [])
+   
+      }, [])
 
 
     return (
@@ -212,26 +223,36 @@ export function Stats(props: PlayerCardProps) {
                 </DataTag>
 
                 {props.isCurrentUser === false && 
+                 
                   <Buttons className='Btp' >
-                    
                     {
+                      // UserState : BlockedUser, Friend, Pending, None(Not a friend)
+                  
+                      // Friends relation
                       relationStatus === "FRIENDS" ? 
-                      <>
-                      <Button  type='secondary' onClick={addFriend} icon={<UserAddIcon/>} text='Friend'/>
-                      <a href="/chat/id">
-                        <Button onClick={addFriend} icon={<UserAddIcon/>} text='send message'/>
-                      </a>
-                      
-                      </>
-                      :
-                      relationStatus === 'PENDING' ? 
-                      <Button onClick={addFriend}  text='Pending'/>
+                        <>
+                          <Button  type='secondary' onClick={addFriend} icon={<UserAddIcon/>} text='Friend'/>
+                          
+                          <a href="/chat/id">
+                            <Button onClick={addFriend} icon={<UserAddIcon/>} text='send message'/>
+                          </a>
+
+                          <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
+                          <Button icon={<UserAddIcon/>}   type='secondary' text='Block'/>
+                        </>
                       : 
-                      <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
+                      // Pending request relation
+                      relationStatus === 'PENDING' ? 
+                        <Button onClick={addFriend}  text='Pending'/>
+                      :
+                      // Blocked relation
+                      relationStatus === "BLOCKED" ? 
+                      <Button icon={<UserAddIcon/>}   type='secondary' text='UnBlock'/>
+                      :
+                      // None relation
+                        <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
                     }
-
                     {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/> */}
-
                   </Buttons>
                 }
 
@@ -340,93 +361,120 @@ justify-content: space-between;
 ///// UserCard Comp
 export interface UserCardProps { data: { ogin: string; defaultAvatar: string; login: string;} }
 
-export interface StyleProps { status: boolean; }
+export interface StyleProps { status: number; }
+
+const override: CSSProperties = {  display: "grid",  margin: "0 auto",  borderColor: "white", };
+
 
 export  function UserCard(props : UserCardProps) {
+
+const [loading, setLoading] = useState(true);
+const [color, setColor] = useState("#12d418");
+
+
+  // setLoading(true);
   return (
-    <UserCardStyle status={true}>
+    <UserCardStyle status={1}>
       
-      <div className="status" >
+      <div className="status" >       
+        {/* <HashLoader   color={color} loading={loading} cssOverride={override} size={22} /> */}
+        {/* <CircleLoader   color={color} loading={loading} cssOverride={override} size={20} /> */}
       </div>
 
-      <DotsIcon className='dots'/>
-        <div className='List'>
-          <div className='element' >
-              Unfriend
-          </div>
-        
-        </div>
+      <DotsIcon className='dots'>
+          <div className='List'> <div className='element' >  Unfriend </div>  </div>
+        </DotsIcon>
       <img alt="avatar" src={props.data.defaultAvatar} className="avatar" />
       
-      <div className="Uname">
-          {props.data.login}
-    </div>
+      <div className="Uname"> @{props.data.login} </div>
+
     </UserCardStyle>
   )
 }
 
+let Statuscolor = "#12d418"
+
 const UserCardStyle = styled.div<StyleProps>`
   position: relative;
-  background: linear-gradient(144deg, #74549C 16.67%, #3581B3 100%);
-font-family: "Poppins" , sans-serif;
-  margin : 10px;
+  background: linear-gradient(144deg, #5c5861 16.67%, #1f2e39 100%);
+  font-family: "Poppins" , sans-serif;
+  margin : 20px;
   width: 130px;
-  height: 60px;
+  height: 140px;
   text-align: center;
-  border-radius: 10px;
-  animation: fadeIn 2s;
-  ${props => props.status === true ? css`
-  .status {
-      background-color: #3CC592;
-      /* display: none; */
-    }
-    ` :
-    css`
-    .status {
-      background-color: #e40101;
-    }
-    
-    `}
+  border-radius: 13px;
+  animation: fadeIn 8s;
+  border:${Statuscolor} 2px solid;
+  -webkit-box-shadow: 3px 3px 5px 6px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow:    3px 3px 5px 6px #1b9ad4;  /* Firefox 3.5 - 3.6 */
+  box-shadow:         1px 1px 4px 4px ${Statuscolor}; 
 
   .status {
-  
 
-    /* border: 3px solid ${Backcolor}; */
-    width: 10px;
-    height: 10px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     left: 0px;
-    transform: translate(-12%, -12%);
+    top: 0px;
+    border: #726969 1px solid;
+    /* border: 10px solid ; */
+    transform: translate(10%, 10%);
+    background-color: ${Statuscolor};
   }
-  .List {
-    display: none;
-  }
-  > svg {
-    /* display: flex; */
-    cursor: pointer;
-    position: absolute;
-    width: 20px;
-    height:15px;
-    right: 3px;
-    top: 3px;
-    /* padding: 1px 1px ; */
-    path{
-      stroke: white;
-    }
-    &:hover {
-      transform: scale(1.5);
+  /* ${
+      props => props.status === 1 ? 
+      Statuscolor = "#12d418" : 
+      props.status === 2 ?
+      Statuscolor = "#d4b31b" :
+      Statuscolor = "#d41b1b" 
 
-      right: 3px;
+      //   css` .status { background-color: #00ffa2;  } ` 
+      //   : props => props.status === 2 ? 
+      //   css`  .status { background-color: #e40101; }  ` 
+      // : 
+      //   css`  .status { background-color: #218ab4; }  `
+    } */
+
+  .List {
+    display: flex;
+  }
+
+  > svg { // Dots icon
+      /* display: flex; */
+      cursor: pointer;
+      position: absolute;
+      width: 25px;
+      height:25px;
+      right: 10px;
       top: 3px;
+      /* padding: 1px 1px ; */
       path{
-      stroke: black;
+        stroke: white;
+      }
+      &:hover {
+        transform: scale(1.3);
+        right:10px;
+        top: 3px;
+        path{
+        stroke: #f9f9f9;
     }
 
     }
     }
   .avatar {
-    display: none;
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    display: block;
+    width: 50%;
+    top: 20%;
+    left: 25%;
+    animation: fadeIn 3s;
+    > img {
+      width:  80px;
+      height: 80px;
   }
+    }
   .Uname {
     position: absolute;
     color: #fcfafc;
@@ -442,22 +490,6 @@ font-family: "Poppins" , sans-serif;
   }
 
   &:hover {
-    height: 125px;
-    transition: 0.8s;
-    .avatar {
-      border: 1px solid #fcfafc;
-      border-radius: 50%;
-      position: absolute;
-      display: block;
-      width: 50%;
-      top: 15px;
-      left: 25%;
-      animation: fadeIn 3s;
-      > img {
-        width:70px;
-        height: 70px;
-      }
-    }
   }
 
   @keyframes fadeIn {
@@ -689,7 +721,7 @@ export interface UserInvitCardProps {
   data: UserProp
 }
 export interface StyleProps {
-    status: boolean;
+    status: number;
 }
 
 export  function UserInvitCard(props : UserInvitCardProps) {
@@ -827,7 +859,7 @@ export interface UserBlockedCardProps {
   }
 }
 export interface StyleProps {
-    status: boolean;
+    status: number;
 }
 
 export  function UserBlockedCard(props : UserBlockedCardProps) {

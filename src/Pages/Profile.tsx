@@ -13,7 +13,7 @@ interface UserProp {
   defaultAvatar: string,
   login : string
   displayName : string
-  relation? : string
+  relation : string
   nbFriends? : string
   wins : number
   losses : number
@@ -148,17 +148,13 @@ const Empty = styled.div`
 export function FriendsComponent(props : FriendsProps)
 {
   const [friends, setfriends] = useState([])
-useEffect(() => {
   
-  axios.get("http://localhost:8000/users/friends/" + props.id, 
-    {withCredentials: true} 
-  ).then((res)=>{
-    console.log(res.data)
-    setfriends(res.data)
-
-  }).catch((err)=>{
-    })
-}, [props.id])
+  useEffect(() => {
+      axios.get("http://localhost:8000/users/friends/" + props.id,   {withCredentials: true}  ).then((res)=>{
+        // console.log(res.data)
+        setfriends(res.data)
+      }).catch((err)=>{ })
+  }, [props.id])
 
   return (
     <TabfourStyle >

@@ -18,14 +18,24 @@ align-items: flex-end;
 
 export  function RadarChart() {
 
-  const [Ewins, setwins] = useState< number[] | any>([12, 15, 15, 12, 10])
-  const [Elosses, setlosses] = useState< number[] | any>([10, 17, 13, 12, 15])
-  const [Edraws, setdraws] = useState< number[] | any>([2, 17, 5, 8, 10])
+
+
+
+  let Ewins = [12, 15, 15, 12, 10]
+  let Elosses = [10, 17, 13, 12, 15]
+  let Edraws = [2, 17, 5, 8, 10]
+
+
+  Edraws = []
+  Elosses = []
+  Ewins = []
 
   // Wins [classic, tag-team, 1vs1, (Ai)buggy, (Ai)Dr VegaPunk]
   // Loss [classic, tag-team, 1vs1, (Ai)buggy, (Ai)Dr VegaPunk]
   // Draws [classic, tag-team, 1vs1, (Ai)buggy, (Ai)Dr VegaPunk]
   
+  // setdraws([2, 17, 5, 8, 10])
+
   const dataRadar = {
     labels: [
       "Classic",

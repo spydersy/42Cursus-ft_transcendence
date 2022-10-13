@@ -1,15 +1,20 @@
 
-# 'Alchemist Todo List:'
+# Alchemist Todo List
 
-## - [ ] '1/ Profile page:'
+## - [ ] 1/ Profile page
 
-    - [ ] Buttons {  Dm, [addUser, Pending, (Friend + BlockeUser)] } .
-    - [ ] DisplayName rules { Long , Empty, SpecialString .
-    - [ ] Achievements { Size }
-    - [ ] Radar {Data , Color }
-    - [ ] Tab 1: Friends
-        - [ ] ...
-        - [ ] ...
+    - [*] Player State
+        - [?] Buttons { [addUser, Pending, (Dm + Friend + BlockeUser), Unblock]}.
+            > "Confused Value on relation"
+        - [?] DisplayName rules { Long , Empty, SpecialString.
+        - [?] Achievements { Size }
+        - [?] Radar {Data , Color }
+
+    - [*] Tab 1: Friends
+        - [?] status {Online, Offline, InGame}
+        - [?] Dots {Unfriend + Dm + Block + Invite To play}
+        - [?] Animation {Hover + Click}
+
     - [ ] Tab 2: Pending Requests   
         - [ ] ...
         - [ ] ...
@@ -17,17 +22,38 @@
         - [ ] ...
         - [ ] ...
 
-## - [ ] '2/ Search Bar:'
+## - [ ] PopUp Notif Coomp
+
+        - [ ] ...
+        - [ ] ...
+        - [ ] ...
+
+## - [ ] 2/ Search Bar
 
     - [ ] ...
     - [ ] ...
 
-## - [ ] '3/ Settings:'
+## - [ ] 3/ Settings
+
+    - [ ] 2Aouth
+    - [ ] ....
+
+## - [ ] 4/ Notifications
 
     - [ ] ...
     - [ ] ...
 
-## - [ ] '4/ Notifications:'
+## - [ ] 5/ Chat
+
+    - [ ] ...
+    - [ ] ...
+
+## - [ ] 6/ Game Page
+
+    - [ ] ...
+    - [ ] ...
+
+## - [ ] 7/ Leaderboard
 
     - [ ] ...
     - [ ] ...
