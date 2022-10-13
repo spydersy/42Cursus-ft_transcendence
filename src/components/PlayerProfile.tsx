@@ -33,6 +33,10 @@ export interface PlayerCardProps { isCurrentUser : boolean,  player: UserProp }
 
 export function PlayerCard(props: PlayerCardProps) {
 
+  let color = ("#d21f2e");
+  const [loading, setLoading] = useState(true);
+
+
   let username = props.player.displayName;
   let name = username.split(" ");
 
@@ -43,10 +47,18 @@ export function PlayerCard(props: PlayerCardProps) {
     username = "Alchemist"
   
     return (
-      <PlayerCardStyle  >
+      <PlayerCardStyle  status={color} >
       
           <div className='Identity'>
+              
               {/* <>Status: </> */}
+              <div className="status" >       
+                {/* <HashLoader   color={color} loading={loading} cssOverride={override} size={22} /> */}
+                <CircleLoader   color={color} loading={loading} cssOverride={override} size={30} />
+                {/* ONLINE */}
+              </div>
+
+
               <div className='Iavatar' style={ {width : "150px" , height : "150px"}} >
                 <AvatarComponent img={props.player.defaultAvatar}/>
               </div>
@@ -72,7 +84,7 @@ export function PlayerCard(props: PlayerCardProps) {
   )
 }
   
-const PlayerCardStyle = styled.div`
+const PlayerCardStyle = styled.div<StyleProps>`
 padding: 0px 0px;
 margin-bottom: 13px;
 width:  100%;
@@ -80,6 +92,8 @@ display: flex;
 position: relative;
 border-radius: 10px 10px 10px 10px;
 background-color: ${props => props.theme.colors.seconderybg};
+/* box-shadow:         1px 1px 1px 2px ${props => props.status};  */
+
 @media  only screen and (max-width: 1090px) {
   flex-direction: column;
   .Identity{
@@ -87,18 +101,32 @@ background-color: ${props => props.theme.colors.seconderybg};
     width: 100% !important;
     margin: 0 auto;
     /* width: 90%; */
+    /* box-shadow:         1px 1px 1px 1px ${props => props.status};  */
 
   }
-}
+  } 
 .Identity{
     width: 250px;
     height: 100%;
-
     background: linear-gradient(144deg, #74549C 16.67%, #3581B3 100%);
-border-radius: 10px 30px 30px 10px;
-    .Iavatar{
-      margin: 40px auto; 
-    }
+    border-radius: 10px 30px 30px 10px;
+    /* box-shadow:         2px 2px 2px 2px ${props => props.status};  */
+
+    .status {
+
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      left: 0px;
+      top: 0px;
+      border: ${props=> props.status} 5px solid;
+      /* border: 3px solid ; */
+      transform: translate(5%, 5%);
+      background-color: #f9f9f984;
+
+    } 
+    .Iavatar{ margin: 40px auto;  }
+    
     .infoSec {
         padding : 10px;
         .Bar{
