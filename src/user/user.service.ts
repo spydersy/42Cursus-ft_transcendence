@@ -396,14 +396,13 @@ export class UserService {
         async FriendsRelationExist(Sender : number, Receiver: number) {
             let FriendshipStat = await this.prisma.friends.findFirst({
                 where: {
-                    SenderId: Sender,
-                    ReceiverId: Receiver
-                } && {
-                        senderId: Receiver,
-                        receiverId: Sender
-                },
+                    OR: [
+                        { AND: [ {senderId: Sender}, {receiverId: Receiver}]},
+                        { AND: [ {senderId: Receiver}, {receiverId: Sender}]},
+                    ],
+                }
             });
-            console.log("__BLOCK__STAT__ : ", FriendshipStat);
+            console.log("__FRIENDS__STAT__DBG__ : ", FriendshipStat);
             return FriendshipStat;
         }
 

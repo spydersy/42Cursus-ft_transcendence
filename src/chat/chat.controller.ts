@@ -25,7 +25,7 @@ export class ChatController {
 
     // TASK_06 - DONE
     @Get('myChannels')
-    async GetMyRooms(@Req() req, @Res() res) {
+    async GetMyChannels(@Req() req, @Res() res) {
       return this.chatService.GetMyChannels(req.user.userId, res);
     }
 

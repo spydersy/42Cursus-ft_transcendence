@@ -9,7 +9,7 @@ STEPS :
 - [X] Cancel Friend Request
 - [X] Add Relation Between Users In Json Object
 - [ ] Add Validation Layer For Outputs
-- [ ] Real Time Search Engine [Channel Search]
+- [X] Real Time Search Engine [Channel Search]
 - [X] Add nb Friends in user Object
 - [ ] Two Factor Authentication
 - [ ] Users Status
@@ -49,9 +49,6 @@ SECRET CODE :
 
 
 LEAR ABOUT MCD MODEL LOGIC DES DONNEES
-
-NOTES :
-- [ ] RAAAAAAAAAANDOOOOOOOOOOOOOOM https://random.imagecdn.app/1000/1000
 
 === OPERATIONS IN CHANNELS  :  ====================================================================
  - [ ] CREATE CHANNEL

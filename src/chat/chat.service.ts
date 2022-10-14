@@ -9,6 +9,12 @@ interface ManyUsers {
     permission: PERMISSION;
 }
 
+enum USERSTAT{
+    MUTED,
+    ACCESS,
+    NOTFOUND
+}
+
 export interface userInChannel {
     permission:      string,
     restriction:     string,
@@ -63,58 +69,6 @@ export class ChatService {
         console.log("__DM__CHANNEL__DBG__ : ", DMChannel);
     }
 
-
-    async GetChannelById(channelId: string) {
-        let channel = await this.prisma.channels.findUnique({
-            where: {id: channelId}
-        });
-        return channel;
-    }
-
-    async FindUserInChannel(userId: number, channelId: string) {
-        let userChannel = await this.prisma.channelsUsers.findUnique({
-            where: {
-                userId_channelId: {userId, channelId},
-            },
-        });
-        return userChannel;
-    }
-
-    async PostMessageValidationLayer(me: number, messageContent: string, channelId: string) : Promise<boolean> {
-        // All Cases:
-            // 1) This user exist in this channel ?
-            // 2) The User have the right to send message (Banned/Muted) ?
-            // 3)
-
-        return true;
-    }
-
-    async GetMessageValidationLayer(me: number, messageContent: string, channelId: string) : Promise<boolean> {
-        // Do Something . . .
-        return true;
-    }
-
-    // {
-    //     id: 4,
-    //     senderId: 62700,
-    //     channelId: 'dad96272-5425-4a7f-8dd4-8710c0f91db5',
-    //     content: 'allo',
-    //     date: 2022-10-12T03:07:49.651Z,
-    //     sender: {
-    //       id: 62700,
-    //       login: 'abelarif',
-    //       displayName: 'Achraf Belarif',
-    //       defaultAvatar: 'https://avatars.dicebear.com/api/croodles-neutral/abelarif.jpg',
-    //       notifications: [Array],
-    //       wins: 0,
-    //       losses: 0,
-    //       level: 0,
-    //       twoFactorAuth: false,
-    //       twoFactorAuthSecret: null,
-    //       lastModification: 2022-10-12T03:05:26.522Z
-    //     }
-    //   },
-
     async GetChannelMessages(me: number, channelId: string, @Res() res) {
     // All validations needed:
         // 1) Is a public/private/protected/dm channel ?
@@ -146,7 +100,7 @@ export class ChatService {
     }
 
     async SendMessage(me: number, messageContent: string, channelId: string) {
-        if (await this.PostMessageValidationLayer(me, messageContent, channelId) === true) {
+        if (await this.PostMessageValidationLayer(me, messageContent, channelId) === USERSTAT.ACCESS) {
             await this.prisma.messages.create({
                 data: {
                     senderId: me,
@@ -176,24 +130,12 @@ export class ChatService {
         return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, allChannels));
     }
 
-    async CanUpdateChannel(userId: number, channelId: string) : Promise<boolean> {
-        const userChannelPair = await this.prisma.channelsUsers.findUnique({
-            where: {
-                userId_channelId: {userId, channelId},
-            },
-        });
-        if (userChannelPair === null
-        || userChannelPair.permission === PERMISSION.USER)
-            return false;
-        return true;
-    }
-
     async AddUserToChannel(me: number, user: string, channelId: string, @Res() res) {
         if (await this.CanUpdateChannel(me, channelId) === true) {
             const channel = await this.prisma.channels.findUnique({
                 where: {id: channelId},
             });
-            if (channel === null || channel.access === CHANNEL.DM || channel.access === CHANNEL.PROTECTED)
+            if (channel === null || channel.access === CHANNEL.DM)
                return res.status(HttpStatus.FORBIDDEN).send({'message': 'Cant Add User'});
                const userProfile = await this.userService.GetUserByLogin(user);
                if (userProfile === null) {
@@ -288,4 +230,49 @@ export class ChatService {
         return myChannels;
     }
 
+    async CanUpdateChannel(userId: number, channelId: string) : Promise<boolean> {
+        const userChannelPair = await this.prisma.channelsUsers.findUnique({
+            where: {
+                userId_channelId: {userId, channelId},
+            },
+        });
+        if (userChannelPair === null
+        || userChannelPair.permission === PERMISSION.USER)
+            return false;
+        return true;
+    }
+
+    async GetChannelById(channelId: string) {
+        let channel = await this.prisma.channels.findUnique({
+            where: {id: channelId}
+        });
+        return channel;
+    }
+
+    async FindUserInChannel(userId: number, channelId: string) {
+        let userChannel = await this.prisma.channelsUsers.findUnique({
+            where: {
+                userId_channelId: {userId, channelId},
+            },
+        });
+        return userChannel;
+    }
+
+    async PostMessageValidationLayer(me: number, messageContent: string, channelId: string) : Promise<USERSTAT> {
+        // All Cases:
+            // 1) This user exist in this channel ?
+            const userInChannel = await this.FindUserInChannel(me, channelId);
+            if (userInChannel === null)
+                return USERSTAT.NOTFOUND;
+            // 2) The User have the right to send message (Banned/Muted) ?
+            // if ()
+            // 3)
+
+        // return true;
+    }
+
+    async GetMessageValidationLayer(me: number, messageContent: string, channelId: string) {
+        // Do Something . . .
+        return true;
+    }
 }

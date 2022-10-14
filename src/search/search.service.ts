@@ -39,7 +39,7 @@ export class SearchService {
                             OR: [
                                 {login: {startsWith: input, mode: 'insensitive'}},
                                 {displayName: {startsWith: input, mode: 'insensitive'}}
-                            ]
+                            ],
                         }
                     }
                 ],
@@ -47,8 +47,6 @@ export class SearchService {
             include: { sender: true}
         });
         let AllFriends = [];
-        console.log("__AA__ : ", FriendsRowA);
-        console.log("__BB__ : ", FriendsRowB);
         FriendsRowA.forEach(element => AllFriends.push(element.receiver));
         FriendsRowB.forEach(element => AllFriends.push(element.sender));
         return res.status(HttpStatus.OK).send(AllFriends);
