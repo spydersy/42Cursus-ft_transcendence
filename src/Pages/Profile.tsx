@@ -1,4 +1,4 @@
-import React, {useState , useEffect, useCallback} from 'react'
+import React, {useState , useEffect} from 'react'
 import styled from "styled-components"
 import Navlinks from '../components/Navlinks';
 import { PlayerCard , UserCard} from '../components/PlayerProfile';
@@ -28,7 +28,7 @@ export default function Profile() {
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
     defaultAvatar: avataro,
-    status: "Offline",
+    status: "Default",
     login : "DefaultUserLogin",
     displayName : 'Default DisplayName',
     relation : "",
@@ -65,7 +65,7 @@ export default function Profile() {
       console.log("> User Data < " , User, ">\n")
     }
 
-  }, [id]);
+  }, [id, User]);
 
   return (
         <div className='container' style={{  display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
@@ -183,12 +183,7 @@ export function FriendsComponent(props : FriendsProps)
   )
 }
 
-
 //#2  Pending Requests
-interface InvProp {  sender: { login : string },
-  // login : string
-  // displayName : string
-}
 
 export function PendingRequests()
 {

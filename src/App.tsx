@@ -77,7 +77,7 @@ function App() {
     localStorage.setItem("user", JSON.stringify(res.data))
   }).catch((err)=>{
         console.log(err)
-        navigate('/signin')
+        // navigate('/signin')
     })
      // eslint-disable-next-line
   }, [])

@@ -1,6 +1,6 @@
 import React, { useEffect , useState, CSSProperties}  from 'react'
 import styled ,{css}from "styled-components";
-import{ReactComponent as DotsIcon }from "../assets/imgs/dots.svg"
+// import{ReactComponent as DotsIcon }from "../assets/imgs/dots.svg"
 import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
 import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
@@ -10,11 +10,12 @@ import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
 import {ReactComponent as CalendarIcon} from "../assets/imgs/calendar.svg";
 import {ReactComponent as RankIcon} from "../assets/imgs/rank.svg";
 import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
+import {ReactComponent as BlockIcon} from "../assets/imgs/ban.svg";
 import { Button } from '../Pages/SignIn';
 import axios from 'axios';
 import Achivments  from './Achivments';
 import  { RadarChart } from './charts/Charts';
-import HashLoader from 'react-spinners/HashLoader';
+// import HashLoader from 'react-spinners/HashLoader';
 import CircleLoader from "react-spinners/CircleLoader";
 
 //// PlayerCard Comp
@@ -35,30 +36,31 @@ export interface PlayerCardProps { isCurrentUser : boolean,  player: UserProp }
 export function PlayerCard(props: PlayerCardProps) {
 
   let color = ("");
-  const [loading, setLoading] = useState(true);
+  const [loading] = useState(true);
 
-  let status = "";
+  let status = "";  
   
   
   if (props.player.status === "InGame")
   {
     color = ("#1e30a1");
-    status = "InGame";
+    status = "IN-GAME";
   }
   else if (props.player.status === "Online")
   {
     color = ("#2b8852");
-    status = "Online";
+    status = "ONLINE";
   }
   else if (props.player.status === "Offline")
   {
     color = ("#af1c1c");
-    status = "Offline";
+    status = "OFFLINE";
   }
   else
   {
     // setLoading(false);
-    status = "Mghayer";
+    status = "MGHAYER";
+    
   }
 
 
@@ -68,11 +70,7 @@ export function PlayerCard(props: PlayerCardProps) {
     username = name[1] + " " +  name[2];
   if (username === "Elmahdi Elaazmi" ) 
     username = "Alchemist"
-
-    
-
-  
-  
+   
     return (
       <PlayerCardStyle  status={color} >
       
@@ -155,7 +153,7 @@ background-color: ${props => props.theme.colors.seconderybg};
       .status-text {
         font-family: 'Poppins', sans-serif;
         font-size: 20px;
-        font-weight: 300;
+        font-weight: 500;
         color: ${props => props.status};
         top: 0px;
         left: 35px;
@@ -219,9 +217,9 @@ interface UserProp {
 
 export function Stats(props: PlayerCardProps) {
   
-    const [relationStatus, setrelationStatus] = useState<string >("NOTHING");
+    const [relationStatus, setrelationStatus] = useState<string >("FRIENDS");
     const id = window.location.pathname.split("/")[2];
-    const [createdTime, setcreatedTime] = useState<string | undefined>("")
+    const [createdTime, setcreatedTime] = useState<string | undefined>("Mon 1 Oct 1999 00:00:00")
     const Grades = ["Unranked","Shinobi","ShiboKay","Hokage","Yonko","3ANKOUB","XX","XXXX","XXXXX","XXXXX"]
     const [grade, setgrade] = useState<string | undefined>(Grades[5])
     const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
@@ -241,6 +239,19 @@ export function Stats(props: PlayerCardProps) {
           // history.pushState("/signin");
         })
     }
+
+    const UnfriendUser = ()=>{
+    
+    }
+
+    const InviteToPlay = ()=>{
+    
+    }
+
+    const BlockUser = ()=>{
+
+    }
+
     console.log( "Player Data > ", props.player, "\n")
 
     useEffect(() => {
@@ -255,6 +266,7 @@ export function Stats(props: PlayerCardProps) {
           
           setrelationStatus(res.data.relation)
 
+          setrelationStatus("FRIENDS")
 
           //Rank
           if (res.data.level)
@@ -279,7 +291,7 @@ export function Stats(props: PlayerCardProps) {
         }).catch((err)=>{
         })
    
-      }, [])
+      })
 
 
     return (
@@ -302,7 +314,6 @@ export function Stats(props: PlayerCardProps) {
                 </DataTag>
 
                 {props.isCurrentUser === false && 
-                 
                   <Buttons className='Btp' >
                     {
                       // UserState : BlockedUser, Friend, Pending, None(Not a friend)
@@ -310,14 +321,14 @@ export function Stats(props: PlayerCardProps) {
                       // Friends relation
                       relationStatus === "FRIENDS" ? 
                         <>
-                          <Button  type='secondary' onClick={addFriend} icon={<UserAddIcon/>} text='Block'/>
-                          
-                          <a href="/chat/id">
-                            <Button onClick={addFriend} icon={<UserAddIcon/>} text='send message'/>
-                          </a>
+                  
+                          <Button  type='secondary' onClick={UnfriendUser} icon={<UserAddIcon/>} text='Unfriend'/>
 
-                          <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
-                          {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Block'/> */}
+                          <a href="/chat/id">  <Button  icon={<UserAddIcon/>} text='Send Message'/> </a>
+
+                          <Button icon={<UserAddIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
+
+                          <Button  type='secondary' onClick={BlockUser} icon={<BlockIcon/>} text='Block'/>
                         </>
                       : 
                       // Pending request relation
@@ -326,13 +337,13 @@ export function Stats(props: PlayerCardProps) {
                       :
                       // Blocked relation
                       relationStatus === "BLOCKED" ? 
-                      <Button icon={<UserAddIcon/>}   type='secondary' text='UnBlock'/>
+                        <Button icon={<BlockIcon/>}   type='secondary' text='UnBlock'/>
                       : 
                       relationStatus === "NOTHING" ? 
                       // None relation
                         <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
                       :
-                        null
+                        <> asd </>
                     }
                     {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/> */}
 
@@ -358,7 +369,7 @@ export function Stats(props: PlayerCardProps) {
 }
 
 const DataTag = styled.div`
-  /* background-color: #bdd4d4; */
+  /* background-color: #1c70b517; */
   display: flex;
   align-items: center;
   min-width : 200px;
@@ -388,11 +399,12 @@ gap: 5px;
 border-radius: 0px 10px 0px 0px;
 `
 const Buttons = styled.div`
+/* background-color: #f0f8ff41; */
 display: flex;
 flex-direction: row;
-gap: 15px;
-margin: 15px 0px;
-/* background-color: red; */
+gap: 10px;
+margin: 20px 0px;
+flex-wrap: wrap;
 `
 
 const Data = styled.div`
@@ -451,7 +463,7 @@ const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderC
 
 export  function UserCard(props : UserCardProps) {
 
-const [loading, setLoading] = useState(true);
+const [loading] = useState(true);
 
 let color = ("#d21f2e");
 

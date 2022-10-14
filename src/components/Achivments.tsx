@@ -1,4 +1,3 @@
-import Tooltip from '@mui/material/Tooltip';
 import React from 'react'
 import styled , {css} from "styled-components";
 import Badge1 from "../assets/imgs/Archive/badge1.svg";
@@ -6,9 +5,9 @@ import Badge2 from "../assets/imgs/Archive/badge2.svg";
 import Badge3 from "../assets/imgs/Archive/badge3.svg";
 import Badge4 from "../assets/imgs/Archive/badge4.svg";
 import Badge5 from "../assets/imgs/Archive/badge5.svg";
-import Badge6 from "../assets/imgs/Archive/badge6.svg";
+// import Badge6 from "../assets/imgs/Archive/badge6.svg";
 import Badge7 from "../assets/imgs/Archive/badge7.svg";
-import Badge8 from "../assets/imgs/Archive/badge8.svg";
+// import Badge8 from "../assets/imgs/Archive/badge8.svg";
 
 const achievment1 = {
     name: "NEW-3ANKOUB",
@@ -38,25 +37,16 @@ const achievment5 = {
     desc : "(MODMIR aka Yaiba)",
     badge : Badge5 ,
   }
-const achievment6 = {
-    name: "SASAGAYO",
-    desc : "you win 5 game.",
-    badge : Badge6 ,
-  }
-const achievment7 = {
+
+  const achievment7 = {
     name: "OYAJI",
     desc : "(Only Golden Promo)",
     badge : Badge7 ,
   }
-const achievment8 = {
-    name: "MADARA ",
-    desc : "(Only Golden Promo)",
-    badge : Badge8 ,
-  }
 
 export interface StyleProps { status: boolean; }
 
-const achiv = [achievment1 , achievment2 , achievment3 , achievment4, achievment5, achievment6, achievment7, achievment8]
+const achiv = [achievment1 , achievment7 , achievment3 , achievment4, achievment5, achievment2]
 
 export interface AchivementsProps { data: [] }
 
@@ -100,10 +90,8 @@ export default function Achivments(props: AchivementsProps) {
             achiv.map((data : any, id : number)=>{
                return (
                  <ContyStyle status={props.data[id]} >
-                    {/* <Tooltip title={data.name} arrow> */}
-                    <ToolTip>asdas</ToolTip>
+                    <ToolTip>{data.name} </ToolTip>
                       <img key={id} src={data.badge} alt={data.name} />
-                    {/* </Tooltip>  */}
                   </ContyStyle>
               )
             })
@@ -115,25 +103,29 @@ export default function Achivments(props: AchivementsProps) {
 }
 
 const AchiStyle = styled.div`
-/* background-color: #85197936; */
+background-color: #1c70b517;
 border-radius : 10px;
-width: 80%;
+width: 99%;
+left: 0px;
 display: flex;
 flex-direction: row;
 align-items: flex-start;
+margin: 35px 0px;
 
 .head{
     color : ${props => props.theme.colors.seconderyText};
 }
 
 .cont{
+    top: 0px;
+
     min-width:100%;
     display: flex;
     flex-direction: row;
     align-items:center;
     flex-wrap: wrap;
     >img{
-        margin : 0px 5px;
+        /* margin : 0px 0px; */
         filter: grayscale(100%);
     }
 
@@ -141,30 +133,31 @@ align-items: flex-start;
 `
 
 const ToolTip = styled.span`
-                display: inline-block;
+        display: inline-block;
 				position: absolute;
-				background-color: #FFF; 
+				background-color: #ffffffb5; 
 				padding: 8px 12px;
 				border-radius: 3px;
 				/* margin-top: -26px; */
-				left: calc(100% + 11px);
-				opacity: 1;
+				bottom: calc(-40%);
+				opacity: 0.5;
 				visibility: hidden;
 				font-size: 10px;
-				letter-spacing: .5px;
+				letter-spacing: .9px;
+        transition: all .2s ease-in;
+        font-weight: 500;
 				/* border: 1px solid ${props => props.theme.colors.border}; */
-                z-index: 3;
+        z-index: 3;
 				&:before {
-                    z-index: 13;
-                    content: '';
-                    /* border: 1px solid ${props => props.theme.colors.border}; */
+          z-index: 13;
+          content: '';
 					display: block;
 					position: absolute;
-					left: -4px;
-					top: 10px;
+					left: 50%;
+          top: -5px;
 					transform: rotate(45deg);
 					width: 10px;
 					height: 10px;
-					background-color: inherit;
+          background-color: #c0bbbbce; 
 				}
 `;
