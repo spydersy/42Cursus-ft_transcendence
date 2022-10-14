@@ -22,12 +22,6 @@ export class ProfileService {
             newname: ForbiddenString,
         }
         console.log("__TEST__USER_NNAME__DTO__ : ", TestUserNameDTO);
-        if (query['friends']) {
-            console.log("AAAAA");
-            let profile = await this.userService.GetUserByLogin(req.user.username);
-        return res.send("__FRIENDS__");
-        return "test00";
-        }
         let profile = await this.userService.GetUserByLogin(req.user.username);
         console.log("WEWE11");
         profile['nbFriends'] = await this.userService.GetnbFriends(req.user.username, req.user.username);
@@ -118,7 +112,7 @@ export class ProfileService {
     async Logout(@Res() res) {
         return res.status(HttpStatus.OK)
                     .clearCookie('Authorization', {httpOnly: true})
-                    .redirect('http://localhost:3000/signin');
+                    .send({'message': 'done'});
     }
 
     async Update2FA(me: number, status: string, @Res() res) {

@@ -55,6 +55,7 @@ export class ProfileController {
 
   @Post('logout')
   async Logout(@Res() res) {
+    console.log("__LOGOUT__ENDPOINT__DBG__");
     return this.profileService.Logout(res);
   }
 
