@@ -18,8 +18,10 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 //  }
  @WebSocketGateway(3001, {
     cors: {
-      origin: '*',
+      origin: 'http://localhost:3000',
+      credentials: true,
     },
+    
  })   // @WebSocketGateway decorator gives us access to the socket.io functionality.
 
  /*We also implement three interfaces OnGatewayInit, OnGatewayConnection 
