@@ -78,7 +78,6 @@ function App() {
   }).catch((err)=>{
         console.log(err)
         navigate('/signin')
-        // history.pushState("/signin");
     })
      // eslint-disable-next-line
   }, [])

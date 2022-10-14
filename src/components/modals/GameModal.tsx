@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {useState , useEffect} from 'react'
 import { useSpringCarousel } from 'react-spring-carousel'
 import styled , {css} from "styled-components"
 import Marin from "../../assets/imgs/marinford.png";
@@ -14,8 +14,21 @@ interface GmaemodelProps {
   setmode : (mode: any)=>void
   mode : any
 }
+interface GameProps {
+  ballcolor : string,
+  paddlecolor : string,
+  mode : string
+}
+var defaultProp = {
+  ballcolor : "#000",
+  paddlecolor : "#000",
+  mode : "string"
+}
 export default function GameModal(props: GmaemodelProps) {
   const [selected, setselected] = useState(2)
+  const [gameData, setgameData] = useState<GameProps>(defaultProp)
+  const [ballColor, setballColor] = useState("#000")
+  const [paddleColoe, setpaddleColoe] = useState("#000")
   const navigate = useNavigate();
   
   interface GameModalProps {
@@ -46,12 +59,28 @@ export default function GameModal(props: GmaemodelProps) {
     banner :Fish 
   }]
   const changemode = ()=>{
-    var theme = {mode : props.mode, theme : {map : mockedItems[selected] , rounds : 5 }}
-    props.setmode(theme)
-    console.log(theme)
+    // var theme = {mode : props.mode, theme : {map : mockedItems[selected] , rounds : 5 }}
+    // props.setmode(theme)
+    // console.log(theme)
+    setgameData({...gameData, mode : props.mode })
+    localStorage.setItem("gameData", JSON.stringify(gameData))
     navigate("/game")
   }
 
+  useEffect(() => {
+    var s : string | null = localStorage.getItem('gameData');
+    if (s)
+    {
+      const data : GameProps =  JSON.parse(s || '{}');
+      setgameData(data)
+
+    }
+    else
+    {
+      setgameData(defaultProp)
+    }
+
+  }, [])
   
   return (
     <GameModalStyle>
@@ -61,22 +90,27 @@ export default function GameModal(props: GmaemodelProps) {
         </Title>
         <Title>
           <div>Ball :</div>
-          <input type="color" />
+          <input onChange={(e: any)=>{
+            setballColor(e.target.value)
+            setgameData({...gameData , ballcolor : e.target.value})
+          }} type="color" defaultValue={gameData.ballcolor} />
         </Title>
         <Title>
           <div>Paddel :</div>
-          <input type="color" />
+          <input onChange={(e: any)=>{
+            setgameData({...gameData , paddlecolor : e.target.value})
+
+
+          }} type="color" defaultValue={gameData.paddlecolor}/>
 
         </Title>
 
         <Table className=' miniGame'> 
              <svg>
-              <circle  id="ball"  cx="20" cy="300" r="12" />
+              <circle  id="ball"  cx="100" cy="10" r="8" fill={gameData.ballcolor} />
               <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC"  />
-    
-              <rect  rx="5" x="30" y="0" width="15" height="50" fill="#FFF" />
-              <rect  rx="5" y="0" width="15" height="50" fill="#FFF" />
-
+              <rect  rx="5" x="235" y="0" width="10" height="50" fill={gameData.paddlecolor} />
+              <rect  rx="5" x="5" y="10" width="10" height="50" fill={gameData.paddlecolor} />
             </svg>
         </Table>
          <PlayButton onClick={changemode}>
@@ -87,10 +121,9 @@ export default function GameModal(props: GmaemodelProps) {
 }
 
 const Table = styled.div`
-cursor: none;
 
 background-size: contain;
-width: 300px;
+width: 250px;
 height: 150px;
 position: relative;
 
@@ -103,13 +136,6 @@ position: relative;
     stroke: ${props => props.theme.colors.purple};
 
     height: 100%;
-    >circle{
-      fill: ${props => props.theme.colors.purple};
-    }
-    >rect{
-      fill: ${props => props.theme.colors.bg};
-      stroke: ${props => props.theme.colors.purple};
-    }
     >line{
       stroke: ${props => props.theme.colors.purple};
     }
@@ -127,7 +153,7 @@ const GameModalStyle = styled.div`
     align-items: flex-start;
     flex-direction: column;
     .miniGame{
-      margin: 0 auto;
+      margin: 15px auto;
     }
 `;
 const Title = styled.div`
@@ -163,7 +189,8 @@ width: 100%;
     }
 
     input[type=color]{
-	width: 200px;
+	/* width: 200px; */
+  flex:  1;
 	height: 40px;
 	border: none;
 	border-radius: 50px;

@@ -12,6 +12,12 @@ import { SocketContext } from '../context/Socket';
 import axios from 'axios';
 
 
+interface GameProps {
+  ballcolor : string,
+  paddlecolor : string,
+  mode : string
+}
+
 interface GameModalProps {
     
   title: string,
@@ -71,6 +77,7 @@ export default function Pong({themes , mode}:myProps ) {
   const [user, setUser] = useState<UserProp>({
     login : "ss",
     defaultAvatar : "sss"
+
   })
 
   const [Player2Data, setPlayer2Data] = useState<UserProp | null>(
@@ -229,7 +236,11 @@ export default function Pong({themes , mode}:myProps ) {
   }
 
 
-
+  var defaultProp = {
+    ballcolor : "#000",
+    paddlecolor : "#000",
+    mode : "classic"
+  }
   const  setBall =(x : number , y : number)=>{
     ballRef.current.setAttribute('cx', x);
     ballRef.current.setAttribute('cy', y);
@@ -258,17 +269,24 @@ export default function Pong({themes , mode}:myProps ) {
     setBall(tableRef.current.offsetWidth / 2 , tableRef.current.offsetHeight / 2)
   }
 
+  const [gameData, setgameData] = useState<GameProps>(defaultProp)
 
 
 useEffect(() => {
   var  data : UserProp ;
   var s : string | null = localStorage.getItem('user');
+  var gameData : string | null = localStorage.getItem('gameData');
   if (s)
   {
      data =  JSON.parse(s || '{}');
     setUser(data)
-    // console.log(data)
     gamesocket.emit("playerConnect" , data.login)
+  }
+  if (gameData)
+  {
+    const gamedatao : GameProps =  JSON.parse(gameData || '{}');
+    console.log(gameData)
+    setgameData(gamedatao)
 
   }
   const initData =()=>{
@@ -365,11 +383,11 @@ useEffect(() => {
     <Table bgimg={""} ref={tableRef} >
 
       <svg>
-          <circle ref={ballRef} id="ball"  cx="20" cy="300" r="12" />
+          <circle ref={ballRef} id="ball"  cx="20" cy="300" r="12" fill={gameData.ballcolor} />
           <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC"  />
           {/* <line ref={lineRef} x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC" /> */}
-          <rect ref={playerRef} rx="10" x="30" y="0" width="20" height="150" fill="#FFF" />
-          <rect ref={player2Ref} rx="10 " y="0" width="20" height="150" fill="#FFF" />
+          <rect ref={playerRef} rx="10" x="30" y="0" width="20" height="150" fill={gameData.paddlecolor} />
+          <rect ref={player2Ref} rx="10 " y="0" width="20" height="150" fill={gameData.paddlecolor} />
 
         </svg>
     </Table> 
@@ -477,13 +495,13 @@ background-color: ${props => props.theme.colors.bg};
     inset: 0 0 0 0;
     width: 100%;
     height: 100%;
-    >circle{
+    /* >circle{
       fill: ${props => props.theme.colors.purple};
     }
     >rect{
       fill: ${props => props.theme.colors.bg};
       stroke: ${props => props.theme.colors.purple};
-    }
+    } */
     >line{
       stroke: ${props => props.theme.colors.purple};
     }
