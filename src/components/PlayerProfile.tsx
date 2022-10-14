@@ -10,6 +10,7 @@ import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
 import {ReactComponent as CalendarIcon} from "../assets/imgs/calendar.svg";
 import {ReactComponent as RankIcon} from "../assets/imgs/rank.svg";
 import {ReactComponent as GameIcon} from "../assets/imgs/game-icon.svg";
+import {ReactComponent as BlockIcon} from "../assets/imgs/ban.svg";
 import { Button } from '../Pages/SignIn';
 import axios from 'axios';
 import Achivments  from './Achivments';
@@ -37,7 +38,7 @@ export function PlayerCard(props: PlayerCardProps) {
   let color = ("");
   const [loading, setLoading] = useState(true);
 
-  let status = "";
+  let status = "";  
   
   
   if (props.player.status === "InGame")
@@ -68,11 +69,7 @@ export function PlayerCard(props: PlayerCardProps) {
     username = name[1] + " " +  name[2];
   if (username === "Elmahdi Elaazmi" ) 
     username = "Alchemist"
-
-    
-
-  
-  
+   
     return (
       <PlayerCardStyle  status={color} >
       
@@ -219,7 +216,7 @@ interface UserProp {
 
 export function Stats(props: PlayerCardProps) {
   
-    const [relationStatus, setrelationStatus] = useState<string >("NOTHING");
+    const [relationStatus, setrelationStatus] = useState<string >("");
     const id = window.location.pathname.split("/")[2];
     const [createdTime, setcreatedTime] = useState<string | undefined>("")
     const Grades = ["Unranked","Shinobi","ShiboKay","Hokage","Yonko","3ANKOUB","XX","XXXX","XXXXX","XXXXX"]
@@ -241,6 +238,19 @@ export function Stats(props: PlayerCardProps) {
           // history.pushState("/signin");
         })
     }
+
+    const UnfriendUser = ()=>{
+    
+    }
+
+    const InviteToPlay = ()=>{
+    
+    }
+
+    const BlockUser = ()=>{
+
+    }
+
     console.log( "Player Data > ", props.player, "\n")
 
     useEffect(() => {
@@ -310,14 +320,13 @@ export function Stats(props: PlayerCardProps) {
                       // Friends relation
                       relationStatus === "FRIENDS" ? 
                         <>
-                          <Button  type='secondary' onClick={addFriend} icon={<UserAddIcon/>} text='Block'/>
-                          
-                          <a href="/chat/id">
-                            <Button onClick={addFriend} icon={<UserAddIcon/>} text='send message'/>
-                          </a>
+                          <Button  type='secondary' onClick={UnfriendUser} icon={<UserAddIcon/>} text='Unfriend'/>
 
-                          <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
-                          {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Block'/> */}
+                          <a href="/chat/id">  <Button  icon={<UserAddIcon/>} text='Send Message'/> </a>
+
+                          <Button icon={<UserAddIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
+
+                          <Button  type='secondary' onClick={BlockUser} icon={<BlockIcon/>} text='Block'/>
                         </>
                       : 
                       // Pending request relation
@@ -326,7 +335,7 @@ export function Stats(props: PlayerCardProps) {
                       :
                       // Blocked relation
                       relationStatus === "BLOCKED" ? 
-                      <Button icon={<UserAddIcon/>}   type='secondary' text='UnBlock'/>
+                        <Button icon={<BlockIcon/>}   type='secondary' text='UnBlock'/>
                       : 
                       relationStatus === "NOTHING" ? 
                       // None relation
@@ -390,8 +399,10 @@ border-radius: 0px 10px 0px 0px;
 const Buttons = styled.div`
 display: flex;
 flex-direction: row;
-gap: 15px;
+gap: 10px;
 margin: 15px 0px;
+flex-wrap: wrap;
+
 /* background-color: red; */
 `
 
