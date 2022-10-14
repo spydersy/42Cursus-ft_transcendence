@@ -82,7 +82,6 @@ export default function ChatBottom(props: ChatProps) {
       window.addEventListener('keydown', (e : any)=>{
         if (e.code === "Enter")
           addMessage()
-        
       });
   })
     return (
