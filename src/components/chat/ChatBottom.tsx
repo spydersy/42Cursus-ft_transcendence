@@ -7,17 +7,6 @@ import { SocketContext } from '../../context/Socket';
 import styled  from "styled-components"
 import axios from 'axios';
 
-// interface chatType {
-//     id: string,
-//     msg: string,
-  
-// }
-// interface convType {
-//   name : string,
-//   avatar : string,
-//   messages : chatType[]
-// }
-
 interface usersType {
   id : string ,
   defaultAvatar: string,
@@ -27,7 +16,6 @@ interface usersType {
   restrictionTime: string,
   duration: number,
 }
-
 interface convType {
   nbMessages: number,
   lastUpdate: string,
@@ -44,7 +32,6 @@ interface ChatProps {
   currentConv : number,
   setcurrentConv : (e : number)=>void,
   msgs : any,
-  // socket : Socket,
 }
 
 export default function ChatBottom(props: ChatProps) {
@@ -57,12 +44,9 @@ export default function ChatBottom(props: ChatProps) {
       console.log( props.list[props.currentConv])
       if (s )
       {
-
         data  =  JSON.parse(s || '{}');
-
         if (inputRef.current?.value && inputRef.current?.value != "")
         {
-          
           mesg =  inputRef.current.value;
           inputRef.current.value = "";
           var msgtmp = {
@@ -71,18 +55,16 @@ export default function ChatBottom(props: ChatProps) {
             channelId:  props.list[props.currentConv]?.channelId
           }
           //validation layer (restrictions)
-          socket.emit('chatToServer', msgtmp , );
+          
+          socket.emit('chatToServer', msgtmp);
         }
-
       }
-
     }
-
     useEffect(() => {
       window.addEventListener('keydown', (e : any)=>{
         if (e.code === "Enter")
           addMessage()
-        
+
       });
   })
     return (
@@ -96,7 +78,6 @@ export default function ChatBottom(props: ChatProps) {
       </BottomChatStyle>
     )
   }
-  
     const BottomChatStyle = styled.div`
       margin: 0 auto;
        width: 95%;
