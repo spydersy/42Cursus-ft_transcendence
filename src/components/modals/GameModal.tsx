@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {useState , useEffect} from 'react'
 import { useSpringCarousel } from 'react-spring-carousel'
 import styled , {css} from "styled-components"
 import Marin from "../../assets/imgs/marinford.png";
@@ -14,8 +14,21 @@ interface GmaemodelProps {
   setmode : (mode: any)=>void
   mode : any
 }
+interface GameProps {
+  ballcolor : string,
+  paddlecolor : string,
+  mode : string
+}
+var defaultProp = {
+  ballcolor : "#000",
+  paddlecolor : "#000",
+  mode : "string"
+}
 export default function GameModal(props: GmaemodelProps) {
   const [selected, setselected] = useState(2)
+  const [gameData, setgameData] = useState<GameProps>(defaultProp)
+  const [ballColor, setballColor] = useState("#000")
+  const [paddleColoe, setpaddleColoe] = useState("#000")
   const navigate = useNavigate();
   
   interface GameModalProps {
@@ -46,31 +59,28 @@ export default function GameModal(props: GmaemodelProps) {
     banner :Fish 
   }]
   const changemode = ()=>{
-    var theme = {mode : props.mode, theme : {map : mockedItems[selected] , rounds : 5 }}
-    props.setmode(theme)
-    console.log(theme)
+    // var theme = {mode : props.mode, theme : {map : mockedItems[selected] , rounds : 5 }}
+    // props.setmode(theme)
+    // console.log(theme)
+    setgameData({...gameData, mode : props.mode })
+    localStorage.setItem("gameData", JSON.stringify(gameData))
     navigate("/game")
   }
-    const { carouselFragment } = useSpringCarousel({
 
-        // width : "350px",
-        itemsPerSlide: 3,
-        withLoop: true,
+  useEffect(() => {
+    var s : string | null = localStorage.getItem('gameData');
+    if (s)
+    {
+      const data : GameProps =  JSON.parse(s || '{}');
+      setgameData(data)
 
-        items: mockedItems.map((i : GameModalProps, id:number) => ({
-          id: id,
-          renderItem: (
-            <CaoussalItem onClick={()=>{
-              setselected(id)
-                document.getElementById("span")?.classList.toggle("anime")
+    }
+    else
+    {
+      setgameData(defaultProp)
+    }
 
-              }} selected={id  === selected ? true : false} >
-            <img src={i.banner} alt="mapimage" />
-              {/* {i.title} */}
-            </CaoussalItem>
-          ),
-        })),
-      });
+  }, [])
   
   return (
     <GameModalStyle>
@@ -80,25 +90,30 @@ export default function GameModal(props: GmaemodelProps) {
         </Title>
         <Title>
           <div>Ball :</div>
-          <input type="color" />
+          <input onChange={(e: any)=>{
+            setballColor(e.target.value)
+            setgameData({...gameData , ballcolor : e.target.value})
+          }} type="color" defaultValue={gameData.ballcolor} />
         </Title>
         <Title>
           <div>Paddel :</div>
-          <input type="color" />
+          <input onChange={(e: any)=>{
+            setgameData({...gameData , paddlecolor : e.target.value})
+
+
+          }} type="color" defaultValue={gameData.paddlecolor}/>
 
         </Title>
 
-        <div className=' miniGame'>
-            <svg>
-              <circle ref={""} id="ball"  cx="20" cy="300" r="12" />
+        <Table className=' miniGame'> 
+             <svg>
+              <circle  id="ball"  cx="100" cy="10" r="8" fill={gameData.ballcolor} />
               <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#CCC"  />
-    
-              <rect ref={"="} rx="10" x="30" y="0" width="20" height="150" fill="#FFF" />
-              <rect ref={""} rx="10 " y="0" width="20" height="150" fill="#FFF" />
-
+              <rect  rx="5" x="235" y="0" width="10" height="50" fill={gameData.paddlecolor} />
+              <rect  rx="5" x="5" y="10" width="10" height="50" fill={gameData.paddlecolor} />
             </svg>
-        </div>
-        <PlayButton onClick={changemode}>
+        </Table>
+         <PlayButton onClick={changemode}>
           Start
         </PlayButton>
       </GameModalStyle>
@@ -106,29 +121,21 @@ export default function GameModal(props: GmaemodelProps) {
 }
 
 const Table = styled.div`
-cursor: none;
 
 background-size: contain;
-/* background-repeat: no-repeat; */
-width: 300px;
-height: 200px;
+width: 250px;
+height: 150px;
 position: relative;
-background-color: ${props => props.theme.colors.bg};
 
     border: 1px solid ${props => props.theme.colors.purple};
   > svg{
     position:absolute;
-    /* background:  ${props => props.theme.colors.bg}; */
+
     inset: 0 0 0 0;
     width: 100%;
+    stroke: ${props => props.theme.colors.purple};
+
     height: 100%;
-    >circle{
-      fill: ${props => props.theme.colors.purple};
-    }
-    >rect{
-      fill: ${props => props.theme.colors.bg};
-      stroke: ${props => props.theme.colors.purple};
-    }
     >line{
       stroke: ${props => props.theme.colors.purple};
     }
@@ -141,44 +148,13 @@ background-color: ${props => props.theme.colors.bg};
 
 
 
-interface CaroItemStyle {
-        
-  selected :boolean
-  
-  }
-const CaoussalItem = styled.div<CaroItemStyle>`
-    width: 150px;
-    height: 100px;
-    border-radius: 5px;
-    /* background-color: black; */
-    background-color: transparent;
-    position: relative;
-    overflow: hidden;
-    >img{
-      position: absolute;
-      z-index: -1;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    cursor: pointer;
-    ${props => (props.selected === true) && css`
-    /* box-shadow: 0px 1px 1px 1px ${props => props.theme.colors.primaryText}; */
-    border: 3px solid ${props => props.theme.colors.primaryText};
-    /* transform: scale(1.1); */
-    `}
-`;
-
-const CaroussalContainer = styled.div`
-    width: 100%;
-    margin: 0 auto;
-    overflow: hidden;
-`;
-
 const GameModalStyle = styled.div`
     display: flex;
     align-items: flex-start;
     flex-direction: column;
+    .miniGame{
+      margin: 15px auto;
+    }
 `;
 const Title = styled.div`
 width: 100%;
@@ -213,7 +189,8 @@ width: 100%;
     }
 
     input[type=color]{
-	width: 200px;
+	/* width: 200px; */
+  flex:  1;
 	height: 40px;
 	border: none;
 	border-radius: 50px;

@@ -55,7 +55,7 @@ export default function ChatBottom(props: ChatProps) {
             channelId:  props.list[props.currentConv]?.channelId
           }
           //validation layer (restrictions)
-          
+
           socket.emit('chatToServer', msgtmp);
         }
       }
@@ -64,7 +64,6 @@ export default function ChatBottom(props: ChatProps) {
       window.addEventListener('keydown', (e : any)=>{
         if (e.code === "Enter")
           addMessage()
-
       });
   })
     return (
