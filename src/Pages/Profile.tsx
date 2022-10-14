@@ -11,6 +11,7 @@ import avataro from "../assets/imgs/avatar/avatar2.png";
 //-----------------------//
 interface UserProp {
   defaultAvatar: string,
+  status: string,
   login : string
   displayName : string
   relation : string
@@ -21,14 +22,13 @@ interface UserProp {
   Achievements: boolean[]
 }
 
-
-
 //// Default function Profile
 export default function Profile() {
   const id = window.location.pathname.split("/")[2];
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
     defaultAvatar: avataro,
+    status: "Offline",
     login : "DefaultUserLogin",
     displayName : 'Default DisplayName',
     relation : "",

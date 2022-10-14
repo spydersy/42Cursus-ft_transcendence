@@ -1,4 +1,4 @@
-// import Tooltip from '@mui/material/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 import React from 'react'
 import styled , {css} from "styled-components";
 import Badge1 from "../assets/imgs/Archive/badge1.svg";
@@ -68,6 +68,16 @@ const ContyStyle = styled.div<AchiveStyleProps>`
   align-items:center;
   /* border: 1px solid #af1998; */
   /* border-style: inset; */
+  position: relative;
+
+  &:hover{
+        > span{
+            visibility: visible;
+					opacity: 1;
+        }
+
+
+    }
   >img{
     margin : 2px 8px;
     padding: 0px;
@@ -91,6 +101,7 @@ export default function Achivments(props: AchivementsProps) {
                return (
                  <ContyStyle status={props.data[id]} >
                     {/* <Tooltip title={data.name} arrow> */}
+                    <ToolTip>asdas</ToolTip>
                       <img key={id} src={data.badge} alt={data.name} />
                     {/* </Tooltip>  */}
                   </ContyStyle>
@@ -125,5 +136,35 @@ align-items: flex-start;
         margin : 0px 5px;
         filter: grayscale(100%);
     }
+
 }
 `
+
+const ToolTip = styled.span`
+                display: inline-block;
+				position: absolute;
+				background-color: #FFF; 
+				padding: 8px 12px;
+				border-radius: 3px;
+				/* margin-top: -26px; */
+				left: calc(100% + 11px);
+				opacity: 1;
+				visibility: hidden;
+				font-size: 10px;
+				letter-spacing: .5px;
+				/* border: 1px solid ${props => props.theme.colors.border}; */
+                z-index: 3;
+				&:before {
+                    z-index: 13;
+                    content: '';
+                    /* border: 1px solid ${props => props.theme.colors.border}; */
+					display: block;
+					position: absolute;
+					left: -4px;
+					top: 10px;
+					transform: rotate(45deg);
+					width: 10px;
+					height: 10px;
+					background-color: inherit;
+				}
+`;

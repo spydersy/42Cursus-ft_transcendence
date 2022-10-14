@@ -28,7 +28,7 @@ import Setting from './Pages/Setting';
 import Leader from './Pages/Leader';
 import Room from './Pages/Room';
 import SocketTesting from './components/testing/SocketTesting';
-
+import Background from './components/Background';
 
 import Particles from "react-particles";
 import type { Container, Engine } from "tsparticles-engine";
@@ -88,95 +88,7 @@ function App() {
        
 
        <ThemeProvider theme={theme}>
-      <div className='bg_img' style={{position: "absolute",width: "100%", height: "100%", zIndex: -1, top: 0,   left: 0  }}>
-                        <Particles
-                                id="tsparticles"
-                                init={particlesInit}
-                                loaded={particlesLoaded}
-                                options={{
-                                background: {
-                                    color: {
-                                    value: "#100f110",
-                                    },
-                                    opacity: 0.1,
-                                },
-                                fpsLimit: 150,
-                                interactivity: {
-                                    events: {
-                                    onClick: {
-                                        enable: true,
-                                        mode: "push",
-                                    },
-                                    onHover: {
-                                        enable: true,
-                                        mode: "repulse",
-                                    },
-                                    resize: true,
-                                    },
-                                    modes: {
-                                    push: {
-                                        quantity: 4,
-                                    },
-                                    repulse: {
-                                        distance: 200,
-                                        duration: 0.5,
-                                    },
-                                    },
-                                },
-                                particles: {
-                                    color: {
-                                    value: "#296390",
-                                    },
-                                    links: {
-                                    color: "#194b64",
-                                    distance: 180,
-                                    enable: true,
-                                    opacity: 0.2,
-                                    width: 1.5,
-                                    },
-                                    collisions: {
-                                    enable: true,
-                                    },
-                                    move: {
-                                    direction: "none",
-                                    enable: true,
-                                    outModes: {
-                                        default: "bounce",
-                                    },
-                                    random: true,
-                                    speed: 2,
-                                    straight: true,
-                                    },
-                                    number: {
-                                    density: {
-                                        enable: true,
-                                        area: 1000,
-                                    },
-                                    value: 90,
-                                    },
-                                    opacity: {
-                                    value: 0.5,
-                                    },
-                                    shape: {
-                                    type: "polygon",
-                                    },
-                                    size: {
-                                    value: { min: 1, max: 5 },
-                                    },
-                                },
-                                detectRetina: true,
-                                }}
-                                // style={{
-                                //   position: "absolute",
-                                //   width: "100%",
-                                //    height: "100%",
-                                //     zIndex: 5,
-                                //     top: 0,
-                                //     left: 0 
-                                // }}
-                                // className="particles"
-                            />
-      </div>
+        <Background/>
         <Main>
           <ProtectedLayout body={<Upperbar />} />
           <ProtectedLayout body={ <Sidebar/>} />

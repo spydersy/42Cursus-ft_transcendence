@@ -20,6 +20,7 @@ import CircleLoader from "react-spinners/CircleLoader";
 //// PlayerCard Comp
 interface UserProp {
   defaultAvatar: string,
+  status: string,
   login : string
   displayName : string
   relation : string
@@ -33,18 +34,44 @@ export interface PlayerCardProps { isCurrentUser : boolean,  player: UserProp }
 
 export function PlayerCard(props: PlayerCardProps) {
 
-  let color = ("#d21f2e");
+  let color = ("");
   const [loading, setLoading] = useState(true);
+
+  let status = "";
+  
+  
+  if (props.player.status === "InGame")
+  {
+    color = ("#1e30a1");
+    status = "InGame";
+  }
+  else if (props.player.status === "Online")
+  {
+    color = ("#2b8852");
+    status = "Online";
+  }
+  else if (props.player.status === "Offline")
+  {
+    color = ("#af1c1c");
+    status = "Offline";
+  }
+  else
+  {
+    // setLoading(false);
+    status = "Mghayer";
+  }
 
 
   let username = props.player.displayName;
   let name = username.split(" ");
-
   if (name.length > 2)
     username = name[1] + " " +  name[2];
-
   if (username === "Elmahdi Elaazmi" ) 
     username = "Alchemist"
+
+    
+
+  
   
     return (
       <PlayerCardStyle  status={color} >
@@ -54,7 +81,8 @@ export function PlayerCard(props: PlayerCardProps) {
               {/* <>Status: </> */}
               <div className="status" >       
                 {/* <HashLoader   color={color} loading={loading} cssOverride={override} size={22} /> */}
-                <CircleLoader   color={color} loading={loading} cssOverride={override} size={30} />
+                <CircleLoader   color={color} loading={loading} cssOverride={override} size={20} />
+                <div className='status-text' >{status}</div>
                 {/* ONLINE */}
               </div>
 
@@ -114,15 +142,29 @@ background-color: ${props => props.theme.colors.seconderybg};
 
     .status {
 
-      width: 30px;
-      height: 30px;
+      width: 25px;
+      height: 25px;
       border-radius: 50%;
       left: 0px;
       top: 0px;
       border: ${props=> props.status} 5px solid;
       /* border: 3px solid ; */
-      transform: translate(5%, 5%);
+      transform: translate(15%, 15%);
       background-color: #f9f9f984;
+
+      .status-text {
+        font-family: 'Poppins', sans-serif;
+        font-size: 20px;
+        font-weight: 300;
+        color: ${props => props.status};
+        top: 0px;
+        left: 35px;
+        /* transform: translate(0%, 10%); */
+        /* left: 10px; */
+        position: absolute;
+        /* left: 50%; */
+        /* top: 0px; */
+      }
 
     } 
     .Iavatar{ margin: 40px auto;  }
@@ -164,6 +206,7 @@ background-color: ${props => props.theme.colors.seconderybg};
 
 interface UserProp {
   defaultAvatar: string,
+  status : string
   login : string
   displayName : string
   relation : string
@@ -176,12 +219,14 @@ interface UserProp {
 
 export function Stats(props: PlayerCardProps) {
   
-    const [relationStatus, setrelationStatus] = useState<string>("BLOCKED");
+    const [relationStatus, setrelationStatus] = useState<string >("NOTHING");
     const id = window.location.pathname.split("/")[2];
-    const [createdTime, setcreatedTime] = useState<string | undefined>("Mon 12 Oct 1963 12:00:00 ")
+    const [createdTime, setcreatedTime] = useState<string | undefined>("")
     const Grades = ["Unranked","Shinobi","ShiboKay","Hokage","Yonko","3ANKOUB","XX","XXXX","XXXXX","XXXXX"]
     const [grade, setgrade] = useState<string | undefined>(Grades[5])
     const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
+
+    // setrelationStatus(props.player.relation)
 
     const addFriend = ()=>{
         //http://localhost:8000/users/relation/:id?evet=add
@@ -196,15 +241,20 @@ export function Stats(props: PlayerCardProps) {
           // history.pushState("/signin");
         })
     }
+    console.log( "Player Data > ", props.player, "\n")
+
     useEffect(() => {
         
-        setrelationStatus(props.player.relation)
+        // setrelationStatus(props.player?.relation)
         console.log( "- 1Relation <" , props.player.relation, "> \n")
         console.log( "- 2Relation <" , relationStatus, "> \n")
         
         // get user data  from server
         axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}).then((res)=>{
           // set grade
+          
+          setrelationStatus(res.data.relation)
+
 
           //Rank
           if (res.data.level)
@@ -260,14 +310,14 @@ export function Stats(props: PlayerCardProps) {
                       // Friends relation
                       relationStatus === "FRIENDS" ? 
                         <>
-                          <Button  type='secondary' onClick={addFriend} icon={<UserAddIcon/>} text='Friend'/>
+                          <Button  type='secondary' onClick={addFriend} icon={<UserAddIcon/>} text='Block'/>
                           
                           <a href="/chat/id">
                             <Button onClick={addFriend} icon={<UserAddIcon/>} text='send message'/>
                           </a>
 
                           <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/>
-                          <Button icon={<UserAddIcon/>}   type='secondary' text='Block'/>
+                          {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Block'/> */}
                         </>
                       : 
                       // Pending request relation
@@ -277,11 +327,15 @@ export function Stats(props: PlayerCardProps) {
                       // Blocked relation
                       relationStatus === "BLOCKED" ? 
                       <Button icon={<UserAddIcon/>}   type='secondary' text='UnBlock'/>
-                      :
+                      : 
+                      relationStatus === "NOTHING" ? 
                       // None relation
                         <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
+                      :
+                        null
                     }
                     {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/> */}
+
                   </Buttons>
                 }
 
@@ -411,20 +465,22 @@ else if (props.data.status === "ONGAME")
   // setLoading(true);
 
   return (
-    <UserCardStyle status={color}>
-      
-      <div className="status" >       
-        {/* <HashLoader   color={color} loading={loading} cssOverride={override} size={22} /> */}
-        <CircleLoader   color={color} loading={loading} cssOverride={override} size={20} />
-      </div>
+    <UserCardStyle status={color} >
+       
+      <a href={"/profile/" + props.data.login}>
+       
+          <div className="status" >       
+            {/* <HashLoader   color={color} loading={loading} cssOverride={override} size={22} /> */}
+            <CircleLoader   color={color} loading={loading} cssOverride={override} size={20} />
+          </div>
 
-      <DotsIcon className='dots'>
-          <div className='List'> <div className='element' >  Unfriend </div>  </div>
-        </DotsIcon>
-      <img alt="avatar" src={props.data.defaultAvatar} className="avatar" />
-      
-      <div className="Uname"> @{props.data.login} </div>
-
+            {/* <DotsIcon className='dots'>
+              <div className='List'> <div className='element' >  Unfriend </div>  </div>
+            </DotsIcon> */}
+          <img alt="avatar" src={props.data.defaultAvatar} className="avatar" />
+          
+          <div className="Uname"> @{props.data.login} </div>
+      </a>  
     </UserCardStyle>
   )
 }
