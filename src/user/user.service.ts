@@ -110,7 +110,7 @@ export class UserService {
         catch {
             return res.status(HttpStatus.FORBIDDEN).send({'message' : 'Forbidden : User Blocked you'}); // DO SOMETHING
         }
-        UserDto['relation'] = null;
+        UserDto['relation'] = 'NOTHING';
         if (await this.IsBlockedUser(UserDto.id, MeDto.id) === true) {
             UserDto['relation'] = 'BLOCKED';
             return res.status(HttpStatus.OK).send(UserDto);
@@ -118,7 +118,6 @@ export class UserService {
         let FriendsStat = await this.FriendsRelationExist(MeDto.id, UserDto.id);
         if (FriendsStat !== null)
             UserDto['relation'] = FriendsStat['status'];
-        console.log("WEWE22");
         UserDto['nbFriends'] = await this.GetnbFriends(Me, Me);
         console.log("__USER__DTO__DBG__ : ", UserDto);
         return res.status(HttpStatus.OK).send(UserDto);

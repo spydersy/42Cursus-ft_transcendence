@@ -29,7 +29,7 @@ export class UserController {
 
     @Get('achievements/:id')
     async GetAchievements(@Req() req, @Res() res) {
-        return res.send([]);   //"this.userService.GetAchievements(req.user.username, req.params.id, res)";
+        return res.send([false, true, false, true, false, true, false, true]);
     }
 
     @Get('games/:id')
