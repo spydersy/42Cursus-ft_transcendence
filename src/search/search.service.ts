@@ -13,40 +13,38 @@ export class SearchService {
             where: {
                 AND: 
                 [
-                    {status: RELATION.FRIENDS},
-                    {senderId: userId},
-                    {
+                    { status: RELATION.FRIENDS},
+                    { senderId: userId},
+                    { 
                         receiver: {
-                            login: {
-                                startsWith: input,
-                            }
+                            OR: [
+                                { login: {startsWith: input, mode: 'insensitive'}},
+                                { displayName: {startsWith: input, mode: 'insensitive'}}
+                            ],
                         }
                     }
                 ],                
             },
-            include: {
-                receiver: true
-            }
+            include: { receiver: true}
         });
 
         let FriendsRowB = await this.prisma.friends.findMany({
             where: {
                 AND:
                 [
-                    {status: RELATION.FRIENDS},
-                    {receiverId: userId},
+                    { status: RELATION.FRIENDS},
+                    { receiverId: userId},
                     {
                         sender: {
-                            login: {
-                                startsWith: input,
-                            }
+                            OR: [
+                                {login: {startsWith: input, mode: 'insensitive'}},
+                                {displayName: {startsWith: input, mode: 'insensitive'}}
+                            ]
                         }
                     }
                 ],
             },
-            include: {
-                sender: true
-            }
+            include: { sender: true}
         });
         let AllFriends = [];
         console.log("__AA__ : ", FriendsRowA);
@@ -59,9 +57,10 @@ export class SearchService {
     async AllUsersSearch(input: string, @Res() res) {
         let MatchedUsers = await this.prisma.users.findMany({
             where: {
-                login: {
-                    startsWith: input,
-                }
+                OR: [
+                    {login: {startsWith: input, mode: 'insensitive'}},
+                    {displayName: {startsWith: input, mode: 'insensitive'}},
+                ],
             },
         });
         return res.status(HttpStatus.OK).send(MatchedUsers);
