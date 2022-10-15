@@ -1,4 +1,4 @@
-import  React, { useEffect  , useState , useCallback }  from 'react';
+import  React, { useEffect  , useState  }  from 'react';
 import styled from "styled-components"
 import {theme} from './theme'
 import { ThemeProvider } from 'styled-components';
@@ -30,9 +30,7 @@ import Room from './Pages/Room';
 import SocketTesting from './components/testing/SocketTesting';
 import Background from './components/Background';
 
-import Particles from "react-particles";
-import type { Container, Engine } from "tsparticles-engine";
-import { loadFull } from "tsparticles";
+
 
 const mockedItems : any = [{
   title: "MarinFord",
@@ -58,14 +56,6 @@ const mockedItems : any = [{
 function App() {
   const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
   
-  const particlesInit = useCallback(async (engine: Engine) => { 
-    // console.log(engine);   
-    await loadFull(engine);
-   }, []);
-
-   const particlesLoaded = useCallback(async (container: Container | undefined) => {
-      // console.log(container);
-    }, []);
 
 
   const navigate = useNavigate();
@@ -77,9 +67,8 @@ function App() {
     localStorage.setItem("user", JSON.stringify(res.data))
   }).catch((err)=>{
         console.log(err)
-        // navigate('/signin')
+        navigate('/signin')
     })
-     // eslint-disable-next-line
   }, [])
   
   return (
