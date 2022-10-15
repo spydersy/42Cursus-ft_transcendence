@@ -54,41 +54,47 @@ export default function Chat() {
     const [state, setstae] = useState(x)
     const [currentConv, setcurrentConv] = useState(parseInt(pageName))
      useEffect(() => {
-      const fetchData = async () => {
-            await axios.get("http://localhost:8000/chat/myChannels", 
-          {withCredentials: true} 
-        ).then((res)=>{
-          setlist(res.data);
+       const fetchData = async () => {
+         await axios.get("http://localhost:8000/chat/myChannels", 
+         {withCredentials: true} 
+         ).then((res)=>{
+           setlist(res.data);
+          //  console.log('> mychannells = '  , res.data, "} \n")
 
-          axios.get("http://localhost:8000/chat/messages/" + res.data[currentConv]?.channelId, 
-          {withCredentials: true} 
-        ).then((res)=>{
-          console.log(res.data)
-          setmsgs(res.data)
-        }).catch((err)=>{
-          console.log(err)
-          })
-        }).catch((err)=>{
+           
+           axios.get("http://localhost:8000/chat/messages/" + res.data[currentConv]?.channelId, 
+           {withCredentials: true} 
+           ).then((res)=>{
+             console.log('mychannells = '  , res.data, "} \n")
+             setmsgs(res.data)
+            }).catch((err)=>{
               console.log(err)
+            })
+          }).catch((err)=>{
+            console.log(err)
           })
-      }
-      fetchData()
-
-      ///
-
-
-      window.addEventListener("resize" , (e)=>{
-        if (window.innerWidth  < 900 )
-           setstae(1);
-        else
+        }
+        fetchData()
+        window.addEventListener("resize" , (e)=>{
+          if (window.innerWidth  < 900 )
+          setstae(1);
+          else
           setstae(-1)
-      }
-      )
+        }
+        )
+        var s : string | null = localStorage.getItem('user');
+        var data: usersType ;
+        if (s )
+        {
+          data  =  JSON.parse(s || '{}');
+          socket.emit('concon', data.id)
+        }
     },[currentConv])
     useEffect(() => {
       const recievedMessgae  = async () => {
         if (list[currentConv]?.channelId  != undefined)
         {
+          console.log('chi haja');
           console.log(list[currentConv]?.channelId)
           await axios.get("http://localhost:8000/chat/messages/" + list[currentConv]?.channelId, 
            {withCredentials: true} 
@@ -101,15 +107,10 @@ export default function Chat() {
         }
         
     }
-
     socket.on('chatToClient', (payload) => {
-
       recievedMessgae();
   });
-
-     
     }, [  list])
-    
     return (
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
           

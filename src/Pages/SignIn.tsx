@@ -23,7 +23,7 @@ export default function SignIn() {
                Login with intra
             </LoginButton> */}
             <a href={url}>
-            <Button  icon={<FtImg/>} text="Sign in with intra"/>
+            <Button cursor="default"  icon={<FtImg/>} text="Sign in with intra"/>
 
             </a>
             <a id="TermsCond" href="#termscondPage">Terms & conditions</a>
@@ -115,17 +115,19 @@ interface ButtonProps {
    text? : string
    icon? : React.ReactElement,
    onClick? : (e?: any)=> void;
-   size ? : "small" | "big"; 
+   size ? : "small" | "big";
+   cursor: string
 
 }
 interface ButtonStyleProps {
    isIcon? : boolean | undefined,
    typeS? : string ,
    size ? : "small" | "big"; 
+   cursor: string
 }
 export  function Button(props :ButtonProps ) {
   return (
-    <LoginButtonStyle size={props.size} isIcon={props.isIcon} onClick={props.onClick} typeS={props.type}>
+    <LoginButtonStyle cursor={props.cursor} size={props.size} isIcon={props.isIcon} onClick={props.onClick} typeS={props.type}>
       {props?.icon}
       {props.text}
     </LoginButtonStyle>
@@ -138,8 +140,9 @@ const LoginButtonStyle = styled.button<ButtonStyleProps>`
    min-width: 100px;
    background: ${props => props.theme.colors.purple};;
    border-radius: 5px;
-height: auto;
-   cursor: pointer;
+   height: auto;
+   cursor: ${props => (props.cursor)};;
+
    border: none;
    display: flex;
    align-items: center;

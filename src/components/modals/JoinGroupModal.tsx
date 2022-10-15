@@ -17,8 +17,8 @@ export default function JoinGroupModal(props :RoomProps ) {
             <InputComponent type='password' placeholder='Enter Password' />
         }
         <div>
-        <Button text='Join' />
-        <Button type='secondary' text='Cancel' />
+        <Button cursor="default" text='Join' />
+        <Button cursor="default" type='secondary' text='Cancel' />
 
         </div>
     </RoomStyle>

@@ -159,7 +159,7 @@ export default function CreateGroup(props :{closeModal : ()=>void}) {
             }
         </MembersCont> 
         </Form>
-        <Button type='primary' text='Create' onClick={createGroup} />
+        <Button cursor="default" type='primary' text='Create' onClick={createGroup} />
     </CreateGroupStyle>
   )
 }

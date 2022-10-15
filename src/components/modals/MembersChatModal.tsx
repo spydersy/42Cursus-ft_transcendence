@@ -35,8 +35,8 @@ interface MemberProps{
           </div>
         </div>
         <div className='buttons'>
-          <Button isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
-        <Button  isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
+          <Button cursor="default" isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
+        <Button  cursor="default" isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
   
         </div>
       </MemberStyle>

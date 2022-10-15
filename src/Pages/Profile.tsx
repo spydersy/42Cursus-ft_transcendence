@@ -1,12 +1,12 @@
 import React, {useState , useEffect} from 'react'
 import styled from "styled-components"
 import Navlinks from '../components/Navlinks';
-import { PlayerCard , UserCard} from '../components/PlayerProfile';
-import { UserInvitCard } from "../components/PlayerProfile";
-import { UserBlockedCard } from "../components/PlayerProfile";
-import {ReactComponent as LuffyAce} from "../assets/imgs/luffyAce.svg";
+import { PlayerCard} from '../components/PlayerProfile';
 import axios from 'axios';
 import avataro from "../assets/imgs/avatar/avatar2.png";
+import { FriendsComponent, PendingRequests, BlockedUsers } from '../components/profile/PlayerTabs';
+import BlockIcon from "../assets/imgs/ban.svg";
+
 
 //-----------------------//
 interface UserProp {
@@ -39,6 +39,19 @@ export default function Profile() {
     Achievements: [false, false, false, false, false, false, false, false]
   })
 
+  const BlockedUser = {
+    defaultAvatar: BlockIcon,
+    status: "BLOCKED",
+    login : "NotFound",
+    displayName : "UserNotFound",
+    relation : "BLOCKED",
+    nbFriends : "000",
+    wins : 0,
+    losses : 0,
+    lastModification: "Mon 00 Oct 0000 00:00:00",
+    Achievements: [false, false, false, false, false, false, false, false]
+  }
+
   // const [connection, setconnection] = useState(true);
 
   useEffect(() => {
@@ -58,14 +71,42 @@ export default function Profile() {
         axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked 
+              console.log("> status = " , res.status)
               setUser(res.data)
-              // setconnection(true)
-            }).catch((err)=>{ })
-      }
-      console.log("> User Data < " , User, ">\n")
-    }
 
-  }, [id, User]);
+            }).catch((error)=>{ 
+              // if (err.status === 403)
+              //   setUser(BlockedUser)
+              // console.log("> status = " , err.status)
+              console.log("---- error ----")
+              if (error.response) 
+              {
+
+                if (error.response.data.message == ("Forbidden : User Blocked you"))
+                  setUser(BlockedUser)
+
+                console.log("m={",error.response.data.message, "}=", (error.response.data.message == ("Forbidden : User Blocked you")) );
+                console.log("m1={",error.response.status, "}");
+                console.log("m2={",error.response.headers, "}");
+              } 
+              // else if (error.request) {
+                
+              //   console.log("Reeeq", error.request);
+              // } 
+              // else {
+              //   console.log('Error', error.message);
+              // }
+              // console.log(error.config);
+              console.log("*---- error ----*")
+
+
+
+            })
+      }
+    }
+    console.log("> User Data < " , User, ">\n")
+
+  }, []);
 
   return (
         <div className='container' style={{  display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
@@ -82,6 +123,7 @@ export default function Profile() {
 const TheBox = styled.div` width: 100%;  border: 0px solid ${props => props.theme.colors.primarybg}; `;
 
 interface PlayerTabsProps { id : string }
+
 
 ///// PlayerTabs Section
 const linkslist = [ " FRIENDS" , "PENDING REQUESTS", "BLOCKED USERS"]
@@ -109,196 +151,4 @@ const PlayerAchieveStyle = styled.div`
   border: 1px solid ${props => props.theme.colors.primarybg};
   flex-direction: column;
   -webkit-text-stroke: 1px #6560679a;
-`;
-
-/// empty
-interface EmptyProps { text: string }
-
-export function EmptyComponent(props: EmptyProps)
-{
-  return (
-    <Empty >
-      <LuffyAce/>
-      {props.text}
-    </Empty>
-  )
-}
-
-const Empty = styled.div` 
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-  background-color:  ${props => props.theme.colors.bg};
-  color:  ${props => props.theme.colors.seconderyText};
-  font-weight: 600;
-  justify-content: center;
-  font-size: 30px;
-  font-family: "Poppins" , sans-serif;
-`;
-
-//#1  Tab Friends
-interface FriendsProps { id : string }
-
-export function FriendsComponent(props : FriendsProps)
-{
-  const [friends, setfriends] = useState(
-    [
-      {
-          status: "ONLINE",
-          defaultAvatar:avataro,
-          login: "DefaultUser1",
-      },
-      {
-        status: "OFFLINE",
-        defaultAvatar:avataro,
-        login: "DefaultUser2"
-      },
-      {
-        status: "ONGAME",
-        defaultAvatar:avataro,
-        login: "DefaultUser3"
-      }
-    ])
-  
-  useEffect(() => {
-      axios.get("http://localhost:8000/users/friends/" + props.id,   {withCredentials: true}  ).then((res)=>{
-        // console.log(res.data)
-        setfriends(res.data)
-      }).catch((err)=>{ })
-  }, [props.id])
-
-  return (
-    <TabfourStyle >
-      {
-        friends.length === 0 ? 
-        <EmptyComponent text="No Friends Yet !"/>
-        : 
-        friends.map((match : any, id : number )=>{
-            return<UserCard key={id} data={match}  />
-        })
-      }
-    </TabfourStyle>
-  )
-}
-
-//#2  Pending Requests
-
-export function PendingRequests()
-{
-  const [friends, setfriends] = useState(
-    [
-      {
-        status: "ONLINE",
-        defaultAvatar:avataro,
-        login: "DefaultUser1",
-      },
-      {
-        status: "OFFLINE",
-        defaultAvatar:avataro,
-        login: "DefaultUser2"
-      },
-      {
-        status: "ONGAME",
-        defaultAvatar:avataro,
-        login: "DefaultUser3"
-      }
-    ]
-    )
-  
-
-
-  useEffect(() => {
-    
-    axios.get("http://localhost:8000/profile/me?data=requests", 
-      {withCredentials: true} 
-    ).then((res)=>{
-      console.log(res)
-
-      setfriends(res.data)
-  
-    }).catch((err)=>{
-      })
-  }, [])
-  return (
-    <TabfourStyle>
-    {
-        friends.length === 0 ? 
-        <EmptyComponent text="No Pending Requests !"/>
-        : 
-        friends.map((invit : any, id : number )=>{
-            return<UserInvitCard key={id} data={invit} />
-        })
-    }
-       
-    </TabfourStyle>
-  )
-}
-
-//#3  My Black List
-export function BlockedUsers()
-{
-  // eslint-disable-next-line 
-  const [listBlocked, setlistBlocked] = useState(
-    [
-      {
-        status: "ONLINE",
-        defaultAvatar:avataro,
-        login: "DefaultUser1",
-      },
-      {
-        status: "OFFLINE",
-        defaultAvatar:avataro,
-        login: "DefaultUser2"
-      },
-      {
-        status: "ONGAME",
-        defaultAvatar:avataro,
-        login: "DefaultUser3"
-      }
-    ]
-    )
- 
-  return (
-    <TabfourStyle> 
-        {
-           listBlocked.length === 0 ? 
-           <EmptyComponent text="Peaceful User !"/>
-           : 
-          listBlocked.map((invit : any, id : number )=>{
-              return<UserBlockedCard key={id} data={invit} />
-          })
-        }  
-    </TabfourStyle>
-  )
-}
-
-const TabfourStyle= styled.div`
-  background-color:  ${props => props.theme.colors.bg};
-  color:  ${props => props.theme.colors.seconderyText};
-  width: 100%;
-  height: 100%;
-  opacity: 0.8;
-  max-height: 500px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
-  overflow-y: scroll;
-  border: 1px solid ${props => props.theme.colors.primarybg};
-  overflow-y: scroll;
-      &::-webkit-scrollbar {
-      width: 4px;
-    }
-    &::-webkit-scrollbar-track {
-      background: transparent; 
-    } 
-    /* Handle */
-    &::-webkit-scrollbar-thumb {
-      background: ${props => props.theme.colors.primarybg};
-    } 
-    /* Handle on hover */
-    &::-webkit-scrollbar-thumb:hover { 
-      background: ${props => props.theme.colors.primarybg};
-    }
 `;
