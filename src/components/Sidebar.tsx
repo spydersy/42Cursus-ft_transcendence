@@ -105,7 +105,7 @@ export default function Sidebar() {
     <SidebarWrraper ref={sideBaref}  >
     <Left open={open}   onClick={openClose} >
 
-        <Button  size={"small"}isIcon={true} icon={<ArrowLeft/>}/>
+        <Button cursor="default" size={"small"}isIcon={true} icon={<ArrowLeft/>}/>
     </Left>
        
 

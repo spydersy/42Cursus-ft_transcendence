@@ -69,14 +69,14 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
                     </div>
               {
                 !props.members.includes(data.id ) ? 
-                <Button onClick={(e)=>{handleFriend(e)
+                <Button  cursor="default" onClick={(e)=>{handleFriend(e)
                   var test = props.members;
                   test.push(data.id)
                    props.setmembers([...test])
                     }} text={  "add" }/>
                     :
                       
-                    <Button onClick={(e)=>{handleFriend(e)
+                    <Button cursor="default" onClick={(e)=>{handleFriend(e)
                       var test = props.members;
                       test.splice(id , 1)
                       props.setmembers([...test])
@@ -88,7 +88,7 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
         })
 
     }
-    <Button onClick={done} text="Done" />
+    <Button cursor="default" onClick={done} text="Done" />
     </AddFriendsModalStyle>
 
   )

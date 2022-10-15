@@ -59,11 +59,13 @@ export default function Chat() {
          {withCredentials: true} 
          ).then((res)=>{
            setlist(res.data);
+          //  console.log('> mychannells = '  , res.data, "} \n")
+
            
            axios.get("http://localhost:8000/chat/messages/" + res.data[currentConv]?.channelId, 
            {withCredentials: true} 
            ).then((res)=>{
-             console.log(res.data)
+             console.log('mychannells = '  , res.data, "} \n")
              setmsgs(res.data)
             }).catch((err)=>{
               console.log(err)

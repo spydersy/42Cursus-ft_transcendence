@@ -180,7 +180,7 @@ export default function Setting() {
                                     <input type="checkbox" id="toggle" name="toggle" checked={checked} onChange={TwoHandler} />
                                 </TwofaStyle>
                         
-                                <Button    onClick={submitHandler} text="save" type='primary' />
+                                <Button  cursor="default"  onClick={submitHandler} text="save" type='primary' />
                                 <RingLoader  color={color} loading={loading} cssOverride={override} size={30} />
                             
                         </Row> 

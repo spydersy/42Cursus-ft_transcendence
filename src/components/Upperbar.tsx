@@ -15,7 +15,7 @@ import {Link} from 'react-router-dom'
 import { useClickOutside } from "react-haiku"
 import HashLoader from "react-spinners/HashLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
-import { EmptyComponent } from '../Pages/Profile';
+import { EmptyComponent } from './profile/PlayerTabs';
 
 interface ListTypes {
   title : string,
@@ -177,7 +177,7 @@ export  function SearchBarComponent() {
                   {
                     Users.map((user : any, index)=>{
                       return (
-                          <UserFound to={`/profile/${user.login}`} >
+                          <UserFound href={"/profile/" + user.login} >
                             
                             <AvatarStyle > <img  alt="avatar" src={user.defaultAvatar} />  </AvatarStyle>
                             <div>
@@ -234,7 +234,7 @@ const AvatarStyle = styled.div`
   }
 `;
 
-const UserFound = styled(Link)`
+const UserFound = styled.a`
   width: 100%;
   height: 16%;
   color: white;

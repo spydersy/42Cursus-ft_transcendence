@@ -54,7 +54,7 @@ export default function ChatSidebar(props : ChatProps) {
       <ChatSidebarStyle>
           <div className='title'>
               Chat
-              <Button isIcon={true} onClick={()=>sethide(!hide)} icon={<Group/>}/>
+              <Button cursor="default" isIcon={true} onClick={()=>sethide(!hide)} icon={<Group/>}/>
               {hide &&  <Modal
                     isOpen={hide}
                     onRequestClose={() => sethide(false)}

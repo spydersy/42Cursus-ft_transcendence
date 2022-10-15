@@ -76,7 +76,7 @@ function App() {
        
 
        <ThemeProvider theme={theme}>
-        <Background/>
+        {/* <Background/> */}
         <Main>
           <ProtectedLayout body={<Upperbar />} />
           <ProtectedLayout body={ <Sidebar/>} />

@@ -37,10 +37,12 @@ export function PlayerCard(props: PlayerCardProps) {
 
   let color = ("");
   const [loading] = useState(true);
-
+  let username = props.player.displayName;
+  let name = username.split(" ");
   let status = "";  
-  
-  
+
+  console.log("actual statue", props.player.status);
+
   if (props.player.status === "InGame")
   {
     color = ("#1e30a1");
@@ -56,20 +58,23 @@ export function PlayerCard(props: PlayerCardProps) {
     color = ("#af1c1c");
     status = "OFFLINE";
   }
+  else if (props.player.status === "BLOCKED")
+  {
+    color = ("#b5c113");
+    status = "Unavailable";
+  }
   else
   {
     // setLoading(false);
     status = "MGHAYER";
-    
   }
-
-
-  let username = props.player.displayName;
-  let name = username.split(" ");
+  
   if (name.length > 2)
     username = name[1] + " " +  name[2];
   if (username === "Elmahdi Elaazmi" ) 
     username = "Alchemist"
+
+  
    
     return (
       <PlayerCardStyle  status={color} >
@@ -157,6 +162,8 @@ background-color: ${props => props.theme.colors.seconderybg};
         color: ${props => props.status};
         top: 0px;
         left: 35px;
+        position: absolute;
+        width: 100%;
         /* transform: translate(0%, 10%); */
         /* left: 10px; */
         position: absolute;
@@ -216,41 +223,70 @@ interface UserProp {
 
 
 export function Stats(props: PlayerCardProps) {
-  
-    const [relationStatus, setrelationStatus] = useState<string >("FRIENDS");
-    const id = window.location.pathname.split("/")[2];
-    const [createdTime, setcreatedTime] = useState<string | undefined>("Mon 1 Oct 1999 00:00:00")
-    const Grades = ["Unranked","Shinobi","ShiboKay","Hokage","Yonko","3ANKOUB","XX","XXXX","XXXXX","XXXXX"]
-    const [grade, setgrade] = useState<string | undefined>(Grades[5])
-    const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
+
+  const [relationStatus, setrelationStatus] = useState<string >("");
+  const id = window.location.pathname.split("/")[2];
+  const [createdTime, setcreatedTime] = useState<string | undefined>("Mon 1 Oct 1999 00:00:00")
+  const Grades = ["Unranked","Shinobi","ShiboKay","Hokage","Yonko","3ANKOUB","XX","XXXX","XXXXX","XXXXX"]
+  const [grade, setgrade] = useState<string | undefined>(Grades[5])
+  const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
 
     // setrelationStatus(props.player.relation)
 
     const addFriend = ()=>{
         //http://localhost:8000/users/relation/:id?evet=add
-        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=add", 
-        {withCredentials: true} 
+        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{
         // console.log(res.data)
         // alert("friend Request sent" + res.status)
         setrelationStatus("PENDING")
-        // console.log(relationStatus)
-        }).catch((err)=>{
-          // history.pushState("/signin");
-        })
+        window.location.reload();
+      }).catch((err)=>{ 
+        console.log(err)
+        alert("USER ALREADY BLOCKED")
+        setrelationStatus("BLOCKER")
+
+       })
     }
 
     const UnfriendUser = ()=>{
-    
+      //  GET http://localhost:8000/users/relation/:id?event=unfriend
+      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
+      ).then((res)=>{
+      // console.log(res.data)
+      // alert("friend Request sent" + res.status)
+      setrelationStatus("NOTHING")
+      window.location.reload();
+      }).catch((err)=>{  })
+    }
+
+    const BlockUser = ()=>{
+      //  GET http://localhost:8000/users/relation/:id?event=block
+      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
+      ).then((res)=>{
+      // console.log(res.data)
+      // alert("friend Request sent" + res.status)
+      setrelationStatus("BLOCKED")
+      window.location.reload();
+      }).catch((err)=>{  })
+    }
+
+    const UnBlockUser = ()=>{
+      //  GET http://localhost:8000/users/relation/:id?event=unblock
+      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unblock",   {withCredentials: true}
+      ).then((res)=>{
+      // console.log(res.data)
+      // alert("friend Request sent" + res.status)
+      setrelationStatus("NOTHING")
+      window.location.reload();
+      }).catch((err)=>{  })
     }
 
     const InviteToPlay = ()=>{
     
     }
 
-    const BlockUser = ()=>{
-
-    }
+    
 
     console.log( "Player Data > ", props.player, "\n")
 
@@ -262,11 +298,9 @@ export function Stats(props: PlayerCardProps) {
         
         // get user data  from server
         axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}).then((res)=>{
-          // set grade
-          
-          setrelationStatus(res.data.relation)
-
-          setrelationStatus("FRIENDS")
+         
+        setrelationStatus(res.data.relation)
+        
 
           //Rank
           if (res.data.level)
@@ -291,7 +325,7 @@ export function Stats(props: PlayerCardProps) {
         }).catch((err)=>{
         })
    
-      })
+      }, [setAChievements])
 
 
     return (
@@ -319,31 +353,36 @@ export function Stats(props: PlayerCardProps) {
                       // UserState : BlockedUser, Friend, Pending, None(Not a friend)
                   
                       // Friends relation
-                      relationStatus === "FRIENDS" ? 
-                        <>
-                  
-                          <Button  type='secondary' onClick={UnfriendUser} icon={<UserAddIcon/>} text='Unfriend'/>
-
-                          <a href="/chat/id">  <Button  icon={<UserAddIcon/>} text='Send Message'/> </a>
-
-                          <Button icon={<UserAddIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
-
-                          <Button  type='secondary' onClick={BlockUser} icon={<BlockIcon/>} text='Block'/>
-                        </>
+                      relationStatus === "NOTHING" ? 
+                      // None relation
+                        <Button cursor="pointer" onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
                       : 
                       // Pending request relation
                       relationStatus === 'PENDING' ? 
-                        <Button onClick={addFriend}  text='Pending'/>
+                       <Button cursor="no-drop"  text='Pending'/> 
                       :
                       // Blocked relation
-                      relationStatus === "BLOCKED" ? 
-                        <Button icon={<BlockIcon/>}   type='secondary' text='UnBlock'/>
-                      : 
-                      relationStatus === "NOTHING" ? 
-                      // None relation
-                        <Button onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
+                      relationStatus === "BLOCKER" ? 
+                        <Button cursor="pointer" icon={<BlockIcon/>} onClick={UnBlockUser}  type='secondary' text='UnBlock'/>
                       :
-                        <> asd </>
+                      relationStatus === "BLOCKED" ? 
+                      <Button cursor="pointer" icon={<BlockIcon/>}   type='secondary' text='GHAYERHA'/>
+                      :
+                      relationStatus === "FRIENDS" ? 
+                        <>
+                  
+                          <Button  cursor="pointer" type='secondary' onClick={UnfriendUser} icon={<UserAddIcon/>} text='Unfriend'/>
+
+                          <a href="/chat/id">  
+                            <Button cursor="pointer"  icon={<UserAddIcon/>} text='Send Message'/>
+                          </a>
+
+                          <Button cursor="pointer" icon={<UserAddIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
+
+                          <Button  cursor="pointer" type='secondary' onClick={BlockUser} icon={<BlockIcon/>} text='Block'/>
+                        </>
+                      :
+                        null
                     }
                     {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/> */}
 
@@ -461,135 +500,7 @@ export interface StyleProps { status: string; }
 const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderColor: "black",};
 
 
-export  function UserCard(props : UserCardProps) {
 
-const [loading] = useState(true);
-
-let color = ("#d21f2e");
-
-if (props.data.status === "ONLINE")
-   color = ("#1ea122") 
-else if (props.data.status === "ONGAME")
-  color = ("#ee900c");
-
-
-  // console.log("status: " , props.data.status , "\n")
-  // setLoading(true);
-
-  return (
-    <UserCardStyle status={color} >
-       
-      <a href={"/profile/" + props.data.login}>
-       
-          <div className="status" >       
-            {/* <HashLoader   color={color} loading={loading} cssOverride={override} size={22} /> */}
-            <CircleLoader   color={color} loading={loading} cssOverride={override} size={20} />
-          </div>
-
-            {/* <DotsIcon className='dots'>
-              <div className='List'> <div className='element' >  Unfriend </div>  </div>
-            </DotsIcon> */}
-          <img alt="avatar" src={props.data.defaultAvatar} className="avatar" />
-          
-          <div className="Uname"> @{props.data.login} </div>
-      </a>  
-    </UserCardStyle>
-  )
-}
-
-// let Statuscolor = "#12d418"
-
-const UserCardStyle = styled.div<StyleProps>`
-  position: relative;
-  background: linear-gradient(144deg, #5c5861 16.67%, #1f2e39 100%);
-  font-family: "Poppins" , sans-serif;
-  margin : 20px;
-  width: 120px;
-  height: 140px;
-  text-align: center;
-  border-radius: 13px;
-  animation: fadeIn 8s;
-  /* border: ${props => props.status} 2px solid; */
-  /* -webkit-box-shadow: 3px 3px 5px 6px #ccc;   */
-  /* -moz-box-shadow:    3px 3px 5px 6px #1b9ad4;   */
-   box-shadow:         1px 1px 1px 1px ${props => props.status}; 
-
-  .status {
-
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    left: 0px;
-    top: 0px;
-    border: ${props=> props.status} 3px solid;
-    /* border: 3px solid ; */
-    /* transform: translate(-10%, -10%); */
-    background-color: #f9f9f984;
-  }
-
-
-  .List {
-    display: flex;
-  }
-
-  > svg { // Dots icon
-      /* display: flex; */
-      cursor: pointer;
-      position: absolute;
-      width: 25px;
-      height:25px;
-      right: 10px;
-      top: 3px;
-      /* padding: 1px 1px ; */
-      path{
-        stroke: ${props=> props.status} ;
-      }
-      &:hover {
-        transform: scale(1.4);
-        right:10px;
-        top: 3px;
-        path{
-        stroke: #f9f9f9;
-    }
-
-    }
-    }
-  .avatar {
-    border: 3px solid #ffffff;
-    border-radius: 50%;
-    position: absolute;
-    display: block;
-    width: 50%;
-    top: 20%;
-    left: 25%;
-    animation: fadeIn 3s;
-    > img {
-      width:  80px;
-      height: 80px;
-  }
-    }
-  .Uname {
-    position: absolute;
-    color: #fcfafc;
-    width: 100%;
-    height: auto;
-    min-height: 30px;
-    margin : 2px 0px;
-    text-transform: capitalize;
-    font-size: 14px;
-    font-weight: bolder;
-    bottom: 0px;
-    /* -webkit-text-stroke: 1px #929292b7; */
-  }
-
-  &:hover {
-  }
-
-  @keyframes fadeIn {
-  0% { opacity: 0.4; }
-  100% { opacity: 1; }
-  }
-`;
 
 /// Game History tab //
 export interface GameCompProps { win: boolean }
@@ -824,7 +735,8 @@ export  function UserInvitCard(props : UserInvitCardProps) {
             ).then((res)=>{
    
         alert("friend Request Accepted" + res.status) }).catch((err)=>{  })
-              
+        // window.location.reload();
+
   }
   
   useEffect(() => {

@@ -33,8 +33,8 @@ export  function FriendRequest(props : NotifProps) {
             </div>
         </div>
         <div className='button'>
-            <Button onClick={(e)=>props.check(e)} size="small" isIcon={true} icon={<CheckIcon/>}/>
-            <Button  onClick={(e)=>props.check(e)}  type='secondary' size="small"isIcon={true} icon={<CloseIcon/>}/>
+            <Button cursor="default" onClick={(e)=>props.check(e)} size="small" isIcon={true} icon={<CheckIcon/>}/>
+            <Button  cursor="default" onClick={(e)=>props.check(e)}  type='secondary' size="small"isIcon={true} icon={<CloseIcon/>}/>
         </div>
     </FriendRequestStyle>
   )
