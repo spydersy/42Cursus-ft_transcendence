@@ -14,14 +14,21 @@ datasource db {
 
 enum SOCKET {
   GAME
-  ONLLINE
+  ONLINE
 }
 
-model websockets{
-  id       Int    @id @default(autoincrement())
-  socketId String
-  userId   Int
-  type     SOCKET
+  // Id: 62700,
+  // Login: 'abelarif',
+  // TwoFactorAuth: false,
+  // Email: 'abelarif@student.1337.ma',
+  // iat: 1665799073,
+  // exp: 1666403873
+
+model websockets {
+  socketId  String  @id @unique
+  userId    Int
+  userLogin String
+  type      SOCKET @default(ONLINE)
 }
 
 enum NOTIFICATION {
@@ -45,6 +52,7 @@ model notifications {
   channelType   CHANNEL?
   Date   DateTime @default(now())
 }
+
 
 model users {
   id                  Int             @id @unique

@@ -20,10 +20,12 @@ import { TfaService } from './tfa/tfa.service';
 import { TfaController } from './tfa/tfa.controller';
 import { TfaModule } from './tfa/tfa.module';
 import { ChatGateway } from './chat.gateway';
+import { JwtService } from '@nestjs/jwt';
+import { OnlineLogerGateway } from './online-loger.gateway';
 
 @Module({
   imports: [AuthModule, PrismaModule, UserModule, ProfileModule, ConfigModule.forRoot(), SearchModule, ChatModule, TfaModule],
   controllers: [AppController, UserController, ProfileController, ChatController, TfaController],
-  providers: [AppService, UserService, ProfileService, PrismaService, SearchService, ChatService, TfaService, ChatGateway],
+  providers: [AppService, UserService, ProfileService, PrismaService, SearchService, ChatService, TfaService, ChatGateway, JwtService, OnlineLogerGateway],
 })
 export class AppModule {}
