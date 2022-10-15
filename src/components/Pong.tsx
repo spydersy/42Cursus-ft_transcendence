@@ -495,15 +495,16 @@ background-color: ${props => props.theme.colors.bg};
     inset: 0 0 0 0;
     width: 100%;
     height: 100%;
-    /* >circle{
-      fill: ${props => props.theme.colors.purple};
+    >circle{
+      z-index: 8;
     }
     >rect{
-      fill: ${props => props.theme.colors.bg};
-      stroke: ${props => props.theme.colors.purple};
-    } */
+
+    }
     >line{
       stroke: ${props => props.theme.colors.purple};
+      z-index: 2;
+
     }
   }
   >div{

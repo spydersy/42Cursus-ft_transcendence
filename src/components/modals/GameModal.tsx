@@ -27,8 +27,7 @@ var defaultProp = {
 export default function GameModal(props: GmaemodelProps) {
   const [selected, setselected] = useState(2)
   const [gameData, setgameData] = useState<GameProps>(defaultProp)
-  const [ballColor, setballColor] = useState("#000")
-  const [paddleColoe, setpaddleColoe] = useState("#000")
+
   const navigate = useNavigate();
   
   interface GameModalProps {
@@ -91,9 +90,8 @@ export default function GameModal(props: GmaemodelProps) {
         <Title>
           <div>Ball :</div>
           <input onChange={(e: any)=>{
-            setballColor(e.target.value)
             setgameData({...gameData , ballcolor : e.target.value})
-          }} type="color" defaultValue={gameData.ballcolor} />
+          }} type="color" value={gameData.ballcolor} />
         </Title>
         <Title>
           <div>Paddel :</div>
@@ -101,7 +99,7 @@ export default function GameModal(props: GmaemodelProps) {
             setgameData({...gameData , paddlecolor : e.target.value})
 
 
-          }} type="color" defaultValue={gameData.paddlecolor}/>
+          }} type="color" value={gameData.paddlecolor}/>
 
         </Title>
 
