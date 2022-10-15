@@ -34,7 +34,7 @@ import { SOCKET } from '@prisma/client';
     let onlineArr: string[] = [];
     let inGameArr: string[] = [];
 
-    const online = await this.prisma.websockets.findMany({where: {type: SOCKET.ONLLINE,} });
+    const online = await this.prisma.websockets.findMany({where: {type: SOCKET.ONLINE,} });
     const ingame = await this.prisma.websockets.findMany({where: {type: SOCKET.GAME,} });
     online.forEach(element => {
       if (onlineArr.includes(element.userLogin) === false)
@@ -44,6 +44,7 @@ import { SOCKET } from '@prisma/client';
       if (inGameArr.includes(element.userLogin) === false) 
         inGameArr.push(element.userLogin);
     });
+    console.log("__EMIT__EVENT__DBG__ : ", {onlineArr, inGameArr});
     this.server.emit('ConnectedUser', {onlineArr, inGameArr});
   }
 
@@ -51,10 +52,16 @@ import { SOCKET } from '@prisma/client';
    this.logger.log('Init OnlineLogerGateway');
   }
  
-  async handleDisconnect(client: Socket) {
-    await this.prisma.websockets.delete({
-      where: {socketId: client.id,}
-    });
+  async handleDisconnect(client) {
+    // try {
+      console.log("__DELETE__SOCKET__ : ",  client);
+      await this.prisma.websockets.delete({
+        where: {socketId: client.id,}
+      });
+    // }
+    // catch {
+      // console.log("DO SOMETHING . . .");
+    // }
    this.logger.log(`Client disconnected: ${client.id}`);
    this.server.emit('DisconnectedUser', {});
   }

@@ -25,7 +25,7 @@ enum SOCKET {
   // exp: 1666403873
 
 model websockets {
-  socketId  String  @id @unique
+  socketId  String  @id
   userId    Int
   userLogin String
   type      SOCKET @default(ONLINE)

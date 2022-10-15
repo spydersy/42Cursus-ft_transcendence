@@ -34,7 +34,7 @@ export class WsGuard implements CanActivate {
     async canActivate(
       context: any,
     ) : Promise<boolean | any> {
-        console.log("__BEARER__TOKEN__DBG__00__ : ", context.args[0].conn.id);
+        console.log("__BEARER__TOKEN__DBG__00__ : ", context.args[0].handshake.headers.cookie);
         if (context.args[0].handshake.headers.cookie !== undefined) {
             console.log("__BEARER__TOKEN__DBG__01__ : ", context.args[0].handshake.headers.cookie);
             const bearerToken = context.args[0].handshake.headers.cookie.split('%20')[1];
@@ -43,32 +43,39 @@ export class WsGuard implements CanActivate {
             try {
                 const decoded = this.jwtService.verify(bearerToken, { secret: JWT_SECRET});
                 console.log("__DECODED__TOKEN__DBG__ : ", decoded);
-                try {
+
+                    try {
                     const ret = await this.prisma.websockets.create({
                         data: {
                             socketId: context.args[0].conn.id,
                             userId: decoded.Id,
                             userLogin: decoded.Login,
+                            type: SOCKET.ONLINE,
                         }
                     });
+                    } catch {
+                        console.log("___AAAAAA____00__");
+
+                    }
+                    console.log("___AAAAAA____11__");
                     const OldStats = await this.prisma.websockets.findMany({
                         where: {
                             userId: decoded.Id,
-                            type: SOCKET.ONLLINE,
+                            type: SOCKET.ONLINE,
                         },
                     });
-                    if (OldStats.length === 1)
+                    console.log("__OLD__STAT__DBG__ : ", OldStats);
+                    if (OldStats.length === 1) {
+                        console.log("__RETURN__TRUE__00__");
                         return true;
+                    }
+                    console.log("__RETURN__FALSE__00__");
                     return false;
-                } catch {
-                    return false;
-                }
-                return true;
             } catch {
-                console.log("I WILL THROW A 401 EXCEPTION ");
                 throw new UnauthorizedException("WEBSOCKET UNAUTHORIZED");
             }
         }
+        console.log("__RETURN__FALSE__02__");
         return false;
     }
 }

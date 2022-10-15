@@ -1,5 +1,14 @@
 -- CreateEnum
+CREATE TYPE "SOCKET" AS ENUM ('GAME', 'ONLINE');
+
+-- CreateEnum
+CREATE TYPE "NOTIFICATION" AS ENUM ('REQUEST', 'ACCEPT', 'MESSAGE', 'GAMEINVITAION');
+
+-- CreateEnum
 CREATE TYPE "RELATION" AS ENUM ('FRIENDS', 'PENDING');
+
+-- CreateEnum
+CREATE TYPE "MODE" AS ENUM ('CLASSIC', 'TAGTEAM', 'ONEVONE', 'AIBUGGY', 'AIDRVEGA');
 
 -- CreateEnum
 CREATE TYPE "CHANNEL" AS ENUM ('DM', 'PUBLIC', 'PRIVATE', 'PROTECTED');
@@ -11,14 +20,39 @@ CREATE TYPE "PERMISSION" AS ENUM ('OWNER', 'ADMIN', 'USER');
 CREATE TYPE "RESCTRICTION" AS ENUM ('BANNED', 'MUTED', 'RECHECK', 'NULL');
 
 -- CreateTable
+CREATE TABLE "websockets" (
+    "socketId" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "userLogin" TEXT NOT NULL,
+    "type" "SOCKET" NOT NULL DEFAULT 'ONLINE',
+
+    CONSTRAINT "websockets_pkey" PRIMARY KEY ("socketId")
+);
+
+-- CreateTable
+CREATE TABLE "notifications" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "type" "NOTIFICATION" NOT NULL,
+    "displayName" TEXT,
+    "login" TEXT,
+    "defaultAvatar" TEXT,
+    "channelName" TEXT,
+    "channelType" "CHANNEL",
+    "Date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "notifications_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "users" (
     "id" INTEGER NOT NULL,
     "login" TEXT NOT NULL,
     "displayName" TEXT NOT NULL,
     "defaultAvatar" TEXT NOT NULL,
-    "notifications" JSONB[],
-    "wins" INTEGER NOT NULL DEFAULT 0,
-    "losses" INTEGER NOT NULL DEFAULT 0,
+    "achievement" BOOLEAN[] DEFAULT ARRAY[false, false, false, false, false, false, false, false]::BOOLEAN[],
+    "wins" INTEGER[] DEFAULT ARRAY[0, 0, 0, 0, 0]::INTEGER[],
+    "losses" INTEGER[] DEFAULT ARRAY[0, 0, 0, 0, 0]::INTEGER[],
     "level" INTEGER NOT NULL DEFAULT 0,
     "twoFactorAuth" BOOLEAN NOT NULL DEFAULT false,
     "twoFactorAuthSecret" TEXT,
@@ -50,11 +84,13 @@ CREATE TABLE "Blocks" (
 -- CreateTable
 CREATE TABLE "MatchHistory" (
     "id" SERIAL NOT NULL,
-    "player1" INTEGER NOT NULL,
-    "player2" INTEGER NOT NULL,
+    "player1Id" INTEGER NOT NULL,
+    "player2Id" INTEGER NOT NULL,
+    "player3Id" INTEGER,
+    "player4Id" INTEGER,
     "score1" INTEGER NOT NULL DEFAULT 0,
     "score2" INTEGER NOT NULL DEFAULT 0,
-    "mode" TEXT NOT NULL,
+    "mode" "MODE" NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "MatchHistory_pkey" PRIMARY KEY ("id")
@@ -62,7 +98,7 @@ CREATE TABLE "MatchHistory" (
 
 -- CreateTable
 CREATE TABLE "channels" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "access" "CHANNEL" NOT NULL,
     "name" TEXT,
     "picture" TEXT,
@@ -77,7 +113,7 @@ CREATE TABLE "channels" (
 CREATE TABLE "channelsUsers" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
-    "channelId" INTEGER NOT NULL,
+    "channelId" TEXT NOT NULL,
     "permission" "PERMISSION" NOT NULL,
     "restriction" "RESCTRICTION" NOT NULL DEFAULT 'NULL',
     "restrictionTime" TIMESTAMP(3) NOT NULL,
@@ -90,12 +126,15 @@ CREATE TABLE "channelsUsers" (
 CREATE TABLE "Messages" (
     "id" SERIAL NOT NULL,
     "senderId" INTEGER NOT NULL,
-    "channelId" INTEGER NOT NULL,
+    "channelId" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Messages_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "websockets_socketId_key" ON "websockets"("socketId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_id_key" ON "users"("id");
@@ -108,6 +147,9 @@ CREATE UNIQUE INDEX "users_displayName_key" ON "users"("displayName");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "channelsUsers_userId_channelId_key" ON "channelsUsers"("userId", "channelId");
+
+-- AddForeignKey
+ALTER TABLE "notifications" ADD CONSTRAINT "notifications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Friends" ADD CONSTRAINT "Friends_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
