@@ -40,6 +40,7 @@ let GameGateway = class GameGateway {
         this.logger.log("After Init");
     }
     playerExist(client, login) {
+        console.log("roomArray length :" + this.roomArray.length);
         for (let i = 0; i < this.roomArray.length; i++) {
             var room = this.roomArray[i];
             var player = room.getPlayerbyLogin(login);
@@ -66,7 +67,6 @@ let GameGateway = class GameGateway {
         return null;
     }
     RemovePlayer(client, id) {
-        console.log("remove : " + id);
         for (let i = 0; i < this.roomArray.length; i++) {
             var room = this.roomArray[i];
             var player = room.getPlayer(id);
@@ -74,7 +74,6 @@ let GameGateway = class GameGateway {
             if (!player)
                 continue;
             if (room.roomPlayers.includes(player)) {
-                console.log("removed : " + player.login);
                 client.leave(room.roomName);
                 room.roomPlayers.splice(0, 2);
                 this.roomArray.splice(i, 1);
@@ -119,6 +118,7 @@ let GameGateway = class GameGateway {
     playerConnect(client, payload) {
         this.logger.log("player connected:  " + client.id + " : " + payload);
         if (this.playerExist(client, payload) === false) {
+            console.log(payload + ": Player does not exist");
             this.AddtoRoomArray(client, payload);
             this.JoinPlayer(client, payload);
             for (let index = 0; index < this.roomArray.length; index++) {

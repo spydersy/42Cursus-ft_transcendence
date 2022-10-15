@@ -21,6 +21,7 @@ export class Room {
     joinPlayer(login : string , id : string)
     {
         this.roomPlayers.push({login , id})
+        
     }
 
     getPlayer(id : string)
@@ -31,12 +32,12 @@ export class Room {
            
             if ( this.roomPlayers[i].id === id )
             {
-                console.log("found")
+                // console.log("found")
                 return this.roomPlayers[i];
             }
             else
             {
-                console.log("Not found")
+                // console.log("Not found")
                 return null
             }
         }
@@ -46,9 +47,10 @@ export class Room {
 
     {
 
-        console.log("room lenht " +this.roomPlayers.length)
+        // console.log("room lenht " +this.roomPlayers.length)
         for (let i = 0; i < this.roomPlayers.length; i++) {
-            console.log("loop " + this.roomPlayers[i].id)
+            console.log("loop " + this.roomPlayers[i].login)
+            console.log("loop " + id)
            
             if ( this.roomPlayers[i].login === id )
             {
@@ -57,7 +59,7 @@ export class Room {
             }
             else
             {
-                console.log("Not found")
+                // console.log("Not found")
 
 
 

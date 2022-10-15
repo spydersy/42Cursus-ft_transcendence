@@ -38,6 +38,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   }
   playerExist(client : any , login  : string)
   {
+        console.log("roomArray length :" +this.roomArray.length)
 
     for (let i = 0; i < this.roomArray.length; i++) {
       var room = this.roomArray[i];
@@ -75,7 +76,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   RemovePlayer(client : any , id : string)
   {
-    console.log("remove : " + id)
+    // console.log("remove : " + id)
     for (let i = 0; i < this.roomArray.length; i++) {
       var room = this.roomArray[i];
       var player = room.getPlayer(id )
@@ -85,7 +86,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         continue ;
       if (room.roomPlayers.includes(player))
       {
-        console.log("removed : " + player.login)
+        // console.log("removed : " + player.login)
 
         client.leave(room.roomName)
         room.roomPlayers.splice(0, 2);
@@ -155,10 +156,12 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     this.logger.log("player connected:  "  + client.id + " : " + payload)
     if (this.playerExist(client , payload) === false)
     {
+      console.log(payload + ": Player does not exist" )
       this.AddtoRoomArray(client , payload)
       this.JoinPlayer(client , payload)
       for (let index = 0; index < this.roomArray.length; index++) {
          this.roomArray[index].debug();
+
       }
 
     }
