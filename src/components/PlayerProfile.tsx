@@ -1,4 +1,4 @@
-import React, { useEffect , useState, CSSProperties}  from 'react'
+import React, { useEffect , useState, CSSProperties , useContext}  from 'react'
 import styled ,{css}from "styled-components";
 // import{ReactComponent as DotsIcon }from "../assets/imgs/dots.svg"
 import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
@@ -17,6 +17,7 @@ import Achivments  from './Achivments';
 import  { RadarChart } from './charts/Charts';
 // import HashLoader from 'react-spinners/HashLoader';
 import CircleLoader from "react-spinners/CircleLoader";
+import { SocketContext,  SocketValue } from '../context/Socket';
 
 //// PlayerCard Comp
 interface UserProp {
@@ -711,18 +712,28 @@ interface UserProp {
   defaultAvatar: string,
   login : string
 }
-interface AvatarProps {img: string }
+interface AvatarProps {img: string , login? : string }
 
 export  function AvatarComponent(props: AvatarProps) {
+  const socket = useContext(SocketContext)
+  const [state, setstate] = useState(false)
  
   useEffect(() => {
-   
+      socket.on("ConnectedUser" , (pyload)=>{
+       console.log(pyload)
+
+        if (pyload.online.includes(props.login))
+          setstate(true)
+        else
+          setstate(false)
+      })
 
   }, [])
   
 return (
   <Avatarr>
     <img src={props.img} alt='avatar' />
+    {state && <div className='on'></div>}
   </Avatarr>
 )
 }
@@ -731,14 +742,23 @@ const Avatarr = styled.div`
 width: 100%;
 height: 100%;
 border-radius : 50%;
-overflow: hidden;
+/* overflow: hidden; */
 background-color: white;
+position: relative;
 img{
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
+  .on{
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left:  -10px;
+    width: 10px;
+    height: 10px;
+    background-color: ${props => props.theme.colors.purple};
+  }
 `;
 
 const Dataa = styled.div`

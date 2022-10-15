@@ -81,7 +81,6 @@ export default function Leader() {
          axios.get("http://localhost:8000/users", 
     {withCredentials: true} 
   ).then((res)=>{
-    console.log(res.data)
     setusers(res.data)
 
   }).catch((err)=>{

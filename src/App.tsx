@@ -1,4 +1,4 @@
-import  React, { useEffect  , useState  }  from 'react';
+import  React, { useEffect  , useState , useContext  }  from 'react';
 import styled from "styled-components"
 import {theme} from './theme'
 import { ThemeProvider } from 'styled-components';
@@ -8,7 +8,7 @@ import Punk from "./assets/imgs/punkhazard.png";
 import Dress from "./assets/imgs/dressRosa.jpg";
 import Wano from "./assets/imgs/wano.jpg";
 import Fish from "./assets/imgs/fishman.jpeg";
-// import { SocketContext,  SocketValue } from './context/Socket';
+import { SocketContext,  SocketValue } from './context/Socket';
 import {
   Routes, // instead of "Switch"
   Route,
@@ -56,8 +56,9 @@ const mockedItems : any = [{
 function App() {
   const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
   
-
-
+  const socket = useContext(SocketContext)
+  
+  
   const navigate = useNavigate();
   useEffect(() => {
     axios.get("http://localhost:8000/profile/me", 
@@ -65,18 +66,22 @@ function App() {
   ).then((res)=>{
     // console.log(res.data)
     localStorage.setItem("user", JSON.stringify(res.data))
+    socket.emit("AddOnlineUser")
   }).catch((err)=>{
         console.log(err)
         navigate('/signin')
     })
+
+
   }, [])
+
   
   return (
     <div className="App">
        
 
        <ThemeProvider theme={theme}>
-        <Background/>
+        {/* <Background/> */}
         <Main>
           <ProtectedLayout body={<Upperbar />} />
           <ProtectedLayout body={ <Sidebar/>} />
