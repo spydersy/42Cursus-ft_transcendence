@@ -45,22 +45,15 @@ export class ProfileService {
     async UpdateUserName(newName: string, userId: number, @Res() res) {
         console.log("__NEW__NAME__ : ", newName);
         try {
-            let resultOfUpdate = await this.prisma.users.update({
-                where: {
-                    id: userId
-                },
-                data: {
-                    displayName: newName,
-                }
+            await this.prisma.users.update({
+                where: { id: userId},
+                data: { displayName: newName},
             });
-            console.log("__RESULT__OF__UPDATE__ : ", resultOfUpdate);
+            return res.status(HttpStatus.CREATED).send({"new name": newName});
         }
         catch {
-            console.log("XXX");
             return res.status(HttpStatus.FORBIDDEN).send({"message": 'Username Already Taken'});
         }
-        console.log("YYY");
-        return res.status(HttpStatus.CREATED).send({"new name": newName});
     }
 
     async GetRequests( UserId: number, @Res() res) {

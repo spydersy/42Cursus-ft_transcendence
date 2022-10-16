@@ -184,6 +184,11 @@ export class ChatService {
         res.status(HttpStatus.FORBIDDEN).send({'message': 'Forbidden'});
     }
 
+    async UpdateUserRestrictionInChannel(me: number, user: string, channel: string,
+        restriction: string, duration: number, @Res() res) {
+        
+    }
+
     async AddUserToChannel(me: number, user: string, channelId: string, @Res() res) {
         if (await this.CanUpdateChannel(me, channelId) === true) {
             const channel = await this.prisma.channels.findUnique({

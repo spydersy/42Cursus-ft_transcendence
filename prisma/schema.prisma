@@ -164,7 +164,7 @@ enum RESCTRICTION {
 model channels {
   id         String       @id @default(uuid())
   access     CHANNEL
-  name       String?us
+  name       String?
   picture    String?
   password   String?
   nbMessages Int             @default(0)

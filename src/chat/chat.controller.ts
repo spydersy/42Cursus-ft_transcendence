@@ -6,7 +6,7 @@ import { editFileName, imageFileFilter } from 'src/app.utils';
 import { fileURLToPath } from 'url';
 import { query } from 'express';
 import { ChatService } from './chat.service';
-import { ChannelUserDto, MessageDataDto } from 'src/dtos/Inputs.dto';
+import { ChannelUserDto, MessageDataDto, UserRestrictionDto } from 'src/dtos/Inputs.dto';
 import { UserService } from 'src/user/user.service';
 import { PERMISSION } from '@prisma/client';
 
@@ -25,12 +25,18 @@ export class ChatController {
     }
 
     // TASK_01 - DONE
-    @Post('UpdateUser')
+    @Post('UpdateUserPermission')
     async UpdateUserInChannel(@Req() req, @Body() userChannelPair: ChannelUserDto, @Query('role') role, @Res() res) {
       if (role && (role === 'admin' || role === 'user'))
         return this.chatService.UpdateUserInChannel(req.user.userId, userChannelPair.user,
           userChannelPair.channelId, role === 'admin' ? PERMISSION.ADMIN : PERMISSION.USER, res);
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Query Not Set Properly'});
+    }
+
+    @Post('UpdateUserRestriction')
+    async UpdateUserRestrictionInChannel(@Req() req, @Body() userRestriction: UserRestrictionDto, @Res() res) {
+      return this.chatService.UpdateUserRestrictionInChannel(req.user.userId, userRestriction.user,
+        userRestriction.channelId, userRestriction.restriction, userRestriction.duration, res);
     }
 
     @Delete('DeleteUser/:user')
@@ -40,16 +46,9 @@ export class ChatController {
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Query Not Set Properly'});
     }
 
-    // TASK_06 - DONE
     @Get('myChannels')
     async GetMyChannels(@Req() req, @Res() res) {
       return this.chatService.GetMyChannels(req.user.userId, res);
-    }
-
-    // TASK_09 - DONE
-    @Post('sendMessage')
-    async SendMessage(@Req() req, @Body() messageData: MessageDataDto, @Res() res) {
-      return this.chatService.SendMessage(req.user.userId, messageData.content, messageData.channelId);
     }
 
     @Get('messages/:channelId')
