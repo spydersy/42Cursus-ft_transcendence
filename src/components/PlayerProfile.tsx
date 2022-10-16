@@ -72,10 +72,10 @@ export function PlayerCard(props: PlayerCardProps) {
     status = "UnvailableStatus";
   }
   
-  if (name.length > 2)
-    username = name[1] + " " +  name[2];
-  if (username === "Elmahdi Elaazmi" ) 
-    username = "Alchemist"
+  // if (name.length > 2)
+  //   username = name[1] + " " +  name[2];
+  // if (username === "Elmahdi Elaazmi" ) 
+  //   username = "Alchemist"
 
   
    
@@ -201,9 +201,12 @@ background-color: ${props => props.theme.colors.seconderybg};
             }
             .text{
                 color: ${props => props.theme.colors.primaryText};
-                font-size: 19px;
-                font-weight: 600;
+                /* background-color: #3581B3; */
+                width: 800px;
+                font-size: 18px;
+                font-weight: 650;
                 text-align: left;
+
                 -webkit-text-stroke: 1px #44404562;
 
             }
@@ -239,6 +242,18 @@ background-color: ${props => props.theme.colors.seconderybg};
           setrelationStatus("BLOCKER")
         })
       }
+      const CancelRequest = ()=>{
+        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
+        ).then((res)=>{
+        // console.log(res.data)
+        // alert("friend Request sent" + res.status)
+        setrelationStatus("NOTHING")
+        window.location.reload();
+        }).catch((err)=>{  
+          setrelationStatus("PENDING")
+
+        })
+      }
       const UnfriendUser = ()=>{
         //  GET http://localhost:8000/users/relation/:id?event=unfriend
         axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
@@ -259,7 +274,6 @@ background-color: ${props => props.theme.colors.seconderybg};
         // window.location.reload();
         }).catch((err)=>{  })
       }
-
       const UnBlockUser = ()=>{
         //  GET http://localhost:8000/users/relation/:id?event=unblock
         axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unblock",   {withCredentials: true}
@@ -270,18 +284,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         // window.location.reload();
         }).catch((err)=>{  })
       }
-      const CancelRequest = ()=>{
-        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
-        ).then((res)=>{
-        // console.log(res.data)
-        // alert("friend Request sent" + res.status)
-        setrelationStatus("NOTHING")
-        window.location.reload();
-        }).catch((err)=>{  
-          setrelationStatus("PENDING")
-
-        })
-      }
+      
 
       const InviteToPlay = ()=>{
       
@@ -454,7 +457,6 @@ background-color: ${props => props.theme.colors.seconderybg};
   50% { transform: translateY(10px)  }
   100% { transform: translateY(0)  } */
  `
-
   const Buttons = styled.div`
   /* background-color: #f0f8ff41; */
   display: flex;
@@ -610,7 +612,6 @@ background-color: ${props => props.theme.colors.seconderybg};
 
 /// Game History tab //
 export interface GameCompProps { win: boolean }
-
 export interface GameCardProps {
   match: {
       name: string;
@@ -722,6 +723,7 @@ const ElapsedTime = styled.div`
     color: white;
   }
 `;
+//
 
 //
 interface AvatarProps {img: string }
@@ -804,6 +806,7 @@ const Dataa = styled.div`
       letter-spacing: 0.3px;
   }
 `;
+//
 
 //
 export  function AddFriend() {

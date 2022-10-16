@@ -193,7 +193,7 @@ const Test = styled.div<barProps>`
     width: 1px;
     height: 100%;
     background-color: transparent;
-    position: relative;
+    position: absolute;
     background-color: ${props => props.theme.colors.primarybg}; 
     background-color: #f0f8ff13;
 
