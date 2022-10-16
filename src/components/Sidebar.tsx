@@ -10,31 +10,34 @@ import {ReactComponent as SettingIcon} from "../assets/imgs/settings.svg";
 import { Button } from '../Pages/SignIn';
 import { Link ,   useNavigate} from 'react-router-dom';
 import axios from 'axios';
-export interface barProps {
-    open: boolean
+
+
+export interface barProps { open: boolean   }
+
+interface LeftStyleProps{ open : boolean    }
+
+const sideBarItemsList = [
+    {
+        title: "Home",
+        link: "/",
+        icon: <DashIcon /> 
+    },
+    {
+        title: "Chat",
+        link: "/chat/0",
+        icon : <DMIcon />
+    },
+    {
+        title: "Rooms",
+        link: "/rooms",
+        icon : <RoomIcon />
+    },
+    {
+        title: "Leaderboard",
+        link: "/leaderboard",
+        icon : <LeaderIcon />
     }
-    const sideBarItemsList = [
-        {
-            title: "Home",
-            link: "/",
-            icon: <DashIcon /> 
-        },
-        {
-            title: "Chat",
-            link: "/chat/0",
-            icon : <DMIcon />
-        },
-        {
-            title: "Rooms",
-            link: "/rooms",
-            icon : <RoomIcon />
-        },
-        {
-            title: "Leaderboard",
-            link: "/leaderboard",
-            icon : <LeaderIcon />
-        }
-    ]
+]
 export default function Sidebar() {
     const sideBaRed : any= useRef<HTMLElement>(null);
     const sideBaref : any= useRef<HTMLElement>(null);
@@ -84,9 +87,9 @@ export default function Sidebar() {
         else if (pageName === "setting" ) pagenum = 4;
         changeFocus(pagenum)
 
-         window.addEventListener("resize", (e : any)=>{
+        window.addEventListener("resize", (e : any)=>{
 
-        if (window.innerWidth < 1400 )
+        if (window.innerWidth < 1200 )
             setopen(false)
         else
             setopen(true)
@@ -98,62 +101,61 @@ export default function Sidebar() {
       }
     }, [open, setopen ])
     
-
-    
   return (
     <Test className='test' ref={sideBaRed} open={open}>
-    <SidebarWrraper ref={sideBaref}  >
-    <Left open={open}   onClick={openClose} >
-
-        <Button cursor="default" size={"small"}isIcon={true} icon={<ArrowLeft/>}/>
-    </Left>
        
+        <SidebarWrraper ref={sideBaref}  >
+            <Left open={open}   onClick={openClose} >
+                <Button cursor="default" size={"small"}isIcon={true} icon={<ArrowLeft/>}/>
+            </Left>
 
-<Items>
-        {
-            sideBarItemsList.map((item : any , id : number)=>{
-                return <Item  open={open}key={id} onClick={()=>setfocused(id)} active={id === focused ? true : false} to={item.link}>
-                {item.icon}
+            <Items>
+            {
+                sideBarItemsList.map((item : any , id : number)=>{
+                    return <Item  open={open}key={id} onClick={()=>setfocused(id)} active={id === focused ? true : false} to={item.link}>
+                    {item.icon}
+                    {
+                        <div>{item.title}</div> 
+                    //    : <ToolTip>{item.title}</ToolTip>  
+                    }
+                    
+                </Item>;
+                })
+            }
+            </Items> 
+
+            <Devider></Devider>
+
+            <Item open={open}  className='item' onClick={()=>setfocused(4)} active={4 === focused ? true : false} to={"/setting"}>
+                <SettingIcon/>
                 {
-                   <div>{item.title}</div> 
-                //    : <ToolTip>{item.title}</ToolTip>  
+                    <div>Setting</div> 
+                //    : <ToolTip>Setting</ToolTip>  
                 }
-                
-            </Item>;
-            })
-        }
-       </Items> 
-       <Devider></Devider>
-       <Item open={open}  className='item' onClick={()=>setfocused(4)} active={4 === focused ? true : false} to={"/setting"}>
-            <SettingIcon/>
-            {
-               <div>Setting</div> 
-            //    : <ToolTip>Setting</ToolTip>  
-            }
-            </Item>
-       <Item open={open} onClick={()=>{
-           axios.post("http://localhost:8000/profile/logout", {}, 
-           {withCredentials: true} 
-         ).then((res)=>{
-           navigate('/signin')
-         }).catch((err)=>{
-               console.log(err)
-               // history.pushState("/signin");
-           })
+                </Item>
+            <Item open={open} onClick={()=>{
+                axios.post("http://localhost:8000/profile/logout", {}, 
+                {withCredentials: true} 
+                ).then((res)=>{
+                navigate('/signin')
+                }).catch((err)=>{
+                    console.log(err)
+                    // history.pushState("/signin");
+                })
 
-       }} className='item'   active={false} to={""}>
-            <LogoutIcon/>
-            {
-               <div>LogOut</div> 
-            //    : <ToolTip>LogOut</ToolTip>  
-            }
-            </Item>
-    </SidebarWrraper>
+            }} className='item'   active={false} to={""}>
+                <LogoutIcon/>
+                {
+                    <div>LogOut</div> 
+                //    : <ToolTip>LogOut</ToolTip>  
+                }
+                </Item>
+        </SidebarWrraper>
+   
     </Test>
 
   )
 }
-
 
 interface ItemProps {
  
@@ -164,6 +166,9 @@ interface ItemProps {
   }
   
 const SidebarWrraper = styled.div`
+    z-index: 10;
+    /* width: 300px; */
+
     height: 100%;
     align-items: flex-end;
     flex-direction: column;  
@@ -172,25 +177,26 @@ const SidebarWrraper = styled.div`
     transition: all 400ms ease-in-out;
 
     background-color: ${props => props.theme.colors.primarybg}; 
-    @media  only screen and (max-width: 768px) {
-        > .item{
-            display: none;
-        }
+    /* background-color: aliceblue; */
 
-      top: calc(100% - 70px);
-      display: flex;
-  align-items: center;
-  > svg{
-      display: none;
-  }
-}
+    @media  only screen and (max-width: 768px) {
+        > .item{ display: none; }
+        top: calc(100% - 70px);
+        display: flex;
+        align-items: center;
+        > svg{  display: none;  }
+    }
 `;
 const Test = styled.div<barProps>`
-    width: 200px;
+    z-index: 10;
+    /* width: 300px; */
+    width: 1px;
     height: 100%;
     background-color: transparent;
     position: relative;
-    /* background-color: ${props => props.theme.colors.primarybg};  */
+    background-color: ${props => props.theme.colors.primarybg}; 
+    background-color: #f0f8ff13;
+
     align-items: flex-end;
     flex-direction: column;
    
@@ -211,18 +217,16 @@ const Test = styled.div<barProps>`
       position: fixed;
       top: calc(100% - 70px);
       display: flex;
-  align-items: center;
-  > svg{
-      display: none;
-  }
+      /* background-color: #000; */
+    align-items: center;
+    > svg{
+        display: none;
+    }
 }
 
     
 `;
 
-interface LeftStyleProps{
-    open : boolean
-}
 const Left = styled.div<LeftStyleProps>`
   
         
@@ -263,12 +267,14 @@ const Left = styled.div<LeftStyleProps>`
 
 const Devider = styled.div`
   
-    width:90%;
-    height: 1px;
-    background: rgba(44, 104, 193, 0.2);;
-    color: rgba(44, 104, 193, 0.2);;
-    margin : 0 auto;
-    overflow : hidden;
+    width       :90%;
+    height      : 1px;
+    background  : rgba(93, 104, 121, 0.2);;
+    color       : rgba(126, 133, 143, 0.2);;
+    margin      : 0px auto;
+    margin-bottom: 15px;
+    /* padding     : 0px auto; */
+    overflow    : hidden;
 
 `;
 const Items = styled.div`

@@ -4,9 +4,10 @@ import Navlinks from '../components/Navlinks';
 import { PlayerCard} from '../components/PlayerProfile';
 import axios from 'axios';
 import avataro from "../assets/imgs/avatar/avatar2.png";
-import { FriendsComponent, PendingRequests, BlockedUsers } from '../components/profile/PlayerTabs';
+import BlockedUsers from '../components/PlayerTabBlockedUsersComp';
+import FriendsComponent  from '../components/PlayerTabFriendsComp';
+import PendingRequests from '../components/PlayerTabPendingRequestsComp';
 import BlockIcon from "../assets/imgs/ban.svg";
-
 
 //-----------------------//
 interface UserProp {
@@ -132,17 +133,15 @@ export function PlayerTabsBar(props : PlayerTabsProps)
 {
   const [index, setindex] = useState(0)
   return ( 
-    <PlayerAchieveStyle>
+    <PlayerTabsStyle>
       <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/> 
-
         {index === 0 && <FriendsComponent id={props.id}/>}
         {index === 1 && <PendingRequests/>}
         {index === 2 && <BlockedUsers/>}
-    </PlayerAchieveStyle>
+    </PlayerTabsStyle>
   )
 }
-
-const PlayerAchieveStyle = styled.div`
+const PlayerTabsStyle = styled.div`
   padding-top: 20px;
   margin : 30px 0px;
   width:  100%;

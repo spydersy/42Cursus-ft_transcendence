@@ -15,7 +15,7 @@ import {Link} from 'react-router-dom'
 import { useClickOutside } from "react-haiku"
 import HashLoader from "react-spinners/HashLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
-import { EmptyComponent } from './profile/PlayerTabs';
+import EmptyComponent from './PlayerrEmptyComp';
 
 interface ListTypes {
   title : string,

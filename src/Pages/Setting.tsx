@@ -156,7 +156,8 @@ export default function Setting() {
             
 
             (
-                <SettingsStyle  className='container' style={{ display:"flex", right:"300px",  width: "800px", marginTop: "100px", marginLeft: "30px"}} >
+                // <SettingsStyle  className='container' style={{ display:"flex", right:"300px",  width: "800px", marginTop: "100px", marginLeft: "30px"}} >
+                <SettingsStyle  className='container'  >
 
                     <div className='all'>
                     
@@ -226,6 +227,8 @@ const SettingsStyle = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 100px;
+
     opacity: 0.8;
     .all {
         height: 100%;
