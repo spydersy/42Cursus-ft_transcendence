@@ -1,5 +1,5 @@
 import { BadRequestException, forwardRef, HttpCode, HttpStatus, Inject, Injectable, MethodNotAllowedException, NotFoundException, Query, Req, Res } from '@nestjs/common';
-import { RELATION } from '@prisma/client';
+import { CHANNEL, RELATION } from '@prisma/client';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Utilities } from 'src/app.utils';
@@ -119,8 +119,20 @@ export class UserService {
         if (FriendsStat !== null)
             UserDto['relation'] = FriendsStat['status'];
         UserDto['nbFriends'] = await this.GetnbFriends(Me, Me);
+        UserDto['dmChannel'] = null;
+        const dmChannel = await this.prisma.channels.findMany({
+            where: {
+                AND: [
+                    {access: CHANNEL.DM},
+                    { users: { some: {userId: MeDto.id}}},
+                    { users: { some: {userId: UserDto.id}}}
+                ],
+            }
+        });
+        if (dmChannel.length !== 0)
+            UserDto['dmChannel'] = dmChannel[0].id;
         console.log("__USER__DTO__DBG__ : ", UserDto);
-        return res.status(HttpStatus.OK).send(UserDto);
+            return res.status(HttpStatus.OK).send(UserDto);
     }
 
     async BlockUser(User: string, BlockedUser: string, @Res() res) {

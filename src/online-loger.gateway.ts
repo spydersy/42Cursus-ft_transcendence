@@ -53,15 +53,15 @@ import { SOCKET } from '@prisma/client';
   }
  
   async handleDisconnect(client) {
-    // try {
+    try {
       console.log("__DELETE__SOCKET__ : ",  client);
       await this.prisma.websockets.delete({
         where: {socketId: client.id,}
       });
-    // }
-    // catch {
-      // console.log("DO SOMETHING . . .");
-    // }
+    }
+    catch {
+      console.log("DO SOMETHING . . .");
+    }
    this.logger.log(`Client disconnected: ${client.id}`);
    this.server.emit('DisconnectedUser', {});
   }
