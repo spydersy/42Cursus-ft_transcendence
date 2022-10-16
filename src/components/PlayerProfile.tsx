@@ -1,8 +1,13 @@
 import React, { useEffect , useState, CSSProperties , useContext}  from 'react'
-import styled ,{css}from "styled-components";
+import styled ,{css, keyframes}from "styled-components";
 import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
 import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
 import {ReactComponent as UserAddIcon} from "../assets/imgs/user-plus.svg";
+import {ReactComponent as SendMessage} from "../assets/imgs/sendMessage.svg";
+import {ReactComponent as Hourglass} from "../assets/imgs/hourglass.svg";
+import {ReactComponent as UnfrienIcon} from "../assets/imgs/unfriend.svg";
+import {ReactComponent as InviteToPlayIcon} from "../assets/imgs/rocket.svg";
+import {ReactComponent as UnblockIcon} from "../assets/imgs/unbrella.svg";
 import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
 import {ReactComponent as CalendarIcon} from "../assets/imgs/calendar.svg";
 import {ReactComponent as RankIcon} from "../assets/imgs/rank.svg";
@@ -27,6 +32,7 @@ interface UserProp {
   losses : number
   lastModification : string 
 }
+
 const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderColor: "black",};
 export interface PlayerCardProps { isCurrentUser : boolean,  player: UserProp }
 
@@ -63,7 +69,7 @@ export function PlayerCard(props: PlayerCardProps) {
   else
   {
     // setLoading(false);
-    status = "MGHAYER";
+    status = "UnvailableStatus";
   }
   
   if (name.length > 2)
@@ -226,15 +232,13 @@ background-color: ${props => props.theme.colors.seconderybg};
           // console.log(res.data)
           // alert("friend Request sent" + res.status)
           setrelationStatus("PENDING")
-          window.location.reload();
+          // window.location.reload();
         }).catch((err)=>{ 
           console.log(err)
           alert("USER ALREADY BLOCKED")
           setrelationStatus("BLOCKER")
-
         })
       }
-
       const UnfriendUser = ()=>{
         //  GET http://localhost:8000/users/relation/:id?event=unfriend
         axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
@@ -242,10 +246,9 @@ background-color: ${props => props.theme.colors.seconderybg};
         // console.log(res.data)
         // alert("friend Request sent" + res.status)
         setrelationStatus("NOTHING")
-        window.location.reload();
+        // window.location.reload();
         }).catch((err)=>{  })
       }
-
       const BlockUser = ()=>{
         //  GET http://localhost:8000/users/relation/:id?event=block
         axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
@@ -253,7 +256,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         // console.log(res.data)
         // alert("friend Request sent" + res.status)
         setrelationStatus("BLOCKED")
-        window.location.reload();
+        // window.location.reload();
         }).catch((err)=>{  })
       }
 
@@ -264,8 +267,20 @@ background-color: ${props => props.theme.colors.seconderybg};
         // console.log(res.data)
         // alert("friend Request sent" + res.status)
         setrelationStatus("NOTHING")
-        window.location.reload();
+        // window.location.reload();
         }).catch((err)=>{  })
+      }
+      const CancelRequest = ()=>{
+        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
+        ).then((res)=>{
+        // console.log(res.data)
+        // alert("friend Request sent" + res.status)
+        setrelationStatus("NOTHING")
+        window.location.reload();
+        }).catch((err)=>{  
+          setrelationStatus("PENDING")
+
+        })
       }
 
       const InviteToPlay = ()=>{
@@ -345,27 +360,40 @@ background-color: ${props => props.theme.colors.seconderybg};
                         : 
                         // Pending request relation
                         relationStatus === 'PENDING' ? 
-                        <Button cursor="no-drop"  text='Pending'/> 
+                        // <Button cursor="no-drop"  text='Pending'/>
+                          <button className='BtpPending' onClick={CancelRequest}>
+                                <Hourglass/>
+                                Cancel Request
+                          </button>
                         :
                         // Blocked relation
-                        relationStatus === "BLOCKER" ? 
-                          <Button cursor="pointer" icon={<BlockIcon/>} onClick={UnBlockUser}  type='secondary' text='UnBlock'/>
-                        :
                         relationStatus === "BLOCKED" ? 
-                        <Button cursor="pointer" icon={<BlockIcon/>}   type='secondary' text='GHAYERHA'/>
+                          <button className='BtpBlocked'onClick={UnBlockUser}>
+                            <UnblockIcon/>
+                            UnBlock
+                          </button>
+                          // <Button cursor="pointer" icon={<BlockIcon/>} onClick={UnBlockUser}  type='secondary' text='UnBlock'/>
                         :
+                        // relationStatus === "BLOCKED" ? 
+                        // <Button cursor="pointer" icon={<BlockIcon/>}   type='secondary' text='GHAYERHA'/>
+                        // :
                         relationStatus === "FRIENDS" ? 
                           <>
                     
-                            <Button  cursor="pointer" type='secondary' onClick={UnfriendUser} icon={<UserAddIcon/>} text='Unfriend'/>
+                            <Button  cursor="pointer" type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
 
                             <a href="/chat/id">  
-                              <Button cursor="pointer"  icon={<UserAddIcon/>} text='Send Message'/>
+                              <Button cursor="pointer"  icon={<SendMessage/>} text='Send Message'/>
                             </a>
 
-                            <Button cursor="pointer" icon={<UserAddIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
+                            <Button cursor="pointer" icon={<InviteToPlayIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
 
-                            <Button  cursor="pointer" type='secondary' onClick={BlockUser} icon={<BlockIcon/>} text='Block'/>
+                            <button className='BtpBlocked'onClick={BlockUser}>
+                              <BlockIcon/>
+                              Block
+                            </button>
+
+                            {/* <Button  cursor="pointer" type='secondary' onClick={BlockUser} icon={<BlockIcon/>} text='Block'/> */}
                           </>
                         :
                           null
@@ -421,6 +449,12 @@ background-color: ${props => props.theme.colors.seconderybg};
   gap: 5px;
   border-radius: 0px 10px 0px 0px;
   `
+  const breatheAnimation = keyframes`
+  /* 0% { transform: translateY(0) }
+  50% { transform: translateY(10px)  }
+  100% { transform: translateY(0)  } */
+ `
+
   const Buttons = styled.div`
   /* background-color: #f0f8ff41; */
   display: flex;
@@ -428,6 +462,103 @@ background-color: ${props => props.theme.colors.seconderybg};
   gap: 10px;
   margin: 20px 0px;
   flex-wrap: wrap;
+  .BtpBlocked {
+      padding: 5px 10px;
+      min-width: 100px;
+      background: #9a1818c5;
+      border-radius: 5px;
+      height: auto;
+      cursor: pointer;
+      border: 1px solid #e6e6e6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap : 5px;
+      padding: 3px 8px;
+      >svg{  path {  stroke : #fff; } }
+      font-family: 'Poppins' sans-serif;
+      font-weight: 500;
+      font-size:  ${props => props.theme.fontSize.l}; 
+      color: #FFFFFF;
+      animation-name: ${breatheAnimation};
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      min-width: auto;
+      width: auto;
+      z-index: 20;
+      position: relative;
+      overflow: hidden;
+      &:after {
+      background: #fff;
+      content: "";
+      height: 155px;
+      left: -75px;
+      opacity: .2;
+      position: absolute;
+      top: -50px;
+      width: 50px;
+      -webkit-transition: all 950ms cubic-bezier(0.19, 1, 0.22, 1);
+      transition: all 950ms cubic-bezier(0.19, 1, 0.22, 1);
+      -webkit-transform: rotate(35deg);
+      -ms-transform: rotate(35deg);
+      transform: rotate(35deg);
+      z-index: -10;
+      }
+      &:hover:after {
+        left: 120%;
+        -webkit-transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+        transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+      }
+  }
+  .BtpPending {
+      padding: 5px 10px;
+      min-width: 100px;
+      background: #a4a912c5;
+      border-radius: 5px;
+      height: auto;
+      cursor: pointer;
+      border: 1px solid #e6e6e6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap : 5px;
+      padding: 5px 8px;
+      >svg{  path {  stroke : #fff; } }
+      font-family: 'Poppins' sans-serif;
+      font-weight: 500;
+      font-size:  ${props => props.theme.fontSize.l}; 
+      color: #FFFFFF;
+      animation-name: ${breatheAnimation};
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      min-width: auto;
+      width: auto;
+      z-index: 20;
+      position: relative;
+      overflow: hidden;
+      &:after {
+      background: #fff;
+      content: "";
+      height: 155px;
+      left: -75px;
+      opacity: .2;
+      position: absolute;
+      top: -50px;
+      width: 50px;
+      -webkit-transition: all 950ms cubic-bezier(0.19, 1, 0.22, 1);
+      transition: all 950ms cubic-bezier(0.19, 1, 0.22, 1);
+      -webkit-transform: rotate(35deg);
+      -ms-transform: rotate(35deg);
+      transform: rotate(35deg);
+      z-index: -10;
+      }
+      &:hover:after {
+        left: 120%;
+        -webkit-transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+        transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+      }
+  }
+
   `
   const Data = styled.div`
   flex: 1;
@@ -603,10 +734,10 @@ export  function AvatarComponent(props: AvatarProps) {
       socket.on("ConnectedUser" , (pyload)=>{
        console.log(pyload)
 
-        if (pyload.online.includes(props.login))
-          setstate(true)
-        else
-          setstate(false)
+        // if (pyload.online.includes(props.login))
+        //   setstate(true)
+        // else
+        //   setstate(false)
       })
 
   }, [])
@@ -622,7 +753,7 @@ const Avatarr = styled.div`
 width: 100%;
 height: 100%;
 border-radius : 50%;
-/* overflow: hidden; */
+overflow: hidden;
 background-color: white;
 position: relative;
 img{

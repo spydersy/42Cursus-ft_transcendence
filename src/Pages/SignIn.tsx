@@ -139,6 +139,7 @@ const LoginButtonStyle = styled.button<ButtonStyleProps>`
    padding: 5px 10px;
    min-width: 100px;
    background: ${props => props.theme.colors.purple};;
+   /* background-color: #831717; */
    border-radius: 5px;
    height: auto;
    cursor: ${props => (props.cursor)};;

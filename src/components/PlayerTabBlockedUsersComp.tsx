@@ -9,30 +9,31 @@ import EmptyComponent from './PlayerrEmptyComp';
 export default function BlockedUsers()
 {
   // eslint-disable-next-line 
-  const [listBlocked, setlistBlocked] = useState(
-      [
-        {
-          status: "ONLINE",
-          defaultAvatar:avataro,
-          login: "DefaultUser1",
-        },
-        {
-          status: "OFFLINE",
-          defaultAvatar:avataro,
-          login: "DefaultUser2"
-        },
-        {
-          status: "ONGAME",
-          defaultAvatar:avataro,
-          login: "DefaultUser3"
-        },
-        {
-          status: "MGHAYER",
-          defaultAvatar:avataro,
-          login: "DefaultUser4"
-        }
-      ]
-    )
+  // const [listBlocked, setlistBlocked] = useState(
+  //     [
+  //       {
+  //         status: "ONLINE",
+  //         defaultAvatar:avataro,
+  //         login: "DefaultUser1",
+  //       },
+  //       {
+  //         status: "OFFLINE",
+  //         defaultAvatar:avataro,
+  //         login: "DefaultUser2"
+  //       },
+  //       {
+  //         status: "ONGAME",
+  //         defaultAvatar:avataro,
+  //         login: "DefaultUser3"
+  //       },
+  //       {
+  //         status: "MGHAYER",
+  //         defaultAvatar:avataro,
+  //         login: "DefaultUser4"
+  //       }
+  //     ]
+  //   )
+  const [listBlocked, setlistBlocked] = useState([])
   
     useEffect(() => {
 

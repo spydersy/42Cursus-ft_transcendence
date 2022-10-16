@@ -15,29 +15,30 @@ export interface StyleProps {  status: string; }
 //
 export default function PendingRequests()
 {
-  const [friends, setfriends] = useState(
-    [
-      {
-        status: "ONLINE",
-        defaultAvatar:avataro,
-        login: "DefaultUser1",
-      },
-      {
-        status: "OFFLINE",
-        defaultAvatar:avataro,
-        login: "DefaultUser2"
-      },
-      {
-        status: "ONGAME",
-        defaultAvatar:avataro,
-        login: "DefaultUser3"
-      },
-      {
-        status: "ONGAME",
-        defaultAvatar:avataro,
-        login: "DefaultUser4"
-      }
-    ])
+  // const [friends, setfriends] = useState(
+  //   [
+  //     {
+  //       status: "ONLINE",
+  //       defaultAvatar:avataro,
+  //       login: "DefaultUser1",
+  //     },
+  //     {
+  //       status: "OFFLINE",
+  //       defaultAvatar:avataro,
+  //       login: "DefaultUser2"
+  //     },
+  //     {
+  //       status: "ONGAME",
+  //       defaultAvatar:avataro,
+  //       login: "DefaultUser3"
+  //     },
+  //     {
+  //       status: "ONGAME",
+  //       defaultAvatar:avataro,
+  //       login: "DefaultUser4"
+  //     }
+  //   ])
+  const [friends, setfriends] = useState([])
   
   useEffect(() => {
     
@@ -105,7 +106,7 @@ const accepteFriend = ()=>{
 }
 
 const DenyFriend = ()=>{
-    axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=deny",  {withCredentials: true} 
+    axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=decline",  {withCredentials: true} 
             ).then((res)=>{
     
         alert("User Request Deny" + res.status) }).catch((err)=>{  })

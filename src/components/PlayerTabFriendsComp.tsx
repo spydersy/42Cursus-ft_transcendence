@@ -16,24 +16,26 @@ export interface StyleProps { status: string; }
 //
 export default function FriendsComponent(props : FriendsProps)
 {
-  const [friends, setfriends] = useState(
-    [
-      {
-          status: "ONLINE",
-          defaultAvatar:avataro,
-          login: "DefaultUser1",
-      },
-      {
-        status: "OFFLINE",
-        defaultAvatar:avataro,
-        login: "DefaultUser2"
-      },
-      {
-        status: "ONGAME",
-        defaultAvatar:avataro,
-        login: "DefaultUser3"
-      }
-    ])
+  // const [friends, setfriends] = useState(
+  //   [
+  //     {
+  //         status: "ONLINE",
+  //         defaultAvatar:avataro,
+  //         login: "DefaultUser1",
+  //     },
+  //     {
+  //       status: "OFFLINE",
+  //       defaultAvatar:avataro,
+  //       login: "DefaultUser2"
+  //     },
+  //     {
+  //       status: "ONGAME",
+  //       defaultAvatar:avataro,
+  //       login: "DefaultUser3"
+  //     }
+  //   ])
+  
+  const [friends, setfriends] = useState([])
   
   useEffect(() => {
       axios.get("http://localhost:8000/users/friends/" + props.id,   {withCredentials: true}  ).then((res)=>{

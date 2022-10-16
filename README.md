@@ -6,3 +6,7 @@
 > - [ ] 1.unblock state and button
 > - [ ] 2.Blocked users
 > - [ ] 3.pending requests
+
+
+- redirect to dm chat 
+

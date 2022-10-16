@@ -69,7 +69,7 @@ function App() {
     socket.emit("AddOnlineUser")
   }).catch((err)=>{
         console.log(err)
-        // navigate('/signin')
+        navigate('/signin')
     })
 
 

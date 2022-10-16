@@ -28,7 +28,7 @@ export default function Profile() {
   const id = window.location.pathname.split("/")[2];
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
-    defaultAvatar: avataro,
+    defaultAvatar: "avataro",
     status: "Default",
     login : "DefaultUserLogin",
     displayName : 'Default DisplayName',
@@ -36,20 +36,20 @@ export default function Profile() {
     nbFriends : "100",
     wins : 100,
     losses : 0,
-    lastModification: "Mon 12 Oct 1963 12:00:00",
+    lastModification: "Xxx 12 Xxx 1963 12:00:00",
     Achievements: [false, false, false, false, false, false, false, false]
   })
 
   const BlockedUser = {
     defaultAvatar: BlockIcon,
     status: "BLOCKED",
-    login : "NotFound",
-    displayName : "UserNotFound",
+    login : "Hiddenlogin",
+    displayName : "HiddenDisplayName",
     relation : "BLOCKED",
     nbFriends : "000",
     wins : 0,
     losses : 0,
-    lastModification: "Mon 00 Oct 0000 00:00:00",
+    lastModification: "Xxx 00 Xxx 0000 00:00:00",
     Achievements: [false, false, false, false, false, false, false, false]
   }
 

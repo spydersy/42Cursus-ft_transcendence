@@ -121,6 +121,6 @@ export default function Pong() {
     
     return <div >
         <Sketch mouseMoved={mouseMoved}  setup={setup} draw={draw} />;
-        <Button onClick={()=>{start = !start}} text='start'/>
+        <Button cursor="default" onClick={()=>{start = !start}} text='start'/>
     </div>
 }
