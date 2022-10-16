@@ -5,8 +5,11 @@ import Pong from '../components/game/Pong'
 import { SocketContext } from '../context/Socket'
 import styled from "styled-components"
 import { AvatarComponent } from '../components/PlayerProfile'
+import axios from 'axios'
+import CountDown from '../components/game/CountDown'
 
 interface UserProp {
+  id : string,
   defaultAvatar: string,
   login : string
   displayName : string
@@ -23,52 +26,85 @@ interface GameProps {
 
 
 export default function Game(props : GameProps) {
-  const [user, setUser] = useState<UserProp>({
-    defaultAvatar: "",
-    login : "",
-    displayName : "",
-    relation : "",
-    nbFriends : "",
-    wins : 0,
-    losses : 0,
-  })
+  const [user, setUser] = useState<UserProp>()
+  const [loged, setloged] = useState<UserProp>()
   const [opennet, setOpennet] = useState<UserProp>()
   const gamesocket = useContext(SocketContext)
 
   const [end, setend] = useState(false)
+  const [start, setstart] = useState(false)
+  const [show, setshow] = useState(false)
+  gamesocket.on("startGame" , (pyload : any)=>{
+    setend(false)
+    fetchPlayersData(pyload.player1 , pyload.player2)
+    setshow(true)
+ })
+ gamesocket.on("endGame" , ()=>{
+  setOpennet(undefined)
+  setUser(undefined)
+   setend(true)
+ })
+ var data : UserProp ;
+
   useEffect(() => {
-    gamesocket.on("endGame" , ()=>{
-      setend(true)
-    })
     
     var s : string | null = localStorage.getItem('user');
-    var data;
     if (s)
     {
       data =  JSON.parse(s || '{}');
-      gamesocket.emit("playerConnect" , data.login)
+      if (!end)
+        gamesocket.emit("playerConnect" , data?.login)
+
       setUser(data)
     }
 
 
 
-  }, [end])
+  }, [])
+  
+  const fetchPlayersData =(player1 : string , player2: string)=>{
+    axios.get("http://localhost:8000/users/" + player1, 
+    {withCredentials: true} 
+     ).then((res)=>{
+          setUser(res.data)
+          setloged(res.data)
+        }).catch((err)=>{
+
+    })
+    axios.get("http://localhost:8000/users/" + player2, 
+    {withCredentials: true} 
+     ).then((res)=>{
+        setOpennet(res.data)
+        }).catch((err)=>{
+
+    })
+    
+  }
   
   return (
-    <div  style={{marginTop: "100px"}}className="container">
-       <PlayerStyle>
-        <Player1>
-          <UserComponent Ai={false} data={user}/>
-        </Player1>
-  {/* <Score>
-    {score1Ref.current} | {score2Ref.current}
-  </Score> */}
-  <Player2>
-    {opennet ?    <UserComponent Ai={true} data={opennet}/>  :  <Spinner/> }
-</Player2>
-</PlayerStyle>
-        <Pong/>
-        {/* <Pong themes={props.theme} mode={props.theme.mode}/>
+    <div  style={{marginTop: "100px" , position: "relative"}}className="container">
+      <PlayerStyle>
+          <Player1>
+          {user ?     <UserComponent Ai={false} data={user}/>:  <Spinner/> }
+          </Player1>
+
+          <Player2>
+          {opennet ?    <UserComponent Ai={true} data={opennet}/>  :  <Spinner/> }
+          </Player2>
+      </PlayerStyle>
+      <GameStyle>
+        {show &&
+            <CountDown show={show} setshow={(e)=>{
+              setshow(e)
+            }} start={start}  setstart={(e)=>{
+              setstart(e)
+            }} />
+        }
+       
+          <Pong player={user?.id === loged?.id} start={start}  setstart={(e)=>{
+            setstart(e)
+          }} />
+      </GameStyle>
         {end && <Modal
                         isOpen={end}
                         onRequestClose={() => setend(false)}
@@ -76,12 +112,18 @@ export default function Game(props : GameProps) {
                         >
          
                              End game
-                        </Modal>} */}
+                        </Modal>}
     </div>
   )
 }
 
 
+const GameStyle = styled.div`
+  width: auto;
+  height:auto ;
+  position: relative;
+
+  `;
 const Player1 = styled.div`
   margin-right: auto;
   height:auto ;

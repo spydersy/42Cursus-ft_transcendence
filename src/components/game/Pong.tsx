@@ -1,15 +1,19 @@
-import React , {useEffect, useState} from 'react'
+import React , {useEffect, useState , useContext} from 'react'
 import Sketch from "react-p5";
 import p5Types from "p5";
 import { Button } from '../../Pages/SignIn';
 import { GameProps } from './types';
+import { SocketContext } from '../../context/Socket'
+
 var defaultProp = {
     ballcolor : "#000",
     paddlecolor : "#000",
     mode : "string"
   }
-export default function Pong() {
+interface gameProps {start: boolean , setstart : (e : boolean)=>void , player : boolean }
+export default function Pong(props : gameProps) {
     const [gameData, setgameData] = useState<GameProps>(defaultProp)
+    const gamesocket = useContext(SocketContext)
   
     var width = 1000;
     var height = 700;
@@ -34,8 +38,8 @@ export default function Pong() {
     var topLimit = 0;
     var bottomLimit = height - paddel2.h;
     var direction  = {
-        x : 10,
-        y : 10,
+        x : 5,
+        y : 5,
     };
 
     var ball;
@@ -76,7 +80,9 @@ export default function Pong() {
     
     const mouseMoved = (p5: p5Types)=>{
         if (p5.mouseY > topLimit  && p5.mouseY < bottomLimit )
-        paddel1.y  = p5.mouseY;
+            gamesocket.emit("playerMoved", p5.mouseY)
+        
+        // paddel1.y  = p5.mouseY;
     }
     
     
@@ -95,19 +101,44 @@ export default function Pong() {
 
         
         // move the ball
-        if (start)
+        hitWalls(p5)
+        if (props.start)
         {
-            ballCord.x += direction.x;
-            ballCord.y += direction.y;
-            
+            // ballCord.x += direction.x;
+            // ballCord.y += direction.y;
+            gamesocket.emit("moveBall" ,{ x : ballCord.x + direction.x  ,  y : ballCord.y + direction.y})
         }
         // check for hit walls
-        hitWalls(p5)
     };
     //detect Colision 
 
 
+    gamesocket.on("player1moved" , (y : number)=>{
+        if (props.player)
+            paddel1.y   =  y;
+        else
+            paddel2.y   =  y;
+
+
+    })
+    gamesocket.on("player2moved" , (y : number)=>{
+        if (props.player)
+        paddel1.y   =  y;
+        else
+        paddel2.y   =  y;
+
+    })
+    gamesocket.on("moveBallClient" , (pyload)=>{
+
+        ballCord.x = pyload.x;
+        ballCord.y = pyload.y;
+    })
+
     useEffect(() => {
+        if (props.start)
+            start = true;
+        else
+            start = false;
     var games : string | null = localStorage.getItem('gameData');
     if (games)
     {
@@ -116,11 +147,10 @@ export default function Pong() {
     }
 
 
-
     }, [])
     
     return <div >
         <Sketch mouseMoved={mouseMoved}  setup={setup} draw={draw} />;
-        <Button onClick={()=>{start = !start}} text='start'/>
+        <Button cursor='pointer' onClick={(e)=>{props.setstart(!props.start)}} text='start'/>
     </div>
 }

@@ -350,7 +350,7 @@ useEffect(() => {
              ).then((res)=>{
               setUser(res.data)
           }).catch((err)=>{
-        
+              
             })
               setPlayer2Data(data)
             
