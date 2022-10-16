@@ -24,6 +24,7 @@ export class CatsController {
 
 export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGatewayDisconnect{
 
+
   @WebSocketServer() wss : Server
   private logger: Logger = new Logger('GameLogger')
   private roomslenght: number = 0
@@ -76,17 +77,17 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   RemovePlayer(client : any , id : string)
   {
-    // console.log("remove : " + id)
+    console.log("remove : " + id)
     for (let i = 0; i < this.roomArray.length; i++) {
       var room = this.roomArray[i];
       var player = room.getPlayer(id )
       console.log(player)
   
-      if (!player)
-        continue ;
+      // if (player)
+      //   continue ;
       if (room.roomPlayers.includes(player))
       {
-        // console.log("removed : " + player.login)
+        console.log("remove : " +room.roomName)
 
         client.leave(room.roomName)
         room.roomPlayers.splice(0, 2);
@@ -167,11 +168,12 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
   }
 
-  @SubscribeMessage('player1move')
+  @SubscribeMessage('playerMoved')
   player1moved(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
     if (room)
     {
+
       this.wss.to(room.roomName).emit("player1moved" , payload)
     }
   }
@@ -181,6 +183,14 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     if (room)
     {
       this.wss.to(room.roomName).emit("player2moved" , payload)
+    }
+  }
+  @SubscribeMessage('moveBall')
+  moveBall(client: any, payload: any): void {
+    var room = this.getRoombyPlayerId(client.id)
+    if (room)
+    {
+      this.wss.to(room.roomName).emit("moveBallClient" , payload)
     }
     // console.log("player1 moved" + payload)
 

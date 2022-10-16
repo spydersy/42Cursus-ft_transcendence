@@ -26,28 +26,24 @@ export class Room {
 
     getPlayer(id : string)
     {
-            console.log(this.roomPlayers.length)
 
+            console.log("players number : " , this.roomPlayers.length)
         for (let i = 0; i < this.roomPlayers.length; i++) {
            
+            console.log(this.roomPlayers[i].id + " " + id )
             if ( this.roomPlayers[i].id === id )
             {
                 // console.log("found")
                 return this.roomPlayers[i];
             }
-            else
-            {
-                // console.log("Not found")
-                return null
-            }
         }
-
+        return null
     }
     getPlayerbyLogin(id : string)
 
     {
 
-        // console.log("room lenht " +this.roomPlayers.length)
+        console.log("room lenht " +this.roomPlayers.length)
         for (let i = 0; i < this.roomPlayers.length; i++) {
             console.log("loop " + this.roomPlayers[i].login)
             console.log("loop " + id)
@@ -57,15 +53,8 @@ export class Room {
                 console.log("found")
                 return this.roomPlayers[i];
             }
-            else
-            {
-                // console.log("Not found")
-
-
-
-                return null
-            }
         }
+        return null
 
     }
 

@@ -15,17 +15,17 @@ class Room {
         this.roomPlayers.push({ login, id });
     }
     getPlayer(id) {
-        console.log(this.roomPlayers.length);
+        console.log("players number : ", this.roomPlayers.length);
         for (let i = 0; i < this.roomPlayers.length; i++) {
+            console.log(this.roomPlayers[i].id + " " + id);
             if (this.roomPlayers[i].id === id) {
                 return this.roomPlayers[i];
             }
-            else {
-                return null;
-            }
         }
+        return null;
     }
     getPlayerbyLogin(id) {
+        console.log("room lenht " + this.roomPlayers.length);
         for (let i = 0; i < this.roomPlayers.length; i++) {
             console.log("loop " + this.roomPlayers[i].login);
             console.log("loop " + id);
@@ -33,10 +33,8 @@ class Room {
                 console.log("found");
                 return this.roomPlayers[i];
             }
-            else {
-                return null;
-            }
         }
+        return null;
     }
     debug() {
         console.log("roomName : " + this.roomName);

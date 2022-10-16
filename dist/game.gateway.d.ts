@@ -20,4 +20,5 @@ export declare class GameGateway implements OnGatewayInit, OnGatewayConnection, 
     playerConnect(client: any, payload: any): void;
     player1moved(client: any, payload: any): void;
     player2moved(client: any, payload: any): void;
+    moveBall(client: any, payload: any): void;
 }

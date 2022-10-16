@@ -67,13 +67,13 @@ let GameGateway = class GameGateway {
         return null;
     }
     RemovePlayer(client, id) {
+        console.log("remove : " + id);
         for (let i = 0; i < this.roomArray.length; i++) {
             var room = this.roomArray[i];
             var player = room.getPlayer(id);
             console.log(player);
-            if (!player)
-                continue;
             if (room.roomPlayers.includes(player)) {
+                console.log("remove : " + room.roomName);
                 client.leave(room.roomName);
                 room.roomPlayers.splice(0, 2);
                 this.roomArray.splice(i, 1);
@@ -138,6 +138,12 @@ let GameGateway = class GameGateway {
             this.wss.to(room.roomName).emit("player2moved", payload);
         }
     }
+    moveBall(client, payload) {
+        var room = this.getRoombyPlayerId(client.id);
+        if (room) {
+            this.wss.to(room.roomName).emit("moveBallClient", payload);
+        }
+    }
 };
 __decorate([
     (0, websockets_1.WebSocketServer)(),
@@ -156,7 +162,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], GameGateway.prototype, "playerConnect", null);
 __decorate([
-    (0, websockets_1.SubscribeMessage)('player1move'),
+    (0, websockets_1.SubscribeMessage)('playerMoved'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
@@ -167,6 +173,12 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], GameGateway.prototype, "player2moved", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('moveBall'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], GameGateway.prototype, "moveBall", null);
 GameGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {
