@@ -33,11 +33,12 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
   private logger: Logger = new Logger('ChatGateway');
 //The handleMessage() function is also decorated with @SubscribeMessage() which makes it listen to an event named msgToServer.
+  
   @SubscribeMessage('chatToServer')
-  async handleMessage(client: Socket, payload) {
+    async handleMessage(client: Socket, payload) {
     console.log("__PAYLOAD__DBG__ : ", payload.content);
 
-   await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
+    await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
     this.server.emit('chatToClient', payload);
     // console.log("__CLIENT__DBG__  : ", client);
     // this.chatService.SendMessage();
@@ -56,7 +57,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
  
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket, room: string): void {
-
+  
    client.join(room);
    client.emit('joinedRoom', room );
   }
@@ -68,6 +69,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
   @SubscribeMessage('leaveRoom')
   handleLeftRoom(client: Socket, room: string): void {
+    console.log("__CLIENT__LEAVE__ROOM__DBG__ : ", room);
    client.leave(room);
    client.emit('leftRoom', room );
   }

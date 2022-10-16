@@ -91,16 +91,24 @@ export class ChatService {
             where: {channelId: channelId},
             include: {sender: true},
         });
+        const blackList = await this.prisma.blocks.findMany({where: {blockedId: me} });
+        console.log("__BLACK__LIST__DBG__ : ", {blackList, me});
         messages.forEach(message => {
             message['displayName'] = message.sender.displayName;
+            console.log("__MESSAGE__SENDER__ : ", message.sender);
+            for (let index = 0; index < blackList.length; index++) {
+                if (message.sender.id === blackList[0].userId) {
+                    message.content = "Hidden Content 👻👻👻";
+                    break ;
+                }
+            }
             delete message.sender;
         });
-        console.log("__MESSAGES__DGB__ : ", messages);
         res.status(HttpStatus.OK).send(messages);
     }
 
     async SendMessage(me: number, messageContent: string, channelId: string) {
-        if (await this.PostMessageValidationLayer(me, messageContent, channelId) === USERSTAT.ACCESS) {
+        // if (await this.PostMessageValidationLayer(me, messageContent, channelId) === USERSTAT.ACCESS) {
             await this.prisma.messages.create({
                 data: {
                     senderId: me,
@@ -115,7 +123,7 @@ export class ChatService {
             // return res
             // .status(HttpStatus.CREATED)
             // .send({'message': "Message Sent"});
-        }
+        // }
         // return res.status(HttpStatus.FORBIDDEN).send({'message': "Method Not Allowed"});
     }
 

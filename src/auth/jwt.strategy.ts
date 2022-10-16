@@ -64,7 +64,7 @@ export class WsGuard implements CanActivate {
                             type: SOCKET.ONLINE,
                         },
                     });
-                    console.log("__OLD__STAT__DBG__ : ", OldStats);
+                    // console.log("__OLD__STAT__DBG__ : ", OldStats);
                     if (OldStats.length === 1) {
                         console.log("__RETURN__TRUE__00__");
                         return true;
