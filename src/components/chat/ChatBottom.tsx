@@ -55,8 +55,9 @@ export default function ChatBottom(props: ChatProps) {
             channelId:  props.list[props.currentConv]?.channelId
           }
           //validation layer (restrictions)
-
+          console.log("WEWE__00__");
           socket.emit('chatToServer', msgtmp);
+          console.log("WEWE__01__");
         }
       }
     }

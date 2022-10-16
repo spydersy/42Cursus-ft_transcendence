@@ -15,7 +15,7 @@ import {Link} from 'react-router-dom'
 import { useClickOutside } from "react-haiku"
 import HashLoader from "react-spinners/HashLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
-import { EmptyComponent } from './profile/PlayerTabs';
+import EmptyComponent from './PlayerrEmptyComp';
 
 interface ListTypes {
   title : string,
@@ -32,7 +32,7 @@ interface NotifProps {
   setopen: (e : boolean) => void,
   
 }
-const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/melkarmi"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
+const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : ""},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
 
 export default function Upperbar() {
   const [open, setopen] = useState(false)

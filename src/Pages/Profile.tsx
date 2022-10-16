@@ -4,9 +4,10 @@ import Navlinks from '../components/Navlinks';
 import { PlayerCard} from '../components/PlayerProfile';
 import axios from 'axios';
 import avataro from "../assets/imgs/avatar/avatar2.png";
-import { FriendsComponent, PendingRequests, BlockedUsers } from '../components/profile/PlayerTabs';
+import BlockedUsers from '../components/PlayerTabBlockedUsersComp';
+import FriendsComponent  from '../components/PlayerTabFriendsComp';
+import PendingRequests from '../components/PlayerTabPendingRequestsComp';
 import BlockIcon from "../assets/imgs/ban.svg";
-
 
 //-----------------------//
 interface UserProp {
@@ -27,7 +28,7 @@ export default function Profile() {
   const id = window.location.pathname.split("/")[2];
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
-    defaultAvatar: avataro,
+    defaultAvatar: "avataro",
     status: "Default",
     login : "DefaultUserLogin",
     displayName : 'Default DisplayName',
@@ -35,20 +36,20 @@ export default function Profile() {
     nbFriends : "100",
     wins : 100,
     losses : 0,
-    lastModification: "Mon 12 Oct 1963 12:00:00",
+    lastModification: "Xxx 12 Xxx 1963 12:00:00",
     Achievements: [false, false, false, false, false, false, false, false]
   })
 
   const BlockedUser = {
     defaultAvatar: BlockIcon,
     status: "BLOCKED",
-    login : "NotFound",
-    displayName : "UserNotFound",
+    login : "Hiddenlogin",
+    displayName : "HiddenDisplayName",
     relation : "BLOCKED",
     nbFriends : "000",
     wins : 0,
     losses : 0,
-    lastModification: "Mon 00 Oct 0000 00:00:00",
+    lastModification: "Xxx 00 Xxx 0000 00:00:00",
     Achievements: [false, false, false, false, false, false, false, false]
   }
 
@@ -115,34 +116,37 @@ export default function Profile() {
                   <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
               </TheBox>
 
-              <PlayerTabsBar id={id} /> 
+              <PlayerTabsBar isCurrentUser={isCurrentUser} id={id} /> 
         </div>
   )
 };
 
 const TheBox = styled.div` width: 100%;  border: 0px solid ${props => props.theme.colors.primarybg}; `;
 
-interface PlayerTabsProps { id : string }
+interface PlayerTabsProps { id : string, isCurrentUser : boolean }
 
 
 ///// PlayerTabs Section
-const linkslist = [ " FRIENDS" , "PENDING REQUESTS", "BLOCKED USERS"]
+
 
 export function PlayerTabsBar(props : PlayerTabsProps)
 {
   const [index, setindex] = useState(0)
-  return ( 
-    <PlayerAchieveStyle>
-      <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/> 
+  let linkslist = [ " FRIENDS"]
 
+  if (props.isCurrentUser)
+    linkslist = [ " FRIENDS" ,"PENDING REQUESTS", "BLOCKED USERS"];
+
+  return ( 
+    <PlayerTabsStyle>
+      <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/> 
         {index === 0 && <FriendsComponent id={props.id}/>}
-        {index === 1 && <PendingRequests/>}
-        {index === 2 && <BlockedUsers/>}
-    </PlayerAchieveStyle>
+        {index === 1 && props.isCurrentUser &&  <PendingRequests/>}
+        {index === 2 && props.isCurrentUser && <BlockedUsers/>}
+    </PlayerTabsStyle>
   )
 }
-
-const PlayerAchieveStyle = styled.div`
+const PlayerTabsStyle = styled.div`
   padding-top: 20px;
   margin : 30px 0px;
   width:  100%;

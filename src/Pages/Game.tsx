@@ -33,11 +33,14 @@ export default function Game(props : GameProps) {
 
   const [end, setend] = useState(false)
   const [start, setstart] = useState(false)
+  const [player, setplayer] = useState(true)
   const [show, setshow] = useState(false)
   gamesocket.on("startGame" , (pyload : any)=>{
     setend(false)
     fetchPlayersData(pyload.player1 , pyload.player2)
     setshow(true)
+    console.log(loged?.login , pyload.player1)
+    setplayer(loged?.login === pyload.player1 )
  })
  gamesocket.on("endGame" , ()=>{
   setOpennet(undefined)
@@ -52,6 +55,8 @@ export default function Game(props : GameProps) {
     if (s)
     {
       data =  JSON.parse(s || '{}');
+      setloged(data)
+
       if (!end)
         gamesocket.emit("playerConnect" , data?.login)
 
@@ -67,7 +72,6 @@ export default function Game(props : GameProps) {
     {withCredentials: true} 
      ).then((res)=>{
           setUser(res.data)
-          setloged(res.data)
         }).catch((err)=>{
 
     })
@@ -92,7 +96,7 @@ export default function Game(props : GameProps) {
           {opennet ?    <UserComponent Ai={true} data={opennet}/>  :  <Spinner/> }
           </Player2>
       </PlayerStyle>
-      <GameStyle>
+      <GameStyle id="canva">
         {show &&
             <CountDown show={show} setshow={(e)=>{
               setshow(e)
@@ -101,7 +105,7 @@ export default function Game(props : GameProps) {
             }} />
         }
        
-          <Pong player={user?.id === loged?.id} start={start}  setstart={(e)=>{
+          <Pong player={player} start={start}  setstart={(e)=>{
             setstart(e)
           }} />
       </GameStyle>
@@ -119,10 +123,16 @@ export default function Game(props : GameProps) {
 
 
 const GameStyle = styled.div`
-  width: auto;
-  height:auto ;
+  width: 100%;
+  height: 700px ;
   position: relative;
-
+  background-color: red;
+  /* > .react-p5{
+    width: 100%;
+    > .p5Canvas{
+      width: 100% !important;
+    }
+  } */
   `;
 const Player1 = styled.div`
   margin-right: auto;

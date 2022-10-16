@@ -1,63 +1,41 @@
 import React, {useState , useEffect, CSSProperties} from 'react'
-import styled from "styled-components"
-import {ReactComponent as LuffyAce} from "../../assets/imgs/luffyAce.svg";
-import avataro from "../../assets/imgs/avatar/avatar2.png";
-import axios from 'axios';
-// import { UserCard} from '../PlayerProfile';
-import { UserInvitCard } from "../PlayerProfile";
-import { UserBlockedCard } from "../PlayerProfile";
 import CircleLoader from "react-spinners/CircleLoader";
-import { animated, useSpring } from 'react-spring';
+import styled from "styled-components"
+import avataro from "../assets/imgs/avatar/avatar2.png";
+import EmptyComponent from "./PlayerrEmptyComp"
+import axios from 'axios';
 
-
-/// empty
-interface EmptyProps { text: string }
-
-export function EmptyComponent(props: EmptyProps)
-{
-  return (
-    <Empty >
-      <LuffyAce/>
-      {props.text}
-    </Empty>
-  )
-}
-const Empty = styled.div` 
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-  background-color:  ${props => props.theme.colors.bg};
-  color:  ${props => props.theme.colors.seconderyText};
-  font-weight: 600;
-  justify-content: center;
-  font-size: 30px;
-  font-family: "Poppins" , sans-serif;
-`;
-
-//#1  Tab Friends
 interface FriendsProps { id : string }
-export function FriendsComponent(props : FriendsProps)
+
+const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderColor: "black",};
+
+export interface UserCardProps { data: { status: string; defaultAvatar: string; login: string;} }
+
+export interface StyleProps { status: string; }
+
+//
+export default function FriendsComponent(props : FriendsProps)
 {
-  const [friends, setfriends] = useState(
-    [
-      {
-          status: "ONLINE",
-          defaultAvatar:avataro,
-          login: "DefaultUser1",
-      },
-      {
-        status: "OFFLINE",
-        defaultAvatar:avataro,
-        login: "DefaultUser2"
-      },
-      {
-        status: "ONGAME",
-        defaultAvatar:avataro,
-        login: "DefaultUser3"
-      }
-    ])
+  // const [friends, setfriends] = useState(
+  //   [
+  //     {
+  //         status: "ONLINE",
+  //         defaultAvatar:avataro,
+  //         login: "DefaultUser1",
+  //     },
+  //     {
+  //       status: "OFFLINE",
+  //       defaultAvatar:avataro,
+  //       login: "DefaultUser2"
+  //     },
+  //     {
+  //       status: "ONGAME",
+  //       defaultAvatar:avataro,
+  //       login: "DefaultUser3"
+  //     }
+  //   ])
+  
+  const [friends, setfriends] = useState([])
   
   useEffect(() => {
       axios.get("http://localhost:8000/users/friends/" + props.id,   {withCredentials: true}  ).then((res)=>{
@@ -76,110 +54,6 @@ export function FriendsComponent(props : FriendsProps)
             return<UserCard key={id} data={match}  />
         })
       }
-    </TabfourStyle>
-  )
-}
-
-//#2  Pending Requests
-export function PendingRequests()
-{
-  const [friends, setfriends] = useState(
-    [
-      {
-        status: "ONLINE",
-        defaultAvatar:avataro,
-        login: "DefaultUser1",
-      },
-      {
-        status: "OFFLINE",
-        defaultAvatar:avataro,
-        login: "DefaultUser2"
-      },
-      {
-        status: "ONGAME",
-        defaultAvatar:avataro,
-        login: "DefaultUser3"
-      }
-    ]
-    )
-  
-
-
-  useEffect(() => {
-    
-    axios.get("http://localhost:8000/profile/me?data=requests", 
-      {withCredentials: true} 
-    ).then((res)=>{
-      console.log(res)
-
-      setfriends(res.data)
-  
-    }).catch((err)=>{
-      })
-  }, [])
-  return (
-    <TabfourStyle>
-    {
-        friends.length === 0 ? 
-        <EmptyComponent text="No Pending Requests !"/>
-        : 
-        friends.map((invit : any, id : number )=>{
-            return<UserInvitCard key={id} data={invit} />
-        })
-    }
-       
-    </TabfourStyle>
-  )
-}
-
-//#3  My Black List
-export function BlockedUsers()
-{
-  // eslint-disable-next-line 
-  const [listBlocked, setlistBlocked] = useState(
-      [
-        {
-          status: "ONLINE",
-          defaultAvatar:avataro,
-          login: "DefaultUser1",
-        },
-        {
-          status: "OFFLINE",
-          defaultAvatar:avataro,
-          login: "DefaultUser2"
-        },
-        {
-          status: "ONGAME",
-          defaultAvatar:avataro,
-          login: "DefaultUser3"
-        }
-      ]
-    )
-  
-    useEffect(() => {
-
-      axios.get("http://localhost:8000/profile/me?data=blacklist",  {withCredentials: true} 
-      ).then((res)=>{
-        console.log("Blockedlist : ", res)
-        setlistBlocked(res.data)
-        }).catch((err)=>{
-      })
-
-    }, [])
-
-
-  
- 
-  return (
-    <TabfourStyle> 
-        {
-           listBlocked.length === 0 ? 
-           <EmptyComponent text="Peaceful User !"/>
-           : 
-          listBlocked.map((invit : any, id : number )=>{
-              return<UserBlockedCard key={id} data={invit} />
-          })
-        }  
     </TabfourStyle>
   )
 }
@@ -211,16 +85,7 @@ const TabfourStyle= styled.div`
       background: ${props => props.theme.colors.primarybg};
     }
 `;
-
-/// # USED COMPONENETS # /// 
-
-/// UserCard
-const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderColor: "black",};
-
-export interface UserCardProps { data: { status: string; defaultAvatar: string; login: string;} }
-
-export interface StyleProps { status: string; }
-
+//
 export  function UserCard(props : UserCardProps) {
 
     const [loading] = useState(true);
@@ -324,17 +189,16 @@ bottom: 0px;
 }
 
 &:hover {
-  transform:  rotate(360deg);
+  /* transform:  rotate(360deg); */
+  transform: scale(1.1);
+
   display: inline-block;
   backface-visibility: visible;
-  transition: 2s ease-in-out;
+  transition: 1s ease-in-out;
 }
   /* @keyframes fadeIn {
   0% { opacity: 0.9; }
   100% { opacity: 1; }
   } */
 `;
-/// UserCard
-
-
-
+//

@@ -1,11 +1,13 @@
 import React, { useEffect , useState, CSSProperties , useContext}  from 'react'
-import styled ,{css}from "styled-components";
-// import{ReactComponent as DotsIcon }from "../assets/imgs/dots.svg"
+import styled ,{css, keyframes}from "styled-components";
 import {ReactComponent as Etimer} from "../assets/imgs/Etimer.svg";
 import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
-import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
-import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import {ReactComponent as UserAddIcon} from "../assets/imgs/user-plus.svg";
+import {ReactComponent as SendMessage} from "../assets/imgs/sendMessage.svg";
+import {ReactComponent as Hourglass} from "../assets/imgs/hourglass.svg";
+import {ReactComponent as UnfrienIcon} from "../assets/imgs/unfriend.svg";
+import {ReactComponent as InviteToPlayIcon} from "../assets/imgs/rocket.svg";
+import {ReactComponent as UnblockIcon} from "../assets/imgs/unbrella.svg";
 import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
 import {ReactComponent as CalendarIcon} from "../assets/imgs/calendar.svg";
 import {ReactComponent as RankIcon} from "../assets/imgs/rank.svg";
@@ -15,9 +17,11 @@ import { Button } from '../Pages/SignIn';
 import axios from 'axios';
 import Achivments  from './Achivments';
 import  { RadarChart } from './charts/Charts';
-// import HashLoader from 'react-spinners/HashLoader';
 import CircleLoader from "react-spinners/CircleLoader";
 import { SocketContext,  SocketValue } from '../context/Socket';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 //// PlayerCard Comp
 interface UserProp {
@@ -32,6 +36,7 @@ interface UserProp {
   lastModification : string 
 }
 
+const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderColor: "black",};
 export interface PlayerCardProps { isCurrentUser : boolean,  player: UserProp }
 
 export function PlayerCard(props: PlayerCardProps) {
@@ -67,13 +72,13 @@ export function PlayerCard(props: PlayerCardProps) {
   else
   {
     // setLoading(false);
-    status = "MGHAYER";
+    status = "UnvailableStatus";
   }
   
-  if (name.length > 2)
-    username = name[1] + " " +  name[2];
-  if (username === "Elmahdi Elaazmi" ) 
-    username = "Alchemist"
+  // if (name.length > 2)
+  //   username = name[1] + " " +  name[2];
+  // if (username === "Elmahdi Elaazmi" ) 
+  //   username = "Alchemist"
 
   
    
@@ -115,7 +120,8 @@ export function PlayerCard(props: PlayerCardProps) {
       </PlayerCardStyle>
   )
 }
-  
+export interface StyleProps { status: string; }
+
 const PlayerCardStyle = styled.div<StyleProps>`
 padding: 0px 0px;
 margin-bottom: 13px;
@@ -198,9 +204,12 @@ background-color: ${props => props.theme.colors.seconderybg};
             }
             .text{
                 color: ${props => props.theme.colors.primaryText};
-                font-size: 19px;
-                font-weight: 600;
+                /* background-color: #3581B3; */
+                width: 800px;
+                font-size: 18px;
+                font-weight: 650;
                 text-align: left;
+
                 -webkit-text-stroke: 1px #44404562;
 
             }
@@ -210,29 +219,66 @@ background-color: ${props => props.theme.colors.seconderybg};
 
 `;
 
-interface UserProp {
-  defaultAvatar: string,
-  status : string
-  login : string
-  displayName : string
-  relation : string
-  nbFriends? : string
-  wins : number
-  losses : number
-  lastModification: string
-}
+// State  // 
+  export function Stats(props: PlayerCardProps) {
 
+    const [relationStatus, setrelationStatus] = useState<string >("");
+    const id = window.location.pathname.split("/")[2];
+    const [createdTime, setcreatedTime] = useState<string | undefined>("Mon 1 Oct 1999 00:00:00")
+    const Grades = ["Unranked","Shinobi","ShiboKay","Hokage","Yonko","3ANKOUB","XX","XXXX","XXXXX","XXXXX"]
+    const [grade, setgrade] = useState<string | undefined>(Grades[5])
+    const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
 
-export function Stats(props: PlayerCardProps) {
-
-  const [relationStatus, setrelationStatus] = useState<string >("");
-  const id = window.location.pathname.split("/")[2];
-  const [createdTime, setcreatedTime] = useState<string | undefined>("Mon 1 Oct 1999 00:00:00")
-  const Grades = ["Unranked","Shinobi","ShiboKay","Hokage","Yonko","3ANKOUB","XX","XXXX","XXXXX","XXXXX"]
-  const [grade, setgrade] = useState<string | undefined>(Grades[5])
-  const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
-
-    // setrelationStatus(props.player.relation)
+    const    AddUsernotify = () => toast.success("You have successfully Send the invitaion to " + id.toLocaleUpperCase() , {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+    const    UnfriendUserNotify = () => toast.error("You have successfully Unfriend this Bastard " + id.toLocaleUpperCase()  , {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+    const    BlockUserNotify = () => toast.error("You have successfully Block " + id.toLocaleUpperCase()  , {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+    const    UnBlockUserNotify = () => toast.warning("You have successfully UnBlock " + id.toLocaleUpperCase()  , {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+    const    CancelNotify = () => toast.warning("You have successfully Cancel the invitation to " + id.toLocaleUpperCase() , {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
 
     const addFriend = ()=>{
         //http://localhost:8000/users/relation/:id?evet=add
@@ -241,15 +287,28 @@ export function Stats(props: PlayerCardProps) {
         // console.log(res.data)
         // alert("friend Request sent" + res.status)
         setrelationStatus("PENDING")
-        window.location.reload();
+        AddUsernotify();
+        // window.location.reload();
       }).catch((err)=>{ 
         console.log(err)
         alert("USER ALREADY BLOCKED")
         setrelationStatus("BLOCKER")
-
-       })
+      })
     }
+    const CancelRequest = ()=>{
+      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
+      ).then((res)=>{
+      // console.log(res.data)
+      // alert("friend Request sent" + res.status)
+      setrelationStatus("NOTHING")
+      CancelNotify();
+      // CancelRequestNotify();
+      // window.location.reload();
+    }).catch((err)=>{  
+        setrelationStatus("PENDING")
 
+      })
+    }
     const UnfriendUser = ()=>{
       //  GET http://localhost:8000/users/relation/:id?event=unfriend
       axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
@@ -257,10 +316,10 @@ export function Stats(props: PlayerCardProps) {
       // console.log(res.data)
       // alert("friend Request sent" + res.status)
       setrelationStatus("NOTHING")
-      window.location.reload();
+      UnfriendUserNotify();
+      // window.location.reload();
       }).catch((err)=>{  })
     }
-
     const BlockUser = ()=>{
       //  GET http://localhost:8000/users/relation/:id?event=block
       axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
@@ -268,10 +327,10 @@ export function Stats(props: PlayerCardProps) {
       // console.log(res.data)
       // alert("friend Request sent" + res.status)
       setrelationStatus("BLOCKED")
-      window.location.reload();
+      BlockUserNotify();
+      // window.location.reload();
       }).catch((err)=>{  })
     }
-
     const UnBlockUser = ()=>{
       //  GET http://localhost:8000/users/relation/:id?event=unblock
       axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unblock",   {withCredentials: true}
@@ -279,17 +338,11 @@ export function Stats(props: PlayerCardProps) {
       // console.log(res.data)
       // alert("friend Request sent" + res.status)
       setrelationStatus("NOTHING")
-      window.location.reload();
+      UnBlockUserNotify()
+      // window.location.reload();
       }).catch((err)=>{  })
     }
-
-    const InviteToPlay = ()=>{
-    
-    }
-
-    
-
-    console.log( "Player Data > ", props.player, "\n")
+    const InviteToPlay = ()=>{ }
 
     useEffect(() => {
         
@@ -299,7 +352,7 @@ export function Stats(props: PlayerCardProps) {
         
         // get user data  from server
         axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}).then((res)=>{
-         
+        
         setrelationStatus(res.data.relation)
         
 
@@ -308,7 +361,7 @@ export function Stats(props: PlayerCardProps) {
             setgrade(Grades[res.data.level])
           else
             setgrade("Unranked")
-       
+      
           //CreatedTime
           const date = new Date(res.data.lastModification)
           setcreatedTime(date.toString().split("GMT")[0])
@@ -325,187 +378,278 @@ export function Stats(props: PlayerCardProps) {
           console.log("> Achievements : ", AChievements)
         }).catch((err)=>{
         })
-   
+  
       }, [setAChievements])
+      return (
+        <StatsStyle  >
+          <Data>
 
+              <div className='data'>
+                <div>
+                  <ToastContainer />
 
-    return (
-      <StatsStyle  >
-        <Data>
+                  <DataTag> 
+                    <DataTag>   <RankIcon/>  {grade}  </DataTag>
+                    <DataTag>   <UsersIcon/> {props.player.nbFriends} {" Friends"} </DataTag>
+                  </DataTag>
 
-            <div className='data'>
+                  <DataTag>
+                    <DataTag>     <GameIcon/> {props.player?.wins +   props.player?.losses} {"  Game"} </DataTag>
+                    <DataTag>     <CalendarIcon/> {createdTime}  </DataTag>
+                  </DataTag>
+                  
+                  {props.isCurrentUser === false && 
+                    <Buttons className='Btp' >
+                      {
+                        // Friends relation
+                        relationStatus === "NOTHING" ? 
+                          <Button cursor="pointer" onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
+                        : 
+                        // Pending request relation
+                        relationStatus === 'PENDING' ? 
+                          <button className='BtpPending' onClick={CancelRequest}>
+                                <Hourglass/>
+                                Cancel Request
+                          </button>
+                        :
+                        // Blocked relation
+                        relationStatus === "BLOCKED" ? 
+                          <button className='BtpBlocked'onClick={UnBlockUser}>
+                            <UnblockIcon/>
+                            UnBlock
+                          </button>
+                        :
+                        // relationStatus === "BLOCKED" ? 
+                        // <Button cursor="pointer" icon={<BlockIcon/>}   type='secondary' text='GHAYERHA'/>
+                        // :
+                        relationStatus === "FRIENDS" ? 
+                          <>
+                            <Button  cursor="pointer" type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
+                            
+                            <a href="/chat/id">  
+                              <Button cursor="pointer"  icon={<SendMessage/>} text='Send Message'/>
+                            </a>
+                            
+                            <Button cursor="pointer" icon={<InviteToPlayIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
+
+                            <button className='BtpBlocked'onClick={BlockUser}>
+                              <BlockIcon/>
+                              Block
+                            </button>
+
+                          </>
+                        : null
+                      }
+                    </Buttons>
+                  }
+
+                </div>
               
-              <div>
-               
-                <DataTag> 
-                  <DataTag>   <RankIcon/>  {grade}  </DataTag>
-                  <DataTag>   <UsersIcon/> {props.player.nbFriends} {" Friends"} </DataTag>
-                </DataTag>
-
-                <DataTag>
-                  <DataTag>     <GameIcon/> {props.player?.wins +   props.player?.losses} {"  Game"} </DataTag>
-                  {/* <DataTag>     <CalendarIcon/> {props.player.lastModification}  </DataTag> */}
-                  <DataTag>     <CalendarIcon/> {createdTime}  </DataTag>
-                </DataTag>
-
-                {props.isCurrentUser === false && 
-                  <Buttons className='Btp' >
-                    {
-                      // UserState : BlockedUser, Friend, Pending, None(Not a friend)
-                  
-                      // Friends relation
-                      relationStatus === "NOTHING" ? 
-                      // None relation
-                        <Button cursor="pointer" onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
-                      : 
-                      // Pending request relation
-                      relationStatus === 'PENDING' ? 
-                       <Button cursor="no-drop"  text='Pending'/> 
-                      :
-                      // Blocked relation
-                      relationStatus === "BLOCKER" ? 
-                        <Button cursor="pointer" icon={<BlockIcon/>} onClick={UnBlockUser}  type='secondary' text='UnBlock'/>
-                      :
-                      relationStatus === "BLOCKED" ? 
-                      <Button cursor="pointer" icon={<BlockIcon/>}   type='secondary' text='GHAYERHA'/>
-                      :
-                      relationStatus === "FRIENDS" ? 
-                        <>
-                  
-                          <Button  cursor="pointer" type='secondary' onClick={UnfriendUser} icon={<UserAddIcon/>} text='Unfriend'/>
-
-                          <a href="/chat/id">  
-                            <Button cursor="pointer"  icon={<UserAddIcon/>} text='Send Message'/>
-                          </a>
-
-                          <Button cursor="pointer" icon={<UserAddIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
-
-                          <Button  cursor="pointer" type='secondary' onClick={BlockUser} icon={<BlockIcon/>} text='Block'/>
-                        </>
-                      :
-                        null
-                    }
-                    {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/> */}
-
-                  </Buttons>
-                }
+              <Achivments  data={AChievements} /> 
+                {/* <div className="Achiv"> <Achivments2/> </div> */}
 
               </div>
-            
-            <Achivments  data={AChievements} /> 
-              {/* <div className="Achiv"> <Achivments2/> </div> */}
 
-            </div>
+              <div className='vr'> </div>
 
-            <div className='vr'> </div>
+              <div className='Stats'>
+                < RadarChart/>
+              </div>
 
-            <div className='Stats'>
-              < RadarChart/>
-            </div>
+          </Data>
+        </StatsStyle>
+      )
+  }
 
-        </Data>
-      </StatsStyle>
-    )
-}
-
-const DataTag = styled.div`
-  /* background-color: #1c70b517; */
+  const DataTag = styled.div`
+    /* background-color: #1c70b517; */
+    display: flex;
+    align-items: center;
+    min-width : 200px;
+    gap: 10px;
+    font-family: 'Poppins' , sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 33px;
+    color : ${props => props.theme.colors.seconderyText};
+    >svg{
+      path {
+        stroke: ${props => props.theme.colors.seconderyText};
+      }
+    }
+  `;
+  const StatsStyle = styled.div`
+  background-color: #171A22;
+  padding :10px;
+  flex: 1;
+  min-height: 100%;
   display: flex;
   align-items: center;
-  min-width : 200px;
+  flex-direction: column;
+  gap: 5px;
+  border-radius: 0px 10px 0px 0px;
+  `
+  const breatheAnimation = keyframes`
+  /* 0% { transform: translateY(0) }
+  50% { transform: translateY(10px)  }
+  100% { transform: translateY(0)  } */
+ `
+  const Buttons = styled.div`
+  /* background-color: #f0f8ff41; */
+  display: flex;
+  flex-direction: row;
   gap: 10px;
-  font-family: 'Poppins' , sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 17px;
-  line-height: 33px;
-  color : ${props => props.theme.colors.seconderyText};
-  >svg{
-    path {
-      stroke: ${props => props.theme.colors.seconderyText};
-    }
+  margin: 20px 0px;
+  flex-wrap: wrap;
+  .BtpBlocked {
+      padding: 5px 10px;
+      min-width: 100px;
+      background: #9a1818c5;
+      border-radius: 5px;
+      height: auto;
+      cursor: pointer;
+      border: 1px solid #e6e6e6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap : 5px;
+      padding: 3px 8px;
+      >svg{  path {  stroke : #fff; } }
+      font-family: 'Poppins' sans-serif;
+      font-weight: 500;
+      font-size:  ${props => props.theme.fontSize.l}; 
+      color: #FFFFFF;
+      animation-name: ${breatheAnimation};
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      min-width: auto;
+      width: auto;
+      z-index: 20;
+      position: relative;
+      overflow: hidden;
+      &:after {
+      background: #fff;
+      content: "";
+      height: 155px;
+      left: -75px;
+      opacity: .2;
+      position: absolute;
+      top: -50px;
+      width: 50px;
+      -webkit-transition: all 950ms cubic-bezier(0.19, 1, 0.22, 1);
+      transition: all 950ms cubic-bezier(0.19, 1, 0.22, 1);
+      -webkit-transform: rotate(35deg);
+      -ms-transform: rotate(35deg);
+      transform: rotate(35deg);
+      z-index: -10;
+      }
+      &:hover:after {
+        left: 120%;
+        -webkit-transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+        transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+      }
   }
-`;
+  .BtpPending {
+      padding: 5px 10px;
+      min-width: 100px;
+      background: #a4a912c5;
+      border-radius: 5px;
+      height: auto;
+      cursor: pointer;
+      border: 1px solid #e6e6e6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap : 5px;
+      padding: 5px 8px;
+      >svg{  path {  stroke : #fff; } }
+      font-family: 'Poppins' sans-serif;
+      font-weight: 500;
+      font-size:  ${props => props.theme.fontSize.l}; 
+      color: #FFFFFF;
+      animation-name: ${breatheAnimation};
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      min-width: auto;
+      width: auto;
+      z-index: 20;
+      position: relative;
+      overflow: hidden;
+      &:after {
+      background: #fff;
+      content: "";
+      height: 155px;
+      left: -75px;
+      opacity: .2;
+      position: absolute;
+      top: -50px;
+      width: 50px;
+      -webkit-transition: all 950ms cubic-bezier(0.19, 1, 0.22, 1);
+      transition: all 950ms cubic-bezier(0.19, 1, 0.22, 1);
+      -webkit-transform: rotate(35deg);
+      -ms-transform: rotate(35deg);
+      transform: rotate(35deg);
+      z-index: -10;
+      }
+      &:hover:after {
+        left: 120%;
+        -webkit-transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+        transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+      }
+  }
 
-const StatsStyle = styled.div`
-background-color: #171A22;
-padding :10px;
-flex: 1;
-min-height: 100%;
-display: flex;
-align-items: center;
-flex-direction: column;
-gap: 5px;
-border-radius: 0px 10px 0px 0px;
-`
-const Buttons = styled.div`
-/* background-color: #f0f8ff41; */
-display: flex;
-flex-direction: row;
-gap: 10px;
-margin: 20px 0px;
-flex-wrap: wrap;
-`
-
-const Data = styled.div`
-flex: 1;
-width: 100%;
-display: flex;
-flex-direction: row;
-align-items: center;
-justify-content: space-between;
-@media  only screen and (max-width: 750px) {
-  flex-direction: column;
-
-}
-
-.data{
-  height: 100%;
+  `
+  const Data = styled.div`
+  flex: 1;
+  width: 100%;
   display: flex;
-  align-items: flex-start;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  
-}
-.Achivv {
-  position: relative;
-  display: flex;
-  /* background-color: aliceblue; */
-  /* bottom: 5%; */
-  /* margin-bottom: 5px; */
+  @media  only screen and (max-width: 750px) {
+    flex-direction: column;
+
+  }
+
+  .data{
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: space-between;
+    
+  }
+  .Achivv {
+    position: relative;
+    display: flex;
+    /* background-color: aliceblue; */
+    /* bottom: 5%; */
+    /* margin-bottom: 5px; */
 
 
-}
-.Achiv {
-  position: relative;
-  display: flex;
-  /* background-color: aliceblue; */
-  /* bottom: 5%; */
-  /* margin-bottom: 5px; */
+  }
+  .Achiv {
+    position: relative;
+    display: flex;
+    /* background-color: aliceblue; */
+    /* bottom: 5%; */
+    /* margin-bottom: 5px; */
 
 
-}
-.Stats{
-  position: relative;
-  height: 100%;
-  width: auto;
- /* flex: 1; */
-  
-}
-`
-///// UserCard Comp
-export interface UserCardProps { data: { status: string; defaultAvatar: string; login: string;} }
-
-export interface StyleProps { status: string; }
-
-const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderColor: "black",};
-
-
-
+  }
+  .Stats{
+    position: relative;
+    height: 100%;
+    width: auto;
+  /* flex: 1; */
+    
+  }
+  `
+// State //
 
 /// Game History tab //
 export interface GameCompProps { win: boolean }
-
 export interface GameCardProps {
   match: {
       name: string;
@@ -517,7 +661,7 @@ export interface GameCardProps {
   },
   isFriend : boolean
 }
-
+//
 export  function GameComp(props : GameCardProps) {
   var state : boolean =( props.match.score1 > props.match.score2) ? true : false
 return (
@@ -553,7 +697,6 @@ return (
   </GameCompStyle>
 )
 }
-
 const GameCompStyle = styled.div<GameCompProps>`
   
   width: 90%;
@@ -591,7 +734,6 @@ const GameCompStyle = styled.div<GameCompProps>`
       }
   }
 `;
-
 const ElapsedTime = styled.div`
   display: flex;
   position: absolute;
@@ -619,11 +761,10 @@ const ElapsedTime = styled.div`
     color: white;
   }
 `;
-interface UserProp {
-  defaultAvatar: string,
-  login : string
-}
-interface AvatarProps {img: string , login? : string }
+//
+
+//
+interface AvatarProps {img: string }
 
 export  function AvatarComponent(props: AvatarProps) {
   const socket = useContext(SocketContext)
@@ -633,10 +774,10 @@ export  function AvatarComponent(props: AvatarProps) {
       socket.on("ConnectedUser" , (pyload)=>{
        console.log(pyload)
 
-        if (pyload.online.includes(props.login))
-          setstate(true)
-        else
-          setstate(false)
+        // if (pyload.online.includes(props.login))
+        //   setstate(true)
+        // else
+        //   setstate(false)
       })
 
   }, [])
@@ -648,12 +789,11 @@ return (
   </Avatarr>
 )
 }
-
 const Avatarr = styled.div`
 width: 100%;
 height: 100%;
 border-radius : 50%;
-/* overflow: hidden; */
+overflow: hidden;
 background-color: white;
 position: relative;
 img{
@@ -671,7 +811,6 @@ img{
     background-color: ${props => props.theme.colors.purple};
   }
 `;
-
 const Dataa = styled.div`
   
   width: 20%;
@@ -705,7 +844,9 @@ const Dataa = styled.div`
       letter-spacing: 0.3px;
   }
 `;
+//
 
+//
 export  function AddFriend() {
 return (
   <AddFriendStyle>
@@ -714,7 +855,6 @@ return (
   </AddFriendStyle>
 )
 }
-
 const AddFriendStyle = styled.div`
  font-family: 'Poppins';
   font-style: normal;
@@ -739,251 +879,4 @@ const AddFriendStyle = styled.div`
   border-radius: 10px;
   padding: 0 5px;
 `;
-
-
-export interface UserInvitCardProps {
-  data: UserProp
-}
-export interface StyleProps {
-    status: string;
-}
-
-export  function UserInvitCard(props : UserInvitCardProps) {
-  
-  const accepteFriend = ()=>{
-   axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=accept",  {withCredentials: true} 
-            ).then((res)=>{
-   
-        alert("friend Request Accepted" + res.status) }).catch((err)=>{  })
-        // window.location.reload();
-
-  }
-  
-  useEffect(() => {
-    console.log(props.data)
-
-  }, )
-  
-  // console.log(props.data)
-  return (
-    <UserInvitCardStyle >
-
-      <div className="YN"> 
-
-        <Deny className='Bdeny'/>
-        <Accepte onClick={accepteFriend} className='Adeny'/>
-
-      </div>
-
-      <img alt="avatar" src={props.data.defaultAvatar} className="avatar" />
-      <div className="Uname"> {props?.data?.login}  </div>
-    
-    </UserInvitCardStyle>
-  )
-}
-
-const UserInvitCardStyle = styled.div`
-
-  position: relative;
-  background: #70539b68;
-  margin : 10px;
-  width: 130px;
-  height: 130px;
-  text-align: center;
-  border-radius: 10px;
-  border: 2px solid  #70539b ;
-  animation: fadeIn 2s;
-
-  .YN {
-    /* background-color: #0228ff; */
-    position: absolute;
-    top: 0px;
-
-    width: 100%;
-    height: 20%;
-    .Bdeny {
-      position: absolute;
-      width: 25px;
-      height: 25px;
-      
-      top: 4px;
-      left: 5px;
-
-      &:hover {
-        cursor: pointer;
-        fill: #f50000a6;
-        width: 27px;
-        height: 27px;
-      }
-
-    } 
-    .Adeny {
-      position: absolute;
-      width: 25px;
-      height: 25px;
-      
-      top: 4px;
-      right: 5px;
-
-      &:hover {
-        cursor: pointer;
-        fill: #12c006a8;
-        width: 27px;
-        height: 27px;
-      }
-    }
-  }
-
-  .avatar {
-      border: 1px solid #fcfafc;
-      border-radius: 50%;
-      position: absolute;
-      display: block;
-      width: 50%;
-      top: 20%;
-      left: 25%;
-      animation: fadeIn 4s;
-      > img {
-        width:70px;
-        height: 70px;
-      }   
-    }
-
-    .Uname {
-    position: absolute;
-    color: #fcfafc;
-    width: 100%;
-    height: auto;
-    min-height: 30px;
-    margin : 2px 0px;
-    text-transform: capitalize;
-    font-size: 14px;
-    font-weight: bolder;
-    bottom: 0px;
-    /* -webkit-text-stroke: 1px #929292b7; */
-    }
-
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    &:hover {
-      cursor: pointer;
-      background: #70539bdb;
-
-    }
-`;
-
-/// Blocked Users ///
-export interface UserBlockedCardProps {
-  data: {
-    login: string;
-    defaultAvatar: string;
-  }
-}
-export interface StyleProps {
-    status: string;
-}
-
-export  function UserBlockedCard(props : UserBlockedCardProps) {
-  return (
-    <UserBlockedCardStyle >
-      <div className="YN"> 
-        <Deny className='Bdeny'/>
-      </div>
-      <img alt="avatar" src={props.data.defaultAvatar} className="avatar" />
-      <div className="Uname"> {props.data.login}  </div>
-    </UserBlockedCardStyle>
-  )
-}
-
-const UserBlockedCardStyle = styled.div`
-
-  position: relative;
-  background: #000000;
-  margin : 10px;
-  width: 130px;
-  height: 130px;
-  text-align: center;
-  border-radius: 10px;
-  border: 2px solid  #433f49 ;
-  animation: fadeIn 2s;
-
-  .YN {
-    position: absolute;
-    top: 0px;
-
-    width: 100%;
-    height: 20%;
-    .Bdeny {
-      position: absolute;
-      width: 25px;
-      height: 25px;
-      
-      top: 4px;
-      left: 5px;
-
-      &:hover {
-        cursor: pointer;
-        fill: #f50000a6;
-        width: 27px;
-        height: 27px;
-      }
-
-    } 
-    .Adeny {
-      position: absolute;
-      width: 25px;
-      height: 25px;
-      
-      top: 4px;
-      right: 5px;
-
-      &:hover {
-        cursor: pointer;
-        fill: #12c006a8;
-      }
-    }
-  }
-
-  .avatar {
-      border: 1px solid #fcfafc;
-      border-radius: 50%;
-      position: absolute;
-      display: block;
-      width: 50%;
-      top: 20%;
-      left: 25%;
-      animation: fadeIn 4s;
-      > img {
-        width:70px;
-        height: 70px;
-      }   
-    }
-
-    .Uname {
-    position: absolute;
-    color: #fcfafc;
-    width: 100%;
-    height: auto;
-    min-height: 30px;
-    margin : 2px 0px;
-    text-transform: capitalize;
-    font-size: 14px;
-    font-weight: bolder;
-    bottom: 0px;
-    /* -webkit-text-stroke: 1px #929292b7; */
-    }
-
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    &:hover {
-      cursor: pointer;
-      background: #282c34;
-
-    }
-`;
+//

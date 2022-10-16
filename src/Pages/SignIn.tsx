@@ -4,8 +4,9 @@ import PatternImg from "../assets/imgs/background.jpeg"
 import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
 import { LogoComponent } from '../components/Upperbar'
 
+
 //todo env file
-const url = "https://api.intra.42.fr/oauth/authorize?client_id=b645a2e7e9c3b0cc8345619af067b26396718e9a1d172c3f36fc602f6ce3cb20&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fauth&response_type=code"
+
 export default function SignIn() {
   return (
     <Wrraper>
@@ -22,8 +23,8 @@ export default function SignIn() {
                <img src={FtImg} alt="42logo" />
                Login with intra
             </LoginButton> */}
-            <a href={url}>
-            <Button cursor="default"  icon={<FtImg/>} text="Sign in with intra"/>
+            <a href={process.env.REACT_APP_REDIRECT_URL}>
+            <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}} cursor="default"  icon={<FtImg/>} text="Sign in with intra"/>
 
             </a>
             <a id="TermsCond" href="#termscondPage">Terms & conditions</a>
@@ -139,6 +140,7 @@ const LoginButtonStyle = styled.button<ButtonStyleProps>`
    padding: 5px 10px;
    min-width: 100px;
    background: ${props => props.theme.colors.purple};;
+   /* background-color: #831717; */
    border-radius: 5px;
    height: auto;
    cursor: ${props => (props.cursor)};;

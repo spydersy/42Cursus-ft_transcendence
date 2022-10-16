@@ -5,28 +5,23 @@ import Badge2 from "../assets/imgs/Archive/badge2.svg";
 import Badge3 from "../assets/imgs/Archive/badge3.svg";
 import Badge4 from "../assets/imgs/Archive/badge4.svg";
 import Badge5 from "../assets/imgs/Archive/badge5.svg";
-// import Badge6 from "../assets/imgs/Archive/badge6.svg";
 import Badge7 from "../assets/imgs/Archive/badge7.svg";
-// import Badge8 from "../assets/imgs/Archive/badge8.svg";
 
 const achievment1 = {
     name: "NEW-3ANKOUB",
     desc : "you played 20 game without any loss",
     badge : Badge1,
   }
-
 const achievment2 = {
     name: "ONLY-ALCHEMIST",
     desc : "You are a M9WED player by nature",
     badge : Badge2,
   }
-
 const achievment3 = {
     name: "3ANKOUB-MASTER",
     desc : "you win 5 game.",
     badge : Badge3 ,
   }
-  
 const achievment4 = {
     name: "MOGIWARA",
     desc : " (9owat Sada9a).",
@@ -37,7 +32,6 @@ const achievment5 = {
     desc : "(MODMIR aka Yaiba)",
     badge : Badge5 ,
   }
-
   const achievment7 = {
     name: "OYAJI",
     desc : "(Only Golden Promo)",
@@ -51,35 +45,6 @@ const achiv = [achievment1 , achievment7 , achievment3 , achievment4, achievment
 export interface AchivementsProps { data: [] }
 
 export interface AchiveStyleProps { status: boolean; }
-
-const ContyStyle = styled.div<AchiveStyleProps>`
-  display: flex;
-  flex-direction: row;
-  align-items:center;
-  /* border: 1px solid #af1998; */
-  /* border-style: inset; */
-  position: relative;
-
-  &:hover{
-        > span{
-            visibility: visible;
-					opacity: 1;
-        }
-
-
-    }
-  >img{
-    margin : 2px 8px;
-    padding: 0px;
-    ${props => props.status === true ? css`
-      filter: grayscale(0%); ` :
-    css`
-      /* filter: grayscale(100%); */
-      /* filter: blur(0.9px); */
-      filter: brightness(12%);
-      `}
-  }
-`
 
 export default function Achivments(props: AchivementsProps) {
   return (
@@ -105,7 +70,7 @@ export default function Achivments(props: AchivementsProps) {
 const AchiStyle = styled.div`
 background-color: #1c70b517;
 border-radius : 10px;
-width: 99%;
+width: 100%;
 left: 0px;
 display: flex;
 flex-direction: row;
@@ -131,7 +96,34 @@ margin: 35px 0px;
 
 }
 `
+const ContyStyle = styled.div<AchiveStyleProps>`
+  display: flex;
+  flex-direction: row;
+  align-items:center;
+  /* border: 1px solid #af1998; */
+  /* border-style: inset; */
+  position: relative;
 
+  &:hover{
+        > span{
+            visibility: visible;
+					opacity: 1;
+        }
+
+
+    }
+  >img{
+    margin : 2px 8px;
+    padding: 0px;
+    ${props => props.status === true ? css`
+      filter: grayscale(0%); ` :
+    css`
+      /* filter: grayscale(100%); */
+      /* filter: blur(0.9px); */
+      filter: brightness(15%);
+      `}
+  }
+`
 const ToolTip = styled.span`
         display: inline-block;
 				position: absolute;
