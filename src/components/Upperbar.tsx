@@ -32,7 +32,7 @@ interface NotifProps {
   setopen: (e : boolean) => void,
   
 }
-const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/melkarmi"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
+const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : ""},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
 
 export default function Upperbar() {
   const [open, setopen] = useState(false)

@@ -20,6 +20,9 @@ import  { RadarChart } from './charts/Charts';
 import CircleLoader from "react-spinners/CircleLoader";
 import { SocketContext,  SocketValue } from '../context/Socket';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 //// PlayerCard Comp
 interface UserProp {
   defaultAvatar: string,
@@ -226,120 +229,165 @@ background-color: ${props => props.theme.colors.seconderybg};
     const [grade, setgrade] = useState<string | undefined>(Grades[5])
     const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
 
-      // setrelationStatus(props.player.relation)
+    const    AddUsernotify = () => toast.success("You have successfully Send the invitaion to " + id.toLocaleUpperCase() , {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+    const    UnfriendUserNotify = () => toast.error("You have successfully Unfriend this Bastard " + id.toLocaleUpperCase()  , {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+    const    BlockUserNotify = () => toast.error("You have successfully Block " + id.toLocaleUpperCase()  , {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+    const    UnBlockUserNotify = () => toast.warning("You have successfully UnBlock " + id.toLocaleUpperCase()  , {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+    const    CancelNotify = () => toast.warning("You have successfully Cancel the invitation to " + id.toLocaleUpperCase() , {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
 
-      const addFriend = ()=>{
-          //http://localhost:8000/users/relation/:id?evet=add
-          axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
-          ).then((res)=>{
-          // console.log(res.data)
-          // alert("friend Request sent" + res.status)
-          setrelationStatus("PENDING")
-          // window.location.reload();
-        }).catch((err)=>{ 
-          console.log(err)
-          alert("USER ALREADY BLOCKED")
-          setrelationStatus("BLOCKER")
-        })
-      }
-      const CancelRequest = ()=>{
-        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
+    const addFriend = ()=>{
+        //http://localhost:8000/users/relation/:id?evet=add
+        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{
         // console.log(res.data)
         // alert("friend Request sent" + res.status)
-        setrelationStatus("NOTHING")
-        window.location.reload();
-        }).catch((err)=>{  
-          setrelationStatus("PENDING")
-
-        })
-      }
-      const UnfriendUser = ()=>{
-        //  GET http://localhost:8000/users/relation/:id?event=unfriend
-        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
-        ).then((res)=>{
-        // console.log(res.data)
-        // alert("friend Request sent" + res.status)
-        setrelationStatus("NOTHING")
+        setrelationStatus("PENDING")
+        AddUsernotify();
         // window.location.reload();
-        }).catch((err)=>{  })
-      }
-      const BlockUser = ()=>{
-        //  GET http://localhost:8000/users/relation/:id?event=block
-        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
-        ).then((res)=>{
-        // console.log(res.data)
-        // alert("friend Request sent" + res.status)
-        setrelationStatus("BLOCKED")
-        // window.location.reload();
-        }).catch((err)=>{  })
-      }
-      const UnBlockUser = ()=>{
-        //  GET http://localhost:8000/users/relation/:id?event=unblock
-        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unblock",   {withCredentials: true}
-        ).then((res)=>{
-        // console.log(res.data)
-        // alert("friend Request sent" + res.status)
-        setrelationStatus("NOTHING")
-        // window.location.reload();
-        }).catch((err)=>{  })
-      }
-      
+      }).catch((err)=>{ 
+        console.log(err)
+        alert("USER ALREADY BLOCKED")
+        setrelationStatus("BLOCKER")
+      })
+    }
+    const CancelRequest = ()=>{
+      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
+      ).then((res)=>{
+      // console.log(res.data)
+      // alert("friend Request sent" + res.status)
+      setrelationStatus("NOTHING")
+      CancelNotify();
+      // CancelRequestNotify();
+      // window.location.reload();
+    }).catch((err)=>{  
+        setrelationStatus("PENDING")
 
-      const InviteToPlay = ()=>{
-      
-      }
+      })
+    }
+    const UnfriendUser = ()=>{
+      //  GET http://localhost:8000/users/relation/:id?event=unfriend
+      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
+      ).then((res)=>{
+      // console.log(res.data)
+      // alert("friend Request sent" + res.status)
+      setrelationStatus("NOTHING")
+      UnfriendUserNotify();
+      // window.location.reload();
+      }).catch((err)=>{  })
+    }
+    const BlockUser = ()=>{
+      //  GET http://localhost:8000/users/relation/:id?event=block
+      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
+      ).then((res)=>{
+      // console.log(res.data)
+      // alert("friend Request sent" + res.status)
+      setrelationStatus("BLOCKED")
+      BlockUserNotify();
+      // window.location.reload();
+      }).catch((err)=>{  })
+    }
+    const UnBlockUser = ()=>{
+      //  GET http://localhost:8000/users/relation/:id?event=unblock
+      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unblock",   {withCredentials: true}
+      ).then((res)=>{
+      // console.log(res.data)
+      // alert("friend Request sent" + res.status)
+      setrelationStatus("NOTHING")
+      UnBlockUserNotify()
+      // window.location.reload();
+      }).catch((err)=>{  })
+    }
+    const InviteToPlay = ()=>{ }
 
-      
-
-      console.log( "Player Data > ", props.player, "\n")
-
-      useEffect(() => {
-          
-          // setrelationStatus(props.player?.relation)
-          console.log( "- 1Relation <" , props.player.relation, "> \n")
-          console.log( "- 2Relation <" , relationStatus, "> \n")
-          
-          // get user data  from server
-          axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}).then((res)=>{
-          
-          setrelationStatus(res.data.relation)
-          
-
-            //Rank
-            if (res.data.level)
-              setgrade(Grades[res.data.level])
-            else
-              setgrade("Unranked")
+    useEffect(() => {
         
-            //CreatedTime
-            const date = new Date(res.data.lastModification)
-            setcreatedTime(date.toString().split("GMT")[0])
+        // setrelationStatus(props.player?.relation)
+        console.log( "- 1Relation <" , props.player.relation, "> \n")
+        console.log( "- 2Relation <" , relationStatus, "> \n")
+        
+        // get user data  from server
+        axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}).then((res)=>{
+        
+        setrelationStatus(res.data.relation)
+        
 
-            console.log("> createdTime : ", createdTime)
-            console.log("> grade : ", grade, "\n")
+          //Rank
+          if (res.data.level)
+            setgrade(Grades[res.data.level])
+          else
+            setgrade("Unranked")
+      
+          //CreatedTime
+          const date = new Date(res.data.lastModification)
+          setcreatedTime(date.toString().split("GMT")[0])
 
-          }).catch((err)=>{   
-          })
+          console.log("> createdTime : ", createdTime)
+          console.log("> grade : ", grade, "\n")
 
-          axios.get("http://localhost:8000/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
-            // Achievenments          
-            setAChievements(res.data)
-            console.log("> Achievements : ", AChievements)
-          }).catch((err)=>{
-          })
-    
-        }, [setAChievements])
+        }).catch((err)=>{   
+        })
 
-
+        axios.get("http://localhost:8000/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
+          // Achievenments          
+          setAChievements(res.data)
+          console.log("> Achievements : ", AChievements)
+        }).catch((err)=>{
+        })
+  
+      }, [setAChievements])
       return (
         <StatsStyle  >
           <Data>
 
               <div className='data'>
-                
                 <div>
-                
+                  <ToastContainer />
+
                   <DataTag> 
                     <DataTag>   <RankIcon/>  {grade}  </DataTag>
                     <DataTag>   <UsersIcon/> {props.player.nbFriends} {" Friends"} </DataTag>
@@ -347,23 +395,18 @@ background-color: ${props => props.theme.colors.seconderybg};
 
                   <DataTag>
                     <DataTag>     <GameIcon/> {props.player?.wins +   props.player?.losses} {"  Game"} </DataTag>
-                    {/* <DataTag>     <CalendarIcon/> {props.player.lastModification}  </DataTag> */}
                     <DataTag>     <CalendarIcon/> {createdTime}  </DataTag>
                   </DataTag>
-
+                  
                   {props.isCurrentUser === false && 
                     <Buttons className='Btp' >
                       {
-                        // UserState : BlockedUser, Friend, Pending, None(Not a friend)
-                    
                         // Friends relation
                         relationStatus === "NOTHING" ? 
-                        // None relation
                           <Button cursor="pointer" onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
                         : 
                         // Pending request relation
                         relationStatus === 'PENDING' ? 
-                        // <Button cursor="no-drop"  text='Pending'/>
                           <button className='BtpPending' onClick={CancelRequest}>
                                 <Hourglass/>
                                 Cancel Request
@@ -375,20 +418,18 @@ background-color: ${props => props.theme.colors.seconderybg};
                             <UnblockIcon/>
                             UnBlock
                           </button>
-                          // <Button cursor="pointer" icon={<BlockIcon/>} onClick={UnBlockUser}  type='secondary' text='UnBlock'/>
                         :
                         // relationStatus === "BLOCKED" ? 
                         // <Button cursor="pointer" icon={<BlockIcon/>}   type='secondary' text='GHAYERHA'/>
                         // :
                         relationStatus === "FRIENDS" ? 
                           <>
-                    
                             <Button  cursor="pointer" type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
-
+                            
                             <a href="/chat/id">  
                               <Button cursor="pointer"  icon={<SendMessage/>} text='Send Message'/>
                             </a>
-
+                            
                             <Button cursor="pointer" icon={<InviteToPlayIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
 
                             <button className='BtpBlocked'onClick={BlockUser}>
@@ -396,13 +437,9 @@ background-color: ${props => props.theme.colors.seconderybg};
                               Block
                             </button>
 
-                            {/* <Button  cursor="pointer" type='secondary' onClick={BlockUser} icon={<BlockIcon/>} text='Block'/> */}
                           </>
-                        :
-                          null
+                        : null
                       }
-                      {/* <Button icon={<UserAddIcon/>}   type='secondary' text='Invite to play'/> */}
-
                     </Buttons>
                   }
 
@@ -423,6 +460,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         </StatsStyle>
       )
   }
+
   const DataTag = styled.div`
     /* background-color: #1c70b517; */
     display: flex;

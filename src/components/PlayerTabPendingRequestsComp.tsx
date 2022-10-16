@@ -7,6 +7,8 @@ import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
 
 import EmptyComponent  from "./PlayerrEmptyComp"
 import avataro from "../assets/imgs/avatar/avatar2.png";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface UserProp { defaultAvatar: string, login : string  }
 export interface UserInvitCardProps { data: UserProp }
@@ -53,7 +55,9 @@ export default function PendingRequests()
   
   return (
     <TabfourStyle>
+        <ToastContainer />
     {
+        
         friends.length === 0 ? 
         <EmptyComponent text="No Pending Requests !"/>
         : 
@@ -96,20 +100,45 @@ const TabfourStyle= styled.div`
 //
 export  function UserInvitCard(props : UserInvitCardProps) {
 
+const    accepteFriendNotify = () => toast.success("You accepted " +  props.data.login.toLocaleUpperCase() + " Friend Request", {
+    position: "bottom-center",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored"
+    });
+const    DeclineFriendNotify = () => toast.warning("You declined " +  props.data.login.toLocaleUpperCase() + " Friend Request", {
+    position: "bottom-center",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored"
+    });
+
 const accepteFriend = ()=>{
     axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=accept",  {withCredentials: true} 
             ).then((res)=>{
     
-        alert("User Request Accepted" + res.status) }).catch((err)=>{  })
+        // alert("User Request Accepted" + res.status) 
+        accepteFriendNotify();
+    
+    }).catch((err)=>{  })
         // window.location.reload();
-
 }
-
 const DenyFriend = ()=>{
     axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=decline",  {withCredentials: true} 
             ).then((res)=>{
     
-        alert("User Request Deny" + res.status) }).catch((err)=>{  })
+        // alert("User Request Deny" + res.status) 
+        DeclineFriendNotify()
+    
+    }).catch((err)=>{  })
         // window.location.reload();
 
 }
@@ -121,7 +150,6 @@ useEffect(() => {
 
 return (
     <UserInvitCardStyle >
-        <a href={"/profile/" + props.data.login}>
             <div className="YN"> 
 
                 <Deny onClick={DenyFriend}  className='Bdeny'/>
@@ -129,9 +157,10 @@ return (
 
             </div>
 
+        <a href={"/profile/" + props.data.login}>
             <img alt="avatar" src={props.data.defaultAvatar} className="avatar" />
-            <div className="Uname"> {props?.data?.login}  </div>
         </a>
+            <div className="Uname"> {props?.data?.login}  </div>
     </UserInvitCardStyle>
 )
 }

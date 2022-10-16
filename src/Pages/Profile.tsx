@@ -116,28 +116,33 @@ export default function Profile() {
                   <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
               </TheBox>
 
-              <PlayerTabsBar id={id} /> 
+              <PlayerTabsBar isCurrentUser={isCurrentUser} id={id} /> 
         </div>
   )
 };
 
 const TheBox = styled.div` width: 100%;  border: 0px solid ${props => props.theme.colors.primarybg}; `;
 
-interface PlayerTabsProps { id : string }
+interface PlayerTabsProps { id : string, isCurrentUser : boolean }
 
 
 ///// PlayerTabs Section
-const linkslist = [ " FRIENDS" , "PENDING REQUESTS", "BLOCKED USERS"]
+
 
 export function PlayerTabsBar(props : PlayerTabsProps)
 {
   const [index, setindex] = useState(0)
+  let linkslist = [ " FRIENDS"]
+
+  if (props.isCurrentUser)
+    linkslist = [ " FRIENDS" ,"PENDING REQUESTS", "BLOCKED USERS"];
+
   return ( 
     <PlayerTabsStyle>
       <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/> 
         {index === 0 && <FriendsComponent id={props.id}/>}
-        {index === 1 && <PendingRequests/>}
-        {index === 2 && <BlockedUsers/>}
+        {index === 1 && props.isCurrentUser &&  <PendingRequests/>}
+        {index === 2 && props.isCurrentUser && <BlockedUsers/>}
     </PlayerTabsStyle>
   )
 }

@@ -4,6 +4,8 @@ import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import axios from 'axios';
 import styled from "styled-components"
 import EmptyComponent from './PlayerrEmptyComp';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 // My Black List
 export default function BlockedUsers()
@@ -48,6 +50,7 @@ export default function BlockedUsers()
 
   return (
     <TabfourStyle> 
+      <ToastContainer />
         {
            listBlocked.length === 0 ? 
            <EmptyComponent text="Peaceful User !"/>
@@ -102,11 +105,24 @@ export interface StyleProps {
 
 export  function UserBlockedCard(props : UserBlockedCardProps) {
 
+  const    DeclineFriendNotify = () => toast.info("You Removed " +  props.data.login.toLocaleUpperCase() + " From BlackList", {
+    position: "bottom-center",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored"
+    });
+
     const RemoveBlockUser = ()=>{
         axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=unblock",  {withCredentials: true} 
                 ).then((res)=>{
         
-            alert("User Unblocked" + res.status) }).catch((err)=>{  })
+            DeclineFriendNotify();
+            
+           }).catch((err)=>{  })
             // window.location.reload();
     
     }

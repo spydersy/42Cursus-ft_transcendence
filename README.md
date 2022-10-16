@@ -10,3 +10,4 @@
 
 - redirect to dm chat 
 
+- the user recieving invitation can't cancel the request 
