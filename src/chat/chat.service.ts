@@ -138,6 +138,52 @@ export class ChatService {
         return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, allChannels));
     }
 
+    async UpdateUserInChannel(me: number, user: string, channelId: string, role: PERMISSION, @Res() res) {
+        if (await this.CanUpdateChannel(me, channelId) === true) {
+            const channel = await this.prisma.channels.findUnique({where: {id: channelId} });
+            if (channel === null || channel.access === CHANNEL.DM)
+               return res.status(HttpStatus.FORBIDDEN).send({'message': 'Cant Add User'});
+            const userProfile = await this.userService.GetUserByLogin(user);
+            if (userProfile === null) 
+                return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+                console.log(userProfile.id);
+                await this.prisma.channelsUsers.update({
+                    where: {
+                        userId_channelId: {
+                            userId: userProfile.id,
+                            channelId: channel.id
+                        },
+                    },
+                    data: { permission: role}
+                });
+                return res.status(HttpStatus.OK).send({'message': 'User Updated'});
+        }
+        return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
+    }
+
+    async DeleteUserFromChannel(me: number, user: string, channelId: string, @Res() res) {
+        const channel = await this.prisma.channels.findUnique({where: {id: channelId} });
+        if (channel === null || channel.access === CHANNEL.DM)
+           return res.status(HttpStatus.FORBIDDEN).send({'message': 'Cant Add User'});
+        const userProfile = await this.userService.GetUserByLogin(user);
+        if (userProfile === null) 
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+        if ((userProfile.id === me)
+        || (userProfile.id !== me && await this.CanUpdateChannel(me, channelId) === true)) {
+            try {
+                await this.prisma.channelsUsers.delete({
+                    where: {
+                        userId_channelId: {userId: userProfile.id, channelId: channelId}
+                    }
+                });
+                res.status(HttpStatus.OK).send({'message': 'User Deleted'});
+            } catch {
+                res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+            }
+        }
+        res.status(HttpStatus.FORBIDDEN).send({'message': 'Forbidden'});
+    }
+
     async AddUserToChannel(me: number, user: string, channelId: string, @Res() res) {
         if (await this.CanUpdateChannel(me, channelId) === true) {
             const channel = await this.prisma.channels.findUnique({
@@ -145,10 +191,9 @@ export class ChatService {
             });
             if (channel === null || channel.access === CHANNEL.DM)
                return res.status(HttpStatus.FORBIDDEN).send({'message': 'Cant Add User'});
-               const userProfile = await this.userService.GetUserByLogin(user);
-               if (userProfile === null) {
+            const userProfile = await this.userService.GetUserByLogin(user);
+               if (userProfile === null) 
                     return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
-               }
             try {
                await this.prisma.channelsUsers.create({
                     data: {
@@ -157,6 +202,7 @@ export class ChatService {
                         permission: PERMISSION.USER
                     }
                 });
+                return res.status(HttpStatus.CREATED).send({'message': 'User Added Succesefully'});
             } catch {
                 return res.status(HttpStatus.CONFLICT).send({'message': 'User Already Exist'});
             }
@@ -251,18 +297,12 @@ export class ChatService {
     }
 
     async GetChannelById(channelId: string) {
-        let channel = await this.prisma.channels.findUnique({
-            where: {id: channelId}
-        });
-        return channel;
+        return await this.prisma.channels.findUnique({where: {id: channelId} });
     }
 
     async FindUserInChannel(userId: number, channelId: string) {
         let userChannel = await this.prisma.channelsUsers.findUnique({
-            where: {
-                userId_channelId: {userId, channelId},
-            },
-        });
+            where: { userId_channelId: {userId, channelId}} });
         return userChannel;
     }
 

@@ -1,4 +1,4 @@
-import { Controller, HttpStatus, Post, Get, Query, Req, Res, UploadedFile, UseGuards, UseInterceptors, Body } from '@nestjs/common';
+import { Controller, HttpStatus, Post, Get, Query, Req, Res, UploadedFile, UseGuards, UseInterceptors, Body, Delete } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -8,6 +8,7 @@ import { query } from 'express';
 import { ChatService } from './chat.service';
 import { ChannelUserDto, MessageDataDto } from 'src/dtos/Inputs.dto';
 import { UserService } from 'src/user/user.service';
+import { PERMISSION } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard)
 @Controller('chat')
@@ -23,6 +24,22 @@ export class ChatController {
       return this.chatService.AddUserToChannel(req.user.userId, userChannelPair.user, userChannelPair.channelId, res);
     }
 
+    // TASK_01 - DONE
+    @Post('UpdateUser')
+    async UpdateUserInChannel(@Req() req, @Body() userChannelPair: ChannelUserDto, @Query('role') role, @Res() res) {
+      if (role && (role === 'admin' || role === 'user'))
+        return this.chatService.UpdateUserInChannel(req.user.userId, userChannelPair.user,
+          userChannelPair.channelId, role === 'admin' ? PERMISSION.ADMIN : PERMISSION.USER, res);
+      return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Query Not Set Properly'});
+    }
+
+    @Delete('DeleteUser/:user')
+    async DeleteUserFromChannel(@Req() req, @Query('channel') channelId, @Res() res) {
+      if (channelId && (channelId === 'admin' || channelId === 'user'))
+        return this.chatService.DeleteUserFromChannel(req.user.userId, req.params.user, channelId, res);
+      return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Query Not Set Properly'});
+    }
+
     // TASK_06 - DONE
     @Get('myChannels')
     async GetMyChannels(@Req() req, @Res() res) {
@@ -34,17 +51,6 @@ export class ChatController {
     async SendMessage(@Req() req, @Body() messageData: MessageDataDto, @Res() res) {
       return this.chatService.SendMessage(req.user.userId, messageData.content, messageData.channelId);
     }
-
-    // @Post('UpdateUser/:channelId')
-    // async UpdateUserInChannel() {
-
-    // }
-
-    // @Post('UpdateUser/:channelId')
-    // async UpdateUserInChannel() {
-
-    // }
-
 
     @Get('messages/:channelId')
     async GetMessages(@Req() req, @Res() res) {

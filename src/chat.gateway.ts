@@ -35,7 +35,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 //The handleMessage() function is also decorated with @SubscribeMessage() which makes it listen to an event named msgToServer.
   
   @SubscribeMessage('chatToServer')
-    async handleMessage(client: Socket, payload) {
+  async handleMessage(client: Socket, payload) {
     console.log("__PAYLOAD__DBG__ : ", payload.content);
 
     await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
