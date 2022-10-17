@@ -6,7 +6,7 @@ import { Controller, Get } from '@nestjs/common';
 import { start } from 'repl';
 import { GameService } from './game/game.service';
 
-@WebSocketGateway( {
+@WebSocketGateway(8080, {
     cors: {
       origin: '*',
       credentials: true,

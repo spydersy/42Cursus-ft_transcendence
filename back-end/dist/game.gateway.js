@@ -165,7 +165,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], GameGateway.prototype, "moveBall", null);
 GameGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({
+    (0, websockets_1.WebSocketGateway)(8080, {
         cors: {
             origin: '*',
             credentials: true,

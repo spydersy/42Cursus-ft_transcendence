@@ -16,7 +16,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 //   content: string,
 //   channelId: string
 //  }
- @WebSocketGateway( {
+ @WebSocketGateway(8080, {
     cors: {
       origin: '*',
       credentials: true,
