@@ -1,0 +1,60 @@
+version: '3.8'
+services:
+  dev-db:
+    image: postgres:13
+    ports:
+      - 5432:5432
+    container_name: db-container
+    environment:
+      - POSTGRES_USER=abelarif
+      - POSTGRES_PASSWORD=1325
+      - POSTGRES_DB=nest
+    networks:
+      - ft_transcendence
+
+
+  back-end:
+    depends_on:
+        - dev-db
+    build:
+      context: ./back-end
+    ports:
+      # - "8000:8000"
+      # - "3001:3001"
+      - "5555:5555"
+    env_file: ./back-end/.env
+    container_name: nest-container
+    volumes:
+       - ./back-end:/back-end
+       - /back-end/node_modules
+    networks:
+      - ft_transcendence
+
+  front-end:
+    depends_on:
+      - dev-db
+    build:
+      context: ./front-end
+    container_name: react-container
+    stdin_open: true
+    volumes:
+       - ./front-end:/front-end
+       - /front-end/node_modules
+    networks:
+      - ft_transcendence
+  
+  nginx:
+    depends_on:
+      - front-end
+      - back-end
+    restart: always
+    build:
+      context: ./nginx
+    ports:
+    - "80:80"
+    networks:
+      - ft_transcendence
+
+networks:
+  ft_transcendence:
+    driver: bridge
