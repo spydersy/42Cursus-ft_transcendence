@@ -66,7 +66,6 @@ import { SOCKET } from '@prisma/client';
    this.server.emit('DisconnectedUser', {});
   }
 
-  @UseGuards(JwtAuthGuard)
   handleConnection(client: Socket, ...args: any[]) {
    this.logger.log(`Client connected: ${client.id}`);
   }

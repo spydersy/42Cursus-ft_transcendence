@@ -18,6 +18,11 @@ export class Profile {
     Level:          number;
 }
 
+export interface PlayerType{
+    id : string
+    login : string,
+}
+
 // export class CurrentUser {
 //     login:          string;
 //     displayName:    string;

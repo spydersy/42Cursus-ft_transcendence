@@ -364,7 +364,6 @@ export class UserService {
             let allUser = await this.prisma.users.findMany() ;
             console.log("__ALL__USERS__ : ", allUser)
             return res.send(allUser);
-            // return allUser;
         }
     /*
     *  Utils : ************************************************************************************

@@ -22,10 +22,14 @@ import { TfaModule } from './tfa/tfa.module';
 import { ChatGateway } from './chat.gateway';
 import { JwtService } from '@nestjs/jwt';
 import { OnlineLogerGateway } from './online-loger.gateway';
+import { GameService } from './game/game.service';
+import { GameController } from './game/game.controller';
+import { GameModule } from './game/game.module';
+import { GameGateway } from './game.gateway';
 
 @Module({
-  imports: [AuthModule, PrismaModule, UserModule, ProfileModule, ConfigModule.forRoot(), SearchModule, ChatModule, TfaModule],
-  controllers: [AppController, UserController, ProfileController, ChatController, TfaController],
-  providers: [AppService, UserService, ProfileService, PrismaService, SearchService, ChatService, TfaService, ChatGateway, JwtService, OnlineLogerGateway],
+  imports: [AuthModule, PrismaModule, UserModule, ProfileModule, ConfigModule.forRoot(), SearchModule, ChatModule, TfaModule, GameModule],
+  controllers: [AppController, UserController, ProfileController, ChatController, TfaController, GameController],
+  providers: [AppService, UserService, ProfileService, PrismaService, SearchService, ChatService, TfaService, ChatGateway, GameGateway, JwtService, OnlineLogerGateway, GameService],
 })
 export class AppModule {}
