@@ -168,12 +168,34 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       this.wss.to(room.roomName).emit("player1moved" , payload)
     }
   }
+
   @SubscribeMessage('player2Moved')
   player2moved(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
     if (room)
     {
       this.wss.to(room.roomName).emit("player2moved" , payload)
+    }
+
+  }
+  @SubscribeMessage('player1Scored')
+  player1Scored(client: any, payload: any): void {
+    var room = this.getRoombyPlayerId(client.id)
+    if (room)
+    {
+      var i = this.roomArray.indexOf(room)
+      this.roomArray[i].incrementScore(1)
+      this.wss.to(room.roomName).emit("playerscored" , this.roomArray[i].score)
+    }
+  }
+  @SubscribeMessage('player2Scored')
+  player2Scored(client: any, payload: any): void {
+    var room = this.getRoombyPlayerId(client.id)
+    if (room)
+    {
+      var i = this.roomArray.indexOf(room)
+      this.roomArray[i].incrementScore(2)
+      this.wss.to(room.roomName).emit("playerscored" ,  this.roomArray[i].score)
     }
   }
   @SubscribeMessage('moveBall')

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
+import { throws } from 'assert';
 import { PlayerType } from '../dtos/Outputs.dto'
 
 
@@ -10,12 +11,14 @@ export class GameService {
     roomMembers: string[] = []
     roomPlayers: PlayerType[] = [];
     roomName: string;
+    score: {score1 : number , score2 : number};
    
    
    constructor(roomName : string)
    {
    //   this.logger.log("client is disconnected")
        this.roomName = roomName;
+       this.score = {score1 : 0 , score2 : 0}
    }
    joinPlayer(login : string , id : string)
    {
@@ -54,6 +57,14 @@ export class GameService {
            }
        }
        return null
+
+   }
+   incrementScore(id : number)
+   {
+        if (id == 1)
+            this.score.score1++;
+        else
+            this.score.score2++;
 
    }
 
