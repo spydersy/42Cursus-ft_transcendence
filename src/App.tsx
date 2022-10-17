@@ -28,7 +28,6 @@ import Setting from './Pages/Setting';
 import Leader from './Pages/Leader';
 import Room from './Pages/Room';
 import SocketTesting from './components/testing/SocketTesting';
-import Background from './components/Background';
 import ChatTesting from './components/testing/ChatTesting';
 
 
@@ -82,7 +81,7 @@ function App() {
        
 
        <ThemeProvider theme={theme}>
-        {/* <Background/> */}
+     
         <Main>
           <ProtectedLayout body={<Upperbar />} />
           <ProtectedLayout body={ <Sidebar/>} />

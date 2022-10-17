@@ -41,7 +41,7 @@ const ToggleSwitchStyle = styled.div`
 
 export default function InputComponent(props: InputProps) {
   return (
-    <InputStyle >
+    <InputStyle disabled={props.disabled}  >
     <label>
         {props.lable}
     </label>
@@ -60,21 +60,23 @@ interface InputProps{
     onChange? : (e : any)=>void,
     alert? : boolean,
     disabled? : boolean
-    refs? : any
+    refs? : any,
  }
 interface InputPropsStyle{
+  disabled? : boolean
 
 }
 const InputStyle = styled.div<InputPropsStyle>`
 font-family: "Poppins", sans-serif
 ;
-
-
+  
   display: flex;
   align-items: flex-start;
   flex-direction: column;
   width: 100%;
   max-width: 600px;
+  cursor: pointer;
+
   > label{
       
       color:  ${props => props.theme.colors.primaryText};;
@@ -95,6 +97,10 @@ font-family: "Poppins", sans-serif
         
         border-radius: 10px;
         > input{
+          
+          ${props => (props.disabled === true) && `
+          cursor: no-drop;
+    `}
         border-radius: 10px;
 
             height: 42px;

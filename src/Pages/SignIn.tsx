@@ -3,6 +3,7 @@ import styled , {keyframes , css} from "styled-components"
 import PatternImg from "../assets/imgs/background.jpeg"
 import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
 import { LogoComponent } from '../components/Upperbar'
+import Background from '../components/Background';
 
 
 //todo env file
@@ -10,14 +11,16 @@ import { LogoComponent } from '../components/Upperbar'
 export default function SignIn() {
   return (
     <Wrraper>
-
+      <Background/>
          <Bloc>
             <LogoComponent size={"big"}/>
             <Title>
-            Welcome Back!
+            3ANAKIB TEAM
             </Title>
+            {/* “Those who don't know pain will never know what true peace is, the world will know pain SHINRA-TENSIE” */}
             <Description>
-            “Only passions, great passiopns can elevate the soul to great things” - Zhang Jike
+            “Nobody Dies a Virgin, Life Fucks Us All.” - Yaiba
+            
             </Description>
             {/* <LoginButton href={url} >
                <img src={FtImg} alt="42logo" />
@@ -28,8 +31,20 @@ export default function SignIn() {
 
             </a>
             <a id="TermsCond" href="#termscondPage">Terms & conditions</a>
+         
+         <br></br>
+         <br></br>
+
+            <h1>  Team Presentation  </h1>
+         <div className='wrow'>
+            <div className='urow'>Person x</div>
+            <div className='urow'>Person x</div>
+            <div className='urow'>Person x</div>
+            <div className='urow'>Person x</div>
+            <div className='urow'>Person x</div>
+           
+         </div>
          </Bloc>
-  
 
    </Wrraper>
   )
@@ -44,22 +59,43 @@ const Wrraper = styled.div`
    width: 100vw;
    height: 100vh;
    display: flex;
-   background: url(${PatternImg})   no-repeat ;
-   /* background-size: cover; */
+   /* background: url(${PatternImg})   no-repeat ; */
+   background-color: #000000;
    background-size: cover;
    position: relative;
+   .wrow{
+      flex-direction: row;
+      display: flex;
+      padding: 10px;
+      gap: 50px;
+      /* flex: 5; */
+      .urow{
+         background-color: #859bbf;
+         /* padding: 10px; */
+      }
+
+   }
 `;
 
 const Bloc = styled.div`
    position: absolute;
-   top: 50%;
-   right: 10%;
+   /* top: 50%;
+   right: 10%; */
    width: 100%;
    border-radius : 10px;
-   min-width: 500px;
-   max-width: 500px;
-   height: 600px;
-   transform: translateY( -50%);
+   min-width: 600px;
+   max-width: 600px;
+   height: 650px;
+   /* border: 1px solid ; */
+   background-color: aqua;
+   box-shadow:   1px 1px 5px 5px #163f83; 
+   top: 30%;
+   left: 50%;
+   >svg 
+      {
+         fill: white;
+      }
+   /* transform: translate( 50%, -50%); */
    background-color: ${props => props.theme.colors.primarybg}; 
    border-radius: 5px;
    /* padding-top: 89px; */
@@ -88,26 +124,29 @@ const Title = styled.div`
    color:  ${props => props.theme.colors.primaryText};;
    font-size:  ${props => props.theme.fontSize.xl}; 
    font-weight: 500;
-   margin-top: 91px;
+   margin-top: 50px;
    margin-bottom: 13px;
    /* object-fit : contain; */
    `;
 const Description = styled.div`
-margin-bottom: 57px;
-font-family: 'Poppins', sans-serif;
+   margin-bottom: 57px;
+   /* width: 100%; */
+   font-family: 'Poppins', sans-serif;
    color:  ${props => props.theme.colors.primaryText};;
    font-size:  ${props => props.theme.fontSize.l}; 
    font-family: 'Poppins' , sans-serif;
-font-style: normal;
-font-weight: 500;
-font-size: 15px;
-line-height: 22px;
-display: flex;
-text-align : start;
-width: 400px;
-
-color: #FFFFFF;
-opacity: 0.8;
+   font-style: normal;
+   font-weight: 500;
+   font-size: 18px;
+   line-height: 25px;
+   display: flex;
+   text-align: start;
+   /* position: relataive; */
+   /* display: flex; */
+   width: 500px;
+   padding: 10px;
+   color: #FFFFFF;
+   opacity: 0.8;
 `;
 
 interface ButtonProps {

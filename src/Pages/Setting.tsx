@@ -9,15 +9,12 @@ import { Button } from './SignIn';
 import RingLoader from "react-spinners/RingLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
 import avataro from "../assets/imgs/avatar/avatar2.png";
+import { Toggle } from "react-toggle-component";
 
-// import Particles from "react-particles";
-// import type { Container, Engine } from "tsparticles-engine";
-// import { loadFull } from "tsparticles";
 
 const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderColor: "red", };
 
 export default function Setting() {
-    // const [query, setQuery] = useState('');
     
     const [img, setImg] = useState(avataro);
     const [loading, setLoading] = useState(false);
@@ -147,75 +144,66 @@ export default function Setting() {
         console.log("submit handler /{" + name+"}")
     };
 
+    const dotoggle = () => {
+
+    }
+
     return (
-        // <div className='container' >
-            
-        // {
-        
-            // (connection) ? 
-            
+  // <SettingsStyle  className='container' style={{ display:"flex", right:"300px",  width: "800px", marginTop: "100px", marginLeft: "30px"}} >
+        <SettingsStyle  className='container'  >
 
-            (
-                // <SettingsStyle  className='container' style={{ display:"flex", right:"300px",  width: "800px", marginTop: "100px", marginLeft: "30px"}} >
-                <SettingsStyle  className='container'  >
-
-                    <div className='all'>
-                    
-                        <HeadComponent title="Settings" />
-                    
-                        <Avatar onClick={uploadFile}>
-                            <div className='edit'>
-                                <Edit />
-                            </div>
-                            <AvatarComponent  img={img}  />
-                            <input id="fileInput" type="file" hidden />
-                        </Avatar>
-                        <Line></Line>
-                
-                        <Row>
-                                <InputComponent onChange={(e)=>{inputHandler(e)}} value={data.displayName} type='text' lable='Display Name' />
-                                <InputComponent disabled={true} onChange={(e)=>{inputHandler(e)}} value={data.login} type='text' lable='Login' />
-                        
-                                <TwofaStyle >
-                                    <label> Two-Factor Authentication (2FA)</label>
-                                    <input type="checkbox" id="toggle" name="toggle" checked={checked} onChange={TwoHandler} />
-                                </TwofaStyle>
-                        
-                                <Button  cursor="default"  onClick={submitHandler} text="save" type='primary' />
-                                <RingLoader  color={color} loading={loading} cssOverride={override} size={30} />
-                            
-                        </Row> 
+            <div className='all'>
+            
+                <HeadComponent title="Settings" />
+            
+                <Avatar onClick={uploadFile}>
+                    <div className='edit'>
+                        <Edit />
                     </div>
-                </SettingsStyle>
-
-            )
-
-            // :
-
-            // <button style={{color:"white", position: "relative", fontSize: "100px", top:"300px", left:"300px" , cursor:"progress"}}> Hors-Ligne (D3IF) </button>
-
-        // }
-        // </div>
-
+                    <AvatarComponent  img={img}  />
+                    <input id="fileInput" type="file" hidden />
+                </Avatar>
+                <Line></Line>
+        
+                <Row>
+                        <InputComponent onChange={(e)=>{inputHandler(e)}} value={data.displayName} type='text' lable='Display Name' />
+                        <InputComponent  disabled={true} onChange={(e)=>{inputHandler(e)}} value={data.login} type='text' lable='Login' /> 
+                
+                        <TwofaStyle >
+                            <Label htmlFor="toggle-3">
+                                <Toggle
+                                leftBackgroundColor="tomato"
+                                rightBackgroundColor="green"
+                                borderColor="black"
+                                knobColor="white"
+                                name="toggle-3"
+                                onToggle={dotoggle}
+                                />
+                                Two-Factor Authentication (2FA)
+                            </Label>
+                        </TwofaStyle>
+                
+                        <Button  cursor="default"  onClick={submitHandler} text="save" type='primary' />
+                        <RingLoader  color={color} loading={loading} cssOverride={override} size={30} />
+                    
+                </Row> 
+            </div>
+        </SettingsStyle>
     )
 }
 
 const TwofaStyle = styled.div`      
     font-family: "Poppins", sans-serif;
     
-    flex-direction: column;
-    align-items: flex-start;
+    /* flex-direction: column;
+    align-items: flex-start; */
     position: relative;
+    background-color: aqua;
     display: flex;
     width: 100%;
     min-width: 50px;
-    > label {
-        color: #ffffff;
-    }
-    > input {
-        width: 20px;
-        height: 20px;
-    }
+    margin: 20px;
+    height: 30px;
 `;
 
 const SettingsStyle = styled.div`
@@ -293,5 +281,12 @@ width: 50%;
     align-items: center;
 `;
 
-
-
+const Label = styled.label`
+  font-weight: bold;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min-content;
+  white-space: nowrap;
+  align-items: center;
+  cursor: pointer;
+`;

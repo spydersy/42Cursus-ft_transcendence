@@ -23,7 +23,7 @@ export default function Background() {
                     color: {
                     value: "#100f110",
                     },
-                    opacity: 0.3,
+                    opacity: 0.5,
                 },
                 fpsLimit: 150,
                 interactivity: {
@@ -43,17 +43,17 @@ export default function Background() {
                         quantity: 4,
                     },
                     repulse: {
-                        distance: 200,
-                        duration: 0.5,
+                        distance: 150,
+                        duration: 0.6,
                     },
                     },
                 },
                 particles: {
                     color: {
-                    value: "#296390",
+                    value: "#1c73b4",
                     },
                     links: {
-                    color: "#194b64",
+                    color: "#ffffff",
                     distance: 180,
                     enable: true,
                     opacity: 0.2,
@@ -69,7 +69,7 @@ export default function Background() {
                         default: "bounce",
                     },
                     random: true,
-                    speed: 2,
+                    speed: 3,
                     straight: true,
                     },
                     number: {
@@ -80,13 +80,13 @@ export default function Background() {
                     value: 90,
                     },
                     opacity: {
-                    value: 0.5,
+                    value: 0.8,
                     },
                     shape: {
                     type: "polygon",
                     },
                     size: {
-                    value: { min: 1, max: 5 },
+                    value: { min: 1, max: 6 },
                     },
                 },
                 detectRetina: true,
