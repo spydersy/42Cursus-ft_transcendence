@@ -24,7 +24,7 @@ export default function SignIn() {
                Login with intra
             </LoginButton> */}
             <a href={process.env.REACT_APP_REDIRECT_URL}>
-            <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}} cursor="default"  icon={<FtImg/>} text="Sign in with intra"/>
+            <Button  onClick={()=>{console.log(process.env.REACT_APP_REDIRECT_URL)}} cursor="default"  icon={<FtImg/>} text="Sign in with intra"/>
 
             </a>
             <a id="TermsCond" href="#termscondPage">Terms & conditions</a>

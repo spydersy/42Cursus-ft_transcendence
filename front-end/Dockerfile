@@ -9,7 +9,8 @@ COPY package*.json .
 
 
 
-# RUN npm install
+RUN npm install
+RUN npm install @types/styled-components
+RUN npm install @types/react-modal
 
-
-CMD ["sh", "init-front"]
+CMD ["npm", "start"]
