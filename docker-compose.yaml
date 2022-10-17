@@ -20,7 +20,7 @@ services:
       context: ./back-end
     ports:
       # - "8000:8000"
-      # - "3001:3001"
+      - "3001:3001"
       - "5555:5555"
     env_file: ./back-end/.env
     container_name: nest-container
