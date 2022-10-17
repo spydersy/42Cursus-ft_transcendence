@@ -40,8 +40,8 @@ export default function Pong(props : gameProps) {
     var topLimit = 0
     var bottomLimit =  height - paddel2.h
     var direction =  {
-        x : 5,
-        y : 5,
+        x : 2,
+        y : 2,
     }
 
 
@@ -49,10 +49,9 @@ export default function Pong(props : gameProps) {
 
          topLimit = 0;
          bottomLimit = height - paddel2.h;
-         direction  = {
-            x : 5,
-            y : 5,
-        };
+
+         
+
         console.log(canvasParentRef)
 		p5.createCanvas(width, height).parent(canvasParentRef);
         p5.background(0);
@@ -64,7 +63,7 @@ export default function Pong(props : gameProps) {
         const cy = ballCord.y ;
         const r = ballCord.size / 2 ;
         const [x1, y1, w1, h1] = [cx - r, cy - r, r * 2, r * 2];
-        const x2 =player.x;
+        const x2 =player.x ;
         const y2 =player.y;
         const w2 = parseInt(player.w);
         const h2 = parseInt(player.h);
@@ -74,11 +73,18 @@ export default function Pong(props : gameProps) {
         return colliding;
       }
     const hitWalls = (p5 : p5Types)=>{
-        if (ballCord.x  <=  ballCord.size / 2   || ballCord.x >= width - ballCord.size / 2  )
+        if (ballCord.x + direction.x >= width - ballCord.size / 2  )
         {
+            gamesocket.emit("player1Scored")
             direction.x = -direction.x
         }
-        else if (ballCord.y  <=  ballCord.size / 2 || ballCord.y >= height - ballCord.size / 2 )
+        else if (ballCord.x + direction.x  <=  ballCord.size / 2  )
+        {
+            gamesocket.emit("player2Scored")
+            direction.x = -direction.x
+
+        }
+        else if (ballCord.y <=  ballCord.size / 2 || ballCord.y  >= height - ballCord.size / 2 )
             direction.y = -direction.y
         else if (detectCollision(paddel1) || detectCollision(paddel2))
             direction.x = -direction.x
