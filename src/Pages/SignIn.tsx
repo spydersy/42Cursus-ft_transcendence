@@ -124,7 +124,7 @@ interface ButtonStyleProps {
    isIcon? : boolean | undefined,
    typeS? : string ,
    size ? : "small" | "big"; 
-   cursor: string
+   cursor?: string
 }
 export  function Button(props :ButtonProps ) {
   return (
@@ -143,7 +143,7 @@ const LoginButtonStyle = styled.button<ButtonStyleProps>`
    /* background-color: #831717; */
    border-radius: 5px;
    height: auto;
-   cursor: ${props => (props.cursor)};;
+   cursor: pointer;;
 
    border: none;
    display: flex;

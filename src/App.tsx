@@ -29,6 +29,7 @@ import Leader from './Pages/Leader';
 import Room from './Pages/Room';
 import SocketTesting from './components/testing/SocketTesting';
 import Background from './components/Background';
+import ChatTesting from './components/testing/ChatTesting';
 
 
 
@@ -92,7 +93,7 @@ function App() {
               <Route path="/game" element={<Game theme={gametheme}  />} />
               <Route path="/chat/:id" element={<Chat />} />
               <Route path="/setting" element={<Setting />} />
-              <Route path="/testing" element={<Test />} />
+              <Route path="/testing" element={<ChatTesting />} />
               <Route path="/rooms" element={<Room />} />
               <Route path="/leaderboard" element={<Leader />} />
               <Route path="/" element={<Home settheme={(e: any)=> setGametheme(e)} />} />

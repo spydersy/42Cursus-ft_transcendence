@@ -58,7 +58,10 @@ export default function Game(props : GameProps) {
       setloged(data)
 
       if (!end)
+      {
         gamesocket.emit("playerConnect" , data?.login)
+
+      }
 
       setUser(data)
     }
@@ -126,7 +129,7 @@ const GameStyle = styled.div`
   width: 100%;
   height: 700px ;
   position: relative;
-  background-color: red;
+  /* background-color: red; */
   /* > .react-p5{
     width: 100%;
     > .p5Canvas{

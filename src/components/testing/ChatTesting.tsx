@@ -25,7 +25,7 @@ const data1 = {
 export default function ChatTesting() {
     const inputref = useRef<HTMLInputElement>(null);
     const msgref = useRef<HTMLInputElement>(null);
-    const socket = io("http://localhost:3001");
+    const socket = io("http://localhost:8001");
     const [data, setdata] = useState(data1)
     const [list1, setlist1] = useState<string[]>([])
     const [index, setindex] = useState(0)
