@@ -1,13 +1,19 @@
-
-
-# to Run the FRONTEND
-    sh init_front
 # Alchemist Todo List
-> - [ ] 1.unblock state and button
-> - [ ] 2.Blocked users
-> - [ ] 3.pending requests
 
+### Mandatory features
 
-- redirect to dm chat 
+> search bar {z-index}
+> - redirect to dm chat
+> - invite to play
+> - the user recieving invitation can't cancel the request
+> - 2fa
+> Tabs [all , dm , rooms]
+> status
+> radar + achievements
+> Rank
+> Last matches
+> Lives Games
 
-- the user recieving invitation can't cancel the request 
+### Other feeatures
+> notifications
+> Lives Games realtime comp
