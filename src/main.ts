@@ -19,7 +19,7 @@ export class VersionHeaderInterceptor implements NestInterceptor {
     console.log("CHECKER01");
     const http = context.switchToHttp();
       const response: Response = http.getResponse();
-      response.setHeader('Access-Control-Allow-Origin', "http://localhost:3000");
+      response.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL);
     }
 
     return next.handle();
@@ -30,7 +30,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalInterceptors(new VersionHeaderInterceptor());
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "PUT"],
     credentials: true,
     allowedHeaders: ["cookie", "Cookie", "authorization", "Authorization", "content-type"],

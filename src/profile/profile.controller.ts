@@ -14,9 +14,7 @@ export class ProfileController {
   constructor(private profileService: ProfileService,
               private userService: UserService) {}
 
-  @Header("Access-Control-Allow-Origin", "http://localhost:3000")
-
-
+  @Header("Access-Control-Allow-Origin", process.env.FRONTEND_URL)
   @Get('me')
   async GetUserProfile(@Req() req  , @Query() query, @Res() res: Response) {
     if (query['data']) {

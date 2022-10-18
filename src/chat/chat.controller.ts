@@ -70,9 +70,9 @@ export class ChatController {
     @Body() channelData, @Res() res) {
       console.log("__BODY__DBG__ : ", channelData);
       console.log("___FILE___ : ", file);
-      let ChannelIcone: string = "http://localhost:8000/upload/defaultChannelIcon.jpg";
+      let ChannelIcone: string = "https://myanimelist.tech/api/avatar?name=&animeName=one_Piece_Crews";
       if (file !== undefined)
-        ChannelIcone = encodeURI(`http://localhost:8000/upload/${file.filename}`);
+        ChannelIcone = encodeURI(process.env.BACKEND_URL + `/upload/${file.filename}`);
       if (channelData === undefined || channelData['name'] === undefined || channelData['type'] === undefined
       &&  channelData['members'] === undefined) {
         return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});

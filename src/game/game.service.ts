@@ -29,10 +29,10 @@ export class GameService {
    getPlayer(id : string)
    {
 
-           console.log("players number : " , this.roomPlayers.length)
+        //    console.log("players number : " , this.roomPlayers.length)
        for (let i = 0; i < this.roomPlayers.length; i++) {
           
-           console.log(this.roomPlayers[i].id + " " + id )
+        //    console.log(this.roomPlayers[i].id + " " + id )
            if ( this.roomPlayers[i].id === id )
            {
                // console.log("found")

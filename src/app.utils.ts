@@ -1,10 +1,6 @@
 import { extname } from "path";
 import { NotAcceptableException } from "@nestjs/common";
 
-export interface Utilities  {
-    'CORS_HOST': { 'Access-Control-Allow-Origin': 'http://localhost:3000' }
-}
-
 export const editFileName = (req, file, callback) => {
     const name = file.originalname.split('.')[0];
     const fileExtName = extname(file.originalname);

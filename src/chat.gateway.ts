@@ -6,19 +6,13 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
  } from '@nestjs/websockets';
- import { Logger, UseGuards } from '@nestjs/common';
- import { Socket, Server } from 'socket.io';
+import { Logger, UseGuards } from '@nestjs/common';
+import { Socket, Server } from 'socket.io';
 import { ChatService } from './chat/chat.service';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
- 
-//  interface Person {
-//   content: string,
-//   channelId: string
-//  }
  @WebSocketGateway(3001, {
     cors: {
-      origin: 'http://localhost:3000',
+      origin: process.env.FRONTEND_URL,
       credentials: true,
     },
     

@@ -1,3 +1,4 @@
+import { ConfigService } from "@nestjs/config";
 import { IsNotEmpty, IsNumber, IsString, IsUUID, Matches, MaxLength } from "class-validator";
 
 export class UserNameDto {

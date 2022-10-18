@@ -17,7 +17,7 @@ import { SOCKET } from '@prisma/client';
   @UseGuards(WsGuard)
   @WebSocketGateway(8001, {
     cors: {
-      origin: 'http://localhost:3000',
+      origin: process.env.FRONTEND_URL,
       credentials: true,
     },
  })

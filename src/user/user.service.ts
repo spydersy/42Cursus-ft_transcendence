@@ -2,7 +2,6 @@ import { BadRequestException, forwardRef, HttpCode, HttpStatus, Inject, Injectab
 import { CHANNEL, RELATION } from '@prisma/client';
 import { User } from 'src/dtos/User.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Utilities } from 'src/app.utils';
 import { ChatService } from 'src/chat/chat.service';
 
 @Injectable()
@@ -375,7 +374,7 @@ export class UserService {
                 Email: UserProfile['email'],
                 Login: UserProfile['login'],
                 UsualFullName: UserProfile['usual_full_name'],
-                DefaultAvatar: `https://avatars.dicebear.com/api/croodles-neutral/${UserProfile['login']}.jpg`,
+                DefaultAvatar: `https://myanimelist.tech/api/avatar?&name=${UserProfile['login']}&animeName=One_Piece`,
                 UploadedAvatar: "",
                 Status: "online",
                 Notifications: {},
