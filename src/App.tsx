@@ -1,7 +1,8 @@
+// @ts-nocheck
 import  React, { useEffect  , useState , useContext  }  from 'react';
-import styled from "styled-components"
+import styled , {ThemeProvider} from "styled-components"
 import {theme} from './theme'
-import { ThemeProvider } from 'styled-components';
+
 import './App.css';
 import Marin from "./assets/imgs/marinford.png";
 import Punk from "./assets/imgs/punkhazard.png";
