@@ -26,10 +26,8 @@ export default function Setting() {
     const [msgtwofa, setmsgtwofa]= useState("OFF") 
     const [isToggled, setIsToggled] = useState(false);
     const [closepop, setclosepop] = useState(true)
+    const [openpass, setopenpass] = useState(false)
 
-    // const PopupExample = () => (
-       
-    //   );
 
     useEffect(() => {
         // !isToggled ? setmsgtwofa("ON") : setmsgtwofa("OFF");
@@ -67,6 +65,7 @@ export default function Setting() {
     const setClosePop = () => {
         setclosepop(false)
         setIsToggled(false)
+        setopenpass(false)
 
     }
 
@@ -114,8 +113,14 @@ export default function Setting() {
     const setEnable = ()=> {
         setclosepop(false)
         setIsToggled(true)
+        setopenpass(true)
     }
     
+    const submitpass = ()=> {
+        setopenpass(false)
+        setclosepop(false)
+        setIsToggled(true)
+    }
 
     const submitHandler = () => {
         const name = data.displayName.trim();
@@ -210,16 +215,34 @@ export default function Setting() {
                                 </div>
 
                                 <Line></Line>
-                                    <img id="borderimg1" src={QrCode} ></img>
-                                    <div className="Bastard" >Scan Me Bastard</div>
+                                <img id="borderimg1" src={QrCode} ></img>
+                                <div className="Bastard" >Scan Me Bastard</div>
                                 <Line></Line>
                                 <div className='Buttons' >
                                     <button id="cancel" onClick={setClosePop} > Cancel </button>
                                     <button id="next"  onClick={setEnable} > Next </button>
                                 </div>
 
-
                             </div>
+                        }
+
+                        {
+                            openpass &&
+                            <div className='PoppUp'>
+                               <Deny onClick={setClosePop}  className='CloseTab'/>
+                                
+                                <div className='Title'> TWO-FACTOR AUTHENTICATION (2FA) - DUO SECURITY </div>
+
+                                <Line></Line>
+                                
+                                Enter Password
+
+                                <Line></Line>
+                                <div className='Buttons' >
+                                    {/* <button id="cancel" onClick={submitpass}> done </button> */}
+                                </div>
+                            </div>
+
                         }
                 
                         <Button  cursor="default"  onClick={submitHandler} text="save" type='primary' />
