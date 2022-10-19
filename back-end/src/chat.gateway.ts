@@ -9,10 +9,12 @@ import {
 import { Logger, UseGuards } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { ChatService } from './chat/chat.service';
+import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
 
- @WebSocketGateway(3001, {
+@WebSocketGateway(3001, {
     cors: {
-      origin: process.env.FRONTEND_URL,
+      // origin: process.env.FRONTEND_URL,
+      origin: 'http://localhost:3000',
       credentials: true,
     },
     
@@ -27,13 +29,29 @@ import { ChatService } from './chat/chat.service';
 
   private logger: Logger = new Logger('ChatGateway');
 //The handleMessage() function is also decorated with @SubscribeMessage() which makes it listen to an event named msgToServer.
-  
+  @UseGuards(WsGuard)
   @SubscribeMessage('chatToServer')
   async handleMessage(client: Socket, payload) {
-    console.log("__PAYLOAD__DBG__ : ", payload.content);
+    console.log("__PAYLOAD__DBG__ : ", payload);
 
-    await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
-    this.server.emit('chatToClient', payload);
+    // nest-container | __RET__DBG__ :  {
+    //   nest-container |   id: 52,
+    //   nest-container |   senderId: 62528,
+    //   nest-container |   channelId: 'd178f7ff-5c50-476f-8af6-b53051896d26',
+    //   nest-container |   content: 'xxxxxxx',
+    //   nest-container |   date: 2022-10-19T04:55:40.240Z
+    //   nest-container | }
+
+
+
+
+    const ret = await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
+    console.log("PAYLOAD : ", payload);
+    if (ret.stat === true)
+      this.server.to(payload.channelId).emit('chatToClient', ret.payload);
+    // this.server.emit('chatToClient', payload);
+
+
     // console.log("__CLIENT__DBG__  : ", client);
     // this.chatService.SendMessage();
     // post to db;
@@ -48,12 +66,13 @@ import { ChatService } from './chat/chat.service';
     //   console.log(err)
     //   })
   }
- 
+  @UseGuards(WsGuard)
   @SubscribeMessage('joinRoom')
-  handleJoinRoom(client: Socket, room: string): void {
-  
-   client.join(room);
-   client.emit('joinedRoom', room );
+  handleJoinRoom(client: Socket, rooms: Array<string>): void {
+    this.logger.log(`joining rooms: ${client.id}`);
+    for(var index in rooms)
+      client.join(rooms[index]);
+  //  client.emit('joinedRoom', room );
   }
 
   // @SubscribeMessage('connection')
@@ -62,7 +81,7 @@ import { ChatService } from './chat/chat.service';
   // }
 
   @SubscribeMessage('leaveRoom')
-  handleLeftRoom(client: Socket, room: string): void {
+  handleLeaveRoom(client: Socket, room: string): void {
     console.log("__CLIENT__LEAVE__ROOM__DBG__ : ", room);
    client.leave(room);
    client.emit('leftRoom', room );

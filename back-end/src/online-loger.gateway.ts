@@ -9,12 +9,11 @@ import {
  import { Logger, UseGuards } from '@nestjs/common';
  import { Socket, Server } from 'socket.io';
  import { ChatService } from './chat/chat.service';
- import { WsGuard } from './auth/jwt.strategy';
+ import { OnlineGuard } from './auth/jwt.strategy';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { PrismaService } from './prisma/prisma.service';
 import { SOCKET } from '@prisma/client';
 
-  @UseGuards(WsGuard)
   @WebSocketGateway(8001, {
     cors: {
       origin: process.env.FRONTEND_URL,
@@ -28,7 +27,7 @@ import { SOCKET } from '@prisma/client';
   @WebSocketServer() server: Server; 
   private logger: Logger = new Logger('OnlineLogerGateway');
 
-  @UseGuards(WsGuard)
+  @UseGuards(OnlineGuard)
   @SubscribeMessage('AddOnlineUser')
   async handleMessage(client: Socket, payload) {
     let onlineArr: string[] = [];

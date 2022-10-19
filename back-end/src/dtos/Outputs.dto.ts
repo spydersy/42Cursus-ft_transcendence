@@ -23,6 +23,15 @@ export interface PlayerType{
     login : string,
 }
 
+export interface MsgPayload {
+    channelId : string,
+    content : string, 
+    date : string, 
+    displayName : string, 
+    id : number,
+    senderId : number
+}
+
 // export class CurrentUser {
 //     login:          string;
 //     displayName:    string;

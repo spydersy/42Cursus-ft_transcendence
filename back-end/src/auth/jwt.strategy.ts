@@ -26,7 +26,7 @@ let cookieExtractor = function( req: Request) {
 }
 
 @Injectable()
-export class WsGuard implements CanActivate {
+export class OnlineGuard implements CanActivate {
 
     constructor( private jwtService: JwtService,
                  private prisma: PrismaService) {}
@@ -76,6 +76,28 @@ export class WsGuard implements CanActivate {
             }
         }
         console.log("__RETURN__FALSE__02__");
+        return false;
+    }
+}
+
+@Injectable()
+export class WsGuard implements CanActivate {
+
+    constructor( private jwtService: JwtService,
+                 private prisma: PrismaService) {}
+
+    async canActivate(
+      context: any,
+    ) : Promise<boolean | any> {
+        if (context.args[0].handshake.headers.cookie !== undefined) {
+            const bearerToken = context.args[0].handshake.headers.cookie.split('%20')[1];
+            try {
+                this.jwtService.verify(bearerToken, { secret: JWT_SECRET});
+                return true;
+            } catch {
+                throw new UnauthorizedException("WEBSOCKET UNAUTHORIZED");
+            }
+        }
         return false;
     }
 }

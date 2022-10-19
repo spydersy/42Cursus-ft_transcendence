@@ -108,23 +108,24 @@ export class ChatService {
     }
 
     async SendMessage(me: number, messageContent: string, channelId: string) {
-        // if (await this.PostMessageValidationLayer(me, messageContent, channelId) === USERSTAT.ACCESS) {
-            await this.prisma.messages.create({
-                data: {
-                    senderId: me,
-                    channelId: channelId,
-                    content: messageContent,
-                }
-            });
-            await this.prisma.channels.update({
-                where: {id: channelId},
-                data: {nbMessages: {increment: 1}},
-            });
-            // return res
-            // .status(HttpStatus.CREATED)
-            // .send({'message': "Message Sent"});
-        // }
-        // return res.status(HttpStatus.FORBIDDEN).send({'message': "Method Not Allowed"});
+        let msg = await this.prisma.messages.create({
+            data: {
+                senderId: me,
+                channelId: channelId,
+                content: messageContent,
+            },
+            include: {
+                sender : true,
+            }
+        });
+        await this.prisma.channels.update({
+            where: {id: channelId},
+            data: {nbMessages: {increment: 1}},
+        });
+        msg['displayName'] = msg.sender.displayName;
+        delete msg.sender;
+        return { stat: true,
+            payload: msg}
     }
 
     async GetMyChannels(me: number, @Res() res) {
