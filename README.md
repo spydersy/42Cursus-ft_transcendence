@@ -2,7 +2,7 @@
 
 ### Mandatory features
 
-> - 2fa
+> - 2fa [X] Front / [-]BACK.
 > search bar {z-index}
 > - redirect to dm chat
 > - invite to play

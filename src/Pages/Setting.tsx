@@ -13,6 +13,9 @@ import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import {ReactComponent as CloseLock} from "../assets/imgs/closelock.svg";
 import OpenLock from "../assets/imgs/TwoFa.png";
 import QrCode from "../assets/imgs/qrcode.png"
+import RICIBs from 'react-individual-character-input-boxes';
+
+
 
 const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderColor: "red", };
 
@@ -116,10 +119,17 @@ export default function Setting() {
         setopenpass(true)
     }
     
-    const submitpass = ()=> {
+    const submitpass = (props: string)=> {
         setopenpass(false)
         setclosepop(false)
         setIsToggled(true)
+        console.log("FUCKING PIN IS ", props)
+    }
+
+    const handleOutput = (props: string)=> {
+
+            if (props.length == 8)
+                submitpass(props)
     }
 
     const submitHandler = () => {
@@ -219,7 +229,7 @@ export default function Setting() {
                                 <div className="Bastard" >Scan Me Bastard</div>
                                 <Line></Line>
                                 <div className='Buttons' >
-                                    <button id="cancel" onClick={setClosePop} > Cancel </button>
+                                    <button id="cancel" onClick={setClosePop} > Enable 2FA  </button>
                                     <button id="next"  onClick={setEnable} > Next </button>
                                 </div>
 
@@ -237,6 +247,20 @@ export default function Setting() {
                                 
                                 Enter Password
 
+                                    <div>
+                                        <RICIBs
+                                        amount={8}
+                                        autoFocus
+                                        handleOutputString={handleOutput}
+                                        inputProps={
+                                        ` className: "2fa-box",
+                                            style: { "color": "orange" },
+                                            placeholder: "*"
+                                            `}
+                                        inputRegExp={/^[0-9]$/}
+                                        />
+                                    </div>
+                                
                                 <Line></Line>
                                 <div className='Buttons' >
                                     {/* <button id="cancel" onClick={submitpass}> done </button> */}
