@@ -39,12 +39,21 @@ id : string,
     picture : string,
     users: usersType[]
   }
+  interface msgType {
+    channelId : string,
+    content : string, 
+    date : string, 
+    displayName : string, 
+    id : number,
+    senderId : number
+  }
+
 
 export default function Chat() {
   const socket = useContext(SocketContext)
 
   const pageName = window.location.pathname.split("/")[2];
-  const [msgs, setmsgs] = useState([])
+  const [msgs, setmsgs] = useState<msgType[]>([])
 
     const [list, setlist] = useState<convType[]>([])
     var x = -1;
@@ -63,8 +72,8 @@ export default function Chat() {
            axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + res.data[currentConv]?.channelId, 
            {withCredentials: true} 
            ).then((res)=>{
-             console.log('mychannells = '  , res.data, "} \n")
              setmsgs(res.data)
+
             }).catch((err)=>{
               console.log(err)
             })
@@ -88,27 +97,19 @@ export default function Chat() {
           socket.emit('concon', data.id)
         }
     },[currentConv])
-    useEffect(() => {
-      const recievedMessgae  = async () => {
-        if (list[currentConv]?.channelId  != undefined)
-        {
-          console.log('chi haja');
-          console.log(list[currentConv]?.channelId)
-          await axios.get("http://localhost:8000/chat/messages/" + list[currentConv]?.channelId, 
-           {withCredentials: true} 
-         ).then((res)=>{
-           console.log(res.data)
-          setmsgs(res.data)
-         }).catch((err)=>{
-          console.log(err)
-           })
-        }
-        
-    }
+    const recievedMessgae  =  (payload : msgType) => {
+          var tmp  : msgType[] = msgs;
+          tmp.push(payload)
+          console.log(tmp)
+          setmsgs([...tmp])
+
+      }
+
+      
     socket.on('chatToClient', (payload) => {
-      recievedMessgae();
-  });
-    }, [  list])
+      recievedMessgae(payload);
+  })
+   
     return (
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
           

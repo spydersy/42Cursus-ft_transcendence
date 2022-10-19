@@ -58,7 +58,19 @@ function App() {
   const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
   
   const socket = useContext(SocketContext)
-  
+  let joinChannels = async () => {
+    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+      {withCredentials: true} 
+      ).then((res)=>{
+          var myChannels : Array<string> = [];
+          for(var index in res.data)
+              myChannels.push(res.data[index].channelId);
+          console.log(myChannels)
+          socket.emit('joinRoom', myChannels)
+        }).catch((err)=>{
+          console.log(err)
+        })
+    }
   
   const navigate = useNavigate();
   useEffect(() => {
@@ -67,6 +79,7 @@ function App() {
   ).then((res)=>{
     // console.log(res.data)
     localStorage.setItem("user", JSON.stringify(res.data))
+    joinChannels()
     socket.emit("AddOnlineUser")
   }).catch((err)=>{
         console.log(err)

@@ -46,7 +46,12 @@ interface ChatProps {
             {
               
               data  =  JSON.parse(s || '{}');
+              console.log(object.senderId )
+              console.log( data.id )
               if (object.senderId != data.id)
+              {
+
+
                 return <div key={i} >  <MsgNotStyle>
                   <div className='name'>{object.displayName}</div>
                   {object.content}
@@ -54,7 +59,10 @@ interface ChatProps {
                   7:20pm
                 </span>
                 </MsgNotStyle></div>
+
+              }
               else
+              {
               return <div key={i} > <MsgStyle>
 
                 {object.content}
@@ -62,6 +70,8 @@ interface ChatProps {
                 7:20pm
               </span>
                 </MsgStyle></div>
+
+              }
             }
 
           })

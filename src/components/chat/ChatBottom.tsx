@@ -38,6 +38,7 @@ export default function ChatBottom(props: ChatProps) {
     const socket = useContext(SocketContext)
     const inputRef = useRef<HTMLTextAreaElement>(null)
     var mesg : string = "";
+    
     const addMessage = ()=>{
       var s : string | null = localStorage.getItem('user');
       var data: usersType ;
@@ -60,6 +61,7 @@ export default function ChatBottom(props: ChatProps) {
       }
     }
     useEffect(() => {
+      
       window.addEventListener('keydown', (e : any)=>{
         if (e.code === "Enter")
           addMessage()
