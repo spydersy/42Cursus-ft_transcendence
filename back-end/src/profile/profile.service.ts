@@ -21,11 +21,11 @@ export class ProfileService {
         let TestUserNameDTO: UserNameDto ={
             newname: ForbiddenString,
         }
-        console.log("__TEST__USER_NNAME__DTO__ : ", TestUserNameDTO);
+        // console.log("__TEST__USER_NNAME__DTO__ : ", TestUserNameDTO);
         let profile = await this.userService.GetUserByLogin(req.user.username);
         console.log("WEWE11 : ", req.user.username, req.user.username);
         profile['nbFriends'] = await this.userService.GetnbFriends(req.user.username, req.user.username);
-        console.log("__USER__PROFILE__ : ", profile);
+        // console.log("__USER__PROFILE__ : ", profile);
         return res.send(profile);
     }
 
