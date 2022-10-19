@@ -12,6 +12,9 @@ export class GameService {
     roomPlayers: PlayerType[] = [];
     roomName: string;
     score: {score1 : number , score2 : number};
+    ball : {size : number,x : number , y  : number} 
+    direction : {x : number , y  : number} 
+    // score: {score1 : number , score2 : number};
    
    
    constructor(roomName : string)
@@ -19,6 +22,8 @@ export class GameService {
    //   this.logger.log("client is disconnected")
        this.roomName = roomName;
        this.score = {score1 : 0 , score2 : 0}
+       this.ball = {size : 35 , x :  500 , y :350}
+       this.direction = { x :  3 , y :3}
    }
    joinPlayer(login : string , id : string)
    {
@@ -65,7 +70,7 @@ export class GameService {
             this.score.score1++;
         else
             this.score.score2++;
-
+        this.ball = {size : 35 , x :  500 , y :350}
    }
 
 

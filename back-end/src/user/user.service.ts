@@ -130,7 +130,7 @@ export class UserService {
         });
         if (dmChannel.length !== 0)
             UserDto['dmChannel'] = dmChannel[0].id;
-        console.log("__USER__DTO__DBG__ : ", UserDto);
+        // console.log("__USER__DTO__DBG__ : ", UserDto);
             return res.status(HttpStatus.OK).send(UserDto);
     }
 
@@ -397,7 +397,7 @@ export class UserService {
                     blockedId: BlockedUserId,
                 },
             });
-            console.log("__BLOCK__STAT__ : ", BlockStat);
+            // console.log("__BLOCK__STAT__ : ", BlockStat);
             if (BlockStat === null)
                 return false;
             return true;
