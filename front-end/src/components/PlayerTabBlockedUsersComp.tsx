@@ -39,7 +39,7 @@ export default function BlockedUsers()
   
     useEffect(() => {
 
-      axios.get("http://localhost:8000/profile/me?data=blacklist",  {withCredentials: true} 
+      axios.get(process.env.REACT_APP_BACKEND_URL+  "/profile/me?data=blacklist",  {withCredentials: true} 
       ).then((res)=>{
         console.log("Blockedlist : ", res)
         setlistBlocked(res.data)
@@ -117,7 +117,7 @@ export  function UserBlockedCard(props : UserBlockedCardProps) {
     });
 
     const RemoveBlockUser = ()=>{
-        axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=unblock",  {withCredentials: true} 
+        axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=unblock",  {withCredentials: true} 
                 ).then((res)=>{
         
             DeclineFriendNotify();

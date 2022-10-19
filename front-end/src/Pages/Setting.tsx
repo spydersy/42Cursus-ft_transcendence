@@ -32,7 +32,7 @@ export default function Setting() {
     useEffect(() => {
         // !isToggled ? setmsgtwofa("ON") : setmsgtwofa("OFF");
         setIsToggled(false)
-        axios.get("http://localhost:8000/profile/me",   {withCredentials: true} 
+        axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/me",   {withCredentials: true} 
         ).then((res)=>{
 
             console.log("__Settings__Data__: ", res.data )
@@ -51,7 +51,7 @@ export default function Setting() {
             setColor("#16ff01");
 
             bodyFormData.append('avatar', c.target.files[0]);
-                axios.post("http://localhost:8000/profile/updateAvatar", bodyFormData, {withCredentials: true}).then((res)=>{
+                axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/updateAvatar", bodyFormData, {withCredentials: true}).then((res)=>{
                     console.log(res)
                     wait(2000).then(() => { setLoading(false);  })
 
@@ -132,7 +132,7 @@ export default function Setting() {
         
         setColor("#16ff01");
 
-        axios.put("http://localhost:8000/profile/updateUsername/" + name , name, {withCredentials: true}).then((res)=>{
+        axios.put(process.env.REACT_APP_BACKEND_URL+ "/profile/updateUsername/" + name , name, {withCredentials: true}).then((res)=>{
             wait(2000).then(() => {
                 setColor("#ff000d");
                 setLoading(false);
@@ -147,7 +147,7 @@ export default function Setting() {
             console.log(err)
         })
 
-        axios.get("http://localhost:8000/profile/update2fa/" + isToggled , {withCredentials: true}).then((res)=>{
+        axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa/" + isToggled , {withCredentials: true}).then((res)=>{
             wait(2000).then(() => {
                 setLoading(false); })
 

@@ -62,7 +62,7 @@ function App() {
   
   const navigate = useNavigate();
   useEffect(() => {
-    axios.get("http://localhost:8000/profile/me", 
+    axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me", 
     {withCredentials: true} 
   ).then((res)=>{
     // console.log(res.data)

@@ -281,8 +281,7 @@ background-color: ${props => props.theme.colors.seconderybg};
     });
 
     const addFriend = ()=>{
-        //http://localhost:8000/users/relation/:id?evet=add
-        axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
+        axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{
         // console.log(res.data)
         // alert("friend Request sent" + res.status)
@@ -296,7 +295,7 @@ background-color: ${props => props.theme.colors.seconderybg};
       })
     }
     const CancelRequest = ()=>{
-      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
+      axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
       ).then((res)=>{
       // console.log(res.data)
       // alert("friend Request sent" + res.status)
@@ -310,8 +309,8 @@ background-color: ${props => props.theme.colors.seconderybg};
       })
     }
     const UnfriendUser = ()=>{
-      //  GET http://localhost:8000/users/relation/:id?event=unfriend
-      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
+      //  GET process.env.REACT_APP_BACKEND_URL+  /users/relation/:id?event=unfriend
+      axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
       ).then((res)=>{
       // console.log(res.data)
       // alert("friend Request sent" + res.status)
@@ -321,8 +320,8 @@ background-color: ${props => props.theme.colors.seconderybg};
       }).catch((err)=>{  })
     }
     const BlockUser = ()=>{
-      //  GET http://localhost:8000/users/relation/:id?event=block
-      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
+      //  GET process.env.REACT_APP_BACKEND_URL+  /users/relation/:id?event=block
+      axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
       ).then((res)=>{
       // console.log(res.data)
       // alert("friend Request sent" + res.status)
@@ -332,8 +331,8 @@ background-color: ${props => props.theme.colors.seconderybg};
       }).catch((err)=>{  })
     }
     const UnBlockUser = ()=>{
-      //  GET http://localhost:8000/users/relation/:id?event=unblock
-      axios.get("http://localhost:8000/users/relation/"+ props.player.login+ "?event=unblock",   {withCredentials: true}
+      //  GET process.env.REACT_APP_BACKEND_URL+  /users/relation/:id?event=unblock
+      axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=unblock",   {withCredentials: true}
       ).then((res)=>{
       // console.log(res.data)
       // alert("friend Request sent" + res.status)
@@ -351,7 +350,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         console.log( "- 2Relation <" , relationStatus, "> \n")
         
         // get user data  from server
-        axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}).then((res)=>{
+        axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/" + id,  {withCredentials: true}).then((res)=>{
         
         setrelationStatus(res.data.relation)
         
@@ -372,7 +371,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         }).catch((err)=>{   
         })
 
-        axios.get("http://localhost:8000/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
+        axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
           // Achievenments          
           setAChievements(res.data)
           console.log("> Achievements : ", AChievements)

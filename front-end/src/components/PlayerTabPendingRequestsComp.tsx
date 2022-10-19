@@ -44,7 +44,7 @@ export default function PendingRequests()
   
   useEffect(() => {
     
-    axios.get("http://localhost:8000/profile/me?data=requests",  {withCredentials: true}  ).then((res)=>{
+    axios.get(process.env.REACT_APP_BACKEND_URL+  "/profile/me?data=requests",  {withCredentials: true}  ).then((res)=>{
         
         // console.log(res)
         setfriends(res.data)
@@ -122,7 +122,7 @@ const    DeclineFriendNotify = () => toast.warning("You declined " +  props.data
     });
 
 const accepteFriend = ()=>{
-    axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=accept",  {withCredentials: true} 
+    axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=accept",  {withCredentials: true} 
             ).then((res)=>{
     
         // alert("User Request Accepted" + res.status) 
@@ -132,7 +132,7 @@ const accepteFriend = ()=>{
         // window.location.reload();
 }
 const DenyFriend = ()=>{
-    axios.get("http://localhost:8000/users/relation/"+ props.data.login+ "?event=decline",  {withCredentials: true} 
+    axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=decline",  {withCredentials: true} 
             ).then((res)=>{
     
         // alert("User Request Deny" + res.status) 

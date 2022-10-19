@@ -8,16 +8,7 @@ import { Button } from '../../Pages/SignIn';
 import Modal from '../Modal';
 import MembersChatModal from '../modals/MembersChatModal';
 
-interface UserProp {
-    defaultAvatar: string,
-    login : string
-    displayName : string
-    relation? : string
-    nbFriends? : string
-    wins : number
-    losses : number
-  }
-  
+
   interface usersType {
   
     defaultAvatar: string,

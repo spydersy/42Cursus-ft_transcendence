@@ -140,7 +140,7 @@ export  function SearchBarComponent() {
       setColor("#ffffff");
       event.target.value.length > 0 ? setLoading(true) : setLoading(false);
 
-      axios.get("http://localhost:8000/search/allUsers?input=" + event.target.value,  {withCredentials: true}  ).then((res)=>{
+      axios.get( process.env.REACT_APP_BACKEND_URL+  "/search/allUsers?input=" + event.target.value,  {withCredentials: true}  ).then((res)=>{
 
       // console.log(res.data)
       setUsers(res.data)

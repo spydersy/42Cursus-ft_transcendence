@@ -23,7 +23,6 @@ interface convType {
   users: usersType[]
 }
 interface ChatProps {
-    // setList: (e : any) => void,
     list: convType,
     setmsgs : (e : any)=>void,
     msgs : any
@@ -33,13 +32,9 @@ interface ChatProps {
   export default function ChatBody(props: ChatProps) {
   const [list, setlist] = useState([])
     useEffect(() => {
-      // const  = io('http://localhost:3030');
-      // socket.on('coco' , ()=>{
-      // })
+
       setlist(props.msgs)
     }, [props.msgs])
-    // console.log('allah' + props.list)
-    // console.log(props.list.length);
     return (
       <ChatBodyStyle>
         {

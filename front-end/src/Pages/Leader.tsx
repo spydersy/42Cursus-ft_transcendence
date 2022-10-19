@@ -78,7 +78,7 @@ export default function Leader() {
 
     const [users, setusers] = useState([])
     useEffect(() => {
-         axios.get("http://localhost:8000/users", 
+         axios.get(process.env.REACT_APP_BACKEND_URL+ "/users", 
     {withCredentials: true} 
   ).then((res)=>{
     setusers(res.data)

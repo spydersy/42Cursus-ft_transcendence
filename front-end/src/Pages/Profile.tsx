@@ -69,7 +69,7 @@ export default function Profile() {
       else
       {
         setisCurrent(false)
-        axios.get("http://localhost:8000/users/" + id,  {withCredentials: true}
+        axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + id,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked 
               console.log("> status = " , res.status)

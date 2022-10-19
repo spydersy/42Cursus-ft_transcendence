@@ -38,7 +38,7 @@ export default function FriendsComponent(props : FriendsProps)
   const [friends, setfriends] = useState([])
   
   useEffect(() => {
-      axios.get("http://localhost:8000/users/friends/" + props.id,   {withCredentials: true}  ).then((res)=>{
+      axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/friends/" + props.id,   {withCredentials: true}  ).then((res)=>{
         // console.log(res.data)
         setfriends(res.data)
       }).catch((err)=>{ })

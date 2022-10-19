@@ -55,14 +55,12 @@ export default function Chat() {
     const [currentConv, setcurrentConv] = useState(parseInt(pageName))
      useEffect(() => {
        const fetchData = async () => {
-         await axios.get("http://localhost:8000/chat/myChannels", 
+         await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
          {withCredentials: true} 
          ).then((res)=>{
            setlist(res.data);
-          //  console.log('> mychannells = '  , res.data, "} \n")
 
-           
-           axios.get("http://localhost:8000/chat/messages/" + res.data[currentConv]?.channelId, 
+           axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + res.data[currentConv]?.channelId, 
            {withCredentials: true} 
            ).then((res)=>{
              console.log('mychannells = '  , res.data, "} \n")

@@ -75,14 +75,14 @@ export default function Game(props : GameProps) {
   }, [])
   
   const fetchPlayersData =(player1 : string , player2: string)=>{
-    axios.get("http://localhost:8000/users/" + player1, 
+    axios.get(process.env.REACT_APP_BACKEND_URL+ "/users/" + player1, 
     {withCredentials: true} 
      ).then((res)=>{
           setUser(res.data)
         }).catch((err)=>{
 
     })
-    axios.get("http://localhost:8000/users/" + player2, 
+    axios.get(process.env.REACT_APP_BACKEND_URL+ "/users/" + player2, 
     {withCredentials: true} 
      ).then((res)=>{
         setOpennet(res.data)
