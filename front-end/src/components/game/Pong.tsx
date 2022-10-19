@@ -51,8 +51,6 @@ export default function Pong(props : gameProps) {
          bottomLimit = height - paddel2.h;
 
          
-
-        console.log(canvasParentRef)
 		p5.createCanvas(width, height).parent(canvasParentRef);
         p5.background(0);
         p5.frameRate(60);
@@ -73,15 +71,25 @@ export default function Pong(props : gameProps) {
         return colliding;
       }
     const hitWalls = (p5 : p5Types)=>{
-        if (ballCord.x + direction.x >= width - ballCord.size / 2  )
+        if (ballCord.x + direction.x > width - (ballCord.size  /2 ))
         {
             gamesocket.emit("player1Scored")
-            direction.x = -direction.x
+            ballCord = {
+                size : 35,
+                x: width/2,
+                y : height/2
+            }
+
         }
-        else if (ballCord.x + direction.x  <=  ballCord.size / 2  )
+        else if (ballCord.x + direction.x  < ( ballCord.size /2)    )
         {
+
             gamesocket.emit("player2Scored")
-            direction.x = -direction.x
+            ballCord = {
+                size : 35,
+                x: width/2,
+                y : height/2
+            }
 
         }
         else if (ballCord.y <=  ballCord.size / 2 || ballCord.y  >= height - ballCord.size / 2 )
@@ -97,19 +105,15 @@ export default function Pong(props : gameProps) {
         {
             if (props.player)
             {
-                console.log("player 1")
                 gamesocket.emit("player1Moved", p5.mouseY)
             }
             else
             {
-                console.log("player 2")
-
                 gamesocket.emit("player2Moved", p5.mouseY)
             }
 
         }
-        
-        // paddel1.y  = p5.mouseY;
+    
     }
     
     
@@ -127,21 +131,18 @@ export default function Pong(props : gameProps) {
 
 
         
-        // move the ball
+        // check for hit walls
         hitWalls(p5)
+        // move the ball
         if (props.start)
         {
-            // ballCord.x += direction.x;
-            // ballCord.y += direction.y;
             gamesocket.emit("moveBall" ,{ x : ballCord.x + direction.x  ,  y : ballCord.y + direction.y})
         }
-        // check for hit walls
     };
     //detect Colision 
 
 
     gamesocket.on("player1moved" , (y : number)=>{
-        console.log(y)
             paddel1.y   =  y;
 
 
@@ -171,9 +172,7 @@ export default function Pong(props : gameProps) {
     if (test)
     {
         setwidthState(test.offsetWidth)
-        console.log(test.offsetWidth)
         height = test.offsetHeight;
-
     }
 
     }, [setwidthState])
