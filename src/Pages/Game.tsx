@@ -69,10 +69,14 @@ export default function Game(props : GameProps) {
 
       setUser(data)
     }
-
+    // return () => {
+    //   gamesocket.emit("endGame" , data?.login)
+    // }
 
 
   }, [])
+  
+
   
   const fetchPlayersData =(player1 : string , player2: string)=>{
     axios.get(process.env.REACT_APP_BACKEND_URL+ "/users/" + player1, 

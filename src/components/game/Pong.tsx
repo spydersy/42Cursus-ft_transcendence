@@ -40,8 +40,8 @@ export default function Pong(props : gameProps) {
     var topLimit = 0
     var bottomLimit =  height - paddel2.h
     var direction =  {
-        x : 2,
-        y : 2,
+        x : 10,
+        y : 10,
     }
 
 
@@ -70,34 +70,34 @@ export default function Pong(props : gameProps) {
         y1 < (y2 + h2) && (y1 + h1) > y2;
         return colliding;
       }
-    const hitWalls = (p5 : p5Types)=>{
-        if (ballCord.x + direction.x > width - (ballCord.size  /2 ))
-        {
-            gamesocket.emit("player1Scored")
-            ballCord = {
-                size : 35,
-                x: width/2,
-                y : height/2
-            }
+    // const hitWalls = (p5 : p5Types)=>{
+    //     // if (ballCord.x + direction.x > width - (ballCord.size  /2 ))
+    //     // {
+    //     //     gamesocket.emit("player1Scored")
+    //     //     ballCord = {
+    //     //         size : 35,
+    //     //         x: width/2,
+    //     //         y : height/2
+    //     //     }
 
-        }
-        else if (ballCord.x + direction.x  < ( ballCord.size /2)    )
-        {
+    //     // }
+    //     // else if (ballCord.x + direction.x  < ( ballCord.size /2)    )
+    //     // {
 
-            gamesocket.emit("player2Scored")
-            ballCord = {
-                size : 35,
-                x: width/2,
-                y : height/2
-            }
+    //     //     gamesocket.emit("player2Scored")
+    //     //     ballCord = {
+    //     //         size : 35,
+    //     //         x: width/2,
+    //     //         y : height/2
+    //     //     }
 
-        }
-        else if (ballCord.y <=  ballCord.size / 2 || ballCord.y  >= height - ballCord.size / 2 )
-            direction.y = -direction.y
-        else if (detectCollision(paddel1) || detectCollision(paddel2))
-            direction.x = -direction.x
+    //     // }
+    //     // else if (ballCord.y <=  ballCord.size / 2 || ballCord.y  >= height - ballCord.size / 2 )
+    //     //     direction.y = -direction.y
+    //      if (detectCollision(paddel1) || detectCollision(paddel2))
+    //         gamesocket.emit("changeDirectionX")
         
-    }
+    // }
     
     
     const mouseMoved = (p5: p5Types)=>{
@@ -132,18 +132,18 @@ export default function Pong(props : gameProps) {
 
         
         // check for hit walls
-        hitWalls(p5)
         // move the ball
         if (props.start)
         {
-            gamesocket.emit("moveBall" ,{ x : ballCord.x + direction.x  ,  y : ballCord.y + direction.y})
+            gamesocket.emit("moveBall" , {w : width, h :height ,p1 : paddel1 , p2: paddel2})
         }
+        // hitWalls(p5)
     };
     //detect Colision 
 
 
     gamesocket.on("player1moved" , (y : number)=>{
-            paddel1.y   =  y;
+        paddel1.y   =  y;
 
 
     })
