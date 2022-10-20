@@ -83,7 +83,7 @@ function App() {
     socket.emit("AddOnlineUser")
   }).catch((err)=>{
         console.log(err)
-        // navigate('/signin')
+        navigate('/signin')
     })
 
 
@@ -106,7 +106,7 @@ function App() {
               <Route path="/game" element={<Game theme={gametheme}  />} />
               <Route path="/chat/:id" element={<Chat />} />
               <Route path="/setting" element={<Setting />} />
-              <Route path="/testing" element={<ChatTesting />} />
+              <Route path="/testing" element={<SocketTesting />} />
               <Route path="/rooms" element={<Room />} />
               <Route path="/leaderboard" element={<Leader />} />
               <Route path="/" element={<Home settheme={(e: any)=> setGametheme(e)} />} />

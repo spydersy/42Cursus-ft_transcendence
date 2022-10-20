@@ -13,7 +13,7 @@ import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import {ReactComponent as CloseLock} from "../assets/imgs/closelock.svg";
 import OpenLock from "../assets/imgs/TwoFa.png";
 import QrCode from "../assets/imgs/qrcode.png"
-import RICIBs from 'react-individual-character-input-boxes';
+// import RICIBs from 'react-individual-character-input-boxes';
 
 
 
@@ -248,7 +248,7 @@ export default function Setting() {
                                 Enter Password
 
                                     <div>
-                                        <RICIBs
+                                        {/* <RICIBs
                                         amount={8}
                                         autoFocus
                                         handleOutputString={handleOutput}
@@ -258,7 +258,7 @@ export default function Setting() {
                                             placeholder: "*"
                                             `}
                                         inputRegExp={/^[0-9]$/}
-                                        />
+                                        /> */}
                                     </div>
                                 
                                 <Line></Line>
@@ -269,7 +269,7 @@ export default function Setting() {
 
                         }
                 
-                        <Button  cursor="default"  onClick={submitHandler} text="save" type='primary' />
+                        <Button  onClick={submitHandler} text="save" type='primary' />
                         <RingLoader  color={color} loading={loading} cssOverride={override} size={30} />     
                 </Row> 
             </div>

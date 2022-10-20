@@ -27,7 +27,7 @@ export default function SignIn() {
                Login with intra
             </LoginButton> */}
             <a href={process.env.REACT_APP_REDIRECT_URL}>
-            <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}} cursor="default"  icon={<FtImg/>} text="Sign in with intra"/>
+            <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}}   icon={<FtImg/>} text="Sign in with intra"/>
 
             </a>
             <a id="TermsCond" href="#termscondPage">Terms & conditions</a>
@@ -156,18 +156,16 @@ interface ButtonProps {
    icon? : React.ReactElement,
    onClick? : (e?: any)=> void;
    size ? : "small" | "big";
-   cursor: string
 
 }
 interface ButtonStyleProps {
    isIcon? : boolean | undefined,
    typeS? : string ,
    size ? : "small" | "big"; 
-   cursor?: string
 }
 export  function Button(props :ButtonProps ) {
   return (
-    <LoginButtonStyle cursor={props.cursor} size={props.size} isIcon={props.isIcon} onClick={props.onClick} typeS={props.type}>
+    <LoginButtonStyle  size={props.size} isIcon={props.isIcon} onClick={props.onClick} typeS={props.type}>
       {props?.icon}
       {props.text}
     </LoginButtonStyle>

@@ -19,7 +19,7 @@ export default function Pong(props : gameProps) {
 
     var height = 700;
     var ballCord = {
-        size : 35,
+        size : 20,
         x: width/2,
         y : height/2
     }
@@ -33,74 +33,33 @@ export default function Pong(props : gameProps) {
     var paddel2 = {
         w : 20,
         h : 100,
-        x:  width - 40,
-        y : 0
-      
-    };
+        x:  width - 30,
+        y : 0,
+       }
     var topLimit = 0
-    var bottomLimit =  height - paddel2.h
+    var bottomLimit =  height - paddel2.h;
     var direction =  {
         x : 10,
         y : 10,
     }
 
+    console.log("_____WTFFFF____")
 
 	const setup = (p5: p5Types, canvasParentRef: Element) => {
 
          topLimit = 0;
-         bottomLimit = height - paddel2.h;
+         console.log("_____WTFFFF____")
 
-         
+        bottomLimit = height - paddel2.h;
 		p5.createCanvas(width, height).parent(canvasParentRef);
         p5.background(0);
         p5.frameRate(60);
 	};
 
-    function detectCollision(player : any) {
-        const cx = ballCord.x ;
-        const cy = ballCord.y ;
-        const r = ballCord.size / 2 ;
-        const [x1, y1, w1, h1] = [cx - r, cy - r, r * 2, r * 2];
-        const x2 =player.x ;
-        const y2 =player.y;
-        const w2 = parseInt(player.w);
-        const h2 = parseInt(player.h);
+ 
 
-        const colliding = x1 < (x2 + w2) && (x1 + w1) > x2 &&
-        y1 < (y2 + h2) && (y1 + h1) > y2;
-        return colliding;
-      }
-    // const hitWalls = (p5 : p5Types)=>{
-    //     // if (ballCord.x + direction.x > width - (ballCord.size  /2 ))
-    //     // {
-    //     //     gamesocket.emit("player1Scored")
-    //     //     ballCord = {
-    //     //         size : 35,
-    //     //         x: width/2,
-    //     //         y : height/2
-    //     //     }
-
-    //     // }
-    //     // else if (ballCord.x + direction.x  < ( ballCord.size /2)    )
-    //     // {
-
-    //     //     gamesocket.emit("player2Scored")
-    //     //     ballCord = {
-    //     //         size : 35,
-    //     //         x: width/2,
-    //     //         y : height/2
-    //     //     }
-
-    //     // }
-    //     // else if (ballCord.y <=  ballCord.size / 2 || ballCord.y  >= height - ballCord.size / 2 )
-    //     //     direction.y = -direction.y
-    //      if (detectCollision(paddel1) || detectCollision(paddel2))
-    //         gamesocket.emit("changeDirectionX")
-        
-    // }
-    
-    
     const mouseMoved = (p5: p5Types)=>{
+
         if (p5.mouseY > topLimit  && p5.mouseY < bottomLimit )
         {
             if (props.player)
@@ -113,9 +72,7 @@ export default function Pong(props : gameProps) {
             }
 
         }
-    
     }
-    
     
     const draw = (p5: p5Types) => {
         p5.background(0);
@@ -128,7 +85,6 @@ export default function Pong(props : gameProps) {
         p5.rect(paddel1.x, paddel1.y, paddel1.w, paddel1.h);
         p5.rect(paddel2.x, paddel2.y, paddel2.w, paddel2.h);
         p5.fill(p5.color(gameData?.paddlecolor))
-
 
         
         // check for hit walls
@@ -161,7 +117,7 @@ export default function Pong(props : gameProps) {
 
     useEffect(() => {
 
-
+console.log("init")
     var games : string | null = localStorage.getItem('gameData');
     if (games)
     {
@@ -176,6 +132,7 @@ export default function Pong(props : gameProps) {
     }
 
     }, [setwidthState])
+
     
     return <Sketch mouseMoved={mouseMoved}  setup={setup} draw={draw} />;
         /* <Button cursor='pointer' onClick={(e)=>{props.setstart(!props.start)}} text='start'/> */

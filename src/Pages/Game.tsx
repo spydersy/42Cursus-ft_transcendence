@@ -7,6 +7,8 @@ import styled from "styled-components"
 import axios from 'axios'
 import CountDown from '../components/game/CountDown'
 import Score from '../components/game/Score'
+import { Button } from './SignIn'
+import io, { Socket } from "socket.io-client";
 
 interface UserProp {
   id : string,
@@ -29,11 +31,11 @@ export default function Game(props : GameProps) {
   const [user, setUser] = useState<UserProp>()
   const [loged, setloged] = useState<UserProp>()
   const [opennet, setOpennet] = useState<UserProp>()
-  const [score, setScore] = useState({score1: 0 , score2: 0})
   const gamesocket = useContext(SocketContext)
 
   const [end, setend] = useState(false)
   const [start, setstart] = useState(false)
+  const [msg, setmsg] = useState(false)
   const [player, setplayer] = useState(true)
   const [show, setshow] = useState(false)
   gamesocket.on("startGame" , (pyload : any)=>{
@@ -43,14 +45,31 @@ export default function Game(props : GameProps) {
     console.log(loged?.login , pyload.player1)
     setplayer(loged?.login === pyload.player1 )
  })
- gamesocket.on("endGame" , ()=>{
-  setOpennet(undefined)
-  setUser(undefined)
+ gamesocket.on("endGame" , (payload)=>{
+
+   setstart(false)
+  if (payload.score.score1 > payload.score.score2 )
+  {
+      if (payload.roomPlayers[0].login === loged?.login )
+        setmsg( true )
+      else
+        setmsg( false )
+
+  }
+  else
+  {
+    if (payload.roomPlayers[0].login === loged?.login )
+        setmsg( false )
+    else
+        setmsg( true )
+
+  }
+
+    setOpennet(undefined)
+    setUser(loged)
    setend(true)
  })
- gamesocket.on("playerscored" , (pyload)=>{
-    setScore(pyload)
- })
+
  var data : UserProp ;
 
   useEffect(() => {
@@ -69,9 +88,9 @@ export default function Game(props : GameProps) {
 
       setUser(data)
     }
-    // return () => {
-    //   gamesocket.emit("endGame" , data?.login)
-    // }
+    return () => {
+      gamesocket.emit("endGame" , data?.login)
+    }
 
 
   }, [])
@@ -79,26 +98,31 @@ export default function Game(props : GameProps) {
 
   
   const fetchPlayersData =(player1 : string , player2: string)=>{
-    axios.get(process.env.REACT_APP_BACKEND_URL+ "/users/" + player1, 
-    {withCredentials: true} 
-     ).then((res)=>{
-          setUser(res.data)
-        }).catch((err)=>{
+    if (player1 && player2)
+    {
+      console.log(player1 , player2)
+          axios.get(process.env.REACT_APP_BACKEND_URL+ "/users/" + player1, 
+          {withCredentials: true} 
+          ).then((res)=>{
+                setUser(res.data)
+              }).catch((err)=>{
+      
+          })
+          axios.get(process.env.REACT_APP_BACKEND_URL+ "/users/" + player2, 
+          {withCredentials: true} 
+          ).then((res)=>{
+              setOpennet(res.data)
+              }).catch((err)=>{
+      
+          })
 
-    })
-    axios.get(process.env.REACT_APP_BACKEND_URL+ "/users/" + player2, 
-    {withCredentials: true} 
-     ).then((res)=>{
-        setOpennet(res.data)
-        }).catch((err)=>{
-
-    })
+    }
     
   }
   
   return (
     <div  style={{marginTop: "100px" , position: "relative"}}className="container">
-      <Score score={score} user={user} opennet={opennet} />
+      <Score socket={gamesocket}  user={user} opennet={opennet} />
       <GameStyle id="canva">
         {show &&
             <CountDown show={show} setshow={(e)=>{
@@ -117,8 +141,9 @@ export default function Game(props : GameProps) {
                         onRequestClose={() => setend(false)}
                         hideModal={() => setend(false)}
                         >
-         
-                             End game
+                            <GameEndModal msg={msg} close={()=>{ setend(false)
+                             setstart(false)
+                            }}login={loged?.login}  socket={gamesocket} />
                         </Modal>}
     </div>
   )
@@ -136,4 +161,33 @@ const GameStyle = styled.div`
       width: 100% !important;
     }
   } */
+  `;
+
+
+
+export  function GameEndModal(props : {msg : boolean , socket :Socket , login? : string , close: ()=>void}) {
+  
+  useEffect(() => {
+
+  }, [])
+  
+  
+  return (
+    <GameEndStyle>
+      {props.msg ? "YOU WON" :"YOU LOST"}
+        
+        
+        <Button onClick={()=>{
+          props.socket.emit("playerConnect" , props.login)
+          props.close()
+        }} type='primary' text='playe again'/>
+        <Button type='secondary' text="go home"/>
+    </GameEndStyle>
+  )
+}
+const GameEndStyle = styled.div`
+    display: flex;
+    width: 100%;
+    align-items: center;
+justify-content: space-around;
   `;

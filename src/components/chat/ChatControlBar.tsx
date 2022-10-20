@@ -60,7 +60,7 @@ export default function ChatControlBar(props :{data : convType }) {
             }
    <div className='buttons'>
                 
-   <Button cursor="default" isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/>
+   <Button  isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/>
    {hide &&  <Modal
                     isOpen={hide}
                     onRequestClose={() => sethide(false)}
@@ -69,8 +69,8 @@ export default function ChatControlBar(props :{data : convType }) {
                   <MembersChatModal closeModal={()=>sethide(false) } />
                  </Modal>
             }
-   <Button cursor="default" isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
-   <Button  cursor="default" isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
+   <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
+   <Button   isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
         </div>
 
     </ContoleStyle>

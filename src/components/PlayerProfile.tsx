@@ -402,7 +402,7 @@ background-color: ${props => props.theme.colors.seconderybg};
                       {
                         // Friends relation
                         relationStatus === "NOTHING" ? 
-                          <Button cursor="pointer" onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
+                          <Button  onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
                         : 
                         // Pending request relation
                         relationStatus === 'PENDING' ? 
@@ -419,17 +419,17 @@ background-color: ${props => props.theme.colors.seconderybg};
                           </button>
                         :
                         // relationStatus === "BLOCKED" ? 
-                        // <Button cursor="pointer" icon={<BlockIcon/>}   type='secondary' text='GHAYERHA'/>
+                        // <Button  icon={<BlockIcon/>}   type='secondary' text='GHAYERHA'/>
                         // :
                         relationStatus === "FRIENDS" ? 
                           <>
-                            <Button  cursor="pointer" type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
+                            <Button   type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
                             
                             <a href="/chat/id">  
-                              <Button cursor="pointer"  icon={<SendMessage/>} text='Send Message'/>
+                              <Button   icon={<SendMessage/>} text='Send Message'/>
                             </a>
                             
-                            <Button cursor="pointer" icon={<InviteToPlayIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
+                            <Button  icon={<InviteToPlayIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
 
                             <button className='BtpBlocked'onClick={BlockUser}>
                               <BlockIcon/>

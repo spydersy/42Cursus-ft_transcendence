@@ -106,13 +106,13 @@ export default function Sidebar() {
        
         <SidebarWrraper ref={sideBaref}  >
             <Left open={open}   onClick={openClose} >
-                <Button cursor="default" size={"small"}isIcon={true} icon={<ArrowLeft/>}/>
+                <Button  size={"small"}isIcon={true} icon={<ArrowLeft/>}/>
             </Left>
 
             <Items>
             {
                 sideBarItemsList.map((item : any , id : number)=>{
-                    return <Item  open={open}key={id} onClick={()=>setfocused(id)} active={id === focused ? true : false} to={item.link}>
+                    return <Item  open={open}key={id} onClick={()=>setfocused(id)} activel={id === focused ? "true" : "false"} to={item.link}>
                     {item.icon}
                     {
                         <div>{item.title}</div> 
@@ -126,7 +126,7 @@ export default function Sidebar() {
 
             <Devider></Devider>
 
-            <Item open={open}  className='item' onClick={()=>setfocused(4)} active={4 === focused ? true : false} to={"/setting"}>
+            <Item open={open}  className='item' onClick={()=>setfocused(4)} activel={4 === focused ? "true" : "false"} to={"/setting"}>
                 <SettingIcon/>
                 {
                     <div>Setting</div> 
@@ -143,7 +143,7 @@ export default function Sidebar() {
                     // history.pushState("/signin");
                 })
 
-            }} className='item'   active={false} to={""}>
+            }} className='item'   activel={"false"} to={""}>
                 <LogoutIcon/>
                 {
                     <div>LogOut</div> 
@@ -159,7 +159,7 @@ export default function Sidebar() {
 
 interface ItemProps {
  
-    active : boolean
+    activel : string,
     open : boolean
 
 
@@ -381,7 +381,7 @@ const Item = styled(Link)<ItemProps>`
                 stroke: ${props => props.theme.colors.primaryText}; 
             }
     }
-    ${props => (props.active === true) && css`
+    ${props => (props.activel === "true") && css`
         color : ${props => props.theme.colors.purple}; 
         &::after{
             content: "";
