@@ -14,14 +14,14 @@ export const JWT_SECRET = process.env.JWT_SECRET;
 
 let cookieExtractor = function( req: Request) {
     var token : String = null;
-    console.log("__DBG__COOKIES__JWT__ : ", req.headers.cookie);
+    // console.log("__DBG__COOKIES__JWT__ : ", req.headers.cookie);
     if (req && req.headers.cookie) {
         token = decodeURI(req.headers.cookie);
         if (token.indexOf('Authorization') != -1) {
             token = token.substring(token.indexOf('Authorization') + 14 + 7);
         }
     }
-    console.log("__JWT__TOKEN__ : >>", token, "<<");
+    // console.log("__JWT__TOKEN__ : >>", token, "<<");
     return token;
 }
 

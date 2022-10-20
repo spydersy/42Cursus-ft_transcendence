@@ -25,10 +25,10 @@ let UserService = class UserService {
     async GetnbFriends(UserMe, User) {
         let UserMeDto = await this.GetUserByLogin(UserMe);
         let UserDto = await this.GetUserByLogin(User);
-        console.log("__USER__ME__ : ", UserMe);
-        console.log("__USER__     : ", User);
-        console.log("__USER__ME__DTO__ : ", UserMeDto);
-        console.log("__USER__DTO__     : ", UserDto);
+        // console.log("__USER__ME__ : ", UserMe);
+        // console.log("__USER__     : ", User);
+        // console.log("__USER__ME__DTO__ : ", UserMeDto);
+        // console.log("__USER__DTO__     : ", UserDto);
         if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true) {
             return 0;
         }
@@ -53,14 +53,14 @@ let UserService = class UserService {
         let AllFriends = [];
         FriendsRowA.forEach(element => AllFriends.push(element.receiver));
         FriendsRowB.forEach(element => AllFriends.push(element.sender));
-        console.log("__NB__FIRNEDS__DBG__ : ", AllFriends.length);
+        // console.log("__NB__FIRNEDS__DBG__ : ", AllFriends.length);
         return AllFriends.length;
     }
     async GetFriends(UserMe, User, res) {
         let UserMeDto = await this.GetUserByLogin(UserMe);
         let UserDto = await this.GetUserByLogin(User);
-        console.log("__USER__ME__DTO__ : ", UserMeDto);
-        console.log("__USER__DTO__     : ", UserDto);
+        // console.log("__USER__ME__DTO__ : ", UserMeDto);
+        // console.log("__USER__DTO__     : ", UserDto);
         if (UserMeDto === null || UserDto === null)
             return res.status(common_1.HttpStatus.NOT_FOUND).send({ 'message': 'User Not Found' });
         if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true)
@@ -128,7 +128,7 @@ let UserService = class UserService {
         });
         if (dmChannel.length !== 0)
             UserDto['dmChannel'] = dmChannel[0].id;
-        console.log("__USER__DTO__DBG__ : ", UserDto);
+        // console.log("__USER__DTO__DBG__ : ", UserDto);
         return res.status(common_1.HttpStatus.OK).send(UserDto);
     }
     async BlockUser(User, BlockedUser, res) {
@@ -371,7 +371,7 @@ let UserService = class UserService {
                 ],
             }
         });
-        console.log("__FRIENDS__STAT__DBG__ : ", FriendshipStat);
+        // console.log("__FRIENDS__STAT__DBG__ : ", FriendshipStat);
         return FriendshipStat;
     }
     async DeleteFriendRelation(User1, User2) {

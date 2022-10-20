@@ -69,10 +69,10 @@ let ChatService = class ChatService {
             include: { sender: true },
         });
         const blackList = await this.prisma.blocks.findMany({ where: { blockedId: me } });
-        console.log("__BLACK__LIST__DBG__ : ", { blackList, me });
+        // console.log("__BLACK__LIST__DBG__ : ", { blackList, me });
         messages.forEach(message => {
-            message['displayName'] = message.sender.displayName;
-            console.log("__MESSAGE__SENDER__ : ", message.sender);
+            // message['displayName'] = message.sender.displayName;
+            // console.log("__MESSAGE__SENDER__ : ", message.sender);
             for (let index = 0; index < blackList.length; index++) {
                 if (message.sender.id === blackList[0].userId) {
                     message.content = "Hidden Content 👻👻👻";

@@ -22,7 +22,7 @@ export class GameService {
    //   this.logger.log("client is disconnected")
        this.roomName = roomName;
        this.score = {score1 : 0 , score2 : 0}
-       this.ball = {size : 35 , x :  500 , y :350}
+       this.ball = {size : 20 , x :  500 , y :350}
        this.direction = { x :  3 , y :3}
    }
    joinPlayer(login : string , id : string)

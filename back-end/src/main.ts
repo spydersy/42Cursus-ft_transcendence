@@ -14,9 +14,9 @@ import { Observable } from 'rxjs';
 export class VersionHeaderInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     // When the request is HTTP
-    console.log("CHECKER00");
+    // console.log("CHECKER00");
     if (context.getType() === 'http') {
-    console.log("CHECKER01");
+    // console.log("CHECKER01");
     const http = context.switchToHttp();
       const response: Response = http.getResponse();
       response.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL);
