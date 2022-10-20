@@ -5,6 +5,11 @@ import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
 import { LogoComponent } from '../components/Upperbar'
 import Background from '../components/Background';
 
+import abelarif from "../assets/imgs/team/abelarif.jpeg"
+import aez_zaou from "../assets/imgs/team/az.jpeg"
+import eelaazmi from "../assets/imgs/team/eelaazmi.jpeg"
+import mamali from "../assets/imgs/team/mamali.jpeg"
+import melkarmi from "../assets/imgs/team/melkarmi.jpeg"
 
 //todo env file
 
@@ -14,41 +19,62 @@ export default function SignIn() {
       <Background/>
          <Bloc>
             <LogoComponent size={"big"}/>
-            <Title>
-            3ANAKIB TEAM
-            </Title>
+            
             {/* “Those who don't know pain will never know what true peace is, the world will know pain SHINRA-TENSIE” */}
+           
             <Description>
-            “Nobody Dies a Virgin, Life Fucks Us All.” - Yaiba
+            {/* “Nobody Dies a Virgin, Life Fucks Us All.” - Yaiba */}
             
             </Description>
+           
             {/* <LoginButton href={url} >
                <img src={FtImg} alt="42logo" />
                Login with intra
             </LoginButton> */}
             <a href={process.env.REACT_APP_REDIRECT_URL}>
-            <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}}   icon={<FtImg/>} text="Sign in with intra"/>
+               <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}}   icon={<FtImg/>} text="Sign in with intra"/>
 
             </a>
             <a id="TermsCond" href="#termscondPage">Terms & conditions</a>
          
          <br></br>
-         <br></br>
 
-            <h1>  Team Presentation  </h1>
-         <div className='wrow'>
-            <div className='urow'>Person x</div>
-            <div className='urow'>Person x</div>
-            <div className='urow'>Person x</div>
-            <div className='urow'>Person x</div>
-            <div className='urow'>Person x</div>
-           
-         </div>
+
+            <div className='wrow'>
+
+               <div className='urow'>
+                  <img className='avatar' src={abelarif}  />
+                  Person 
+               </div>
+               <div className='urow'>
+                  <img className='avatar' src={aez_zaou}  />
+                  Person 
+               </div>
+               <div className='urow'>
+                  <img className='avatar' src={melkarmi}  />
+                  Person 
+               </div>
+               <div className='urow'>
+                  <img className='avatar' src={mamali}  />
+                  Person
+               </div>
+               <div className='urow'>
+                  <img className='avatar' src={eelaazmi}  />
+                  Person 
+               </div>
+               
+               
+            </div>
+
+            <Title> THE GOLDEN 3ANAKIB TEAM  </Title>
+
          </Bloc>
 
    </Wrraper>
   )
 }
+
+
 const breatheAnimation = keyframes`
  /* 0% { transform: translateY(0) }
  50% { transform: translateY(10px)  }
@@ -56,97 +82,95 @@ const breatheAnimation = keyframes`
 `
 const Wrraper = styled.div`
 
-   width: 100vw;
-   height: 100vh;
+   width:   100%;
+   height:  100%; 
    display: flex;
+
    /* background: url(${PatternImg})   no-repeat ; */
    background-color: #000000;
    background-size: cover;
-   position: relative;
-   .wrow{
-      flex-direction: row;
-      display: flex;
-      padding: 10px;
-      gap: 50px;
-      /* flex: 5; */
-      .urow{
-         background-color: #859bbf;
-         /* padding: 10px; */
-      }
-
-   }
+   position: absolute;
+   align-items: center;
+   
+ 
 `;
 
 const Bloc = styled.div`
    position: absolute;
-   /* top: 50%;
-   right: 10%; */
-   width: 100%;
+
+   /* width: 100%; */
+   min-width: 650px;
+   max-width: 650px;
+   height:    400px;
+
+   top:  25%;
+   right: 25%;
+
    border-radius : 10px;
-   min-width: 600px;
-   max-width: 600px;
-   height: 650px;
-   /* border: 1px solid ; */
-   background-color: aqua;
    box-shadow:   1px 1px 5px 5px #163f83; 
-   top: 30%;
-   left: 50%;
-   >svg 
-      {
-         fill: white;
-      }
-   /* transform: translate( 50%, -50%); */
    background-color: ${props => props.theme.colors.primarybg}; 
-   border-radius: 5px;
-   /* padding-top: 89px; */
    display: flex;
    align-items: center;
    flex-direction: column;
-   padding-top : 89px;
+   padding-top : 30px;
+
    @media  only screen and (max-width: 768px) {
       width: 70%;
       min-width: 70%;
       right: 50%;
       transform: translate(50%, -50%);
-}
-#TermsCond{
-   margin-top: 80px;
-   width: 100%;
-   text-align: center;
-   align-items: center;
-   font-size: ${props => props.theme.fontSize.s};
-   color: ${props => props.theme.colors.primaryText};
-   text-decoration: underline;
-}
+   }
+   #TermsCond{
+      margin-top: 20px;
+      width: 100%;
+      text-align: center;
+      align-items: center;
+      font-size: ${props => props.theme.fontSize.s};
+      color: ${props => props.theme.colors.primaryText};
+      text-decoration: underline;
+   }
+   .wrow{
+      flex-direction: row;
+      display: flex;
+      padding: 10px;
+      gap: 50px;
+      background-color: #0635517b;
+      width: 90%;
+      .urow{
+         /* background-color: #1553b6; */
+         .avatar{
+            border-radius: 25px;
+            width:   60px;
+            height:  60px;
+         }
+      }
+   }
 `;
+
 const Title = styled.div`
-   font-family: 'Poppins', sans-serif;
+   font-family: 'Gill Sans Extrabold', cursive;
    color:  ${props => props.theme.colors.primaryText};;
    font-size:  ${props => props.theme.fontSize.xl}; 
    font-weight: 500;
-   margin-top: 50px;
-   margin-bottom: 13px;
-   /* object-fit : contain; */
-   `;
+   /* margin-top: 10px; */
+   /* margin-bottom: 0px; */
+   bottom: 30px;
+   position: absolute;
+   font-weight: 300;
+   line-height: 20px;
+`;
+
 const Description = styled.div`
-   margin-bottom: 57px;
-   /* width: 100%; */
-   font-family: 'Poppins', sans-serif;
+   margin-bottom: 30px;
    color:  ${props => props.theme.colors.primaryText};;
-   font-size:  ${props => props.theme.fontSize.l}; 
    font-family: 'Poppins' , sans-serif;
    font-style: normal;
-   font-weight: 500;
-   font-size: 18px;
-   line-height: 25px;
+   font-weight: 300;
+   line-height: 20px;
    display: flex;
    text-align: start;
-   /* position: relataive; */
-   /* display: flex; */
    width: 500px;
-   padding: 10px;
-   color: #FFFFFF;
-   opacity: 0.8;
+   opacity: 0.6;
 `;
 
 interface ButtonProps {
@@ -174,14 +198,13 @@ export  function Button(props :ButtonProps ) {
 
 const LoginButtonStyle = styled.button<ButtonStyleProps>`
 /* margin: 0 auto; */
-   padding: 5px 10px;
+   padding: 10px 20px;
    min-width: 100px;
    background: ${props => props.theme.colors.purple};;
    /* background-color: #831717; */
    border-radius: 5px;
    height: auto;
    cursor: pointer;;
-
    border: none;
    display: flex;
    align-items: center;

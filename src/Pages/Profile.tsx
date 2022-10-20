@@ -3,7 +3,6 @@ import styled from "styled-components"
 import Navlinks from '../components/Navlinks';
 import { PlayerCard} from '../components/PlayerProfile';
 import axios from 'axios';
-import avataro from "../assets/imgs/avatar/avatar2.png";
 import BlockedUsers from '../components/PlayerTabBlockedUsersComp';
 import FriendsComponent  from '../components/PlayerTabFriendsComp';
 import PendingRequests from '../components/PlayerTabPendingRequestsComp';
