@@ -1,6 +1,6 @@
 
 import axios from 'axios'
-import React , {useEffect , useState} from 'react'
+import React , {useEffect , useState , useRef} from 'react'
 import styled  from "styled-components"
 interface usersType {
   id : string,
@@ -27,13 +27,22 @@ interface ChatProps {
     setmsgs : (e : any)=>void,
     msgs : any
     setcurrentConv : (e : number)=>void
+    ref : any;
   }
 
   export default function ChatBody(props: ChatProps) {
   const [list, setlist] = useState([])
+  const bottomRef = useRef<HTMLDivElement>(null)
+
     useEffect(() => {
 
       setlist(props.msgs)
+      if (bottomRef?.current != null)
+      {
+      console.log(bottomRef?.current)
+
+        bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+      }
     }, [props.msgs])
     return (
       <ChatBodyStyle>
@@ -46,8 +55,6 @@ interface ChatProps {
             {
               
               data  =  JSON.parse(s || '{}');
-              console.log(object.senderId )
-              console.log( data.id )
               if (object.senderId != data.id)
               {
 
@@ -76,6 +83,8 @@ interface ChatProps {
 
           })
         }
+        
+        <div ref={bottomRef} />
       </ChatBodyStyle>
     )
   }

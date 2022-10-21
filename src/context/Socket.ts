@@ -5,5 +5,7 @@ import io, { Socket } from "socket.io-client";
 var socketOptions = {
     withCredentials: true,
  };
- export const SocketValue = io("10.12.2.4:3001", socketOptions);
+ export const SocketValue = io("http://localhost:3001/chat", socketOptions);
 export const SocketContext = React.createContext<Socket>(SocketValue);
+export const notifSocket = io("http://localhost:3001/notif", socketOptions);
+export const notifContextSocket = React.createContext<Socket>(notifSocket);

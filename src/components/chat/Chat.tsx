@@ -1,4 +1,4 @@
-import React , {useEffect, useState , useContext}from 'react'
+import React , {useEffect, useState , useContext , useRef}from 'react'
 import styled  from "styled-components"
 import ChatBody from './ChatBody'
 import ChatHeader from './ChatHeader'
@@ -54,7 +54,7 @@ export default function Chat() {
 
   const pageName = window.location.pathname.split("/")[2];
   const [msgs, setmsgs] = useState<msgType[]>([])
-
+  const bottomRef = useRef(null)
     const [list, setlist] = useState<convType[]>([])
     var x = -1;
     if (window.innerWidth  < 900 )
@@ -63,12 +63,14 @@ export default function Chat() {
     const [state, setstae] = useState(x)
     const [currentConv, setcurrentConv] = useState(parseInt(pageName))
      useEffect(() => {
+      console.log(bottomRef)
+
        const fetchData = async () => {
          await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
          {withCredentials: true} 
          ).then((res)=>{
            setlist(res.data);
-
+            
            axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + res.data[currentConv]?.channelId, 
            {withCredentials: true} 
            ).then((res)=>{
@@ -97,6 +99,24 @@ export default function Chat() {
           socket.emit('concon', data.id)
         }
     },[currentConv])
+    const fetchData = async () => {
+      await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+      {withCredentials: true} 
+      ).then((res)=>{
+        setlist(res.data);
+
+        axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + res.data[currentConv]?.channelId, 
+        {withCredentials: true} 
+        ).then((res)=>{
+          setmsgs(res.data)
+
+         }).catch((err)=>{
+           console.log(err)
+         })
+       }).catch((err)=>{
+         console.log(err)
+       })
+     }
     const recievedMessgae  =  (payload : msgType) => {
           var tmp  : msgType[] = msgs;
           tmp.push(payload)
@@ -108,6 +128,8 @@ export default function Chat() {
       
     socket.on('chatToClient', (payload) => {
       recievedMessgae(payload);
+      fetchData()
+      // setcurrentConv()
   })
    
     return (
@@ -130,7 +152,7 @@ export default function Chat() {
           </div>
           <div className='center'>
 
-          <ChatBody setmsgs={(e : any)=>setmsgs} msgs={msgs} setcurrentConv={(e)=>{ setcurrentConv(e) }}  list={list[currentConv]} />
+          <ChatBody ref={bottomRef} setmsgs={(e : any)=>setmsgs} msgs={msgs} setcurrentConv={(e)=>{ setcurrentConv(e) }}  list={list[currentConv]} />
           </div>
           <div className='bottom'>
             <ChatBottom   setcurrentConv={(e)=>setcurrentConv(e)} msgs={msgs} currentConv={currentConv} list={list} setList={(e)=>{setlist(e)}}  />

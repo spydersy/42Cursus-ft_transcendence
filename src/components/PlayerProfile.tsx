@@ -19,7 +19,9 @@ import Achivments  from './Achivments';
 import  { RadarChart } from './charts/Charts';
 import CircleLoader from "react-spinners/CircleLoader";
 import { SocketContext,  SocketValue } from '../context/Socket';
-
+import {
+Link
+} from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -425,9 +427,9 @@ background-color: ${props => props.theme.colors.seconderybg};
                           <>
                             <Button   type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
                             
-                            <a href="/chat/id">  
+                            <Link to={"/chat/" + props.player?.login}>  
                               <Button   icon={<SendMessage/>} text='Send Message'/>
-                            </a>
+                            </Link>
                             
                             <Button  icon={<InviteToPlayIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
 

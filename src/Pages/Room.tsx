@@ -1,4 +1,5 @@
-import React , {useState}from 'react'
+import axios from 'axios';
+import React , {useState , useEffect}from 'react'
 import styled from "styled-components"
 import Navlinks from '../components/Navlinks';
 import RoomComponent from '../components/RoomComponent';
@@ -32,22 +33,49 @@ const  roomListDummy = [
   }
 ]
 export default function Room() {
-const linkslist = ["Public", "Protected" , "My Rooms"]
+const linkslist = ["All" , "My Rooms"]
 
     const [index, setindex] = useState(0)
+    const [myrooms, setmyrooms] = useState([])
+    useEffect(() => {
+      const fetchData = async () => {
+        await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+        {withCredentials: true} 
+        ).then((res)=>{
+          setmyrooms(res.data)
+         }).catch((err)=>{
+           console.log(err)
+         })
+       }
+       fetchData()
+    }, [])
+    
   return (
     <RoomStyle className='container'>
         <HeadComponent title='Chat Rooms'/>
         <PlayerAchieveStyle>
         <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/>
+              {index === 0 && 
             <Warraper>
+
               {
                 roomListDummy.map((data : any , id : number)=>{
                   return<RoomComponent roomMembers={5} roomName={data.roomName} roomBanner={data.roomBanner} isLocked={data.isLocked} />        
                 })
               }
-                  
             </Warraper>
+              }
+              {index === 1 && 
+            <Warraper>
+              {
+                myrooms.map((data : any , id : number)=>{
+                  return<RoomComponent roomMembers={5} roomName={data.roomName} roomBanner={data.roomBanner} isLocked={data.isLocked} />        
+                })
+              }
+            </Warraper>
+              }
+              
+                  
         </PlayerAchieveStyle>
     </RoomStyle>
   )

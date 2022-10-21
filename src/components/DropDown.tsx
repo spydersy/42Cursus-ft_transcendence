@@ -1,8 +1,10 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import styled  from "styled-components"
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import { FriendRequest } from './Notifications/NotifComponents';
 import Mamali from "../assets/imgs/avatar/mamali.jpeg";
+import { SocketContext } from '../context/Socket';
+
 
 interface ListTypes {
   title : string,
@@ -97,6 +99,10 @@ interface NotifDropDownProps {
 }
 export  function NotifDropDown(props : NotifDropDownProps) {
   const refs = useDetectClickOutside({ onTriggered: props.closeDropdown });
+  const socket = useContext(SocketContext)
+  // socket.on('event', (payload)=>{
+  //     console.table(payload)
+  // });
 return (<>
     {props.open && 
       <NotifD style={props.style}  ref={refs} >

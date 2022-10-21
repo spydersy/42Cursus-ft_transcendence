@@ -1,4 +1,4 @@
-import React  , {useState} from 'react'
+import React  , {useState , useContext} from 'react'
 import styled  from "styled-components"
 import { AvatarComponent } from '../PlayerProfile';
 import {ReactComponent as Group} from "../../assets/imgs/users.svg";
@@ -7,10 +7,12 @@ import {ReactComponent as Mute} from "../../assets/imgs/mute.svg";
 import { Button } from '../../Pages/SignIn';
 import Modal from '../Modal';
 import MembersChatModal from '../modals/MembersChatModal';
+import {ReactComponent as GameIcon} from "../../assets/imgs/game-icon.svg";
+import { SocketContext } from '../../context/Socket';
 
 
   interface usersType {
-  
+    id: string,
     defaultAvatar: string,
     login : string
     displayName : string,
@@ -34,6 +36,7 @@ import MembersChatModal from '../modals/MembersChatModal';
 export default function ChatControlBar(props :{data : convType }) {
 
   const [hide, sethide] = useState(false)
+  const socket = useContext(SocketContext)
 
   return (
     <ContoleStyle>
@@ -60,7 +63,7 @@ export default function ChatControlBar(props :{data : convType }) {
             }
    <div className='buttons'>
                 
-   <Button  isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/>
+   {/* <Button  isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/> */}
    {hide &&  <Modal
                     isOpen={hide}
                     onRequestClose={() => sethide(false)}
@@ -69,6 +72,8 @@ export default function ChatControlBar(props :{data : convType }) {
                   <MembersChatModal closeModal={()=>sethide(false) } />
                  </Modal>
             }
+    
+   <Button  isIcon={true} onClick={()=>{  socket.emit("gameChallenge" , props.data.channelId , props.data.users[0].login)}} icon={<GameIcon/>}/>
    <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
    <Button   isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
         </div>

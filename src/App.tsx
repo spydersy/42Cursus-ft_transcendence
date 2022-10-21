@@ -9,7 +9,7 @@ import Punk from "./assets/imgs/punkhazard.png";
 import Dress from "./assets/imgs/dressRosa.jpg";
 import Wano from "./assets/imgs/wano.jpg";
 import Fish from "./assets/imgs/fishman.jpeg";
-import { SocketContext,  SocketValue } from './context/Socket';
+import { notifContextSocket, SocketContext,  SocketValue } from './context/Socket';
 import {
   Routes, // instead of "Switch"
   Route,
@@ -30,7 +30,8 @@ import Leader from './Pages/Leader';
 import Room from './Pages/Room';
 import SocketTesting from './components/testing/SocketTesting';
 import ChatTesting from './components/testing/ChatTesting';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const mockedItems : any = [{
@@ -58,14 +59,52 @@ function App() {
   const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
   
   const socket = useContext(SocketContext)
+  const [toastData, settoastData] = useState()
+  const [toastDataChallenge, settoastDataChallenge] = useState()
+  // const [toastData, settoastData] = useState()
+  const notifsocket = useContext(notifContextSocket)
+    socket.on('msg_event', (payload)=>{
+      settoastData(payload)
+      accepteFriendNotify()
+
+  });
+    socket.on('challeneEvent', (payload)=>{
+
+      settoastDataChallenge(payload)
+      CHallengeNotify()
+
+  });
+  const    accepteFriendNotify = () => toast.success("You accepted " +  toastData?.displayName + " Friend Request", {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored"
+    });
+  const    CHallengeNotify = () => toast.success("You accepted " +  toastDataChallenge + " Friend Request", {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored"
+    });
   let joinChannels = async () => {
     await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
       {withCredentials: true} 
       ).then((res)=>{
           var myChannels : Array<string> = [];
-          for(var index in res.data)
-              myChannels.push(res.data[index].channelId);
-          console.log(myChannels)
+          for (let index = 0; index < res.data.length; index++) {
+            myChannels.push(res.data[index].channelId);
+            
+          }
+
+
           socket.emit('joinRoom', myChannels)
         }).catch((err)=>{
           console.log(err)
@@ -100,6 +139,7 @@ function App() {
           <ProtectedLayout body={<Upperbar />} />
           <ProtectedLayout body={ <Sidebar/>} />
           <Cont  >
+          <ToastContainer />
             {/* <SocketContext.Provider value={SocketValue}> */}
             <Routes>
               <Route path="/signin" element={<SignIn />} />
