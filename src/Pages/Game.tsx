@@ -2,7 +2,7 @@ import React , {useContext , useState , useEffect} from 'react'
 import Modal from '../components/Modal'
 // import Pong from '../components/Pong'
 import Pong from '../components/game/Pong'
-import { SocketContext } from '../context/Socket'
+import { SocketGameContext } from '../context/Socket'
 import styled from "styled-components"
 import axios from 'axios'
 import CountDown from '../components/game/CountDown'
@@ -31,7 +31,7 @@ export default function Game(props : GameProps) {
   const [user, setUser] = useState<UserProp>()
   const [loged, setloged] = useState<UserProp>()
   const [opennet, setOpennet] = useState<UserProp>()
-  const gamesocket = useContext(SocketContext)
+  const gamesocket = useContext(SocketGameContext)
 
   const [end, setend] = useState(false)
   const [start, setstart] = useState(false)

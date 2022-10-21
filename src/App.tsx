@@ -9,7 +9,7 @@ import Punk from "./assets/imgs/punkhazard.png";
 import Dress from "./assets/imgs/dressRosa.jpg";
 import Wano from "./assets/imgs/wano.jpg";
 import Fish from "./assets/imgs/fishman.jpeg";
-import { notifContextSocket, SocketContext,  SocketValue } from './context/Socket';
+import { SocketContext,  SocketValue } from './context/Socket';
 import {
   Routes, // instead of "Switch"
   Route,
@@ -62,7 +62,6 @@ function App() {
   const [toastData, settoastData] = useState()
   const [toastDataChallenge, settoastDataChallenge] = useState()
   // const [toastData, settoastData] = useState()
-  const notifsocket = useContext(notifContextSocket)
     socket.on('msg_event', (payload)=>{
       settoastData(payload)
       accepteFriendNotify()
