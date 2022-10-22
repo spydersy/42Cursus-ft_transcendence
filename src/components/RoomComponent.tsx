@@ -11,6 +11,7 @@ import JoinGroupModal from './modals/JoinGroupModal';
     roomBanner: string,
     roomName : string,
     roomMembers : number
+    id: number
   }
 export default function RoomComponent(props : RoomProps) {
   const [hideModel, sethideModel] = useState(false)
@@ -18,11 +19,11 @@ export default function RoomComponent(props : RoomProps) {
   return (
     <RoomStyle onClick={()=>sethideModel(!hideModel)} >
         <div className='banner'>
-            <img src={Fadi} alt="banner" />
+            <img src={props.roomBanner} alt="banner" />
         </div>
         <div className='desc'>
             <div>
-                    mohamed
+                    {props.roomName}
                 <div>
                     51 member
                 </div>
@@ -33,7 +34,7 @@ export default function RoomComponent(props : RoomProps) {
         onRequestClose={() => sethideModel(false)}
         hideModal={() => sethideModel(false)}
       >
-    <JoinGroupModal isLocked={props.isLocked} />
+    <JoinGroupModal link={props.id} isLocked={props.isLocked} />
       </Modal>}
     </RoomStyle>
   )

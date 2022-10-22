@@ -32,6 +32,7 @@ import SocketTesting from './components/testing/SocketTesting';
 import ChatTesting from './components/testing/ChatTesting';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import MsgToast from './components/Toasts/MsgToast';
 
 
 const mockedItems : any = [{
@@ -62,27 +63,27 @@ function App() {
   const [toastData, settoastData] = useState()
   const [toastDataChallenge, settoastDataChallenge] = useState()
   // const [toastData, settoastData] = useState()
-    socket.on('msg_event', (payload)=>{
-      settoastData(payload)
-      accepteFriendNotify()
-
-  });
-    socket.on('challeneEvent', (payload)=>{
-
-      settoastDataChallenge(payload)
-      CHallengeNotify()
-
-  });
-  const    accepteFriendNotify = () => toast.success("You accepted " +  toastData?.displayName + " Friend Request", {
-    position: "top-right",
-    autoClose: 2000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored"
-    });
+  function hundleMsg (payload) {
+    settoastData(payload)
+    msgNotifyToast()
+}
+function handleChallenge (payload) {
+  settoastDataChallenge(payload)
+  CHallengeNotify()
+}
+  useEffect(()=>{
+    // sub
+    socket.on('msg_event', hundleMsg);
+    socket.on('challeneEvent', handleChallenge);
+    return () => {
+      socket.removeListener('msg_event', hundleMsg);
+      socket.removeListener('challeneEvent', handleChallenge);
+    }
+  })
+      // settoastDataChallenge(payload)
+      // console.log(toastDataChallenge)
+      // CHallengeNotify()
+  const    msgNotifyToast = () => toast(<MsgToast/>)
   const    CHallengeNotify = () => toast.success("You accepted " +  toastDataChallenge + " Friend Request", {
     position: "top-right",
     autoClose: 2000,
@@ -100,10 +101,7 @@ function App() {
           var myChannels : Array<string> = [];
           for (let index = 0; index < res.data.length; index++) {
             myChannels.push(res.data[index].channelId);
-            
           }
-
-
           socket.emit('joinRoom', myChannels)
         }).catch((err)=>{
           console.log(err)

@@ -33,7 +33,7 @@ id : string,
     nbMessages: number,
     lastUpdate: string,
     access : string,
-    channelId: number,
+    channelId:  number,
     name: string;
     password: string,
     picture : string,
@@ -70,12 +70,32 @@ export default function Chat() {
          {withCredentials: true} 
          ).then((res)=>{
            setlist(res.data);
-            
-           axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + res.data[currentConv]?.channelId, 
+            var s = 0
+           for (let index = 0; index < res.data.length; index++) {
+             const element : convType = res.data[index];
+             console.log(pageName)
+             console.log(element.channelId )    
+             if (element.access === "DM")
+             {
+                 if (element.users[1].id === pageName)
+                 {
+                   setcurrentConv(index)
+                   s = element.channelId
+                 }
+             }
+             else
+             {
+              if (element.channelId?.toString() === pageName)
+                 {
+                   setcurrentConv(index)
+                   s = element.channelId
+                 }
+             }
+           }
+           axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + s, 
            {withCredentials: true} 
            ).then((res)=>{
              setmsgs(res.data)
-
             }).catch((err)=>{
               console.log(err)
             })

@@ -10,6 +10,7 @@ import BlockIcon from "../assets/imgs/ban.svg";
 
 //-----------------------//
 interface UserProp {
+  id: string,
   defaultAvatar: string,
   status: string,
   login : string
@@ -27,6 +28,7 @@ export default function Profile() {
   const id = window.location.pathname.split("/")[2];
   const [isCurrentUser, setisCurrent] = useState(true)
   const [User, setUser] = useState<UserProp>({
+    id: "Ss",
     defaultAvatar: "avataro",
     status: "Default",
     login : "DefaultUserLogin",
@@ -40,6 +42,7 @@ export default function Profile() {
   })
 
   const BlockedUser = {
+    id: "Ss",
     defaultAvatar: BlockIcon,
     status: "BLOCKED",
     login : "Hiddenlogin",

@@ -27,6 +27,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 //// PlayerCard Comp
 interface UserProp {
+  id: string,
   defaultAvatar: string,
   status: string,
   login : string
@@ -427,7 +428,7 @@ background-color: ${props => props.theme.colors.seconderybg};
                           <>
                             <Button   type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
                             
-                            <Link to={"/chat/" + props.player?.login}>  
+                            <Link to={"/chat/" + props.player?.id}>  
                               <Button   icon={<SendMessage/>} text='Send Message'/>
                             </Link>
                             

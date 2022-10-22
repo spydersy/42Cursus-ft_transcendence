@@ -4,7 +4,26 @@ import styled from "styled-components"
 import Navlinks from '../components/Navlinks';
 import RoomComponent from '../components/RoomComponent';
 import { HeadComponent } from './Home';
-
+interface usersType {
+  id : string,
+      defaultAvatar: string,
+      login : string
+      displayName : string,
+      restriction: string,
+      restrictionTime: string,
+      duration: number,
+    }
+  
+    interface convType {
+      nbMessages: number,
+      lastUpdate: string,
+      access : string,
+      channelId: number,
+      name: string;
+      password: string,
+      picture : string,
+      users: usersType[]
+    }
 const  roomListDummy = [
   {
     isLocked : true,
@@ -35,8 +54,8 @@ const  roomListDummy = [
 export default function Room() {
 const linkslist = ["All" , "My Rooms"]
 
-    const [index, setindex] = useState(0)
-    const [myrooms, setmyrooms] = useState([])
+    const [index, setindex] = useState(1)
+    const [myrooms, setmyrooms] = useState<convType[]>([])
     useEffect(() => {
       const fetchData = async () => {
         await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
@@ -60,7 +79,7 @@ const linkslist = ["All" , "My Rooms"]
 
               {
                 roomListDummy.map((data : any , id : number)=>{
-                  return<RoomComponent roomMembers={5} roomName={data.roomName} roomBanner={data.roomBanner} isLocked={data.isLocked} />        
+                  return<RoomComponent id={3} roomMembers={5} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
                 })
               }
             </Warraper>
@@ -68,8 +87,13 @@ const linkslist = ["All" , "My Rooms"]
               {index === 1 && 
             <Warraper>
               {
-                myrooms.map((data : any , id : number)=>{
-                  return<RoomComponent roomMembers={5} roomName={data.roomName} roomBanner={data.roomBanner} isLocked={data.isLocked} />        
+                myrooms.map((data : convType , id : number)=>{
+                  if (data.access != "DM")
+                  {
+                    return<RoomComponent id={data.channelId } roomMembers={5} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
+                    
+                  }
+                  return<></>
                 })
               }
             </Warraper>

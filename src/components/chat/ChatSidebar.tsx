@@ -7,6 +7,7 @@ import { Button } from '../../Pages/SignIn';
 import Modal from '../Modal';
 import CreateGroup from '../modals/CreateGroup';
 import { AvatarComponent } from '../PlayerProfile';
+import { Link } from 'react-router-dom';
 
 interface UserProp {
   defaultAvatar: string,
@@ -150,7 +151,7 @@ interface ConvProps{
 
 export  function ConversationComponent(props : ConvProps) {
     return (
-        <ChatMesgstyle active={props.active}onClick={props.onClick}>
+        <ChatMesgstyle to={"/chat/" + (props.data.access === "DM" ? 0 : props.data.channelId)} active={props.active}onClick={props.onClick}>
           {
             props.data.access === "DM" ?
             <>
@@ -204,7 +205,7 @@ export  function ConversationComponent(props : ConvProps) {
   interface chatprop{
     active : boolean
   }
-    const ChatMesgstyle = styled.a<chatprop>`
+    const ChatMesgstyle = styled(Link)<chatprop>`
    
       height: 70px;
       width: 100%;
