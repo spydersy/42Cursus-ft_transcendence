@@ -10,10 +10,10 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
 import {v4 as uuidv4} from 'uuid';
 @WebSocketGateway(3001, {
     cors: {
-      origin: "http://10.12.2.4:3000",
+      origin: "http://localhost:3000",
       credentials: true,
     },
-    
+    namespace : "game"
  })  
 export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGatewayDisconnect{
 
@@ -153,7 +153,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 }
-
 
 
 

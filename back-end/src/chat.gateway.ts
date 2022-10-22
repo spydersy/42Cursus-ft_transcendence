@@ -14,9 +14,10 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
 @WebSocketGateway(3001, {
     cors: {
       // origin: process.env.FRONTEND_URL,
-      origin: "http://10.12.2.4:3000",
+      origin: "http://localhost:3000",
       credentials: true,
     },
+    namespace: 'chat'
     
  })   // @WebSocketGateway decorator gives us access to the socket.io functionality.
 
@@ -33,7 +34,6 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
   @SubscribeMessage('chatToServer')
   async handleMessage(client: Socket, payload) {
     console.log("__PAYLOAD__DBG__ : ", payload);
-
     // nest-container | __RET__DBG__ :  {
     //   nest-container |   id: 52,
     //   nest-container |   senderId: 62528,
@@ -41,17 +41,15 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
     //   nest-container |   content: 'xxxxxxx',
     //   nest-container |   date: 2022-10-19T04:55:40.240Z
     //   nest-container | }
-
-
-
-
     const ret = await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
     console.log("PAYLOAD : ", payload);
     if (ret.stat === true)
+    {
       this.server.to(payload.channelId).emit('chatToClient', ret.payload);
+      // this.server.to(payload.channelId).emit('event', ret.payload);
+      client.to(payload.channelId).emit('msg_event', ret.payload);
+    }
     // this.server.emit('chatToClient', payload);
-
-
     // console.log("__CLIENT__DBG__  : ", client);
     // this.chatService.SendMessage();
     // post to db;
@@ -74,7 +72,12 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
       client.join(rooms[index]);
   //  client.emit('joinedRoom', room );
   }
-
+  @SubscribeMessage('gameChallenge')
+  SendGameChallenge(client: any, payload: any): void {
+    console.log("______DBG____ CHALLENGEGAME : " , payload[1])
+    client.to(payload[0]).emit('challeneEvent', payload[1]);
+  }
+  
   // @SubscribeMessage('connection')
   // handleCon() {
   //   console.log('connected');
