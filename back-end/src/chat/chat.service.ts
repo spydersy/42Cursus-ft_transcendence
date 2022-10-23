@@ -147,6 +147,12 @@ export class ChatService {
                      {access: CHANNEL.PROTECTED}
                 ],
             },
+            // select: {
+            //     password: false,
+            // },
+        });
+        allChannels.forEach(element => {
+            delete element.password;
         });
         console.log("__ALL__CHANNELS__ENDPOINT__DBG__ : ", allChannels);
         return res.status(HttpStatus.OK).send(allChannels);
