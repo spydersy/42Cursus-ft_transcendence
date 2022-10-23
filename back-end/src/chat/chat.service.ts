@@ -139,6 +139,19 @@ export class ChatService {
         return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, allChannels));
     }
 
+    async GetAllChannels(@Res() res) {
+        const allChannels = await this.prisma.channels.findMany({
+            where: {
+                OR: [
+                    {access: CHANNEL.PUBLIC},
+                     {access: CHANNEL.PROTECTED}
+                ],
+            },
+        });
+        console.log("__ALL__CHANNELS__ENDPOINT__DBG__ : ", allChannels);
+        return res.status(HttpStatus.OK).send(allChannels);
+    }
+
     async UpdateUserInChannel(me: number, user: string, channelId: string, role: PERMISSION, @Res() res) {
         if (await this.CanUpdateChannel(me, channelId) === true) {
             const channel = await this.prisma.channels.findUnique({where: {id: channelId} });

@@ -51,6 +51,11 @@ export class ChatController {
       return this.chatService.GetMyChannels(req.user.userId, res);
     }
 
+    @Get('allChannels')
+    async GetAllChannels(@Req() req, @Res() res) {
+      return this.chatService.GetAllChannels(res);
+    }
+
     @Get('messages/:channelId')
     async GetMessages(@Req() req, @Res() res) {
       return this.chatService.GetChannelMessages(req.user.userId, req.params.channelId, res);
