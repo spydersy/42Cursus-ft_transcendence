@@ -129,6 +129,20 @@ export class ChatService {
             payload: msg}
     }
 
+    async GetManagedChannels(me: number, @Res() res) {
+        let managedChannels = await this.prisma.channelsUsers.findMany({
+            where: {
+                userId: me,
+                OR: [
+                    {permission: PERMISSION.ADMIN},
+                    {permission: PERMISSION.OWNER},
+                ],
+            }
+        });
+        console.log("__MANAGED__CHANNELS__DBG__ : ", managedChannels);
+        return res.send(managedChannels);
+    }
+
     async SetLastMessageInChannel(me: number, myChannels : any[]) {
         const blackList = await this.prisma.blocks.findMany({
             where: {blockedId: me}
@@ -191,19 +205,19 @@ export class ChatService {
             if (channel === null || channel.access === CHANNEL.DM)
                return res.status(HttpStatus.FORBIDDEN).send({'message': 'Cant Add User'});
             const userProfile = await this.userService.GetUserByLogin(user);
-            if (userProfile === null) 
+            if (userProfile === null)
                 return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
-                console.log(userProfile.id);
-                await this.prisma.channelsUsers.update({
-                    where: {
-                        userId_channelId: {
-                            userId: userProfile.id,
-                            channelId: channel.id
-                        },
+            console.log(userProfile.id);
+            await this.prisma.channelsUsers.update({
+                where: {
+                    userId_channelId: {
+                        userId: userProfile.id,
+                        channelId: channel.id
                     },
-                    data: { permission: role}
-                });
-                return res.status(HttpStatus.OK).send({'message': 'User Updated'});
+                },
+                data: { permission: role}
+            });
+            return res.status(HttpStatus.OK).send({'message': 'User Updated'});
         }
         return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
     }
@@ -213,7 +227,7 @@ export class ChatService {
         if (channel === null || channel.access === CHANNEL.DM)
            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Cant Add User'});
         const userProfile = await this.userService.GetUserByLogin(user);
-        if (userProfile === null) 
+        if (userProfile === null)
             return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
         if ((userProfile.id === me)
         || (userProfile.id !== me && await this.CanUpdateChannel(me, channelId) === true)) {
@@ -233,7 +247,7 @@ export class ChatService {
 
     async UpdateUserRestrictionInChannel(me: number, user: string, channel: string,
         restriction: string, duration: number, @Res() res) {
-        
+
     }
 
     async AddUserToChannel(me: number, user: string, channelId: string, @Res() res) {
@@ -242,12 +256,12 @@ export class ChatService {
                 where: {id: channelId},
             });
             if (channel === null || channel.access === CHANNEL.DM)
-               return res.status(HttpStatus.FORBIDDEN).send({'message': 'Cant Add User'});
+                return res.status(HttpStatus.FORBIDDEN).send({'message': 'Cant Add User'});
             const userProfile = await this.userService.GetUserByLogin(user);
-               if (userProfile === null) 
+            if (userProfile === null)
                     return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
             try {
-               await this.prisma.channelsUsers.create({
+                await this.prisma.channelsUsers.create({
                     data: {
                         userId: userProfile.id ,
                         channelId: channelId,

@@ -17,13 +17,6 @@ enum SOCKET {
   ONLINE
 }
 
-  // Id: 62700,
-  // Login: 'abelarif',
-  // TwoFactorAuth: false,
-  // Email: 'abelarif@student.1337.ma',
-  // iat: 1665799073,
-  // exp: 1666403873
-
 model websockets {
   socketId  String  @id
   userId    Int
