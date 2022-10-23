@@ -28,6 +28,7 @@ interface ChatProps {
     list: convType[],
     currentconv: convType,
     setlist : (e : any)=>void,
+    setmsgs : (e : any)=>void,
     msgs : any
     setcurrentConv : (e : any)=>void
     refss : any;
@@ -44,62 +45,24 @@ interface ChatProps {
   export default function ChatBody(props: ChatProps) {
   const socket = useContext(SocketContext)
 
-  const [list, setlist] = useState<msgType[]>([])
-  // const bottomRefss = useRefss<HTMLDivElement>(null)
-  const pageName = window.location.pathname.split("/")[2];
-  useEffect(() => {
-    
-    const recievedMessgae  =  (payload : msgType) => {
-      var tmp  : msgType[] = list;
-      tmp.push(payload)
-      console.log(tmp)
-      setlist([...tmp])
-  
-  }
-      const fetchData = async () => {
-      await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
-      {withCredentials: true} 
-      ).then((res)=>{
-        props.setlist([...res.data]);
-       }).catch((err)=>{
-         console.log(err)
-       })
-     }
-  
-  socket.on('chatToClient', (payload) => {
-    fetchData()
-    console.log("xss")
-  recievedMessgae(payload);
 
-  if (props.refss?.current != null)
-  {
-  
-  
-    props.refss.current?.scrollIntoView({behavior: 'smooth'});
-  }
-  })
-    axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + pageName, 
-      {withCredentials: true} 
-      ).then((res)=>{
-        // setmsgs(res.data)
-        setlist(res.data)
 
-       }).catch((err)=>{
-         console.log(err)
-       })
+    // useEffect(() => {
 
+    // }, [])
+    const scroolDown  = ()=>
+    {
       if (props.refss?.current != null)
       {
-
-      console.log("xss")
-
+      
+      
         props.refss.current?.scrollIntoView({behavior: 'smooth'});
       }
-    }, [props.list , props.currentconv])
+    }
     return (
       <ChatBodyStyle>
         {
-          list.map((object: any , i : number)=>{
+          props.msgs.map((object: any , i : number)=>{
             var s : string | null = localStorage.getItem('user');
             var data: usersType ;
 

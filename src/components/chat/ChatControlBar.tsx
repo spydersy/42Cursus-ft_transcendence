@@ -61,22 +61,32 @@ export default function ChatControlBar(props :{data : convType }) {
                 
         </div>
             }
-   <div className='buttons'>
+   {
+     props.data?.access === "DM" ? 
+            <div className='buttons'>
+                  
+              <Button  isIcon={true} onClick={()=>{  socket.emit("gameChallenge" , props.data.channelId , props.data.users[0].login)}} icon={<GameIcon/>}/>
+            <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
+            {/* <Button   isIcon={true} onClick={()=>{}} icon={<Mute/>}/> */}
+                 </div>
                 
-   {/* <Button  isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/> */}
-   {hide &&  <Modal
-                    isOpen={hide}
-                    onRequestClose={() => sethide(false)}
-                    hideModal={() => sethide(false)}
-                 >
-                  <MembersChatModal closeModal={()=>sethide(false) } />
-                 </Modal>
-            }
-    
-   <Button  isIcon={true} onClick={()=>{  socket.emit("gameChallenge" , props.data.channelId , props.data.users[0].login)}} icon={<GameIcon/>}/>
-   <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
-   <Button   isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
-        </div>
+                :
+            <div className='buttons'>
+                 <Button  isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/> 
+                      {hide &&  <Modal
+                        isOpen={hide}
+                        onRequestClose={() => sethide(false)}
+                        hideModal={() => sethide(false)}
+                    >
+                      <MembersChatModal  data={props.data}closeModal={()=>sethide(false) } />
+                    </Modal>
+                }
+                 </div>
+
+            }    
+
+
+  
 
     </ContoleStyle>
   )

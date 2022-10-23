@@ -16,6 +16,7 @@ interface UserProp {
   login : string
   displayName : string
   relation : string
+  dmChannel : string
   nbFriends? : string
   wins : number
   losses : number
@@ -34,6 +35,8 @@ export default function Profile() {
     login : "DefaultUserLogin",
     displayName : 'Default DisplayName',
     relation : "",
+  dmChannel : "string",
+
     nbFriends : "100",
     wins : 100,
     losses : 0,
@@ -48,6 +51,8 @@ export default function Profile() {
     login : "Hiddenlogin",
     displayName : "HiddenDisplayName",
     relation : "BLOCKED",
+  dmChannel : "string",
+
     nbFriends : "000",
     wins : 0,
     losses : 0,
@@ -74,8 +79,8 @@ export default function Profile() {
         axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + id,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked 
-              console.log("> status = " , res.status)
               setUser(res.data)
+              console.log("> status = " , res.data)
 
             }).catch((error)=>{ 
               // if (err.status === 403)

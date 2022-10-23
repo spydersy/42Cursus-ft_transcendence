@@ -56,12 +56,21 @@ const linkslist = ["All" , "My Rooms"]
 
     const [index, setindex] = useState(1)
     const [myrooms, setmyrooms] = useState<convType[]>([])
+    const [allRooms, setallRooms] = useState<convType[]>([])
     useEffect(() => {
       const fetchData = async () => {
         await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
         {withCredentials: true} 
         ).then((res)=>{
           setmyrooms(res.data)
+         }).catch((err)=>{
+           console.log(err)
+         })
+        await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/allChannels", 
+        {withCredentials: true} 
+        ).then((res)=>{
+          console.log(res.data)
+          setallRooms(res.data)
          }).catch((err)=>{
            console.log(err)
          })
@@ -78,7 +87,7 @@ const linkslist = ["All" , "My Rooms"]
             <Warraper>
 
               {
-                roomListDummy.map((data : any , id : number)=>{
+                allRooms.map((data : any , id : number)=>{
                   return<RoomComponent id={3} roomMembers={5} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
                 })
               }
