@@ -14,7 +14,8 @@ import {ReactComponent as CloseLock} from "../assets/imgs/closelock.svg";
 import OpenLock from "../assets/imgs/TwoFa.png";
 import QrCode from "../assets/imgs/qrcode.png"
 // import RICIBs from 'react-individual-character-input-boxes';
-
+import PasswordChecklist from "react-password-checklist"
+import { PinInput } from 'react-input-pin-code' // ES Module
 
 
 const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderColor: "red", };
@@ -30,6 +31,11 @@ export default function Setting() {
     const [isToggled, setIsToggled] = useState(false);
     const [closepop, setclosepop] = useState(true)
     const [openpass, setopenpass] = useState(false)
+
+    const [password, setPassword] = useState("")
+	const [passwordAgain, setPasswordAgain] = useState("")
+
+    const [values, setValues] = useState(['', '', '','','','','','']);
 
 
     useEffect(() => {
@@ -119,17 +125,11 @@ export default function Setting() {
         setopenpass(true)
     }
     
-    const submitpass = (props: string)=> {
+    const submitpass = (props: string[])=> {
         setopenpass(false)
         setclosepop(false)
         setIsToggled(true)
         console.log("FUCKING PIN IS ", props)
-    }
-
-    const handleOutput = (props: string)=> {
-
-            if (props.length == 8)
-                submitpass(props)
     }
 
     const submitHandler = () => {
@@ -202,7 +202,7 @@ export default function Setting() {
 
                         {
                             isToggled && closepop &&
-                            // true &&
+                            // false &&
                             <div className='PoppUp'>
 
                                 <Deny onClick={setClosePop}  className='CloseTab'/>
@@ -229,7 +229,7 @@ export default function Setting() {
                                 <div className="Bastard" >Scan Me Bastard</div>
                                 <Line></Line>
                                 <div className='Buttons' >
-                                    <button id="cancel" onClick={setClosePop} > Enable 2FA  </button>
+                                    <button id="cancel" onClick={setClosePop} > Disable 2FA  </button>
                                     <button id="next"  onClick={setEnable} > Next </button>
                                 </div>
 
@@ -238,32 +238,31 @@ export default function Setting() {
 
                         {
                             openpass &&
-                            <div className='PoppUp'>
+                            // true && 
+                            <div className='PoppUpp'>
                                <Deny onClick={setClosePop}  className='CloseTab'/>
                                 
                                 <div className='Title'> TWO-FACTOR AUTHENTICATION (2FA) - DUO SECURITY </div>
 
                                 <Line></Line>
                                 
-                                Enter Password
 
-                                    <div>
-                                        {/* <RICIBs
-                                        amount={8}
-                                        autoFocus
-                                        handleOutputString={handleOutput}
-                                        inputProps={
-                                        ` className: "2fa-box",
-                                            style: { "color": "orange" },
-                                            placeholder: "*"
-                                            `}
-                                        inputRegExp={/^[0-9]$/}
-                                        /> */}
-                                    </div>
+                                <div className='passwordo' >
+                                    {/* <label className='text'> 8 Digit Pin : </label> */}
+                                    <PinInput
+                                    containerClassName='piniput'
+                                    values={values}
+                                    size='lg'
+                                    // onChange={(value, index, values) => setValues(values)}
+                                    onChange={(value, index, values) => setValues(values)}
+                                    onComplete={(values) => submitpass(values)}
+                                    />
+                                </div>
                                 
                                 <Line></Line>
+
                                 <div className='Buttons' >
-                                    {/* <button id="cancel" onClick={submitpass}> done </button> */}
+                                {/* <button id="next"  onClick={setEnable} > Next </button> */}
                                 </div>
                             </div>
 
@@ -302,7 +301,8 @@ const Row = styled.div`
             text-align: center;
             font-size: 18px;
             margin: 20px 0px;
-            font-weight: 700;
+            font-weight: 800;
+            color:  ${props => props.theme.colors.purple};
             /* background-color: aqua; */
         }
         .CloseTab{
@@ -396,6 +396,116 @@ const Row = styled.div`
                 font-size: 20px;
                 font-weight: 600;
             }
+        }
+        .passwordo {
+            width: 100%;
+            position: relative;
+
+            height: 300px;
+            background-color: #1d5eac;
+            .Blocko{
+                width: 150px;
+                height: 20px;
+                border: 3px solid #090909;
+                margin-left: 8px;
+            }
+            .passList{
+                /* display: flex; */
+                position: absolute;
+                background-color: #c88989;
+                /* width: 80%; */
+                width: 50%;
+                height: 120px;
+                align-items: center;
+                text-align: center;
+                left: 25%;
+                margin: 30px 0px;
+                /* top: 100px; */
+
+            }
+        }
+}
+    .PoppUpp{
+        margin-top: 100px;
+        height: 500px;
+        width: 650px;
+        background-color: ${props => props.theme.colors.seconderybg};
+        border: 2px solid  ${props => props.theme.colors.purple};
+        color: #dacece5f ;
+        z-index: 30;
+        position: absolute;
+        top: 15%;
+        border-radius: 25px;
+
+        .Title {
+            width: 100%;
+            height: 15px;
+            text-align: center;
+            font-size: 18px;
+            margin: 20px 0px;
+            font-weight: 800;
+            color:  ${props => props.theme.colors.purple};
+            /* background-color: aqua; */
+        }
+        .CloseTab{
+            position: absolute;
+            width:  25px;
+            height: 25px;
+            top:    18px;
+            right:  10px;
+            &:hover {
+                cursor: pointer;
+                fill: #665a5a5f;
+                transform: scale(1.2);
+            }
+        }
+        .piniput{
+            /* background-color: #c88989; */
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            left: 17%;
+            height: 100px;
+            /* width: 60%; */
+
+        }
+     
+        .Buttons{
+            width: 100%;
+            height: 100px;
+            flex-direction: row;
+            align-items: center;
+
+            #next {
+                margin: 0px 20px;
+                background-color: #1d5eac;
+                width: 20%;
+                height: 50px;
+                border-radius: 20px;
+                font-size: 20px;
+                font-weight: 600;
+            }
+        }
+        .passwordo {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            /* position: relative; */
+            display: flex;
+            align-items: center;
+            background-color: #6f89a927;
+            .text {
+                width: 25%;
+                /* height: 30px; */
+                /* background-color: #b0a7a7; */
+                color: #090909;
+                font-size: 25px;
+
+                
+         
+            }
+
         }
 }
 `;

@@ -206,7 +206,7 @@ const Bloc = styled.div`
             position: absolute;
             /* bottom: 0px; */
             background-color: #5469704a;
-            bottom: 20px;
+            bottom: 8px;
             left: 10%;
          }
 
