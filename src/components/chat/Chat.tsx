@@ -86,10 +86,12 @@ export default function Chat() {
          {withCredentials: true} 
          ).then((res)=>{
            setlist(res.data);
-           var s = 0
+           var s : convType | undefined ;
            if (pageName === '0')
            {
-            s = res.data[0].channelId
+            setcurrentConv(res.data[0])
+            s = res.data[0]
+
            }
            else {
              console.log( res.data)
@@ -101,20 +103,26 @@ export default function Chat() {
             if (element.channelId?.toString() === pageName)
             {
               setcurrentConv(element)
-              s = element.channelId
+              s = element
             }
                 
               
               }
             }
+            axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + s?.channelId, 
+            {withCredentials: true} 
+            ).then((res)=>{
+              setmsgs(res.data)
+      
+              console.log("done!")
+      
 
-          //  axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + pageName, 
-          //  {withCredentials: true} 
-          //  ).then((res)=>{
-          //    setmsgs(res.data)
-          //   }).catch((err)=>{
-          //     console.log(err)
-          //   })
+              
+            }).catch((err)=>{
+    
+               console.log(err)
+             })
+
           }).catch((err)=>{
             console.log(err)
           })
@@ -135,23 +143,48 @@ export default function Chat() {
           socket.emit('concon', data.id)
         }
     },[setcurrentConv])
-    // const fetchData = async () => {
-    //   await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
-    //   {withCredentials: true} 
-    //   ).then((res)=>{
-    //     setlist(res.data);
-    //    }).catch((err)=>{
-    //      console.log(err)
-    //    })
-    //  }
+    useEffect(() => {
+      socket.on('chatToClient', (payload) => {
+        recievedMessgae(payload);
+        fetchData()
+    
+      })
+    }, [msgs])
+    
+    const recievedMessgae  =  (payload : msgType) => {
+        
+      var tmp  : msgType[] = msgs;
+      tmp.push(payload)
+      setmsgs([...tmp])
+  
+  }
+      const fetchData = async () => {
+      await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+      {withCredentials: true} 
+      ).then((res)=>{
+        setlist([...res.data]);
+        axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + currentConv?.channelId, 
+        {withCredentials: true} 
+        ).then((res)=>{
+          setmsgs(res.data)
+  
+          console.log("done!")
+  
 
+          
+        }).catch((err)=>{
 
-      
-  //   socket.on('chatToClient', (payload) => {
-  //     fetchData()
-  //     // fetchData()
-  //     // setcurrentConv()
-  // })
+           console.log(err)
+         })
+       }).catch((err)=>{
+         console.log(err)
+       })
+     }
+  
+     useEffect(() => {
+      fetchData()
+     }, [currentConv])
+     
    
     return (
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
@@ -173,7 +206,7 @@ export default function Chat() {
           </div>
           <div className='center'>
 
-          <ChatBody refss={bottomRef} setlist={(e : any)=>(setlist(e))} msgs={msgs} setcurrentConv={(e)=>{ setcurrentConv(e) }}  currentconv={currentConv} list={list} />
+          <ChatBody refss={bottomRef} setlist={(e : any)=>(setlist(e))} setmsgs={(e : any)=>(setmsgs(e))} msgs={msgs} setcurrentConv={(e)=>{ setcurrentConv(e) }}  currentconv={currentConv} list={list} />
           </div>
           <div className='bottom'>
             <ChatBottom   setcurrentConv={(e)=>setcurrentConv(e)} msgs={msgs}  data={currentConv}  list={list} setList={(e)=>{setlist(e)}}  />

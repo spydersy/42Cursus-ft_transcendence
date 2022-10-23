@@ -32,7 +32,8 @@ import SocketTesting from './components/testing/SocketTesting';
 import ChatTesting from './components/testing/ChatTesting';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import MsgToast from './components/Toasts/MsgToast';
+import MsgToast , {GameChallengeToast} from './components/Toasts/MsgToast';
+import { ReactComponent as CloseIcon } from "./assets/imgs/close-icon.svg";
 
 
 const mockedItems : any = [{
@@ -55,21 +56,60 @@ const mockedItems : any = [{
   title: "Fishman Island",
   banner :Fish 
 }]
+interface msgType {
+  channelId : string,
+  content : string, 
+  date : string, 
+  displayName : string, 
+  id : number,
+  senderId : number
+}
+
+const CustomToastWithLink = (data : msgType) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <MsgToast data={data}/>
+  </div>
+);
+const CustomToastWithLinkGame = (data : any) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <GameChallengeToast data={data}/>
+  </div>
+);
 
 function App() {
   const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
   
   const socket = useContext(SocketContext)
-  const [toastData, settoastData] = useState()
+  const [toastData, settoastData] = useState<msgType>()
   const [toastDataChallenge, settoastDataChallenge] = useState()
+  const pageName = window.location.pathname.split("/")[1];
+  
   // const [toastData, settoastData] = useState()
   function hundleMsg (payload) {
-    settoastData(payload)
-    msgNotifyToast()
-}
-function handleChallenge (payload) {
-  settoastDataChallenge(payload)
-  CHallengeNotify()
+    if (pageName != "chat")
+    {
+      // settoastData(payload)
+      // msgNotifyToast()
+    console.table(payload)
+
+      toast(CustomToastWithLink(payload) , {
+        className: "toast",
+        progressClassName: "toastProgress"
+      })
+    }
+  }
+  
+  function handleChallenge (payload) {
+    console.log(payload)
+
+    toast(CustomToastWithLinkGame(payload) , {
+      className: "toast",
+      progressClassName: "toastProgress",
+
+  
+
+    })
+  // CHallengeNotify()
 }
   useEffect(()=>{
     // sub
@@ -80,10 +120,7 @@ function handleChallenge (payload) {
       socket.removeListener('challeneEvent', handleChallenge);
     }
   })
-      // settoastDataChallenge(payload)
-      // console.log(toastDataChallenge)
-      // CHallengeNotify()
-  const    msgNotifyToast = () => toast(<MsgToast/>)
+
   const    CHallengeNotify = () => toast.success("You accepted " +  toastDataChallenge + " Friend Request", {
     position: "top-right",
     autoClose: 2000,
@@ -92,7 +129,7 @@ function handleChallenge (payload) {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "colored"
+    theme: "colored",
     });
   let joinChannels = async () => {
     await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
@@ -169,6 +206,15 @@ const Cont = styled.div`
   }
   @media  only screen and (max-width: 560) {
     width: 100%;
+  }
+  .toast{
+    background-color: ${props => props.theme.colors.primarybg};;
+    border: 2px solid ${props => props.theme.colors.purple};
+  }
+  .toastProgress{
+    display: none;
+    background-color: ${props => props.theme.colors.secondaryText} !important;;
+
   }
 `;
 

@@ -31,7 +31,8 @@ interface UserProp {
   defaultAvatar: string,
   status: string,
   login : string
-  displayName : string
+  displayName : string,
+  dmChannel : string,
   relation : string
   nbFriends? : string
   wins : number
@@ -428,7 +429,7 @@ background-color: ${props => props.theme.colors.seconderybg};
                           <>
                             <Button   type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
                             
-                            <Link to={"/chat/" + props.player?.id}>  
+                            <Link to={"/chat/" + props.player?.dmChannel}>  
                               <Button   icon={<SendMessage/>} text='Send Message'/>
                             </Link>
                             

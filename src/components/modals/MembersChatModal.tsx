@@ -3,40 +3,70 @@ import { Button } from '../../Pages/SignIn';
 import { AvatarComponent } from '../PlayerProfile';
 import {ReactComponent as Ban} from "../../assets/imgs/ban.svg";
 import {ReactComponent as Mute} from "../../assets/imgs/mute.svg";
-import styled , {css} from "styled-components"
+import {ReactComponent as GameIcon} from "../../assets/imgs/game-icon.svg";
 
-export default function MembersChatModal(props : { closeModal : ()=>void}) {
+import styled , {css} from "styled-components"
+interface convType {
+  nbMessages: number,
+  lastUpdate: string,
+  access : string,
+  channelId: number,
+  name: string;
+  password: string,
+  picture : string,
+  users: usersType[]
+}
+interface usersType {
+  id: string,
+  defaultAvatar: string,
+  login : string
+  displayName : string,
+  restriction: string,
+  restrictionTime: string,
+  duration: number,
+}
+
+
+export default function MembersChatModal(props : { closeModal : ()=>void , data : convType}) {
   return (
     <div>   
         Members: 
         <div className='members'>
-    <Member img={""}/>
-</div></div>
+          {
+              props.data.users.map((data : any , id : number)=>{
+                return <Member data={data}/>
+              })
+          }
+          
+      </div>
+      </div>
   )
 }
 
 interface MemberProps{
-    img : string
+    data : usersType
   }
   export  function Member(props : MemberProps) {
     return (
       <MemberStyle>
+    
         <div className='data'>
   
           <div className='avatar'>
-                      <AvatarComponent img={props.img}/>
+                      <AvatarComponent img={props.data.defaultAvatar}/>
   
           </div>
           <div className='name'>
-                    Mohamed Elkarmi
+               { props.data.displayName}
             <span>
-              @melkarmi
+              @{props.data.login}
             </span>
           </div>
         </div>
         <div className='buttons'>
-          <Button isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
-        <Button  isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
+        <Button size='small'  isIcon={true} onClick={()=>{}} icon={<GameIcon/>}/>
+          <Button size='small' isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
+        <Button size='small'  isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
   
         </div>
       </MemberStyle>
