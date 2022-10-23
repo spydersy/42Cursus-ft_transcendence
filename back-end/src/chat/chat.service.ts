@@ -26,14 +26,15 @@ export interface userInChannel {
 }
 
 export interface myChannelsDto {
-    channelId:  number,
-    access:     CHANNEL,
-    name:       string,
-    picture:    string,
-    password:   string,
-    nbMessages: number,
-    lastUpdate: Date,
-    users:      userInChannel[],
+    channelId:   number,
+    access:      CHANNEL,
+    name:        string,
+    picture:     string,
+    password:    string,
+    nbMessages:  number,
+    lastUpdate:  Date,
+    lastMessage: string,
+    users:       userInChannel[],
 }
 
 @Injectable()
@@ -128,15 +129,41 @@ export class ChatService {
             payload: msg}
     }
 
+    async SetLastMessageInChannel(me: number, myChannels : any[]) {
+        const blackList = await this.prisma.blocks.findMany({
+            where: {blockedId: me}
+        });
+        for (let index = 0; index < myChannels.length; index++) {
+            let lastMessage = await this.prisma.messages.findMany({
+                where: { channelId: myChannels[index].id},
+                orderBy: { date: 'desc'},
+                take: 1,
+            });
+            myChannels[index]['lastMessage'] = "";
+            if (lastMessage.length === 1) {
+                myChannels[index]['lastMessage'] = lastMessage[0].content;
+                for (let index = 0; index < blackList.length; index++) {
+                    if (blackList[index]['userId'] === lastMessage[0].senderId) {
+                        myChannels[index]['lastMessage'] = "Hidden Content 👻👻👻";
+                        break ;
+                    }
+                }
+            }
+            delete myChannels[index]['password'];
+        }
+        return myChannels;
+    }
+
     async GetMyChannels(me: number, @Res() res) {
-        let allChannels = await this.prisma.channels.findMany({
+        let myChannels = await this.prisma.channels.findMany({
             where: {
                 users: {some: { userId: me}}
             },
             include: {users: {include: { user: true }}},
             orderBy: {lastUpdate: 'desc'},
         });
-        return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, allChannels));
+        await this.SetLastMessageInChannel(me, myChannels);
+        return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, myChannels));
     }
 
     async GetAllChannels(@Res() res) {
@@ -147,11 +174,11 @@ export class ChatService {
                      {access: CHANNEL.PROTECTED}
                 ],
             },
-            // select: {
-            //     password: false,
-            // },
+            include: { users: true}
         });
         allChannels.forEach(element => {
+            element['nbUsers'] = element.users.length;
+            delete element.users;
             delete element.password;
         });
         console.log("__ALL__CHANNELS__ENDPOINT__DBG__ : ", allChannels);
@@ -287,6 +314,7 @@ export class ChatService {
                 password:   chnl.password,
                 nbMessages: chnl.nbMessages,
                 lastUpdate: chnl.lastUpdate,
+                lastMessage: chnl.lastMessage,
                 users:      [],
             };
             chnl.users.forEach(user => {
