@@ -2,6 +2,8 @@ import React from 'react'
 import styled , {keyframes , css} from "styled-components"
 import PatternImg from "../assets/imgs/background.jpeg"
 import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
+import {ReactComponent as FttImg } from "../assets/imgs/google.svg"
+import {ReactComponent as FtttImg } from "../assets/imgs/google1.svg"
 import { LogoComponent } from '../components/Upperbar'
 import Background from '../components/Background';
 
@@ -17,103 +19,198 @@ export default function SignIn() {
   return (
     <Wrraper>
       <Background/>
-         <Bloc>
-            <LogoComponent size={"big"}/>
-            
-            {/* “Those who don't know pain will never know what true peace is, the world will know pain SHINRA-TENSIE” */}
-           
-            <Description>
-            {/* “Nobody Dies a Virgin, Life Fucks Us All.” - Yaiba */}
-            
-            </Description>
-           
-            {/* <LoginButton href={url} >
-               <img src={FtImg} alt="42logo" />
-               Login with intra
-            </LoginButton> */}
-            <a href={process.env.REACT_APP_REDIRECT_URL}>
-               <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}}   icon={<FtImg/>} text="Sign in with intra"/>
-
-            </a>
-            <a id="TermsCond" href="#termscondPage">Terms & conditions</a>
          
-         <br></br>
+      <Bloc>
+         <div className='Logo'>
+            <LogoComponent size={"big"}/>
+         </div>
+         {/* <div className='Quotoo'>
+            ~ all your dreams can come true if you have the courage to pursue them ~
+         </div> */}
+         
+         <div className='team'>
 
 
             <div className='wrow'>
 
-               <div className='urow'>
+               <a className='urow' href="https://github.com/spydersy">
                   <img className='avatar' src={abelarif}  />
-                  Person 
-               </div>
-               <div className='urow'>
+                  <a > @Spydersy </a>  
+               </a>
+              
+               <a className='urow' href="https://github.com/aladinez">
                   <img className='avatar' src={aez_zaou}  />
-                  Person 
-               </div>
-               <div className='urow'>
+                  <a > @Aladinez </a>  
+               </a>
+              
+               <a className='urow' href="https://github.com/NotYaiba">
                   <img className='avatar' src={melkarmi}  />
-                  Person 
-               </div>
-               <div className='urow'>
+                  <a > @NotYaiba </a>  
+               </a>
+
+               <a className='urow' href="https://github.com/mamali543">
                   <img className='avatar' src={mamali}  />
-                  Person
-               </div>
-               <div className='urow'>
+                  <a > @Mamali543 </a>  
+               </a>
+               <a className='urow' href="https://github.com/Alcheemiist">
                   <img className='avatar' src={eelaazmi}  />
-                  Person 
-               </div>
-               
+                  <a > @Alchemist </a>  
+               </a>
                
             </div>
 
-            <Title> THE GOLDEN 3ANAKIB TEAM  </Title>
+           
 
-         </Bloc>
+         </div>
+
+         <a className="Butto" href={process.env.REACT_APP_REDIRECT_URL}>
+            <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}}   icon={<FtImg/>} text="Sign in"/>
+            <a className='space-zb'/>
+            <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}}   icon={<FtttImg/>} text="Sign up"/>
+         </a>
+         {/* <a id="TermsCond" href="#termscondPage">Terms & conditions</a> */}
+
+
+      
+
+         <div className="title"> 
+            <a className='space-zb'/>
+
+            <img src="https://emojipedia-us.s3.amazonaws.com/source/skype/289/spider_1f577-fe0f.png" 
+                  // srcset="https://emojipedia-us.s3.amazonaws.com/source/skype/289/spider_1f577-fe0f.png 2x"
+                  alt="Spider on Skype Emoticons 1.2" width="70" height="60" /> 
+            <a className="timo"  > # Team AL-3ANAKIB </a>
+            
+         </div>
+         
+      </Bloc>
 
    </Wrraper>
   )
 }
 
 
-const breatheAnimation = keyframes`
- /* 0% { transform: translateY(0) }
- 50% { transform: translateY(10px)  }
- 100% { transform: translateY(0)  } */
-`
-const Wrraper = styled.div`
 
+const Wrraper = styled.div`
+   position: relative;
+   margin: 0;
+   padding: 0;
+   overflow-x:hidden;
+   overflow-y:hidden;
+   background-color: #112238;
    width:   100%;
    height:  100%; 
    display: flex;
+   background-size: cover;
 
    /* background: url(${PatternImg})   no-repeat ; */
-   background-color: #000000;
-   background-size: cover;
-   position: absolute;
-   align-items: center;
-   
- 
+   /* position: absolute; */
+   /* align-items: center;  */
 `;
 
 const Bloc = styled.div`
    position: absolute;
 
-   /* width: 100%; */
-   min-width: 650px;
-   max-width: 650px;
-   height:    400px;
+   min-width: 750px;
+   max-width: 700px;
+   min-height:    350px;
+   min-height:    400px;
 
-   top:  25%;
-   right: 25%;
-
+   top: 400px;
+   right: 28%;
+   
    border-radius : 10px;
-   box-shadow:   1px 1px 5px 5px #163f83; 
    background-color: ${props => props.theme.colors.primarybg}; 
-   display: flex;
-   align-items: center;
    flex-direction: column;
-   padding-top : 30px;
+   box-shadow:   1px 1px 3px 2px #25a7d7; 
 
+   .Logo {
+      width: 100%;
+      margin: 30px 0px;
+      /* background-color: #25a8d74b; */
+      height: 60px;
+   }
+   .Quotoo {
+      color: #ebf2f467;
+      font-weight: 600;
+      font-size: 18px;
+      padding: 10px 0px;
+      margin: 30px 0px;
+      /* background-color: #25a7d7; */
+   }
+   .team {
+      width: 100%;
+      color: #546970;
+      height: 160px;
+      /* background-color: #25a7d7; */
+      margin-bottom: 0px;
+
+
+      .wrow{
+         position: relative;
+         align-items: center;
+         justify-content: center;
+
+         flex-direction: row;
+         display: flex;
+
+         padding: 10px 0px;
+         gap: 30px;
+         /* background-color: #0635517b; */
+         width: 100%;
+         cursor: pointer;
+
+         .urow{
+            /* background-color: #1553b6; */
+            .avatar{
+               border-radius: 50%;
+               width:   90px;
+               height:  90px;
+            }
+         }
+      }
+   }
+   
+
+   .Butto {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      /* position: relative; */
+      /* background-color: antiquewhite; */
+      height: 60px;
+      /* margin: 0px 10px; */
+      .space-zb {
+         width: 40px;
+      }
+
+
+   }
+
+   .title {
+         flex-direction: row;
+         display: flex;
+         /* position: absolute; */
+
+         font-family: "Gill Sans", sans-serif;
+         color:  ${props => props.theme.colors.primaryText};;
+         font-weight: 500;
+         font-size: 15px;
+         background-color: #25a8d70;
+         /* margin     : 10px 0px; */
+         width: 100%;
+         /* height: 100px; */
+         .timo {
+            display: flex;
+            position: absolute;
+            /* bottom: 0px; */
+            background-color: #5469704a;
+            bottom: 20px;
+            left: 10%;
+         }
+
+      }
    @media  only screen and (max-width: 768px) {
       width: 70%;
       min-width: 70%;
@@ -129,35 +226,11 @@ const Bloc = styled.div`
       color: ${props => props.theme.colors.primaryText};
       text-decoration: underline;
    }
-   .wrow{
-      flex-direction: row;
-      display: flex;
-      padding: 10px;
-      gap: 50px;
-      background-color: #0635517b;
-      width: 90%;
-      .urow{
-         /* background-color: #1553b6; */
-         .avatar{
-            border-radius: 25px;
-            width:   60px;
-            height:  60px;
-         }
-      }
-   }
+  
 `;
 
 const Title = styled.div`
-   font-family: 'Gill Sans Extrabold', cursive;
-   color:  ${props => props.theme.colors.primaryText};;
-   font-size:  ${props => props.theme.fontSize.xl}; 
-   font-weight: 500;
-   /* margin-top: 10px; */
-   /* margin-bottom: 0px; */
-   bottom: 30px;
-   position: absolute;
-   font-weight: 300;
-   line-height: 20px;
+
 `;
 
 const Description = styled.div`
@@ -224,7 +297,6 @@ padding: 3px 5px;
    font-weight: 500;
    font-size:  ${props => props.theme.fontSize.l}; 
    color: #FFFFFF;
-   animation-name: ${breatheAnimation};
    animation-duration: 3s;
    animation-iteration-count: infinite;
    ${props => (props.typeS === "secondary") && css`
