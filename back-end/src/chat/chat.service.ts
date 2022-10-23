@@ -285,6 +285,8 @@ export class ChatService {
             access = CHANNEL.PUBLIC
         else if (type === 'protected')
             access = CHANNEL.PROTECTED
+        else
+            return res.status(HttpStatus.BAD_REQUEST).send({'messaeg': 'Wrong channel type'});
         let channel = await this.prisma.channels.create({
             data: {
                 access: access,
@@ -298,14 +300,11 @@ export class ChatService {
             data: {userId: me, channelId: channel.id, permission: PERMISSION.OWNER}
         });
         if (members.length !== 0) {
-            console.log("__members__ : ", members);
             let manyUsers : ManyUsers[];
             manyUsers = [];
-            console.log("__many__members__00__ : ", manyUsers);
             members.forEach(element => {
                 manyUsers.push({userId: parseInt(element, 10), channelId: channel.id, permission: PERMISSION.USER});
             });
-            console.log("__MANY__members__ : ", manyUsers);
             let addedUseres = await this.prisma.channelsUsers.createMany({
                 data: manyUsers,
             });

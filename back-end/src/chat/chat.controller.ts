@@ -3,11 +3,8 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
-import { fileURLToPath } from 'url';
-import { query } from 'express';
 import { ChatService } from './chat.service';
-import { ChannelUserDto, MessageDataDto, UserRestrictionDto } from 'src/dtos/Inputs.dto';
-import { UserService } from 'src/user/user.service';
+import { ChannelData, ChannelUserDto, MessageDataDto, UserRestrictionDto } from 'src/dtos/Inputs.dto';
 import { PERMISSION } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard)
@@ -77,23 +74,16 @@ export class ChatController {
         }),
     )
     async CreateRoom(@UploadedFile() file, @Req() req,
-    @Body() channelData, @Res() res) {
-      console.log("__BODY__DBG__ : ", channelData);
-      console.log("___FILE___ : ", file);
+    @Body() channelData : ChannelData, @Res() res) {
       let ChannelIcone: string = "https://myanimelist.tech/api/avatar?name=&animeName=one_Piece_Crews";
       if (file !== undefined)
         ChannelIcone = encodeURI(process.env.BACKEND_URL + `/upload/${file.filename}`);
-      if (channelData === undefined || channelData['name'] === undefined || channelData['type'] === undefined
-      &&  channelData['members'] === undefined) {
-        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
-      }
-
       var membersObj = JSON.parse(channelData['members']);
       console.log("__MEMBERS__OBJ__DBG__ : ", membersObj);
       if (channelData['type'] === 'protected' && channelData['password'] === undefined)
-        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Bad Request"});
+        return res.status(HttpStatus.BAD_REQUEST).send({'message': "Password Required"});
       if (channelData['type'] === 'protected' && channelData['password'] !== undefined)
         return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], membersObj, channelData['password'], ChannelIcone, res);
-      return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], membersObj, "", ChannelIcone, res);
+      return this.chatService.CreateRoom(req.user.userId, channelData['name'], channelData['type'], membersObj, null, ChannelIcone, res);
     }
 }

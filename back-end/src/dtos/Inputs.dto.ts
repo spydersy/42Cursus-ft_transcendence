@@ -1,5 +1,11 @@
 import { ConfigService } from "@nestjs/config";
-import { IsNotEmpty, IsNumber, IsString, IsUUID, Matches, MaxLength } from "class-validator";
+import { IsNotEmpty,
+        IsNumber,
+        IsString,
+        IsUUID,
+        Matches,
+        MinLength,
+        MaxLength } from "class-validator";
 
 export class UserNameDto {
     @IsString()
@@ -8,6 +14,23 @@ export class UserNameDto {
     newname:   string;
 }
 
+export class ChannelData {
+    @IsString()
+    @IsNotEmpty()
+    @MinLength(4)
+    @MaxLength(30)
+    name: string;
+
+    @IsString()
+    @IsNotEmpty()
+    type: string;
+
+    @IsString()
+    @MinLength(2)
+    members: string;
+
+    password: string;
+}
 export class MessageDataDto {
     @IsUUID()
     @IsNotEmpty()
