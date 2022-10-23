@@ -1,7 +1,9 @@
 
 import axios from 'axios'
-import React , {useEffect , useState , useRef} from 'react'
+import React , {useEffect , useState , useContext} from 'react'
 import styled  from "styled-components"
+import { SocketContext } from '../../context/Socket';
+
 interface usersType {
   id : string,
   defaultAvatar: string,
@@ -23,27 +25,77 @@ interface convType {
   users: usersType[]
 }
 interface ChatProps {
-    list: convType,
-    setmsgs : (e : any)=>void,
+    list: convType[],
+    currentconv: convType,
+    setlist : (e : any)=>void,
     msgs : any
-    setcurrentConv : (e : number)=>void
-    ref : any;
+    setcurrentConv : (e : any)=>void
+    refss : any;
   }
 
+  interface msgType {
+    channelId : string,
+    content : string, 
+    date : string, 
+    displayName : string, 
+    id : number,
+    senderId : number
+  }
   export default function ChatBody(props: ChatProps) {
-  const [list, setlist] = useState([])
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const socket = useContext(SocketContext)
 
-    useEffect(() => {
+  const [list, setlist] = useState<msgType[]>([])
+  // const bottomRefss = useRefss<HTMLDivElement>(null)
+  const pageName = window.location.pathname.split("/")[2];
+  useEffect(() => {
+    
+    const recievedMessgae  =  (payload : msgType) => {
+      var tmp  : msgType[] = list;
+      tmp.push(payload)
+      console.log(tmp)
+      setlist([...tmp])
+  
+  }
+      const fetchData = async () => {
+      await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+      {withCredentials: true} 
+      ).then((res)=>{
+        props.setlist([...res.data]);
+       }).catch((err)=>{
+         console.log(err)
+       })
+     }
+  
+  socket.on('chatToClient', (payload) => {
+    fetchData()
+    console.log("xss")
+  recievedMessgae(payload);
 
-      setlist(props.msgs)
-      if (bottomRef?.current != null)
+  if (props.refss?.current != null)
+  {
+  
+  
+    props.refss.current?.scrollIntoView({behavior: 'smooth'});
+  }
+  })
+    axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + pageName, 
+      {withCredentials: true} 
+      ).then((res)=>{
+        // setmsgs(res.data)
+        setlist(res.data)
+
+       }).catch((err)=>{
+         console.log(err)
+       })
+
+      if (props.refss?.current != null)
       {
-      console.log(bottomRef?.current)
 
-        bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+      console.log("xss")
+
+        props.refss.current?.scrollIntoView({behavior: 'smooth'});
       }
-    }, [props.msgs])
+    }, [props.list , props.currentconv])
     return (
       <ChatBodyStyle>
         {
@@ -84,7 +136,7 @@ interface ChatProps {
           })
         }
         
-        <div ref={bottomRef} />
+        <div id="ddd" ref={props.refss} />
       </ChatBodyStyle>
     )
   }

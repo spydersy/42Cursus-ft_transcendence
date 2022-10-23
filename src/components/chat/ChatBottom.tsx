@@ -29,8 +29,8 @@ interface convType {
 interface ChatProps {
   setList: (e : any) => void,
   list: convType[],
-  currentConv : number,
-  setcurrentConv : (e : number)=>void,
+  data : convType,
+  setcurrentConv : (e : any)=>void,
   msgs : any,
 }
 
@@ -42,7 +42,7 @@ export default function ChatBottom(props: ChatProps) {
     const addMessage = ()=>{
       var s : string | null = localStorage.getItem('user');
       var data: usersType ;
-      console.log( props.list[props.currentConv])
+
       if (s )
       {
         data  =  JSON.parse(s || '{}');
@@ -53,7 +53,7 @@ export default function ChatBottom(props: ChatProps) {
           var msgtmp = {
             userId: data.id,
             content: mesg,
-            channelId:  props.list[props.currentConv]?.channelId
+            channelId:  props.data?.channelId
           }
           //validation layer (restrictions
           socket.emit('chatToServer', msgtmp);

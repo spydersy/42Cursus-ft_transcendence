@@ -89,6 +89,7 @@ export default function CreateGroup(props :{closeModal : ()=>void}) {
         {withCredentials: true} 
       ).then((res)=>{
         console.log(res.data)
+        props.closeModal()
       }).catch((err)=>{
         console.log(err)
         })

@@ -54,51 +54,67 @@ export default function Chat() {
 
   const pageName = window.location.pathname.split("/")[2];
   const [msgs, setmsgs] = useState<msgType[]>([])
-  const bottomRef = useRef(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
     const [list, setlist] = useState<convType[]>([])
     var x = -1;
     if (window.innerWidth  < 900 )
       x = 1;
 
     const [state, setstae] = useState(x)
-    const [currentConv, setcurrentConv] = useState(parseInt(pageName))
+    const [currentConv, setcurrentConv] = useState<convType>({
+      nbMessages: 0,
+      lastUpdate: "string",
+      access : "string",
+      channelId:  0,
+      name: "string",
+      password: "string",
+      picture : "string",
+      users: [{
+        id : "string",
+    defaultAvatar: "string",
+    login : "string",
+    displayName : "string",
+    restriction: "string",
+    restrictionTime: "string",
+    duration: 0,
+      }]
+    })
      useEffect(() => {
-      console.log(bottomRef)
-
+      // console.log(bottomRef)
        const fetchData = async () => {
          await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
          {withCredentials: true} 
          ).then((res)=>{
            setlist(res.data);
-            var s = 0
+           var s = 0
+           if (pageName === '0')
+           {
+            s = res.data[0].channelId
+           }
+           else {
+             console.log( res.data)
            for (let index = 0; index < res.data.length; index++) {
              const element : convType = res.data[index];
-             console.log(pageName)
-             console.log(element.channelId )    
-             if (element.access === "DM")
-             {
-                 if (element.users[1].id === pageName)
-                 {
-                   setcurrentConv(index)
-                   s = element.channelId
-                 }
-             }
-             else
-             {
-              if (element.channelId?.toString() === pageName)
-                 {
-                   setcurrentConv(index)
-                   s = element.channelId
-                 }
-             }
-           }
-           axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + s, 
-           {withCredentials: true} 
-           ).then((res)=>{
-             setmsgs(res.data)
-            }).catch((err)=>{
-              console.log(err)
-            })
+             console.log(element )    
+        
+               
+            if (element.channelId?.toString() === pageName)
+            {
+              setcurrentConv(element)
+              s = element.channelId
+            }
+                
+              
+              }
+            }
+
+          //  axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + pageName, 
+          //  {withCredentials: true} 
+          //  ).then((res)=>{
+          //    setmsgs(res.data)
+          //   }).catch((err)=>{
+          //     console.log(err)
+          //   })
           }).catch((err)=>{
             console.log(err)
           })
@@ -118,39 +134,24 @@ export default function Chat() {
           data  =  JSON.parse(s || '{}');
           socket.emit('concon', data.id)
         }
-    },[currentConv])
-    const fetchData = async () => {
-      await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
-      {withCredentials: true} 
-      ).then((res)=>{
-        setlist(res.data);
+    },[setcurrentConv])
+    // const fetchData = async () => {
+    //   await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+    //   {withCredentials: true} 
+    //   ).then((res)=>{
+    //     setlist(res.data);
+    //    }).catch((err)=>{
+    //      console.log(err)
+    //    })
+    //  }
 
-        axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + res.data[currentConv]?.channelId, 
-        {withCredentials: true} 
-        ).then((res)=>{
-          setmsgs(res.data)
-
-         }).catch((err)=>{
-           console.log(err)
-         })
-       }).catch((err)=>{
-         console.log(err)
-       })
-     }
-    const recievedMessgae  =  (payload : msgType) => {
-          var tmp  : msgType[] = msgs;
-          tmp.push(payload)
-          console.log(tmp)
-          setmsgs([...tmp])
-
-      }
 
       
-    socket.on('chatToClient', (payload) => {
-      recievedMessgae(payload);
-      fetchData()
-      // setcurrentConv()
-  })
+  //   socket.on('chatToClient', (payload) => {
+  //     fetchData()
+  //     // fetchData()
+  //     // setcurrentConv()
+  // })
    
     return (
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
@@ -161,28 +162,28 @@ export default function Chat() {
             var test = document.getElementById("test");
             if (test)
               test.style.zIndex = "1"
-          }} currentConv={currentConv} list={list} />
+          }} currentConv={0} list={list} />
           </div>
           
           }
           {(state === -1 || state === 1) && 
           <div id="body"className='bodyy'>
           <div  className='top'>
-            <ChatHeader  state={state} setState={(e)=> setstae(e)} data={list[currentConv]} />
+            <ChatHeader  state={state} setState={(e)=> setstae(e)} data={currentConv} />
           </div>
           <div className='center'>
 
-          <ChatBody ref={bottomRef} setmsgs={(e : any)=>setmsgs} msgs={msgs} setcurrentConv={(e)=>{ setcurrentConv(e) }}  list={list[currentConv]} />
+          <ChatBody refss={bottomRef} setlist={(e : any)=>(setlist(e))} msgs={msgs} setcurrentConv={(e)=>{ setcurrentConv(e) }}  currentconv={currentConv} list={list} />
           </div>
           <div className='bottom'>
-            <ChatBottom   setcurrentConv={(e)=>setcurrentConv(e)} msgs={msgs} currentConv={currentConv} list={list} setList={(e)=>{setlist(e)}}  />
+            <ChatBottom   setcurrentConv={(e)=>setcurrentConv(e)} msgs={msgs}  data={currentConv}  list={list} setList={(e)=>{setlist(e)}}  />
           </div>
         </div>
           
           }
          {(state === -1 || state === 3) && 
-          <div className='left'>
-            <ChatControlBar data={list[currentConv]}/>
+          <div className='left'>  
+            <ChatControlBar data={currentConv}/>
           </div>
          }
       </GridContainer>

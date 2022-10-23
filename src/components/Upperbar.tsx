@@ -179,7 +179,10 @@ export  function SearchBarComponent() {
                       return (
                           <UserFound href={"/profile/" + user.login} >
                             
-                            <AvatarStyle > <img  alt="avatar" src={user.defaultAvatar} />  </AvatarStyle>
+                            <AvatarStyle >
+                              <AvatarComponent img={user.defaultAvatar} />
+                               {/* <img  alt="avatar" src={user.defaultAvatar} />  */}
+                                </AvatarStyle>
                             <div>
                               <NameStyle>{user.displayName}</NameStyle>
                               <LoginStyle>@{user.login}</LoginStyle>
@@ -198,7 +201,8 @@ export  function SearchBarComponent() {
 const NameStyle = styled.div`
   width: 100%;
   display: flex;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 600;
   position: relative;
 `;
 
@@ -212,34 +216,21 @@ const LoginStyle = styled.div`
 const AvatarStyle = styled.div`
   /* background-color: #389c71; */
   display: flex;
-  position: relative;
-  width: 25%;
-  height: 50%;
-  min-height: 40px;
-  min-width: 40px;
-  max-width: 80px;
-  max-height: 80px;
-  img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 18px;
-    width: 60%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: 2px solid #61dafb;
-  }
+  /* position: relative; */
+  width: 50px;
+  height: 50px;
+  margin-left: 30px;
+
 `;
 
 const UserFound = styled.a`
   width: 100%;
-  height: 16%;
+  height: 60px;
   color: white;
   display: flex;
   flex-direction: row;
+  gap: 10px;
+  font-family: "Poppoins" , sans-serif;
   align-items: center;
   cursor: pointer;
   &:hover {

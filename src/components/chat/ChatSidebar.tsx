@@ -43,12 +43,13 @@ interface convType {
   interface ChatProps {
     // setList: (e : any) => void,
     list:  convType[]
-    setcurrentConv : (e: number)=>void,
+    setcurrentConv : (e: any)=>void,
     setState : (e: number)=>void,
     state : number,
     currentConv : number,
   }
 export default function ChatSidebar(props : ChatProps) {
+  const pageName = window.location.pathname.split("/")[2];
  
     const [hide, sethide] = useState(false)
     return (
@@ -66,12 +67,15 @@ export default function ChatSidebar(props : ChatProps) {
             }
           </div>
           <div className='conversation'>
-                {props.list.map((data : any , id : number)=>{
-                    return < ConversationComponent onClick={()=>{
-                        props.setcurrentConv(id)
-                        if (props.state != -1 )
-                          props.setState(1)
-                    }} key={id}  data={data} active={props.currentConv === id} />
+                {props.list.map((data : convType , id : number)=>{
+        
+                   return < ConversationComponent  key={id}onClick={()=>{
+                      props.setcurrentConv(data)
+                      // window.location.href= data.channelId.toString()
+                      if (props.state != -1 )
+                        props.setState(1)
+                  }}  data={data} active={pageName === data.channelId.toString()} />
+                
                 })}
           </div>
   
@@ -139,7 +143,9 @@ const ChatSidebarStyle = styled.div`
       align-items: flex-start;
 
       flex-direction: column;
-      
+      >a{
+        width: 100%;
+      }
 
     }
 `
@@ -151,7 +157,7 @@ interface ConvProps{
 
 export  function ConversationComponent(props : ConvProps) {
     return (
-        <ChatMesgstyle to={"/chat/" + (props.data.access === "DM" ? 0 : props.data.channelId)} active={props.active}onClick={props.onClick}>
+        <ChatMesgstyle to={"/chat/" + ( props.data.channelId)} active={props.active ? "true" : "false"}onClick={props.onClick}>
           {
             props.data.access === "DM" ?
             <>
@@ -203,7 +209,7 @@ export  function ConversationComponent(props : ConvProps) {
     height: 50px;
   `
   interface chatprop{
-    active : boolean
+    active : string
   }
     const ChatMesgstyle = styled(Link)<chatprop>`
    
@@ -215,7 +221,7 @@ export  function ConversationComponent(props : ConvProps) {
       display: flex;
       
       margin-bottom: 10px;
-      ${props => (props.active === true) && `
+      ${props => (props.active === "true") && `
       background-color:  #0E1117;
       `}
       &:hover{

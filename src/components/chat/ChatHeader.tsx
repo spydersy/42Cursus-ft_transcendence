@@ -1,4 +1,4 @@
-import React , { useState}from 'react'
+import React , { useState , useEffect}from 'react'
 import {ReactComponent as Dots} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as UserIcon} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as SettingIcon} from "../../assets/imgs/dotsvertical.svg";
@@ -19,7 +19,7 @@ interface UserProp {
 }
 
 interface usersType {
-
+  id: string,
   defaultAvatar: string,
   login : string
   displayName : string,
@@ -56,10 +56,34 @@ interface ListTypes  {
   
 export default function ChatHeader(props : chatHeaderProps) {
     const [open, setopen] = useState(false)
+    const [data, setdata] = useState<convType>(
+      {
+      nbMessages: 0,
+      lastUpdate: "string",
+      access : "string",
+      channelId:  0,
+      name: "string",
+      password: "string",
+      picture : "string",
+      users: [{
+        id : "string",
+    defaultAvatar: "string",
+    login : "string",
+    displayName : "string",
+    restriction: "string",
+    restrictionTime: "string",
+    duration: 0,
+      }]
+      })
     const ToggleDD = (e : any)=>{
       setopen(!open)
       e.stopPropagation();
     }
+    useEffect(() => {
+      console.log(props.data)
+      setdata(props.data)
+    }, [props.data])
+    
     return (
       <TopStyle>
        {props.state === 1 && <BackIcon onClick={()=>props.setState(0)} />}
