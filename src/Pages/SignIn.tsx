@@ -2,8 +2,8 @@ import React from 'react'
 import styled , {keyframes , css} from "styled-components"
 import PatternImg from "../assets/imgs/background.jpeg"
 import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
-import {ReactComponent as FttImg } from "../assets/imgs/google.svg"
 import {ReactComponent as FtttImg } from "../assets/imgs/google1.svg"
+
 import { LogoComponent } from '../components/Upperbar'
 import Background from '../components/Background';
 
@@ -13,6 +13,12 @@ import eelaazmi from "../assets/imgs/team/eelaazmi.jpeg"
 import mamali from "../assets/imgs/team/mamali.jpeg"
 import melkarmi from "../assets/imgs/team/melkarmi.jpeg"
 
+import  Zero from "../assets/imgs/badgezero.svg"
+import  Huit from "../assets/imgs/huit.svg"
+import  Joke from "../assets/imgs/joke.svg"
+import  Cinq from "../assets/imgs/cinq.svg"
+
+import  Zeroo from "../assets/imgs/zero.svg"
 //todo env file
 
 export default function SignIn() {
@@ -35,26 +41,33 @@ export default function SignIn() {
 
                <a className='urow' href="https://github.com/spydersy">
                   <img className='avatar' src={abelarif}  />
+                  <img className='avatarr' src={Cinq}></img>
                   <a > @Spydersy </a>  
                </a>
               
                <a className='urow' href="https://github.com/aladinez">
                   <img className='avatar' src={aez_zaou}  />
+                  <img className='avatarr' src={Huit}></img>
                   <a > @Aladinez </a>  
                </a>
               
                <a className='urow' href="https://github.com/NotYaiba">
                   <img className='avatar' src={melkarmi}  />
+                  <img className='avatarr' src={Joke}></img>
                   <a > @NotYaiba </a>  
                </a>
 
                <a className='urow' href="https://github.com/mamali543">
                   <img className='avatar' src={mamali}  />
+                  <img className='avatarr' src={Huit}></img>
                   <a > @Mamali543 </a>  
                </a>
                <a className='urow' href="https://github.com/Alcheemiist">
-                  <img className='avatar' src={eelaazmi}  />
-                  <a > @Alchemist </a>  
+                  {/* <Zero className='badge'>
+                  </Zero> */}
+                     <img className='avatar' src={eelaazmi}  />
+                     <img className='avatarr' src={Zero}></img>
+                     <a > @Alchemist </a>  
                </a>
                
             </div>
@@ -76,9 +89,10 @@ export default function SignIn() {
          <div className="title"> 
             <a className='space-zb'/>
 
-            <img src="https://emojipedia-us.s3.amazonaws.com/source/skype/289/spider_1f577-fe0f.png" 
+            <img className="spider" src="https://emojipedia-us.s3.amazonaws.com/source/skype/289/spider_1f577-fe0f.png" 
                   // srcset="https://emojipedia-us.s3.amazonaws.com/source/skype/289/spider_1f577-fe0f.png 2x"
-                  alt="Spider on Skype Emoticons 1.2" width="70" height="60" /> 
+                  alt="Spider on Skype Emoticons 1.2" width="80" height="70" /> 
+            
             <a className="timo"  > # Team AL-3ANAKIB </a>
             
          </div>
@@ -113,10 +127,10 @@ const Bloc = styled.div`
 
    min-width: 750px;
    max-width: 700px;
-   min-height:    350px;
-   min-height:    400px;
+   min-height:    250px;
+   max-height:    400px;
 
-   top: 400px;
+   top: 25%;
    right: 28%;
    
    border-radius : 10px;
@@ -148,26 +162,73 @@ const Bloc = styled.div`
 
       .wrow{
          position: relative;
-         align-items: center;
-         justify-content: center;
+         /* align-items: center; */
+         /* justify-content: center; */
 
          flex-direction: row;
          display: flex;
 
          padding: 10px 0px;
-         gap: 30px;
+         gap: 20px;
          /* background-color: #0635517b; */
-         width: 100%;
+         width: 80%;
+         height: 100px;
+         left: 3%;
          cursor: pointer;
 
          .urow{
+            /* background-image: url(""); */
             /* background-color: #1553b6; */
+            width: 100%;
+            padding: 0px 10px;
             .avatar{
+               /* display: none; */
                border-radius: 50%;
-               width:   90px;
-               height:  90px;
+               width:   100px;
+               height:  100px;
+               border: 2px solid  #25a7d7;
+               transition: 600ms ease-in-out;
+               /* animation: ease-in-out 2s; */
+
+            }
+            .avatarr{
+               display: none;
+                 /* transition: 2s ease-in-out;
+                  animation: ease-in-out 2s; */
+                  /* animation: alternate; */
+             
+            }
+            .badge{
+               width: 100%;
+               height: 100%;
+               position: absolute;
+               object-fit: cover;
+               /* background-color: #25a7d7; */
+            }
+            &:hover {
+               /* background-color: #25a7d7; */
+               .avatar {
+                  border-radius: 50%;
+                  width:   100px;
+                  height:  100px;
+                  border: 2px solid  #25a7d7;
+                  box-shadow: 1px 1px 5px 5px #25a7d7;
+
+               }
+               .avatarr{
+                  top: 10%;
+                  display: flex;
+                  position: absolute;
+                  opacity: 0.8;
+                  width:   105px;
+                  height:  105px;
+                  /* transition: 2s ease-in-out;
+                  animation: ease-in-out 2s;
+                  animation: alternate; */
+               }
             }
          }
+         
       }
    }
    
@@ -207,10 +268,17 @@ const Bloc = styled.div`
             /* bottom: 0px; */
             background-color: #5469704a;
             bottom: 8px;
-            left: 10%;
+            left: 2%;
+         }
+         .spider {
+            position: relative;
+            /* background-color: #25a7d7; */
+            bottom: -70px;
          }
 
       }
+      
+
    @media  only screen and (max-width: 768px) {
       width: 70%;
       min-width: 70%;
@@ -226,6 +294,7 @@ const Bloc = styled.div`
       color: ${props => props.theme.colors.primaryText};
       text-decoration: underline;
    }
+
   
 `;
 
