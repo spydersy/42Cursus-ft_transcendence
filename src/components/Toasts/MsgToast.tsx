@@ -6,7 +6,9 @@ import { AvatarComponent } from '../PlayerProfile'
 import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 import { Button } from '../../Pages/SignIn';
 import { ReactComponent as CheckIcon } from "../../assets/imgs/check.svg";
-
+import {
+Link
+} from "react-router-dom";
 interface msgType {
   channelId : string,
   content : string, 
@@ -51,7 +53,7 @@ export default function MsgToast(props: {data : msgType}) {
   }, [])
   
   return (
-    <ToastStyle>
+    <ToastStyle to={"/chat/"+ props.data.channelId}>
         <div className='avatar'>
           <AvatarComponent img={Mamali}/>
         </div>
@@ -70,7 +72,7 @@ export default function MsgToast(props: {data : msgType}) {
   )
 }
 
-const ToastStyle = styled.div`
+const ToastStyle = styled(Link)`
   width: 100%;
   height: 100%;
   color : #FFF;
@@ -135,7 +137,7 @@ export  function GameChallengeToast(props: {data : any}) {
   }, [])
   
   return (
-    <ToastStyle>
+    <ToastStyle to="">
         <div className='avatar'>
           <AvatarComponent img={User.defaultAvatar}/>
         </div>

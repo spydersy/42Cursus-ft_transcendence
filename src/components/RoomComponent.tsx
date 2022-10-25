@@ -4,6 +4,7 @@ import styled from "styled-components"
 import Fadi from "../assets/imgs/avatar/ael-fadi.jpeg";
 import Modal from './Modal';
 import JoinGroupModal from './modals/JoinGroupModal';
+import { ReactComponent as Lock} from "../assets/imgs/lock-01.svg"
 
 
   interface RoomProps{
@@ -22,12 +23,14 @@ export default function RoomComponent(props : RoomProps) {
             <img src={props.roomBanner} alt="banner" />
         </div>
         <div className='desc'>
-            <div>
+            <div className='name'>
+                    {props.isLocked  && <Lock/>}
+                    
                     {props.roomName}
-                <div>
-                    51 member
-                </div>
             </div>
+                <div className='members'>
+                    {props.roomMembers} Members
+                </div>
         </div>
         {hideModel &&  <Modal
         isOpen={hideModel}
@@ -63,18 +66,34 @@ cursor: pointer;
         display: flex;
         flex: 1;
         align-items: center;
-        >div{
+
+        >.name{
             font-family: "Poppins", sans-serif;
             color: ${props => props.theme.colors.primaryText };
-            width: 95%;
+           flex: 1;
             margin: 0 auto ;
             display: flex;
+            font-weight: 600;
+            align-items: center;
+            gap: 5px;
+            >svg{
+              >path{
+                stroke: #FFF;
+              }
+            }
+            
+        }
+        >.members{
+            font-family: "Poppins", sans-serif;
+            color: #FFF;
+ margin-right: 5px;
+            display: flex;
+            font-weight: 700;
             align-items: center;
             justify-content: space-between;
-            >div{
-                font-size: 12px;
-                opacity: 0.7;
-            }
+        
+            font-size: 12px;
+            opacity: 0.7;
         }
     }
 `;

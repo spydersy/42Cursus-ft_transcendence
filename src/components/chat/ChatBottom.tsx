@@ -56,17 +56,19 @@ export default function ChatBottom(props: ChatProps) {
             channelId:  props.data?.channelId
           }
           //validation layer (restrictions
+
           socket.emit('chatToServer', msgtmp);
         }
       }
     }
-    useEffect(() => {
-      
-      window.addEventListener('keydown', (e : any)=>{
-        if (e.code === "Enter")
-          addMessage()
-      });
-  })
+    inputRef.current?.addEventListener('keydown', (e : any)=>{
+      if (e.code === "Enter")
+      {
+
+        addMessage()
+      }
+    });
+  
     return (
       <BottomChatStyle>
         <textarea ref={inputRef} 

@@ -1,6 +1,6 @@
 
 import axios from 'axios'
-import React , {useEffect , useState , useContext} from 'react'
+import React , {useEffect , useState , useContext, useRef} from 'react'
 import styled  from "styled-components"
 import { SocketContext } from '../../context/Socket';
 
@@ -45,22 +45,27 @@ interface ChatProps {
   export default function ChatBody(props: ChatProps) {
   const socket = useContext(SocketContext)
 
+const first = useRef(null)
 
-
-    // useEffect(() => {
-
-    // }, [])
+    useEffect(() => {
+      scroolDown()
+    }, [props.msgs])
     const scroolDown  = ()=>
     {
-      if (props.refss?.current != null)
+
+      if (props.msgs.length != 0)
       {
-      
-      
-        props.refss.current?.scrollIntoView({behavior: 'smooth'});
+        var s = document.getElementsByClassName("bar" )
+        
+        console.log(s[props.msgs.length-1])
+          s[props.msgs.length-1].scrollIntoView({behavior: 'smooth'});
+
       }
     }
     return (
       <ChatBodyStyle>
+        <div className='wrapper'>
+
         {
           props.msgs.map((object: any , i : number)=>{
             var s : string | null = localStorage.getItem('user');
@@ -74,7 +79,7 @@ interface ChatProps {
               {
 
 
-                return <div key={i} >  <MsgNotStyle>
+                return <div id={"bar"+ i} className='bar' key={i} >  <MsgNotStyle>
                   <div className='name'>{object.displayName}</div>
                   {object.content}
                 <span>
@@ -85,7 +90,7 @@ interface ChatProps {
               }
               else
               {
-              return <div key={i} > <MsgStyle>
+              return <div id={"bar"+ i} className='bar'  key={i} > <MsgStyle>
 
                 {object.content}
                 <span>
@@ -98,8 +103,11 @@ interface ChatProps {
 
           })
         }
+        {/* <div className='butt' ref={props.refss} /> */}
+
+        </div>
         
-        <div id="ddd" ref={props.refss} />
+       
       </ChatBodyStyle>
     )
   }
@@ -111,14 +119,26 @@ interface ChatProps {
   height : 100%;
   max-height : 100%;
   overflow-y: scroll;
-  >div{
-   display: flex;
+  .wrapper{
     width: 100%;
-    margin: 5px 0;
+    display: flex;
     height: auto;
-    align-items: flex-end;
-    flex-direction: row; 
-    color: ${props => props.theme.colors.primaryText};
+  align-items: center;
+  flex-direction: column;
+    >.butt{
+      width: 100%;
+        height: 40px;
+        background-color: red;
+    }
+    >.bar{
+     display: flex;
+      width: 100%;
+      margin: 5px 0;
+      height: auto;
+      align-items: flex-end;
+      flex-direction: row; 
+      color: ${props => props.theme.colors.primaryText};
+    }
   }
   
 `;

@@ -94,7 +94,7 @@ export default function Chat() {
 
            }
            else {
-             console.log( res.data)
+     
            for (let index = 0; index < res.data.length; index++) {
              const element : convType = res.data[index];
              console.log(element )    
@@ -114,8 +114,8 @@ export default function Chat() {
             ).then((res)=>{
               setmsgs(res.data)
       
-              console.log("done!")
-      
+       
+
 
               
             }).catch((err)=>{
@@ -142,31 +142,55 @@ export default function Chat() {
           data  =  JSON.parse(s || '{}');
           socket.emit('concon', data.id)
         }
-    },[setcurrentConv])
+    },[])
     useEffect(() => {
-      socket.on('chatToClient', (payload) => {
+      const recievedMessgae  =  (payload : msgType) => {        
+        if (currentConv.channelId != 0)
+        {
+          if (payload.channelId  === currentConv.channelId.toString())
+          {
+            console.log(currentConv.channelId)
+            console.log(payload.channelId)
+    
+            var tmp  : msgType[] = msgs;
+            tmp.push(payload)
+            setmsgs([...tmp])
+    
+          }
+
+        }
+    
+    }
+      socket.off("chatToClient").on('chatToClient', (payload) => {
+        console.log(payload)
         recievedMessgae(payload);
         fetchData()
+
     
       })
-    }, [msgs])
-    
-    const recievedMessgae  =  (payload : msgType) => {
-        
-      var tmp  : msgType[] = msgs;
-      tmp.push(payload)
-      setmsgs([...tmp])
-  
-  }
+      const catchAllListener = (event : any, ...args : any) => {
+        console.log(`got event ${event}`);
+      }
+      // return ()=>{
+
+      //   socket.off("chatToClient").(catchAllListener)
+      // } 
+    }, [msgs ])
       const fetchData = async () => {
       await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
       {withCredentials: true} 
       ).then((res)=>{
         setlist([...res.data]);
-        axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + currentConv?.channelId, 
+       }).catch((err)=>{
+         console.log(err)
+       })
+     }
+     useEffect(() => {
+      axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + currentConv?.channelId, 
         {withCredentials: true} 
         ).then((res)=>{
           setmsgs(res.data)
+ 
   
           console.log("done!")
   
@@ -176,13 +200,6 @@ export default function Chat() {
 
            console.log(err)
          })
-       }).catch((err)=>{
-         console.log(err)
-       })
-     }
-  
-     useEffect(() => {
-      fetchData()
      }, [currentConv])
      
    

@@ -59,14 +59,14 @@ const linkslist = ["All" , "My Rooms"]
     const [allRooms, setallRooms] = useState<convType[]>([])
     useEffect(() => {
       const fetchData = async () => {
-        await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+        await axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/myChannels", 
         {withCredentials: true} 
         ).then((res)=>{
           setmyrooms(res.data)
          }).catch((err)=>{
            console.log(err)
          })
-        await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/allChannels", 
+        await axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/allChannels", 
         {withCredentials: true} 
         ).then((res)=>{
           console.log(res.data)
@@ -88,7 +88,7 @@ const linkslist = ["All" , "My Rooms"]
 
               {
                 allRooms.map((data : any , id : number)=>{
-                  return<RoomComponent id={3} roomMembers={5} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
+                  return<RoomComponent id={3} roomMembers={data.nbUsers} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
                 })
               }
             </Warraper>
@@ -99,7 +99,7 @@ const linkslist = ["All" , "My Rooms"]
                 myrooms.map((data : convType , id : number)=>{
                   if (data.access != "DM")
                   {
-                    return<RoomComponent id={data.channelId } roomMembers={5} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
+                    return<RoomComponent id={data.channelId } roomMembers={data.users.length} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
                     
                   }
                   return<></>
