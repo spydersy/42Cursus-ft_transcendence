@@ -121,6 +121,7 @@ export class ProfileService {
                         twoFactorAuthSecret: _2faData.secret
                     },
                 });
+                return res.status(HttpStatus.OK).send({'message': '2FA Enabled'});
             }
             else if (user.twoFactorAuth === false) {
                 await this.prisma.users.update({   
@@ -130,7 +131,7 @@ export class ProfileService {
                 return this.Logout(res);
             }
             else
-                return res.status(HttpStatus.OK).send({'message':  '2FA Already Eenabled'});
+                return res.status(HttpStatus.OK).send({'message':  '2FA Already Enabled'});
         }
         else if (status === 'off') {
             await this.prisma.users.update({
