@@ -8,7 +8,7 @@ import { Response as Res } from 'express';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class AuthService {
+export class AuthService {  
     constructor(private httpService: HttpService,
                 private userService: UserService,
                 private jwtTokenService: JwtService,
