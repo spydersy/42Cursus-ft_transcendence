@@ -90,7 +90,7 @@ export class AuthService {
             }
             let JWT = await this.GenerateJWT(UserDto);
             if (UserDto.TwoFactorAuth === true) {
-                // Do Something . . .
+                res.send({'message': '2FAVERIFICATION'});
             }
             return res
                     .status(HttpStatus.OK).

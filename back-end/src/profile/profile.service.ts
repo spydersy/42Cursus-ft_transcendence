@@ -7,13 +7,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { RELATION } from '@prisma/client';
 import { TfaService } from 'src/tfa/tfa.service';
 import { Console } from 'console';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ProfileService {
 
     constructor(private userService: UserService,
                 private prisma: PrismaService,
-                private tfaService: TfaService) {}
+                private tfaService: TfaService,
+                private configService: ConfigService) {}
 
     async me(@Req() req , @Query() query, @Res() res: Response) {
         // JUST FOR TEST
@@ -102,17 +104,18 @@ export class ProfileService {
         return res.status(HttpStatus.OK).send(AllFriends);
     }
 
-    async Logout(@Res() res) {
+    async Logout(redirectionn : Boolean,@Res() res) {
         return res.status(HttpStatus.OK)
                     .clearCookie('Authorization', {httpOnly: true})
                     .send({'message': 'done'});
     }
 
     async Update2FA(me: number, status: string, @Res() res) {
+        let user = await this.userService.GetUserById(me);
+
         if (status === 'true') {
-            let user = await this.userService.GetUserById(me);
-            if (user.twoFactorAuthSecret === null) {
-                const _2faData = await this.tfaService.generateTwoFactorAuthenticationSecret(me, user.email);
+            if (user.twoFactorAuth === false) {
+                const _2faData = await this.tfaService.generateTwoFactorAuthenticationSecret(me, user.login);
                 console.log("__TFA__DATA__ : ", _2faData);
                 await this.prisma.users.update({
                     where: { id: me },
@@ -121,22 +124,32 @@ export class ProfileService {
                         twoFactorAuthSecret: _2faData.secret
                     },
                 });
-                return res.status(HttpStatus.OK).send({'message': '2FA Enabled'});
-            }
-            else if (user.twoFactorAuth === false) {
-                await this.prisma.users.update({   
-                    where: { id: me }, 
-                    data: { twoFactorAuth: true }, 
-                });
-                return this.Logout(res);
+                return this.tfaService.pipeQrCodeStream(res, _2faData.otpauthUrl);
             }
             else
-                return res.status(HttpStatus.OK).send({'message':  '2FA Already Enabled'});
+                return res.status(HttpStatus.OK).send({'message': '2FA Already enabeled'});
+            //     console.log("USER__ENDPOINT_DNG__ : ", user.login);
+            //     return res.status(HttpStatus.OK).send({'message': '2FA Enabled'});
+            // }
+            // else if (user.twoFactorAuth === false) {
+            //     await this.prisma.users.update({   
+            //         where: { id: me }, 
+            //         data: { twoFactorAuth: true,
+            //                 twoFactorAuthSecret: null
+            //         }, 
+            //     });
+            //     return this.Logout(false, res);
+            // }
+            // else
+            //     return res.status(HttpStatus.OK).send({'message':  '2FA Already Enabled'});
         }
         else if (status === 'false') {
             await this.prisma.users.update({
                 where: { id: me },
-                data: {twoFactorAuth: false },
+                data: {
+                    twoFactorAuth: false,
+                    twoFactorAuthSecret: null
+                },
             });
             return res.status(HttpStatus.OK).send({'message': "TFA False"});
         }

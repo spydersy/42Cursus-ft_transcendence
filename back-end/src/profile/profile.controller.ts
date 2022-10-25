@@ -54,10 +54,10 @@ export class ProfileController {
   @Post('logout')
   async Logout(@Res() res) {
     console.log("__LOGOUT__ENDPOINT__DBG__");
-    return this.profileService.Logout(res);
+    return this.profileService.Logout(true, res);
   }
 
-  @Post('update2FA')
+  @Get('update2FA')
   async Update2FA(@Req() req, @Query('status') status, @Res() res) {
     if (status === undefined || !(status === 'true' || status === 'false')) {
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Request'});
