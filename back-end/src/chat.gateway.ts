@@ -87,6 +87,7 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
     // const ret = await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
     client.join(payload);
     client.to(payload).emit('recievedRequest', payload);
+    client.leave(payload)
     // client.to(payload[0]).emit('challeneEvent', payload[1]);
   }
   
