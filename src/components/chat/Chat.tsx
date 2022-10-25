@@ -20,7 +20,7 @@ interface UserProp {
 }
 
   interface usersType {
-id : string,
+    id : string,
     defaultAvatar: string,
     login : string
     displayName : string,
@@ -51,7 +51,6 @@ id : string,
 
 export default function Chat() {
   const socket = useContext(SocketContext)
-
   const pageName = window.location.pathname.split("/")[2];
   const [msgs, setmsgs] = useState<msgType[]>([])
   const bottomRef = useRef<HTMLDivElement>(null)

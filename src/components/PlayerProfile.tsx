@@ -19,9 +19,7 @@ import Achivments  from './Achivments';
 import  { RadarChart } from './charts/Charts';
 import CircleLoader from "react-spinners/CircleLoader";
 import { SocketContext,  SocketValue } from '../context/Socket';
-import {
-Link
-} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -38,6 +36,16 @@ interface UserProp {
   wins : number
   losses : number
   lastModification : string 
+}
+
+interface usersType {
+  id : string ,
+  defaultAvatar: string,
+  login : string
+  displayName : string,
+  restriction: string,
+  restrictionTime: string,
+  duration: number,
 }
 
 const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderColor: "black",};
@@ -225,7 +233,7 @@ background-color: ${props => props.theme.colors.seconderybg};
 
 // State  // 
   export function Stats(props: PlayerCardProps) {
-
+    const socket = useContext(SocketContext)
     const [relationStatus, setrelationStatus] = useState<string >("");
     const id = window.location.pathname.split("/")[2];
     const [createdTime, setcreatedTime] = useState<string | undefined>("Mon 1 Oct 1999 00:00:00")
@@ -291,6 +299,11 @@ background-color: ${props => props.theme.colors.seconderybg};
         // alert("friend Request sent" + res.status)
         setrelationStatus("PENDING")
         AddUsernotify();
+        // console.table('____ login___' +res.data)
+        socket.emit('sendFriendRequest', props.player.login)
+        // get this user login
+        // join user login room
+        // emit event to the room.
         // window.location.reload();
       }).catch((err)=>{ 
         console.log(err)
@@ -847,17 +860,15 @@ const Dataa = styled.div`
       letter-spacing: 0.3px;
   }
 `;
-//
 
-//
 export  function AddFriend() {
 return (
   <AddFriendStyle>
       <AddIcon/>
       Add Friend
   </AddFriendStyle>
-)
-}
+)}
+
 const AddFriendStyle = styled.div`
  font-family: 'Poppins';
   font-style: normal;
