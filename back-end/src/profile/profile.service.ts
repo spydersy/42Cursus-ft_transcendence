@@ -109,7 +109,7 @@ export class ProfileService {
     }
 
     async Update2FA(me: number, status: string, @Res() res) {
-        if (status === 'on') {
+        if (status === 'true') {
             let user = await this.userService.GetUserById(me);
             if (user.twoFactorAuthSecret === null) {
                 const _2faData = await this.tfaService.generateTwoFactorAuthenticationSecret(me, user.email);
@@ -133,7 +133,7 @@ export class ProfileService {
             else
                 return res.status(HttpStatus.OK).send({'message':  '2FA Already Enabled'});
         }
-        else if (status === 'off') {
+        else if (status === 'false') {
             await this.prisma.users.update({
                 where: { id: me },
                 data: {twoFactorAuth: false },
