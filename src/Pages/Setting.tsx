@@ -12,10 +12,12 @@ import avataro from "../assets/imgs/avatar/avatar2.png";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import {ReactComponent as CloseLock} from "../assets/imgs/closelock.svg";
 import OpenLock from "../assets/imgs/TwoFa.png";
-import QrCode from "../assets/imgs/qrcode.png"
+// import QrCode from "../assets/imgs/qrcode.png"
 // import RICIBs from 'react-individual-character-input-boxes';
 import PasswordChecklist from "react-password-checklist"
 import { PinInput } from 'react-input-pin-code' // ES Module
+// import { Body } from '@nestjs/common';
+import QrCodeCmp from '../components/QrCode';
 
 
 const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderColor: "red", };
@@ -27,13 +29,15 @@ export default function Setting() {
     const [color, setColor] = useState("#fa0137");
     const [data, setdata] = useState({login : "", defaultAvatar : "", displayName : "", twoFactorAuth : false, email : ""})
     
-    const [msgtwofa, setmsgtwofa]= useState("OFF") 
+    // const [msgtwofa, setmsgtwofa]= useState("OFF") 
     const [isToggled, setIsToggled] = useState(false);
-    const [closepop, setclosepop] = useState(true)
+    const [closepop, setclosepop] = useState(false)
     const [openpass, setopenpass] = useState(false)
 
-    const [password, setPassword] = useState("")
-	const [passwordAgain, setPasswordAgain] = useState("")
+    const [QrCode, setQrCode] = useState("")
+
+    // const [password, setPassword] = useState("")
+	// const [passwordAgain, setPasswordAgain] = useState("")
 
     const [values, setValues] = useState(['', '', '','','','','','']);
 
@@ -41,15 +45,21 @@ export default function Setting() {
     useEffect(() => {
         // !isToggled ? setmsgtwofa("ON") : setmsgtwofa("OFF");
         setIsToggled(false)
+        
         axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/me",   {withCredentials: true} 
         ).then((res)=>{
 
             console.log("__Settings__Data__: ", res.data )
             setdata(res.data)
             setImg(res.data.defaultAvatar)
-            // setIsToggled(res.data.twoFactorAuth)
+
+            setIsToggled(res.data.twoFactorAuth)
+
+            console.log("__res.data.twoFactorAuth__ = " , isToggled)
 
         }).catch((err)=>{})
+
+
 
         var e = document.getElementById("fileInput")
         e?.addEventListener("change", (c :any)=>{
@@ -69,20 +79,25 @@ export default function Setting() {
                     console.log(err)
                 }   )
         })
+
+        // axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/me",   {withCredentials: true} 
+        // ).then((res)=>{
+
+        //     console.log("__Settings__Data__: ", res.data )
+        //     setdata(res.data)
+        //     setImg(res.data.defaultAvatar)
+        //     setIsToggled(res.data.twoFactorAuth)
+
+        // }).catch((err)=>{})
+
+        
     }, [])
-
-    const setClosePop = () => {
-        setclosepop(false)
-        setIsToggled(false)
-        setopenpass(false)
-
-    }
-
+    
     const uploadFile = ()=>{
         var e = document.getElementById("fileInput")
         e?.click()
     }
-
+    
     const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setColor("#f29408");
         if (!loading)
@@ -103,24 +118,86 @@ export default function Setting() {
         // setQuery(enteredName);
     };
 
+    const setClosePop = () => {
+        setclosepop(false)
+        setIsToggled(false)
+        setopenpass(false)
+    }
+
     const onToggle = ()=> {
-        // wait(2000).then(() =>{
-        setclosepop(true)
+       
+        console.log("1-OnToggle =  " , isToggled)
 
-        // })
+        if (isToggled == false) 
+        {
+            setIsToggled(true)
+            setclosepop(true)
+        
+            // axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" , "",{withCredentials: true}).then((res)=>{
+            // axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" , "",{withCredentials: true}).then((res)=>{
 
-        setIsToggled(true)
-        console.log("1Two Handler " , isToggled)
+
+            //     if (res)
+            //     {
+
+            //         console.log("__DATA__", res.data.lenght ,"__ " , res.data , "}")
+
+                
+                
+            //         // let base64 = Buffer.from(res.data, "binary").toString("base64");
+    
+            //         // // create image src
+            //         // let image = `data:${res.headers["content-type"]};base64,${base64}`;
+
+
+
+            //         // let blob = new Blob( [res.data], { type: res.headers['content-type'] } )
+            //         // let image = window.URL.createObjectURL(blob)
+
+            //         // setQrCode(image)
+            //         // console.log("__Image__", image, "}")
+
+
+
+
+            //     }
+            //     else 
+            //         console.log("ALREADY BROKEN")
+
+
+            // }   ).catch((err)=>{ 
+
+            //     setIsToggled(false)
+            //     // console.log(err)
+
+            // } )
+        
+        }
+        else 
+        {
+            axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
+
+                setIsToggled(false)
+
+                console.log("Response Data ={", res.data.message , "}")
+
+                // if (res.data.message === "2FA Enabled")
+                //     setclosepop(true)
+
+            }   ).catch((err)=>{ 
+
+                setIsToggled(true)
+                // console.log(err)
+            } )
+        }
 
         setColor("#f29408");
-        // console.log("2Two Handler " , isToggled)
-
         if (!loading)
             setLoading(!loading);
     }
 
     const setEnable = ()=> {
-        setclosepop(false)
+        // setclosepop(false)
         setIsToggled(true)
         setopenpass(true)
     }
@@ -157,19 +234,20 @@ export default function Setting() {
             console.log(err)
         })
 
-        axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa/" + isToggled , {withCredentials: true}).then((res)=>{
-            wait(2000).then(() => {
-                setLoading(false); })
+        // axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=" + isToggled , "",{withCredentials: true}).then((res)=>{
+        //     wait(2000).then(() => {
+        //         setLoading(false); })
 
-        }   ).catch((err)=>{ 
-            wait(2000).then(() => {
-            setColor("#ff000d");})
+        // }   ).catch((err)=>{ 
+        //     wait(2000).then(() => {
+        //     setColor("#ff000d");})
 
-            console.log(err)
-        } )
+        //     console.log(err)
+        // } )
 
         console.log("submit handler /{" + name+"}")
     };
+
 
     return (
         <SettingsStyle  className='container'  >
@@ -201,6 +279,7 @@ export default function Setting() {
                         </ToggleSwitchStyle>
 
                         {
+                            // isToggled && 
                             isToggled && closepop &&
                             // false &&
                             <div className='PoppUp'>
@@ -225,20 +304,22 @@ export default function Setting() {
                                 </div>
 
                                 <Line></Line>
-                                <img id="borderimg1" src={QrCode} ></img>
+                                {/* <img id="borderimg1" src={QrCode} ></img> */}
+                                <QrCodeCmp />
+                                
                                 <div className="Bastard" >Scan Me Bastard</div>
                                 <Line></Line>
                                 <div className='Buttons' >
-                                    <button id="cancel" onClick={setClosePop} > Disable 2FA  </button>
-                                    <button id="next"  onClick={setEnable} > Next </button>
+                                    {/* <button id="cancel" onClick={setClosePop} > Disable 2FA  </button>
+                                    <button id="next"  onClick={setEnable} > Next </button> */}
                                 </div>
 
                             </div>
                         }
 
                         {
-                            openpass &&
-                            // true && 
+                            // openpass &&
+                            false && 
                             <div className='PoppUpp'>
                                <Deny onClick={setClosePop}  className='CloseTab'/>
                                 
@@ -285,8 +366,9 @@ const Row = styled.div`
     align-items: center;
 
     .PoppUp{
-        height: 720px;
-        width: 650px;
+
+        width: 50%;
+        height: 700px;
         background-color: ${props => props.theme.colors.seconderybg};
         border: 2px solid  ${props => props.theme.colors.purple};
         color: #dacece5f ;
@@ -296,19 +378,19 @@ const Row = styled.div`
         border-radius: 25px;
 
         .Title {
-            width: 100%;
+            width: 90%;
             height: 15px;
             text-align: center;
-            font-size: 18px;
-            margin: 20px 0px;
+            font-size: 16px;
+            margin: 20px 10px;
             font-weight: 800;
             color:  ${props => props.theme.colors.purple};
             /* background-color: aqua; */
         }
         .CloseTab{
             position: absolute;
-            width:  25px;
-            height: 25px;
+            width:  23px;
+            height: 23px;
             top:    18px;
             right:  10px;
             &:hover {
@@ -321,7 +403,7 @@ const Row = styled.div`
             flex-direction: row;
             display: flex;
             position: relative;
-            gap: 10px;
+            gap: 30px;
             margin: 10px ;
 
             .D_img{
@@ -331,7 +413,7 @@ const Row = styled.div`
                 height: 100px;
                 border: 3px solid #665a5a5f;
                 border-radius: 50%;
-                left: 15%;
+                left: 20%;
                 > img {
                     width: 98%;
                     height: 98%;
