@@ -69,13 +69,25 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
   handleJoinRoom(client: Socket, rooms: Array<string>): void {
     this.logger.log(`joining rooms: ${client.id}`);
     for(var index in rooms)
+    {
+
+      console.log(rooms[index])
       client.join(rooms[index]);
+    }
   //  client.emit('joinedRoom', room );
   }
   @SubscribeMessage('gameChallenge')
   SendGameChallenge(client: any, payload: any): void {
     console.log("______DBG____ CHALLENGEGAME : " , payload[1])
     client.to(payload[0]).emit('challeneEvent', payload[1]);
+  }
+  @SubscribeMessage('sendFriendRequest')
+  handleFriendRequest(client: Socket, payload: string): void {
+    console.log('___FreindRequest____:'+payload)
+    // const ret = await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
+    client.join(payload);
+    client.to(payload).emit('recievedRequest', payload);
+    // client.to(payload[0]).emit('challeneEvent', payload[1]);
   }
   
   // @SubscribeMessage('connection')
