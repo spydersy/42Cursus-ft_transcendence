@@ -88,8 +88,6 @@ function App() {
   function hundleMsg (payload) {
     if (pageName != "chat")
     {
-      // settoastData(payload)
-      // msgNotifyToast()
     console.table(payload)
 
       toast(CustomToastWithLink(payload) , {
@@ -111,13 +109,23 @@ function App() {
     })
   // CHallengeNotify()
 }
+
+  function handleRequest (payload) {
+    console.log('__sahbiiiiii____:'+payload)
+    toast(CustomToastWithLink(payload) , {
+      className: "toast",
+      progressClassName: "toastProgress"
+    })
+}
   useEffect(()=>{
     // sub
     socket.on('msg_event', hundleMsg);
     socket.on('challeneEvent', handleChallenge);
+    socket.on('recievedRequest', handleRequest)
     return () => {
       socket.removeListener('msg_event', hundleMsg);
       socket.removeListener('challeneEvent', handleChallenge);
+      socket.removeListener('recievedRequest', handleRequest);
     }
   })
 
@@ -132,6 +140,14 @@ function App() {
     theme: "colored",
     });
   let joinChannels = async () => {
+    let userLogin : string;
+    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
+    {withCredentials: true} 
+    ).then((res)=>{
+           userLogin = res.data.login
+    }).catch((err)=>{
+      console.log(err)
+    })
     await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
       {withCredentials: true} 
       ).then((res)=>{
@@ -139,6 +155,8 @@ function App() {
           for (let index = 0; index < res.data.length; index++) {
             myChannels.push(res.data[index].channelId);
           }
+        myChannels.push(userLogin);
+          // mychannels.pushback(userlogin)
           socket.emit('joinRoom', myChannels)
         }).catch((err)=>{
           console.log(err)
