@@ -1,4 +1,4 @@
-import React, {useState , useEffect} from 'react'
+import React, {useState , useEffect , useContext} from 'react'
 // import { UserInvitCard } from "./PlayerProfile";
 import styled from "styled-components"
 import axios from 'axios';
@@ -9,14 +9,16 @@ import EmptyComponent  from "./PlayerrEmptyComp"
 import avataro from "../assets/imgs/avatar/avatar2.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { SocketContext,  SocketValue } from '../context/Socket';
 
 interface UserProp { defaultAvatar: string, login : string  }
-export interface UserInvitCardProps { data: UserProp }
+export interface UserInvitCardProps { data: UserProp , friends : UserProp[], setfriends : (e : any)=>void }
 export interface StyleProps {  status: string; }
 
 //
 export default function PendingRequests()
 {
+
   // const [friends, setfriends] = useState(
   //   [
   //     {
@@ -62,7 +64,7 @@ export default function PendingRequests()
         <EmptyComponent text="No Pending Requests !"/>
         : 
         friends.map((invit : any, id : number )=>{
-            return<UserInvitCard key={id} data={invit} />
+            return<UserInvitCard friends={friends} setfriends={(e)=>setfriends(e)} key={id} data={invit} />
         })
     }
        
@@ -99,6 +101,7 @@ const TabfourStyle= styled.div`
 `;
 //
 export  function UserInvitCard(props : UserInvitCardProps) {
+    const socket = useContext(SocketContext)
 
 const    accepteFriendNotify = () => toast.success("You accepted " +  props.data.login.toLocaleUpperCase() + " Friend Request", {
     position: "bottom-center",
@@ -124,7 +127,12 @@ const    DeclineFriendNotify = () => toast.warning("You declined " +  props.data
 const accepteFriend = ()=>{
     axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=accept",  {withCredentials: true} 
             ).then((res)=>{
-    
+                console.log(res)
+                socket.emit('joinRoom', [])
+                var s  = props.friends.indexOf(props.data)
+                var l = props.friends
+                l.splice(s , 1)
+                props.setfriends([...l])
         // alert("User Request Accepted" + res.status) 
         accepteFriendNotify();
     

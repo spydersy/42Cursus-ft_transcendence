@@ -38,14 +38,14 @@ export default function Game(props : GameProps) {
   const [msg, setmsg] = useState(false)
   const [player, setplayer] = useState(true)
   const [show, setshow] = useState(false)
-  gamesocket.on("startGame" , (pyload : any)=>{
+  gamesocket.off("startGame").on("startGame" , (pyload : any)=>{
     setend(false)
     fetchPlayersData(pyload.player1 , pyload.player2)
     setshow(true)
     console.log(loged?.login , pyload.player1)
     setplayer(loged?.login === pyload.player1 )
  })
- gamesocket.on("endGame" , (payload)=>{
+ gamesocket.off("endGame").on("endGame" , (payload)=>{
 
    setstart(false)
   if (payload.score.score1 > payload.score.score2 )
@@ -75,18 +75,25 @@ export default function Game(props : GameProps) {
   useEffect(() => {
     
     var s : string | null = localStorage.getItem('user');
+    var mode = "1v1"
     if (s)
     {
       data =  JSON.parse(s || '{}');
       setloged(data)
-
-      if (!end)
+      if (mode === "classic")
       {
-        gamesocket.emit("playerConnect" , data?.login)
-
+        if (!end)
+        {
+          gamesocket.emit("playerConnect" , data?.login)
+  
+        }
+  
+        setUser(data)
       }
-
-      setUser(data)
+      else if (mode === "1v1")
+      {
+        gamesocket.emit("start" , data?.login)
+      }
     }
     return () => {
       gamesocket.emit("endGame" , data?.login)

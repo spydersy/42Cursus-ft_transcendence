@@ -22,6 +22,7 @@ import { SocketContext,  SocketValue } from '../context/Socket';
 import {Link} from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { UserContext } from '../context/UserContext';
 
 //// PlayerCard Comp
 interface UserProp {
@@ -240,6 +241,7 @@ background-color: ${props => props.theme.colors.seconderybg};
     const Grades = ["Unranked","Shinobi","ShiboKay","Hokage","Yonko","3ANKOUB","XX","XXXX","XXXXX","XXXXX"]
     const [grade, setgrade] = useState<string | undefined>(Grades[5])
     const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
+    const userData = useContext(UserContext)
 
     const    AddUsernotify = () => toast.success("You have successfully Send the invitaion to " + id.toLocaleUpperCase() , {
       position: "bottom-center",
@@ -293,6 +295,7 @@ background-color: ${props => props.theme.colors.seconderybg};
     });
 
     const addFriend = ()=>{
+
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{
         // console.log(res.data)
@@ -300,7 +303,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         setrelationStatus("PENDING")
         AddUsernotify();
         // console.table('____ login___' +res.data)
-        socket.emit('sendFriendRequest', props.player.login)
+        socket.emit('sendFriendRequest', {sender : userData?.login , reciver : props.player.login} )
         // get this user login
         // join user login room
         // emit event to the room.

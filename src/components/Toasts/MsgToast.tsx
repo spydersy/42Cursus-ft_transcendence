@@ -1,14 +1,17 @@
 
 import axios from 'axios'
-import React , {useEffect , useState} from 'react'
+import React , {useEffect , useState , useContext} from 'react'
 import styled from "styled-components"
 import { AvatarComponent } from '../PlayerProfile'
 import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 import { Button } from '../../Pages/SignIn';
 import { ReactComponent as CheckIcon } from "../../assets/imgs/check.svg";
+import { SocketGameContext } from '../../context/Socket'
+
 import {
 Link
 } from "react-router-dom";
+import { UserContext } from '../../context/UserContext';
 interface msgType {
   channelId : string,
   content : string, 
@@ -110,6 +113,9 @@ white-space: nowrap;
   }
 `
 export  function GameChallengeToast(props: {data : any}) {
+  const gamesocket = useContext(SocketGameContext)
+  const UserData = useContext(UserContext)
+
   const [User, setUser] = useState<UserProp>({
     defaultAvatar: "string",
     login : "string",
@@ -135,7 +141,10 @@ export  function GameChallengeToast(props: {data : any}) {
 
         
   }, [])
-  
+  const acceptChallenge = ()=>{
+    gamesocket.emit("gameAccept", {player1 : props.data, player2: UserData?.login})
+    // window.location.href = "/game"
+  }
   return (
     <ToastStyle to="">
         <div className='avatar'>
@@ -147,6 +156,54 @@ export  function GameChallengeToast(props: {data : any}) {
             </div>
             <div className='msg'>
               Is challenging you.:
+            </div>
+        </div>
+        <div className='buttons'>
+          <Button  onClick={acceptChallenge} size='small'  isIcon={true} icon={<CheckIcon/>}/>
+        </div>
+    </ToastStyle>
+  )
+}
+
+
+export  function FriendRequestToast(props: {data : any}) {
+  const [User, setUser] = useState<UserProp>({
+    defaultAvatar: "string",
+    login : "string",
+    displayName : "string",
+    relation : "string",
+    nbFriends : "string",
+    wins : 0,
+    losses : 0,
+  })
+  useEffect(() => {
+    console.log(props.data)
+    axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data.sender  ,  {withCredentials: true}
+        ).then((res)=>{
+              // check for the user is bloked 
+              console.log("> status = " , res.status)
+              setUser(res.data)
+
+            }).catch((error)=>{ 
+             
+              } 
+   )
+
+
+        
+  }, [])
+  
+  return (
+    <ToastStyle to="">
+        <div className='avatar'>
+          <AvatarComponent img={User.defaultAvatar}/>
+        </div>
+        <div className='data'>
+            <div className=' name'>
+              {User.displayName}
+            </div>
+            <div className='msg'>
+              Sent a Friend Request:
             </div>
         </div>
         <div className='buttons'>

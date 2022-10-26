@@ -9,7 +9,7 @@ import Punk from "./assets/imgs/punkhazard.png";
 import Dress from "./assets/imgs/dressRosa.jpg";
 import Wano from "./assets/imgs/wano.jpg";
 import Fish from "./assets/imgs/fishman.jpeg";
-import { SocketContext,  SocketValue } from './context/Socket';
+import { SocketContext,  SocketGameContext,  SocketValue } from './context/Socket';
 import {
   Routes, // instead of "Switch"
   Route,
@@ -32,7 +32,7 @@ import SocketTesting from './components/testing/SocketTesting';
 import ChatTesting from './components/testing/ChatTesting';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import MsgToast , {GameChallengeToast} from './components/Toasts/MsgToast';
+import MsgToast , {FriendRequestToast, GameChallengeToast} from './components/Toasts/MsgToast';
 import { ReactComponent as CloseIcon } from "./assets/imgs/close-icon.svg";
 
 
@@ -70,6 +70,11 @@ const CustomToastWithLink = (data : msgType) => (
         <MsgToast data={data}/>
   </div>
 );
+const CustomToastFriendReq = (data : any) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <FriendRequestToast data={data}/>
+  </div>
+);
 const CustomToastWithLinkGame = (data : any) => (
   <div style={{width: "100%" , height : "100%"}}>
         <GameChallengeToast data={data}/>
@@ -80,6 +85,7 @@ function App() {
   const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
   
   const socket = useContext(SocketContext)
+  const gameSocket = useContext(SocketGameContext)
   const [toastData, settoastData] = useState<msgType>()
   const [toastDataChallenge, settoastDataChallenge] = useState()
   const pageName = window.location.pathname.split("/")[1];
@@ -92,7 +98,10 @@ function App() {
 
       toast(CustomToastWithLink(payload) , {
         className: "toast",
-        progressClassName: "toastProgress"
+        progressClassName: "toastProgress",
+        autoClose: 2000,
+        
+        hideProgressBar: true,
       })
     }
   }
@@ -103,6 +112,9 @@ function App() {
     toast(CustomToastWithLinkGame(payload) , {
       className: "toast",
       progressClassName: "toastProgress",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: false
 
   
 
@@ -112,20 +124,34 @@ function App() {
 
   function handleRequest (payload) {
     console.log('__sahbiiiiii____:'+payload)
-    toast(CustomToastWithLink(payload) , {
+    toast(CustomToastFriendReq(payload) , {
       className: "toast",
-      progressClassName: "toastProgress"
+      progressClassName: "toastProgress",
+      autoClose: 2000,
+      hideProgressBar: true,
     })
+}
+function handelChallengeAccept (payload) {
+  navigate("/game/")
+  // toast(CustomToastFriendReq(payload) , {
+  //   className: "toast",
+  //   progressClassName: "toastProgress",
+  //   autoClose: 2000,
+  //   hideProgressBar: true,
+  // })
+
 }
   useEffect(()=>{
     // sub
     socket.on('msg_event', hundleMsg);
     socket.on('challeneEvent', handleChallenge);
     socket.on('recievedRequest', handleRequest)
+    gameSocket.on('challengeAccepted', handelChallengeAccept)
     return () => {
       socket.removeListener('msg_event', hundleMsg);
       socket.removeListener('challeneEvent', handleChallenge);
       socket.removeListener('recievedRequest', handleRequest);
+      socket.removeListener('challengeAccepted', handelChallengeAccept);
     }
   })
 
@@ -230,7 +256,7 @@ const Cont = styled.div`
     border: 2px solid ${props => props.theme.colors.purple};
   }
   .toastProgress{
-    display: none;
+
     background-color: ${props => props.theme.colors.secondaryText} !important;;
 
   }

@@ -8,7 +8,7 @@ import { Button } from '../../Pages/SignIn';
 import Modal from '../Modal';
 import MembersChatModal from '../modals/MembersChatModal';
 import {ReactComponent as GameIcon} from "../../assets/imgs/game-icon.svg";
-import { SocketContext } from '../../context/Socket';
+import { SocketContext , SocketGameContext} from '../../context/Socket';
 
 
   interface usersType {
@@ -37,6 +37,7 @@ export default function ChatControlBar(props :{data : convType }) {
 
   const [hide, sethide] = useState(false)
   const socket = useContext(SocketContext)
+  const gamesocket = useContext(SocketGameContext)
 
   return (
     <ContoleStyle>
@@ -65,7 +66,10 @@ export default function ChatControlBar(props :{data : convType }) {
      props.data?.access === "DM" ? 
             <div className='buttons'>
                   
-              <Button  isIcon={true} onClick={()=>{  socket.emit("gameChallenge" , props.data.channelId , props.data.users[0].login)}} icon={<GameIcon/>}/>
+              <Button  isIcon={true} onClick={()=>{ 
+                
+                socket.emit("gameChallenge", props.data.channelId , props.data.users[0].login) ; 
+                  gamesocket.emit("gameChallenge" , {player1 : props.data.users[0].login , player2 : props.data.users[1].login})}} icon={<GameIcon/>}/>
             <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
             {/* <Button   isIcon={true} onClick={()=>{}} icon={<Mute/>}/> */}
                  </div>
