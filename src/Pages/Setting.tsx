@@ -12,12 +12,8 @@ import avataro from "../assets/imgs/avatar/avatar2.png";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import {ReactComponent as CloseLock} from "../assets/imgs/closelock.svg";
 import OpenLock from "../assets/imgs/TwoFa.png";
-// import QrCode from "../assets/imgs/qrcode.png"
-// import RICIBs from 'react-individual-character-input-boxes';
 import PasswordChecklist from "react-password-checklist"
 import { PinInput } from 'react-input-pin-code' // ES Module
-// import { Body } from '@nestjs/common';
-import QrCodeCmp from '../components/QrCode';
 
 
 const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderColor: "red", };
@@ -28,22 +24,14 @@ export default function Setting() {
     const [loading, setLoading] = useState(false);
     const [color, setColor] = useState("#fa0137");
     const [data, setdata] = useState({login : "", defaultAvatar : "", displayName : "", twoFactorAuth : false, email : ""})
-    
-    // const [msgtwofa, setmsgtwofa]= useState("OFF") 
     const [isToggled, setIsToggled] = useState(false);
     const [closepop, setclosepop] = useState(false)
     const [openpass, setopenpass] = useState(false)
-
     const [QrCode, setQrCode] = useState("")
-
-    // const [password, setPassword] = useState("")
-	// const [passwordAgain, setPasswordAgain] = useState("")
-
     const [values, setValues] = useState(['', '', '','','','','','']);
 
-
     useEffect(() => {
-        // !isToggled ? setmsgtwofa("ON") : setmsgtwofa("OFF");
+
         setIsToggled(false)
         
         axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/me",   {withCredentials: true} 
@@ -58,8 +46,6 @@ export default function Setting() {
             console.log("__res.data.twoFactorAuth__ = " , isToggled)
 
         }).catch((err)=>{})
-
-
 
         var e = document.getElementById("fileInput")
         e?.addEventListener("change", (c :any)=>{
@@ -79,22 +65,9 @@ export default function Setting() {
                     console.log(err)
                 }   )
         })
-
-        // axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/me",   {withCredentials: true} 
-        // ).then((res)=>{
-
-        //     console.log("__Settings__Data__: ", res.data )
-        //     setdata(res.data)
-        //     setImg(res.data.defaultAvatar)
-        //     setIsToggled(res.data.twoFactorAuth)
-
-        // }).catch((err)=>{})
-
-        
     }, [])
     
-    const uploadFile = ()=>{
-        var e = document.getElementById("fileInput")
+    const uploadFile = ()=>{  var e = document.getElementById("fileInput")
         e?.click()
     }
     
@@ -115,7 +88,6 @@ export default function Setting() {
             enteredName = Name;
     
         setdata({...data, displayName : enteredName})
-        // setQuery(enteredName);
     };
 
     const setClosePop = () => {
@@ -133,63 +105,76 @@ export default function Setting() {
             setIsToggled(true)
             setclosepop(true)
         
-            // axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" , "",{withCredentials: true}).then((res)=>{
-            // axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" , "",{withCredentials: true}).then((res)=>{
+            axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" , "",{withCredentials: true}).then((res)=>{
+
+                if (res)
+                {
+                    // console.log("__DATA__", res.data.lenght ,"__ " , res.data , "}")
+                    console.log("__DATA__\n", res)
+                    
+                    var base64Flag = 'data:image/png;base64,';
+                    // var imageStr = window.btoa(res.data);
+                    setQrCode(res.data)
+                    // CONVERT BINARY TO BASE64
 
 
-            //     if (res)
-            //     {
+                    // console.log("__res.data__\n", base64Flag + res.data)
+                    // console.log("__flag__\n", base64Flag)
+                    // console.log("__imageStr__\n", imageStr)
+                    // console.log("____BUFFER____")
+                    // console.log(Buffer.from(res.data).toString('base64'))
+                    // console.log("____BUFFER____")
 
-            //         console.log("__DATA__", res.data.lenght ,"__ " , res.data , "}")
 
-                
-                
-            //         // let base64 = Buffer.from(res.data, "binary").toString("base64");
+                    // let imageStr = res.data.toString('base64);
+                    // $("img").attr("src","data:image/;base64,"+ res.data);
+                    
+                    // let   img = base64Flag + imageStr
+                    // 
+                    // setImg(QrCode);
+                    // setQrCode(img)
+                    
+                    // console.log("__DATA__\n", QrCode)
+
+
+
+                    // const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+
+                    // let base64 = Buffer.from(res.data, "binary").toString("base64");
     
-            //         // // create image src
-            //         // let image = `data:${res.headers["content-type"]};base64,${base64}`;
+                    // // create image src
+                    // let image = `data:${res.headers["content-type"]};base64,${base64}`;
 
 
 
-            //         // let blob = new Blob( [res.data], { type: res.headers['content-type'] } )
-            //         // let image = window.URL.createObjectURL(blob)
+                    // let blob = new Blob( [res.data], { type: res.headers['content-type'] } )
+                    // let image = window.URL.createObjectURL(blob)
 
-            //         // setQrCode(image)
-            //         // console.log("__Image__", image, "}")
-
-
-
-
-            //     }
-            //     else 
-            //         console.log("ALREADY BROKEN")
-
-
-            // }   ).catch((err)=>{ 
-
-            //     setIsToggled(false)
-            //     // console.log(err)
-
-            // } )
-        
-        }
-        else 
-        {
-            axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
-
-                setIsToggled(false)
-
-                console.log("Response Data ={", res.data.message , "}")
-
-                // if (res.data.message === "2FA Enabled")
-                //     setclosepop(true)
+                    // setQrCode(image)
+                    // console.log("__Image__", image, "}")
+                }
+                else 
+                    console.log("ALREADY BROKEN")
 
             }   ).catch((err)=>{ 
-
-                setIsToggled(true)
+                // setIsToggled(false)
                 // console.log(err)
             } )
+        
         }
+        // else 
+        // {
+        //     axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
+
+        //         setIsToggled(false)
+        //         console.log("Response Data ={", res.data.message , "}")
+
+        //     }   ).catch((err)=>{ 
+
+        //         setIsToggled(true)
+        //         // console.log(err)
+        //     } )
+        // }
 
         setColor("#f29408");
         if (!loading)
@@ -305,8 +290,9 @@ export default function Setting() {
 
                                 <Line></Line>
                                 {/* <img id="borderimg1" src={QrCode} ></img> */}
-                                <QrCodeCmp />
                                 
+                                <img id="borderimg1" src={`data:image/png;base64,${QrCode}`} alt="qr code" />
+
                                 <div className="Bastard" >Scan Me Bastard</div>
                                 <Line></Line>
                                 <div className='Buttons' >
