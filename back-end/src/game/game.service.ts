@@ -27,7 +27,10 @@ export class GameService {
    }
    joinPlayer(login : string , id : string)
    {
-       this.roomPlayers.push({login , id})
+    if ( this.roomPlayers.length < 2)
+    {
+        this.roomPlayers.push({login , id})
+    }
        
    }
 

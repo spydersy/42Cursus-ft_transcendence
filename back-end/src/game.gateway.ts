@@ -65,6 +65,15 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
     return null
   }
+  getRoombyName(name : string )
+  {
+    for (let i = 0; i < this.roomArray.length; i++) {
+
+      if (this.roomArray[i].roomName === name)
+          return i;
+    }
+    return null
+  }
 
   RemovePlayer(client : any , login : string)
   {
@@ -145,6 +154,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   deleteRoom(client: any, payload: any): void {
 
     this.logger.log("client is disconnected")
+    var room = this.getRoombyPlayerId(client.id)
+    this.wss.to(room.roomName).emit("endGame" , room)
     this.RemovePlayer(client , payload)
     this.wss.emit("change" ,  this.roomArray)
 
@@ -153,6 +164,72 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 }
+  @SubscribeMessage('gameChallenge')
+  gameChallenge(client: any, payload: {player1 : string ,player2 : string }): void {
+
+
+      this.logger.log("challengeGame" , payload)
+  if (this.getRoombyName(payload.player1+payload.player2) === null)
+  {
+    var newRoom = new GameService(payload.player1+payload.player2)
+    newRoom.joinPlayer(payload.player1 , client.id)
+    client.join(newRoom.roomName)
+    this.roomArray.push(newRoom)
+    this.roomArray[this.roomArray.length - 1].debug()
+
+  }
+
+
+  }
+  @SubscribeMessage('gameAccept')
+  gameAccept(client: any, payload: {player1 : string ,player2 : string }): void {
+
+   
+      var i = this.getRoombyName(payload.player1 + payload.player2)
+      this.logger.log("gameAccept" , i)
+
+      if (i != null)
+      {
+        this.logger.log("gameAccept" , i)
+        client.join(this.roomArray[i].roomName)
+
+        this.wss.to(this.roomArray[i].roomName).emit("challengeAccepted")
+        this.roomArray[i].joinPlayer(payload.player2 , client.id)
+
+        this.roomArray[i].debug()
+        // this.wss.to(this.roomArray[i].roomName).emit("startGame" , payload) 
+      }
+
+    
+
+  }
+  @SubscribeMessage('start')
+  start(client: any, payload: string): void {
+
+
+      console.log("______DBG___START : " , client.id)
+      var room = this.getRoombyPlayerId(client.id)
+      console.log("______DBG___START : " , room)
+      
+      if (room != null)
+      {
+        client.join(room.roomName)
+        var i = this.roomArray.indexOf(room)
+        // this.roomArray[i].roomPlayers.
+        if (this.roomArray[i].roomPlayers.length === 2)
+        {
+          this.wss.to(this.roomArray[i].roomName).emit("startGame" , {player1: this.roomArray[i].roomPlayers[0].login , player2: this.roomArray[i].roomPlayers[1].login}) 
+
+        }
+        console.log("______DBG___START : " , "start")
+      }
+
+    
+
+
+
+  }
+
 
 
 
@@ -169,8 +246,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
          this.roomArray[index].debug();
 
       }
-
     }
+
   }
 
   @SubscribeMessage('player1Moved')

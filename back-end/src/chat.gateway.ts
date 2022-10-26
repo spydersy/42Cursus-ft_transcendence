@@ -82,12 +82,12 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
     client.to(payload[0]).emit('challeneEvent', payload[1]);
   }
   @SubscribeMessage('sendFriendRequest')
-  handleFriendRequest(client: Socket, payload: string): void {
-    console.log('___FreindRequest____:'+payload)
+  handleFriendRequest(client: Socket, payload: any): void {
+    console.log('___FreindRequest____:',  payload)
     // const ret = await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
-    client.join(payload);
-    client.to(payload).emit('recievedRequest', payload);
-    client.leave(payload)
+    client.join(payload.reciver);
+    client.to(payload.reciver).emit('recievedRequest', payload);
+    client.leave(payload.reciver)
     // client.to(payload[0]).emit('challeneEvent', payload[1]);
   }
   
