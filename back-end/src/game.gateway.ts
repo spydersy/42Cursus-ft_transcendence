@@ -28,10 +28,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   afterInit(server: any) {
     this.logger.log("After Init")
     // console.log( server.adapter.rooms)
-<<<<<<< HEAD
-
-=======
->>>>>>> f8163126206460d0d33f254764430cb1c84838cb
   }
   playerExist(client : any , login  : string)
   {
@@ -41,13 +37,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       var room = this.roomArray[i];
       var player = room.getPlayerbyLogin(login )
       if (player)
-<<<<<<< HEAD
-        return  true;
-
-=======
         return  i;
-
->>>>>>> f8163126206460d0d33f254764430cb1c84838cb
     }
     return -1;
   }
@@ -286,19 +276,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 
-<<<<<<< HEAD
-  @SubscribeMessage('changeDirectionX')
-  changeD(client: any, payload: any): void {
-    var room = this.getRoombyPlayerId(client.id)
-    if (room)
-    {
-      var i = this.roomArray.indexOf(room)
-      this.roomArray[i].direction.x = -this.roomArray[i].direction.x
-    }
-  }
-=======
 
->>>>>>> f8163126206460d0d33f254764430cb1c84838cb
+
   @SubscribeMessage('moveBall')
   moveBall(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)

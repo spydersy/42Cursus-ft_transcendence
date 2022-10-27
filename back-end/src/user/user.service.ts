@@ -381,7 +381,7 @@ export class UserService {
                 Wins: 0,
                 Losses: 0,
                 Level: 0,
-                TwoFactorAuth: false,
+                TwoFactorAuth: UserProfile['twoFactorAuth'],
             }
             return user;
         }

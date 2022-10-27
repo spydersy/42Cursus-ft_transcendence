@@ -90,7 +90,13 @@ export class AuthService {
             }
             let JWT = await this.GenerateJWT(UserDto);
             if (UserDto.TwoFactorAuth === true) {
-                res.send({'message': '2FAVERIFICATION'});
+                res.
+                set({
+                    'Access-Control-Allow-Credentials': true,
+                    'Access-Control-Allow-Origin': this.configService.get<string>('FRONTEND_URL'),
+                    'Access-Control-Allow-Headers': this.configService.get<string>('FRONTEND_URL')
+                }).redirect(this.configService.get<string>('FRONTEND_2FA_URL'));
+                // Do something ...
             }
             return res
                     .status(HttpStatus.OK).

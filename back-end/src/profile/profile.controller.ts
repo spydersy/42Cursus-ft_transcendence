@@ -57,9 +57,17 @@ export class ProfileController {
     return this.profileService.Logout(true, res);
   }
 
+  @Get('update2FA')
+  async GenerateQrCode(@Req() req, @Query('status') status, @Res() res) {
+    if (status === undefined || status !== 'generate') {
+      return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Request'});
+    }
+    return this.profileService.Update2FA(req.user.userId, status, res);
+  }
+
   @Post('update2FA')
   async Update2FA(@Req() req, @Query('status') status, @Res() res) {
-    if (status === undefined || !(status === 'true' || status === 'false' || status === 'generate')) {
+    if (status === undefined || !(status === 'true' || status === 'false')) {
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Request'});
     }
     return this.profileService.Update2FA(req.user.userId, status, res);
