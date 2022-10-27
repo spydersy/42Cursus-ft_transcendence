@@ -22,7 +22,6 @@ const getUserData = ()=>{
     {
       const data : UserProp  =  JSON.parse(s || '{}');
       return data;
-    
     }
     return null
 }   

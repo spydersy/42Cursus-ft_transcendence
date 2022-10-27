@@ -134,7 +134,6 @@ const accepteFriend = ()=>{
                 l.splice(s , 1)
                 props.setfriends([...l])
         // alert("User Request Accepted" + res.status) 
-        accepteFriendNotify();
     
     }).catch((err)=>{  })
         // window.location.reload();
@@ -182,8 +181,7 @@ height: 140px;
 text-align: center;
 border-radius: 10px;
 /* border: 2px solid  #70539b ; */
-box-shadow:   2px 2px 2px 2px #70539b ; 
-
+box-shadow:   2px 2px 2px 2px #70539b ;
 /* animation: fadeIn 2s; */
 
 .YN {

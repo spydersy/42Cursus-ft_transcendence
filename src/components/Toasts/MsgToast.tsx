@@ -7,11 +7,14 @@ import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 import { Button } from '../../Pages/SignIn';
 import { ReactComponent as CheckIcon } from "../../assets/imgs/check.svg";
 import { SocketGameContext } from '../../context/Socket'
+import { SocketContext } from '../../context/Socket'
 
 import {
 Link
 } from "react-router-dom";
 import { UserContext } from '../../context/UserContext';
+import { userInfo } from 'os';
+import { alterHsl } from 'tsparticles-engine';
 interface msgType {
   channelId : string,
   content : string, 
@@ -29,7 +32,51 @@ interface UserProp {
   wins : number
   losses : number
 }
-export default function MsgToast(props: {data : msgType}) {
+
+export  function AcceptToast(props: {data : string}) {
+  const [User, setUser] = useState<UserProp>({
+    defaultAvatar: "string",
+    login : "string",
+    displayName : "string",
+    relation : "string",
+    nbFriends : "string",
+    wins : 0,
+    losses : 0,
+  })
+
+  useEffect(() => {
+    axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data  ,  {withCredentials: true}
+        ).then((res)=>{
+              // check for the user is bloked 
+              console.log("> status = " , res.status)
+              setUser(res.data)
+
+            }).catch((error)=>{ 
+             
+              } 
+   )
+
+
+        
+  }, [])
+  
+  return (
+    <ToastStyle to="">
+        <div className='avatar'>
+          <AvatarComponent img={User.defaultAvatar}/>
+        </div>
+        <div className='data'>
+            <div className=' name'>
+              {props.data}
+            </div>
+            <div className='msg'>
+              accepted your friend request :
+            </div>
+        </div>
+    </ToastStyle>
+  )
+}
+export default  function MsgToast(props: {data : msgType}) {
   const [User, setUser] = useState<UserProp>({
     defaultAvatar: "string",
     login : "string",
@@ -167,6 +214,8 @@ export  function GameChallengeToast(props: {data : any}) {
 
 
 export  function FriendRequestToast(props: {data : any}) {
+  const socket = useContext(SocketContext)
+  const userData = useContext(UserContext)
   const [User, setUser] = useState<UserProp>({
     defaultAvatar: "string",
     login : "string",
@@ -176,6 +225,24 @@ export  function FriendRequestToast(props: {data : any}) {
     wins : 0,
     losses : 0,
   })
+  const acceptFriendReq = ()=> {
+
+    // alert(userData?.login)
+ 
+      axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+  User?.login + "?event=accept",  {withCredentials: true} 
+      ).then((res)=>{
+          console.log(res)
+          socket.emit('joinRoom', [])
+          // var s  = props.friends.indexOf(props.data)
+          // var l = props.friends
+          // l.splice(s , 1)
+          // props.setfriends([...l])
+  // alert("User Request Accepted" + res.status) 
+  
+  }).catch((err)=>{  })
+    
+    socket.emit('acceptFriendRequest', {accepter: userData?.login, reciever: User?.login} )
+  }
   useEffect(() => {
     console.log(props.data)
     axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data.sender  ,  {withCredentials: true}
@@ -185,12 +252,9 @@ export  function FriendRequestToast(props: {data : any}) {
               setUser(res.data)
 
             }).catch((error)=>{ 
-             
+
               } 
    )
-
-
-        
   }, [])
   
   return (
@@ -207,7 +271,7 @@ export  function FriendRequestToast(props: {data : any}) {
             </div>
         </div>
         <div className='buttons'>
-          <Button size='small'  isIcon={true} icon={<CheckIcon/>}/>
+          <Button onClick={acceptFriendReq} size='small'  isIcon={true} icon={<CheckIcon/>}/>
         </div>
     </ToastStyle>
   )
