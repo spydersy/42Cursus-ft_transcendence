@@ -84,7 +84,6 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
   @SubscribeMessage('sendFriendRequest')
   handleFriendRequest(client: Socket, payload: any): void {
     console.log('___FreindRequest____:',  payload)
-    // const ret = await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
     client.join(payload.reciver);
     client.to(payload.reciver).emit('recievedRequest', payload);
     client.leave(payload.reciver)
@@ -95,6 +94,14 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
   // handleCon() {
   //   console.log('connected');
   // }
+
+  @SubscribeMessage('acceptFriendRequest')
+  handleAcceptRequest(client: Socket, payload: any): void {
+    console.log('___requestd Login___', payload)
+    client.join(payload.reciever);
+    client.to(payload.reciever).emit('acceptedReq', payload.accepter)
+    client.leave(payload.reciever)
+  }
 
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: Socket, room: string): void {
