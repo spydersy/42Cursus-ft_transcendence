@@ -14,6 +14,7 @@ export class GameService {
     score: {score1 : number , score2 : number};
     ball : {size : number,x : number , y  : number} 
     direction : {x : number , y  : number} 
+    status : string
     // score: {score1 : number , score2 : number};
    
    
@@ -24,6 +25,7 @@ export class GameService {
        this.score = {score1 : 0 , score2 : 0}
        this.ball = {size : 20 , x :  500 , y :350}
        this.direction = { x :  3 , y :3}
+       this.status  = "waiting";
    }
    joinPlayer(login : string , id : string)
    {
@@ -48,6 +50,20 @@ export class GameService {
            }
        }
        return null
+   }
+   changeId(id : string , login : string)
+   {
+
+        //    console.log("players number : " , this.roomPlayers.length)
+       for (let i = 0; i < this.roomPlayers.length; i++) {
+          
+           if ( this.roomPlayers[i].login === login )
+           {
+
+               this.roomPlayers[i].id = id
+           }
+       }
+
    }
 
    getPlayerbyLogin(id : string)

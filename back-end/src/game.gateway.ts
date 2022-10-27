@@ -28,7 +28,10 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   afterInit(server: any) {
     this.logger.log("After Init")
     // console.log( server.adapter.rooms)
+<<<<<<< HEAD
 
+=======
+>>>>>>> f8163126206460d0d33f254764430cb1c84838cb
   }
   playerExist(client : any , login  : string)
   {
@@ -38,10 +41,15 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       var room = this.roomArray[i];
       var player = room.getPlayerbyLogin(login )
       if (player)
+<<<<<<< HEAD
         return  true;
 
+=======
+        return  i;
+
+>>>>>>> f8163126206460d0d33f254764430cb1c84838cb
     }
-    return false
+    return -1;
   }
   JoinPlayer(client : any , login : string)
   {
@@ -51,6 +59,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     {
       var roomName = this.roomArray[roomslenght - 1].roomName
       var lastRoomPlayers = this.roomArray[roomslenght - 1].roomPlayers
+      this.roomArray[roomslenght - 1].status = "InGame"
+
       this.wss.to(roomName).emit("startGame", {player1 : lastRoomPlayers[0].login , player2 :  lastRoomPlayers[1].login })
       this.logger.log("startgame emited")
     }
@@ -219,8 +229,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         // this.roomArray[i].roomPlayers.
         if (this.roomArray[i].roomPlayers.length === 2)
         {
+          this.roomArray[i].status = "InGame";
           this.wss.to(this.roomArray[i].roomName).emit("startGame" , {player1: this.roomArray[i].roomPlayers[0].login , player2: this.roomArray[i].roomPlayers[1].login})
-
         }
         console.log("______DBG___START__02 : " , "start")
       }
@@ -236,17 +246,23 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 
   @SubscribeMessage('playerConnect')
-    playerConnect(client: any, payload: any): void {
-    this.logger.log("player connected:  "  + client.id + " : " + payload)
-    if (this.playerExist(client , payload) === false)
+    playerConnect(client: any, login: any): void {
+    this.logger.log("player connected:  "  + client.id + " : " + login)
+
+    var index = this.playerExist(client , login)
+    if (index === -1)
     {
-      // console.log(payload + ": Player does not exist" )
-      this.AddtoRoomArray(client , payload)
-      this.JoinPlayer(client , payload)
+      // console.log(login + ": Player does not exist" )
+      this.AddtoRoomArray(client , login)
+      this.JoinPlayer(client , login)
       for (let index = 0; index < this.roomArray.length; index++) {
          this.roomArray[index].debug();
 
       }
+    }
+    else
+    {
+       this.roomArray[index].changeId(client.id , login)
     }
 
   }
@@ -256,7 +272,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     var room = this.getRoombyPlayerId(client.id)
     if (room)
     {
-      // console.log("player one moved")
       this.wss.to(room.roomName).emit("player1moved" , payload)
     }
   }
@@ -271,6 +286,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 
+<<<<<<< HEAD
   @SubscribeMessage('changeDirectionX')
   changeD(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
@@ -280,6 +296,9 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       this.roomArray[i].direction.x = -this.roomArray[i].direction.x
     }
   }
+=======
+
+>>>>>>> f8163126206460d0d33f254764430cb1c84838cb
   @SubscribeMessage('moveBall')
   moveBall(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
@@ -336,7 +355,9 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 }
   checkScore(room : any) {
-    if (room.score.score1 + room.score.score2 === 10)
+    //you can do better
+    console.log(Math.abs(room.score.score1 - room.score.score2))
+    if (  Math.abs(room.score.score1 - room.score.score2) > 5)
     {
       this.wss.emit("endGame" , room)
       var i = this.roomArray.indexOf(room)
