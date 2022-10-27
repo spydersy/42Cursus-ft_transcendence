@@ -75,7 +75,7 @@ export default function Game(props : GameProps) {
   useEffect(() => {
     
     var s : string | null = localStorage.getItem('user');
-    var mode = "1v1"
+    var mode = localStorage.getItem('mode');
     if (s)
     {
       data =  JSON.parse(s || '{}');

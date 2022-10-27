@@ -59,9 +59,11 @@ const [mode, setmode] = useState("")
     // props.settheme()
 
     if (id  === 0)
-      setmode("AI" )
+      localStorage.setItem("mode","AI")
+
     if (id  === 1)
-      setmode("Classic" )
+      localStorage.setItem("mode","classic")
+
     sethideModel(!hideModel)
   }
   const { carouselFragment ,      slideToNextItem } = useSpringCarousel({

@@ -206,6 +206,7 @@ function handelChallengeAccept (payload) {
   ).then((res)=>{
     // console.log(res.data)
     localStorage.setItem("user", JSON.stringify(res.data))
+    localStorage.setItem("mode","classic")
     joinChannels()
     socket.emit("AddOnlineUser")
   }).catch((err)=>{

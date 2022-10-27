@@ -8,6 +8,7 @@ import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 import axios from 'axios'
 import { SocketContext } from '../../context/Socket';
 import ChatControlBar from './ChatControlBar'
+import EmptyComponent from '../PlayerrEmptyComp'
 
 interface UserProp {
   defaultAvatar: string,
@@ -204,7 +205,7 @@ export default function Chat() {
    
     return (
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
-          
+          { list.length ?<>
           {(state === -1 || state === 0) && 
           <div id="right" className='right'>
           <ChatSidebar state={state} setState={(e)=> setstae(e)} setcurrentConv={(e)=>{ setcurrentConv(e)
@@ -235,6 +236,10 @@ export default function Chat() {
             <ChatControlBar data={currentConv}/>
           </div>
          }
+         </> : 
+         
+         <EmptyComponent text="GET SOME HELP" />
+        }
       </GridContainer>
     )
   }
