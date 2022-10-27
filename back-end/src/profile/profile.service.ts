@@ -115,33 +115,35 @@ export class ProfileService {
 
         if (status === 'true') {
             if (user.twoFactorAuth === false) {
-                const _2faData = await this.tfaService.generateTwoFactorAuthenticationSecret(me, user.login);
-                console.log("__TFA__DATA__ : ", _2faData);
+                // const _2faData = await this.tfaService.generateTwoFactorAuthenticationSecret(me, user.login);
+                // console.log("__TFA__DATA__ : ", _2faData);
+                await this.prisma.users.update({
+                    where: { id: me},
+                    data: { twoFactorAuth: true},
+                });
+                return res.status(HttpStatus.OK).send({'message': '2FA enabeled'});
+            }
+            else
+                return res.status(HttpStatus.OK).send({'message': '2FA Already enabeled'});
+        }
+        else if (status === 'generate') {
+            const _2faData = await this.tfaService.generateTwoFactorAuthenticationSecret(me, user.login);
+            console.log("__TFA__DATA__ : ", _2faData);
+            const usertfa = await this.prisma.users.findUnique({
+                where: { id: me },
+            });
+            if (user.twoFactorAuth === true) {
                 await this.prisma.users.update({
                     where: { id: me },
                     data: {
-                        twoFactorAuth: true ,
+                        // twoFactorAuth: true ,
                         twoFactorAuthSecret: _2faData.secret
                     },
                 });
                 return this.tfaService.pipeQrCodeStream(res, _2faData.otpauthUrl);
             }
             else
-                return res.status(HttpStatus.OK).send({'message': '2FA Already enabeled'});
-            //     console.log("USER__ENDPOINT_DNG__ : ", user.login);
-            //     return res.status(HttpStatus.OK).send({'message': '2FA Enabled'});
-            // }
-            // else if (user.twoFactorAuth === false) {
-            //     await this.prisma.users.update({   
-            //         where: { id: me }, 
-            //         data: { twoFactorAuth: true,
-            //                 twoFactorAuthSecret: null
-            //         }, 
-            //     });
-            //     return this.Logout(false, res);
-            // }
-            // else
-            //     return res.status(HttpStatus.OK).send({'message':  '2FA Already Enabled'});
+                return res.status(HttpStatus.FORBIDDEN).send({'message': 'Not Allowed'});
         }
         else if (status === 'false') {
             await this.prisma.users.update({

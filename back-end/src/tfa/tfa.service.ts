@@ -12,6 +12,7 @@ export class TfaService {
                 private prisma: PrismaService) {}
 
     public async pipeQrCodeStream(stream: Response, otpauthUrl: string) {
+        stream.setHeader('content-type','image/png');
         return toFileStream(stream, otpauthUrl);
     }
 

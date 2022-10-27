@@ -57,9 +57,9 @@ export class ProfileController {
     return this.profileService.Logout(true, res);
   }
 
-  @Get('update2FA')
+  @Post('update2FA')
   async Update2FA(@Req() req, @Query('status') status, @Res() res) {
-    if (status === undefined || !(status === 'true' || status === 'false')) {
+    if (status === undefined || !(status === 'true' || status === 'false' || status === 'generate')) {
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Request'});
     }
     return this.profileService.Update2FA(req.user.userId, status, res);
