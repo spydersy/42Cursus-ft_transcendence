@@ -40,12 +40,14 @@ export default function Setting() {
             console.log("__Settings__Data__: ", res.data )
             setdata(res.data)
             setImg(res.data.defaultAvatar)
-
             setIsToggled(res.data.twoFactorAuth)
 
-            console.log("__res.data.twoFactorAuth__ = " , isToggled)
+            console.log("__res.data.twoFactorAuth__ = " , res.data.twoFactorAuth)
+            console.log("__isToggled__ = " , isToggled)
 
-        }).catch((err)=>{})
+        }).catch((err)=>{
+            setIsToggled(false)
+        })
 
         var e = document.getElementById("fileInput")
         e?.addEventListener("change", (c :any)=>{
@@ -93,72 +95,86 @@ export default function Setting() {
 
     const setClosePop = () => {
         setclosepop(false)
+        // setIsToggled(false)
+        setopenpass(false)
+    }
+
+    const setCancel = () => {
+        // console.log("false =  " , isToggled)
+
+        axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
+
+            console.log("Response false Data ={", res.data.message , "}")
+        }   ).catch((err)=>{ 
+        })
+
+        setclosepop(false)
         setIsToggled(false)
         setopenpass(false)
     }
 
-    const setEnable = () => {
-        setclosepop(false)
-        // setIsToggled(true)
-        setopenpass(true)    
-    }
+   
 
     const onToggle = ()=> {
         
-        setIsToggled(!isToggled)
         const stateToggle = !isToggled
-        // console.log("1-OnToggle =  " , isToggled)
-
-        if (stateToggle) 
-        {
-            // console.log("true =  " , isToggled)
-            axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" , "",{withCredentials: true}).then((res)=>{
-                // console.log("Response true Data ={", res.data , "}")
-
-                if (res.data === "2fa is already enabled")
-                {
-                    setIsToggled(false)
-                    console.log("ALREADY BROKEN")
-                    setQrCode("ALREADY ENABLED")
-                }
-                else
-                {
-                    setIsToggled(true)
-                    setQrCode(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=generate")
-                    setclosepop(true)
-                }   
-
-            }).catch((err)=>{
-                    setIsToggled(false)
-            })
         
-        }
-        else 
+        if (stateToggle)
         {
-            console.log("false =  " , isToggled)
-
-            axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
-
-                console.log("Response false Data ={", res.data.message , "}")
-
-            }   ).catch((err)=>{ 
-                    setIsToggled(true)
-            } )
+            setclosepop(true)
+            setQrCode(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=generate")
         }
+        else
+        {
+            setclosepop(false)
+            console.log("false =  " , isToggled)
+            axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
+                
+                setIsToggled(false)
+                
+            }).catch((err)=>{})
+        }
+        
+        // console.log("1-OnToggle =  " , isToggled)
+        // if (stateToggle) 
+        // {
+        //     console.log("true =  " , isToggled)
+        //     axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" , "",{withCredentials: true}).then((res)=>{
+        //         // console.log("Response true Data ={", res.data , "}")
 
-        // setColor("#f29408");
-        // if (!loading)
-        //     setLoading(!loading);
+        //         if (res.data === "2fa is already enabled")
+        //         {
+        //             setIsToggled(false)
+        //             setQrCode("ALREADY ENABLED")
+        //             console.log("ALREADY BROKEN")
+        //         }
+        //         else
+        //         {
+        //             setIsToggled(true)
+            // }   
+
+        // }).catch((err)=>{
+        //         setIsToggled(false)
+        // })
+        
+        // }
+        // else 
+        // {
+       
+        // }
     }
     
+    const setEnable = () => {        
+        setclosepop(false)
+        setopenpass(true)    
+    }
+
     const submitpass = ()=> {
+
         setopenpass(false)
         setclosepop(false)
-        setIsToggled(true)
-
         console.log("__PIN  = ", values)
         let pass  = "";
-
         for (let i = 0; i < values.length; i++) 
         {
             if (values[i] === ',')
@@ -167,34 +183,32 @@ export default function Setting() {
                 pass += values[i];
         } 
         // console.log("_FILTRED_PIN  = ", pass)
-
+        // axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" ,   {withCredentials: true}).then((res)=>{
         axios.get(process.env.REACT_APP_BACKEND_URL+ "/2fa/verifie?code=" + pass ,   {withCredentials: true}).then((res)=>{
             console.log("__verifie__Data__: ", res.data )
+            
             if (res.data) 
             {
+                console.log("ALREADY BROKEN")
+                setQrCode("ALREADY ENABLED")
                 setclosepop(false)
                 setIsToggled(true)
             }
             else
             {
                 axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
-
                     console.log("Response false Data ={", res.data.message , "}")
-    
+                    setIsToggled(false)
                 }   ).catch((err)=>{ 
                         // setIsToggled(true)
                 } )
-                setclosepop(false)
-                setIsToggled(false)
-                window.location.reload()
             }
-
+            
         }).catch((err)=>{
-            setclosepop(false)
             setIsToggled(false)
-            window.location.reload()
         })
-        console.log("FUCKING PIN IS ", values)
+        window.location.reload()
+        // console.log("FUCKING PIN IS ", values)
     }
 
     const submitHandler = () => {
@@ -218,20 +232,8 @@ export default function Setting() {
         }   ).catch((err)=>{ 
             wait(2000).then(() => {
             setColor("#ff000d");})
-
             console.log(err)
         })
-
-        // axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=" + isToggled , "",{withCredentials: true}).then((res)=>{
-        //     wait(2000).then(() => {
-        //         setLoading(false); })
-
-        // }   ).catch((err)=>{ 
-        //     wait(2000).then(() => {
-        //     setColor("#ff000d");})
-
-        //     console.log(err)
-        // } )
 
         console.log("submit handler /{" + name+"}")
     };
@@ -266,7 +268,7 @@ export default function Setting() {
                         </ToggleSwitchStyle>
 
                         {
-                            isToggled && closepop &&
+                             closepop &&
                             <div className='PoppUp'>
 
                                 <Deny onClick={setClosePop}  className='CloseTab'/>
@@ -305,7 +307,7 @@ export default function Setting() {
                                 </div>
                                 <Line></Line>
                                 <div className='Buttons' >
-                                    <button id="cancel" onClick={setClosePop} > 
+                                    <button id="cancel" onClick={setCancel} > 
                                         <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="40" height="35"></img>
                                         Disable 2FA 
                                      </button>
@@ -336,16 +338,16 @@ export default function Setting() {
                                         size='lg'
                                         // onChange={(value, index, values) => setValues(values)}
                                         onChange={(value, index, values) => setValues(values)}
-                                        // onComplete={(values) => submitpass(values)}
+                                        onComplete={(values) => submitpass()}
                                     />
                                 </div>
                                 
                                 <Line></Line>
 
                                 <div className='Buttons' >
-                                    <button id="next"  onClick={submitpass} > 
+                                    <button id="submit"  onClick={submitpass} > 
                                         <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="40" height="40"></img>
-                                        Next 
+                                        submit
                                     </button>
                                     
                                     {/* <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img>
@@ -401,10 +403,10 @@ const Row = styled.div`
         }
         .CloseTab{
             position: absolute;
-            width:  23px;
-            height: 23px;
-            top:    18px;
-            right:  10px;
+            width:  35px;
+            height: 35px;
+            top:    13px;
+            right:  13px;
             &:hover {
                 cursor: pointer;
                 fill: #665a5a5f;
@@ -562,10 +564,10 @@ const Row = styled.div`
         }
         .CloseTab{
             position: absolute;
-            width:  25px;
-            height: 25px;
-            top:    18px;
-            right:  10px;
+            width:  35px;
+            height: 35px;
+            top:    13px;
+            right:  13px;
             &:hover {
                 cursor: pointer;
                 fill: #665a5a5f;
@@ -585,19 +587,27 @@ const Row = styled.div`
         }
      
         .Buttons{
+            /* background-color: #c88989; */
             width: 100%;
-            height: 100px;
+            height: 50px;
             flex-direction: row;
             align-items: center;
+            justify-content: center;
+            display: flex;
+            gap: 20px;
 
-            #next {
-                margin: 0px 20px;
+            #submit {
+                margin: 0px 0px;
                 background-color: #1d5eac;
-                width: 20%;
+                width: 25%;
                 height: 50px;
                 border-radius: 20px;
-                font-size: 20px;
+                font-size: 25px;
                 font-weight: 600;
+                display: flex;
+                justify-content: center;
+                text-align: center;
+                align-items: center;
             }
         }
         .passwordo {

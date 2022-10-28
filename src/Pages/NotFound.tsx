@@ -8,12 +8,26 @@ export default function NotFound() {
                 {/* <body> */}
 
                 <div className="video">
-                    
+                    asdfasfa
                     <video autoPlay loop muted width="80%" height="100%">
                         <source src="https://i.gifer.com/PgbQ.mp4" type="video/mp4" />
                     </video>
                     
                 </div>
+              
+
+
+            </StyledTwoFa>
+    }
+export  function TwoFa() {
+    return <StyledTwoFa>
+     
+
+                {/* <body> */}
+
+               <>
+               asdasd
+               </>
               
 
 

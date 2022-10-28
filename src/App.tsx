@@ -25,7 +25,7 @@ import ProtectedLayout from './components/protected/ProtectedLayout';
 import Profile from './Pages/Profile';
 import Chat from './components/chat/Chat';
 import Game from './Pages/Game';
-import TwoFa from './Pages/NotFound';
+import {TwoFa} from './Pages/NotFound';
 import axios from 'axios';
 import Setting from './Pages/Setting';
 import Leader from './Pages/Leader';
@@ -227,6 +227,9 @@ function handelChallengeAccept (payload) {
           const pageName = window.location.pathname.split("/")[1];
           if (pageName != "2fa")
             navigate('/signin')
+          else
+            navigate('/2fa')
+        
 
       })
 

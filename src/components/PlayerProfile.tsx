@@ -387,6 +387,7 @@ background-color: ${props => props.theme.colors.seconderybg};
 
           console.log("> createdTime : ", createdTime)
           console.log("> grade : ", grade, "\n")
+        console.log(  "> Relation <" , relationStatus, "> \n")
 
         }).catch((err)=>{   
         })
