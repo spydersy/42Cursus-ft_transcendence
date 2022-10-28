@@ -16,6 +16,7 @@ import {
   useNavigate
 } from "react-router-dom";
 import SignIn from './Pages/SignIn';
+import NotFound from './Pages/NotFound';
 import Home from './Pages/Home';
 import Upperbar from './components/Upperbar';
 import Sidebar from './components/Sidebar';
@@ -24,7 +25,7 @@ import ProtectedLayout from './components/protected/ProtectedLayout';
 import Profile from './Pages/Profile';
 import Chat from './components/chat/Chat';
 import Game from './Pages/Game';
-import TwoFa from './Pages/TwoFa';
+import TwoFa from './Pages/NotFound';
 import axios from 'axios';
 import Setting from './Pages/Setting';
 import Leader from './Pages/Leader';
@@ -217,13 +218,14 @@ function handelChallengeAccept (payload) {
       joinChannels()
       socket.emit("AddOnlineUser")
 
-      
+
 
 
 
     }).catch((err)=>{
-          console.log(err)
+          console.log(err.message)
           navigate('/signin')
+          
       })
 
 
@@ -247,13 +249,14 @@ function handelChallengeAccept (payload) {
               <Route path="/game" element={<Game theme={gametheme}  />} />
               <Route path="/chat/:id" element={<Chat />} />
               <Route path="/setting" element={<Setting />} />
-              <Route path="/2fa" element={<TwoFa />} />
               <Route path="/testing" element={<SocketTesting />} />
               <Route path="/rooms" element={<Room />} />
               <Route path="/leaderboard" element={<Leader />} />
               <Route path="/" element={<Home settheme={(e: any)=> setGametheme(e)} />} />
               <Route path="/profile/:id" element={<Profile  />} />
               <Route path="/socketTest" element={<SocketTesting />} />
+              <Route path="/2fa" element={<TwoFa />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
 
 
