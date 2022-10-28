@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SocketContext,  SocketValue } from '../context/Socket';
 
-interface UserProp { defaultAvatar: string, login : string  }
+interface UserProp { defaultAvatar: string, login : string , dmChannel : string,  }
 export interface UserInvitCardProps { data: UserProp , friends : UserProp[], setfriends : (e : any)=>void }
 export interface StyleProps {  status: string; }
 
@@ -103,32 +103,11 @@ const TabfourStyle= styled.div`
 export  function UserInvitCard(props : UserInvitCardProps) {
     const socket = useContext(SocketContext)
 
-const    accepteFriendNotify = () => toast.success("You accepted " +  props.data.login.toLocaleUpperCase() + " Friend Request", {
-    position: "bottom-center",
-    autoClose: 2000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored"
-    });
-const    DeclineFriendNotify = () => toast.warning("You declined " +  props.data.login.toLocaleUpperCase() + " Friend Request", {
-    position: "bottom-center",
-    autoClose: 2000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored"
-    });
-
 const accepteFriend = ()=>{
     axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=accept",  {withCredentials: true} 
             ).then((res)=>{
                 console.log(res)
-                socket.emit('joinRoom', [])
+                socket.emit('joinRoom', [props.data.dmChannel])
                 var s  = props.friends.indexOf(props.data)
                 var l = props.friends
                 l.splice(s , 1)
@@ -136,24 +115,16 @@ const accepteFriend = ()=>{
         // alert("User Request Accepted" + res.status) 
     
     }).catch((err)=>{  })
-        // window.location.reload();
+   
 }
 const DenyFriend = ()=>{
     axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=decline",  {withCredentials: true} 
             ).then((res)=>{
     
-        // alert("User Request Deny" + res.status) 
-        DeclineFriendNotify()
-    
     }).catch((err)=>{  })
-        // window.location.reload();
+
 
 }
-
-useEffect(() => {
-    // console.log(props.data)
-
-    })
 
 return (
     <UserInvitCardStyle >

@@ -38,6 +38,7 @@ export default function SignIn() {
 
 
             <div className='wrow'>
+               
 
                <a className='urow' href="https://github.com/spydersy">
                   <img className='avatar' src={abelarif}  />
@@ -69,7 +70,6 @@ export default function SignIn() {
                      <img className='avatarr' src={Zero}></img>
                      <a > @Alchemist </a>  
                </a>
-               
             </div>
 
            

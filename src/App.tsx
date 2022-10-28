@@ -224,8 +224,10 @@ function handelChallengeAccept (payload) {
 
     }).catch((err)=>{
           console.log(err.message)
-          navigate('/signin')
-          
+          const pageName = window.location.pathname.split("/")[1];
+          if (pageName != "2fa")
+            navigate('/signin')
+
       })
 
 
