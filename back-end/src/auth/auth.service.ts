@@ -88,14 +88,19 @@ export class AuthService {
             if (await this.userService.FindUserById(UserDto.Id) === false) {
                 this.userService.AddUserToDB(UserDto);
             }
+            const userDB = await this.userService.GetUserByLogin(UserDto.Login);
+            console.log("__USERDB__DBG__ : ", userDB);
             let JWT = await this.GenerateJWT(UserDto);
-            if (UserDto.TwoFactorAuth === true) {
+            if (userDB.twoFactorAuth === true) {
+                console.log("++++++++++++++");
                 res.
                 set({
                     'Access-Control-Allow-Credentials': true,
                     'Access-Control-Allow-Origin': this.configService.get<string>('FRONTEND_URL'),
                     'Access-Control-Allow-Headers': this.configService.get<string>('FRONTEND_URL')
-                }).redirect(this.configService.get<string>('FRONTEND_2FA_URL'));
+                })
+                .cookie('2FA_PUBLICKEY', "PUBLIC KEY EXPECTED", {httpOnly: true})
+                .redirect(this.configService.get<string>('FRONTEND_2FA_URL'));
                 // Do something ...
             }
             return res
