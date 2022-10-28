@@ -28,7 +28,7 @@ export default function Setting() {
     const [closepop, setclosepop] = useState(false)
     const [openpass, setopenpass] = useState(false)
     const [QrCode, setQrCode] = useState("")
-    const [values, setValues] = useState(['', '', '','','','','','']);
+    const [values, setValues] = useState(['', '', '','','','']);
 
     useEffect(() => {
 
@@ -96,101 +96,104 @@ export default function Setting() {
         setopenpass(false)
     }
 
-    const onToggle = ()=> {
-       
-        console.log("1-OnToggle =  " , isToggled)
-
-        if (isToggled == false) 
-        {
-            setIsToggled(true)
-            setclosepop(true)
-        
-            axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" , "",{withCredentials: true}).then((res)=>{
-
-                if (res)
-                {
-                    // console.log("__DATA__", res.data.lenght ,"__ " , res.data , "}")
-                    console.log("__DATA__\n", res)
-                    
-                    var base64Flag = 'data:image/png;base64,';
-                    // var imageStr = window.btoa(res.data);
-                    setQrCode(res.data)
-                    // CONVERT BINARY TO BASE64
-
-
-                    // console.log("__res.data__\n", base64Flag + res.data)
-                    // console.log("__flag__\n", base64Flag)
-                    // console.log("__imageStr__\n", imageStr)
-                    // console.log("____BUFFER____")
-                    // console.log(Buffer.from(res.data).toString('base64'))
-                    // console.log("____BUFFER____")
-
-
-                    // let imageStr = res.data.toString('base64);
-                    // $("img").attr("src","data:image/;base64,"+ res.data);
-                    
-                    // let   img = base64Flag + imageStr
-                    // 
-                    // setImg(QrCode);
-                    // setQrCode(img)
-                    
-                    // console.log("__DATA__\n", QrCode)
-
-
-
-                    // const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-
-                    // let base64 = Buffer.from(res.data, "binary").toString("base64");
-    
-                    // // create image src
-                    // let image = `data:${res.headers["content-type"]};base64,${base64}`;
-
-
-
-                    // let blob = new Blob( [res.data], { type: res.headers['content-type'] } )
-                    // let image = window.URL.createObjectURL(blob)
-
-                    // setQrCode(image)
-                    // console.log("__Image__", image, "}")
-                }
-                else 
-                    console.log("ALREADY BROKEN")
-
-            }   ).catch((err)=>{ 
-                // setIsToggled(false)
-                // console.log(err)
-            } )
-        
-        }
-        // else 
-        // {
-        //     axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
-
-        //         setIsToggled(false)
-        //         console.log("Response Data ={", res.data.message , "}")
-
-        //     }   ).catch((err)=>{ 
-
-        //         setIsToggled(true)
-        //         // console.log(err)
-        //     } )
-        // }
-
-        setColor("#f29408");
-        if (!loading)
-            setLoading(!loading);
+    const setEnable = () => {
+        setclosepop(false)
+        setIsToggled(true)
+        setopenpass(true)    
     }
 
-    const setEnable = ()=> {
-        // setclosepop(false)
-        setIsToggled(true)
-        setopenpass(true)
+    const onToggle = ()=> {
+
+        const stateToggle = !isToggled
+        setIsToggled(!isToggled)
+        // console.log("1-OnToggle =  " , isToggled)
+
+        if (stateToggle) 
+        {
+            // console.log("true =  " , isToggled)
+            axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" , "",{withCredentials: true}).then((res)=>{
+                // console.log("Response true Data ={", res.data , "}")
+
+                if (res.data === "2fa is already enabled")
+                {
+                    console.log("ALREADY BROKEN")
+                    setQrCode("ALREADY ENABLED")
+                }
+                else
+                {
+                    setQrCode(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=generate")
+                    setclosepop(true)
+                }   
+
+            }).catch((err)=>{
+                setIsToggled(false)
+            })
+        
+        }
+        else 
+        {
+            console.log("false =  " , isToggled)
+
+            axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
+
+                console.log("Response false Data ={", res.data.message , "}")
+
+            }   ).catch((err)=>{ 
+                    setIsToggled(true)
+            } )
+        }
+
+        // setColor("#f29408");
+        // if (!loading)
+        //     setLoading(!loading);
     }
     
     const submitpass = (props: string[])=> {
         setopenpass(false)
         setclosepop(false)
         setIsToggled(true)
+
+        console.log("__PIN  = ", props)
+        
+        let pass  = "";
+
+        for (let i = 0; i < props.length; i++) 
+        {
+            if (props[i] === ',')
+                i++;
+            else
+                pass += props[i];
+        } 
+
+        // console.log("_FILTRED_PIN  = ", pass)
+
+        axios.get(process.env.REACT_APP_BACKEND_URL+ "/2fa/verifie?code=" + pass ,   {withCredentials: true}).then((res)=>{
+            console.log("__verifie__Data__: ", res.data )
+            if (res.data) 
+            {
+                setclosepop(false)
+                setIsToggled(true)
+            }
+            else
+            {
+                
+                axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
+
+                    console.log("Response false Data ={", res.data.message , "}")
+    
+                }   ).catch((err)=>{ 
+                        // setIsToggled(true)
+                } )
+                setclosepop(false)
+                setIsToggled(false)
+
+            }
+
+        }).catch((err)=>{
+                setclosepop(false)
+                setIsToggled(false)
+        })
+
         console.log("FUCKING PIN IS ", props)
     }
 
@@ -233,7 +236,6 @@ export default function Setting() {
         console.log("submit handler /{" + name+"}")
     };
 
-
     return (
         <SettingsStyle  className='container'  >
 
@@ -264,9 +266,7 @@ export default function Setting() {
                         </ToggleSwitchStyle>
 
                         {
-                            // isToggled && 
                             isToggled && closepop &&
-                            // false &&
                             <div className='PoppUp'>
 
                                 <Deny onClick={setClosePop}  className='CloseTab'/>
@@ -282,30 +282,45 @@ export default function Setting() {
                                         Configuration via a third-party authentication system    
                                         </div>
                                         <div className='D_texto' >
-                                        Use your authentication application (such as Duo or Google Authenticator) to scan this QR code.
+                                        - Use your authentication application (such as Duo or Google Authenticator) to Configure it as a third party.
+                                        </div>
+                                        
+                                        <div className='D_texto' >
+                                            - Steps to configure your authentication application:<br/>
+                                            1- Scan The Qr code.  <br/>
+                                            2- Click Done.  <br/>
+                                            3- Logout and Enter the Pin Generated by the app. <br/>
+                                            4- Enjoy Dear User. <br/>
                                         </div>
 
                                     </div>
                                 </div>
 
                                 <Line></Line>
-                                {/* <img id="borderimg1" src={QrCode} ></img> */}
                                 
-                                <img id="borderimg1" src={`data:image/png;base64,${QrCode}`} alt="qr code" />
+                                <img id="borderimg1" src={QrCode} alt="qr code" />
 
-                                <div className="Bastard" >Scan Me Bastard</div>
+                                <div className="Bastard" >
+                                    Scan Me 
+                                </div>
                                 <Line></Line>
                                 <div className='Buttons' >
-                                    {/* <button id="cancel" onClick={setClosePop} > Disable 2FA  </button>
-                                    <button id="next"  onClick={setEnable} > Next </button> */}
+                                    <button id="cancel" onClick={setClosePop} > 
+                                        <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="40" height="35"></img>
+                                        Disable 2FA 
+                                     </button>
+
+                                    <button id="next"  onClick={setEnable} > 
+                                        <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="40" height="40"></img>
+                                        Next 
+                                        </button>
                                 </div>
 
                             </div>
                         }
 
                         {
-                            // openpass &&
-                            false && 
+                            openpass &&
                             <div className='PoppUpp'>
                                <Deny onClick={setClosePop}  className='CloseTab'/>
                                 
@@ -329,7 +344,15 @@ export default function Setting() {
                                 <Line></Line>
 
                                 <div className='Buttons' >
-                                {/* <button id="next"  onClick={setEnable} > Next </button> */}
+                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img>
+                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="50" height="50"></img>
+                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img>
+                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="50" height="50"></img>
+                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img>
+                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="50" height="50"></img>
+                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img>
+                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="50" height="50"></img>
+                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img>
                                 </div>
                             </div>
 
@@ -354,7 +377,7 @@ const Row = styled.div`
     .PoppUp{
 
         width: 50%;
-        height: 700px;
+        /* height: 700px; */
         background-color: ${props => props.theme.colors.seconderybg};
         border: 2px solid  ${props => props.theme.colors.purple};
         color: #dacece5f ;
@@ -452,16 +475,32 @@ const Row = styled.div`
                 width: 20%;
                 height: 50px;
                 border-radius: 20px;
-                font-size: 20px;
+                font-size: 25px;
                 font-weight: 600;
+
+                display: flex;
+                justify-content: center;
+                bottom: 0px;
+                text-align: center;
+                align-items: center;
+
+
+
             }
             #cancel{
                 background-color: #b0a7a7;
-                margin: 0px 20px;
-                width: 20%;
+                margin: 20px 0px;
+                width: 30%;
+                align-items: center;
                 height: 50px;
+                text-align: center;
+                bottom: 0px;
+                display: flex;
+                justify-content: center;
+
+                /* height: 50px; */
                 border-radius: 20px;
-                font-size: 20px;
+                font-size: 25px;
                 font-weight: 600;
             }
         }
