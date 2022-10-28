@@ -115,8 +115,6 @@ export class ProfileService {
 
         if (status === 'true') {
             if (user.twoFactorAuth === false) {
-                // const _2faData = await this.tfaService.generateTwoFactorAuthenticationSecret(me, user.login);
-                // console.log("__TFA__DATA__ : ", _2faData);
                 await this.prisma.users.update({
                     where: { id: me},
                     data: { twoFactorAuth: true},

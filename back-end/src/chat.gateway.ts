@@ -18,15 +18,15 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
       credentials: true,
     },
     namespace: 'chat'
-    
+
  })   // @WebSocketGateway decorator gives us access to the socket.io functionality.
 
- /*We also implement three interfaces OnGatewayInit, OnGatewayConnection 
+ /*We also implement three interfaces OnGatewayInit, OnGatewayConnection
  and OnGatewayDisconnect which we use to log some key states of our application*/
  export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   constructor(private chatService: ChatService) {}
    // we created a member variable called server which is decorated with @WebsocketServer() which gives us access to the websockets server instance.
-  @WebSocketServer() server: Server; 
+  @WebSocketServer() server: Server;
 
   private logger: Logger = new Logger('ChatGateway');
 //The handleMessage() function is also decorated with @SubscribeMessage() which makes it listen to an event named msgToServer.
@@ -49,21 +49,8 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
       // this.server.to(payload.channelId).emit('event', ret.payload);
       client.to(payload.channelId).emit('msg_event', ret.payload);
     }
-    // this.server.emit('chatToClient', payload);
-    // console.log("__CLIENT__DBG__  : ", client);
-    // this.chatService.SendMessage();
-    // post to db;
-    //We make use of the instance in our handleMessage() function where we send data to all clients connected to the server using the emit() function   
-    // axios.post("http://localhost:8000/chat/sendMessage" ,{ "content" : payload.content,
-    //   'channelId' : payload.channelId + ""
-    // }, 
-    //   {withCredentials: true} 
-    // ).then((res)=>{
-    //   console.log(res.data)
-    // }).catch((err)=>{
-    //   console.log(err)
-    //   })
   }
+
   @UseGuards(WsGuard)
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket, rooms: Array<string>): void {
@@ -71,7 +58,7 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
     for(var index in rooms)
     {
 
-      console.log(rooms[index])
+      console.log("__ROOM__DBG__ : ", rooms[index])
       client.join(rooms[index]);
     }
   //  client.emit('joinedRoom', room );
@@ -89,7 +76,7 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
     client.leave(payload.reciver)
     // client.to(payload[0]).emit('challeneEvent', payload[1]);
   }
-  
+
   // @SubscribeMessage('connection')
   // handleCon() {
   //   console.log('connected');
@@ -103,6 +90,17 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
     client.leave(payload.reciever)
   }
 
+
+
+  @SubscribeMessage('authEvent')
+  handleAuthEvent(client: Socket, payload: string): void {
+    console.log('___here___', payload)
+    // function to store new stat => ret
+    // if (ret === true) {
+    // emit(friends, online);
+    //}
+  }
+
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: Socket, room: string): void {
     console.log("__CLIENT__LEAVE__ROOM__DBG__ : ", room);
@@ -113,11 +111,11 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
   afterInit(server: Server) {
    this.logger.log('Init');
   }
- 
+
   handleDisconnect(client: Socket) {
    this.logger.log(`Client disconnected: ${client.id}`);
   }
- 
+
   handleConnection(client: Socket, ...args: any[]) {
    this.logger.log(`Client connected: ${client.id}`);
   }
