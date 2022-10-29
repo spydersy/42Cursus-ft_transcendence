@@ -60,11 +60,14 @@ export class GameService {
        return null
    }
 
-   async storeGame(player1: number, player2: number, score1: number, score2: number, mode: MODE) {
+   async saveGame(player1: string, player2: string, score1: number, score2: number, mode: MODE) {
+        const player1Dto = await this.prisma.users.findUnique({ where: { login: player1}});
+        const player2Dto = await this.prisma.users.findUnique({ where: { login: player2}});
+
         await this.prisma.matchHistory.create({
             data: {
-                player1Id: player1,
-                player2Id: player2,
+                player1Id: player1Dto.id,
+                player2Id: player2Dto.id,
                 score1: score1,
                 score2: score2,
                 mode: mode,
