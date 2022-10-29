@@ -113,16 +113,20 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     else
     {
       roomName = this.roomArray[roomslenght - 1].roomName
-      if (this.roomArray[roomslenght - 1].roomPlayers.length  < 2)
+      if ( this.roomArray[roomslenght - 1].status  === "waiting")
       {
-          this.roomArray[roomslenght - 1].joinPlayer(login , client.id)
-      }
-      else
-      {
-        let myuuid = uuidv4();
-        const  newRoom = new GameService(myuuid)
-        newRoom.joinPlayer(login , client.id)
-        this.roomArray.push(newRoom)
+        if (this.roomArray[roomslenght - 1].roomPlayers.length  < 2)
+        {
+            this.roomArray[roomslenght - 1].joinPlayer(login , client.id)
+        }
+        else
+        {
+          let myuuid = uuidv4();
+          const  newRoom = new GameService(myuuid)
+          newRoom.joinPlayer(login , client.id)
+          this.roomArray.push(newRoom)
+        }
+
       }
     }
     var roomName = this.roomArray[this.roomArray.length - 1].roomName
@@ -155,10 +159,13 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
     this.logger.log("client is disconnected")
     var room = this.getRoombyPlayerId(client.id)
-    console.log("__ROOM__DBG__ : ", room);
-    this.wss.to(room.roomName).emit("endGame" , room)
-    this.RemovePlayer(client , payload)
-    this.wss.emit("change" ,  this.roomArray)
+    if (room)
+    {
+      console.log("__ROOM__DBG__ : ", room);
+      this.wss.to(room.roomName).emit("endGame" , room)
+      this.RemovePlayer(client , payload)
+      this.wss.emit("change" ,  this.roomArray)
+    }
 
     for (let index = 0; index < this.roomArray.length; index++) {
       this.roomArray[index].debug();
@@ -285,8 +292,15 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     {
       var i = this.roomArray.indexOf(room)
       this.hitWalls(i, this.roomArray[i].ball ,this.roomArray[i].direction , payload.w, payload.h ,payload.p1 , payload.p2 )
-      this.roomArray[i].ball.x += this.roomArray[i].direction.x
+      this.roomArray[i].predict =  (this.roomArray[i].paddel2.x -  this.roomArray[i].ball.x) / this.roomArray[i].direction.x
+       this.roomArray[i].ball.x += this.roomArray[i].direction.x
       this.roomArray[i].ball.y += this.roomArray[i].direction.y
+
+      if(room.status === "AiGame")
+      {
+
+          this.moveAI( this.roomArray[i])
+      }
       this.wss.to(room.roomName).emit("moveBallClient" , {x: this.roomArray[i].ball.x , y: this.roomArray[i].ball.y})
     }
 
@@ -294,6 +308,20 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 
+
+  @SubscribeMessage('PlayAi')
+  playAi(client: any, payload: any): void {
+    console.log("____DBG___SALAM")
+    let myuuid = uuidv4();
+
+    var newRoom = new GameService(myuuid)
+    newRoom.status = "AiGame"
+    newRoom.joinPlayer(payload , client.id)
+    client.join(newRoom.roomName)
+    this.roomArray.push(newRoom)
+    this.wss.to(newRoom.roomName).emit("Aistart" , {player1 : payload , player2: "drVege"})
+    
+  }
    hitWalls = (i : number,ballCord : any ,direction: any , width , height  ,paddel1 : any , paddel2 : any, )=>{
 
 
@@ -345,4 +373,41 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
 }
 
+moveAI(room : any )
+ {
+  var i = this.roomArray.indexOf(room)
+   const h =  100;
+   var yp : number ;
+   var yb : number ;
+   yp =  room.paddel2.y;
+   yb =  room.ball.y + room.direction.y;
+   var PreditctY : number =  yb +( room.direction.y * room.predict) -( h / 2);
+   var TableH : number =   700;
+
+       if (PreditctY > 0 && PreditctY < TableH)
+       { 
+         if (PreditctY >  yb && PreditctY < yb  + h)
+           return ;
+         else if (yp  > PreditctY)
+            this.roomArray[i].paddel2.y = yp - 10
+         else if (yp + (h / 2) < PreditctY)
+            this.roomArray[i].paddel2.y = yp + 10
+      
+       }
+       else if (PreditctY < TableH + (TableH / 2)  &&  PreditctY > TableH)
+       {
+           if (yp  + h < TableH)
+            this.roomArray[i].paddel2.y = yp + 10
+
+
+       }
+       else if (PreditctY < 0  &&  PreditctY > - (TableH / 2))
+       {
+           if (yp  > 0)
+            this.roomArray[i].paddel2.y = yp - 10
+
+       }
+            this.roomArray[i].paddel2.y = yp + 10
+       this.wss.to(room.roomName).emit("player2moved" , this.roomArray[i].paddel2.y)
+ }
 }

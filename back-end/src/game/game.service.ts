@@ -13,8 +13,10 @@ export class GameService {
     roomName: string;
     score: {score1 : number , score2 : number};
     ball : {size : number,x : number , y  : number} 
+    paddel2 : {x : number , y  : number} 
     direction : {x : number , y  : number} 
     status : string
+    predict : number
     // score: {score1 : number , score2 : number};
    
    
@@ -26,6 +28,8 @@ export class GameService {
        this.ball = {size : 20 , x :  500 , y :350}
        this.direction = { x :  3 , y :3}
        this.status  = "waiting";
+       this.paddel2 = {x : 0 , y : 0}
+       this.predict = 0;
    }
    joinPlayer(login : string , id : string)
    {
