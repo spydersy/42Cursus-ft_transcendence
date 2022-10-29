@@ -62,15 +62,15 @@ export class ProfileController {
     if (status === undefined || status !== 'generate') {
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Request'});
     }
-    return this.profileService.Update2FA(req.user.userId, status, res);
+    return this.profileService.Update2FA(req.user.userId, status, undefined, res);
   }
 
   @Post('update2FA')
-  async Update2FA(@Req() req, @Query('status') status, @Res() res) {
+  async Update2FA(@Req() req, @Query('status') status, @Query('code') code, @Res() res) {
     if (status === undefined || !(status === 'true' || status === 'false')) {
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Request'});
     }
-    return this.profileService.Update2FA(req.user.userId, status, res);
+    return this.profileService.Update2FA(req.user.userId, status, code, res);
   }
 
   @Put("updateUsername/:newname")

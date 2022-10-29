@@ -111,31 +111,33 @@ export class ProfileService {
                     .send({'message': 'done'});
     }
 
-    async Update2FA(me: number, status: string, @Res() res) {
+    async Update2FA(me: number, status: string, code: string, @Res() res) {
         let user = await this.userService.GetUserById(me);
 
-        if (status === 'true') {
-            if (user.twoFactorAuth === false) {
-                await this.prisma.users.update({
-                    where: { id: me},
-                    data: { twoFactorAuth: true},
-                });
-                return res.status(HttpStatus.OK).send({'message': '2FA enabeled'});
+        if (status === 'true' && code !== undefined) {
+            if (user.twoFactorAuth === false && user.twoFactorAuthSecret !== null) {
+                if (await this.tfaService.TFAVerification(me, code) === true) {
+                    await this.prisma.users.update({
+                        where: { id: me},
+                        data: { twoFactorAuth: true},
+                    });
+                    return res.status(HttpStatus.OK).send({'message': '2FA enabeled'});
+                }
+                else
+                    return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Unvalid Code'});
             }
             else
-                return res.status(HttpStatus.OK).send({'message': '2FA Already enabeled'});
+                return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Request'});
         }
         else if (status === 'generate') {
-            const _2faData = await this.tfaService.generateTwoFactorAuthenticationSecret(me, user.login);
-            console.log("__TFA__DATA__ : ", _2faData);
             const usertfa = await this.prisma.users.findUnique({
                 where: { id: me },
             });
-            if (user.twoFactorAuth === true) {
+            if (user.twoFactorAuth === false) {
+                const _2faData = await this.tfaService.generateTwoFactorAuthenticationSecret(me, user.login);
                 await this.prisma.users.update({
                     where: { id: me },
                     data: {
-                        // twoFactorAuth: true ,
                         twoFactorAuthSecret: _2faData.secret
                     },
                 });

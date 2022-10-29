@@ -25,13 +25,13 @@ export class TfaService {
         return { secret, otpauthUrl };
     }
 
-    async TFAVerification(me: number, userSecret: string, @Res() res) {
+    async TFAVerification(me: number, userSecret: string) {
         const user = await this.prisma.users.findUnique({
             where: {id: me}
         });
-        return res.send(authenticator.verify({
+        return authenticator.verify({
             token: userSecret,
             secret: user.twoFactorAuthSecret
-        }));
+        });
     }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Res } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { throws } from 'assert';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -35,6 +35,13 @@ export class GameService {
        this.predict = 0;
 
    }
+
+   async GetMatchHistory(me: number, param: string, @Res() res) {
+        // if (param === 'all') {
+        //     t
+        // }
+   }
+
    joinPlayer(login : string , id : string)
    {
     if ( this.roomPlayers.length < 2)

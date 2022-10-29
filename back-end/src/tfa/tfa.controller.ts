@@ -15,8 +15,8 @@ export class TfaController {
     return this.tfaService.pipeQrCodeStream(response, otpauthUrl);
     }
 
-    @Get('verifie')
+    @Get('validate')
     async TFAVerification(@Req() req, @Query() query, @Res() res) {
-      return this.tfaService.TFAVerification(req.user.userId, query['code'], res);
+      return this.tfaService.TFAVerification(req.user.userId, query['code']);
     }
 }
