@@ -26,15 +26,16 @@ export class VersionHeaderInterceptor implements NestInterceptor {
 }
 async function initDB() {
   const prisma: PrismaService = new PrismaService;
-
-  await prisma.users.create({
-    data: {
-      id: 0,
-      login: "ai_1",
-      displayName: "ai 1",
-      defaultAvatar: "https://myanimelist.tech/api/avatar?&name=ai1&animeName=One_Piece"
-    }
-  })
+  try {
+    await prisma.users.create({
+      data: {
+        id: 0,
+        login: "ai_1",
+        displayName: "ai 1",
+        defaultAvatar: "https://myanimelist.tech/api/avatar?&name=ai1&animeName=One_Piece"
+      }
+    });
+  } catch { return; }
 }
 
 async function bootstrap() {
