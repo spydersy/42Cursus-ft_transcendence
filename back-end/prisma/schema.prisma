@@ -110,22 +110,12 @@ enum MODE {
 model MatchHistory {
   id        Int       @id @default(autoincrement())
 
-  // player1   users
   player1Id Int
-
-  // player2   users
   player2Id Int
-
-  // player3   users
   player3Id Int?
-
-  // player4   users
   player4Id Int?
-
   score1    Int       @default(0)
-
   score2    Int       @default(0)
-
   mode      MODE
   date      DateTime  @default(now())
 }

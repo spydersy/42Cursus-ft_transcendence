@@ -8,6 +8,7 @@ import { RELATION } from '@prisma/client';
 import { TfaService } from 'src/tfa/tfa.service';
 import { Console } from 'console';
 import { ConfigService } from '@nestjs/config';
+import { GameService } from 'src/game/game.service';
 
 @Injectable()
 export class ProfileService {

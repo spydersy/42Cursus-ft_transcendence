@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { throws } from 'assert';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { PlayerType } from '../dtos/Outputs.dto'
-
+import { MODE } from '@prisma/client';
 
 export class GameService {
+    prisma: PrismaService
     logger: Logger = new Logger('RoomLogger')
     roomlenght: number = 0;
     id: number = 0;
@@ -12,17 +14,18 @@ export class GameService {
     roomPlayers: PlayerType[] = [];
     roomName: string;
     score: {score1 : number , score2 : number};
-    ball : {size : number,x : number , y  : number} 
-    paddel2 : {x : number , y  : number} 
-    direction : {x : number , y  : number} 
+    ball : {size : number,x : number , y  : number}
+    paddel2 : {x : number , y  : number}
+    direction : {x : number , y  : number}
     status : string
     predict : number
     // score: {score1 : number , score2 : number};
-   
-   
+
+
    constructor(roomName : string)
    {
    //   this.logger.log("client is disconnected")
+       this.prisma = new PrismaService();
        this.roomName = roomName;
        this.score = {score1 : 0 , score2 : 0}
        this.ball = {size : 20 , x :  500 , y :350}
@@ -30,6 +33,7 @@ export class GameService {
        this.status  = "waiting";
        this.paddel2 = {x : 0 , y : 0}
        this.predict = 0;
+
    }
    joinPlayer(login : string , id : string)
    {
@@ -37,7 +41,7 @@ export class GameService {
     {
         this.roomPlayers.push({login , id})
     }
-       
+
    }
 
    getPlayer(id : string)
@@ -45,7 +49,7 @@ export class GameService {
 
         //    console.log("players number : " , this.roomPlayers.length)
        for (let i = 0; i < this.roomPlayers.length; i++) {
-          
+
         //    console.log(this.roomPlayers[i].id + " " + id )
            if ( this.roomPlayers[i].id === id )
            {
@@ -55,12 +59,25 @@ export class GameService {
        }
        return null
    }
+
+   async storeGame(player1: number, player2: number, score1: number, score2: number, mode: MODE) {
+        await this.prisma.matchHistory.create({
+            data: {
+                player1Id: player1,
+                player2Id: player2,
+                score1: score1,
+                score2: score2,
+                mode: mode,
+            }
+        });
+   }
+
    changeId(id : string , login : string)
    {
 
         //    console.log("players number : " , this.roomPlayers.length)
        for (let i = 0; i < this.roomPlayers.length; i++) {
-          
+
            if ( this.roomPlayers[i].login === login )
            {
 
@@ -77,7 +94,7 @@ export class GameService {
        for (let i = 0; i < this.roomPlayers.length; i++) {
            console.log("loop " + this.roomPlayers[i].login)
            console.log("loop " + id)
-          
+
            if ( this.roomPlayers[i].login === id )
            {
                console.log("found")
@@ -103,10 +120,10 @@ export class GameService {
        console.log("roomlenght : " +  this.roomlenght )
        console.log("roomPlayers  : {" )
        for (let index = 0; index < this.roomPlayers.length; index++) {
-           
+
            console.log("id : " +  this.roomPlayers[index].id )
            console.log("login : " +  this.roomPlayers[index].login )
-           
+
        }
        console.log("}" )
 
