@@ -3,12 +3,11 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser'
-
-// HELPER FUNCITON
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-// import { GqlExecutionContext } from '@nestjs/graphql';
 import { Response } from 'express';
 import { Observable } from 'rxjs';
+import { PrismaModule } from './prisma/prisma.module';
+import { PrismaService } from './prisma/prisma.service';
 
 @Injectable()
 export class VersionHeaderInterceptor implements NestInterceptor {
@@ -25,9 +24,23 @@ export class VersionHeaderInterceptor implements NestInterceptor {
     return next.handle();
   }
 }
+async function initDB() {
+  const prisma: PrismaService = new PrismaService;
+
+  await prisma.users.create({
+    data: {
+      id: 0,
+      login: "ai_1",
+      displayName: "ai 1",
+      defaultAvatar: "https://myanimelist.tech/api/avatar?&name=ai1&animeName=One_Piece"
+    }
+  })
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  initDB();
   app.useGlobalInterceptors(new VersionHeaderInterceptor());
   app.enableCors({
     origin: process.env.FRONTEND_URL,
