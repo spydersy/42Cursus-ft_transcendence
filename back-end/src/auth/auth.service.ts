@@ -8,7 +8,7 @@ import { Response as Res } from 'express';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class AuthService {  
+export class AuthService {
     constructor(private httpService: HttpService,
                 private userService: UserService,
                 private jwtTokenService: JwtService,
@@ -79,6 +79,19 @@ export class AuthService {
         };
     }
 
+    async firstSignin(UserDto: User, @Response() res) {
+        this.userService.AddUserToDB(UserDto);
+        const JWT = await this.GenerateJWT(UserDto);
+        res.
+        set({
+            'Access-Control-Allow-Credentials': true,
+            'Access-Control-Allow-Origin': this.configService.get<string>('FRONTEND_URL'),
+            'Access-Control-Allow-Headers': this.configService.get<string>('FRONTEND_URL')
+        })
+        .cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true})
+        .redirect(this.configService.get<string>('SETTINGS_FRONTEND_URL'));
+    }
+
     async SigninLogic(@Query() query, @Response() res: Res): Promise<any> {
         let UserDto: User;
         if (this.Check42ApiQueryCode(query) === true) {
@@ -86,13 +99,13 @@ export class AuthService {
             const UserProfile = await this.ClaimUserProfile(Token, query['code']);
             UserDto =this.userService.GenerateUserDto(UserProfile['data']);
             if (await this.userService.FindUserById(UserDto.Id) === false) {
-                this.userService.AddUserToDB(UserDto);
+                return this.firstSignin(UserDto, res);
             }
             const userDB = await this.userService.GetUserByLogin(UserDto.Login);
             console.log("__USERDB__DBG__ : ", userDB);
-            let JWT = await this.GenerateJWT(UserDto);
-            if (userDB.twoFactorAuth === true) {
-                console.log("++++++++++++++");
+            const JWT = await this.GenerateJWT(UserDto);
+            if (userDB.twoFactorAuth === true && userDB.twoFactorAuthSecret !== null) {
+                // Generate Public Key;
                 res.
                 set({
                     'Access-Control-Allow-Credentials': true,
@@ -101,11 +114,10 @@ export class AuthService {
                 })
                 .cookie('2FA_PUBLICKEY', "PUBLIC KEY EXPECTED", {httpOnly: true})
                 .redirect(this.configService.get<string>('FRONTEND_2FA_URL'));
-                // Do something ...
             }
             return res
-                    .status(HttpStatus.OK).
-                    set({
+                    .status(HttpStatus.OK)
+                    .set({
                         'Access-Control-Allow-Credentials': true,
                         'Access-Control-Allow-Origin': this.configService.get<string>('FRONTEND_URL'),
                         'Access-Control-Allow-Headers': this.configService.get<string>('FRONTEND_URL')
