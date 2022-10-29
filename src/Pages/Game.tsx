@@ -9,7 +9,10 @@ import CountDown from '../components/game/CountDown'
 import Score from '../components/game/Score'
 import { Button } from './SignIn'
 import io, { Socket } from "socket.io-client";
-
+import {
+Link
+} from "react-router-dom";
+import { AlterType } from 'tsparticles-engine'
 interface UserProp {
   id : string,
   defaultAvatar: string,
@@ -45,6 +48,12 @@ export default function Game(props : GameProps) {
     console.log(loged?.login , pyload.player1)
     setplayer(loged?.login === pyload.player1 )
  })
+  gamesocket.off("Aistart").on("Aistart" , (pyload : any)=>{
+    setUser(loged)
+    // setend(false)
+    setshow(true)
+
+ })
  gamesocket.off("endGame").on("endGame" , (payload)=>{
 
    setstart(false)
@@ -75,7 +84,7 @@ export default function Game(props : GameProps) {
   useEffect(() => {
     
     var s : string | null = localStorage.getItem('user');
-    var mode = localStorage.getItem('mode');
+    var mode = localStorage.getItem('mode') ;
     if (s)
     {
       data =  JSON.parse(s || '{}');
@@ -93,6 +102,11 @@ export default function Game(props : GameProps) {
       else if (mode === "1v1")
       {
         gamesocket.emit("start" , data?.login)
+      }
+      else if (mode === "AI")
+      {
+        gamesocket.emit("PlayAi" , data?.login)
+
       }
     }
     return () => {
@@ -188,7 +202,10 @@ export  function GameEndModal(props : {msg : boolean , socket :Socket , login? :
           props.socket.emit("playerConnect" , props.login)
           props.close()
         }} type='primary' text='playe again'/>
+        <Link to="/">
         <Button type='secondary' text="go home"/>
+        </Link>
+          
     </GameEndStyle>
   )
 }

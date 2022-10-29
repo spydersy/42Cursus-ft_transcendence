@@ -150,6 +150,8 @@ function acceptRequest (payload) {
 }
 function handelChallengeAccept (payload) {
   navigate("/game/")
+  localStorage.setItem("mode","1v1")
+
 }
   useEffect(()=>{
     // sub

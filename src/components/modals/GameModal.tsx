@@ -63,6 +63,7 @@ export default function GameModal(props: GmaemodelProps) {
     // console.log(theme)
     setgameData({...gameData, mode : props.mode })
     localStorage.setItem("gameData", JSON.stringify(gameData))
+    // localStorage.setItem("mode", props.mode)
     navigate("/game")
   }
 

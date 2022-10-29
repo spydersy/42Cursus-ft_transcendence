@@ -2,7 +2,6 @@ import React , {useState , useEffect} from 'react'
 import styled  from "styled-components"
 import SearchIcon from "../../assets/imgs/searchIcon.svg"
 
-import Img from "../../assets/imgs/avatar/a1.png";
 import { AvatarComponent } from '../PlayerProfile';
 import axios from 'axios';
 import { Button } from '../../Pages/SignIn';
