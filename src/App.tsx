@@ -58,6 +58,12 @@ const mockedItems : any = [{
   title: "Fishman Island",
   banner :Fish 
 }]
+
+interface ssss {
+  accepter: string,
+  sender: string,
+  status: boolean
+}
 interface msgType {
   channelId : string,
   content : string, 
@@ -73,14 +79,7 @@ const CustomToastWithLink = (data : msgType) => (
   </div>
 );
 
-
-
-const CustomToastCancelFriendReq = (data : any) => (
-  <div style={{width: "100%" , height : "100%"}}>
-        <CancelToast data={data}/>
-  </div>
-);
-const CustomToastAcceptFriendReq = (data : any) => (
+const CustomToastAcceptFriendReq = (data : ssss) => (
   <div style={{width: "100%" , height : "100%"}}>
         <AcceptToast data={data}/>
   </div>
@@ -130,9 +129,6 @@ function App() {
       autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: false
-
-  
-
     })
   // CHallengeNotify()
 }
@@ -156,14 +152,6 @@ function acceptRequest (payload) {
   })
 }
 
-function cancelRequest (payload) {
-  toast(CustomToastCancelFriendReq(payload) , {
-    className: "toast",
-    progressClassName: "toastProgress",
-    autoClose: 2000,
-    hideProgressBar: true,
-  })
-}
 function handelChallengeAccept (payload) {
   navigate("/game/")
   localStorage.setItem("mode","1v1")
@@ -175,7 +163,6 @@ function handelChallengeAccept (payload) {
     socket.on('challeneEvent', handleChallenge);
     socket.on('recievedRequest', handleRequest)
     socket.on('acceptedReq', acceptRequest)
-    socket.on('declineReq', cancelRequest)
     gameSocket.on('challengeAccepted', handelChallengeAccept)
     return () => {
       socket.removeListener('msg_event', hundleMsg);
@@ -183,7 +170,6 @@ function handelChallengeAccept (payload) {
       socket.removeListener('recievedRequest', handleRequest);
       socket.removeListener('challengeAccepted', handelChallengeAccept);
       socket.removeListener('acceptedReq', acceptRequest);
-      socket.removeListener('declineReq', cancelRequest)
 
     }
   })

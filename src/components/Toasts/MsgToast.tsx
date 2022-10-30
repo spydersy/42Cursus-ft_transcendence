@@ -25,6 +25,12 @@ interface msgType {
   id : number,
   senderId : number
 }
+
+interface ssss {
+  accepter: string,
+  reciever: string,
+  status: boolean
+}
 interface UserProp {
   defaultAvatar: string,
   login : string
@@ -76,7 +82,7 @@ export  function CancelToast(props: {data : string}) {
   )
 }
 
-export  function AcceptToast(props: {data : string}) {
+export  function AcceptToast(props: {data : ssss}) {
   const [User, setUser] = useState<UserProp>({
     defaultAvatar: "string",
     login : "string",
@@ -88,7 +94,7 @@ export  function AcceptToast(props: {data : string}) {
   })
 
   useEffect(() => {
-    axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data  ,  {withCredentials: true}
+    axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data.accepter  ,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked 
               console.log("> status = " , res.status)
@@ -110,10 +116,11 @@ export  function AcceptToast(props: {data : string}) {
         </div>
         <div className='data'>
             <div className=' name'>
-              {props.data}
+              {props.data.accepter}
             </div>
             <div className='msg'>
-              accepted your friend request :
+              
+              {(props.data.status)?" accepted your friend request :":" canceled your friend request :"}
             </div>
         </div>
     </ToastStyle>
@@ -268,26 +275,26 @@ export  function FriendRequestToast(props: {data : any}) {
     wins : 0,
     losses : 0,
   })
-  const declineFriendReq = ()=> {
-    socket.emit('declineFriendRequest', {accepter: userData?.login, reciever: User?.login} )
-  }
-  const acceptFriendReq = ()=> {
+  const acceptFriendReq = (k: boolean)=> {
 
-    // alert(userData?.login)
- 
+    console.log('yyyyyyy:',userData)
+    if (k)
+    {
+
       axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+  User?.login + "?event=accept",  {withCredentials: true} 
       ).then((res)=>{
-          console.log(res)
-          socket.emit('joinRoom', [])
-          // var s  = props.friends.indexOf(props.data)
-          // var l = props.friends
-          // l.splice(s , 1)
-          // props.setfriends([...l])
-  // alert("User Request Accepted" + res.status) 
-  
-  }).catch((err)=>{  })
-    
-    socket.emit('acceptFriendRequest', {accepter: userData?.login, reciever: User?.login} )
+        console.log(res)
+        socket.emit('joinRoom', [])
+        // var s  = props.friends.indexOf(props.data)
+        // var l = props.friends
+        // l.splice(s , 1)
+        // props.setfriends([...l])
+        // alert("User Request Accepted" + res.status) 
+        
+      }).catch((err)=>{  })
+    }
+      
+    socket.emit('acceptFriendRequest', {accepter: userData?.login, reciever: User?.login, status: k} )
   }
   useEffect(() => {
     console.log(props.data)
@@ -317,9 +324,8 @@ export  function FriendRequestToast(props: {data : any}) {
             </div>
         </div>
         <div className='buttons'>
-          {/* <Button onClick={()=>{acceptFriendReq(0)}} size='small'  isIcon={true} icon={<CheckIcon/>}/> */}
-          <Button onClick={acceptFriendReq} size='small'  isIcon={true} icon={<CheckIcon/>}/>
-          <Button  onClick={declineFriendReq}  type='secondary' size="small"isIcon={true} icon={<CloseIcon/>}/>
+          <Button onClick={()=>{acceptFriendReq(true)}}  type='secondary' size='small'  isIcon={true} icon={<CheckIcon/>}/>
+          <Button onClick={()=>{acceptFriendReq(false)}} size='small'  isIcon={true} icon={<CloseIcon/>}/>
         </div>
     </ToastStyle>
   )
