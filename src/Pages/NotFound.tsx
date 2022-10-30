@@ -44,7 +44,7 @@ export  function TwoFa() {
         //         console.log()
         //     }).catch((err)=>{})
         
-        axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true&code=" + pass ,  " " , {withCredentials: true}).then((res)=>{
+        axios.post(process.env.REACT_APP_BACKEND_URL+ "/2fa/validate?code=" + pass , {withCredentials: true}).then((res)=>{
             console.log("__status=true_&_code=__: ", res.data )
             
             if (res.data) 
