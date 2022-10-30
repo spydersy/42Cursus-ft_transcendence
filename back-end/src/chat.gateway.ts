@@ -84,19 +84,20 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
 
   @SubscribeMessage('acceptFriendRequest')
   handleAcceptRequest(client: Socket, payload: any): void {
+
     console.log('___requestd Login___', payload)
     client.join(payload.reciever);
-    client.to(payload.reciever).emit('acceptedReq', payload.accepter)
+    client.to(payload.reciever).emit('acceptedReq', payload)
     client.leave(payload.reciever)
   }
 
-  @SubscribeMessage('declineFriendRequest')
-  handleDeclineRequest(client: Socket, payload: any): void {
-    // console.log('___requestd Login___', payload)
-    client.join(payload.reciever);
-    client.to(payload.reciever).emit('declineReq', payload.accepter)
-    client.leave(payload.reciever)
-  }
+  // @SubscribeMessage('declineFriendRequest')
+  // handleDeclineRequest(client: Socket, payload: any): void {
+  //   // console.log('___requestd Login___', payload)
+  //   client.join(payload.reciever);
+  //   client.to(payload.reciever).emit('declineReq', payload.accepter)
+  //   client.leave(payload.reciever)
+  // }
 
   @SubscribeMessage('authEvent')
   handleAuthEvent(client: Socket, payload: string): void {
