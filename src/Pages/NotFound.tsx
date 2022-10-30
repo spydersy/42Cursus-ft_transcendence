@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { PinInput } from 'react-input-pin-code' // ES Module
 import SICIRITY from '../components/2fa/main';
+import AnimatedBg from '../components/AnimatedBg';
 
 export default function NotFound() {
     return <StyledTwoFa>
@@ -65,12 +66,16 @@ export  function TwoFa() {
         }).catch((err)=>{
             // setIsToggled(false)
         })
-        // window.location.reload()
+        window.location.reload()
         // console.log("FUCKING PIN IS ", values)
     }
 
     return <StyledTwoFa>
-                              
+               
+                <div className='Hiho'>
+                    <AnimatedBg /> 
+                </div>
+
                 <div className='PoppUpp'>
                                 
                     <div className='Title'> TWO-FACTOR AUTHENTICATION (2FA) - DUO SECURITY </div>
@@ -93,19 +98,31 @@ export  function TwoFa() {
 
                     <div className='Buttons' >
                         <button id="submit"  onClick={submitpass} > 
-                            <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="40" height="40"></img>
+                            {/* <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="40" height="40"></img> */}
                             submit
                         </button>
                         
                     </div>
 
                 </div>
-                <SICIRITY/> 
             </StyledTwoFa>
     }
 
 const StyledTwoFa = styled.div`
     width: 100%;
+    height: 100%;
+    position: relative;
+    
+    .Hiho {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        /* opacity: 0.6; */
+        background-color: #dc1111f0
+    }
+
     /* display: flex;
     position: relative; */
     /* flex-direction: row; */
@@ -114,10 +131,10 @@ const StyledTwoFa = styled.div`
   
     .PoppUpp{
         background-color: #6f89a927;
-        margin-top: 100px;
-        left: 30%;
-        height: 400px;
-        width: 650px;
+        /* margin-top: 100px; */
+        left: 20%;
+        height: 250px;
+        width: 500px;
         background-color: ${props => props.theme.colors.seconderybg};
         border: 2px solid  ${props => props.theme.colors.purple};
         color: #dacece5f ;
@@ -127,29 +144,18 @@ const StyledTwoFa = styled.div`
         border-radius: 25px;
         justify-content: center;
         align-items: center;
-        
+
         .Title {
             width: 100%;
             height: 15px;
             text-align: center;
-            font-size: 18px;
+            font-size: 14px;
             margin: 20px 0px;
             font-weight: 800;
             color:  ${props => props.theme.colors.purple};
             /* background-color: aqua; */
         }
-        .CloseTab{
-            position: absolute;
-            width:  35px;
-            height: 35px;
-            top:    13px;
-            right:  13px;
-            &:hover {
-                cursor: pointer;
-                fill: #665a5a5f;
-                transform: scale(1.2);
-            }
-        }
+      
         .piniput{
             /* background-color: #c88989; */
             position: absolute;
@@ -165,7 +171,7 @@ const StyledTwoFa = styled.div`
         .Buttons{
             /* background-color: #c88989; */
             width: 100%;
-            height: 50px;
+            height: 30px;
             flex-direction: row;
             align-items: center;
             justify-content: center;
@@ -189,7 +195,7 @@ const StyledTwoFa = styled.div`
         .passwordo {
             position: relative;
             width: 100%;
-            height: 200px;
+            height: 80px;
             /* position: relative; */
             display: flex;
             align-items: center;
@@ -206,8 +212,9 @@ const StyledTwoFa = styled.div`
             }
 
         }
-}
+    }
 `;
+
 const Line = styled.div`
     position: relative;
    margin: 20px 0;

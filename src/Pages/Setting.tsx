@@ -166,7 +166,8 @@ export default function Setting() {
     
     const setEnable = () => {        
         setclosepop(false)
-        setopenpass(true)    
+        setopenpass(true)
+        setValues(['', '', '','','','']);
     }
 
     const submitpass = ()=> {
@@ -187,7 +188,8 @@ export default function Setting() {
         //         console.log()
         //     }).catch((err)=>{})
         
-        axios.post(process.env.REACT_APP_BACKEND_URL+ "/update2FA?status=true&code=" + pass ,  " " , {withCredentials: true}).then((res)=>{
+        axios.post(process.env.REACT_APP_BACKEND_URL+ "/update2fa?status=true&code=" + pass , " ", {withCredentials: true}).then((res)=>{
+        // axios.get(process.env.REACT_APP_BACKEND_URL+ "/update2FA?status=true" , {withCredentials: true}).then((res)=>{
             console.log("__status=true_&_code=__: ", res.data )
             
             if (res.data) 
@@ -310,14 +312,17 @@ export default function Setting() {
                                 </div>
                                 <Line></Line>
                                 <div className='Buttons' >
-                                    <button id="cancel" onClick={setCancel} > 
-                                        <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="40" height="35"></img>
-                                        Disable 2FA 
-                                     </button>
 
-                                    <button id="next"  onClick={setEnable} > 
-                                        <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="40" height="40"></img>
-                                        Next 
+                                    <button id="cancel"  > 
+                                        <Button  onClick={setCancel} text="Disable 2FA" type='secondary' />
+                                        {/* <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="40" height="35"></img>
+                                        Disable 2FA  */}
+                                    </button>
+
+                                    <button id="next"   > 
+                                        <Button  onClick={setEnable} text="Next" type='primary' />
+                                        {/* <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="40" height="40"></img>
+                                        Next  */}
                                     </button>
                                 </div>
                             </div>
@@ -348,10 +353,13 @@ export default function Setting() {
                                 <Line></Line>
 
                                 <div className='Buttons' >
-                                    <button id="submit"  onClick={submitpass} > 
-                                        <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="40" height="40"></img>
-                                        submit
-                                    </button>
+                                    
+                                    {/* <button id="submit"  onClick={setEnable} >  */}
+                                        <Button  onClick={submitpass} text="Submit" type='primary' />
+
+                                        {/* <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="40" height="40"></img>
+                                        submit */}
+                                    {/* </button> */}
                                     
                                     {/* <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img>
                                     <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="50" height="50"></img>
@@ -481,38 +489,38 @@ const Row = styled.div`
             gap: 10px;
 
             #next {
-                margin: 0px 20px;
-                background-color: #1d5eac;
-                width: 30%;
+                margin: 0px 0px;
+                /* background-color: #1d5eac; */
+                width: 20%;
                 height: 60px;
-                border-radius: 20px;
+                /* border-radius: 20px;
                 font-size: 25px;
-                font-weight: 600;
+                font-weight: 600; */
 
                 display: flex;
                 justify-content: center;
-                bottom: 0px;
                 text-align: center;
                 align-items: center;
+                /* bottom: 0px; */
 
 
 
             }
             #cancel{
-                background-color: #b0a7a7;
-                margin: 10px 0px;
+                /* background-color: #b0a7a7; */
+                margin: 0px 0px;
                 width: 30%;
                 align-items: center;
                 height: 60px;
                 text-align: center;
-                bottom: 0px;
+                /* bottom: 0px; */
                 display: flex;
                 justify-content: center;
 
                 /* height: 50px; */
-                border-radius: 20px;
+                /* border-radius: 20px;
                 font-size: 25px;
-                font-weight: 600;
+                font-weight: 600; */
             }
         }
         .passwordo {
@@ -544,7 +552,7 @@ const Row = styled.div`
         }
 }
     .PoppUpp{
-        margin-top: 100px;
+        /* top: 15%; */
         height: 400px;
         width: 650px;
         background-color: ${props => props.theme.colors.seconderybg};
@@ -552,7 +560,7 @@ const Row = styled.div`
         color: #dacece5f ;
         z-index: 30;
         position: absolute;
-        top: 15%;
+        top: 30%;
         border-radius: 25px;
 
         .Title {
