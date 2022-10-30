@@ -188,7 +188,7 @@ export default function Setting() {
         //         console.log()
         //     }).catch((err)=>{})
         
-        axios.post(process.env.REACT_APP_BACKEND_URL+ "/update2fa?status=true&code=" + pass , " ", {withCredentials: true}).then((res)=>{
+        axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true&code=" + pass , " ", {withCredentials: true}).then((res)=>{
         // axios.get(process.env.REACT_APP_BACKEND_URL+ "/update2FA?status=true" , {withCredentials: true}).then((res)=>{
             console.log("__status=true_&_code=__: ", res.data )
             

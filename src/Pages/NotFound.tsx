@@ -4,6 +4,7 @@ import axios from 'axios';
 import { PinInput } from 'react-input-pin-code' // ES Module
 import SICIRITY from '../components/2fa/main';
 import AnimatedBg from '../components/AnimatedBg';
+import { Button } from './SignIn';
 
 export default function NotFound() {
     return <StyledTwoFa>
@@ -43,7 +44,7 @@ export  function TwoFa() {
         //         console.log()
         //     }).catch((err)=>{})
         
-        axios.post(process.env.REACT_APP_BACKEND_URL+ "/update2FA?status=true&code=" + pass ,  " " , {withCredentials: true}).then((res)=>{
+        axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true&code=" + pass ,  " " , {withCredentials: true}).then((res)=>{
             console.log("__status=true_&_code=__: ", res.data )
             
             if (res.data) 
@@ -66,7 +67,7 @@ export  function TwoFa() {
         }).catch((err)=>{
             // setIsToggled(false)
         })
-        window.location.reload()
+        // window.location.reload()
         // console.log("FUCKING PIN IS ", values)
     }
 
@@ -97,11 +98,7 @@ export  function TwoFa() {
                     <Line></Line>
 
                     <div className='Buttons' >
-                        <button id="submit"  onClick={submitpass} > 
-                            {/* <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="40" height="40"></img> */}
-                            submit
-                        </button>
-                        
+                        <Button  onClick={submitpass} text="Submit" type='primary' />
                     </div>
 
                 </div>
@@ -130,9 +127,10 @@ const StyledTwoFa = styled.div`
     /* align-items: center; */
   
     .PoppUpp{
+        opacity: 0.9;
         background-color: #6f89a927;
         /* margin-top: 100px; */
-        left: 20%;
+        left: 30%;
         height: 250px;
         width: 500px;
         background-color: ${props => props.theme.colors.seconderybg};
@@ -140,11 +138,12 @@ const StyledTwoFa = styled.div`
         color: #dacece5f ;
         z-index: 30;
         position: absolute;
-        top: 15%;
-        border-radius: 25px;
+        top: 30%;
+        border-radius: 15px;
         justify-content: center;
         align-items: center;
-
+        animation: 6s ease-in-out;
+        
         .Title {
             width: 100%;
             height: 15px;
@@ -211,6 +210,10 @@ const StyledTwoFa = styled.div`
          
             }
 
+        }
+        &:hover {
+            opacity: 1;
+            animation: 6s ease-in-out;
         }
     }
 `;
