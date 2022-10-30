@@ -183,9 +183,12 @@ export default function Setting() {
                 pass += values[i];
         } 
         // console.log("_FILTRED_PIN  = ", pass)
-        // axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" ,   {withCredentials: true}).then((res)=>{
-        axios.get(process.env.REACT_APP_BACKEND_URL+ "/2fa/verifie?code=" + pass ,   {withCredentials: true}).then((res)=>{
-            console.log("__verifie__Data__: ", res.data )
+        // axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/update2FA?status=true" ,   {withCredentials: true}).then((res)=>{
+        //         console.log()
+        //     }).catch((err)=>{})
+        
+        axios.post(process.env.REACT_APP_BACKEND_URL+ "/update2FA?status=true&code=" + pass ,  " " , {withCredentials: true}).then((res)=>{
+            console.log("__status=true_&_code=__: ", res.data )
             
             if (res.data) 
             {
@@ -196,18 +199,18 @@ export default function Setting() {
             }
             else
             {
-                axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
-                    console.log("Response false Data ={", res.data.message , "}")
-                    setIsToggled(false)
-                }   ).catch((err)=>{ 
-                        // setIsToggled(true)
-                } )
+                // axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
+                //     console.log("Response false Data ={", res.data.message , "}")
+                //     setIsToggled(false)
+                // }   ).catch((err)=>{ 
+                //         // setIsToggled(true)
+                // } )
             }
             
         }).catch((err)=>{
             setIsToggled(false)
         })
-        window.location.reload()
+        // window.location.reload()
         // console.log("FUCKING PIN IS ", values)
     }
 
