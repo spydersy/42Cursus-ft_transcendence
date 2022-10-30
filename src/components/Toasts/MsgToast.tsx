@@ -6,6 +6,8 @@ import { AvatarComponent } from '../PlayerProfile'
 import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 import { Button } from '../../Pages/SignIn';
 import { ReactComponent as CheckIcon } from "../../assets/imgs/check.svg";
+import { ReactComponent as CloseIcon } from "../../assets/imgs/close-icon.svg";
+
 import { SocketGameContext } from '../../context/Socket'
 import { SocketContext } from '../../context/Socket'
 
@@ -31,6 +33,47 @@ interface UserProp {
   nbFriends? : string
   wins : number
   losses : number
+}
+export  function CancelToast(props: {data : string}) {
+  // to bring defaultAvatar
+  const [User, setUser] = useState<UserProp>({
+    defaultAvatar: "string",
+    login : "string",
+    displayName : "string",
+    relation : "string",
+    nbFriends : "string",
+    wins : 0,
+    losses : 0,
+  })
+
+  useEffect(() => {
+    axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data  ,  {withCredentials: true}
+        ).then((res)=>{
+              // check for the user is bloked 
+              console.log("> status = " , res.status)
+              setUser(res.data)
+
+            }).catch((error)=>{ 
+             
+              } 
+   )    
+  }, [])
+  
+  return (
+    <ToastStyle to="">
+        <div className='avatar'>
+          <AvatarComponent img={User.defaultAvatar}/>
+        </div>
+        <div className='data'>
+            <div className=' name'>
+              {props.data}
+            </div>
+            <div className='msg'>
+              Canceled your friend request :
+            </div>
+        </div>
+    </ToastStyle>
+  )
 }
 
 export  function AcceptToast(props: {data : string}) {
@@ -225,6 +268,9 @@ export  function FriendRequestToast(props: {data : any}) {
     wins : 0,
     losses : 0,
   })
+  const declineFriendReq = ()=> {
+    socket.emit('declineFriendRequest', {accepter: userData?.login, reciever: User?.login} )
+  }
   const acceptFriendReq = ()=> {
 
     // alert(userData?.login)
@@ -271,7 +317,9 @@ export  function FriendRequestToast(props: {data : any}) {
             </div>
         </div>
         <div className='buttons'>
+          {/* <Button onClick={()=>{acceptFriendReq(0)}} size='small'  isIcon={true} icon={<CheckIcon/>}/> */}
           <Button onClick={acceptFriendReq} size='small'  isIcon={true} icon={<CheckIcon/>}/>
+          <Button  onClick={declineFriendReq}  type='secondary' size="small"isIcon={true} icon={<CloseIcon/>}/>
         </div>
     </ToastStyle>
   )

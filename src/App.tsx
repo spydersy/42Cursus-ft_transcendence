@@ -34,7 +34,7 @@ import SocketTesting from './components/testing/SocketTesting';
 import ChatTesting from './components/testing/ChatTesting';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import MsgToast , {AcceptToast, FriendRequestToast, GameChallengeToast} from './components/Toasts/MsgToast';
+import MsgToast , {AcceptToast, FriendRequestToast, GameChallengeToast, CancelToast} from './components/Toasts/MsgToast';
 import { ReactComponent as CloseIcon } from "./assets/imgs/close-icon.svg";
 
 
@@ -73,6 +73,13 @@ const CustomToastWithLink = (data : msgType) => (
   </div>
 );
 
+
+
+const CustomToastCancelFriendReq = (data : any) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <CancelToast data={data}/>
+  </div>
+);
 const CustomToastAcceptFriendReq = (data : any) => (
   <div style={{width: "100%" , height : "100%"}}>
         <AcceptToast data={data}/>
@@ -130,7 +137,7 @@ function App() {
   // CHallengeNotify()
 }
   function handleRequest (payload) {
-    console.log('__sahbiiiiii____:'+payload)
+    // console.log('__sahbiiiiii____:'+payload)
     toast(CustomToastFriendReq(payload) , {
       className: "toast",
       progressClassName: "toastProgress",
@@ -140,8 +147,17 @@ function App() {
 }
 
 function acceptRequest (payload) {
-  console.log('acceptii a sahbi:'+payload)
+  console.log('acceptii a sahbi:',payload)
   toast(CustomToastAcceptFriendReq(payload) , {
+    className: "toast",
+    progressClassName: "toastProgress",
+    autoClose: 2000,
+    hideProgressBar: true,
+  })
+}
+
+function cancelRequest (payload) {
+  toast(CustomToastCancelFriendReq(payload) , {
     className: "toast",
     progressClassName: "toastProgress",
     autoClose: 2000,
@@ -159,6 +175,7 @@ function handelChallengeAccept (payload) {
     socket.on('challeneEvent', handleChallenge);
     socket.on('recievedRequest', handleRequest)
     socket.on('acceptedReq', acceptRequest)
+    socket.on('declineReq', cancelRequest)
     gameSocket.on('challengeAccepted', handelChallengeAccept)
     return () => {
       socket.removeListener('msg_event', hundleMsg);
@@ -166,6 +183,8 @@ function handelChallengeAccept (payload) {
       socket.removeListener('recievedRequest', handleRequest);
       socket.removeListener('challengeAccepted', handelChallengeAccept);
       socket.removeListener('acceptedReq', acceptRequest);
+      socket.removeListener('declineReq', cancelRequest)
+
     }
   })
 
