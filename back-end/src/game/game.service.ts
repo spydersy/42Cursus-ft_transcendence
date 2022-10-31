@@ -105,14 +105,11 @@ export class GameService {
    getPlayerbyLogin(id : string)
    {
 
-       console.log("room lenht " +this.roomPlayers.length)
        for (let i = 0; i < this.roomPlayers.length; i++) {
-           console.log("loop " + this.roomPlayers[i].login)
-           console.log("loop " + id)
+
 
            if ( this.roomPlayers[i].login === id )
            {
-               console.log("found")
                return this.roomPlayers[i];
            }
        }

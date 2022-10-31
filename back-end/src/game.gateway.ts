@@ -31,7 +31,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   }
   playerExist(client : any , login  : string)
   {
-        console.log("roomArray length :" +this.roomArray.length)
 
     for (let i = 0; i < this.roomArray.length; i++) {
       var room = this.roomArray[i];
@@ -45,13 +44,15 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   JoinPlayer(client : any , login : string)
   {
+    console.log("___DBG@")
     var roomslenght = this.roomArray.length;
-
+    
     if (this.roomArray[roomslenght - 1].roomPlayers.length === 2)
     {
       var roomName = this.roomArray[roomslenght - 1].roomName
       var lastRoomPlayers = this.roomArray[roomslenght - 1].roomPlayers
       this.roomArray[roomslenght - 1].status = "InGame"
+      console.log("___DBG@")
 
       this.logger.log("startgame emited")
       this.wss.to(roomName).emit("startGame", {player1 : lastRoomPlayers[0].login , player2 :  lastRoomPlayers[1].login })
@@ -61,7 +62,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   getRoombyPlayerId(id : string )
   {
-    console.log("____DBG__ROOOMLNT : " , this.roomArray.length )
     for (let i = 0; i < this.roomArray.length; i++) {
       const element = this.roomArray[i].getPlayer(id);
       if (element)
@@ -69,6 +69,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
     return null
   }
+
   getRoombyName(name : string )
   {
     for (let i = 0; i < this.roomArray.length; i++) {
@@ -93,7 +94,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         client.leave(room.roomName)
         room.roomPlayers.splice(0, 2);
         this.roomArray.splice(i, 1)
-        this.wss.to(room.roomName).emit("endGame")
+        this.wss.to(room.roomName).emit("endGame", {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
 
         return ;
       }
@@ -167,10 +168,10 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     var room = this.getRoombyPlayerId(client.id)
     if (room)
     {
-      console.log("__ROOM__DBG__ : ", room);
-      this.wss.to(room.roomName).emit("endGame" , room)
+      // console.log("__ROOM__DBG__ : ", room);
+      this.wss.to(room.roomName).emit("endGame" , {score: room.score, roomPlayers :   room.roomPlayers})
       this.RemovePlayer(client , payload)
-      this.wss.emit("change" ,  this.roomArray)
+      // this.wss.emit("change" ,  this.roomArray)
     }
 
     for (let index = 0; index < this.roomArray.length; index++) {
@@ -302,7 +303,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
        this.roomArray[i].ball.x += this.roomArray[i].direction.x
       this.roomArray[i].ball.y += this.roomArray[i].direction.y
 
-      if(room.status === "AiGame")
+      if(room.status === "AiGame" && room.direction.x > 0)
       {
 
           this.moveAI( this.roomArray[i])
