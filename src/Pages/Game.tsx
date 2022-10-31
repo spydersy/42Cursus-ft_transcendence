@@ -48,12 +48,15 @@ export default function Game(props : GameProps) {
     console.log(loged?.login , pyload.player1)
     setplayer(loged?.login === pyload.player1 )
  })
-  gamesocket.off("Aistart").on("Aistart" , (pyload : any)=>{
-    setUser(loged)
-    // setend(false)
-    setshow(true)
+//   gamesocket.off("Aistart").on("Aistart" , (pyload : any)=>{
+//     fetchPlayersData(pyload , "ai_1")
+//     setend(false)
 
- })
+//     setshow(true)
+//     setplayer(loged?.login === pyload )
+
+
+//  })
  gamesocket.off("endGame").on("endGame" , (payload)=>{
 
    setstart(false)

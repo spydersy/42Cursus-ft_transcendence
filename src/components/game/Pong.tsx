@@ -36,6 +36,11 @@ export default function Pong(props: gameProps) {
         x: width - 30,
         y: 0,
     }
+    var pre = {
+
+        x: width - 30,
+        y: 0,
+    }
     var topLimit = 0
     var bottomLimit = height - paddel2.h;
     var direction = {
@@ -84,6 +89,8 @@ export default function Pong(props: gameProps) {
         p5.stroke(p5.color("#157DBD"));
         p5.strokeWeight(2)
         p5.ellipse(ballCord.x, ballCord.y, ballCord.size, ballCord.size);
+        p5.line(ballCord.x ,ballCord.y,  pre.x, pre.y);
+
         p5.fill(p5.color(gameData?.ballcolor))
         p5.noStroke()
     }
@@ -140,6 +147,8 @@ export default function Pong(props: gameProps) {
 
         ballCord.x = pyload.x;
         ballCord.y = pyload.y;
+        pre.x =  pyload.px
+        pre.y = pyload.py
     })
 
     useEffect(() => {

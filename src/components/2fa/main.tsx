@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import Flame1 ,{Flame2, Flame3} from "./flame";
-import { AnimateKeyframes } from "react-simple-animate";
+// import { AnimateKeyframes } from "react-simple-animate";
 
 // import "./styles.css";
 
@@ -18,7 +18,7 @@ export default function SICIRITY() {
   return (
     <Sicirity>
         <Section className="App">
-        <AnimateKeyframes
+        {/* <AnimateKeyframes
             play
             iterationCount="infinite"
             direction="alternate"
@@ -70,7 +70,7 @@ export default function SICIRITY() {
             render={({ style }) => {
             return <Flame2 style={style} />;
             }}
-        />
+        /> */}
         </Section>
      </Sicirity> 
   );

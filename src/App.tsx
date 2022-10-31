@@ -144,6 +144,7 @@ function App() {
 
 function acceptRequest (payload) {
   console.log('acceptii a sahbi:',payload)
+
   toast(CustomToastAcceptFriendReq(payload) , {
     className: "toast",
     progressClassName: "toastProgress",
@@ -153,12 +154,13 @@ function acceptRequest (payload) {
 }
 
 function handelChallengeAccept (payload) {
-  navigate("/game/")
   localStorage.setItem("mode","1v1")
+  navigate("/game/")
 
 }
   useEffect(()=>{
     // sub
+
     socket.on('msg_event', hundleMsg);
     socket.on('challeneEvent', handleChallenge);
     socket.on('recievedRequest', handleRequest)
@@ -168,8 +170,8 @@ function handelChallengeAccept (payload) {
       socket.removeListener('msg_event', hundleMsg);
       socket.removeListener('challeneEvent', handleChallenge);
       socket.removeListener('recievedRequest', handleRequest);
-      socket.removeListener('challengeAccepted', handelChallengeAccept);
       socket.removeListener('acceptedReq', acceptRequest);
+      gameSocket.removeListener('challengeAccepted', handelChallengeAccept);
 
     }
   })

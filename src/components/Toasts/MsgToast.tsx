@@ -40,47 +40,7 @@ interface UserProp {
   wins : number
   losses : number
 }
-export  function CancelToast(props: {data : string}) {
-  // to bring defaultAvatar
-  const [User, setUser] = useState<UserProp>({
-    defaultAvatar: "string",
-    login : "string",
-    displayName : "string",
-    relation : "string",
-    nbFriends : "string",
-    wins : 0,
-    losses : 0,
-  })
 
-  useEffect(() => {
-    axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data  ,  {withCredentials: true}
-        ).then((res)=>{
-              // check for the user is bloked 
-              console.log("> status = " , res.status)
-              setUser(res.data)
-
-            }).catch((error)=>{ 
-             
-              } 
-   )    
-  }, [])
-  
-  return (
-    <ToastStyle to="">
-        <div className='avatar'>
-          <AvatarComponent img={User.defaultAvatar}/>
-        </div>
-        <div className='data'>
-            <div className=' name'>
-              {props.data}
-            </div>
-            <div className='msg'>
-              Canceled your friend request :
-            </div>
-        </div>
-    </ToastStyle>
-  )
-}
 
 export  function AcceptToast(props: {data : ssss}) {
   const [User, setUser] = useState<UserProp>({
@@ -180,6 +140,12 @@ const ToastStyle = styled(Link)`
     align-items: center;
     flex-direction: row;
     gap: 10px;
+    .buttons{
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      gap:5px;
+    }
   .avatar{
     width: 50px;
     height: 50px;
@@ -324,8 +290,8 @@ export  function FriendRequestToast(props: {data : any}) {
             </div>
         </div>
         <div className='buttons'>
-          <Button onClick={()=>{acceptFriendReq(true)}}  type='secondary' size='small'  isIcon={true} icon={<CheckIcon/>}/>
-          <Button onClick={()=>{acceptFriendReq(false)}} size='small'  isIcon={true} icon={<CloseIcon/>}/>
+          <Button onClick={()=>{acceptFriendReq(true)}}  size='small'  isIcon={true} icon={<CheckIcon/>}/>
+          <Button onClick={()=>{acceptFriendReq(false)}} type='secondary' size='small'  isIcon={true} icon={<CloseIcon/>}/>
         </div>
     </ToastStyle>
   )
