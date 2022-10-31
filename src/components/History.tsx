@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {useState , useEffect , useContext} from 'react'
 import styled , {css} from "styled-components"
 import { AvatarComponent } from './PlayerProfile';
 
@@ -8,6 +8,8 @@ import Img from "../assets/imgs/avatar/a1.png";
 import { ReactComponent as BattleIcon} from "../assets/imgs/battle-icon.svg"
 import Modal from './Modal';
 import AchievmentModal from './modals/AchievmentModal';
+import axios from 'axios';
+import { UserContext } from '../context/UserContext';
 
 const match1 = {
     name: "Melkafdsfdsfsfdsfrmi",
@@ -25,6 +27,8 @@ const match2 = {
   var listGame = [match1 , match2 ,  match2]
 
 export default function History() {
+   
+    
   return (
     <Conta>
         <HistoryComponent/>
@@ -33,6 +37,26 @@ export default function History() {
 }
 
 export  function HistoryComponent() {
+  const UserData = useContext(UserContext)
+
+    const [list, setlist] = useState([])
+    useEffect(() => {
+        console.log(UserData)
+        axios.get(process.env.REACT_APP_BACKEND_URL+ "/game/MatchHistory/"+ UserData?.id , 
+    {withCredentials: true} 
+  ).then((res)=>{
+    console.log(res.data)
+    setlist(res.data)
+
+  }).catch((err)=>{
+
+        console.log(err)
+    })
+    
+        return () => {
+          
+        }
+      }, [])
   return (
     <HistoryComponentStyle>
         <Head>
@@ -42,7 +66,7 @@ export  function HistoryComponent() {
             </a>
         </Head>
         {
-            listGame.map((match : any, id : number )=>{
+            list.map((match : any, id : number )=>{
                 return<GameComp key={id} match={match}  isFriend={true} />
             })
         }

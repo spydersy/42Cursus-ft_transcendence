@@ -48,15 +48,7 @@ export default function Game(props : GameProps) {
     console.log(loged?.login , pyload.player1)
     setplayer(loged?.login === pyload.player1 )
  })
-//   gamesocket.off("Aistart").on("Aistart" , (pyload : any)=>{
-//     fetchPlayersData(pyload , "ai_1")
-//     setend(false)
 
-//     setshow(true)
-//     setplayer(loged?.login === pyload )
-
-
-//  })
  gamesocket.on("endGame" , (payload)=>{
    setstart(false)
   if (payload.score.score1 > payload.score.score2 )
