@@ -41,6 +41,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
     return -1;
   }
+
   JoinPlayer(client : any , login : string)
   {
     var roomslenght = this.roomArray.length;
@@ -51,6 +52,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       var lastRoomPlayers = this.roomArray[roomslenght - 1].roomPlayers
       this.roomArray[roomslenght - 1].status = "InGame"
 
+      this.logger.log("startgame emited")
       this.wss.to(roomName).emit("startGame", {player1 : lastRoomPlayers[0].login , player2 :  lastRoomPlayers[1].login })
       this.logger.log("startgame emited")
     }
@@ -58,6 +60,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   getRoombyPlayerId(id : string )
   {
+    console.log("____DBG__ROOOMLNT : " , this.roomArray.length )
     for (let i = 0; i < this.roomArray.length; i++) {
       const element = this.roomArray[i].getPlayer(id);
       if (element)
@@ -87,7 +90,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         console.log("remove : " +room.roomName)
 
         client.leave(room.roomName)
-        room.roomPlayers.splice(0, 2);2
+        room.roomPlayers.splice(0, 2);
         this.roomArray.splice(i, 1)
         this.wss.to(room.roomName).emit("endGame")
 
@@ -105,33 +108,35 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     if (roomslenght === 0)
     {
       let myuuid = uuidv4();
-      const  newRoom = new GameService(myuuid)
-      newRoom.joinPlayer(login , client.id)
-      this.roomArray.push(newRoom)
-      roomName = this.roomArray[roomslenght].roomName
-    }
-    else
-    {
-      roomName = this.roomArray[roomslenght - 1].roomName
-      if ( this.roomArray[roomslenght - 1].status  === "waiting")
-      {
-        if (this.roomArray[roomslenght - 1].roomPlayers.length  < 2)
-        {
-            this.roomArray[roomslenght - 1].joinPlayer(login , client.id)
-        }
-        else
-        {
-          let myuuid = uuidv4();
-          const  newRoom = new GameService(myuuid)
-          newRoom.joinPlayer(login , client.id)
-          this.roomArray.push(newRoom)
-        }
 
+      const  newRoom = new GameService(myuuid)
+    
+    newRoom.joinPlayer(login , client.id)
+    this.roomArray.push(newRoom)
+    roomName = this.roomArray[roomslenght].roomName
+  }
+  else
+  {
+    roomName = this.roomArray[roomslenght - 1].roomName
+    if ( this.roomArray[roomslenght - 1].status  === "waiting")
+    {
+      if (this.roomArray[roomslenght - 1].roomPlayers.length  < 2)
+      {
+        this.roomArray[roomslenght - 1].joinPlayer(login , client.id)
       }
+      else
+      {
+        let myuuid = uuidv4();
+        const  newRoom = new GameService(myuuid)
+        newRoom.joinPlayer(login , client.id)
+        this.roomArray.push(newRoom)
+      }
+      
     }
-    var roomName = this.roomArray[this.roomArray.length - 1].roomName
-    client.join(roomName)
-    this.wss.emit("change" ,  this.roomArray)
+  }
+  var roomName = this.roomArray[this.roomArray.length - 1].roomName
+  client.join(roomName)
+    // this.wss.emit("change" ,  this.roomArray)
     this.logger.log("changeee")
 
 
@@ -300,9 +305,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       {
 
           this.moveAI( this.roomArray[i])
-          var s = this.roomArray[i]
-          // if (s.paddel2.y >= 600)
-          //   return;
       }
       this.wss.to(room.roomName).emit("moveBallClient" , {x: this.roomArray[i].ball.x , y: this.roomArray[i].ball.y , px : this.roomArray[i].paddel2.x, py :this.roomArray[i].predicty })
     }
@@ -320,10 +322,10 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     var newRoom = new GameService(myuuid)
     newRoom.status = "AiGame"
     newRoom.joinPlayer(payload , client.id)
+    newRoom.joinPlayer("ai_1" , "ai_1")
     client.join(newRoom.roomName)
     this.roomArray.push(newRoom)
     this.wss.to(newRoom.roomName).emit("startGame" , {player1 : payload , player2: "ai_1"})
-
   }
    hitWalls = (i : number,ballCord : any ,direction: any , width , height  ,paddel1 : any , paddel2 : any, )=>{
 
@@ -344,14 +346,16 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
     else if (ballCord.y <=  ballCord.size / 2 || ballCord.y  >= height - ballCord.size / 2 )
         this.roomArray[i].direction.y = -this.roomArray[i].direction.y
-    else if (this.detectCollision(paddel1 , ballCord) || this.detectCollision(paddel2 , ballCord))
-        this.roomArray[i].direction.x = -this.roomArray[i].direction.x
+    else if (this.detectCollision(paddel1 , ballCord , this.roomArray[i].direction) || this.detectCollision(paddel2 , ballCord , this.roomArray[i].direction))
+    {
+        this.roomArray[i].direction.x =( -this.roomArray[i].direction.x) * 1.15;
+    }
 
   }
 
-   detectCollision(player : any , ballCord : any) {
-    const cx = ballCord.x ;
-    const cy = ballCord.y ;
+   detectCollision(player : any , ballCord : any , direction : any) {
+    const cx = ballCord.x + direction.x ;
+    const cy = ballCord.y + direction.y;
     const r = ballCord.size / 2 ;
     const [x1, y1, w1, h1] = [cx - r, cy - r, r * 2, r * 2];
     const x2 =player.x ;
@@ -364,28 +368,32 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     return colliding;
 
 }
-  checkScore(room : any) {
+async checkScore (room : any) {
     //you can do better
     console.log(Math.abs(room.score.score1 - room.score.score2))
-    if (  Math.abs(room.score.score1 - room.score.score2) > 5)
+    if (room.score.score1 + room.score.score2  >= 3)
     {
-      this.wss.emit("endGame" , room)
       var i = this.roomArray.indexOf(room)
-      this.roomArray[i].roomPlayers.splice(0, 2);
+
+      this.wss.to(this.roomArray[i].roomName).emit("endGame" , {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
+
+      await this.roomArray[i].saveGame("AIBUGGY")
       this.roomArray.splice(i, 1)
+      delete  this.roomArray[i];
     }
 }
 
 moveAI(room : any )
- {
+ { 
   var i = this.roomArray.indexOf(room)
    const h =  100;
    var yp : number ;
    var yb : number ;
+   var q = ( room.paddel2.x -  room.ball.x ) / room.direction.x
    yp =  room.paddel2.y;
    yb =  room.ball.y + room.direction.y;
-   var PreditctY : number =  yb +( room.direction.y * room.predict) -( h / 2);
-
+   var PreditctY : number =  yb +( room.direction.y * q) -( h / 2);
+    this.roomArray[i].predicty = PreditctY
    var TableH : number =   700;
         
 

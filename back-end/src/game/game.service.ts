@@ -32,7 +32,7 @@ export class GameService {
        this.ball = {size : 20 , x :  500 , y :350}
        this.direction = { x :  3 , y :3}
        this.status  = "waiting";
-       this.paddel2 = {x : 0 , y : 0}
+       this.paddel2 = {x : 1000 - 30 , y : 0}
        this.predict = 0;
        this.predicty = 0;
 
@@ -53,6 +53,8 @@ export class GameService {
 
    }
 
+
+   
    getPlayer(id : string)
    {
 
@@ -69,20 +71,21 @@ export class GameService {
        return null
    }
 
-   async saveGame(player1: string, player2: string, score1: number, score2: number, mode: MODE) {
-        const player1Dto = await this.prisma.users.findUnique({ where: { login: player1}});
-        const player2Dto = await this.prisma.users.findUnique({ where: { login: player2}});
+   async saveGame( mode: MODE) {
+        const player1Dto = await this.prisma.users.findUnique({ where: { login: this.roomPlayers[0].login}});
+        const player2Dto = await this.prisma.users.findUnique({ where: { login:   this.roomPlayers[1].login}});
 
         await this.prisma.matchHistory.create({
             data: {
                 player1Id: player1Dto.id,
                 player2Id: player2Dto.id,
-                score1: score1,
-                score2: score2,
+                score1: this.score.score1,
+                score2: this.score.score2,
                 mode: mode,
             }
         });
    }
+   
 
    changeId(id : string , login : string)
    {
@@ -123,6 +126,7 @@ export class GameService {
         else
             this.score.score2++;
         this.ball = {size : 35 , x :  500 , y :350}
+        this.direction = { x :  3 , y :3}
    }
 
 
