@@ -1,10 +1,14 @@
-import { Injectable, Res } from '@nestjs/common';
+import { Injectable, Res, Req, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { authenticator } from 'otplib';
 import { toFileStream } from 'qrcode';
 import { Response } from 'express';
 import { ProfileService } from 'src/profile/profile.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Request } from 'express';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class TfaService {
