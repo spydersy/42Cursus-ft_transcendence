@@ -88,10 +88,6 @@ export function PlayerCard(props: PlayerCardProps) {
     status = "UnvailableStatus";
   }
   
-  // if (name.length > 2)
-  //   username = name[1] + " " +  name[2];
-  // if (username === "Elmahdi Elaazmi" ) 
-  //   username = "Alchemist"
 
   
    

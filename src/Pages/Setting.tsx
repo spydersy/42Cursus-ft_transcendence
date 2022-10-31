@@ -12,17 +12,14 @@ import avataro from "../assets/imgs/avatar/avatar2.png";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import {ReactComponent as CloseLock} from "../assets/imgs/closelock.svg";
 import OpenLock from "../assets/imgs/TwoFa.png";
-import PasswordChecklist from "react-password-checklist"
 import { PinInput } from 'react-input-pin-code' // ES Module
-
+import { toast } from 'react-toastify';
 
 const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderColor: "red", };
 
 export default function Setting() {
     
     const [img, setImg] = useState(avataro);
-    const [loading, setLoading] = useState(false);
-    const [color, setColor] = useState("#fa0137");
     const [data, setdata] = useState({login : "", defaultAvatar : "", displayName : "", twoFactorAuth : false, email : ""})
     const [isToggled, setIsToggled] = useState(false);
     const [closepop, setclosepop] = useState(false)
@@ -30,21 +27,52 @@ export default function Setting() {
     const [QrCode, setQrCode] = useState("")
     const [values, setValues] = useState(['', '', '','','','']);
 
+    const error = (props: string) => {
+        toast.error(props, {
+            position: "bottom-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored"
+        });
+    }
+    const succes = (props: string) => {
+        toast.success(props, {
+            position: "bottom-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored"
+        });
+    }
+    const warning = (props: string) => {
+        toast.warning(props, {
+            position: "bottom-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored"
+        });
+    }
+
     useEffect(() => {
-
-        // setIsToggled(false)
         
-        axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/me",   {withCredentials: true} 
-        ).then((res)=>{
-
-            console.log("__Settings__Data__: ", res.data )
+        axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/me",   {withCredentials: true}).then((res)=>{
+            // console.log("__Settings__Data__: ", res.data )
             setdata(res.data)
             setImg(res.data.defaultAvatar)
             setIsToggled(res.data.twoFactorAuth)
-
-            console.log("__res.data.twoFactorAuth__ = " , res.data.twoFactorAuth)
-            console.log("__isToggled__ = " , isToggled)
-
+            // console.log("__res.data.twoFactorAuth__ = " , res.data.twoFactorAuth)
+            // console.log("__isToggled__ = " , isToggled)
         }).catch((err)=>{
             setIsToggled(false)
         })
@@ -55,16 +83,13 @@ export default function Setting() {
             setImg(URL.createObjectURL(c.target.files[0]))
             var  bodyFormData = new FormData();
 
-            setColor("#16ff01");
-
             bodyFormData.append('avatar', c.target.files[0]);
                 axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/updateAvatar", bodyFormData, {withCredentials: true}).then((res)=>{
-                    console.log(res)
-                    wait(2000).then(() => { setLoading(false);  })
-
+                    succes("Avatar Updated Successfully")
+                    // console.log(res)
                 }   ).catch((err)=>{ 
-                    wait(2000).then(() => {  setColor("#ff000d");})
-                    console.log(err)
+                    error("Avatar Not Updated")
+                    // console.log(err)
                 }   )
         })
 
@@ -75,45 +100,43 @@ export default function Setting() {
     }
     
     const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setColor("#f29408");
-        if (!loading)
-            setLoading(!loading);
 
         const Name = event.target.value;
         let enteredName = "";
 
         if (Name.trim().length >= 25)    
         {
-            setColor("#f20808");
             enteredName = Name.trim().slice(0, 25);
+            warning("YOur Display Name must be less than 25 characters");
+            // MinLenghtname();
         }
         else
             enteredName = Name;
-    
         setdata({...data, displayName : enteredName})
     };
 
     const setClosePop = () => {
         setclosepop(false)
-        // setIsToggled(false)
         setopenpass(false)
+        // CancelProc()
+        warning(" 2FA Third Party Procces Canceled");
     }
 
     const setCancel = () => {
         // console.log("false =  " , isToggled)
-
         axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
 
-            console.log("Response false Data ={", res.data.message , "}")
-        }   ).catch((err)=>{ 
-        })
+            // console.log("Response false Data ={", res.data.message , "}")
+
+        }).catch((err)=>{ })
 
         setclosepop(false)
         setIsToggled(false)
         setopenpass(false)
+        // CancelProc()
+        warning(" 2FA Third Party Procces Canceled");
+        wait(1000).then(() => {  window.location.reload(); })
     }
-
-   
 
     const onToggle = ()=> {
         
@@ -129,39 +152,14 @@ export default function Setting() {
             setclosepop(false)
             console.log("false =  " , isToggled)
             axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
-                
                 setIsToggled(false)
-                
-            }).catch((err)=>{})
+                succes("You have successfully Enable 2FA Third Party");
+                // DisabledSucces()
+            }).catch((err)=>{
+               error("2FA Third Party Procces Failed");
+                // DisabledError()
+            })
         }
-        
-        // console.log("1-OnToggle =  " , isToggled)
-        // if (stateToggle) 
-        // {
-        //     console.log("true =  " , isToggled)
-        //     axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true" , "",{withCredentials: true}).then((res)=>{
-        //         // console.log("Response true Data ={", res.data , "}")
-
-        //         if (res.data === "2fa is already enabled")
-        //         {
-        //             setIsToggled(false)
-        //             setQrCode("ALREADY ENABLED")
-        //             console.log("ALREADY BROKEN")
-        //         }
-        //         else
-        //         {
-        //             setIsToggled(true)
-            // }   
-
-        // }).catch((err)=>{
-        //         setIsToggled(false)
-        // })
-        
-        // }
-        // else 
-        // {
-       
-        // }
     }
     
     const setEnable = () => {        
@@ -176,6 +174,13 @@ export default function Setting() {
         setclosepop(false)
         console.log("__PIN  = ", values)
         let pass  = "";
+        if (values.length < 5)
+        {
+            // PinError()
+            error("PIN must be 6 digits");
+            return;
+            // return;
+        }
         for (let i = 0; i < values.length; i++) 
         {
             if (values[i] === ',')
@@ -183,69 +188,43 @@ export default function Setting() {
             else
                 pass += values[i];
         } 
-        // console.log("_FILTRED_PIN  = ", pass)
-        // axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/update2FA?status=true" ,   {withCredentials: true}).then((res)=>{
-        //         console.log()
-        //     }).catch((err)=>{})
         
         axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true&code=" + pass , " ", {withCredentials: true}).then((res)=>{
-        // axios.get(process.env.REACT_APP_BACKEND_URL+ "/update2FA?status=true" , {withCredentials: true}).then((res)=>{
             console.log("__status=true_&_code=__: ", res.data )
-            
-            if (res.data) 
-            {
-                console.log("ALREADY BROKEN")
-                setQrCode("ALREADY ENABLED")
-                setclosepop(false)
-                setIsToggled(true)
-            }
-            else
-            {
-                // axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
-                //     console.log("Response false Data ={", res.data.message , "}")
-                //     setIsToggled(false)
-                // }   ).catch((err)=>{ 
-                //         // setIsToggled(true)
-                // } )
-            }
-            
+            // EnabledSucces()
+            succes("You have successfully Enable 2FA Third Party");
         }).catch((err)=>{
             setIsToggled(false)
+            error("2FA Third Party Procces Failed");
+            // EnableError()
         })
-        // window.location.reload()
-        // console.log("FUCKING PIN IS ", values)
+        wait(1000).then(() => { 
+            window.location.reload();
+          })
+
     }
 
     const submitHandler = () => {
         const name = data.displayName.trim();
+        
         if (name.length === 0)
         {
-            setColor("#ff0101");
+            warning("Display Name must not be empty");
+            // NoNameError();
             return;
         }
         
-        setColor("#16ff01");
-
         axios.put(process.env.REACT_APP_BACKEND_URL+ "/profile/updateUsername/" + name , name, {withCredentials: true}).then((res)=>{
-            wait(2000).then(() => {
-                setColor("#ff000d");
-                setLoading(false);
-            })
-
-            console.log("Res = ", res)
-            // console.log(res)
+            // NameUpdated();
+            succes("You have successfully updated your Display Name");
         }   ).catch((err)=>{ 
-            wait(2000).then(() => {
-            setColor("#ff000d");})
-            console.log(err)
+            error("Display Name Update Failed");
+            // NameNotUpdated()
         })
-
-        console.log("submit handler /{" + name+"}")
     };
 
     return (
         <SettingsStyle  className='container'  >
-
             <div className='all'>
             
                 <HeadComponent title="Settings" />
@@ -315,14 +294,10 @@ export default function Setting() {
 
                                     <button id="cancel"  > 
                                         <Button  onClick={setCancel} text="Disable 2FA" type='secondary' />
-                                        {/* <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="40" height="35"></img>
-                                        Disable 2FA  */}
                                     </button>
 
                                     <button id="next"   > 
                                         <Button  onClick={setEnable} text="Next" type='primary' />
-                                        {/* <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="40" height="40"></img>
-                                        Next  */}
                                     </button>
                                 </div>
                             </div>
@@ -339,7 +314,6 @@ export default function Setting() {
                                 
 
                                 <div className='passwordo' >
-                                    {/* <label className='text'> 8 Digit Pin : </label> */}
                                     <PinInput
                                         containerClassName='piniput'
                                         values={values}
@@ -353,32 +327,14 @@ export default function Setting() {
                                 <Line></Line>
 
                                 <div className='Buttons' >
-                                    
-                                    {/* <button id="submit"  onClick={setEnable} >  */}
                                         <Button  onClick={submitpass} text="Submit" type='primary' />
-
-                                        {/* <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="40" height="40"></img>
-                                        submit */}
-                                    {/* </button> */}
-                                    
-                                    {/* <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img>
-                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="50" height="50"></img>
-                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img>
-                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="50" height="50"></img>
-                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img>
-                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="50" height="50"></img>
-                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img>
-                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider_1f577-fe0f.png" alt="Spider on Microsoft Teams 1.0" width="50" height="50"></img>
-                                    <img src="https://emojipedia-us.s3.amazonaws.com/source/microsoft-teams/337/spider-web_1f578-fe0f.png" width="60" height="60"></img> */}
                                 </div>
                             </div>
                         }
                 
                         <Button  onClick={submitHandler} text="save" type='primary' />
-                        <RingLoader  color={color} loading={loading} cssOverride={override} size={30} />     
                 </Row> 
             </div>
-
         </SettingsStyle>
     )
 }
@@ -642,11 +598,6 @@ const Row = styled.div`
 
         }
 }
-
-`;
-
-const PoppUpp = styled.div`
-
 
 `;
 

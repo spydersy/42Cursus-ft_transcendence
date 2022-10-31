@@ -2,15 +2,14 @@ import React , {useState} from "react";
 import styled from 'styled-components';
 import axios from 'axios';
 import { PinInput } from 'react-input-pin-code' // ES Module
-import SICIRITY from '../components/2fa/main';
 import AnimatedBg from '../components/AnimatedBg';
 import { Button } from './SignIn';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { wait } from '@testing-library/user-event/dist/utils';
 
 export default function NotFound() {
     return <StyledTwoFa>
-     
-
-                {/* <body> */}
 
                 <div className="video">
                     asdfasfa
@@ -27,11 +26,37 @@ export default function NotFound() {
 
 export  function TwoFa() {
     const [values, setValues] = useState(['', '', '','','','']);
+    const navigate = useNavigate();
+
+    const error = (props: string) => {
+        toast.error(props, {
+            position: "bottom-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored"
+        });
+    }
+    const succes = (props: string) => {
+        toast.success(props, {
+            position: "bottom-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored"
+        });
+    }
 
     const submitpass = ()=> {
-
         console.log("__PIN  = ", values)
         let pass  = "";
+
         for (let i = 0; i < values.length; i++) 
         {
             if (values[i] === ',')
@@ -39,43 +64,26 @@ export  function TwoFa() {
             else
                 pass += values[i];
         } 
-        // console.log("_FILTRED_PIN  = ", pass)
-        // axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/update2FA?status=true" ,   {withCredentials: true}).then((res)=>{
-        //         console.log()
-        //     }).catch((err)=>{})
-        
-        axios.post(process.env.REACT_APP_BACKEND_URL+ "/2fa/validate?code=" + pass , {withCredentials: true}).then((res)=>{
-            console.log("__status=true_&_code=__: ", res.data )
-            
-            if (res.data) 
+
+        axios.post(process.env.REACT_APP_BACKEND_URL+ "/2fa/validate?code=" + pass , {} ,{withCredentials: true}).then((res)=>{
+            if (res.data.status === "true")
             {
-                console.log("ALREADY BROKEN")
-                // setQrCode("ALREADY ENABLED")
-                // setclosepop(false)
-                // setIsToggled(true)
+                succes(" Signed in successfully");
+                wait(2000).then(() => {
+                navigate("/");})
             }
             else
-            {
-                // axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
-                //     console.log("Response false Data ={", res.data.message , "}")
-                //     setIsToggled(false)
-                // }   ).catch((err)=>{ 
-                //         // setIsToggled(true)
-                // } )
-            }
+                error("Wrong code , Try again");
             
         }).catch((err)=>{
-            // setIsToggled(false)
+            error("Something is Wrong , Try again");
+            navigate("/signin");
         })
-        // window.location.reload()
-        // console.log("FUCKING PIN IS ", values)
     }
 
-    return <StyledTwoFa>
+    return   <StyledTwoFa>
                
-                <div className='Hiho'>
-                    <AnimatedBg /> 
-                </div>
+                <div className='Hiho'>  <AnimatedBg />   </div>
 
                 <div className='PoppUpp'>
                                 
@@ -84,7 +92,6 @@ export  function TwoFa() {
                     <Line></Line>
                     
                     <div className='passwordo' >
-                        {/* <label className='text'> 8 Digit Pin : </label> */}
                         <PinInput
                             containerClassName='piniput'
                             values={values}
@@ -98,6 +105,7 @@ export  function TwoFa() {
                     <Line></Line>
 
                     <div className='Buttons' >
+                        <a href="/signin"> <Button  onClick={submitpass} text="Go Back to Sign-in" type='secondary' /></a>
                         <Button  onClick={submitpass} text="Submit" type='primary' />
                     </div>
 
@@ -116,23 +124,15 @@ const StyledTwoFa = styled.div`
         position: relative;
         align-items: center;
         justify-content: center;
-        /* opacity: 0.6; */
         background-color: #dc1111f0
     }
 
-    /* display: flex;
-    position: relative; */
-    /* flex-direction: row; */
-    /* gap: 10px; */
-    /* align-items: center; */
-  
     .PoppUpp{
         opacity: 0.9;
         background-color: #6f89a927;
-        /* margin-top: 100px; */
         left: 30%;
-        height: 250px;
-        width: 500px;
+        height: 280px;
+        width: 550px;
         background-color: ${props => props.theme.colors.seconderybg};
         border: 2px solid  ${props => props.theme.colors.purple};
         color: #dacece5f ;
@@ -146,7 +146,7 @@ const StyledTwoFa = styled.div`
         
         .Title {
             width: 100%;
-            height: 15px;
+            height: 18px;
             text-align: center;
             font-size: 14px;
             margin: 20px 0px;
@@ -162,7 +162,7 @@ const StyledTwoFa = styled.div`
             align-items: center;
             justify-content: center;
             left: 25%;
-            height: 100px;
+            height: 130px;
             width: 50%;
 
         }
@@ -170,46 +170,28 @@ const StyledTwoFa = styled.div`
         .Buttons{
             /* background-color: #c88989; */
             width: 100%;
-            height: 30px;
+            height: 40px;
             flex-direction: row;
             align-items: center;
             justify-content: center;
             display: flex;
-            gap: 20px;
+            gap: 40px;
 
-            #submit {
-                margin: 0px 0px;
-                background-color: #1d5eac;
-                width: 25%;
-                height: 50px;
-                border-radius: 20px;
-                font-size: 25px;
-                font-weight: 600;
-                display: flex;
-                justify-content: center;
-                text-align: center;
-                align-items: center;
-            }
         }
         .passwordo {
             position: relative;
             width: 100%;
-            height: 80px;
+            height: 100px;
             /* position: relative; */
             display: flex;
             align-items: center;
             background-color: #6f89a927;
             .text {
                 width: 25%;
-                /* height: 30px; */
-                /* background-color: #b0a7a7; */
+ 
                 color: #090909;
                 font-size: 25px;
-
-                
-         
             }
-
         }
         &:hover {
             opacity: 1;
