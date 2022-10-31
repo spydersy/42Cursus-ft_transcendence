@@ -89,7 +89,6 @@ export default function Pong(props: gameProps) {
         p5.stroke(p5.color("#157DBD"));
         p5.strokeWeight(2)
         p5.ellipse(ballCord.x, ballCord.y, ballCord.size, ballCord.size);
-        p5.line(ballCord.x ,ballCord.y,  pre.x, pre.y);
 
         p5.fill(p5.color(gameData?.ballcolor))
         p5.noStroke()

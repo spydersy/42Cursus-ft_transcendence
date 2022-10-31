@@ -349,7 +349,7 @@ const Item = styled(Link)<ItemProps>`
     font-family: 'Poppins', sans-serif;
     font-weight : 500;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content:center;
 
     flex-direction: row;

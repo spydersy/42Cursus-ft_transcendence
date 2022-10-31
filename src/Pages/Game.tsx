@@ -57,8 +57,7 @@ export default function Game(props : GameProps) {
 
 
 //  })
- gamesocket.off("endGame").on("endGame" , (payload)=>{
-
+ gamesocket.on("endGame" , (payload)=>{
    setstart(false)
   if (payload.score.score1 > payload.score.score2 )
   {
@@ -82,6 +81,7 @@ export default function Game(props : GameProps) {
    setend(true)
  })
 
+
  var data : UserProp ;
 
   useEffect(() => {
@@ -96,6 +96,7 @@ export default function Game(props : GameProps) {
       {
         if (!end)
         {
+          console.log(mode)
           gamesocket.emit("playerConnect" , data?.login)
   
         }
