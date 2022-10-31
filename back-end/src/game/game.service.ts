@@ -19,6 +19,7 @@ export class GameService {
     direction : {x : number , y  : number}
     status : string
     predict : number
+    predicty : number
     // score: {score1 : number , score2 : number};
 
 
@@ -33,6 +34,7 @@ export class GameService {
        this.status  = "waiting";
        this.paddel2 = {x : 0 , y : 0}
        this.predict = 0;
+       this.predicty = 0;
 
    }
 
