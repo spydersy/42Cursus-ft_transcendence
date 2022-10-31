@@ -43,13 +43,15 @@ export default function Game(props : GameProps) {
   const [show, setshow] = useState(false)
   gamesocket.off("startGame").on("startGame" , (pyload : any)=>{
     setend(false)
+
     fetchPlayersData(pyload.player1 , pyload.player2)
     setshow(true)
     console.log(loged?.login , pyload.player1)
     setplayer(loged?.login === pyload.player1 )
  })
 
- gamesocket.on("endGame" , (payload)=>{
+
+ gamesocket.off("endGame").on("endGame" , (payload)=>{
    setstart(false)
   if (payload.score.score1 > payload.score.score2 )
   {
