@@ -39,6 +39,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       if (player)
         return  i;
     }
+
     return -1;
   }
 
@@ -397,28 +398,28 @@ moveAI(room : any )
    var TableH : number =   700;
         
 
-      //  if (PreditctY > 0 && PreditctY < TableH)
-      //  {
-      //    if (PreditctY >  yb && PreditctY < yb  + h)
-      //      return ;
-      //    else if (yp  > PreditctY)
-      //       this.roomArray[i].paddel2.y = yp - 10
-      //    else if (yp + (h / 2) < PreditctY)
-      //       this.roomArray[i].paddel2.y = yp + 10
+       if (PreditctY > 0 && PreditctY < TableH)
+       {
+         if (PreditctY >  yb && PreditctY < yb  + h)
+           return ;
+         else if (yp  > PreditctY)
+            this.roomArray[i].paddel2.y = yp - 10
+         else if (yp + (h / 2) < PreditctY)
+            this.roomArray[i].paddel2.y = yp + 10
 
-      //  }
-      //  else if (PreditctY < TableH + (TableH / 2)  &&  PreditctY > TableH)
-      //  {
-      //      if (yp  + h < TableH)
-      //       this.roomArray[i].paddel2.y = yp + 10
+       }
+       else if (PreditctY < TableH + (TableH / 2)  &&  PreditctY > TableH)
+       {
+           if (yp  + h < TableH)
+            this.roomArray[i].paddel2.y = yp + 10
 
 
-      //  }
-      //  else if (PreditctY < 0  &&  PreditctY > - (TableH / 2))
-      //  {
-      //      if (yp  > 0)
-      //       this.roomArray[i].paddel2.y = yp - 10
-      //  }
+       }
+       else if (PreditctY < 0  &&  PreditctY > - (TableH / 2))
+       {
+           if (yp  > 0)
+            this.roomArray[i].paddel2.y = yp - 10
+       }
         
        this.wss.to(room.roomName).emit("player2moved" , this.roomArray[i].paddel2.y)
  }
