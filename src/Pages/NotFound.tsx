@@ -65,7 +65,7 @@ export  function TwoFa() {
                 pass += values[i];
         } 
 
-        axios.post(process.env.REACT_APP_BACKEND_URL+ "/2fa/validate?code=" + pass , {} ,{withCredentials: true}).then((res)=>{
+        axios.post(process.env.REACT_APP_BACKEND_URL+ "/auth/validate2FA?code=" + pass , {} ,{withCredentials: true}).then((res)=>{
             if (res.data.status === "true")
             {
                 succes(" Signed in successfully");
