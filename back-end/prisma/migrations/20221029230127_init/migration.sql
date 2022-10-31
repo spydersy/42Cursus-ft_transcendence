@@ -8,7 +8,7 @@ CREATE TYPE "NOTIFICATION" AS ENUM ('REQUEST', 'ACCEPT', 'MESSAGE', 'GAMEINVITAI
 CREATE TYPE "RELATION" AS ENUM ('FRIENDS', 'PENDING');
 
 -- CreateEnum
-CREATE TYPE "MODE" AS ENUM ('CLASSIC', 'TAGTEAM', 'ONEVONE', 'AIBUGGY', 'AIDRVEGA');
+CREATE TYPE "MODE" AS ENUM ('CLASSIC', 'AIBUGGY', 'AIDRVEGA');
 
 -- CreateEnum
 CREATE TYPE "CHANNEL" AS ENUM ('DM', 'PUBLIC', 'PRIVATE', 'PROTECTED');
@@ -132,9 +132,6 @@ CREATE TABLE "Messages" (
 
     CONSTRAINT "Messages_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "websockets_socketId_key" ON "websockets"("socketId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_id_key" ON "users"("id");

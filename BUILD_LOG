@@ -1,0 +1,368 @@
+Building back-end
+#1 [internal] load build definition from Dockerfile
+#1 sha256:24bc1f6de36ee2d2e2c838d1af758036790313f119c93bc498737e727c564071
+#1 transferring dockerfile: 38B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load .dockerignore
+#2 sha256:20d91643ef52e8d68a8ac70f48223b26b1d2884d05d1420f00dfdbf0a0724668
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:18.8
+#3 sha256:82d97a82cdbb238adbf711d6ed0d68dd546f637da1c3d4f28dd3893f2ffe61d2
+#3 DONE 1.0s
+
+#4 [1/4] FROM docker.io/library/node:18.8@sha256:a0a2fc4435b0c9ae7bec0a69b1279323a4a41c5a005581fbf30d39cd5777db37
+#4 sha256:2f5804f229f1b9389e696c8da653fb5f6587d0e020586ab7a0c56ad69c814f99
+#4 DONE 0.0s
+
+#6 [internal] load build context
+#6 sha256:c2bed2d44f944f6fb68c17975b785a11c9377c920ec4603b8b3d746519fb91ce
+#6 transferring context: 642.95kB 0.0s done
+#6 DONE 0.0s
+
+#5 [2/4] WORKDIR /back-end
+#5 sha256:89c177d3312a37ad944487d6c8b33945ac5e7fb1f94abf010830a2626af4e10f
+#5 CACHED
+
+#7 [3/4] COPY package*.json .
+#7 sha256:b2167ddc15d0fd4df46146b78b3100ae6c2ed39f5f14f693fedb0c4f8b42e766
+#7 CACHED
+
+#8 [4/4] RUN npm install
+#8 sha256:dba4ce529166391fe6aec17429bd573b4bc31c00f53fa06e4a5754516842e623
+#8 CACHED
+
+#9 exporting to image
+#9 sha256:e8c613e07b0b7ff33893b694f7759a10d42e180f2b4dc349fb57dc6b71dcab00
+#9 exporting layers done
+#9 writing image sha256:5b408976e335492a131764bce245f1e50970005edf2dd0ee0a9bee8a2e94ddc3 done
+#9 naming to docker.io/library/42cursus-ft_transcendence_back-end done
+#9 DONE 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Building front-end
+#1 [internal] load build definition from Dockerfile
+#1 sha256:e71bdf44122ddc306d635772bbd50ebb6a9794fce073c7b3a71ce7baa0471501
+#1 transferring dockerfile: 37B done
+#1 DONE 0.0s
+
+#2 [internal] load .dockerignore
+#2 sha256:3dd23abebd245a7ac1f6224f7e64d102b8bfa8f0f2356d54e589ab1fc8e19a0e
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:18.8
+#3 sha256:82d97a82cdbb238adbf711d6ed0d68dd546f637da1c3d4f28dd3893f2ffe61d2
+#3 DONE 0.2s
+
+#4 [1/4] FROM docker.io/library/node:18.8@sha256:a0a2fc4435b0c9ae7bec0a69b1279323a4a41c5a005581fbf30d39cd5777db37
+#4 sha256:2f5804f229f1b9389e696c8da653fb5f6587d0e020586ab7a0c56ad69c814f99
+#4 DONE 0.0s
+
+#6 [internal] load build context
+#6 sha256:504f7a44672eb96ff20621ad53704b9d52c21c61b60f036842ebcef8672f05d9
+#6 transferring context: 72B done
+#6 DONE 0.0s
+
+#5 [2/4] WORKDIR /front-end
+#5 sha256:092ff68e5b13c01b8bab9e712c6e13ca35570ad9b8842e6c6d5021b3aeeb69e7
+#5 CACHED
+
+#7 [3/4] COPY package*.json .
+#7 sha256:af6a02ed3e3ec2b358f4e3c2e699399e69d90a612f5000968bc4ef47771d372a
+#7 CACHED
+
+#8 [4/4] RUN yarn install
+#8 sha256:d20b4a6165415da2dfd0bc991cf3f148b9808628f50ded0335985ccb9bd757a8
+#8 CACHED
+
+#9 exporting to image
+#9 sha256:e8c613e07b0b7ff33893b694f7759a10d42e180f2b4dc349fb57dc6b71dcab00
+#9 exporting layers done
+#9 writing image sha256:da9e4cf4f5644c0a31b25d75ac0c850367d4ea3289ba2ba492c4debc6b2a25fb done
+#9 naming to docker.io/library/42cursus-ft_transcendence_front-end done
+#9 DONE 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+db-container is up-to-date
+Recreating nest-container ... 
+Starting react-container  ... 
+Starting react-container  ... done
+Recreating nest-container ... done
+Attaching to db-container, react-container, nest-container
+[32mreact-container |[0m yarn run v1.22.19
+[32mreact-container |[0m $ react-scripts start
+[36mdb-container |[0m The files belonging to this database system will be owned by user "postgres".
+[36mdb-container |[0m This user must also own the server process.
+[36mdb-container |[0m 
+[36mdb-container |[0m The database cluster will be initialized with locale "en_US.utf8".
+[36mdb-container |[0m The default database encoding has accordingly been set to "UTF8".
+[36mdb-container |[0m The default text search configuration will be set to "english".
+[36mdb-container |[0m 
+[36mdb-container |[0m Data page checksums are disabled.
+[36mdb-container |[0m 
+[36mdb-container |[0m fixing permissions on existing directory /var/lib/postgresql/data ... ok
+[36mdb-container |[0m creating subdirectories ... ok
+[36mdb-container |[0m selecting dynamic shared memory implementation ... posix
+[36mdb-container |[0m selecting default max_connections ... 100
+[36mdb-container |[0m selecting default shared_buffers ... 128MB
+[36mdb-container |[0m selecting default time zone ... Etc/UTC
+[36mdb-container |[0m creating configuration files ... ok
+[36mdb-container |[0m running bootstrap script ... ok
+[36mdb-container |[0m performing post-bootstrap initialization ... ok
+[36mdb-container |[0m syncing data to disk ... ok
+[36mdb-container |[0m 
+[36mdb-container |[0m initdb: warning: enabling "trust" authentication for local connections
+[36mdb-container |[0m You can change this by editing pg_hba.conf or using the option -A, or
+[36mdb-container |[0m --auth-local and --auth-host, the next time you run initdb.
+[36mdb-container |[0m 
+[36mdb-container |[0m Success. You can now start the database server using:
+[36mdb-container |[0m 
+[36mdb-container |[0m     pg_ctl -D /var/lib/postgresql/data -l logfile start
+[36mdb-container |[0m 
+[36mdb-container |[0m waiting for server to start....2022-10-29 22:42:50.040 UTC [48] LOG:  starting PostgreSQL 13.8 (Debian 13.8-1.pgdg110+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+[36mdb-container |[0m 2022-10-29 22:42:50.059 UTC [48] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+[36mdb-container |[0m 2022-10-29 22:42:50.084 UTC [49] LOG:  database system was shut down at 2022-10-29 22:42:49 UTC
+[36mdb-container |[0m 2022-10-29 22:42:50.097 UTC [48] LOG:  database system is ready to accept connections
+[36mdb-container |[0m  done
+[36mdb-container |[0m server started
+[36mdb-container |[0m CREATE DATABASE
+[36mdb-container |[0m 
+[36mdb-container |[0m 
+[36mdb-container |[0m /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+[36mdb-container |[0m 
+[36mdb-container |[0m 2022-10-29 22:42:50.456 UTC [48] LOG:  received fast shutdown request
+[36mdb-container |[0m waiting for server to shut down....2022-10-29 22:42:50.457 UTC [48] LOG:  aborting any active transactions
+[36mdb-container |[0m 2022-10-29 22:42:50.460 UTC [48] LOG:  background worker "logical replication launcher" (PID 55) exited with exit code 1
+[36mdb-container |[0m 2022-10-29 22:42:50.463 UTC [50] LOG:  shutting down
+[36mdb-container |[0m 2022-10-29 22:42:50.478 UTC [48] LOG:  database system is shut down
+[36mdb-container |[0m  done
+[36mdb-container |[0m server stopped
+[36mdb-container |[0m 
+[36mdb-container |[0m PostgreSQL init process complete; ready for start up.
+[36mdb-container |[0m 
+[36mdb-container |[0m 2022-10-29 22:42:50.598 UTC [1] LOG:  starting PostgreSQL 13.8 (Debian 13.8-1.pgdg110+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+[36mdb-container |[0m 2022-10-29 22:42:50.598 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+[36mdb-container |[0m 2022-10-29 22:42:50.598 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+[36mdb-container |[0m 2022-10-29 22:42:50.601 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+[36mdb-container |[0m 2022-10-29 22:42:50.605 UTC [62] LOG:  database system was shut down at 2022-10-29 22:42:50 UTC
+[36mdb-container |[0m 2022-10-29 22:42:50.613 UTC [1] LOG:  database system is ready to accept connections
+[36mdb-container |[0m 2022-10-29 22:42:58.642 UTC [70] ERROR:  relation "_prisma_migrations" does not exist at character 126
+[36mdb-container |[0m 2022-10-29 22:42:58.642 UTC [70] STATEMENT:  SELECT "id", "checksum", "finished_at", "migration_name", "logs", "rolled_back_at", "started_at", "applied_steps_count" FROM "_prisma_migrations" ORDER BY "started_at" ASC
+[36mdb-container |[0m 
+[36mdb-container |[0m PostgreSQL Database directory appears to contain a database; Skipping initialization
+[36mdb-container |[0m 
+[36mdb-container |[0m 2022-10-29 22:43:24.604 UTC [1] LOG:  starting PostgreSQL 13.8 (Debian 13.8-1.pgdg110+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+[36mdb-container |[0m 2022-10-29 22:43:24.605 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+[36mdb-container |[0m 2022-10-29 22:43:24.605 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+[36mdb-container |[0m 2022-10-29 22:43:24.608 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+[36mdb-container |[0m 2022-10-29 22:43:24.611 UTC [27] LOG:  database system was interrupted; last known up at 2022-10-29 22:42:59 UTC
+[36mdb-container |[0m 2022-10-29 22:43:24.760 UTC [27] LOG:  database system was not properly shut down; automatic recovery in progress
+[36mdb-container |[0m 2022-10-29 22:43:24.770 UTC [27] LOG:  redo starts at 0/16ED8C8
+[36mdb-container |[0m 2022-10-29 22:43:24.771 UTC [27] WARNING:  could not open directory "base/16814": No such file or directory
+[36mdb-container |[0m 2022-10-29 22:43:24.771 UTC [27] CONTEXT:  WAL redo at 0/16ED978 for Database/DROP: dir 1663/16814
+[36mdb-container |[0m 2022-10-29 22:43:24.771 UTC [27] WARNING:  some useless files may be left behind in old database directory "base/16814"
+[36mdb-container |[0m 2022-10-29 22:43:24.771 UTC [27] CONTEXT:  WAL redo at 0/16ED978 for Database/DROP: dir 1663/16814
+[36mdb-container |[0m 2022-10-29 22:43:24.771 UTC [27] LOG:  invalid record length at 0/16ED9E8: wanted 24, got 0
+[36mdb-container |[0m 2022-10-29 22:43:24.771 UTC [27] LOG:  redo done at 0/16ED9A0
+[36mdb-container |[0m 2022-10-29 22:43:24.783 UTC [1] LOG:  database system is ready to accept connections
+[36mdb-container |[0m 2022-10-29 22:43:31.086 UTC [34] LOG:  could not receive data from client: Connection reset by peer
+[32mreact-container |[0m (node:36) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+[32mreact-container |[0m (Use `node --trace-deprecation ...` to show where the warning was created)
+[32mreact-container |[0m (node:36) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+[32mreact-container |[0m Starting the development server...
+[32mreact-container |[0m 
+[33mnest-container |[0m 
+[33mnest-container |[0m up to date, audited 800 packages in 2s
+[33mnest-container |[0m 
+[33mnest-container |[0m 91 packages are looking for funding
+[33mnest-container |[0m   run `npm fund` for details
+[33mnest-container |[0m 
+[33mnest-container |[0m found 0 vulnerabilities
+[33mnest-container |[0m Environment variables loaded from .env
+[33mnest-container |[0m Prisma schema loaded from prisma/schema.prisma
+[33mnest-container |[0m Datasource "db": PostgreSQL database "nest", schema "public" at "dev-db:5432"
+[33mnest-container |[0m 
+[36mdb-container |[0m 2022-10-29 22:49:03.640 UTC [45] LOG:  could not receive data from client: Connection reset by peer
+[33mnest-container |[0m 
+[33mnest-container |[0m ⚠️  Warnings for the current datasource:
+[33mnest-container |[0m 
+[33mnest-container |[0m   • The values [TAGTEAM,ONEVONE] on the enum `MODE` will be removed. If these variants are still used in the database, this will fail.
+[33mnest-container |[0m 
+[33mnest-container |[0m Error: Prisma Migrate has detected that the environment is non-interactive, which is not supported.
+[33mnest-container |[0m 
+[33mnest-container |[0m `prisma migrate dev` is an interactive command designed to create new migrations and evolve the database in development.
+[33mnest-container |[0m To apply existing migrations in deployments, use prisma migrate deploy.
+[33mnest-container |[0m See https://www.prisma.io/docs/reference/api-reference/command-reference#migrate-deploy
+[33mnest-container |[0m 
+[33mnest-container |[0m > ft_transcendence@0.0.1 start:dev
+[33mnest-container |[0m > nest start --watch
+[33mnest-container |[0m 
+[32mreact-container |[0m Compiled with warnings.
+[32mreact-container |[0m 
+[32mreact-container |[0m Failed to parse source map from '/front-end/node_modules/@bradgarropy/use-countdown/src/countdown.tsx' file: Error: ENOENT: no such file or directory, open '/front-end/node_modules/@bradgarropy/use-countdown/src/countdown.tsx'
+[32mreact-container |[0m 
+[32mreact-container |[0m Failed to parse source map from '/front-end/node_modules/@bradgarropy/use-countdown/src/index.tsx' file: Error: ENOENT: no such file or directory, open '/front-end/node_modules/@bradgarropy/use-countdown/src/index.tsx'
+[32mreact-container |[0m 
+[32mreact-container |[0m Failed to parse source map from '/front-end/node_modules/@bradgarropy/use-countdown/src/time.tsx' file: Error: ENOENT: no such file or directory, open '/front-end/node_modules/@bradgarropy/use-countdown/src/time.tsx'
+[32mreact-container |[0m 
+[32mreact-container |[0m Failed to parse source map from '/front-end/node_modules/@bradgarropy/use-countdown/src/types.ts' file: Error: ENOENT: no such file or directory, open '/front-end/node_modules/@bradgarropy/use-countdown/src/types.ts'
+[32mreact-container |[0m 
+[32mreact-container |[0m Search for the keywords to learn more about each warning.
+[32mreact-container |[0m To ignore, add // eslint-disable-next-line to the line before.
+[32mreact-container |[0m 
+[32mreact-container |[0m WARNING in ./node_modules/@bradgarropy/use-countdown/dist/countdown.js
+[32mreact-container |[0m Module Warning (from ./node_modules/source-map-loader/dist/cjs.js):
+[32mreact-container |[0m Failed to parse source map from '/front-end/node_modules/@bradgarropy/use-countdown/src/countdown.tsx' file: Error: ENOENT: no such file or directory, open '/front-end/node_modules/@bradgarropy/use-countdown/src/countdown.tsx'
+[32mreact-container |[0m 
+[32mreact-container |[0m WARNING in ./node_modules/@bradgarropy/use-countdown/dist/index.js
+[32mreact-container |[0m Module Warning (from ./node_modules/source-map-loader/dist/cjs.js):
+[32mreact-container |[0m Failed to parse source map from '/front-end/node_modules/@bradgarropy/use-countdown/src/index.tsx' file: Error: ENOENT: no such file or directory, open '/front-end/node_modules/@bradgarropy/use-countdown/src/index.tsx'
+[32mreact-container |[0m 
+[32mreact-container |[0m WARNING in ./node_modules/@bradgarropy/use-countdown/dist/time.js
+[32mreact-container |[0m Module Warning (from ./node_modules/source-map-loader/dist/cjs.js):
+[32mreact-container |[0m Failed to parse source map from '/front-end/node_modules/@bradgarropy/use-countdown/src/time.tsx' file: Error: ENOENT: no such file or directory, open '/front-end/node_modules/@bradgarropy/use-countdown/src/time.tsx'
+[32mreact-container |[0m 
+[32mreact-container |[0m WARNING in ./node_modules/@bradgarropy/use-countdown/dist/types.js
+[32mreact-container |[0m Module Warning (from ./node_modules/source-map-loader/dist/cjs.js):
+[32mreact-container |[0m Failed to parse source map from '/front-end/node_modules/@bradgarropy/use-countdown/src/types.ts' file: Error: ENOENT: no such file or directory, open '/front-end/node_modules/@bradgarropy/use-countdown/src/types.ts'
+[32mreact-container |[0m 
+[32mreact-container |[0m webpack compiled with 4 warnings
+[32mreact-container |[0m Files successfully emitted, waiting for typecheck results...
+[32mreact-container |[0m Issues checking in progress...
+[33mnest-container |[0m c[[90m10:49:08 PM[0m] Starting compilation in watch mode...
+[33mnest-container |[0m 
+[33mnest-container |[0m Environment variables loaded from .env
+[33mnest-container |[0m Prisma schema loaded from prisma/schema.prisma
+[33mnest-container |[0m Prisma Studio is up on http://localhost:5555
+[33mnest-container |[0m [96msrc/auth/jwt.strategy.ts[0m:[93m11[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'SOCKET'.
+[33mnest-container |[0m 
+[33mnest-container |[0m [7m11[0m import { SOCKET } from "@prisma/client";
+[33mnest-container |[0m [7m  [0m [91m         ~~~~~~[0m
+[33mnest-container |[0m 
+[33mnest-container |[0m [96msrc/chat/chat.controller.ts[0m:[93m8[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PERMISSION'.
+[33mnest-container |[0m 
+[33mnest-container |[0m [7m8[0m import { PERMISSION } from '@prisma/client';
+[33mnest-container |[0m [7m [0m [91m         ~~~~~~~~~~[0m
+[33mnest-container |[0m 
+[33mnest-container |[0m [96msrc/chat/chat.service.ts[0m:[93m3[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'CHANNEL'.
+[33mnest-container |[0m 
+[33mnest-container |[0m [7m3[0m import { CHANNEL, PERMISSION, RESCTRICTION } from '@prisma/client';
+[33mnest-container |[0m [7m [0m [91m         ~~~~~~~[0m
+[33mnest-container |[0m 
+[33mnest-container |[0m [96msrc/chat/chat.service.ts[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'PERMISSION'.
+[33mnest-container |[0m 
+[33mnest-container |[0m [7m3[0m import { CHANNEL, PERMISSION, RESCTRICTION } from '@prisma/client';
+[33mnest-container |[0m [7m [0m [91m                  ~~~~~~~~~~[0m
+[33mnest-container |[0m 
+[33mnest-container |[0m [96msrc/chat/chat.service.ts[0m:[93m3[0m:[93m31[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'RESCTRICTION'.
+[33mnest-container |[0m 
+[33mnest-container |[0m [7m3[0m import { CHANNEL, PERMISSION, RESCTRICTION } from '@prisma/client';
+[33mnest-container |[0m [7m [0m [91m                              ~~~~~~~~~~~~[0m
+[33mnest-container |[0m 
+[33mnest-container |[0m [96msrc/game/game.service.ts[0m:[93m6[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'MODE'.
+[33mnest-container |[0m 
+[33mnest-container |[0m [7m6[0m import { MODE } from '@prisma/client';
+[33mnest-container |[0m [7m [0m [91m         ~~~~[0m
+[33mnest-container |[0m 
+[33mnest-container |[0m [96msrc/online-loger.gateway.ts[0m:[93m15[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'SOCKET'.
+[33mnest-container |[0m 
+[33mnest-container |[0m [7m15[0m import { SOCKET } from '@prisma/client';
+[33mnest-container |[0m [7m  [0m [91m         ~~~~~~[0m
+[33mnest-container |[0m 
+[33mnest-container |[0m [96msrc/profile/profile.service.ts[0m:[93m7[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'RELATION'.
+[33mnest-container |[0m 
+[33mnest-container |[0m [7m7[0m import { RELATION } from '@prisma/client';
+[33mnest-container |[0m [7m [0m [91m         ~~~~~~~~[0m
+[33mnest-container |[0m 
+[33mnest-container |[0m [96msrc/search/search.service.ts[0m:[93m3[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'RELATION'.
+[33mnest-container |[0m 
+[33mnest-container |[0m [7m3[0m import { RELATION } from '@prisma/client';
+[33mnest-container |[0m [7m [0m [91m         ~~~~~~~~[0m
+[33mnest-container |[0m 
+[33mnest-container |[0m [96msrc/user/user.service.ts[0m:[93m2[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'CHANNEL'.
+[33mnest-container |[0m 
+[33mnest-container |[0m [7m2[0m import { CHANNEL, RELATION } from '@prisma/client';
+[33mnest-container |[0m [7m [0m [91m         ~~~~~~~[0m
+[33mnest-container |[0m 
+[33mnest-container |[0m [96msrc/user/user.service.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2305: [0mModule '"@prisma/client"' has no exported member 'RELATION'.
+[33mnest-container |[0m 
+[33mnest-container |[0m [7m2[0m import { CHANNEL, RELATION } from '@prisma/client';
+[33mnest-container |[0m [7m [0m [91m                  ~~~~~~~~[0m
+[33mnest-container |[0m 
+[33mnest-container |[0m [[90m10:49:15 PM[0m] Found 11 errors. Watching for file changes.
+[33mnest-container |[0m 
+[32mreact-container |[0m No issues found.
+Killing nest-container    ... 
+Killing react-container   ... 
+Killing db-container      ... 
+Traceback (most recent call last):
+  File "compose/cli/main.py", line 1530, in up_shutdown_context
+  File "compose/cli/main.py", line 1216, in up
+  File "compose/cli/log_printer.py", line 88, in run
+  File "compose/cli/log_printer.py", line 241, in consume_queue
+  File "queue.py", line 180, in get
+  File "threading.py", line 316, in wait
+  File "compose/cli/signals.py", line 15, in shutdown
+compose.cli.signals.ShutdownException
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "compose/cli/main.py", line 1533, in up_shutdown_context
+  File "compose/project.py", line 411, in stop
+  File "compose/project.py", line 854, in containers
+  File "compose/project.py", line 834, in _labeled_containers
+  File "docker/api/container.py", line 211, in containers
+  File "docker/utils/decorators.py", line 46, in inner
+  File "docker/api/client.py", line 237, in _get
+  File "requests/sessions.py", line 543, in get
+  File "requests/sessions.py", line 516, in request
+  File "requests/sessions.py", line 449, in prepare_request
+  File "requests/models.py", line 314, in prepare
+  File "requests/models.py", line 380, in prepare_url
+  File "urllib3/util/url.py", line 414, in parse_url
+  File "urllib3/util/url.py", line 101, in __new__
+  File "compose/cli/signals.py", line 15, in shutdown
+compose.cli.signals.ShutdownException
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "compose/cli/main.py", line 81, in main
+  File "compose/cli/main.py", line 203, in perform_command
+  File "compose/metrics/decorator.py", line 18, in wrapper
+  File "compose/cli/main.py", line 1229, in up
+  File "contextlib.py", line 135, in __exit__
+  File "compose/cli/main.py", line 1535, in up_shutdown_context
+  File "compose/project.py", line 438, in kill
+  File "compose/parallel.py", line 366, in parallel_kill
+  File "compose/parallel.py", line 344, in parallel_operation
+  File "compose/parallel.py", line 100, in parallel_execute
+  File "compose/parallel.py", line 49, in parallel_execute_watch
+  File "compose/parallel.py", line 178, in parallel_execute_iter
+  File "queue.py", line 180, in get
+  File "threading.py", line 316, in wait
+  File "compose/cli/signals.py", line 15, in shutdown
+compose.cli.signals.ShutdownException
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "logging/__init__.py", line 1685, in isEnabledFor
+KeyError: 40
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "docker-compose", line 3, in <module>
+  File "compose/cli/main.py", line 85, in main
+  File "compose/cli/main.py", line 145, in exit_with_metrics
+  File "logging/__init__.py", line 1462, in error
+  File "logging/__init__.py", line 1687, in isEnabledFor
+  File "compose/cli/signals.py", line 15, in shutdown
+compose.cli.signals.ShutdownException
+[20107] Failed to execute script docker-compose
+Gracefully stopping... (press Ctrl+C again to force)
