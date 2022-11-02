@@ -5,26 +5,22 @@ import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
 import { ChatService } from './chat.service';
 import { ChannelData, ChannelUserDto, MessageDataDto, UserRestrictionDto } from 'src/dtos/Inputs.dto';
-import { PERMISSION } from '@prisma/client';
+import { PERMISSION, RESCTRICTION } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard)
 @Controller('chat')
 export class ChatController {
 
-    constructor(private chatService: ChatService,
-                //private userService: UserService
-                ) {}
+    constructor(private chatService: ChatService) {}
 
-    // TASK_01 - DONE
     @Post('AddUser')
     async AddUserToChannel(@Req() req, @Body() userChannelPair: ChannelUserDto, @Res() res) {
       return this.chatService.AddUserToChannel(req.user.userId, userChannelPair.user, userChannelPair.channelId, res);
     }
 
-    // TASK_01 - DONE
     @Post('UpdateUserPermission')
     async UpdateUserInChannel(@Req() req, @Body() userChannelPair: ChannelUserDto, @Query('role') role, @Res() res) {
-      if (role && (role === 'admin' || role === 'user'))
+      if (role !== undefined && (role === 'admin' || role === 'user'))
         return this.chatService.UpdateUserInChannel(req.user.userId, userChannelPair.user,
           userChannelPair.channelId, role === 'admin' ? PERMISSION.ADMIN : PERMISSION.USER, res);
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Query Not Set Properly'});
@@ -32,13 +28,15 @@ export class ChatController {
 
     @Post('UpdateUserRestriction')
     async UpdateUserRestrictionInChannel(@Req() req, @Body() userRestriction: UserRestrictionDto, @Res() res) {
-      return this.chatService.UpdateUserRestrictionInChannel(req.user.userId, userRestriction.user,
-        userRestriction.channelId, userRestriction.restriction, userRestriction.duration, res);
+      if (userRestriction.restriction === 'BAN' || userRestriction.restriction === 'MUTE' )
+        return this.chatService.UpdateUserRestrictionInChannel(req.user.userId, userRestriction.user,
+          userRestriction.channelId, userRestriction.restriction === "BAN" ? RESCTRICTION.BANNED : RESCTRICTION.MUTED, userRestriction.duration, res);
+      return res.status(HttpStatus.BAD_REQUEST).send({'message': 'BAD REQUEST'});
     }
 
     @Delete('DeleteUser/:user')
     async DeleteUserFromChannel(@Req() req, @Query('channel') channelId, @Res() res) {
-      if (channelId && (channelId === 'admin' || channelId === 'user'))
+      if (channelId !== undefined && (channelId === 'admin' || channelId === 'user'))
         return this.chatService.DeleteUserFromChannel(req.user.userId, req.params.user, channelId, res);
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Query Not Set Properly'});
     }

@@ -9,9 +9,15 @@ interface ManyUsers {
     permission: PERMISSION;
 }
 
+interface SocketRes {
+    stat: boolean;
+    payload: any;
+}
+
 enum USERSTAT{
     MUTED,
     ACCESS,
+    BANNED,
     NOTFOUND
 }
 
@@ -43,7 +49,6 @@ export class ChatService {
                 private userService: UserService,
                 private prisma: PrismaService) {}
 
-    // DONE
     async CreatDMChannel(SenderId: number, ReceiverId: number) {
         let DMChannel = await this.prisma.channels.findMany({
             where :
@@ -71,32 +76,27 @@ export class ChatService {
     }
 
     async GetChannelMessages(me: number, channelId: string, @Res() res) {
-    // All validations needed:
-        // 1) Is a public/private/protected/dm channel ?
-        let channel = await this.GetChannelById(channelId);
+        // Find Channel
+        const channel = await this.GetChannelById(channelId);
         if (channel === null)
             return res.status(HttpStatus.NOT_FOUND).send({'message': 'Channel Not Found'});
-        // 2) user exist in this channel ?
-        let userChannel = await this.FindUserInChannel(me, channelId);
+        // Find User In Channel
+        const userChannel = await this.FindUserInChannel(me, channelId);
         if (userChannel === null)
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'Forbidden'});
-        // 3) user have rights to get content ?
-        if (userChannel.restriction === RESCTRICTION.BANNED
-        || userChannel.restriction === RESCTRICTION.MUTED) {
-            let now = new Date();
-            let restrictionTime = new Date();
-            // console.log("__DIFF__ : ", restrictionTime - now);
-            // if ()
-        }
+        // Check Banned User
+        if (userChannel.restriction === RESCTRICTION.BANNED)
+            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Banned User'});
+        // Get All Messages
         let messages = await this.prisma.messages.findMany({
             where: {channelId: channelId},
             include: {sender: true},
         });
+        // Get Blocked Users
         const blackList = await this.prisma.blocks.findMany({where: {blockedId: me} });
-        // console.log("__BLACK__LIST__DBG__ : ", {blackList, me});
+        // Filter Messages
         messages.forEach(message => {
             message['displayName'] = message.sender.displayName;
-            // console.log("__MESSAGE__SENDER__ : ", message.sender);
             for (let index = 0; index < blackList.length; index++) {
                 if (message.sender.id === blackList[0].userId) {
                     message.content = "Hidden Content 👻👻👻";
@@ -109,6 +109,16 @@ export class ChatService {
     }
 
     async SendMessage(me: number, messageContent: string, channelId: string) {
+        let socketRes: SocketRes;
+        const userStat = await this.PostMessageValidationLayer(me, channelId);
+        if (userStat === USERSTAT.NOTFOUND || userStat === USERSTAT.MUTED
+            || userStat === USERSTAT.BANNED) {
+            socketRes.stat = false;
+            socketRes.payload =  userStat === USERSTAT.NOTFOUND ? 'User or Channel Not Found'
+            : userStat === USERSTAT.BANNED ? 'Banned User'
+            : 'Muted User'
+            return socketRes;
+        }
         let msg = await this.prisma.messages.create({
             data: {
                 senderId: me,
@@ -125,8 +135,9 @@ export class ChatService {
         });
         msg['displayName'] = msg.sender.displayName;
         delete msg.sender;
-        return { stat: true,
-            payload: msg}
+        socketRes.stat = true;
+        socketRes.payload = msg;
+        return socketRes;
     }
 
     async GetManagedChannels(me: number, @Res() res) {
@@ -372,21 +383,15 @@ export class ChatService {
         return userChannel;
     }
 
-    async PostMessageValidationLayer(me: number, messageContent: string, channelId: string) : Promise<USERSTAT> {
-        // All Cases:
-            // 1) This user exist in this channel ?
-            const userInChannel = await this.FindUserInChannel(me, channelId);
-            if (userInChannel === null)
-                return USERSTAT.NOTFOUND;
-            // 2) The User have the right to send message (Banned/Muted) ?
-            // if ()
-            // 3)
+    async PostMessageValidationLayer(me: number, channelId: string) : Promise<USERSTAT> {
+        // const userInChannel = await this.FindUserInChannel(me, channelId);
+        // if (userInChannel === null)
+        //     return USERSTAT.NOTFOUND;
+        // else if (userInChannel.restriction === RESCTRICTION.BANNED)
+        //     return USERSTAT.BANNED;
+        // else if (userInChannel.restriction === RESCTRICTION.MUTED) {
 
-        // return true;
-    }
-
-    async GetMessageValidationLayer(me: number, messageContent: string, channelId: string) {
-        // Do Something . . .
-        return true;
+        // }
+        return USERSTAT.ACCESS;
     }
 }
