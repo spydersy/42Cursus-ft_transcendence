@@ -51,6 +51,7 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
     }
   }
 
+
   @UseGuards(WsGuard)
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket, rooms: Array<string>): void {
@@ -58,7 +59,7 @@ import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
     for(var index in rooms)
     {
 
-      console.log("__ROOM__DBG__ : ", rooms[index])
+      // console.log("__ROOM__DBG__ : ", rooms[index])
       client.join(rooms[index]);
     }
   //  client.emit('joinedRoom', room );

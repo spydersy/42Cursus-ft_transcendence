@@ -15,8 +15,9 @@ import {v4 as uuidv4} from 'uuid';
     },
     namespace : "game"
  })
-export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGatewayDisconnect{
 
+
+export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGatewayDisconnect{
 
   @WebSocketServer() wss : Server
   private logger: Logger = new Logger('GameLogger')
@@ -91,10 +92,10 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       {
         console.log("remove : " +room.roomName)
 
+        this.wss.to(room.roomName).emit("endGame", {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
         client.leave(room.roomName)
         room.roomPlayers.splice(0, 2);
         this.roomArray.splice(i, 1)
-        this.wss.to(room.roomName).emit("endGame", {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
 
         return ;
       }
@@ -104,9 +105,9 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 
   AddtoRoomArray(client : any , login : string) {
-    this.logger.log("After Init")
-    var roomslenght = this.roomArray.length;
 
+    var roomslenght = this.roomArray.length;
+    console.log("__DBG__ADTOROOMS :",roomslenght )
     if (roomslenght === 0)
     {
       let myuuid = uuidv4();
@@ -126,23 +127,26 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       {
         this.roomArray[roomslenght - 1].joinPlayer(login , client.id)
       }
-      else
-      {
-        let myuuid = uuidv4();
-        const  newRoom = new GameService(myuuid)
-        newRoom.joinPlayer(login , client.id)
-        this.roomArray.push(newRoom)
-      }
       
+    }
+    else
+    {
+      let myuuid = uuidv4();
+      const  newRoom = new GameService(myuuid)
+      newRoom.joinPlayer(login , client.id)
+      this.roomArray.push(newRoom)
     }
   }
   var roomName = this.roomArray[this.roomArray.length - 1].roomName
   client.join(roomName)
     // this.wss.emit("change" ,  this.roomArray)
     this.logger.log("changeee")
-
+    for (let index = 0; index < this.roomArray.length; index++) {
+      this.roomArray[index].debug();
+   }
 
   }
+
 
   // @UseGuards(WsGuard)
   handleDisconnect(client: any)
@@ -295,10 +299,12 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   @SubscribeMessage('moveBall')
   moveBall(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
+    console.log(room.roomPlayers)
     if (room)
     {
       var i = this.roomArray.indexOf(room)
-      this.hitWalls(i, this.roomArray[i].ball ,this.roomArray[i].direction , payload.w, payload.h ,payload.p1 , payload.p2 )
+      if (!this.hitWalls(i, this.roomArray[i].ball ,this.roomArray[i].direction , payload.w, payload.h ,payload.p1 , payload.p2 ))
+        return ;
       this.roomArray[i].predict =  (this.roomArray[i].paddel2.x -  this.roomArray[i].ball.x) / this.roomArray[i].direction.x
        this.roomArray[i].ball.x += this.roomArray[i].direction.x
       this.roomArray[i].ball.y += this.roomArray[i].direction.y
@@ -320,23 +326,35 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   playAi(client: any, payload: any): void {
     console.log("____DBG___SALAM")
     let myuuid = uuidv4();
+    var ret  = this.playerExist(client , payload);
+    console.log(ret)
+    if (ret)
+    {
+      var newRoom = new GameService(myuuid)
+      newRoom.status = "AiGame"
+      newRoom.joinPlayer(payload , client.id)
+      newRoom.joinPlayer("ai_1" , "ai_1")
+      client.join(newRoom.roomName)
+      this.roomArray.push(newRoom)
+      this.wss.to(newRoom.roomName).emit("startGame" , {player1 : payload , player2: "ai_1"})
+      console.log("__PLAYAI___DBG: ", )
+    }
+    for (let index = 0; index < this.roomArray.length; index++) {
+      this.roomArray[index].debug();
 
-    var newRoom = new GameService(myuuid)
-    newRoom.status = "AiGame"
-    newRoom.joinPlayer(payload , client.id)
-    newRoom.joinPlayer("ai_1" , "ai_1")
-    client.join(newRoom.roomName)
-    this.roomArray.push(newRoom)
-    this.wss.to(newRoom.roomName).emit("startGame" , {player1 : payload , player2: "ai_1"})
+   }
+
   }
    hitWalls = (i : number,ballCord : any ,direction: any , width , height  ,paddel1 : any , paddel2 : any, )=>{
 
 
+  
     if (ballCord.x + direction.x > width - (ballCord.size  /2 ))
     {
       this.roomArray[i].incrementScore(1)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
       this.checkScore(this.roomArray[i])
+      return false
     }
     else if (ballCord.x + direction.x  < ( ballCord.size /2)    )
     {
@@ -344,6 +362,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       this.roomArray[i].incrementScore(2)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
       this.checkScore(this.roomArray[i])
+      return false
+
 
     }
     else if (ballCord.y <=  ballCord.size / 2 || ballCord.y  >= height - ballCord.size / 2 )
@@ -352,6 +372,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     {
         this.roomArray[i].direction.x =( -this.roomArray[i].direction.x) * 1.15;
     }
+    return true
 
   }
 
@@ -379,7 +400,7 @@ async checkScore (room : any) {
 
       this.wss.to(this.roomArray[i].roomName).emit("endGame" , {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
 
-      await this.roomArray[i].saveGame("AIBUGGY")
+      // await this.roomArray[i].saveGame("AIBUGGY")
       this.roomArray.splice(i, 1)
       delete  this.roomArray[i];
     }
