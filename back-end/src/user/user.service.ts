@@ -397,7 +397,6 @@ export class UserService {
                     blockedId: BlockedUserId,
                 },
             });
-            // console.log("__BLOCK__STAT__ : ", BlockStat);
             if (BlockStat === null)
                 return false;
             return true;
