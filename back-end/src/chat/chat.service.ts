@@ -18,6 +18,7 @@ enum USERSTAT{
     MUTED,
     ACCESS,
     BANNED,
+    BLOCKED,
     NOTFOUND
 }
 
@@ -109,14 +110,17 @@ export class ChatService {
     }
 
     async SendMessage(me: number, messageContent: string, channelId: string) {
-        let socketRes: SocketRes;
+        let socketRes: SocketRes = {stat: false, payload: null};
         const userStat = await this.PostMessageValidationLayer(me, channelId);
+
         if (userStat === USERSTAT.NOTFOUND || userStat === USERSTAT.MUTED
-            || userStat === USERSTAT.BANNED) {
+            || userStat === USERSTAT.BANNED || userStat === USERSTAT.BLOCKED) {
             socketRes.stat = false;
             socketRes.payload =  userStat === USERSTAT.NOTFOUND ? 'User or Channel Not Found'
             : userStat === USERSTAT.BANNED ? 'Banned User'
+            : userStat === USERSTAT.BLOCKED ? 'Blocked User'
             : 'Muted User'
+            console.log("__ENDPOINT__00__");
             return socketRes;
         }
         let msg = await this.prisma.messages.create({
@@ -137,6 +141,7 @@ export class ChatService {
         delete msg.sender;
         socketRes.stat = true;
         socketRes.payload = msg;
+        console.log("__ENDPOINT__01__");
         return socketRes;
     }
 
@@ -383,15 +388,31 @@ export class ChatService {
         return userChannel;
     }
 
-    async PostMessageValidationLayer(me: number, channelId: string) : Promise<USERSTAT> {
-        // const userInChannel = await this.FindUserInChannel(me, channelId);
-        // if (userInChannel === null)
-        //     return USERSTAT.NOTFOUND;
-        // else if (userInChannel.restriction === RESCTRICTION.BANNED)
-        //     return USERSTAT.BANNED;
-        // else if (userInChannel.restriction === RESCTRICTION.MUTED) {
+    async MutedUser() {
 
-        // }
+    }
+
+    async PostMessageValidationLayer(me: number, channelId: string) : Promise<USERSTAT> {
+        const channel = await this.GetChannelById(channelId);
+        const userInChannel = await this.FindUserInChannel(me, channelId);
+
+        if (channel === null)
+            return USERSTAT.NOTFOUND;
+        else if (channel.access === CHANNEL.DM) {
+            const dmChannel = await this.prisma.channelsUsers.findMany({where: {channelId: channelId}});
+            if (await this.userService.IsBlockedUser(dmChannel[0].userId === me
+                ? dmChannel[1].userId : dmChannel[0].userId, me)) {
+                    console.log("__BLOCKED__USER__BEF__SEND__MESSAGE__");
+                    return USERSTAT.BLOCKED;
+            }
+        }
+        else if (userInChannel === null)
+            return USERSTAT.NOTFOUND;
+        else if (userInChannel.restriction === RESCTRICTION.BANNED)
+            return USERSTAT.BANNED;
+        else if (userInChannel.restriction === RESCTRICTION.MUTED) {
+
+        }
         return USERSTAT.ACCESS;
     }
 }
