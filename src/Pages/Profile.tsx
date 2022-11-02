@@ -122,14 +122,14 @@ if (user != null)
                   <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
               </TheBox>
 
-              <PlayerTabsBar isCurrentUser={isCurrentUser} id={id} /> 
+              <PlayerTabsBar isCurrentUser={isCurrentUser} player={User} id={id} /> 
         </div>
   )
 };
 
 const TheBox = styled.div` width: 100%;  border: 0px solid ${props => props.theme.colors.primarybg}; `;
 
-interface PlayerTabsProps { id : string, isCurrentUser : boolean }
+interface PlayerTabsProps { id : string, isCurrentUser : boolean , player : any }
 
 
 ///// PlayerTabs Section
@@ -147,7 +147,7 @@ export function PlayerTabsBar(props : PlayerTabsProps)
     <PlayerTabsStyle>
       <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/> 
         {index === 0 && <FriendsComponent id={props.id}/>}
-        {index === 1 && props.isCurrentUser &&  <PendingRequests/>}
+        {index === 1 && props.isCurrentUser &&  <PendingRequests player={props.player}/>}
         {index === 2 && props.isCurrentUser && <BlockedUsers/>}
     </PlayerTabsStyle>
   )

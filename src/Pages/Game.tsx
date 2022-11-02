@@ -41,15 +41,12 @@ export default function Game(props : GameProps) {
   const [msg, setmsg] = useState(false)
   const [player, setplayer] = useState(true)
   const [show, setshow] = useState(false)
-  gamesocket.off("startGame").on("startGame" , (pyload : any)=>{
-    setend(false)
-
+  gamesocket.on("startGame" , (pyload : any)=>{
     fetchPlayersData(pyload.player1 , pyload.player2)
+    setend(false)
     setshow(true)
-    console.log(loged?.login , pyload.player1)
     setplayer(loged?.login === pyload.player1 )
  })
-
 
  gamesocket.off("endGame").on("endGame" , (payload)=>{
    setstart(false)
@@ -75,6 +72,7 @@ export default function Game(props : GameProps) {
    setend(true)
  })
 
+ 
 
  var data : UserProp ;
 

@@ -27,8 +27,9 @@ export default function CreateGroup(props :{closeModal : ()=>void}) {
         password : "",
         members :[]
     })
-    const [check, setcheck] = useState("")
+    const [check, setcheck] = useState("public")
     const [hide, sethide] = useState(false)
+    const [alertt, setalert] = useState(false)
     const [img, setimg] = useState("")
     const groupName = useRef(null)
     const passRef = useRef<HTMLInputElement>(null)
@@ -72,8 +73,8 @@ export default function CreateGroup(props :{closeModal : ()=>void}) {
         bodyFormData.append('icone',data.icone);
         bodyFormData.append('name',data.name);
         bodyFormData.append('members', JSON.stringify(members));
-        bodyFormData.append('type',data.type);
-        if (data.type === "protected" )
+        bodyFormData.append('type',check);
+        if (check === "protected" )
         {
             if (passRef.current != null)
             {
@@ -84,13 +85,15 @@ export default function CreateGroup(props :{closeModal : ()=>void}) {
                 }
             }
         }
-        console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("members"))
+        console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
         axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 
       ).then((res)=>{
         console.log(res.data)
         props.closeModal()
       }).catch((err)=>{
+        // if (data.name === "")
+            setalert(true)
         console.log(err)
         })
         
@@ -114,15 +117,19 @@ export default function CreateGroup(props :{closeModal : ()=>void}) {
             <div  onClick={uploadFile} className='groupImg' >
                 <input id="fileInput" type="file" hidden />
                 {img === ""? < Image/> :  <img style={{width  : "100%", height : "100%"  }} src={img}alt="xx" />}
-               
+               <div className='hov'>
+x
+               </div>
             </div>
             {/* <input className='inputText' type="text"  placeholder='Enter group name ..'/> */}
             <div className='con' >
-            <InputComponent onChange={(e)=>{
+            <InputComponent onFocus={()=>{
+                setalert(false)
+            }} onChange={(e)=>{
              setdata({...data , name : e.target.value})
-            }} type='text' placeholder='Enter Group name'/>
+            }} type='text' lable='Group name' alert={alertt} placeholder='Enter Group name'/>
 <Row2>
-            <input type="radio"   onChange={handleRadioChange} id="public" name="status" value="public"/>
+            <input type="radio" defaultChecked  onChange={handleRadioChange} id="public" name="status" value="public"/>
             <label>Public</label>
             <input type="radio" onChange={handleRadioChange} id="private" name="status" value="private"/>
             <label>Private</label>
@@ -194,7 +201,7 @@ flex-direction: row;
     overflow: hidden;
     width: 100px;
     height: 100px;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 2px solid  ${props => props.theme.colors.seconderyText};
     display: flex;
     align-items: center;
@@ -202,9 +209,25 @@ justify-content: center;
 margin-right: 20px;
 position: relative;
 cursor: pointer;
+
     /* >input{
         opacity: 0;
     } */
+    >.hov{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #ffffff2f;
+        top: 0;
+        opacity: 0;
+        transition: opacity 300ms ease-in-out;
+    }
+    &:hover{
+        >.hov{
+      
+        opacity: 1;
+    }
+    }
     >img{
         object-fit: cover;
     }
@@ -271,6 +294,7 @@ flex-direction: row;
         width: 0.9em;
         height: 0.9em;
         border-radius: 50%;
+        background-color: ${props => props.theme.colors.purple};;
         transform: scale(0);
         transition: 250ms transform ease-in-out;
         box-shadow: inset 1em 1em ${props => props.theme.colors.purple};;

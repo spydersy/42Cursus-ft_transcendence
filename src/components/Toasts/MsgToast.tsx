@@ -133,6 +133,7 @@ export default  function MsgToast(props: {data : msgType}) {
 }
 
 const ToastStyle = styled(Link)`
+  /* width: 400px; */
   width: 100%;
   height: 100%;
   color : #FFF;
@@ -140,6 +141,7 @@ const ToastStyle = styled(Link)`
     align-items: center;
     flex-direction: row;
     gap: 10px;
+    
     .buttons{
       display: flex;
       align-items: center;
@@ -247,10 +249,23 @@ export  function FriendRequestToast(props: {data : any}) {
     if (k)
     {
 
+      console.log(User?.login )
       axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+  User?.login + "?event=accept",  {withCredentials: true} 
       ).then((res)=>{
-        console.log(res)
+        // console.log(res)
         socket.emit('joinRoom', [])
+
+      axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/friends/"+  User?.login ,  {withCredentials: true} 
+      ).then((res)=>{
+        console.log(res.data)
+        socket.emit('joinRoom', [])
+        // var s  = props.friends.indexOf(props.data)
+        // var l = props.friends
+        // l.splice(s , 1)
+        // props.setfriends([...l])
+        // alert("User Request Accepted" + res.status) 
+        
+      }).catch((err)=>{  })
         // var s  = props.friends.indexOf(props.data)
         // var l = props.friends
         // l.splice(s , 1)

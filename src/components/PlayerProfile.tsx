@@ -295,7 +295,6 @@ background-color: ${props => props.theme.colors.seconderybg};
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{
         // console.log(res.data)
-        // alert("friend Request sent" + res.status)
         setrelationStatus("PENDING")
         AddUsernotify();
         // console.table('____ login___' +res.data)
@@ -314,7 +313,6 @@ background-color: ${props => props.theme.colors.seconderybg};
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
       ).then((res)=>{
       // console.log(res.data)
-      // alert("friend Request sent" + res.status)
       setrelationStatus("NOTHING")
       CancelNotify();
       // CancelRequestNotify();
@@ -362,39 +360,39 @@ background-color: ${props => props.theme.colors.seconderybg};
     useEffect(() => {
         
         // setrelationStatus(props.player?.relation)
-        console.log( "- 1Relation <" , props.player.relation, "> \n")
         console.log( "- 2Relation <" , relationStatus, "> \n")
         
         // get user data  from server
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/" + id,  {withCredentials: true}).then((res)=>{
-        
-        setrelationStatus(res.data.relation)
-        
-
+          
+          setrelationStatus(res.data.relation)
+          
+          
           //Rank
           if (res.data.level)
-            setgrade(Grades[res.data.level])
+          setgrade(Grades[res.data.level])
           else
-            setgrade("Unranked")
-      
+          setgrade("Unranked")
+          
           //CreatedTime
           const date = new Date(res.data.lastModification)
           setcreatedTime(date.toString().split("GMT")[0])
-
+          
           console.log("> createdTime : ", createdTime)
           console.log("> grade : ", grade, "\n")
-        console.log(  "> Relation <" , relationStatus, "> \n")
-
+          console.log(  "> Relation <" , relationStatus, "> \n")
+          
         }).catch((err)=>{   
         })
-
+        
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
           // Achievenments          
           setAChievements(res.data)
           console.log("> Achievements : ", AChievements)
         }).catch((err)=>{
         })
-  
+        
+        console.log( "- 1Relation <" , props.player, "> \n")
       }, [setAChievements])
       return (
         <StatsStyle  >
@@ -402,7 +400,6 @@ background-color: ${props => props.theme.colors.seconderybg};
 
               <div className='data'>
                 <div>
-                  <ToastContainer />
 
                   <DataTag> 
                     <DataTag>   <RankIcon/>  {grade}  </DataTag>
@@ -440,18 +437,24 @@ background-color: ${props => props.theme.colors.seconderybg};
                         // :
                         relationStatus === "FRIENDS" ? 
                           <>
+                          <div className='row'>
+
                             <Button   type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
                             
-                            <Link to={"/chat/" + props.player?.dmChannel}>  
-                              <Button   icon={<SendMessage/>} text='Send Message'/>
-                            </Link>
-                            
-                            <Button  icon={<InviteToPlayIcon/>}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
-
                             <button className='BtpBlocked'onClick={BlockUser}>
                               <BlockIcon/>
                               Block
                             </button>
+                            
+                          </div>
+                          <div className='row'>
+                            <Link to={"/chat/" + props.player?.dmChannel}>  
+                              <Button isIcon={true}  icon={<SendMessage/>} text='Send Message'/>
+                            </Link>
+                            <Button  icon={<InviteToPlayIcon/>} isIcon={true}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
+
+
+                          </div>
 
                           </>
                         : null
@@ -514,10 +517,17 @@ background-color: ${props => props.theme.colors.seconderybg};
   const Buttons = styled.div`
   /* background-color: #f0f8ff41; */
   display: flex;
+  width: 100%;
+  justify-content: space-between;
   flex-direction: row;
   gap: 10px;
   margin: 20px 0px;
   flex-wrap: wrap;
+  >.row{
+  display: flex;
+  flex-direction: row;
+gap:10px;
+  }
   .BtpBlocked {
       padding: 5px 10px;
       min-width: 100px;
@@ -630,10 +640,15 @@ background-color: ${props => props.theme.colors.seconderybg};
 
   .data{
     height: 100%;
+
+    width: 100%;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
     justify-content: space-between;
+    >div{
+      width: 95%;
+    }
     
   }
   .Achivv {

@@ -333,10 +333,43 @@ export  function Button(props :ButtonProps ) {
   return (
     <LoginButtonStyle  size={props.size} isIcon={props.isIcon} onClick={props.onClick} typeS={props.type}>
       {props?.icon}
-      {props.text}
+      
+      {props.isIcon ? "" : <>{props.text}</>}
+      <ToolTip>{props.text} </ToolTip>
+
     </LoginButtonStyle>
   )
 }
+
+const ToolTip = styled.span`
+        display: inline-block;
+				position: absolute;
+				background-color: #ffffffb5; 
+				padding: 8px 12px;
+				border-radius: 3px;
+				/* margin-top: -26px; */
+				bottom: calc(-40%);
+				opacity: 0.5;
+				visibility: hidden;
+				font-size: 10px;
+				letter-spacing: .9px;
+        transition: all .2s ease-in;
+        font-weight: 500;
+				/* border: 1px solid ${props => props.theme.colors.border}; */
+        z-index: 3;
+				&:before {
+          z-index: 13;
+          content: '';
+					display: block;
+					position: absolute;
+					left: 50%;
+          top: -5px;
+					transform: rotate(45deg);
+					width: 10px;
+					height: 10px;
+          background-color: #c0bbbbce; 
+				}
+`;
 
 const LoginButtonStyle = styled.button<ButtonStyleProps>`
 /* margin: 0 auto; */
@@ -345,15 +378,16 @@ const LoginButtonStyle = styled.button<ButtonStyleProps>`
    background: ${props => props.theme.colors.purple};;
    /* background-color: #831717; */
    border-radius: 5px;
+   border: 1px solid  ${props => props.theme.colors.purple};;;
+
    height: auto;
    cursor: pointer;;
-   border: none;
    display: flex;
    align-items: center;
    justify-content: center;
    gap : 5px;
+   position: relative;
    ${props => (props.size === "small") && `
-
 padding: 3px 5px;
 `}
    >svg{
@@ -382,7 +416,7 @@ padding: 3px 5px;
 
    z-index: 20;
    position: relative;
-   overflow: hidden;
+   overflow: hidden; 
    &:after {
   background: #fff;
   content: "";

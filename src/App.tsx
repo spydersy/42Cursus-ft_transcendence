@@ -124,11 +124,12 @@ function App() {
     console.log(payload)
 
     toast(CustomToastWithLinkGame(payload) , {
+      // position : toast.POSITION.TOP_RIGHT,
       className: "toast",
       progressClassName: "toastProgress",
       autoClose: 2000,
       hideProgressBar: true,
-      closeOnClick: false
+      // closeOnClick: false
     })
   // CHallengeNotify()
 }
@@ -256,7 +257,7 @@ function handelChallengeAccept (payload) {
           <ProtectedLayout body={<Upperbar />} />
           <ProtectedLayout body={ <Sidebar/>} />
           <Cont  >
-          <ToastContainer />
+          <ToastContainer  className={"toast_container"}/>
             {/* <SocketContext.Provider value={SocketValue}> */}
             <Routes>
               <Route path="/signin" element={<SignIn />} />
@@ -294,9 +295,13 @@ const Cont = styled.div`
   @media  only screen and (max-width: 560) {
     width: 100%;
   }
+  .toast_container{
+    width: auto;
+  }
   .toast{
-    background-color: ${props => props.theme.colors.primarybg};;
-    border: 2px solid ${props => props.theme.colors.purple};
+    width: 400px;
+    background-color: ${props => props.theme.colors.bg};;
+    border: 3px solid ${props => props.theme.colors.purple};
   }
   .toastProgress{
 

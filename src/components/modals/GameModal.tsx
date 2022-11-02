@@ -29,6 +29,9 @@ export default function GameModal(props: GmaemodelProps) {
   const [gameData, setgameData] = useState<GameProps>(defaultProp)
 
   const navigate = useNavigate();
+  useEffect(() => {
+    localStorage.setItem("mode",props.mode)
+  }, [])
   
   interface GameModalProps {
     

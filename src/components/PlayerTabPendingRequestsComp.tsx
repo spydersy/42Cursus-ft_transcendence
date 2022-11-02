@@ -16,7 +16,7 @@ export interface UserInvitCardProps { data: UserProp , friends : UserProp[], set
 export interface StyleProps {  status: string; }
 
 //
-export default function PendingRequests()
+export default function PendingRequests(props: {player : any})
 {
 
   // const [friends, setfriends] = useState(
@@ -45,7 +45,7 @@ export default function PendingRequests()
   const [friends, setfriends] = useState([])
   
   useEffect(() => {
-    
+    console.log(props.player)
     axios.get(process.env.REACT_APP_BACKEND_URL+  "/profile/me?data=requests",  {withCredentials: true}  ).then((res)=>{
         
         // console.log(res)
@@ -106,7 +106,8 @@ export  function UserInvitCard(props : UserInvitCardProps) {
 const accepteFriend = ()=>{
     axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=accept",  {withCredentials: true} 
             ).then((res)=>{
-                console.log(res)
+                // console.log(res)
+                console.log(props.data)
                 socket.emit('joinRoom', [props.data.dmChannel])
                 var s  = props.friends.indexOf(props.data)
                 var l = props.friends

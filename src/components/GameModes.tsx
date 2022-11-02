@@ -59,10 +59,15 @@ const [mode, setmode] = useState("")
     // props.settheme()
 
     if (id  === 0)
-      localStorage.setItem("mode","AI")
+    {
+      setmode("AI")
+    }
+    
+    if (id  === 1){
 
-    if (id  === 1)
-      localStorage.setItem("mode","classic")
+      setmode("classic")
+    }
+
 
     sethideModel(!hideModel)
   }

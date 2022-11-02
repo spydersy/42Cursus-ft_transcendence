@@ -68,6 +68,7 @@ export default function Pong(props: gameProps) {
     const mouseMoved = (p5: p5Types) => {
 
         if (p5.mouseY > topLimit && p5.mouseY < bottomLimit) {
+            
             if (props.player) {
                 gamesocket.emit("player1Moved", p5.mouseY)
             }
@@ -75,8 +76,9 @@ export default function Pong(props: gameProps) {
                 gamesocket.emit("player2Moved", p5.mouseY)
             }
 
-        }
+        }   
     }
+
     const drowPaddels = (p5 : p5Types)=>{
         p5.stroke(p5.color("#157DBD"));
         p5.strokeWeight(4)
