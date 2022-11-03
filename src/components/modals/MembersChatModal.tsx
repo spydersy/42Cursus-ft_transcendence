@@ -22,6 +22,7 @@ interface usersType {
   login : string
   displayName : string,
   restriction: string,
+  permission: string,
   restrictionTime: string,
   duration: number,
 }
@@ -34,7 +35,9 @@ export default function MembersChatModal(props : { closeModal : ()=>void , data 
         <div className='members'>
           {
               props.data.users.map((data : any , id : number)=>{
-                return <Member data={data}/>
+                if (id === 0)
+                  return <></>
+                return <Member access={props.data.users[0].permission}  data={data}/>
               })
           }
           
@@ -45,8 +48,11 @@ export default function MembersChatModal(props : { closeModal : ()=>void , data 
 
 interface MemberProps{
     data : usersType
+    access : string
   }
   export  function Member(props : MemberProps) {
+  console.log(props.access)
+
     return (
       <MemberStyle>
     
@@ -64,9 +70,23 @@ interface MemberProps{
           </div>
         </div>
         <div className='buttons'>
-        <Button size='small'  isIcon={true} onClick={()=>{}} icon={<GameIcon/>}/>
+          {props.access === "OWNER"
+          &&
+          <>
           <Button size='small' isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
         <Button size='small'  isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
+          </>
+          
+        }
+          {(props.access === "ADMIN"
+          && props.data.permission !== "OWNER" )&& 
+          <>
+          <Button size='small' isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
+        <Button size='small'  isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
+          </>
+          
+        }
+        <Button size='small'  isIcon={true} onClick={()=>{}} icon={<GameIcon/>}/>
   
         </div>
       </MemberStyle>

@@ -17,6 +17,7 @@ import { SocketContext , SocketGameContext} from '../../context/Socket';
     login : string
     displayName : string,
     restriction: string,
+    permission: string, 
     restrictionTime: string,
     duration: number,
   }
