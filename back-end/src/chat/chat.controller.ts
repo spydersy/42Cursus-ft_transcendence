@@ -4,7 +4,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
 import { ChatService } from './chat.service';
-import { ChannelData, ChannelUserDto, MessageDataDto, UserRestrictionDto } from 'src/dtos/Inputs.dto';
+import { ChannelData, ChannelUserDto, JoinChannel, MessageDataDto, UserRestrictionDto } from 'src/dtos/Inputs.dto';
 import { PERMISSION, RESCTRICTION } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard)
@@ -13,9 +13,9 @@ export class ChatController {
 
     constructor(private chatService: ChatService) {}
 
-    @Post('AddUser')
-    async AddUserToChannel(@Req() req, @Body() userChannelPair: ChannelUserDto, @Res() res) {
-      return this.chatService.AddUserToChannel(req.user.userId, userChannelPair.user, userChannelPair.channelId, res);
+    @Post('joinChannel')
+    async AddUserToChannel(@Req() req, @Body() joinChannel: JoinChannel, @Res() res) {
+      return this.chatService.AddUserToChannel(req.user.userId, joinChannel.user, joinChannel.channelId, joinChannel.password, res);
     }
 
     @Post('UpdateUserPermission')

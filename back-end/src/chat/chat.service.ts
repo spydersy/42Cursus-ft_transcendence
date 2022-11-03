@@ -266,7 +266,7 @@ export class ChatService {
 
     }
 
-    async AddUserToChannel(me: number, user: string, channelId: string, @Res() res) {
+    async AddUserToChannel(me: number, user: string, channelId: string, password: string, @Res() res) {
         if (await this.CanUpdateChannel(me, channelId) === true) {
             const channel = await this.prisma.channels.findUnique({
                 where: {id: channelId},
