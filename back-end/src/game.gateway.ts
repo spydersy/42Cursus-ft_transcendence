@@ -57,6 +57,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
       this.logger.log("startgame emited")
       this.wss.to(roomName).emit("startGame", {player1 : lastRoomPlayers[0].login , player2 :  lastRoomPlayers[1].login })
+      this.wss.emit("change" , this.getArrayData() )
+
       this.logger.log("startgame emited")
     }
   }
@@ -96,6 +98,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         client.leave(room.roomName)
         room.roomPlayers.splice(0, 2);
         this.roomArray.splice(i, 1)
+        this.wss.emit("change" , this.getArrayData() )
 
         return ;
       }
@@ -175,6 +178,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       // console.log("__ROOM__DBG__ : ", room);
       this.wss.to(room.roomName).emit("endGame" , {score: room.score, roomPlayers :   room.roomPlayers})
       this.RemovePlayer(client , payload)
+      this.wss.emit("change" , this.getArrayData() )
+
       // this.wss.emit("change" ,  this.roomArray)
     }
 
@@ -239,6 +244,9 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         {
           this.roomArray[i].status = "InGame";
           this.wss.to(this.roomArray[i].roomName).emit("startGame" , {player1: this.roomArray[i].roomPlayers[0].login , player2: this.roomArray[i].roomPlayers[1].login})
+          
+          
+          this.wss.emit("change" , this.getArrayData() )
         }
         console.log("______DBG___START__02 : " , "start")
       }
@@ -248,7 +256,15 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 
   }
-
+  getArrayData() {
+    var l = [];
+    for (let i = 0; i < this.roomArray.length; i++) {
+      const element = this.roomArray[i];
+      var test = { players :[element.roomPlayers[0].login ,element.roomPlayers[1].login ] , score : element.score}
+      l.push(test)
+    }
+    return l
+  }
 
 
 
@@ -338,6 +354,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       this.roomArray.push(newRoom)
       this.wss.to(newRoom.roomName).emit("startGame" , {player1 : payload , player2: "ai_1"})
       console.log("__PLAYAI___DBG: ", )
+      this.wss.emit("change" , this.getArrayData() )
+
     }
     for (let index = 0; index < this.roomArray.length; index++) {
       this.roomArray[index].debug();
@@ -399,10 +417,11 @@ async checkScore (room : any) {
       var i = this.roomArray.indexOf(room)
 
       this.wss.to(this.roomArray[i].roomName).emit("endGame" , {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
-
+      
       // await this.roomArray[i].saveGame("AIBUGGY")
       this.roomArray.splice(i, 1)
       delete  this.roomArray[i];
+      this.wss.emit("change" , this.getArrayData() )
     }
 }
 
