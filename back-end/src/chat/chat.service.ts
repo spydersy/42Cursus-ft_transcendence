@@ -350,9 +350,10 @@ export class ChatService {
             access = CHANNEL.PROTECTED
         else
             return res.status(HttpStatus.BAD_REQUEST).send({'messaeg': 'Wrong channel type'});
-        if (password !== null) {
+        if (password !== null &&  password !== undefined) {
             const saltOrRounds = 10;
             password = await bcrypt.hash(password, saltOrRounds);
+            console.log("__HASHED__PASSWORD__ : ", password);
         }
         let channel = await this.prisma.channels.create({
             data: {
