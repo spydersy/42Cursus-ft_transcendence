@@ -9,7 +9,7 @@ import Punk from "./assets/imgs/punkhazard.png";
 import Dress from "./assets/imgs/dressRosa.jpg";
 import Wano from "./assets/imgs/wano.jpg";
 import Fish from "./assets/imgs/fishman.jpeg";
-import { SocketContext,  SocketGameContext,  SocketValue } from './context/Socket';
+import { OnlineContextSocket, SocketContext,  SocketGameContext,  SocketValue } from './context/Socket';
 import {
   Routes, // instead of "Switch"
   Route,
@@ -99,6 +99,7 @@ function App() {
   const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
   
   const socket = useContext(SocketContext)
+  const onlinesSocket = useContext(OnlineContextSocket)
   const gameSocket = useContext(SocketGameContext)
   const [toastData, settoastData] = useState<msgType>()
   const [toastDataChallenge, settoastDataChallenge] = useState()
@@ -108,8 +109,8 @@ function App() {
   function hundleMsg (payload) {
     if (pageName != "chat")
     {
-    console.table(payload)
-
+      console.table(payload)
+      
       toast(CustomToastWithLink(payload) , {
         className: "toast",
         progressClassName: "toastProgress",
@@ -122,7 +123,7 @@ function App() {
   
   function handleChallenge (payload) {
     console.log(payload)
-
+    
     toast(CustomToastWithLinkGame(payload) , {
       // position : toast.POSITION.TOP_RIGHT,
       className: "toast",
@@ -131,8 +132,8 @@ function App() {
       hideProgressBar: true,
       // closeOnClick: false
     })
-  // CHallengeNotify()
-}
+    // CHallengeNotify()
+  }
   function handleRequest (payload) {
     // console.log('__sahbiiiiii____:'+payload)
     toast(CustomToastFriendReq(payload) , {
@@ -141,27 +142,27 @@ function App() {
       autoClose: 2000,
       hideProgressBar: true,
     })
-}
-
-function acceptRequest (payload) {
-  console.log('acceptii a sahbi:',payload)
-
-  toast(CustomToastAcceptFriendReq(payload) , {
-    className: "toast",
-    progressClassName: "toastProgress",
-    autoClose: 2000,
-    hideProgressBar: true,
-  })
-}
-
-function handelChallengeAccept (payload) {
-  localStorage.setItem("mode","1v1")
-  navigate("/game/")
-
-}
+  }
+  
+  function acceptRequest (payload) {
+    console.log('acceptii a sahbi:',payload)
+    
+    toast(CustomToastAcceptFriendReq(payload) , {
+      className: "toast",
+      progressClassName: "toastProgress",
+      autoClose: 2000,
+      hideProgressBar: true,
+    })
+  }
+  
+  function handelChallengeAccept (payload) {
+    localStorage.setItem("mode","1v1")
+    navigate("/game/")
+    
+  }
   useEffect(()=>{
     // sub
-
+    
     socket.on('msg_event', hundleMsg);
     socket.on('challeneEvent', handleChallenge);
     socket.on('recievedRequest', handleRequest)
@@ -173,10 +174,10 @@ function handelChallengeAccept (payload) {
       socket.removeListener('recievedRequest', handleRequest);
       socket.removeListener('acceptedReq', acceptRequest);
       gameSocket.removeListener('challengeAccepted', handelChallengeAccept);
-
+      
     }
   })
-
+  
   const    CHallengeNotify = () => toast.success("You accepted " +  toastDataChallenge + " Friend Request", {
     position: "top-right",
     autoClose: 2000,
@@ -186,51 +187,52 @@ function handelChallengeAccept (payload) {
     draggable: true,
     progress: undefined,
     theme: "colored",
-    });
+  });
   let joinChannels = async () => {
     let userLogin : string;
     await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
     {withCredentials: true} 
     ).then((res)=>{
-           userLogin = res.data.login
+      userLogin = res.data.login
     }).catch((err)=>{
       console.log(err)
     })
     await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+    {withCredentials: true} 
+    ).then((res)=>{
+      var myChannels : Array<string> = [];
+      for (let index = 0; index < res.data.length; index++) {
+        myChannels.push(res.data[index].channelId);
+      }
+      myChannels.push(userLogin);
+      // mychannels.pushback(userlogin)
+      socket.emit('joinRoom', myChannels)
+    }).catch((err)=>{
+      console.log(err)
+    })
+    }
+    
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+      
+   
+      
+      axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me", 
       {withCredentials: true} 
       ).then((res)=>{
-          var myChannels : Array<string> = [];
-          for (let index = 0; index < res.data.length; index++) {
-            myChannels.push(res.data[index].channelId);
-          }
-        myChannels.push(userLogin);
-          // mychannels.pushback(userlogin)
-          socket.emit('joinRoom', myChannels)
-        }).catch((err)=>{
-          console.log(err)
-        })
-    }
-  
-  const navigate = useNavigate();
+        
+        
+        // console.log(res.data)
+        localStorage.setItem("user", JSON.stringify(res.data))
+        localStorage.setItem("mode","classic")
+        joinChannels()
+        socket.emit("AddOnlineUser")
 
-  useEffect(() => {
-   
-   
-   
-    axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me", 
-      {withCredentials: true} 
-    ).then((res)=>{
-    
-    
-      // console.log(res.data)
-      localStorage.setItem("user", JSON.stringify(res.data))
-      localStorage.setItem("mode","classic")
-      joinChannels()
-      socket.emit("AddOnlineUser")
-
-
-
-
+        
+        
+        
+        
 
     }).catch((err)=>{
           console.log(err.message)

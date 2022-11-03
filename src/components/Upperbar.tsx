@@ -256,6 +256,7 @@ const UsersTable = styled.div`
 `;
 
 const SearchBar = styled.div`
+border: 2px solid ${props => props.theme.colors.purple};
 background:  ${props => props.theme.colors.bg};
 border-radius: 5px;
 display: flex;
@@ -271,7 +272,7 @@ padding: 0px 0px 0px 49px;
   }
   >svg{
     path{
-      stroke:  ${props => props.theme.colors.seconderyText};;
+      stroke:  ${props => props.theme.colors.purple};;
 
     }
   }

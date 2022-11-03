@@ -18,7 +18,7 @@ import axios from 'axios';
 import Achivments  from './Achivments';
 import  { RadarChart } from './charts/Charts';
 import CircleLoader from "react-spinners/CircleLoader";
-import { SocketContext,  SocketValue } from '../context/Socket';
+import { OnlineContextSocket, SocketContext,  SocketValue } from '../context/Socket';
 import {Link} from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -795,52 +795,77 @@ const ElapsedTime = styled.div`
 //
 
 //
-interface AvatarProps {img: string }
+interface AvatarProps {img: string , login ?: string }
+
+interface UserType {
+ socketId : string[],
+ userid : string,
+ gameStatu : boolean,
+}
 
 export  function AvatarComponent(props: AvatarProps) {
-  const socket = useContext(SocketContext)
+  const socket = useContext(OnlineContextSocket)
+  const User = useContext(UserContext)
   const [state, setstate] = useState(false)
  
+  const setUserStatu =( list : UserType[] )=>{
+    for (let i = 0; i < list.length; i++) {
+      const element : UserType = list[i];
+      if (element.userid === props?.login)
+      {
+        setstate(true)
+        return ;
+      }
+      
+    }
+    setstate(false)
+  }
+  socket.on("ConnectedUser" , (pyload)=>{
+   console.log(pyload)
+   setUserStatu(pyload)
+  
+  })
   useEffect(() => {
-      socket.on("ConnectedUser" , (pyload)=>{
-       console.log(pyload)
+    socket.emit("AddOnlineUser" ,User?.login)
 
-        // if (pyload.online.includes(props.login))
-        //   setstate(true)
-        // else
-        //   setstate(false)
-      })
 
-  }, [])
+  }, [props.login])
   
 return (
-  <Avatarr>
-    <img src={props.img} alt='avatar' />
+  <Avatarr  on={state ? "true" : "false"}>
+  <div className='crcl'>
+      <img src={props.img} alt='avatar' />
+    </div>
     {state && <div className='on'></div>}
   </Avatarr>
 )
 }
-const Avatarr = styled.div`
+interface AvatarStyleProps {
+  on : string
+}
+const Avatarr = styled.div<AvatarStyleProps>`
 width: 100%;
 height: 100%;
 border-radius : 50%;
-overflow: hidden;
-background-color: white;
 position: relative;
-img{
+${props => (props.on === "true") && `
+border: 4px solid #157DBD;
+
+`}
+> .crcl{
+  overflow: hidden;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-  .on{
-    border-radius: 50%;
-    position: absolute;
-    top: 0;
-    left:  -10px;
-    width: 10px;
-    height: 10px;
-    background-color: ${props => props.theme.colors.purple};
+height: 100%;
+border-radius : 50%;
+
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
+  
+}
+
 `;
 const Dataa = styled.div`
   

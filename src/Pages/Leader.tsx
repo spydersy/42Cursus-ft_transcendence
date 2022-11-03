@@ -96,7 +96,7 @@ export default function Leader() {
                 <AvatarComponent img={list[1].img}/>
             </div> */}
             <div style={{width: "200px" , height: "200px"}}>
-                <AvatarComponent img={list[0].img}/>
+                <AvatarComponent   img={list[0].img}/>
             <Hat/>
 
             </div>
@@ -126,8 +126,8 @@ export default function Leader() {
                         <td className='id'> {id + 1}</td>
                         <td>
                             <a href={"/profile/" + data.login}>
-                                <div style={{width: "40px" , height: "40px"}}>
-                                    <AvatarComponent img={data.defaultAvatar}/>
+                                <div style={{width: "50px" , height: "50px"}}>
+                                    <AvatarComponent login={data.login} img={data.defaultAvatar}/>
                                 </div>
                                 <div>
                                     {data.login}

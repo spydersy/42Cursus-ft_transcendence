@@ -30,6 +30,11 @@ export default function Slider() {
             return ;
         setmain(slideId)
     }
+    useEffect(() => {
+        socket.emit("getLiveGames")
+     
+    }, [])
+    
   return (
     <SliderStyle>
             <LeftStyle onClick={()=>animatethis(main -1)}/>

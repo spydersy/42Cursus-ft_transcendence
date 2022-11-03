@@ -162,7 +162,7 @@ export  function ConversationComponent(props : ConvProps) {
             props.data.access === "DM" ?
             <>
               <Avatar>
-            <AvatarComponent img={props.data?.users[1].defaultAvatar}/>
+            <AvatarComponent login={props.data?.users[1].login} img={props.data?.users[1].defaultAvatar}/>
           </Avatar>
           <div className='mesgData'>
             <div className='name'>

@@ -57,7 +57,6 @@ export  function AcceptToast(props: {data : ssss}) {
     axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data.accepter  ,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked 
-              console.log("> status = " , res.status)
               setUser(res.data)
 
             }).catch((error)=>{ 
@@ -195,7 +194,6 @@ export  function GameChallengeToast(props: {data : any}) {
     axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data  ,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked 
-              console.log("> status = " , res.status)
               setUser(res.data)
 
             }).catch((error)=>{ 
@@ -282,7 +280,7 @@ export  function FriendRequestToast(props: {data : any}) {
     axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data.sender  ,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked 
-              console.log("> status = " , res.status)
+              console.log("> status = " , res.data)
               setUser(res.data)
 
             }).catch((error)=>{ 
