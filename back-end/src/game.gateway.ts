@@ -261,11 +261,17 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     for (let i = 0; i < this.roomArray.length; i++) {
       const element = this.roomArray[i];
       var test = { players :[element.roomPlayers[0].login ,element.roomPlayers[1].login ] , score : element.score}
-      l.push(test)
+      if (element.status != "waiting")
+        l.push(test)
     }
     return l
   }
 
+  @SubscribeMessage('getLiveGames')
+  getLive(client: any): void {
+    client.emit("change" , this.getArrayData() )
+
+  }
 
 
 
@@ -372,6 +378,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       this.roomArray[i].incrementScore(1)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
       this.checkScore(this.roomArray[i])
+      this.wss.emit("change" , this.getArrayData() )
+
       return false
     }
     else if (ballCord.x + direction.x  < ( ballCord.size /2)    )
@@ -380,6 +388,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       this.roomArray[i].incrementScore(2)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
       this.checkScore(this.roomArray[i])
+      this.wss.emit("change" , this.getArrayData() )
+
       return false
 
 
@@ -394,6 +404,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 
+  
    detectCollision(player : any , ballCord : any , direction : any) {
     const cx = ballCord.x + direction.x ;
     const cy = ballCord.y + direction.y;
