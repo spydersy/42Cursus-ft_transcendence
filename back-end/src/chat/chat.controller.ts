@@ -15,7 +15,7 @@ export class ChatController {
 
     @Post('joinChannel')
     async AddUserToChannel(@Req() req, @Body() joinChannel: JoinChannel, @Res() res) {
-      return this.chatService.AddUserToChannel(req.user.userId, joinChannel.user, joinChannel.channelId, joinChannel.password, res);
+      return this.chatService.JoinChannel(req.user.userId, joinChannel.user, joinChannel.channelId, joinChannel.password, res);
     }
 
     @Post('UpdateUserPermission')
@@ -77,7 +77,7 @@ export class ChatController {
       if (file !== undefined)
         ChannelIcone = encodeURI(process.env.BACKEND_URL + `/upload/${file.filename}`);
       var membersObj = JSON.parse(channelData['members']);
-      console.log("__MEMBERS__OBJ__DBG__ : ", membersObj);
+      console.log("__CHANNEL_DATA__DBG__ : ", channelData);
       if (channelData['type'] === 'protected' && channelData['password'] === undefined)
         return res.status(HttpStatus.BAD_REQUEST).send({'message': "Password Required"});
       if (channelData['type'] === 'protected' && channelData['password'] !== undefined)
