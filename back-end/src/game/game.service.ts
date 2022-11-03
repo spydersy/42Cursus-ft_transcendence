@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 import { throws } from 'assert';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PlayerType } from '../dtos/Outputs.dto'
-// import { MODE } from '@prisma/client';
+import { MODE } from '@prisma/client';
 
 export class GameService {
     prisma: PrismaService
@@ -54,7 +54,7 @@ export class GameService {
    }
 
 
-   
+
    getPlayer(id : string)
    {
 
@@ -71,21 +71,21 @@ export class GameService {
        return null
    }
 
-//    async saveGame( mode: MODE) {
-        // const player1Dto = await this.prisma.users.findUnique({ where: { login: this.roomPlayers[0].login}});
-        // const player2Dto = await this.prisma.users.findUnique({ where: { login:   this.roomPlayers[1].login}});
+   async saveGame( mode: MODE) {
+        const player1Dto = await this.prisma.users.findUnique({ where: { login: this.roomPlayers[0].login}});
+        const player2Dto = await this.prisma.users.findUnique({ where: { login:   this.roomPlayers[1].login}});
 
-        // await this.prisma.matchHistory.create({
-        //     data: {
-        //         player1Id: player1Dto.id,
-        //         player2Id: player2Dto.id,
-        //         score1: this.score.score1,
-        //         score2: this.score.score2,
-        //         mode: mode,
-        //     }
-        // });
-//    }
-   
+        await this.prisma.matchHistory.create({
+            data: {
+                player1Id: player1Dto.id,
+                player2Id: player2Dto.id,
+                score1: this.score.score1,
+                score2: this.score.score2,
+                mode: mode,
+            }
+        });
+   }
+
 
    changeId(id : string , login : string)
    {

@@ -6,8 +6,9 @@ import { Controller, Get } from '@nestjs/common';
 import { start } from 'repl';
 import { GameService } from './game/game.service';
 import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
-
+import { MODE } from '@prisma/client';
 import {v4 as uuidv4} from 'uuid';
+
 @WebSocketGateway(3001, {
     cors: {
       origin: "http://localhost:3000",
@@ -47,7 +48,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   {
     console.log("___DBG@")
     var roomslenght = this.roomArray.length;
-    
+
     if (this.roomArray[roomslenght - 1].roomPlayers.length === 2)
     {
       var roomName = this.roomArray[roomslenght - 1].roomName
@@ -116,7 +117,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       let myuuid = uuidv4();
 
       const  newRoom = new GameService(myuuid)
-    
+
     newRoom.joinPlayer(login , client.id)
     this.roomArray.push(newRoom)
     roomName = this.roomArray[roomslenght].roomName
@@ -130,7 +131,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       {
         this.roomArray[roomslenght - 1].joinPlayer(login , client.id)
       }
-      
+
     }
     else
     {
@@ -244,8 +245,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         {
           this.roomArray[i].status = "InGame";
           this.wss.to(this.roomArray[i].roomName).emit("startGame" , {player1: this.roomArray[i].roomPlayers[0].login , player2: this.roomArray[i].roomPlayers[1].login})
-          
-          
+
+
           this.wss.emit("change" , this.getArrayData() )
         }
         console.log("______DBG___START__02 : " , "start")
@@ -372,7 +373,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
    hitWalls = (i : number,ballCord : any ,direction: any , width , height  ,paddel1 : any , paddel2 : any, )=>{
 
 
-  
+
     if (ballCord.x + direction.x > width - (ballCord.size  /2 ))
     {
       this.roomArray[i].incrementScore(1)
@@ -428,8 +429,8 @@ async checkScore (room : any) {
       var i = this.roomArray.indexOf(room)
 
       this.wss.to(this.roomArray[i].roomName).emit("endGame" , {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
-      
-      // await this.roomArray[i].saveGame("AIBUGGY")
+
+      await this.roomArray[i].saveGame(MODE.AIBUGGY)
       this.roomArray.splice(i, 1)
       delete  this.roomArray[i];
       this.wss.emit("change" , this.getArrayData() )
@@ -437,7 +438,7 @@ async checkScore (room : any) {
 }
 
 moveAI(room : any )
- { 
+ {
   var i = this.roomArray.indexOf(room)
    const h =  100;
    var yp : number ;
@@ -448,7 +449,7 @@ moveAI(room : any )
    var PreditctY : number =  yb +( room.direction.y * q) -( h / 2);
     this.roomArray[i].predicty = PreditctY
    var TableH : number =   700;
-        
+
 
        if (PreditctY > 0 && PreditctY < TableH)
        {
@@ -472,7 +473,7 @@ moveAI(room : any )
            if (yp  > 0)
             this.roomArray[i].paddel2.y = yp - 10
        }
-        
+
        this.wss.to(room.roomName).emit("player2moved" , this.roomArray[i].paddel2.y)
  }
 }

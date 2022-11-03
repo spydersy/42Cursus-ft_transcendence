@@ -2,6 +2,7 @@ import { Body, forwardRef, HttpStatus, Inject, Injectable, Req, Res } from '@nes
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CHANNEL, PERMISSION, RESCTRICTION } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
+import * as bcrypt from 'bcrypt';
 
 interface ManyUsers {
     userId:    number;
@@ -266,31 +267,77 @@ export class ChatService {
 
     }
 
-    async AddUserToChannel(me: number, user: string, channelId: string, @Res() res) {
-        if (await this.CanUpdateChannel(me, channelId) === true) {
-            const channel = await this.prisma.channels.findUnique({
-                where: {id: channelId},
-            });
-            if (channel === null || channel.access === CHANNEL.DM)
-                return res.status(HttpStatus.FORBIDDEN).send({'message': 'Cant Add User'});
-            const userProfile = await this.userService.GetUserByLogin(user);
-            if (userProfile === null)
-                    return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
-            try {
+    async JoinChannel(me: number, user: string, channelId: string, password: string, @Res() res) {
+        // Find Channel:
+        const channel = await this.GetChannelById(channelId);
+        if (channel === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'Channel Not Found'});
+        // Find User:
+        const userProfile = await this.userService.GetUserById(me);
+        if (userProfile === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+        // Find User In Channel:
+        const userInChannel = await this.FindUserInChannel(me, channelId);
+        if (userInChannel !== null || channel.access === CHANNEL.PRIVATE
+            || channel.access === CHANNEL.DM)
+            return res.status(HttpStatus.FORBIDDEN).send({'message': 'User Is Not Allowed To Join This Channel'});
+        if (channel.access === CHANNEL.PROTECTED) {
+            if (password === null || password === undefined)
+                return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Password Required'});
+            if (channel.password === password) {
                 await this.prisma.channelsUsers.create({
                     data: {
-                        userId: userProfile.id ,
-                        channelId: channelId,
-                        permission: PERMISSION.USER
+                        userId: userProfile.id,
+                        channelId: channel.id,
+                        permission: PERMISSION.USER,
                     }
                 });
-                return res.status(HttpStatus.CREATED).send({'message': 'User Added Succesefully'});
-            } catch {
-                return res.status(HttpStatus.CONFLICT).send({'message': 'User Already Exist'});
+                return res.status(HttpStatus.CREATED).send({'message': 'User Added'});
             }
+            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Wrong Password'});
         }
-        return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
+        await this.prisma.channelsUsers.create({
+            data: {
+                userId: userProfile.id,
+                channelId: channel.id,
+                permission: PERMISSION.USER,
+            }
+        });
+        return res.status(HttpStatus.OK).send({'message': 'User Added'});
     }
+
+    // async AddUserToChannel(me: number, user: string, channelId: string, password: string, @Res() res) {
+    //     // Find Channe:
+    //     if (await this.CanUpdateChannel(me, channelId) === true) {
+    //         const channel = await this.prisma.channels.findUnique({
+    //             where: {id: channelId},
+    //         });
+    //         if (channel === null || channel.access === CHANNEL.DM)
+    //             return res.status(HttpStatus.FORBIDDEN).send({'message': 'Cant Add User'});
+    //     // Find User:
+    //         const userProfile = await this.userService.GetUserByLogin(user);
+    //         if (userProfile === null)
+    //                 return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+    //     // Find User In Channel:
+    //         const userInChannel = await this.FindUserInChannel(userProfile.id, channel.id);
+    //         if (userInChannel !== null)
+    //             return res.status(HttpStatus.FORBIDDEN).send({'message': 'User Already Exist In Channel'});
+
+    //         try {
+    //             await this.prisma.channelsUsers.create({
+    //             data: {
+    //                 userId: userProfile.id ,
+    //                 channelId: channelId,
+    //                 permission: PERMISSION.USER
+    //             }
+    //             });
+    //             return res.status(HttpStatus.CREATED).send({'message': 'User Added Succesefully'});
+    //         } catch {
+    //             return res.status(HttpStatus.CONFLICT).send({'message': 'User Already Exist'});
+    //         }
+    //     }
+    //     return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
+    // }
 
     async CreateRoom(me: number, channelName: string, type: string,
         members: string[], password: string, channelIcone: string, @Res() res) {
@@ -303,6 +350,11 @@ export class ChatService {
             access = CHANNEL.PROTECTED
         else
             return res.status(HttpStatus.BAD_REQUEST).send({'messaeg': 'Wrong channel type'});
+        if (password !== null &&  password !== undefined) {
+            const saltOrRounds = 10;
+            password = await bcrypt.hash(password, saltOrRounds);
+            console.log("__HASHED__PASSWORD__ : ", password);
+        }
         let channel = await this.prisma.channels.create({
             data: {
                 access: access,

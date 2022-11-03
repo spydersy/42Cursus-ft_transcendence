@@ -52,6 +52,18 @@ export class ChannelUserDto {
     user: string;
 }
 
+export class JoinChannel {
+    @IsUUID()
+    @IsNotEmpty()
+    channelId: string;
+
+    @IsString()
+    @IsNotEmpty()
+    user: string;
+
+    password: string;
+}
+
 export class UserRestrictionDto{
     @IsUUID()
     @IsNotEmpty()
