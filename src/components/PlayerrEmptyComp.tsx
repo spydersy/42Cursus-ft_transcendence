@@ -1,4 +1,4 @@
-import React from 'react'
+import React , {useContext} from 'react'
 import styled from "styled-components"
 import {ReactComponent as LuffyAce} from "../assets/imgs/luffyAce.svg";
 
@@ -7,6 +7,7 @@ interface EmptyProps { text: string }
 
 export default function EmptyComponent(props: EmptyProps)
 {
+ 
   return (
     <Empty >
       <LuffyAce/>
@@ -20,7 +21,7 @@ const Empty = styled.div`
   width: 100%;
   height: 100%;
   flex-direction: column;
-  background-color:  ${props => props.theme.colors.bg};
+  /* background-color:  ${props => props.theme.colors.bg}; */
   color:  ${props => props.theme.colors.seconderyText};
   font-weight: 600;
   justify-content: center;

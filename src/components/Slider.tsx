@@ -1,27 +1,49 @@
-import React, {useState} from 'react'
+import React, {useState , useContext , useEffect} from 'react'
 import styled from "styled-components"
 import { ReactComponent as Right} from "../assets/imgs/right-Arrow.svg"
 import { ReactComponent as Left} from "../assets/imgs/left-Arrow.svg"
 import { ReactComponent as BattleIcon} from "../assets/imgs/battle-icon.svg"
+import EmptyComponent from './PlayerrEmptyComp'
+import { SocketGameContext } from '../context/Socket';
+import axios from 'axios'
 
 
 const list  = [0,0 , 1 , 2 , 1 , 0, 0]
+interface LiveGameProps {
+    players : string[],
+    score : {score1 : number , score2 : number}
+
+}
 export default function Slider() {
     const [main, setmain] = useState(2)
+    const [list, setlist] = useState<LiveGameProps[]>([])
+  const socket = useContext(SocketGameContext)
+    socket.off("change").on("change" , (data : LiveGameProps[])=>{
+        setlist([...data])
+
+        setmain(data.length / 2 > 1 ? data.length / 2  : 0 )
+    })
     const animatethis =(slideId: number)=>{
         if (slideId < 0 )
             return ;
-        if (slideId > list.length - 1 )
+        if (slideId > list.length - 1)
             return ;
         setmain(slideId)
     }
   return (
     <SliderStyle>
             <LeftStyle onClick={()=>animatethis(main -1)}/>
+            {
+                list.length === 0 ? 
+                <EmptyComponent text='No Live Games'/>
+                :
             <SliderContainer>
             {
-            list.map((data : any, id : number )=>{
+                
+
+            list.map((data : LiveGameProps, id : number )=>{
                 var classname : string = "";
+                
                 if (id === main)
                     classname = "main";
                 else if (id === main - 1)
@@ -34,21 +56,25 @@ export default function Slider() {
                     classname = "emptyleft"
                 return<Slide onClick={()=>animatethis(id)} className={classname}key={id}  >
                     <div className='center'>
-x
+              <UserAvatar login={data.players[0]}/>
+              <UserAvatar login={data.players[1]}/>
                     </div>
                     <div className='bottom'>
-                        <div>
-                        Yaiba
+                        <div className='name'>
+                        {data.players[0]}
 
                         </div>
-                        <div>
+                        <div className='score'>
 
-                        7
+                        {data.score.score1}
+                        
                         <BattleIcon/>
-                        0
+                        {data.score.score1}
+                        
                         </div>
-                        <div>
-                        mehdi
+                        <div className='name'>
+                        {data.players[1]}
+                        
 
                         </div>
                         
@@ -61,11 +87,48 @@ x
 
                 
             </SliderContainer>
+
+            }
             <RightStyle onClick={()=>animatethis(main + 1)}/>
     </SliderStyle>
   )
 }
 
+interface UserProp {
+    defaultAvatar: string,
+    login : string
+    displayName : string
+    relation? : string
+    nbFriends? : string
+    wins : number
+    losses : number
+  }
+  
+
+
+export  function UserAvatar(props : {login : string}) {
+    const [data, setdata] = useState<UserProp>()
+    useEffect(() => {
+        axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.login  ,  {withCredentials: true}
+        ).then((res)=>{
+              // check for the user is bloked 
+              console.log("> status = " , res.data)
+              setdata(res.data)
+
+            }).catch((error)=>{ 
+             
+              } 
+   )
+}, [])
+
+
+  return (
+    <div>
+        
+       {data && <img src={data?.defaultAvatar} alt="sd"/>}
+    </div>
+  )
+}
 
 const SliderStyle = styled.div`
         display: flex;
@@ -81,9 +144,9 @@ overflow: hidden;
     transform: translate(50% , -50%);
     background-color: #000;
     color:white;
-    border: 2px solid  ${props => props.theme.colors.border};
+    /* border: 4px solid  ${props => props.theme.colors.purple}; */
     border-radius: 10px;
-    box-shadow: 0px 4px 10px 2px ${props => props.theme.colors.border};
+    /* box-shadow: 0px 4px 10px 2px ${props => props.theme.colors.border}; */
     /* box-shadow: 0px 2px 2px 2px ${props => props.theme.colors.purple} ; */
     cursor: pointer;
     transition-duration: 500ms;
@@ -93,25 +156,50 @@ overflow: hidden;
     .center{
         width: 100%;
         flex: 1;
+        display: flex;
 
+        flex-direction: row;
+        align-items: center;
+        >div{
+            width: 50%;
+overflow: hidden;
+            height: 100%;
+            > img{
+                width: 100%;
+                height: 100%;
+                object-fit: fill;
+            }
+        }
     }
     .bottom{
-        font-family: 'Michroma', sans-serif;
+        font-family: 'Poppins', sans-serif;
         color  :${props => props.theme.colors.primaryText};;
         width: 100%;
         height: 60px;
-        background-color: ${props => props.theme.colors.purple};
+        background-color: ${props => props.theme.colors.bg};
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        
+        justify-content: center;
+    border: 4px solid  ${props => props.theme.colors.purple};
        
-        >div{
-            margin: 0 15px;
-            display: flex;
+        >.name{
+            /* margin: 0 15px; */
+            flex :1;
             align-items: center;
             >svg{
             path{
                 stroke: ${props => props.theme.colors.primaryText};
+            }
+        }
+        }
+        >.score{
+            /* margin: 0 15px; */
+            display: flex;
+            align-items: center;
+            >svg{
+            path{
+                stroke: ${props => props.theme.colors.purple};
             }
         }
         }
