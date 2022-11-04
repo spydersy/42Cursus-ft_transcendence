@@ -107,7 +107,7 @@ export function PlayerCard(props: PlayerCardProps) {
 
 
               <div className='Iavatar' style={ {width : "150px" , height : "150px"}} >
-                <AvatarComponent img={props.player.defaultAvatar}/>
+                <AvatarComponent login={props.player.login} img={props.player.defaultAvatar}/>
               </div>
 
               <div className='infoSec'>
@@ -721,7 +721,7 @@ export  function GameComp(props : GameCardProps) {
 return (
   <GameCompStyle win={state} >
       <div style={{marginLeft : "24px"}}>
-        <AvatarComponent img={ props.match.img} />
+        <AvatarComponent  img={ props.match.img} />
       </div>
 
       <Dataa>

@@ -26,6 +26,8 @@ interface UserProp {
     login : string
     displayName : string,
     restriction: string,
+    permission: string, 
+
     restrictionTime: string,
     duration: number,
   }
@@ -77,6 +79,8 @@ export default function Chat() {
     restriction: "string",
     restrictionTime: "string",
     duration: 0,
+    permission: "string", 
+
       }]
     })
      useEffect(() => {
