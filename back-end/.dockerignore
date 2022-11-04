@@ -1,0 +1,14 @@
+./CHAT.TODO
+./TODO
+./docker-compose.yaml
+./init_back.sh
+./node_modules
+./src
+./tsconfig.json
+./README.md
+./dist
+./dockerfile
+./nest-cli.json
+./prisma
+./tsconfig.build.json
+./upload
