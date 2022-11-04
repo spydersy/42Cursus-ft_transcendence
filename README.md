@@ -17,3 +17,8 @@
 ### Other feeatures
 > notifications
 > Lives Games realtime comp
+
+
+> http://localhost:8000/users/relation/eelaazmi?event=cancel
+response : always "DONE"
+expected : 
