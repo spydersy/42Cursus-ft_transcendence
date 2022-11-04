@@ -27,10 +27,16 @@ const Modal = (props : ChatProps) => {
      }}
     {...props}>
       <ModalContentStyle>
+
+        
         <button  onClick={props.hideModal}>
           <CloseIcon />
         </button>
+
+
         <div>{props.children}</div>
+
+
       </ModalContentStyle>
     </ModalStyle>
   );

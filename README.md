@@ -21,4 +21,6 @@
 
 > http://localhost:8000/users/relation/eelaazmi?event=cancel
 response : always "DONE"
-expected : 
+expected : .....
+> users relations BLOCKED & BLOCKER
+> 
