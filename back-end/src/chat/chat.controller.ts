@@ -15,7 +15,7 @@ export class ChatController {
 
     @Post('joinChannel')
     async AddUserToChannel(@Req() req, @Body() joinChannel: JoinChannel, @Res() res) {
-      return this.chatService.JoinChannel(req.user.userId, joinChannel.user, joinChannel.channelId, joinChannel.password, res);
+      return this.chatService.JoinChannel(req.user.userId, joinChannel.channelId, joinChannel.password, res);
     }
 
     @Post('UpdateUserPermission')

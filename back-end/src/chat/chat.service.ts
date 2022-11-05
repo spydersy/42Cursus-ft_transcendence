@@ -267,7 +267,23 @@ export class ChatService {
 
     }
 
-    async JoinChannel(me: number, user: string, channelId: string, password: string, @Res() res) {
+    async JoinProtectedChannel(userProfile: any, channel: any, password: string, @Res() res) {
+        if (password === null || password === undefined)
+            return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Password Required'});
+        if (await bcrypt.compare(password, channel.password) === true) {
+            await this.prisma.channelsUsers.create({
+            data: {
+                userId: userProfile.id,
+                channelId: channel.id,
+                permission: PERMISSION.USER,
+            }
+            });
+            return res.status(HttpStatus.CREATED).send({'message': 'User Added'});
+        }
+        return res.status(HttpStatus.FORBIDDEN).send({'message': 'Wrong Password'});
+    }
+
+    async JoinChannel(me: number, channelId: string, password: string, @Res() res) {
         // Find Channel:
         const channel = await this.GetChannelById(channelId);
         if (channel === null)
@@ -281,21 +297,8 @@ export class ChatService {
         if (userInChannel !== null || channel.access === CHANNEL.PRIVATE
             || channel.access === CHANNEL.DM)
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'User Is Not Allowed To Join This Channel'});
-        if (channel.access === CHANNEL.PROTECTED) {
-            if (password === null || password === undefined)
-                return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Password Required'});
-            if (channel.password === password) {
-                await this.prisma.channelsUsers.create({
-                    data: {
-                        userId: userProfile.id,
-                        channelId: channel.id,
-                        permission: PERMISSION.USER,
-                    }
-                });
-                return res.status(HttpStatus.CREATED).send({'message': 'User Added'});
-            }
-            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Wrong Password'});
-        }
+        if (channel.access === CHANNEL.PROTECTED)
+            return this.JoinProtectedChannel(userProfile, channel, password, res);
         await this.prisma.channelsUsers.create({
             data: {
                 userId: userProfile.id,

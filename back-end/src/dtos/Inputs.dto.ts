@@ -29,6 +29,7 @@ export class ChannelData {
     @MinLength(2)
     members: string;
 
+    @IsString()
     password: string;
 }
 export class MessageDataDto {
@@ -58,9 +59,6 @@ export class JoinChannel {
     channelId: string;
 
     @IsString()
-    @IsNotEmpty()
-    user: string;
-
     password: string;
 }
 
