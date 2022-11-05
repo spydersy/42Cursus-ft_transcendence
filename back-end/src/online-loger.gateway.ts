@@ -19,6 +19,8 @@ interface UserType {
  gameStatu : boolean,
 }
 
+
+
   @WebSocketGateway(3001, {
     cors: {
       origin: process.env.FRONTEND_URL,
@@ -114,6 +116,7 @@ interface UserType {
         this.onLineArray[index].socketId.splice(i, 1);
       if (this.onLineArray[index].socketId.length === 0)
         this.onLineArray.splice(index , 1);
+
 
     }
     this.debug()

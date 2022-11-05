@@ -181,6 +181,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       this.RemovePlayer(client , payload)
       this.wss.emit("change" , this.getArrayData() )
 
+
       // this.wss.emit("change" ,  this.roomArray)
     }
 
@@ -267,6 +268,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
     return l
   }
+
+
 
   @SubscribeMessage('getLiveGames')
   getLive(client: any): void {
@@ -369,27 +372,27 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
    }
 
+
+
+
   }
    hitWalls = (i : number,ballCord : any ,direction: any , width , height  ,paddel1 : any , paddel2 : any, )=>{
-
-
 
     if (ballCord.x + direction.x > width - (ballCord.size  /2 ))
     {
       this.roomArray[i].incrementScore(1)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
       this.checkScore(this.roomArray[i])
-      this.wss.emit("change" , this.getArrayData() )
+      this.wss.emit("changeScoreLive" , {index : i , score :this.roomArray[i].score  })
 
       return false
     }
     else if (ballCord.x + direction.x  < ( ballCord.size /2)    )
     {
-
       this.roomArray[i].incrementScore(2)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
       this.checkScore(this.roomArray[i])
-      this.wss.emit("change" , this.getArrayData() )
+      this.wss.emit("changeScoreLive" , {index : i , score :this.roomArray[i].score  })
 
       return false
 
