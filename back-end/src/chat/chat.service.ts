@@ -279,10 +279,24 @@ export class ChatService {
         return res.status(HttpStatus.OK).send({'message': 'User Updated successfully'});
     }
 
-    async UpdateUserRestrictionInChannel(me: number, user: string, channel: string,
+    async UpdateUserRestrictionInChannel(userId: number, user: string, channelId: string,
         restriction: string, duration: number, @Res() res) {
         //Me is admin or owner
+        const channel = await this.prisma.channels.findUnique({where: {id: channelId}});
+        if (channel === null || channel.access === CHANNEL.DM)
+            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
+        const meDto = await this.prisma.channelsUsers.findUnique({
+            where: {userId_channelId: {userId, channelId},},
+        });
+        if (meDto === null || meDto.permission === PERMISSION.USER
+            || meDto.restriction === RESCTRICTION.BANNED)
+            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
         //user exist in channel
+        const userDto = await this.prisma.users.findUnique({ where:{ login: user}});
+        const userChannel = this.prisma.channelsUsers.findMany({
+            where: { channelId: channelId, userId: userDto.id},
+        });
+        // if ()
         //check his current stat
     }
 
