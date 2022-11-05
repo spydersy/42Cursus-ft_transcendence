@@ -316,10 +316,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         // {
           setrelationStatus("PENDING")
           AddUsernotify();
-          socket.emit('sendFriendRequest', {sender : userData?.login , reciver : props.player.login} )
         // }
-        // console.table('____ login___' +res.data)
-<<<<<<< HEAD
         userData.then((user : UserProp | "{}")=>{
           if (user !== "{}")
           {
@@ -329,8 +326,7 @@ background-color: ${props => props.theme.colors.seconderybg};
 
     })
 
-=======
->>>>>>> 89d12037f51d81acac76691a688b4e228c40514d
+
         // get this user login
         // join user login room
         // emit event to the room.
