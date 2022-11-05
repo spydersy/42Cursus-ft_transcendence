@@ -298,7 +298,15 @@ background-color: ${props => props.theme.colors.seconderybg};
         setrelationStatus("PENDING")
         AddUsernotify();
         // console.table('____ login___' +res.data)
-        socket.emit('sendFriendRequest', {sender : userData?.login , reciver : props.player.login} )
+        userData.then((user : UserProp | "{}")=>{
+          if (user !== "{}")
+          {
+            socket.emit('sendFriendRequest', {sender : user?.login , reciver : props.player.login} )
+
+          }
+
+    })
+
         // get this user login
         // join user login room
         // emit event to the room.
@@ -806,6 +814,7 @@ interface UserType {
 export  function AvatarComponent(props: AvatarProps) {
   const socket = useContext(OnlineContextSocket)
   const User = useContext(UserContext)
+
   const [state, setstate] = useState(false)
  
   const setUserStatu =( list : UserType[] )=>{
@@ -826,7 +835,11 @@ export  function AvatarComponent(props: AvatarProps) {
   
   })
   useEffect(() => {
-    socket.emit("AddOnlineUser" ,User?.login)
+    User.then((data : UserProp | "{}")=>{
+      if (data !== "{}")
+        socket.emit("AddOnlineUser" ,data?.login)
+ })
+    
 
 
   }, [props.login])

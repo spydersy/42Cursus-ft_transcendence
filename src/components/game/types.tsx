@@ -6,6 +6,7 @@ export interface GameProps {
   
 
 export interface UserProp {
+  id: string,
     defaultAvatar: string,
     login : string
     displayName : string

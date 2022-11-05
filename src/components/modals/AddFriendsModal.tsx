@@ -1,10 +1,11 @@
-import React , {useState , useEffect} from 'react'
+import React , {useState , useEffect, useContext} from 'react'
 import styled  from "styled-components"
 import SearchIcon from "../../assets/imgs/searchIcon.svg"
 
 import { AvatarComponent } from '../PlayerProfile';
 import axios from 'axios';
 import { Button } from '../../Pages/SignIn';
+import { UserContext } from '../../context/UserContext';
 interface UserProp {
   id : string , 
     defaultAvatar: string,
@@ -26,23 +27,26 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
       console.log(props.members)
         props.closeModal()
     }
+  const user = useContext(UserContext)
+
     useEffect(() => {
         var s : string | null = localStorage.getItem('user');
-        if (s)
-        {
+        user.then((data : UserProp | "{}")=>{
+          if (data !== "{}")
+          {
+            axios.get("http://localhost:8000/users/friends/" + data.login, 
+            {withCredentials: true} 
+          ).then((res)=>{
     
-          const data : UserProp =  JSON.parse(s || '{}');
-          axios.get("http://localhost:8000/users/friends/" + data.login, 
-          {withCredentials: true} 
-        ).then((res)=>{
-  
-  
-          setfriends(res.data)
-          console.log(res.data[0])
-        }).catch((err)=>{
-         
-          })
-        }
+    
+            setfriends(res.data)
+            console.log(res.data[0])
+          }).catch((err)=>{
+           
+            })
+          }
+        })
+       
     
  
     }  , [ props.setmembers])

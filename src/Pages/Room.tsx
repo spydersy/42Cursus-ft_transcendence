@@ -88,7 +88,7 @@ const linkslist = ["All" , "My Rooms"]
 
               {
                 allRooms.map((data : any , id : number)=>{
-                  return<RoomComponent id={3} roomMembers={data.nbUsers} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
+                  return<RoomComponent  key={id} id={3} roomMembers={data.nbUsers} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
                 })
               }
             </Warraper>
@@ -99,10 +99,10 @@ const linkslist = ["All" , "My Rooms"]
                 myrooms.map((data : convType , id : number)=>{
                   if (data.access != "DM")
                   {
-                    return<RoomComponent id={data.channelId } roomMembers={data.users.length} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
+                    return<RoomComponent  key={id}  id={data.channelId } roomMembers={data.users.length} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
                     
                   }
-                  return<></>
+                  return<div key={id} ></div>
                 })
               }
             </Warraper>

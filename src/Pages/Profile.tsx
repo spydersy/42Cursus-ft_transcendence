@@ -63,54 +63,33 @@ export default function Profile() {
   // const [connection, setconnection] = useState(true);
   const user = useContext(UserContext)
   useEffect(() => {
-if (user != null)
-{
-  if (id === user?.login)
-  {
-    setisCurrent(true)
-    setUser(user)
-  }
-  else
-  {
-    setisCurrent(false)
-    axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + id,  {withCredentials: true}
-    ).then((res)=>{
-          // check for the user is bloked 
-          setUser(res.data)
-          console.log("> status = " , res.data)
 
-        }).catch((error)=>{ 
-          // if (err.status === 403)
-          //   setUser(BlockedUser)
-          // console.log("> status = " , err.status)
-          console.log("---- error ----")
-          if (error.response) 
-          {
-
-            if (error.response.data.message == ("Forbidden : User Blocked you"))
-              setUser(BlockedUser)
-
-            console.log("m={",error.response.data.message, "}=", (error.response.data.message == ("Forbidden : User Blocked you")) );
-            console.log("m1={",error.response.status, "}");
-            console.log("m2={",error.response.headers, "}");
-          } 
-          // else if (error.request) {
-            
-          //   console.log("Reeeq", error.request);
-          // } 
-          // else {
-          //   console.log('Error', error.message);
-          // }
-          // console.log(error.config);
-          console.log("*---- error ----*")
-
-
-
-        })
-  }
-
-
+    user.then((data : UserProp | "{}")=>{
+      if (data !== "{}"){
+        if (id === data?.login){
+            setisCurrent(true)
+              setUser(data)
+        }
+        else
+        {
+          setisCurrent(false)
+          axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + id,  {withCredentials: true}
+          ).then((res)=>{
+                // check for the user is bloked 
+                setUser(res.data)
+         
+              }).catch((error)=>{ 
+                if (error.response) 
+                {
+                  if (error.response.data.message == ("Forbidden : User Blocked you"))
+                    setUser(BlockedUser)
+                } 
+              })
+        }
     }
+
+ })
+
 
 
   }, []);

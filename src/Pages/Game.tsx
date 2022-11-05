@@ -13,6 +13,7 @@ import {
 Link
 } from "react-router-dom";
 import { AlterType } from 'tsparticles-engine'
+import { UserContext } from '../context/UserContext'
 interface UserProp {
   id : string,
   defaultAvatar: string,
@@ -35,6 +36,7 @@ export default function Game(props : GameProps) {
   const [loged, setloged] = useState<UserProp>()
   const [opennet, setOpennet] = useState<UserProp>()
   const gamesocket = useContext(SocketGameContext)
+  const UserData = useContext(UserContext)
 
   const [end, setend] = useState(false)
   const [start, setstart] = useState(false)
@@ -75,38 +77,43 @@ export default function Game(props : GameProps) {
  
 
  var data : UserProp ;
+ 
 
   useEffect(() => {
-    
-    var s : string | null = localStorage.getItem('user');
-    var mode = localStorage.getItem('mode') ;
-    if (s)
-    {
-      data =  JSON.parse(s || '{}');
-      setloged(data)
-      if (mode === "classic")
+
+var dat : UserProp;
+    UserData.then((data : UserProp | "{}")=>{
+      if (data !== "{}")
       {
-        if (!end)
+        dat = data
+        setloged(data)
+        if (mode === "classic")
         {
-          console.log(mode)
-          gamesocket.emit("playerConnect" , data?.login)
+          if (!end)
+          {
+            console.log(mode)
+            gamesocket.emit("playerConnect" , data?.login)
+    
+          }
+    
+          setUser(data)
+        }
+        else if (mode === "1v1")
+        {
+          gamesocket.emit("start" , data?.login)
+        }
+        else if (mode === "AI")
+        {
+          gamesocket.emit("PlayAi" , data?.login)
   
         }
-  
-        setUser(data)
       }
-      else if (mode === "1v1")
-      {
-        gamesocket.emit("start" , data?.login)
-      }
-      else if (mode === "AI")
-      {
-        gamesocket.emit("PlayAi" , data?.login)
+    })
+    var mode = localStorage.getItem('mode') ;
 
-      }
-    }
     return () => {
-      gamesocket.emit("endGame" , data?.login)
+
+      gamesocket.emit("endGame" , dat?.login)
     }
 
 

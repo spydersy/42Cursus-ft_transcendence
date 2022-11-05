@@ -10,6 +10,7 @@ import Modal from './Modal';
 import AchievmentModal from './modals/AchievmentModal';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext';
+import { UserProp } from './game/types';
 
 const match1 = {
     name: "Melkafdsfdsfsfdsfrmi",
@@ -40,18 +41,25 @@ export  function HistoryComponent() {
   const UserData = useContext(UserContext)
 
     const [list, setlist] = useState([])
-    useEffect(() => {
-        console.log(UserData)
-        axios.get(process.env.REACT_APP_BACKEND_URL+ "/game/MatchHistory/"+ UserData?.id , 
-    {withCredentials: true} 
-  ).then((res)=>{
-    console.log(res.data)
-    setlist(res.data)
+    useEffect(() => {UserData.then((user : UserProp | "{}")=>{
+        if (user !== "{}")
+        {
+                    axios.get(process.env.REACT_APP_BACKEND_URL+ "/game/MatchHistory/"+ user.id , 
+                {withCredentials: true} 
+              ).then((res)=>{
+                console.log(res.data)
+                setlist(res.data)
+            
+              }).catch((err)=>{
+            
+                    console.log(err)
+                })
 
-  }).catch((err)=>{
+        }
 
-        console.log(err)
     })
+
+
     
         return () => {
           

@@ -205,7 +205,7 @@ export  function GameChallengeToast(props: {data : any}) {
         
   }, [])
   const acceptChallenge = ()=>{
-    gamesocket.emit("gameAccept", {player1 : props.data, player2: UserData?.login})
+    // gamesocket.emit("gameAccept", {player1 : props.data, player2: UserData?.login})
     // window.location.href = "/game"
   }
   return (
@@ -243,7 +243,7 @@ export  function FriendRequestToast(props: {data : any}) {
   })
   const acceptFriendReq = (k: boolean)=> {
 
-    console.log('yyyyyyy:',userData)
+
     if (k)
     {
 
@@ -273,7 +273,13 @@ export  function FriendRequestToast(props: {data : any}) {
       }).catch((err)=>{  })
     }
       
-    socket.emit('acceptFriendRequest', {accepter: userData?.login, reciever: User?.login, status: k} )
+    userData.then((user : UserProp | "{}")=>{
+      if (user !== "{}")
+      {
+        socket.emit('acceptFriendRequest', {accepter: user?.login, reciever: User?.login, status: k} )
+      }
+
+  })
   }
   useEffect(() => {
     console.log(props.data)

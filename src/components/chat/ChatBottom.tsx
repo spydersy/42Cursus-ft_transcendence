@@ -6,6 +6,8 @@ import {ReactComponent as SendIcon} from "../../assets/imgs/send-icon.svg";
 import { SocketContext } from '../../context/Socket';
 import styled  from "styled-components"
 import axios from 'axios';
+import { UserContext } from '../../context/UserContext';
+import { UserProp } from '../game/types';
 
 interface usersType {
   id : string ,
@@ -38,28 +40,31 @@ export default function ChatBottom(props: ChatProps) {
     const socket = useContext(SocketContext)
     const inputRef = useRef<HTMLTextAreaElement>(null)
     var mesg : string = "";
+ const User = useContext(UserContext)
     
     const addMessage = ()=>{
       var s : string | null = localStorage.getItem('user');
       var data: usersType ;
-
-      if (s )
-      {
-        data  =  JSON.parse(s || '{}');
-        if (inputRef.current?.value && inputRef.current?.value != "")
+      User.then((data : UserProp | "{}")=>{
+        if (data !== "{}")
         {
-          mesg =  inputRef.current.value;
-          inputRef.current.value = "";
-          var msgtmp = {
-            userId: data.id,
-            content: mesg,
-            channelId:  props.data?.channelId
-          }
-          //validation layer (restrictions
+          if (inputRef.current?.value && inputRef.current?.value != "")
+          {
+            mesg =  inputRef.current.value;
+            inputRef.current.value = "";
+            var msgtmp = {
+              userId: data.id,
+              content: mesg,
+              channelId:  props.data?.channelId
+            }
+            //validation layer (restrictions
+  
+            socket.emit('chatToServer', msgtmp);
 
-          socket.emit('chatToServer', msgtmp);
         }
-      }
+        }
+      })
+     
     }
     inputRef.current?.addEventListener('keydown', (e : any)=>{
       if (e.code === "Enter")

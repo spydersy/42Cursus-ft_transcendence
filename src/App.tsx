@@ -36,6 +36,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MsgToast , {AcceptToast, FriendRequestToast, GameChallengeToast, CancelToast} from './components/Toasts/MsgToast';
 import { ReactComponent as CloseIcon } from "./assets/imgs/close-icon.svg";
+import { UserContext } from './context/UserContext';
 
 
 const mockedItems : any = [{
@@ -101,6 +102,7 @@ function App() {
   const socket = useContext(SocketContext)
   const onlinesSocket = useContext(OnlineContextSocket)
   const gameSocket = useContext(SocketGameContext)
+  const User = useContext(UserContext)
   const [toastData, settoastData] = useState<msgType>()
   const [toastDataChallenge, settoastDataChallenge] = useState()
   const pageName = window.location.pathname.split("/")[1];
@@ -211,20 +213,41 @@ function App() {
       console.log(err)
     })
     }
-    
+    interface UserProp {
+      id: string,
+      defaultAvatar: string,
+      status: string,
+      login : string
+      displayName : string
+      relation : string
+      dmChannel : string
+      nbFriends? : string
+      wins : number
+      losses : number
+      lastModification: string
+      Achievements: boolean[]
+  } 
     const navigate = useNavigate();
     
     useEffect(() => {
-      
-   
+      // if ()
+      User.then((user : UserProp | string)=>{
+        console.log(user)
+        if (user === "{}")
+        {
+          onlinesSocket.close()
+          navigate("/signin")
+        }
+
+      })
       
       axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me", 
       {withCredentials: true} 
       ).then((res)=>{
         
         
-        // console.log(res.data)
-        localStorage.setItem("user", JSON.stringify(res.data))
+        console.log(res.data)
+        localStorage.setItem("user", JSON.stringify(User))
         localStorage.setItem("mode","classic")
         joinChannels()
         socket.emit("AddOnlineUser")
@@ -235,12 +258,9 @@ function App() {
         
 
     }).catch((err)=>{
-          console.log(err.message)
-          const pageName = window.location.pathname.split("/")[1];
-          if (pageName != "2fa")
-            navigate('/signin')
-          else
-            navigate('/2fa')
+          // console.log(err.message)
+          // const pageName = window.location.pathname.split("/")[1];
+
         
 
       })

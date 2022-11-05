@@ -9,8 +9,10 @@ import axios from 'axios'
 import { SocketContext } from '../../context/Socket';
 import ChatControlBar from './ChatControlBar'
 import EmptyComponent from '../PlayerrEmptyComp'
+import { UserContext } from '../../context/UserContext'
 
 interface UserProp {
+  id : string,
   defaultAvatar: string,
   login : string
   displayName : string
@@ -83,8 +85,10 @@ export default function Chat() {
 
       }]
     })
+    const userData = useContext(UserContext)
      useEffect(() => {
       // console.log(bottomRef)
+
        const fetchData = async () => {
          await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
          {withCredentials: true} 
@@ -139,13 +143,20 @@ export default function Chat() {
           setstae(-1)
         }
         )
-        var s : string | null = localStorage.getItem('user');
-        var data: usersType ;
-        if (s )
-        {
-          data  =  JSON.parse(s || '{}');
-          socket.emit('concon', data.id)
-        }
+        userData.then((user : UserProp | "{}")=>{
+          if (user !== "{}")
+          {
+            socket.emit('concon', user.id)
+
+          }
+
+        })
+        // var s : string | null = localStorage.getItem('user');
+        // var data: usersType ;
+        // if (s )
+        // {
+        //   data  =  JSON.parse(s || '{}');
+        // }
     },[])
     useEffect(() => {
       const recievedMessgae  =  (payload : msgType) => {        

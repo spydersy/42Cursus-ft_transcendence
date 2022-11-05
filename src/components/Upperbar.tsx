@@ -1,4 +1,4 @@
-import React, {useState , useEffect, useRef, CSSProperties} from 'react'
+import React, {useState , useEffect, useRef, CSSProperties, useContext} from 'react'
 import styled , {css} from "styled-components"
 import SearchIcon from "../assets/imgs/search.svg"
 import {ReactComponent as BellIcon }from "../assets/imgs/notfication.svg"
@@ -16,6 +16,7 @@ import { useClickOutside } from "react-haiku"
 import HashLoader from "react-spinners/HashLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
 import EmptyComponent from './PlayerrEmptyComp';
+import { UserContext } from '../context/UserContext'
 
 interface ListTypes {
   title : string,
@@ -41,22 +42,31 @@ export default function Upperbar() {
     setopen(!open)
     e.stopPropagation();
   }
-  
+ const User = useContext(UserContext)
 
   useEffect(() => {
+    console.log(User)
     // setcurrentUser(localStorage.getItem("user"))
-    var s : string | null = localStorage.getItem('user');
-    if (s)
-    {
-      const data : UserProp =  JSON.parse(s || '{}');
-      setcurrentUser(data)
-      // console.log(data)
+    User.then((user : UserProp | "{}" )=>{
+    //   console.log(user.defaultAvatar)
+    if (user !== "{}"){
 
-      list[0].href = "/profile/" + data.login
+      setcurrentUser(user)
+      list[0].href = "/profile/" + user.login
     }
 
+    })
+
+      // console.log(data)
+
+    
+
   
-  }, [setcurrentUser])
+  }, [])
+  useEffect(() => {
+
+  }, [currentUser])
+  
   
   return (
     <Wrraper>
@@ -67,7 +77,7 @@ export default function Upperbar() {
           <NotificationComponent setopen={(e)=>setopen(e)} />
           <div  style={{position : "relative"}} onClick={(e)=>{ToggleDD(e)}}>
             <div style={{width : "40px", height :"40px"}}>
-            <AvatarComponent  img={currentUser?.defaultAvatar!} />
+            <AvatarComponent  img={currentUser?.defaultAvatar} />
             </div>
             {
               open && <DropDown closeDropdown={ ()=>{

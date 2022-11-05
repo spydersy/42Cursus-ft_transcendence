@@ -54,7 +54,7 @@ export default function Achivments(props: AchivementsProps) {
         {
             achiv.map((data : any, id : number)=>{
                return (
-                 <ContyStyle status={props.data[id]} >
+                 <ContyStyle key={id} status={props.data[id]} >
                     <ToolTip>{data.name} </ToolTip>
                       <img key={id} src={data.badge} alt={data.name} />
                   </ContyStyle>

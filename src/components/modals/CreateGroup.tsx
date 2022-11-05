@@ -379,8 +379,8 @@ margin: 15px 0;
 
 interface  MemberProp{
     members : string[],
-    setmembers: (e : any) => void,
-    id: string
+    setmembers : (e : any) => void,
+    id: string,
 }
 
 
@@ -401,7 +401,7 @@ export  function Member(props:MemberProp ) {
         
     
  
-    }  , [])
+    }  , [props.members])
     const deleteMember = ()=>{
         var list = props.members
         var index = list.indexOf(props.id)

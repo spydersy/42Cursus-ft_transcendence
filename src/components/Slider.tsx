@@ -23,6 +23,14 @@ export default function Slider() {
 
         setmain(data.length / 2 > 1 ? data.length / 2  : 0 )
     })
+    socket.off("changeScoreLive").on("changeScoreLive" , (data : any)=>{
+
+
+       var l = list;
+       l[data.index].score = data.score
+       setlist([...l])
+        // setmain(data.length / 2 > 1 ? data.length / 2  : 0 )
+    })
     const animatethis =(slideId: number)=>{
         if (slideId < 0 )
             return ;
@@ -34,6 +42,10 @@ export default function Slider() {
         socket.emit("getLiveGames")
      
     }, [])
+    useEffect(() => {
+      console.log("sw")
+     
+    }, [list])
     
   return (
     <SliderStyle>
@@ -74,7 +86,7 @@ export default function Slider() {
                         {data.score.score1}
                         
                         <BattleIcon/>
-                        {data.score.score1}
+                        {data.score.score2}
                         
                         </div>
                         <div className='name'>
@@ -202,7 +214,9 @@ overflow: hidden;
             /* margin: 0 15px; */
             display: flex;
             align-items: center;
+            font-size: 20px;
             >svg{
+                margin: 0 10px;
             path{
                 stroke: ${props => props.theme.colors.purple};
             }
