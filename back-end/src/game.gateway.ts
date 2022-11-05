@@ -17,7 +17,6 @@ import {v4 as uuidv4} from 'uuid';
     namespace : "game"
  })
 
-
 export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGatewayDisconnect{
 
   @WebSocketServer() wss : Server
