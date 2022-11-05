@@ -9,7 +9,7 @@ import {
 import { Logger, UseGuards } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { ChatService } from './chat/chat.service';
-import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
+import { WsGuard } from './auth/jwt.strategy';
 
 @WebSocketGateway(3001, {
     cors: {

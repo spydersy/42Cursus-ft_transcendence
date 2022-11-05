@@ -5,7 +5,7 @@ import { get } from 'http';
 import { Controller, Get } from '@nestjs/common';
 import { start } from 'repl';
 import { GameService } from './game/game.service';
-import { OnlineGuard, WsGuard } from './auth/jwt.strategy';
+import { WsGuard } from './auth/jwt.strategy';
 import { MODE } from '@prisma/client';
 import {v4 as uuidv4} from 'uuid';
 
@@ -407,7 +407,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 
-  
+
    detectCollision(player : any , ballCord : any , direction : any) {
     const cx = ballCord.x + direction.x ;
     const cy = ballCord.y + direction.y;

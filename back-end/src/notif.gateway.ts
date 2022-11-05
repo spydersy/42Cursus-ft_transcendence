@@ -19,7 +19,7 @@ import { Socket, Server } from 'socket.io';
 } )
 
 export class NotifGateway implements  OnGatewayConnection{
-  @WebSocketServer() server: Server; 
+  @WebSocketServer() server: Server;
 
   private logger: Logger = new Logger('NotifGateway');
   @SubscribeMessage('message')

@@ -9,7 +9,6 @@ import {
  import { Logger, UseGuards } from '@nestjs/common';
  import { Socket, Server } from 'socket.io';
  import { ChatService } from './chat/chat.service';
- import { OnlineGuard } from './auth/jwt.strategy';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { PrismaService } from './prisma/prisma.service';
 import { SOCKET } from '@prisma/client';
@@ -33,7 +32,7 @@ interface UserType {
   constructor(private chatService: ChatService,
               private prisma: PrismaService) {}
 
-  @WebSocketServer() server: Server; 
+  @WebSocketServer() server: Server;
   private logger: Logger = new Logger('OnlineLogerGateway');
   onLineArray  : UserType[] = [];
   // @UseGuards(OnlineGuard)
@@ -49,7 +48,7 @@ interface UserType {
   //       onlineArr.push(element.userLogin);
   //   });
   //   ingame.forEach(element => {
-  //     if (inGameArr.includes(element.userLogin) === false) 
+  //     if (inGameArr.includes(element.userLogin) === false)
   //       inGameArr.push(element.userLogin);
   //   });
   //   console.log("__EMIT__EVENT__DBG__ : ", {onlineArr, inGameArr});
@@ -67,7 +66,7 @@ interface UserType {
         this.onLineArray.push(test)
       }
       else
-      { 
+      {
         console.log("______BGGGG___: ", this.onLineArray[i].socketId.includes(client.id.toString()))
         if( this.onLineArray[i].socketId.includes(client.id.toString()) === false)
           this.onLineArray[i].socketId.push(client.id)
@@ -75,7 +74,7 @@ interface UserType {
       }
 
 
- 
+
     this.debug()
 
     this.server.emit('ConnectedUser', this.onLineArray);
@@ -87,7 +86,7 @@ interface UserType {
   afterInit(server: Server) {
    this.logger.log('Init OnlineLogerGateway');
   }
- 
+
   getIndex( id : string) {
     for (let i = 0; i < this.onLineArray.length; i++) {
       const element = this.onLineArray[i];
@@ -104,15 +103,15 @@ interface UserType {
     }
     return -1
   }
- 
+
    handleDisconnect(client) {
   var index = this.getIndex(client.id.toString())
   console.log("___DBG__INDEX :", index)
     if (index !== -1)
     {
-      
+
       var i = this.onLineArray[index].socketId.indexOf(client.id);
-      if (i !== -1) 
+      if (i !== -1)
         this.onLineArray[index].socketId.splice(i, 1);
       if (this.onLineArray[index].socketId.length === 0)
         this.onLineArray.splice(index , 1);
