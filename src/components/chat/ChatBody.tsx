@@ -3,6 +3,8 @@ import axios from 'axios'
 import React , {useEffect , useState , useContext, useRef} from 'react'
 import styled  from "styled-components"
 import { SocketContext } from '../../context/Socket';
+import { UserContext } from '../../context/UserContext';
+import { UserProp } from '../game/types';
 
 interface usersType {
   id : string,
@@ -44,9 +46,26 @@ interface ChatProps {
   }
   export default function ChatBody(props: ChatProps) {
   const socket = useContext(SocketContext)
+  const User = useContext(UserContext)
 
+const [UserData, setUserData] = useState<UserProp>({
+  id: "string",
+    defaultAvatar: "string",
+    login : "string",
+    displayName : "string",
+    wins : 0,
+    losses : 0,
+})
 const first = useRef(null)
 
+    useEffect(() => {
+      User.then((data : UserProp | "{}" )=>{
+        if (data !== "{}")
+          setUserData(data)
+     
+
+      })
+    }, [])
     useEffect(() => {
       scroolDown()
     }, [props.msgs])
@@ -58,6 +77,7 @@ const first = useRef(null)
         var s = document.getElementsByClassName("bar" )
         
         console.log(s[props.msgs.length-1])
+        if (s[props.msgs.length-1])
           s[props.msgs.length-1].scrollIntoView({behavior: 'smooth'});
 
       }
@@ -68,14 +88,9 @@ const first = useRef(null)
 
         {
           props.msgs.map((object: any , i : number)=>{
-            var s : string | null = localStorage.getItem('user');
-            var data: usersType ;
+        
 
-            if (s)
-            {
-              
-              data  =  JSON.parse(s || '{}');
-              if (object.senderId != data.id)
+              if (object.senderId != UserData.id)
               {
 
 
@@ -99,7 +114,13 @@ const first = useRef(null)
                 </MsgStyle></div>
 
               }
-            }
+            
+              
+        
+    
+  
+             
+            
 
           })
         }
