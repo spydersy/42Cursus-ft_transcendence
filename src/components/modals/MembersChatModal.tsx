@@ -4,6 +4,7 @@ import { AvatarComponent } from '../PlayerProfile';
 import {ReactComponent as Ban} from "../../assets/imgs/ban.svg";
 import {ReactComponent as Mute} from "../../assets/imgs/mute.svg";
 import {ReactComponent as GameIcon} from "../../assets/imgs/game-icon.svg";
+import axios from 'axios';
 
 import styled , {css} from "styled-components"
 interface convType {
@@ -29,6 +30,10 @@ interface usersType {
 
 
 export default function MembersChatModal(props : { closeModal : ()=>void , data : convType}) {
+
+  const channelId = props.data.channelId;
+
+
   return (
     <div>   
         Members: 
@@ -37,7 +42,7 @@ export default function MembersChatModal(props : { closeModal : ()=>void , data 
               props.data.users.map((data : any , id : number)=>{
                 if (id === 0)
                   return <></>
-                return <Member access={props.data.users[0].permission}  data={data}/>
+                return <Member access={props.data.users[0].permission}  data={data} channelId={channelId} />
               })
           }
           
@@ -47,11 +52,56 @@ export default function MembersChatModal(props : { closeModal : ()=>void , data 
 }
 
 interface MemberProps{
+   channelId: number,
     data : usersType
     access : string
   }
+
   export  function Member(props : MemberProps) {
-  console.log(props.access)
+    console.log(props.access)
+
+    const OwnerBan = () => {
+      console.log("OwnerBan")
+      var  bodyFormData = new FormData();
+      
+      bodyFormData.append('channelId', props.channelId.toString());
+
+      bodyFormData.append('user', props.data.id);
+      bodyFormData.append('restriction', "BAN");
+      bodyFormData.append('duration', "600s");
+      
+
+    //       POST /chat/UpdateUserRestriction
+    //   - Body: {
+    //     channelId: string;
+    //     user: string;
+    //     restriction: string; // expected values: "BAN" - "MUTE" - "UNBAN" (UNBAN still not working as expected ...)
+    //     duration: number; //expected  values in second: 1min(60s), 5min(300s), 10min(600s), 30min(1800s), 60min(3600s), 1day(86400s)
+    // }
+
+      // axios.post(process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData, {withCredentials: true}).then((res)=>{
+      //         // succes("Avatar Updated Successfully")
+      //         // console.log(res)
+
+      //     }).catch((err)=>{ 
+      //         // error("Avatar Not Updated")
+      //         // console.log(err)
+      //     })
+
+    };
+    const OwnerMute = () => {
+      console.log("OwnerMute")
+    };
+    const AdminBan = () => {
+      console.log("AdminBan")
+    };
+    const AdminMute = () => {
+      console.log("AdminMute")
+    };
+
+    const ChallengeGame = () => {
+      console.log("ChallengeGame")
+    };
 
     return (
       <MemberStyle>
@@ -59,9 +109,9 @@ interface MemberProps{
         <div className='data'>
   
           <div className='avatar'>
-                      <AvatarComponent img={props.data.defaultAvatar}/>
-  
+            <AvatarComponent img={props.data.defaultAvatar}/>
           </div>
+
           <div className='name'>
                { props.data.displayName}
             <span>
@@ -69,26 +119,29 @@ interface MemberProps{
             </span>
           </div>
         </div>
+
         <div className='buttons'>
           {props.access === "OWNER"
           &&
           <>
-          <Button size='small' isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
-        <Button size='small'  isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
+          <Button size='small' isIcon={true} onClick={()=>{OwnerBan()}} icon={<Ban/>}/>
+          <Button size='small'  isIcon={true} onClick={()=>{OwnerMute()}} icon={<Mute/>}/>
           </>
           
         }
           {(props.access === "ADMIN"
           && props.data.permission !== "OWNER" )&& 
           <>
-          <Button size='small' isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
-        <Button size='small'  isIcon={true} onClick={()=>{}} icon={<Mute/>}/>
+          <Button size='small' isIcon={true} onClick={()=>{AdminBan()}} icon={<Ban/>}/>
+          <Button size='small'  isIcon={true} onClick={()=>{AdminMute()}} icon={<Mute/>}/>
           </>
           
         }
-        <Button size='small'  isIcon={true} onClick={()=>{}} icon={<GameIcon/>}/>
+        <Button size='small'  isIcon={true} onClick={()=>{ChallengeGame()}} icon={<GameIcon/>}/>
   
         </div>
+      
+      
       </MemberStyle>
     )
   }

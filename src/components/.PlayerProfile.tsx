@@ -23,6 +23,7 @@ import {Link} from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../context/UserContext';
+import { data } from 'jquery';
 
 //// PlayerCard Comp
 interface UserProp {
@@ -238,8 +239,19 @@ background-color: ${props => props.theme.colors.seconderybg};
     const [grade, setgrade] = useState<string | undefined>(Grades[5])
     const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
     const userData = useContext(UserContext)
+    let isBlocked = "";
 
     const    AddUsernotify = () => toast.success("You have successfully Send the invitaion to " + id.toLocaleUpperCase() , {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+    const    ALreadyFriendnotify = () => toast.success("You can't Friendo !!" + id.toLocaleUpperCase() , {
       position: "bottom-center",
       autoClose: 2000,
       hideProgressBar: true,
@@ -294,10 +306,20 @@ background-color: ${props => props.theme.colors.seconderybg};
 
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{
-        // console.log(res.data)
-        setrelationStatus("PENDING")
-        AddUsernotify();
+        console.log(res.data)
+        // if (res.data.message === "Relation Already Exist")
+        // {
+        //   setrelationStatus("PENDING")
+        //   ALreadyFriendnotify();
+        // } 
+        // else
+        // {
+          setrelationStatus("PENDING")
+          AddUsernotify();
+          socket.emit('sendFriendRequest', {sender : userData?.login , reciver : props.player.login} )
+        // }
         // console.table('____ login___' +res.data)
+<<<<<<< HEAD
         userData.then((user : UserProp | "{}")=>{
           if (user !== "{}")
           {
@@ -307,6 +329,8 @@ background-color: ${props => props.theme.colors.seconderybg};
 
     })
 
+=======
+>>>>>>> 89d12037f51d81acac76691a688b4e228c40514d
         // get this user login
         // join user login room
         // emit event to the room.
@@ -315,20 +339,27 @@ background-color: ${props => props.theme.colors.seconderybg};
         console.log(err)
         alert("USER ALREADY BLOCKED")
         setrelationStatus("BLOCKER")
+        isBlocked = "BLOCKER"
       })
     }
     const CancelRequest = ()=>{
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
       ).then((res)=>{
       // console.log(res.data)
+      
+      
       setrelationStatus("NOTHING")
       CancelNotify();
+
+
       // CancelRequestNotify();
       // window.location.reload();
     }).catch((err)=>{  
-        setrelationStatus("PENDING")
+        // setrelationStatus("PENDING")
 
       })
+      window.location.reload();
+
     }
     const UnfriendUser = ()=>{
       //  GET process.env.REACT_APP_BACKEND_URL+  /users/relation/:id?event=unfriend
@@ -348,6 +379,7 @@ background-color: ${props => props.theme.colors.seconderybg};
       // console.log(res.data)
       // alert("friend Request sent" + res.status)
       setrelationStatus("BLOCKED")
+      isBlocked = "BLOCKED";
       BlockUserNotify();
       // window.location.reload();
       }).catch((err)=>{  })
@@ -465,7 +497,9 @@ background-color: ${props => props.theme.colors.seconderybg};
                           </div>
 
                           </>
-                        : null
+                        :
+                        null
+                        
                       }
                     </Buttons>
                   }

@@ -66,17 +66,19 @@ export  function TwoFa() {
         } 
 
         axios.post(process.env.REACT_APP_BACKEND_URL+ "/auth/validate2FA?code=" + pass , {} ,{withCredentials: true}).then((res)=>{
-            if (res.data.status === "true")
+            
+            // console.log("___CONSOLE___", res.data.Authentication)
+
+            if (res.data.Authentication === "SUCCESS")
             {
-                succes(" Signed in successfully");
-                wait(2000).then(() => {
-                navigate("/");})
+                succes("Signed in successfully\nWelcome back!");
+                wait(2000).then(() => { navigate("/");})
             }
             else
                 error("Wrong code , Try again");
-            
+
         }).catch((err)=>{
-            error("Something is Wrong , Try again");
+            error("Something is Wrong , Try again or contact us");
             navigate("/signin");
         })
     }

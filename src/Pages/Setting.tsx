@@ -26,6 +26,7 @@ export default function Setting() {
     const [openpass, setopenpass] = useState(false)
     const [QrCode, setQrCode] = useState("")
     const [values, setValues] = useState(['', '', '','','','']);
+    const [SaveName, setSaveName] = useState("");
 
     const error = (props: string) => {
         toast.error(props, {
@@ -71,6 +72,8 @@ export default function Setting() {
             setdata(res.data)
             setImg(res.data.defaultAvatar)
             setIsToggled(res.data.twoFactorAuth)
+            setSaveName(res.data.displayName);
+
             // console.log("__res.data.twoFactorAuth__ = " , res.data.twoFactorAuth)
             // console.log("__isToggled__ = " , isToggled)
         }).catch((err)=>{
@@ -112,6 +115,8 @@ export default function Setting() {
         }
         else
             enteredName = Name;
+
+        
         setdata({...data, displayName : enteredName})
     };
 
@@ -209,16 +214,24 @@ export default function Setting() {
         
         if (name.length === 0)
         {
-            warning("Display Name must not be empty");
+            warning("Display Name empty or invalid Friendo!!!");
             // NoNameError();
             return;
         }
-        
+        if (name === SaveName)
+        {
+            warning("Change Something Friendo !!!");
+            // NoNameError();
+            return;
+        }
+
         axios.put(process.env.REACT_APP_BACKEND_URL+ "/profile/updateUsername/" + name , name, {withCredentials: true}).then((res)=>{
             // NameUpdated();
-            succes("You have successfully updated your Display Name");
+            setSaveName(name);
+
+            succes("You have successfully updated your Universe");
         }   ).catch((err)=>{ 
-            error("Display Name Update Failed");
+            error("Updating your Universe Failed");
             // NameNotUpdated()
         })
     };

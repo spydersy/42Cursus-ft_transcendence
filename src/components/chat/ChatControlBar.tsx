@@ -71,7 +71,8 @@ export default function ChatControlBar(props :{data : convType }) {
                 
                 socket.emit("gameChallenge", props.data.channelId , props.data.users[0].login) ; 
                   gamesocket.emit("gameChallenge" , {player1 : props.data.users[0].login , player2 : props.data.users[1].login})}} icon={<GameIcon/>}/>
-            <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
+              
+              <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
             {/* <Button   isIcon={true} onClick={()=>{}} icon={<Mute/>}/> */}
                  </div>
                 
@@ -86,7 +87,7 @@ export default function ChatControlBar(props :{data : convType }) {
                       <MembersChatModal  data={props.data}closeModal={()=>sethide(false) } />
                     </Modal>
                 }
-                 </div>
+            </div>
 
             }    
 
