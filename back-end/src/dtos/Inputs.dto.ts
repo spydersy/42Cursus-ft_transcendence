@@ -53,7 +53,7 @@ export class ChannelUserDto {
     user: string;
 }
 
-export class JoinChannel {
+export class JoinChannelDto {
     @IsUUID()
     @IsNotEmpty()
     channelId: string;
@@ -62,7 +62,7 @@ export class JoinChannel {
     password: string;
 }
 
-export class UserRestrictionDto{
+export class UserRestrictionDto {
     @IsUUID()
     @IsNotEmpty()
     channelId: string;
