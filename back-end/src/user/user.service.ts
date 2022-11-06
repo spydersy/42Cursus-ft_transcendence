@@ -359,8 +359,16 @@ export class UserService {
         }
 
         async GetAllUsers(@Res() res) {
-            let allUser = await this.prisma.users.findMany({
-                orderBy:{ level: 'desc'}
+            const allUser = await this.prisma.users.findMany({
+                select: {
+                    login: true,
+                    displayName: true,
+                    defaultAvatar: true,
+                    wins: true,
+                    losses: true,
+                    level: true,
+                },
+                orderBy:{ level: 'desc'},
             });
             return res.send(allUser);
         }
