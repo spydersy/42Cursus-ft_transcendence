@@ -79,6 +79,22 @@ export class GameService {
                 mode: mode,
             }
         });
+        await this.prisma.users.update({
+            where: {id: player1Dto.id},
+            data: {
+                level: {
+                    increment: this.score.score1 > this.score.score2 ? 100 : -50,
+                }
+            }
+        });
+        await this.prisma.users.update({
+            where: {id: player2Dto.id},
+            data: {
+                level: {
+                    increment: this.score.score2 > this.score.score1 ? 100 : -50,
+                }
+            }
+        });
    }
 
 
