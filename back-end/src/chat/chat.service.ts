@@ -186,6 +186,14 @@ export class ChatService {
     }
 
     async GetMyChannels(me: number, @Res() res) {
+        let filtredChannels: any[] = [];
+
+        const bannedChannels = await this.prisma.channelsUsers.findMany({
+            where: {
+                userId: me,
+                restriction: RESCTRICTION.BANNED
+            }
+        });
         let myChannels = await this.prisma.channels.findMany({
             where: {
                 users: {some: { userId: me}}
@@ -193,8 +201,17 @@ export class ChatService {
             include: {users: {include: { user: true }}},
             orderBy: {lastUpdate: 'desc'},
         });
-        await this.SetLastMessageInChannel(me, myChannels);
-        return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, myChannels));
+        myChannels.forEach(element => {
+            filtredChannels.push(element);
+            for (let index = 0; index < bannedChannels.length; index++) {
+                if (bannedChannels[index].channelId === element.id) {
+                    filtredChannels.pop();
+                    break;
+                }
+            }
+        });
+        await this.SetLastMessageInChannel(me, filtredChannels);
+        return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, filtredChannels));
     }
 
     async GetAllChannels(me: number, @Res() res) {
