@@ -65,6 +65,8 @@ model users {
   blockedFrom         Blocks[]        @relation("BlockedUsers")
   channels            channelsUsers[] @relation("Channels")
   messages            Messages[]      @relation("Messages")
+  player1             MatchHistory[]  @relation("Player1")
+  player2             MatchHistory[]  @relation("Player2")
   lastModification    DateTime        @default(now())
 }
 
@@ -107,11 +109,10 @@ enum MODE {
 
 model MatchHistory {
   id        Int       @id @default(autoincrement())
-
+  player1   users     @relation("Player1", fields: [player1Id], references: [id])
   player1Id Int
+  player2   users     @relation("Player2", fields: [player2Id], references: [id])
   player2Id Int
-  player3Id Int?
-  player4Id Int?
   score1    Int       @default(0)
   score2    Int       @default(0)
   mode      MODE

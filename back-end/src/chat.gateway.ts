@@ -34,13 +34,6 @@ import { WsGuard } from './auth/jwt.strategy';
   @SubscribeMessage('chatToServer')
   async handleMessage(client: Socket, payload) {
     console.log("__PAYLOAD__DBG__ : ", payload);
-    // nest-container | __RET__DBG__ :  {
-    //   nest-container |   id: 52,
-    //   nest-container |   senderId: 62528,
-    //   nest-container |   channelId: 'd178f7ff-5c50-476f-8af6-b53051896d26',
-    //   nest-container |   content: 'xxxxxxx',
-    //   nest-container |   date: 2022-10-19T04:55:40.240Z
-    //   nest-container | }
     const ret = await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
     console.log("PAYLOAD : ", payload);
     if (ret.stat === true)

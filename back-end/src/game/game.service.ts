@@ -39,9 +39,7 @@ export class GameService {
    }
 
    async GetMatchHistory(me: number, param: string, @Res() res) {
-        // if (param === 'all') {
-        //     t
-        // }
+
    }
 
    joinPlayer(login : string , id : string)
