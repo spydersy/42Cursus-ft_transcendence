@@ -94,8 +94,10 @@ const ChatSidebarStyle = styled.div`
   align-items: center;
   flex-direction: column;
   margin-bottom: 10px;
-    .title{
+  overflow-y: scroll;
 
+    .title{
+    position: sticky;
         color :${props => props.theme.colors.seconderyText}; 
         height: 80px;
         width: 95%;
@@ -219,7 +221,7 @@ export  function ConversationComponent(props : ConvProps) {
       border-radius: 5px;
       align-items: center;
       display: flex;
-      
+
       margin-bottom: 10px;
       ${props => (props.active === "true") && `
       background-color:  #0E1117;

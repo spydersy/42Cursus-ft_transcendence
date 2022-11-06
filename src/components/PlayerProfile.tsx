@@ -61,42 +61,79 @@ export function PlayerCard(props: PlayerCardProps) {
   let name = username.split(" ");
   let status = "";  
 
-  console.log("actual statue", props.player.status);
+  const socket = useContext(OnlineContextSocket)
 
-  if (props.player.status === "InGame")
-  {
-    color = ("#1e30a1");
-    status = "IN-GAME";
+  const User = useContext(UserContext)
+
+  const [state, setstate] = useState(true)
+ 
+  const setUserStatu =( list : UserType[] )=>{
+    for (let i = 0; i < list.length; i++) {
+      const element : UserType = list[i];
+      if (element.userid === props?.player.login)
+      {
+        setstate(true)
+        return ;
+      }
+      
+    }
+    setstate(false)
   }
-  else if (props.player.status === "Online")
+  socket.on("ConnectedUser" , (pyload)=>{
+   console.log(pyload)
+   setUserStatu(pyload)
+  
+  })
+  useEffect(() => {
+  //   User.then((data : UserProp | "{}")=>{
+  //     if (data !== "{}")
+  //       socket.emit("AddOnlineUser" ,data?.login)
+
+  // })
+        console.log("mystatue=", state)
+    
+
+
+  }, [props.player.login])
+  
+  
+  
+  // console.log("actual statue", props.player.status);
+
+  // if (props.player.status === "InGame")
+  // {
+  //   color = ("#1e30a1");
+  //   status = "IN-GAME";
+  // }
+  // else 
+  if (state)
   {
-    color = ("#2b8852");
+    color = ("#1cb52e");
     status = "ONLINE";
   }
-  else if (props.player.status === "Offline")
+  else if (!state)
   {
     color = ("#af1c1c");
     status = "OFFLINE";
   }
-  else if (props.player.status === "BLOCKED")
-  {
-    color = ("#b5c113");
-    status = "Unavailable";
-  }
-  else
-  {
-    // setLoading(false);
-    status = "UnvailableStatus";
-  }
   
+  // else if (props.player.status === "BLOCKED")
+  // {
+  //   color = ("#b5c113");
+  //   status = "Unavailable";
+  // }
+  // else
+  // {
+  //   // setLoading(false);
+  //   status = "UnvailableStatus";
+  // }
 
-  
    
     return (
       <PlayerCardStyle  status={color} >
       
           <div className='Identity'>
-              
+              {/* {state && <>BULLLSHIT</>} */}
               {/* <>Status: </> */}
               <div className="status" >       
                 {/* <HashLoader   color={color} loading={loading} cssOverride={override} size={22} /> */}
@@ -108,7 +145,7 @@ export function PlayerCard(props: PlayerCardProps) {
 
               <div className='Iavatar' style={ {width : "150px" , height : "150px"}} >
                 <AvatarComponent login={props.player.login} img={props.player.defaultAvatar}/>
-              </div>
+              </div>  
 
               <div className='infoSec'>
 
@@ -871,7 +908,7 @@ export  function AvatarComponent(props: AvatarProps) {
  })
     
 
-
+  console.log("AvatarComponent status = ", state)
   }, [props.login])
   
 return (

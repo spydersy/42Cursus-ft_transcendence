@@ -3,6 +3,7 @@ import {ReactComponent as Dots} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as UserIcon} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as SettingIcon} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as BackIcon} from "../../assets/imgs/arrowLeft.svg";
+import {ReactComponent as UserProfileIcon} from "../../assets/imgs/userprofile.svg";
 import styled  from "styled-components"
 import { AvatarComponent } from '../PlayerProfile';
 import DropDown from '../DropDown';
@@ -52,77 +53,103 @@ interface ListTypes  {
     state : number,
   }
 
-  const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : "/profile/id"},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
   
 export default function ChatHeader(props : chatHeaderProps) {
+  var list :ListTypes[] =  [{title: "Profile" , icon : <></> , href : "/profile/" + props.data.users[1].login} ]
+
     const [open, setopen] = useState(false)
     const [data, setdata] = useState<convType>(
       {
-      nbMessages: 0,
-      lastUpdate: "string",
-      access : "string",
-      channelId:  0,
-      name: "string",
-      password: "string",
-      picture : "string",
-      users: [{
-        id : "string",
-    defaultAvatar: "string",
-    login : "string",
-    displayName : "string",
-    restriction: "string",
-    restrictionTime: "string",
-    duration: 0,
+        nbMessages: 0,
+        lastUpdate: "string",
+        access : "string",
+        channelId:  0,
+        name: "string",
+        password: "string",
+        picture : "string",
+        users: [{
+          id : "string",
+      defaultAvatar: "string",
+      login : "string",
+      displayName : "string",
+      restriction: "string",
+      restrictionTime: "string",
+      duration: 0,
       }]
       })
+
     const ToggleDD = (e : any)=>{
       setopen(!open)
       e.stopPropagation();
+      console.log("___DATA CHAT HEADER PROP__", props.data)
+      console.log("___DATA CHAT HEADER PROP LOGIN USER__",  props.data.users[1].login)
+      list[0].href = "/profile/" + props.data.users[1].login
     }
+
     useEffect(() => {
-      console.log(props.data)
       setdata(props.data)
+
+
     }, [props.data])
     
     return (
       <TopStyle>
        {props.state === 1 && <BackIcon onClick={()=>props.setState(0)} />}
           {
+
             props.data?.access === "DM" ? 
-        <div className='cont'>
+        
+            <a className='conty' href={list[0].href}>
 
-          <div style={{width: "50px" , height: "50px"}}>
-  
-          <AvatarComponent img={props.data?.users[1].defaultAvatar}/>
-          </div >
-          <div >
-             {props.data?.users[1].displayName}
-          </div>
-        </div>
-          :
-          <div className='cont'>
+              <div style={{width: "50px" , height: "50px"}}>
+      
+              <AvatarComponent img={props.data?.users[1].defaultAvatar}/>
+              </div >
 
-            <div style={{width: "50px" , height: "50px"}}>
-    
-            <AvatarComponent img={props.data?.picture}/>
-            </div >
-            <div >
-              {props.data?.name}
+              <div >  {props.data?.users[1].displayName} </div>
+
+            </a>
+
+            :
+              
+            <div className='cont'>
+
+              <div style={{width: "50px" , height: "50px"}}>
+                <AvatarComponent img={props.data?.picture}/>
+              </div >
+
+              <div > {props.data?.name} </div>
+
             </div>
-          </div>
 
           }
         
-        <Dots onClick={ToggleDD} />
         {
-          open && <DropDown closeDropdown={ ()=>{
-        
-            console.log(open)
-            setopen(false)
-          }} open={open} 
-          style={{bottom: "-25px" , right: '0'}}
-          list={list}  /> 
+          props.data?.access === "DM" ? 
+
+            <>
+
+              <Dots onClick={ToggleDD} />
+
+              {
+                open && 
+                <a className="Icon" href={list[0].href}>
+                  <UserProfileIcon /> 
+                </a>
+
+                //   <DropDown closeDropdown={ ()=>{
+              
+                //   console.log(open)
+                //   setopen(false)
+                // }} open={open} 
+                // style={{bottom: "-25px" , right: '0'}}
+                //   list={list}  />
+              }
+            </>
+          :
+          null
         }
+
       </TopStyle>
     )
 }
@@ -146,8 +173,22 @@ const TopStyle = styled.div`
       align-items: center;
       flex-direction: row;
       align-items: center;
-      height :70px;
+      height :60px;
       gap: 15px;
+    }
+    .conty{
+      flex: 1;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      align-items: center;
+      height :60px;
+      gap: 15px;
+      &:hover{
+        cursor: pointer;
+        color: #126ba3;
+
+      }
     }
     >svg{
       path {
@@ -155,4 +196,17 @@ const TopStyle = styled.div`
 
       }
     }
-`;
+    .Icon{
+      display: flex;
+      align-items: left;
+      right: 0px;
+      cursor: pointer;
+      &:hover{
+        >svg{
+      path {
+        stroke :  #126ba3;
+        }
+      }
+    }
+    }
+      `;
