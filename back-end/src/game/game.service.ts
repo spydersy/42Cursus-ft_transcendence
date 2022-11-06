@@ -1,12 +1,14 @@
-import { Injectable, Res } from '@nestjs/common';
+import { HttpStatus, Injectable, Res } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { throws } from 'assert';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PlayerType } from '../dtos/Outputs.dto'
 import { MODE } from '@prisma/client';
+import { UserService } from 'src/user/user.service';
 
 export class GameService {
     prisma: PrismaService
+    userService: UserService
     logger: Logger = new Logger('RoomLogger')
     roomlenght: number = 0;
     id: number = 0;
@@ -27,6 +29,7 @@ export class GameService {
    {
    //   this.logger.log("client is disconnected")
        this.prisma = new PrismaService();
+       this.userService = new UserService(this.prisma, null);
        this.roomName = roomName;
        this.score = {score1 : 0 , score2 : 0}
        this.ball = {size : 20 , x :  500 , y :350}
@@ -38,34 +41,28 @@ export class GameService {
 
    }
 
-   async GetMatchHistory(me: number, param: string, @Res() res) {
-
-   }
-
-   joinPlayer(login : string , id : string)
-   {
-    if ( this.roomPlayers.length < 2)
+    joinPlayer(login : string , id : string)
     {
-        this.roomPlayers.push({login , id})
+        if ( this.roomPlayers.length < 2)
+        {
+            this.roomPlayers.push({login , id})
+        }
     }
 
-   }
 
 
-
-   getPlayer(id : string)
-   {
+    getPlayer(id : string)
+    {
 
         //    console.log("players number : " , this.roomPlayers.length)
-       for (let i = 0; i < this.roomPlayers.length; i++) {
-
-        //    console.log(this.roomPlayers[i].id + " " + id )
-           if ( this.roomPlayers[i].id === id )
-           {
-               // console.log("found")
-               return this.roomPlayers[i];
-           }
-       }
+        for (let i = 0; i < this.roomPlayers.length; i++) {
+            //    console.log(this.roomPlayers[i].id + " " + id )
+            if ( this.roomPlayers[i].id === id )
+            {
+                   // console.log("found")
+                return this.roomPlayers[i];
+            }
+        }
        return null
    }
 
@@ -139,4 +136,62 @@ export class GameService {
        console.log("}" )
 
    }
+
+   async GetMatchHistory(me: number, param: string, @Res() res) {
+        console.log("__PARAM__DBG__ : ", param);
+        let History : any[] = [];
+        if (param === 'all') {
+            History = await this.prisma.matchHistory.findMany({
+                include: {
+                    player1: true,
+                    player2: true,
+                }
+            });
+        }
+        else {
+            const userDto = await this.userService.GetUserByLogin(param);
+            if (userDto === null)
+                return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+            History = await this.prisma.matchHistory.findMany({
+                where: {
+                    OR: [
+                        {player1Id: userDto.id},
+                        {player2Id: userDto.id},
+                    ],
+                },
+                include: {
+                    player1: true,
+                    player2: true,
+                }
+            });
+        }
+        if (History.length !== 0) {
+            History.forEach(game => {
+                delete game.id;
+                delete game.player1Id;
+                delete game.player2Id;
+
+                delete game.player1.id;
+                delete game.player1.achievement;
+                delete game.player1.wins;
+                delete game.player1.losses;
+                delete game.player1.level;
+                delete game.player1.twoFactorAuth;
+                delete game.player1.twoFactorAuthSecret;
+                delete game.player1.lastModification;
+
+                delete game.player2.id;
+                delete game.player2.achievement;
+                delete game.player2.wins;
+                delete game.player2.losses;
+                delete game.player2.level;
+                delete game.player2.twoFactorAuth;
+                delete game.player2.twoFactorAuthSecret;
+                delete game.player2.lastModification;
+            });
+        }
+        return res.status(HttpStatus.OK).send(History);
+    }
 }
+
+

@@ -11,6 +11,6 @@ export class GameController {
 
     @Get('MatchHistory/:user')
     async GetMatchHistory(@Req() req, @Res() res) {
-        return this.gameService.GetMatchHistory(req.user.userId, req.param.user, res);
+        return this.gameService.GetMatchHistory(req.user.userId, req.params.user, res);
     }
 }

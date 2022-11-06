@@ -8,8 +8,7 @@ import { ChatService } from 'src/chat/chat.service';
 export class UserService {
 
 
-    constructor(private prisma: PrismaService,
-                //@Inject(forwardRef(() => ChatService))
+    public constructor(private prisma: PrismaService,
                 private chatService: ChatService) {}
 
     /*
