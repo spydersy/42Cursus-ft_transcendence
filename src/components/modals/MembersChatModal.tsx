@@ -66,11 +66,12 @@ interface MemberProps{
     const OwnerBan = async () => {
       console.log("OwnerBan")
       var  bodyFormData = {
-        chanelId: props.channelId.toString(),
+        channelId: props.channelId.toString(),
         user: props.data.login,
         restriction: "BAN",
         duration: 0
       }
+      console.log(bodyFormData)
       await axios.post( process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData,
       {withCredentials: true} 
       ).then((res)=>{
