@@ -98,7 +98,7 @@ export default function Profile() {
         <div className='container' style={{  display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
 
               <TheBox> 
-                  <PlayerCard  isCurrentUser={isCurrentUser} player={User} />
+                  <PlayerCard    isCurrentUser={isCurrentUser} player={User} />
               </TheBox>
 
               <PlayerTabsBar isCurrentUser={isCurrentUser} player={User} id={id} /> 

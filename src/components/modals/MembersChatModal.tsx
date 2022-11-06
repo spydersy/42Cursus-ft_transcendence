@@ -5,6 +5,8 @@ import {ReactComponent as Ban} from "../../assets/imgs/ban.svg";
 import {ReactComponent as Mute} from "../../assets/imgs/mute.svg";
 import {ReactComponent as GameIcon} from "../../assets/imgs/game-icon.svg";
 import axios from 'axios';
+import {ReactComponent as Admin} from "../../assets/imgs/Admino.svg";
+
 
 import styled , {css} from "styled-components"
 interface convType {
@@ -102,6 +104,9 @@ interface MemberProps{
     const ChallengeGame = () => {
       console.log("ChallengeGame")
     };
+    const SetAdmin = () => {
+      console.log("Set the user as admin")
+    };
 
     return (
       <MemberStyle>
@@ -124,6 +129,7 @@ interface MemberProps{
           {props.access === "OWNER"
           &&
           <>
+          <Button size='small' isIcon={true} onClick={()=>{SetAdmin()}} icon={<Admin/>}/>
           <Button size='small' isIcon={true} onClick={()=>{OwnerBan()}} icon={<Ban/>}/>
           <Button size='small'  isIcon={true} onClick={()=>{OwnerMute()}} icon={<Mute/>}/>
           </>
