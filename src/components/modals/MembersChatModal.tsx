@@ -34,6 +34,7 @@ export default function MembersChatModal(props : { closeModal : ()=>void , data 
   const channelId = props.data.channelId;
 
 
+  console.log(props.data.users)
   return (
     <div>   
         Members: 
@@ -42,10 +43,10 @@ export default function MembersChatModal(props : { closeModal : ()=>void , data 
               props.data.users.map((data : any , id : number)=>{
                 if (id === 0)
                   return <></>
+                console.log(data)
                 return <Member access={props.data.users[0].permission}  data={data} channelId={channelId} />
               })
           }
-          
       </div>
       </div>
   )
@@ -58,36 +59,22 @@ interface MemberProps{
   }
 
   export  function Member(props : MemberProps) {
-    console.log(props.access)
+    console.log('hna '+props.access)
 
-    const OwnerBan = () => {
+    const OwnerBan = async () => {
       console.log("OwnerBan")
-      var  bodyFormData = new FormData();
-      
-      bodyFormData.append('channelId', props.channelId.toString());
-
-      bodyFormData.append('user', props.data.id);
-      bodyFormData.append('restriction', "BAN");
-      bodyFormData.append('duration', "600s");
-      
-
-    //       POST /chat/UpdateUserRestriction
-    //   - Body: {
-    //     channelId: string;
-    //     user: string;
-    //     restriction: string; // expected values: "BAN" - "MUTE" - "UNBAN" (UNBAN still not working as expected ...)
-    //     duration: number; //expected  values in second: 1min(60s), 5min(300s), 10min(600s), 30min(1800s), 60min(3600s), 1day(86400s)
-    // }
-
-      // axios.post(process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData, {withCredentials: true}).then((res)=>{
-      //         // succes("Avatar Updated Successfully")
-      //         // console.log(res)
-
-      //     }).catch((err)=>{ 
-      //         // error("Avatar Not Updated")
-      //         // console.log(err)
-      //     })
-
+      var  bodyFormData = {
+        chanelId: props.channelId.toString(),
+        user: props.data.login,
+        restriction: "BAN",
+        duration: 0
+      }
+      await axios.post( process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData,
+      {withCredentials: true} 
+      ).then((res)=>{
+      }).catch((err)=>{
+        console.log(err)
+      })
     };
     const OwnerMute = () => {
       console.log("OwnerMute")
@@ -111,7 +98,6 @@ interface MemberProps{
           <div className='avatar'>
             <AvatarComponent img={props.data.defaultAvatar}/>
           </div>
-
           <div className='name'>
                { props.data.displayName}
             <span>
