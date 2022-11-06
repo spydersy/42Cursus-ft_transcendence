@@ -197,8 +197,16 @@ export class ChatService {
         return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, myChannels));
     }
 
-    async GetAllChannels(@Res() res) {
-        const allChannels = await this.prisma.channels.findMany({
+    async GetAllChannels(me: number, @Res() res) {
+        let filtredChannels: any[] = [];
+
+        const bannedChannels = await this.prisma.channelsUsers.findMany({
+            where: {
+                userId: me,
+                restriction: RESCTRICTION.BANNED
+            }
+        });
+        let allChannels = await this.prisma.channels.findMany({
             where: {
                 OR: [
                     {access: CHANNEL.PUBLIC},
@@ -211,9 +219,16 @@ export class ChatService {
             element['nbUsers'] = element.users.length;
             delete element.users;
             delete element.password;
+            filtredChannels.push(element);
+            for (let index = 0; index < bannedChannels.length; index++) {
+                if (bannedChannels[index].channelId === element.id) {
+                    filtredChannels.pop();
+                    break;
+                }
+            }
         });
-        console.log("__ALL__CHANNELS__ENDPOINT__DBG__ : ", allChannels);
-        return res.status(HttpStatus.OK).send(allChannels);
+        console.log("__ALL__CHANNELS__ENDPOINT__DBG__ : ", filtredChannels);
+        return res.status(HttpStatus.OK).send(filtredChannels);
     }
 
     async UpdateUserInChannel(userId: number, user: string, channelId: string, role: PERMISSION, @Res() res) {
@@ -459,3 +474,55 @@ export class ChatService {
         return USERSTAT.ACCESS;
     }
 }
+
+[
+    {
+        "channelId":"fe52fbc2-0176-4fec-aec9-df4b8999db8f",
+        "access":"DM",
+        "name":null,
+        "picture":null,
+        "nbMessages":3,
+        "lastUpdate":"2022-11-06T10:45:36.545Z",
+        "lastMessage":"test test ",
+        "users":[
+            {
+                "permission":"USER",
+                "restriction":"NULL",
+                "restrictionTime":"2022-11-06T08:42:17.767Z",
+                "duration":0,
+                "login":"abelarif",
+                "displayName":"Achraf Belarif",
+                "defaultAvatar":"https://myanimelist.tech/api/avatar?&name=abelarif&animeName=One_Piece"
+            },
+            {
+                "permission":"USER",
+                "restriction":"NULL",
+                "restrictionTime":"2022-11-06T08:42:17.767Z",
+                "duration":0,
+                "login":"hkhalil",
+                "displayName":"Hassan Khalil",
+                "defaultAvatar":"https://myanimelist.tech/api/avatar?&name=hkhalil&animeName=One_Piece"
+            }
+        ]
+    },
+    {
+        "channelId":"4ee1d19a-3578-4137-b034-0dd6248e9198",
+        "access":"PROTECTED",
+        "name":"test",
+        "picture":"https://myanimelist.tech/api/avatar?name=&animeName=one_Piece_Crews",
+        "nbMessages":1,
+        "lastUpdate":"2022-11-06T08:44:24.697Z",
+        "lastMessage":"aaaa",
+        "users":[{"permission":"OWNER",
+        "restriction":"NULL",
+        "restrictionTime":"2022-11-06T08:43:50.016Z",
+        "duration":0,
+        "login":"abelarif",
+        "displayName":"Achraf Belarif",
+        "defaultAvatar":"https://myanimelist.tech/api/avatar?&name=abelarif&animeName=One_Piece"},{"permission":"USER",
+        "restriction":"NULL",
+        "restrictionTime":"2022-11-06T08:43:50.018Z",
+        "duration":0,
+        "login":"hkhalil",
+        "displayName":"Hassan Khalil",
+        "defaultAvatar":"https://myanimelist.tech/api/avatar?&name=hkhalil&animeName=One_Piece"}]}]

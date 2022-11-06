@@ -18,10 +18,7 @@ export class UserService {
     async GetnbFriends(UserMe: string, User: string) : Promise<number> {
         let UserMeDto = await this.GetUserByLogin(UserMe);
         let UserDto = await this.GetUserByLogin(User);
-        // console.log("__USER__ME__ : ", UserMe);
-        // console.log("__USER__     : ", User);
-        // console.log("__USER__ME__DTO__ : ", UserMeDto);
-        // console.log("__USER__DTO__     : ", UserDto);
+
         if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true) {
             return 0;
         }
