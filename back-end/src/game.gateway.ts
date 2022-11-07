@@ -66,9 +66,12 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   getRoombyPlayerId(id : string )
   {
     for (let i = 0; i < this.roomArray.length; i++) {
-      const element = this.roomArray[i].getPlayer(id);
-      if (element)
+      if (this.roomArray[i])
+      {
+        const element = this.roomArray[i].getPlayer(id);
+        if (element)
           return this.roomArray[i];
+      }
     }
     return null
   }
@@ -88,19 +91,23 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     console.log("remove : " + login)
     for (let i = 0; i < this.roomArray.length; i++) {
       var room = this.roomArray[i];
-      var player = room.getPlayerbyLogin(login )
-      console.log(player)
-      if (room.roomPlayers.includes(player))
+      if (room)
       {
-        console.log("remove : " +room.roomName)
 
-        this.wss.to(room.roomName).emit("endGame", {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
-        client.leave(room.roomName)
-        room.roomPlayers.splice(0, 2);
-        this.roomArray.splice(i, 1)
-        this.wss.emit("change" , this.getArrayData() )
-
-        return ;
+        var player = room.getPlayerbyLogin(login )
+        console.log(player)
+        if (room.roomPlayers.includes(player))
+        {
+          console.log("remove : " +room.roomName)
+  
+          this.wss.to(room.roomName).emit("endGame", {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
+          client.leave(room.roomName)
+          // room.roomPlayers.splice(0, 2);
+          this.roomArray.splice(i, 1)
+          this.wss.emit("change" , this.getArrayData() )
+  
+          return ;
+      }
       }
     }
 
@@ -161,6 +168,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
    }
   }
 
+
   // @UseGuards(WsGuard)
   handleConnection(client: any, payload: any): void {
 
@@ -177,13 +185,13 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     {
       // console.log("__ROOM__DBG__ : ", room);
       this.wss.to(room.roomName).emit("endGame" , {score: room.score, roomPlayers :   room.roomPlayers})
-      this.RemovePlayer(client , payload)
       this.wss.emit("change" , this.getArrayData() )
+      this.RemovePlayer(client , payload)
 
 
       // this.wss.emit("change" ,  this.roomArray)
     }
-
+    console.log("testtt " ,this.roomArray.length)
     for (let index = 0; index < this.roomArray.length; index++) {
       this.roomArray[index].debug();
 
@@ -261,10 +269,14 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     var l = [];
     for (let i = 0; i < this.roomArray.length; i++) {
       const element = this.roomArray[i];
-      var test = { players :[element.roomPlayers[0].login ,element.roomPlayers[1].login ] , score : element.score}
-      if (element.status != "waiting")
-        l.push(test)
+      if (element)
+      {
+        var test = { players :[element.roomPlayers[0].login ,element.roomPlayers[1].login ] , score : element.score}
+        if (element.status != "waiting")
+          l.push(test)
+      }
     }
+    console.log(l)
     return l
   }
 
@@ -300,6 +312,11 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 
+  
+  @SubscribeMessage('watchGame')
+  addWatch(client: any, payload: any): void {
+    
+  }
   @SubscribeMessage('player1Moved')
   player1moved(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
@@ -324,7 +341,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   @SubscribeMessage('moveBall')
   moveBall(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
-    console.log(room.roomPlayers)
     if (room)
     {
       var i = this.roomArray.indexOf(room)
@@ -336,7 +352,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
       if(room.status === "AiGame" && room.direction.x > 0)
       {
-
+        console.log("salam : ", i)
           this.moveAI( this.roomArray[i])
       }
       this.wss.to(room.roomName).emit("moveBallClient" , {x: this.roomArray[i].ball.x , y: this.roomArray[i].ball.y , px : this.roomArray[i].paddel2.x, py :this.roomArray[i].predicty })
@@ -381,8 +397,9 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     {
       this.roomArray[i].incrementScore(1)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
-      this.checkScore(this.roomArray[i])
+      console.log("Room : " , i)
       this.wss.emit("changeScoreLive" , {index : i , score :this.roomArray[i].score  })
+      this.checkScore(this.roomArray[i])
 
       return false
     }
@@ -390,8 +407,9 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     {
       this.roomArray[i].incrementScore(2)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
-      this.checkScore(this.roomArray[i])
+      console.log("Room : " , i)
       this.wss.emit("changeScoreLive" , {index : i , score :this.roomArray[i].score  })
+      this.checkScore(this.roomArray[i])
 
       return false
 
@@ -434,10 +452,11 @@ async checkScore (room : any) {
 
       await this.roomArray[i].saveGame(MODE.AIBUGGY)
       this.roomArray.splice(i, 1)
-      delete  this.roomArray[i];
-      this.wss.emit("change" , this.getArrayData() )
+      console.log(this.roomArray)
     }
 }
+
+
 
 moveAI(room : any )
  {

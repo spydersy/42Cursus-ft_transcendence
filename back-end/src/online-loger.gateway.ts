@@ -124,10 +124,10 @@ interface UserType {
   debug(){
     for (let i = 0; i < this.onLineArray.length; i++) {
       const element = this.onLineArray[i];
-      console.log("{")
-      console.log("UserId : " , element.userid)
-      console.log("socketId : " , element.socketId)
-      console.log("}")
+      // console.log("{")
+      // console.log("UserId : " , element.userid)
+      // console.log("socketId : " , element.socketId)
+      // console.log("}")
     }
   }
   // async handleDisconnect(client) {
