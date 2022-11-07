@@ -28,7 +28,7 @@ export class ChatController {
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Query Not Set Properly'});
     }
 
-    //PROG
+    //DONE [Need More Tests . . .]
     @Post('UpdateUserRestriction')
     async UpdateUserRestrictionInChannel(@Req() req, @Body() userRestriction: UserRestrictionDto, @Res() res) {
       if (userRestriction.restriction === 'BAN' || userRestriction.restriction === 'MUTE'

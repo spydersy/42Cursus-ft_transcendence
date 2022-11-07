@@ -30,9 +30,9 @@ async function initDB() {
     await prisma.users.create({
       data: {
         id: 0,
-        login: "ai_1",
-        displayName: "ai 1",
-        defaultAvatar: "https://myanimelist.tech/api/avatar?&name=ai1&animeName=One_Piece"
+        login: "drVegaPunk",
+        displayName: "الذكاء الاصطناعي الخارق",
+        defaultAvatar: "https://www.greenscene.co.id/wp-content/uploads/2021/10/Dr-Vegapunk.jpg"
       }
     });
   } catch { return; }

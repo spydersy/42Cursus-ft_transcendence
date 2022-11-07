@@ -299,7 +299,7 @@ export class ChatService {
                 });
                 await this.prisma.channelsUsers.updateMany({
                     where: {userId: firstAdmin.userId, channelId: channelId},
-                    data: {permission: PERMISSION.OWNER}
+                    data: {permission: PERMISSION.OWNER, restriction: RESTRICTION.NULL}
                 });
             } catch {
                 const firstUser = await this.prisma.channelsUsers.findFirst({
@@ -307,42 +307,87 @@ export class ChatService {
                 });
                 await this.prisma.channelsUsers.updateMany({
                     where: {userId:userId, channelId: channelId},
-                    data: {permission: PERMISSION.OWNER}
+                    data: {permission: PERMISSION.OWNER, restriction: RESTRICTION.NULL}
                 });
             }
         }
         return res.status(HttpStatus.OK).send({'message': 'User Updated successfully'});
     }
 
-    async UpdateUserRestrictionInChannel(userId: number, user: string, channelId: string,
-        restriction: RESTRICTION, duration: number, @Res() res) {
+    CanUpdateUserRestriction(meInChannel: any, userInChannel: any) : boolean {
+        if (meInChannel.restriction === RESTRICTION.BANNED
+            || meInChannel.permission === PERMISSION.USER
+            || userInChannel.permission === PERMISSION.OWNER
+            || (userInChannel.permission === PERMISSION.ADMIN
+                && meInChannel.permission === PERMISSION.ADMIN)
+            || (userInChannel.permission === PERMISSION.OWNER
+                && meInChannel.permission === PERMISSION.OWNER))
+            return false;
+        return true;
+    }
 
+    async ApplieBanRestriction(userInChannel: any) {
+        if (userInChannel.restriction !== RESTRICTION.BANNED) {
+            await this.prisma.channelsUsers.updateMany({
+                where: {
+                    userId: userInChannel.userId,
+                    channelId: userInChannel.channelId
+                },
+                data: {
+                    restriction: RESTRICTION.BANNED,
+                    duration: 0
+                }
+            });
+        }
+    }
+
+    async ApplieMuteRestriction(userInChannel: any) {
+        if (userInChannel.restriction !== RESTRICTION.BANNED)
+            await this.prisma.channelsUsers.updateMany({
+                where: {
+                    userId: userInChannel.userId,
+                    channelId: userInChannel.channelId
+                },
+                data: {
+                    restriction: RESTRICTION.MUTED,
+                    duration: 30
+                }
+            });
+    }
+
+    async ApplieUnbanRestriction(userInChannel: any) {
+        if (userInChannel.restriction === RESTRICTION.BANNED)
+            await this.prisma.channelsUsers.updateMany({
+                where: {
+                    userId: userInChannel.userId,
+                    channelId: userInChannel.channelId
+                },
+                data: {
+                    restriction: RESTRICTION.NULL,
+                    duration: 0
+                }
+            });
+    }
+
+    async UpdateUserRestrictionInChannel(userId: number, user: string, channelId: string,
+        restriction: RESTRICTION, duration: number, @Res() res)
+    {
+        const meInChannel = await this.FindUserInChannel(userId, channelId);
         const userDto = await this.userService.GetUserByLogin(user);
-        await this.prisma.channelsUsers.updateMany({
-            where: {
-                userId: userDto.id,
-                channelId: channelId
-            },
-            data: { restriction: restriction}
-        });
-        return res.status(HttpStatus.OK).send({'message': 'User Updated'});
-        // //Me is admin or owner
-        // const channel = await this.prisma.channels.findUnique({where: {id: channelId}});
-        // if (channel === null || channel.access === CHANNEL.DM)
-        //     return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
-        // const meDto = await this.prisma.channelsUsers.findUnique({
-        //     where: {userId_channelId: {userId, channelId},},
-        // });
-        // if (meDto === null || meDto.permission === PERMISSION.USER
-        //     || meDto.restriction === RESTRICTION.BANNED)
-        //     return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
-        // //user exist in channel
-        // const userDto = await this.prisma.users.findUnique({ where:{ login: user}});
-        // const userChannel = this.prisma.channelsUsers.findMany({
-        //     where: { channelId: channelId, userId: userDto.id},
-        // });
-        // if ()
-        //check his current stat
+        if (userDto === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+        const userInChannel = await this.FindUserInChannel(userDto.id, channelId);
+        if (meInChannel === null || userInChannel === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Or Channel Does Not Exist'});
+        if (this.CanUpdateUserRestriction(meInChannel, userInChannel) === false)
+            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
+        if (restriction === RESTRICTION.BANNED)
+            this.ApplieBanRestriction(userInChannel);
+        else if (restriction === RESTRICTION.MUTED)
+            this.ApplieMuteRestriction(userInChannel);
+        else if (restriction === RESTRICTION.NULL)
+            this.ApplieUnbanRestriction(userInChannel);
+        return res.status(HttpStatus.OK).send({'message': 'User Successefully Updated'});
     }
 
     async JoinProtectedChannel(userProfile: any, channel: any, password: string, @Res() res) {
@@ -504,55 +549,3 @@ export class ChatService {
         return USERSTAT.ACCESS;
     }
 }
-
-[
-    {
-        "channelId":"fe52fbc2-0176-4fec-aec9-df4b8999db8f",
-        "access":"DM",
-        "name":null,
-        "picture":null,
-        "nbMessages":3,
-        "lastUpdate":"2022-11-06T10:45:36.545Z",
-        "lastMessage":"test test ",
-        "users":[
-            {
-                "permission":"USER",
-                "restriction":"NULL",
-                "restrictionTime":"2022-11-06T08:42:17.767Z",
-                "duration":0,
-                "login":"abelarif",
-                "displayName":"Achraf Belarif",
-                "defaultAvatar":"https://myanimelist.tech/api/avatar?&name=abelarif&animeName=One_Piece"
-            },
-            {
-                "permission":"USER",
-                "restriction":"NULL",
-                "restrictionTime":"2022-11-06T08:42:17.767Z",
-                "duration":0,
-                "login":"hkhalil",
-                "displayName":"Hassan Khalil",
-                "defaultAvatar":"https://myanimelist.tech/api/avatar?&name=hkhalil&animeName=One_Piece"
-            }
-        ]
-    },
-    {
-        "channelId":"4ee1d19a-3578-4137-b034-0dd6248e9198",
-        "access":"PROTECTED",
-        "name":"test",
-        "picture":"https://myanimelist.tech/api/avatar?name=&animeName=one_Piece_Crews",
-        "nbMessages":1,
-        "lastUpdate":"2022-11-06T08:44:24.697Z",
-        "lastMessage":"aaaa",
-        "users":[{"permission":"OWNER",
-        "restriction":"NULL",
-        "restrictionTime":"2022-11-06T08:43:50.016Z",
-        "duration":0,
-        "login":"abelarif",
-        "displayName":"Achraf Belarif",
-        "defaultAvatar":"https://myanimelist.tech/api/avatar?&name=abelarif&animeName=One_Piece"},{"permission":"USER",
-        "restriction":"NULL",
-        "restrictionTime":"2022-11-06T08:43:50.018Z",
-        "duration":0,
-        "login":"hkhalil",
-        "displayName":"Hassan Khalil",
-        "defaultAvatar":"https://myanimelist.tech/api/avatar?&name=hkhalil&animeName=One_Piece"}]}]
