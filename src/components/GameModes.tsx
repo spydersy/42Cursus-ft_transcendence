@@ -28,20 +28,7 @@ const modes : any = [
      background : ' linear-gradient(249.44deg, #40196C 2.4%, #000000 99.44%)'
 
   },
-  {
-    title : "Tag-Team",
-    img : FriendImg,
-    desc : "focus",
-     background : 'linear-gradient(111.22deg, #8F0263 0.8%, #000000 97.01%)'
 
-  }, 
-  {
-    title : "Challenge Friend",
-    img : Tidk,
-    desc : "Start Your jorney at the new world,  win games , rank higher .",
-     background : 'linear-gradient(250.87deg, #025C8F 1.44%, #000000 98.56%)'
-
-  }
 ]
 
 interface GameModesProps {
@@ -113,7 +100,7 @@ const [mode, setmode] = useState("")
 
         <GameModal mode={mode} setmode={(e)=>props.settheme(e)}/>
       </Modal>}
-      <Swipeicon onClick={slideToNextItem} />
+      {/* <Swipeicon onClick={slideToNextItem} /> */}
     </Game>
   )
 }

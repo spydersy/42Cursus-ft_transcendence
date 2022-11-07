@@ -284,6 +284,7 @@ function App() {
             <Routes>
               <Route path="/signin" element={<SignIn />} />
               <Route path="/game" element={<Game theme={gametheme}  />} />
+              <Route path="/game/watch/:id" element={<Game theme={gametheme}  />} />
               <Route path="/chat/:id" element={<Chat />} />
               <Route path="/setting" element={<Setting />} />
               <Route path="/testing" element={<SocketTesting />} />

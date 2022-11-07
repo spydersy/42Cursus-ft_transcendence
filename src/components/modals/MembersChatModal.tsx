@@ -117,7 +117,7 @@ interface MemberProps{
           &&
           <>
           <Button size='small' isIcon={true} onClick={()=>{SetAdmin()}} icon={<Admin/>}/>
-          <Button size='small' isIcon={true} onClick={()=>{OwnerBan()}} icon={<Ban/>}/>
+          <Button size='small' color={"#ae0b0b"}  isIcon={true} onClick={()=>{OwnerBan()}} icon={<Ban/>}/>
           <Button size='small'  isIcon={true} onClick={()=>{OwnerMute()}} icon={<Mute/>}/>
           </>
           
@@ -125,7 +125,7 @@ interface MemberProps{
           {(props.access === "ADMIN"
           && props.data.permission !== "OWNER" )&& 
           <>
-          <Button size='small' isIcon={true} onClick={()=>{AdminBan()}} icon={<Ban/>}/>
+          <Button size='small'color={"#ae0b0b"}   isIcon={true} onClick={()=>{AdminBan()}} icon={<Ban/>}/>
           <Button size='small'  isIcon={true} onClick={()=>{AdminMute()}} icon={<Mute/>}/>
           </>
           

@@ -12,10 +12,22 @@ import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 import { UserProp } from './game/types';
 
-const match1 = {
-    name: "Melkafdsfdsfsfdsfrmi",
-    score1 : 7,
-    score2 : 5,
+interface  matchType {
+     id  : number,
+     score1  : number,
+     score2  : number,
+     mode : string ,
+     date : string,
+     player1 : {
+         login : string ,
+         displayName :  string ,
+         defaultAvatar :string,
+    },
+     player2 : {
+         login : string ,
+         displayName : string ,
+         defaultAvatar :string,
+    }
   }
 const match2 = {
     name: "Alchemist",
@@ -25,7 +37,7 @@ const match2 = {
 
 
 
-  var listGame = [match1 , match2 ,  match2]
+//   var listGame = [match1 , match2 ,  match2]
 
 export default function History() {
    
@@ -40,17 +52,18 @@ export default function History() {
 export  function HistoryComponent() {
   const UserData = useContext(UserContext)
 
-    const [list, setlist] = useState([])
+    const [list, setlist] = useState<matchType[]>([])
     useEffect(() => {UserData.then((user : UserProp | "{}")=>{
         if (user !== "{}")
         {
-                    axios.get(process.env.REACT_APP_BACKEND_URL+ "/game/MatchHistory/"+ user.id , 
-                {withCredentials: true} 
-              ).then((res)=>{
+            axios.get(process.env.REACT_APP_BACKEND_URL+ "/game/MatchHistory/all" , 
+            {withCredentials: true} 
+            ).then((res)=>{
                 console.log(res.data)
                 setlist(res.data)
             
               }).catch((err)=>{
+            
             
                     console.log(err)
                 })
@@ -67,15 +80,9 @@ export  function HistoryComponent() {
       }, [])
   return (
     <HistoryComponentStyle>
-        <Head>
-            Last matches
-            <a href="#profilepage">
-                View all matches
-            </a>
-        </Head>
         {
             list.map((match : any, id : number )=>{
-                return<GameComp key={id} match={match}  isFriend={true} />
+                return<GameComp key={id} match={match}  />
             })
         }
 
@@ -100,17 +107,18 @@ const Conta = styled.div`
 const HistoryComponentStyle = styled.div`
 
     flex: 1;
+    height:300px;
     min-width: 100%;
     min-height: 300px;
     max-height: 300px;
-    height: auto;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    /* justify-content: center; */
     background: #171A22;
     flex-direction: column;
     border-radius: 10px ;
     padding: 0 15px;
+    overflow: scroll;
     border : 1px solid ${props => props.theme.colors.border};;
 `
 const Head = styled.div`
@@ -139,12 +147,9 @@ export interface GameCompProps {
 }
     
 export interface GameCardProps {
-    match: {
-        name: string;
-        score1: number,
-        score2: number,
-    },
-    isFriend : boolean
+   
+      match: matchType, 
+     
 }
 
 export  function GameComp(props : GameCardProps) {
@@ -153,31 +158,34 @@ export  function GameComp(props : GameCardProps) {
     <GameCompStyle win={state} >
         <Data>
             <div className='name'>
-                    {props.match.name}
+                    {props.match.player1.displayName}
             </div>
 
-            <div style={{margin : "0 14px" , width: "45px" , height: "45px"}}>
-                <AvatarComponent img={Img} />
+            <div style={{margin : "0 14px" , width: "50px" , height: "50px"}}>
+                <AvatarComponent img={props.match.player1.defaultAvatar} />
             </div>
             <div className='stat'>
-                7 
+                {props.match.score1}
                 <BattleIcon/>
                 
-                 8
+                {props.match.score2}
+                 
             </div>
-            <div style={{margin : "0 14px" , width: "45px" , height: "45px"}}>
-                <AvatarComponent img={Img} />
+            <div style={{margin : "0 14px" , width: "50px" , height: "50px"}}>
+                <AvatarComponent img={props.match.player2.defaultAvatar} />
             </div>
             <div className='name'>
-                    {props.match.name}
+            {props.match.player2.displayName}
+                    
             </div>
+            
         </Data>
-        {
+        {/* {
             props.isFriend &&
             <div id='addFriend'>
                 <AddFriend/>
             </div>
-        }
+        } */}
     </GameCompStyle>
   )
 }
@@ -245,6 +253,7 @@ const Data = styled.div`
     color:  ${props => props.theme.colors.primaryText};
     .name{
         /* font-family: 'Poppins' , sans-serif; */
+        flex: 1;
         font-style: normal;
         font-weight: 500;
         font-size: 20px;
@@ -262,10 +271,10 @@ const Data = styled.div`
         /* font-family: 'Poppins' , sans-serif; */
         font-style: normal;
         font-weight: 400;
-        font-size: 20px;
+        font-size: 30px;
         line-height: 150%;
         /* identical to box height, or 12px */
-        color : ${props => props.theme.colors.green};
+        /* color : ${props => props.theme.colors.green}; */
         
         text-align: center;
         letter-spacing: 0.5px;

@@ -7,7 +7,7 @@ import EmptyComponent from './PlayerrEmptyComp'
 import { SocketGameContext } from '../context/Socket';
 import axios from 'axios'
 
-
+import { Link } from 'react-router-dom'
 const list  = [0,0 , 1 , 2 , 1 , 0, 0]
 interface LiveGameProps {
     players : string[],
@@ -23,11 +23,19 @@ export default function Slider() {
 
         setmain(data.length / 2 > 1 ? data.length / 2  : 0 )
     })
-    socket.off("changeScoreLive").on("changeScoreLive" , (data : any)=>{
+    socket.on("changeScoreLive" , (data : any)=>{
+
 
 
        var l = list;
-       l[data.index].score = data.score
+       console.log(list)
+       console.log(l.length)
+       if (l.length !== 0)
+       {
+        if (l[data.index])
+           l[data.index].score = data.score
+
+       }
        setlist([...l])
         // setmain(data.length / 2 > 1 ? data.length / 2  : 0 )
     })
@@ -71,7 +79,9 @@ export default function Slider() {
                     classname = "emptyright"
                 else if (id <  main - 1)
                     classname = "emptyleft"
-                return<Slide onClick={()=>animatethis(id)} className={classname}key={id}  >
+                return<Slide to="/game/watch/salam3alata3am"
+                //  onClick={()=>animatethis(id)} 
+                 className={classname}key={id}  >
                     <div className='center'>
               <UserAvatar login={data.players[0]}/>
               <UserAvatar login={data.players[1]}/>
@@ -155,7 +165,7 @@ const SliderStyle = styled.div`
         
 
 `;
-const Slide = styled.div`
+const Slide = styled(Link)`
 overflow: hidden;
     position: absolute;
     transform: translate(50% , -50%);
