@@ -18,7 +18,6 @@ interface UserProp {
   wins : number
   losses : number
 }
-
 interface usersType {
 
   defaultAvatar: string,
@@ -28,7 +27,6 @@ interface usersType {
   restrictionTime: string,
   duration: number,
 }
-
 interface convType {
   nbMessages: number,
   lastUpdate: string,
@@ -39,15 +37,14 @@ interface convType {
   picture : string,
   users: usersType[]
 }
-
-  interface ChatProps {
-    // setList: (e : any) => void,
-    list:  convType[]
-    setcurrentConv : (e: any)=>void,
-    setState : (e: number)=>void,
-    state : number,
-    currentConv : number,
-  }
+interface ChatProps {
+  // setList: (e : any) => void,
+  list:  convType[]
+  setcurrentConv : (e: any)=>void,
+  setState : (e: number)=>void,
+  state : number,
+  currentConv : number,
+}
 export default function ChatSidebar(props : ChatProps) {
   const pageName = window.location.pathname.split("/")[2];
  
@@ -83,7 +80,6 @@ export default function ChatSidebar(props : ChatProps) {
     )
   
 }
-
 const ChatSidebarStyle = styled.div`
   
   width: 100%;
@@ -151,109 +147,108 @@ const ChatSidebarStyle = styled.div`
 
     }
 `
+
 interface ConvProps{
-    onClick : ()=>void,
-    active : boolean
-    data : convType
+  onClick : ()=>void,
+  active : boolean
+  data : convType
+}
+export  function ConversationComponent(props : ConvProps) {
+  return (
+      <ChatMesgstyle to={"/chat/" + ( props.data.channelId)} active={props.active ? "true" : "false"}onClick={props.onClick}>
+        {
+          props.data.access === "DM" ?
+          <>
+            <Avatar>
+          <AvatarComponent login={props.data?.users[1].login} img={props.data?.users[1].defaultAvatar}/>
+        </Avatar>
+        <div className='mesgData'>
+          <div className='name'>
+            { props.data?.users[1].displayName}
+          </div>
+            {
+            <div className='msg'>
+            {/* {props.messages[props.messages.length - 1]} */}
+          </div>
+            }
+        </div>
+        <div className='time'>
+          3min ago
+        </div>
+          </>
+          :
+          <>
+            <Avatar>
+          <AvatarComponent img={props.data.picture}/>
+        </Avatar>
+        <div className='mesgData'>
+          <div className='name'>
+            { props.data.name}
+          </div>
+            {
+            <div className='msg'>
+            {/* {props.messages[props.messages.length - 1]} */}
+          </div>
+            }
+        </div>
+        <div className='time'>
+          3min ago
+        </div>
+          </>
+
+        }
+      
+      </ChatMesgstyle>
+  )
+}
+const Avatar = styled.div`
+margin-left : 5px;
+width: 50px;
+height: 50px;
+`
+interface chatprop{
+active : string
+}
+const ChatMesgstyle = styled(Link)<chatprop>`
+
+height: 70px;
+width: 100%;
+position: relative;
+border-radius: 5px;
+align-items: center;
+display: flex;
+
+margin-bottom: 10px;
+${props => (props.active === "true") && `
+background-color:  #0E1117;
+`}
+&:hover{
+/* border :1px solid ${props => props.theme.colors.seconderybg};  */
+background-color: ${props => props.theme.colors.bg};
+}
+.mesgData{
+margin-left: 12px;
+height: 40px;
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+flex-direction: column;
+.name{
+  color:  ${props => props.theme.colors.primaryText};
+
+}
+.msg{
+  font-size: 15px;
+  opacity: 0.7;
+  color:  ${props => props.theme.colors.seconderyText};
 }
 
-export  function ConversationComponent(props : ConvProps) {
-    return (
-        <ChatMesgstyle to={"/chat/" + ( props.data.channelId)} active={props.active ? "true" : "false"}onClick={props.onClick}>
-          {
-            props.data.access === "DM" ?
-            <>
-              <Avatar>
-            <AvatarComponent login={props.data?.users[1].login} img={props.data?.users[1].defaultAvatar}/>
-          </Avatar>
-          <div className='mesgData'>
-            <div className='name'>
-             { props.data?.users[1].displayName}
-            </div>
-              {
-              <div className='msg'>
-              {/* {props.messages[props.messages.length - 1]} */}
-            </div>
-              }
-          </div>
-          <div className='time'>
-            3min ago
-          </div>
-            </>
-            :
-            <>
-              <Avatar>
-            <AvatarComponent img={props.data.picture}/>
-          </Avatar>
-          <div className='mesgData'>
-            <div className='name'>
-             { props.data.name}
-            </div>
-              {
-              <div className='msg'>
-              {/* {props.messages[props.messages.length - 1]} */}
-            </div>
-              }
-          </div>
-          <div className='time'>
-            3min ago
-          </div>
-            </>
-
-          }
-        
-        </ChatMesgstyle>
-    )
-  }
-  const Avatar = styled.div`
-    margin-left : 5px;
-    width: 50px;
-    height: 50px;
-  `
-  interface chatprop{
-    active : string
-  }
-    const ChatMesgstyle = styled(Link)<chatprop>`
-   
-      height: 70px;
-      width: 100%;
-    position: relative;
-      border-radius: 5px;
-      align-items: center;
-      display: flex;
-
-      margin-bottom: 10px;
-      ${props => (props.active === "true") && `
-      background-color:  #0E1117;
-      `}
-      &:hover{
-        /* border :1px solid ${props => props.theme.colors.seconderybg};  */
-        background-color: ${props => props.theme.colors.bg};
-      }
-       .mesgData{
-        margin-left: 12px;
-        height: 40px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        flex-direction: column;
-        .name{
-          color:  ${props => props.theme.colors.primaryText};
-  
-        }
-        .msg{
-          font-size: 15px;
-          opacity: 0.7;
-          color:  ${props => props.theme.colors.seconderyText};
-        }
-  
-      }
-      .time{
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        color: ${props => props.theme.colors.purple};
-        font-size: 10px;
-      }
-    `;
-  
+}
+.time{
+position: absolute;
+top: 10px;
+right: 10px;
+color: ${props => props.theme.colors.purple};
+font-size: 10px;
+}
+`;
