@@ -12,6 +12,7 @@ export default function NotifComponents() {
 }
 
 interface NotifProps{
+    type: string,
     clear : (e : any)=>void,
     check : (e : any)=>void,
     name : string,
@@ -19,11 +20,13 @@ interface NotifProps{
     msg : string,
 }
 export  function FriendRequest(props : NotifProps) {
+
   return (
     <FriendRequestStyle>
         <div className='avatar'>
             <AvatarComponent img={props.img} />
         </div>
+        
         <div className='data'>
             <div className='name'>
                 {props.name}
@@ -32,14 +35,23 @@ export  function FriendRequest(props : NotifProps) {
                {props.msg}
             </div>
         </div>
+        
         <div className='button'>
-            <Button onClick={(e)=>props.check(e)} size="small" isIcon={true} icon={<CheckIcon/>}/>
-            <Button  onClick={(e)=>props.check(e)}  type='secondary' size="small"isIcon={true} icon={<CloseIcon/>}/>
+            {
+                props.type === 'request' && <Button 
+                onClick={(e)=>props.check(e)}
+                size="small" isIcon={true}
+                icon={<CheckIcon/>}/>
+            }
+            
+            <Button  onClick={(e)=>props.clear(e)}  type='secondary' size="small"isIcon={true} icon={<CloseIcon/>}/>
         </div>
+
+
     </FriendRequestStyle>
   )
-}
 
+}
 const FriendRequestStyle = styled.div`
     width: 95%;
     padding: 10px 1%;
@@ -78,7 +90,5 @@ background-color: ${props => props.theme.colors.primarybg};;
         gap: 5px;
         /* background-color: red; */
         /* width: 100px; */
-
     }
-
 `;

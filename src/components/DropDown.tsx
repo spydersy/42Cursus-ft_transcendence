@@ -55,8 +55,6 @@ overflow: hidden;
 min-width: 120px;
 background-color: ${props => props.theme.colors.bg};;
 `;
-
-
 const Item = styled.a`
     min-width: 120px;
     font-family: 'Poppins', sans-serif;
@@ -87,97 +85,4 @@ const Item = styled.a`
       }
     }
 `;
-
-
-
-
-interface NotifDropDownProps {
-  closeDropdown: () => void,
-  open : boolean
-  style :  React.CSSProperties
-
-}
-export  function NotifDropDown(props : NotifDropDownProps) {
-  const refs = useDetectClickOutside({ onTriggered: props.closeDropdown });
-  const socket = useContext(SocketContext)
-  // socket.on('event', (payload)=>{
-  //     console.table(payload)
-  // });
-return (<>
-    {props.open && 
-      <NotifD style={props.style}  ref={refs} >
-          {/* <div> */}
-            <Head>
-              <div>Notifications</div>
-              <span>Clear all</span>
-            </Head>
-            <Notif>
-              
-              <FriendRequest name="moahmed" img={Mamali} msg={"Send a Friend request ."} check={()=>{}}  clear={()=>{}} />
-              <FriendRequest name="moahmed" img={Mamali} msg={"Is challenging you."} check={()=>{}}  clear={()=>{}} />
-            </Notif>
-          {/* </div> */}
-      </NotifD>}
-</>
-)
-}
-
-
-const NotifD = styled.div`
-position: absolute;
-min-width: 400px;
-width: 400px;
-bottom: -25px;
-transform: translateY(100%);
-min-height: 300px;
-border-radius: 8px;
-background-color: ${props => props.theme.colors.bg};;
-
-border:2px solid ${props => props.theme.colors.seconderyText};;
-/* padding: 0 15px; */
-/* lef:t: ; */
-right: 0;
-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.06);
-display: flex;
-align-items: center;
-flex-direction: column;
-overflow: hidden;
-min-width: 120px;
-
-`;
-
-const Head = styled.div`
-  width: 95%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 60px;
-  font-family: 'Poppins', sans-serif;
-  color: ${props => props.theme.colors.primaryText};
-  border-bottom: 0.5px solid ${props => props.theme.colors.seconderyText};
-  >div{
-    font-weight: 600;
-    font-size: 20px;
-  }
-  >span{
-    opacity: 0.7;
-  }
-`;
-const Notif = styled.div`
-  width: 100%;
-  flex: 1;
-  /* height: 100%; */
-  gap: 10px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  font-family: 'Poppins', sans-serif;
-  color: ${props => props.theme.colors.primaryText};
-  /* border-bottom: 0.5px solid   #c8d0d97b; */
-  border-radius: 10px;
-  margin: 10px 0;
-  /* background-color: ${props => props.theme.colors.purple};; */
-`;
-
-
 

@@ -3,9 +3,8 @@ import styled , {css} from "styled-components"
 import SearchIcon from "../assets/imgs/search.svg"
 import {ReactComponent as BellIcon }from "../assets/imgs/notfication.svg"
 import {ReactComponent as Logo }from "../assets/imgs/logo.svg"
-
 import {ReactComponent as BigLogo }from "../assets/imgs/biglogo.svg"
-import DropDown, { NotifDropDown } from './DropDown'
+import DropDown, { } from './DropDown'
 import { ReactComponent as UserIcon} from "../assets/imgs/user-icon.svg"
 import { ReactComponent as SettingIcon} from "../assets/imgs/settings.svg"
 import { AvatarComponent } from './PlayerProfile'
@@ -17,6 +16,15 @@ import HashLoader from "react-spinners/HashLoader";
 import { wait } from '@testing-library/user-event/dist/utils';
 import EmptyComponent from './PlayerrEmptyComp';
 import { UserContext } from '../context/UserContext'
+import { FriendRequest } from './Notifications/NotifComponents';
+import Mamali from "../assets/imgs/avatar/mamali.jpeg";
+import { ToastContainer, toast } from 'react-toastify';
+import { useDetectClickOutside } from 'react-detect-click-outside';
+// import { UserContext } from './context/UserContext';
+import { OnlineContextSocket, SocketContext,  SocketGameContext,  SocketValue } from '../context/Socket';
+import MsgToast , {AcceptToast, FriendRequestToast, GameChallengeToast} from '../components/Toasts/MsgToast';
+
+///////
 
 interface ListTypes {
   title : string,
@@ -24,7 +32,6 @@ interface ListTypes {
   href: string
 
 }
-
 interface UserProp {
   defaultAvatar: string,
   login : string
@@ -34,7 +41,6 @@ interface NotifProps {
   
 }
 const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : ""},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
-
 export default function Upperbar() {
   const [open, setopen] = useState(false)
   const [currentUser, setcurrentUser] = useState< UserProp>({defaultAvatar : NoUserIcon , login : ""})
@@ -42,7 +48,7 @@ export default function Upperbar() {
     setopen(!open)
     e.stopPropagation();
   }
- const User = useContext(UserContext)
+  const User = useContext(UserContext)
 
   useEffect(() => {
     console.log(User)
@@ -59,44 +65,40 @@ export default function Upperbar() {
 
       // console.log(data)
 
-    
-
-  
   }, [])
   useEffect(() => {
 
   }, [currentUser])
-  
-  
+
+
+
   return (
     <Wrraper>
         <LogoComponent size={"small"} />
         <SearchBarComponent/>
         <RightCont>
-
-          <NotificationComponent setopen={(e)=>setopen(e)} />
-          <div  style={{position : "relative"}} onClick={(e)=>{ToggleDD(e)}}>
-            <div style={{width : "40px", height :"40px"}}>
-            <AvatarComponent  img={currentUser?.defaultAvatar} />
+            <NotificationComponent setopen={(e)=>setopen(e)} />
+            <div  style={{position : "relative"}} onClick={(e)=>{ToggleDD(e)}}>
+              <div style={{width : "40px", height :"40px"}}>
+              <AvatarComponent  img={currentUser?.defaultAvatar} />
+              </div>
+              {
+                open && <DropDown closeDropdown={ ()=>{
+        
+                  console.log(open)
+                  // setopen(false)
+                }} open={open} 
+                style={{bottom: "-25px" , right: '0'}}
+                list={list}
+                />
+              }
             </div>
-            {
-              open && <DropDown closeDropdown={ ()=>{
-      
-                console.log(open)
-                setopen(false)
-              }} open={open} 
-              style={{bottom: "-25px" , right: '0'}}
-              list={list}
-              />
-            }
-          </div>
         </RightCont>
        
     </Wrraper>
     
   )
 }
-
 const Wrraper = styled.div`
   z-index: 20;
 
@@ -113,7 +115,6 @@ const Wrraper = styled.div`
   left: 0;
   
 `;
-
 const RightCont = styled.div`
 width: 100px;
    display: flex;
@@ -123,22 +124,19 @@ width: 100px;
    gap: 10px;
    margin-right :10px;
 `;
-
 interface LogoProps {
   size : string
 }
-
 export  function LogoComponent(props : LogoProps) {
     return (
       <a style={{marginLeft :"10px"}}href='/'>
         {(props.size === "small")  ? <Logo/> : <BigLogo/>}
       </a>
     )
-  }
+}
 
 //////////////
 const override: CSSProperties = {  display: "grid",  margin: "0 auto",  borderColor: "white", };
-
 export  function SearchBarComponent() {
     const [Users, setUsers] = useState([])
     const [open, setopen] = useState(false)
@@ -206,8 +204,7 @@ export  function SearchBarComponent() {
         <HashLoader  className='s'  color={color} loading={loading} cssOverride={override} size={22} />
       </SearchBar>
     )
-  }
-
+}
 const NameStyle = styled.div`
   width: 100%;
   display: flex;
@@ -215,14 +212,12 @@ const NameStyle = styled.div`
   font-weight: 600;
   position: relative;
 `;
-
 const LoginStyle = styled.div`
   width: 100%;
   display: flex;
   font-size: 18px;
   position: relative;
 `;
-
 const AvatarStyle = styled.div`
   /* background-color: #389c71; */
   display: flex;
@@ -232,7 +227,6 @@ const AvatarStyle = styled.div`
   margin-left: 30px;
 
 `;
-
 const UserFound = styled.a`
   width: 100%;
   height: 60px;
@@ -247,7 +241,6 @@ const UserFound = styled.a`
     background-color: ${props => props.theme.colors.primarybg};
   }
 `;
-
 const UsersTable = styled.div`
 
   position: absolute;
@@ -264,7 +257,6 @@ const UsersTable = styled.div`
     margin: 15px auto;
   }
 `;
-
 const SearchBar = styled.div`
 border: 2px solid ${props => props.theme.colors.purple};
 background:  ${props => props.theme.colors.bg};
@@ -315,42 +307,156 @@ padding: 0px 0px 0px 49px;
     max-width: 200px;
   }
 `;
+
 //////////////
 
+interface ssss {
+  accepter: string,
+  sender: string,
+  status: boolean
+}
+interface msgType {
+  channelId : string,
+  content : string, 
+  date : string, 
+  displayName : string, 
+  id : number,
+  senderId : number
+}
+
+const CustomToastWithLink = (data : msgType) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <MsgToast data={data}/>
+  </div>
+);
+
 export  function NotificationComponent(props: NotifProps) {
-  const [openNotif, setopenNotif] = useState(false)
+    
+    const [openNotif, setopenNotif] = useState(false)
+    const [isNotif, setisNotif] = useState(false)
+    const socket = useContext(SocketContext)
+    // const onlinesSocket = useContext(OnlineContextSocket)
+    // const gameSocket = useContext(SocketGameContext)
+    // const User = useContext(UserContext)
+    // const [toastData, settoastData] = useState<msgType>()
+    // const [toastDataChallenge, settoastDataChallenge] = useState()
+    const pageName = window.location.pathname.split("/")[1];
+    var [list, setlist] = useState<NotifDataCard[]>([
+      // {sender:"Mehdi",img:"", msg:"Send you Friend request", type:"request"},
+      // {sender:"Mehdi",img:"", msg:"Send you Game request", type:"request"},
+      // {sender:"Reda",img:"", msg:"oui", type:"msg"},
+      // {sender:"Reda",img:"", msg:"cv", type:"msg"},
+      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
+      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
+      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
+      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
+      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
+      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
+      // {sender:"Reda",img:"", msg:"MaHello", type:"msg"}
+    ])
+
+    const refo = useRef(null)
+    function hundleMsg (payload : any) {
+      setisNotif(true)
+      if (pageName != "chat")
+      {
+        console.table(">__NOTIF__HANDLE__MSG__", payload)
+        list.push({sender:payload.displayName, img:payload.img, msg:payload.content, type:payload.type})
+      }
+    }
+
+    // function handleChallenge (payload) {
+    //   console.log(payload)
+      
+    //   toast(CustomToastWithLinkGame(payload) , {
+    //     // position : toast.POSITION.TOP_RIGHT,
+    //     className: "toast",
+    //     progressClassName: "toastProgress",
+    //     autoClose: 2000,
+    //     hideProgressBar: true,
+    //     // closeOnClick: false
+    //   })
+    //   // CHallengeNotify()
+    // }
+    // function handleRequest (payload) {
+    //   // console.log('__sahbiiiiii____:'+payload)
+    //   toast(CustomToastFriendReq(payload) , {
+    //     className: "toast",
+    //     progressClassName: "toastProgress",
+    //     autoClose: 2000,
+    //     hideProgressBar: true,
+    //   })
+    // }
+    // function acceptRequest (payload) {
+    //   console.log('acceptii a sahbi:',payload)
+      
+    //   toast(CustomToastAcceptFriendReq(payload) , {
+    //     className: "toast",
+    //     progressClassName: "toastProgress",
+    //     autoClose: 2000,
+    //     hideProgressBar: true,
+    //   })
+    // }
+    // function handelChallengeAccept (payload) {
+    //   localStorage.setItem("mode","1v1")
+    //   navigate("/game/")
+      
+    // }
+
+    const handleClickOutside = () => {
+      setopenNotif(false);
+      // wait (3000).then(() => { setLoading(false); });
+    };
+
+    useClickOutside(refo, handleClickOutside);
+
+  useEffect(()=>{
+    // sub
+    
+    socket.on('msg_event', hundleMsg);
+    // socket.on('challeneEvent', handleChallenge);
+    // socket.on('recievedRequest', handleRequest)
+    // socket.on('acceptedReq', acceptRequest)
+    // gameSocket.on('challengeAccepted', handelChallengeAccept)
+      return () => {
+        socket.removeListener('msg_event', hundleMsg);
+        // socket.removeListener('challeneEvent', handleChallenge);
+        // socket.removeListener('recievedRequest', handleRequest);
+        // socket.removeListener('acceptedReq', acceptRequest);
+        // gameSocket.removeListener('challengeAccepted', handelChallengeAccept);
+      }
+    })
 
   return (
-    <Notification onClick={(e)=>{
-      console.log(openNotif)
-      setopenNotif(!openNotif)
+
+    <Notification ref={refo} onClick={(e)=>{ console.log(openNotif)
+      setopenNotif(true) 
       e.stopPropagation()
       props.setopen(false)
-      }} new={true}  >
-      <BellIcon/>
+      }} new={isNotif}  >
+      
+      <BellIcon />
       {
-              openNotif && <NotifDropDown closeDropdown={ ()=>{
-                console.log(openNotif)
-                setopenNotif(false)
-              }} open={openNotif} 
-              style={{bottom: "-25px" , right: '0'}}
-              // list={list}
-              />
-            }
+        openNotif &&   <NotifDropDown closeDropdown={ ()=>{ console.log(openNotif)
+          setopenNotif(false)
+        }} open={openNotif} 
+        style={{bottom: "-25px" , right: '0'}}
+        list={list}
+        />
+      }
     </Notification>
   )
 }
-
 export interface SearchProps {
 new: boolean
 }
-
 const Notification= styled.div<SearchProps>`
 width: auto;
 position: relative;
 display: flex;
 align-items: center;
 justify-content: center;
+
 >svg{
   height: 30px;
   width: 30px;
@@ -373,6 +479,141 @@ ${props => props.new && css`
     border-radius: 50%;
   }`
   }
- 
 
 `;
+
+///////
+
+interface NotifDataCard {
+  sender : string,
+  img: string,  
+  msg : string,
+  type : string
+  // check: check(), 
+  // clear: clear()
+ }
+
+interface NotifDropDownProps {
+  closeDropdown: () => void,
+  open : boolean
+  style :  React.CSSProperties
+  list : NotifDataCard[]
+}
+
+export  function NotifDropDown(props : NotifDropDownProps) {
+
+  const refs = useRef<HTMLDivElement>(null)
+
+  // const refs = useDetectClickOutside({ onTriggered: props.closeDropdown });
+  const socket = useContext(SocketContext)
+  var [list, setlist] = useState<NotifDataCard[]>(props.list)
+  const [isNotif, setisNotif] = useState(true)
+
+
+  const ClearNotif = () => {
+    console.log("______clearALLNotifList_____")
+    list.splice(0, list.length)
+    setlist([])
+    props.list = []
+  }
+
+  const removeNotif = (index : number) => {
+    console.log("______removeNotif_____", index)
+    console.log("______removeNotif__list___", list)
+    list.splice(index, 1)
+    setlist([...list])
+    props.list = list
+  }
+
+  // socket.on('event', (payload)=>{
+  //     console.table("___TABLE__", payload)
+  // });
+
+return (<>
+    
+    {props.open && 
+      <NotifD style={props.style}  ref={refs} new={isNotif}  >
+            {
+                <Head>
+                  <div>Notifications</div>
+                  <div  className="clearo" onClick={ClearNotif} >Clear all</div>
+                </Head>
+           }  
+
+            <Notif>
+              {list.map((item: any, index: any) => (
+                <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={item.msg} check={()=>{}}  clear={(index)=>{removeNotif(index)}} />
+              ))}
+              {/* <FriendRequest name="moahmed" img={Mamali} msg={"Send a Friend request ."} check={()=>{}}  clear={()=>{}} /> */}
+              {/* <FriendRequest name="moahmed" img={Mamali} msg={"Is challenging you."} check={()=>{}}  clear={()=>{}} /> */}
+            </Notif>
+
+      </NotifD>}
+</>
+)
+}
+const NotifD = styled.div<SearchProps>`
+position: absolute;
+min-width: 400px;
+width: 400px;
+bottom: -25px;
+transform: translateY(100%);
+min-height: 300px;
+max-height: 600px;
+border-radius: 8px;
+background-color: ${props => props.theme.colors.bg};;
+
+border:2px solid ${props => props.theme.colors.seconderyText};;
+/* padding: 0 15px; */
+/* lef:t: ; */
+right: 0;
+box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.06);
+display: flex;
+align-items: center;
+flex-direction: column;
+overflow: hidden;
+min-width: 120px;
+`;
+const Head = styled.div`
+  width: 95%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  font-family: 'Poppins', sans-serif;
+  color: ${props => props.theme.colors.primaryText};
+  border-bottom: 0.5px solid ${props => props.theme.colors.seconderyText};
+  >div{
+    font-weight: 600;
+    font-size: 20px;
+  }
+  .clearo{
+    opacity: 0.7;
+    font-size: 18px;
+    cursor: pointer;
+    &:hover{
+      opacity: 1;
+      color: #1065af;
+    }
+
+  }
+`;
+const Notif = styled.div`
+  width: 100%;
+  flex: 1;
+  /* height: 100%; */
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+  color: ${props => props.theme.colors.primaryText};
+  /* border-bottom: 0.5px solid   #c8d0d97b; */
+  border-radius: 10px;
+  margin: 10px 0;
+  overflow-y: scroll;
+
+  /* background-color: ${props => props.theme.colors.purple};; */
+`;
+
+
