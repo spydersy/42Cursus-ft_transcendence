@@ -541,8 +541,8 @@ export class ChatService {
             return USERSTAT.NOTFOUND;
         if (channel.access === CHANNEL.DM) {
             const dmChannel = await this.prisma.channelsUsers.findMany({where: {channelId: channelId}});
-            if (await this.userService.IsBlockedUser(dmChannel[0].userId === me
-                ? dmChannel[1].userId : dmChannel[0].userId, me)) {
+            if (await this.userService.IsBlockedUser(dmChannel[1].userId, dmChannel[0].userId)
+                || await this.userService.IsBlockedUser(dmChannel[0].userId, dmChannel[1].userId)) {
                     console.log("__BLOCKED__USER__BEF__SEND__MESSAGE__");
                     return USERSTAT.BLOCKED;
             }
