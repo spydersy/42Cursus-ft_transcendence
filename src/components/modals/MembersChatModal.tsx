@@ -84,7 +84,7 @@ interface MemberProps{
         channelId: props.channelId.toString(),
         user: props.data.login,
         restriction: "MUTE",
-        duration: 3
+        duration: 60
       }
       await axios.post( process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData,
       {withCredentials: true} 
