@@ -114,6 +114,7 @@ export class ChatService {
         let socketRes: SocketRes = {stat: false, payload: null};
         const userStat = await this.PostMessageValidationLayer(me, channelId);
 
+        console.log("__USER__STAT__DBG__ : ", userStat);
         if (userStat === USERSTAT.NOTFOUND || userStat === USERSTAT.MUTED
             || userStat === USERSTAT.BANNED || userStat === USERSTAT.BLOCKED) {
             socketRes.stat = false;
@@ -525,13 +526,20 @@ export class ChatService {
 
     }
 
+    addSeconds(date, seconds) {
+        date.setSeconds(date.getSeconds() + seconds);
+        return date;
+    }
+
     async PostMessageValidationLayer(me: number, channelId: string) : Promise<USERSTAT> {
         const channel = await this.GetChannelById(channelId);
-        const userInChannel = await this.FindUserInChannel(me, channelId);
-
         if (channel === null)
             return USERSTAT.NOTFOUND;
-        else if (channel.access === CHANNEL.DM) {
+        const userInChannel = await this.FindUserInChannel(me, channelId);
+        console.log("__USER))IN__CHANNEL__BEF__SEND__MESSAGE__ : ", userInChannel);
+        if (userInChannel === null)
+            return USERSTAT.NOTFOUND;
+        if (channel.access === CHANNEL.DM) {
             const dmChannel = await this.prisma.channelsUsers.findMany({where: {channelId: channelId}});
             if (await this.userService.IsBlockedUser(dmChannel[0].userId === me
                 ? dmChannel[1].userId : dmChannel[0].userId, me)) {
@@ -539,12 +547,25 @@ export class ChatService {
                     return USERSTAT.BLOCKED;
             }
         }
-        else if (userInChannel === null)
-            return USERSTAT.NOTFOUND;
         else if (userInChannel.restriction === RESTRICTION.BANNED)
             return USERSTAT.BANNED;
         else if (userInChannel.restriction === RESTRICTION.MUTED) {
-
+            console.log("__MUTED__USER__DBG__");
+            let currentDt = new Date();
+            if (currentDt < this.addSeconds(new Date(userInChannel.restrictionTime), userInChannel.duration)) {
+                return USERSTAT.MUTED
+            } else {
+                await this.prisma.channelsUsers.updateMany({
+                    where: {
+                        userId: userInChannel.userId,
+                        channelId: userInChannel.channelId
+                    },
+                    data: {
+                        restriction: RESTRICTION.NULL,
+                        duration: 0
+                    }
+                });
+            }
         }
         return USERSTAT.ACCESS;
     }

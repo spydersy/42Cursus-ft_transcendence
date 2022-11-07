@@ -33,9 +33,9 @@ import { WsGuard } from './auth/jwt.strategy';
   @UseGuards(WsGuard)
   @SubscribeMessage('chatToServer')
   async handleMessage(client: Socket, payload) {
-    console.log("__PAYLOAD__DBG__ : ", payload);
+    // console.log("__PAYLOAD__DBG__ : ", payload);
     const ret = await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
-    console.log("PAYLOAD : ", payload);
+    // console.log("PAYLOAD : ", payload);
     if (ret.stat === true)
     {
       this.server.to(payload.channelId).emit('chatToClient', ret.payload);
