@@ -322,16 +322,18 @@ interface ButtonProps {
    icon? : React.ReactElement,
    onClick? : (e?: any)=> void;
    size ? : "small" | "big";
+   color ?: string,
 
 }
 interface ButtonStyleProps {
    isIcon? : boolean | undefined,
    typeS? : string ,
-   size ? : "small" | "big"; 
+   size ? : "small" | "big",
+   color?: string
 }
 export  function Button(props :ButtonProps ) {
   return (
-    <LoginButtonStyle  size={props.size} isIcon={props.isIcon} onClick={props.onClick} typeS={props.type}>
+    <LoginButtonStyle color={props.color} size={props.size} isIcon={props.isIcon} onClick={props.onClick} typeS={props.type}>
       {props?.icon}
       
       {props.isIcon ? "" : <>{props.text}</>}
@@ -389,6 +391,12 @@ const LoginButtonStyle = styled.button<ButtonStyleProps>`
    position: relative;
    ${props => (props.size === "small") && `
 padding: 3px 5px;
+`}
+   ${props => (props.color) && `
+      background: ${props.color};;
+   border: 1px solid  ${props.color};
+
+
 `}
    >svg{
       /* display: none; */

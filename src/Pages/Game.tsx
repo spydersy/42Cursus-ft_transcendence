@@ -83,20 +83,29 @@ export default function Game(props : GameProps) {
 
 var dat : UserProp;
     UserData.then((data : UserProp | "{}")=>{
-      if (data !== "{}")
+    const pageName = window.location.pathname.split("/")[2];
+    const room = window.location.pathname.split("/")[3];
+    var mode = localStorage.getItem('mode') ;
+      
+    if (data !== "{}")
+    {
+      dat = data
+      setloged(data)
+      
+      if (pageName === "watch")
       {
-        dat = data
-        setloged(data)
+          if (room)
+          {
+
+          }
+      }
+      else
+      {
         if (mode === "classic")
         {
           if (!end)
-          {
-            console.log(mode)
             gamesocket.emit("playerConnect" , data?.login)
-    
-          }
-    
-          setUser(data)
+          // setUser(data)
         }
         else if (mode === "1v1")
         {
@@ -108,8 +117,8 @@ var dat : UserProp;
   
         }
       }
+      }
     })
-    var mode = localStorage.getItem('mode') ;
 
     return () => {
 
@@ -119,6 +128,8 @@ var dat : UserProp;
 
   }, [])
   
+
+
 
   
   const fetchPlayersData =(player1 : string , player2: string)=>{

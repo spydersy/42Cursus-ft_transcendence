@@ -93,11 +93,7 @@ export default function ChatControlBar(props :{data : convType }) {
                   </Modal>
 
             }
-            <button className='BtpBlocked' onClick={LeaveRoom} >
-              <BlockIcon/>
-            </button>
-
-
+            <Button  color={"#ae0b0b"} isIcon={true} onClick={()=>{sethide(true)}} icon={<BlockIcon/>}/>
         </div>
     }    
 

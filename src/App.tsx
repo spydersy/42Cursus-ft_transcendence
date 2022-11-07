@@ -122,7 +122,6 @@ function App() {
       })
     }
   }
-  
   function handleChallenge (payload) {
     console.log(payload)
     
@@ -145,7 +144,6 @@ function App() {
       hideProgressBar: true,
     })
   }
-  
   function acceptRequest (payload) {
     console.log('acceptii a sahbi:',payload)
     
@@ -156,7 +154,6 @@ function App() {
       hideProgressBar: true,
     })
   }
-  
   function handelChallengeAccept (payload) {
     localStorage.setItem("mode","1v1")
     navigate("/game/")
@@ -176,9 +173,8 @@ function App() {
       socket.removeListener('recievedRequest', handleRequest);
       socket.removeListener('acceptedReq', acceptRequest);
       gameSocket.removeListener('challengeAccepted', handelChallengeAccept);
-      
     }
-  })
+    })
   
   const    CHallengeNotify = () => toast.success("You accepted " +  toastDataChallenge + " Friend Request", {
     position: "top-right",
@@ -227,9 +223,9 @@ function App() {
       lastModification: string
       Achievements: boolean[]
   } 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
     
-    useEffect(() => {
+  useEffect(() => {
       // if ()
       User.then((user : UserProp | string)=>{
         console.log(user)
@@ -238,41 +234,29 @@ function App() {
           onlinesSocket.close()
           navigate("/signin")
         }
-
       })
       
       axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me", 
       {withCredentials: true} 
       ).then((res)=>{
         
-        
-        console.log(res.data)
+        // console.log(res.data)
         localStorage.setItem("user", JSON.stringify(User))
         localStorage.setItem("mode","classic")
         joinChannels()
         socket.emit("AddOnlineUser")
-
         
-        
-        
-        
-
     }).catch((err)=>{
           // console.log(err.message)
           // const pageName = window.location.pathname.split("/")[1];
 
-        
-
       })
 
-
   }, [])
-
   
   return (
     <div className="App">
        
-
        <ThemeProvider theme={theme}>
      
         <Main>
@@ -284,6 +268,7 @@ function App() {
             <Routes>
               <Route path="/signin" element={<SignIn />} />
               <Route path="/game" element={<Game theme={gametheme}  />} />
+              <Route path="/game/watch/:id" element={<Game theme={gametheme}  />} />
               <Route path="/chat/:id" element={<Chat />} />
               <Route path="/setting" element={<Setting />} />
               <Route path="/testing" element={<SocketTesting />} />
