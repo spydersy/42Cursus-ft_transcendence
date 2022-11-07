@@ -71,7 +71,6 @@ interface MemberProps{
         restriction: "BAN",
         duration: 0
       }
-      console.log(bodyFormData)
       await axios.post( process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData,
       {withCredentials: true} 
       ).then((res)=>{
@@ -79,8 +78,20 @@ interface MemberProps{
         console.log(err)
       })
     };
-    const OwnerMute = () => {
+    const OwnerMute = async () => {
       console.log("OwnerMute")
+      var  bodyFormData = {
+        channelId: props.channelId.toString(),
+        user: props.data.login,
+        restriction: "MUTE",
+        duration: 3
+      }
+      await axios.post( process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData,
+      {withCredentials: true} 
+      ).then((res)=>{
+      }).catch((err)=>{
+        console.log(err)
+      })
     };
     const AdminBan = () => {
       console.log("AdminBan")
