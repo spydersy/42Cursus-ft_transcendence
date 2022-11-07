@@ -88,7 +88,7 @@ const linkslist = ["All" , "My Rooms"]
 
               {
                 allRooms.map((data : any , id : number)=>{
-                  return<RoomComponent  key={id} id={3} roomMembers={data.nbUsers} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected"} />        
+                  return<RoomComponent  key={id} id={3} roomMembers={data.nbUsers} roomName={data.name} roomBanner={data.picture} isLocked={data.access === "Protected".toUpperCase()} />        
                 })
               }
             </Warraper>

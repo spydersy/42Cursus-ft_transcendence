@@ -44,6 +44,9 @@ export default function ChatControlBar(props :{data : convType }) {
   const LeaveRoom = () => {
     console.log("leave room {" , props.data)
   }
+  const deleteChunnel = () => {
+    alert()
+  }
 
   return (
     <ContoleStyle>
@@ -94,6 +97,11 @@ export default function ChatControlBar(props :{data : convType }) {
 
             }
             <Button  color={"#ae0b0b"} isIcon={true} onClick={()=>{sethide(true)}} icon={<BlockIcon/>}/>
+            {props.data.users[0].permission === "OWNER" &&
+            
+            <Button   isIcon={true} onClick={()=>{deleteChunnel()}} icon={<BlockIcon/>}/>
+            
+            }
         </div>
     }    
 

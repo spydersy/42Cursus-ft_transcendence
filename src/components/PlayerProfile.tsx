@@ -897,7 +897,7 @@ export  function AvatarComponent(props: AvatarProps) {
     setstate(false)
   }
   socket.on("ConnectedUser" , (pyload)=>{
-   console.log(pyload)
+  //  console.log(pyload)
    setUserStatu(pyload)
   
   })
