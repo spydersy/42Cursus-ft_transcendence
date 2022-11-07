@@ -1,6 +1,6 @@
 import { Body, forwardRef, HttpStatus, Inject, Injectable, Req, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CHANNEL, PERMISSION, RESCTRICTION } from '@prisma/client';
+import { CHANNEL, PERMISSION, RESTRICTION } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 
@@ -68,8 +68,8 @@ export class ChatService {
             });
             let Users = await this.prisma.channelsUsers.createMany({
                 data: [
-                    {userId: SenderId, channelId: Channel.id, permission: PERMISSION.USER, restriction: RESCTRICTION.NULL, duration: 0},
-                    {userId: ReceiverId, channelId: Channel.id, permission: PERMISSION.USER, restriction: RESCTRICTION.NULL, duration: 0}
+                    {userId: SenderId, channelId: Channel.id, permission: PERMISSION.USER, restriction: RESTRICTION.NULL, duration: 0},
+                    {userId: ReceiverId, channelId: Channel.id, permission: PERMISSION.USER, restriction: RESTRICTION.NULL, duration: 0}
                 ]
             });
             console.log("__DM__USERS__DBG__ : ", Users);
@@ -87,7 +87,7 @@ export class ChatService {
         if (userChannel === null)
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'Forbidden'});
         // Check Banned User
-        if (userChannel.restriction === RESCTRICTION.BANNED)
+        if (userChannel.restriction === RESTRICTION.BANNED)
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'Banned User'});
         // Get All Messages
         let messages = await this.prisma.messages.findMany({
@@ -150,10 +150,13 @@ export class ChatService {
         let managedChannels = await this.prisma.channelsUsers.findMany({
             where: {
                 userId: me,
-                OR: [
-                    {permission: PERMISSION.ADMIN},
-                    {permission: PERMISSION.OWNER},
-                ],
+                AND: [{
+                    NOT: {restriction: RESTRICTION.BANNED},
+                    OR: [
+                        {permission: PERMISSION.ADMIN},
+                        {permission: PERMISSION.OWNER},
+                    ],
+                }],
             }
         });
         console.log("__MANAGED__CHANNELS__DBG__ : ", managedChannels);
@@ -191,7 +194,7 @@ export class ChatService {
         const bannedChannels = await this.prisma.channelsUsers.findMany({
             where: {
                 userId: me,
-                restriction: RESCTRICTION.BANNED
+                restriction: RESTRICTION.BANNED
             }
         });
         let myChannels = await this.prisma.channels.findMany({
@@ -220,7 +223,7 @@ export class ChatService {
         const bannedChannels = await this.prisma.channelsUsers.findMany({
             where: {
                 userId: me,
-                restriction: RESCTRICTION.BANNED
+                restriction: RESTRICTION.BANNED
             }
         });
         let allChannels = await this.prisma.channels.findMany({
@@ -254,7 +257,7 @@ export class ChatService {
                 userId_channelId: {userId, channelId},
             },
         });
-        if (meDto === null || meDto.permission === PERMISSION.USER)
+        if (meDto === null || meDto.permission === PERMISSION.USER || meDto.restriction === RESTRICTION.BANNED)
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'User Dont Have Permission To Update Users'});
         const userDto = await this.prisma.users.findUnique({where: { login: user}});
         if (userDto === null)
@@ -262,8 +265,8 @@ export class ChatService {
         const userInChannel = await this.FindUserInChannel(userDto.id, channelId);
         if (userInChannel == null)
             return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
-        if ((userInChannel.permission === PERMISSION.ADMIN || userInChannel.permission === PERMISSION.OWNER)
-            && meDto.permission === PERMISSION.ADMIN)
+        if (((userInChannel.permission === PERMISSION.ADMIN || userInChannel.permission === PERMISSION.OWNER)
+            && meDto.permission === PERMISSION.ADMIN) || userInChannel.restriction === RESTRICTION.BANNED)
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'You Dont Have Rights To Update This User'});
         await this.prisma.channelsUsers.update({
             where: {
@@ -312,7 +315,7 @@ export class ChatService {
     }
 
     async UpdateUserRestrictionInChannel(userId: number, user: string, channelId: string,
-        restriction: RESCTRICTION, duration: number, @Res() res) {
+        restriction: RESTRICTION, duration: number, @Res() res) {
 
         const userDto = await this.userService.GetUserByLogin(user);
         await this.prisma.channelsUsers.updateMany({
@@ -331,7 +334,7 @@ export class ChatService {
         //     where: {userId_channelId: {userId, channelId},},
         // });
         // if (meDto === null || meDto.permission === PERMISSION.USER
-        //     || meDto.restriction === RESCTRICTION.BANNED)
+        //     || meDto.restriction === RESTRICTION.BANNED)
         //     return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
         // //user exist in channel
         // const userDto = await this.prisma.users.findUnique({ where:{ login: user}});
@@ -493,9 +496,9 @@ export class ChatService {
         }
         else if (userInChannel === null)
             return USERSTAT.NOTFOUND;
-        else if (userInChannel.restriction === RESCTRICTION.BANNED)
+        else if (userInChannel.restriction === RESTRICTION.BANNED)
             return USERSTAT.BANNED;
-        else if (userInChannel.restriction === RESCTRICTION.MUTED) {
+        else if (userInChannel.restriction === RESTRICTION.MUTED) {
 
         }
         return USERSTAT.ACCESS;

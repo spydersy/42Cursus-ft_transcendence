@@ -5,7 +5,7 @@ import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
 import { ChatService } from './chat.service';
 import { ChannelData, ChannelUserDto, JoinChannelDto, MessageDataDto, UserRestrictionDto } from 'src/dtos/Inputs.dto';
-import { PERMISSION, RESCTRICTION } from '@prisma/client';
+import { PERMISSION, RESTRICTION } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard)
 @Controller('chat')
@@ -35,14 +35,14 @@ export class ChatController {
         || userRestriction.restriction === 'UNBAN')
         return this.chatService.UpdateUserRestrictionInChannel(req.user.userId, userRestriction.user,
           userRestriction.channelId,
-          userRestriction.restriction === "BAN" ? RESCTRICTION.BANNED
-          : userRestriction.restriction === "MUTE" ? RESCTRICTION.MUTED
-          : RESCTRICTION.NULL, userRestriction.duration, res);
+          userRestriction.restriction === "BAN" ? RESTRICTION.BANNED
+          : userRestriction.restriction === "MUTE" ? RESTRICTION.MUTED
+          : RESTRICTION.NULL, userRestriction.duration, res);
 
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'BAD REQUEST'});
     }
 
-    //Done
+    //DONE
     @Delete('LeaveChannel')
     async DeleteUserFromChannel(@Req() req, @Query('channel') channelId, @Res() res) {
       if (channelId !== undefined)
@@ -50,26 +50,31 @@ export class ChatController {
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Query Not Set Properly'});
     }
 
+    //DONE
     @Get('myChannels')
     async GetMyChannels(@Req() req, @Res() res) {
       return this.chatService.GetMyChannels(req.user.userId, res);
     }
 
+    //DONE
     @Get('allChannels')
     async GetAllChannels(@Req() req, @Res() res) {
       return this.chatService.GetAllChannels(req.user.userId, res);
     }
 
+    //DONE
     @Get('messages/:channelId')
     async GetMessages(@Req() req, @Res() res) {
       return this.chatService.GetChannelMessages(req.user.userId, req.params.channelId, res);
     }
 
+    //NEED MORE TESTS . . .
     @Get('managedChannels')
     async GetManagedChannels(@Req() req, @Res() res) {
       return this.chatService.GetManagedChannels(req.user.userId, res);
     }
 
+    //DONE [password must be allways defined]
     @Post('createRoom')
     @UseInterceptors(
         FileInterceptor('icone', {

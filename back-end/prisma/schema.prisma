@@ -136,7 +136,7 @@ enum PERMISSION {
   USER
 }
 
-enum RESCTRICTION {
+enum RESTRICTION {
   BANNED
   MUTED
   RECHECK
@@ -162,7 +162,7 @@ model channelsUsers {
   channel         channels @relation("ChannelsUsers", fields: [channelId], references: [id])
   channelId       String
   permission      PERMISSION
-  restriction     RESCTRICTION @default(NULL)
+  restriction     RESTRICTION @default(NULL)
   restrictionTime DateTime     @updatedAt
   duration        Int          @default(0)
   @@unique([userId, channelId])
