@@ -246,7 +246,7 @@ function App() {
       // if ()
       User.then((user : UserProp | string)=>{
         console.log(user)
-        if (user === "{}")
+        if (user === "{}" && pageName != "2fa")
         {
           onlinesSocket.close()
           navigate("/signin")

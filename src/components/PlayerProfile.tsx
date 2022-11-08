@@ -409,8 +409,6 @@ background-color: ${props => props.theme.colors.seconderybg};
       //  GET process.env.REACT_APP_BACKEND_URL+  /users/relation/:id?event=block
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
       ).then((res)=>{
-      // console.log(res.data)
-      // alert("friend Request sent" + res.status)
       setrelationStatus("BLOCKED")
       isBlocked = "BLOCKED";
       BlockUserNotify();
@@ -439,7 +437,6 @@ background-color: ${props => props.theme.colors.seconderybg};
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/" + id,  {withCredentials: true}).then((res)=>{
           
           setrelationStatus(res.data.relation)
-          
           
           //Rank
           if (res.data.level)
@@ -472,6 +469,7 @@ background-color: ${props => props.theme.colors.seconderybg};
           <Data>
 
               <div className='data'>
+                
                 <div>
 
                   <DataTag> 
@@ -484,57 +482,51 @@ background-color: ${props => props.theme.colors.seconderybg};
                     <DataTag>     <CalendarIcon/> {createdTime}  </DataTag>
                   </DataTag>
                   
-                  {props.isCurrentUser === false && 
-                    <Buttons className='Btp' >
-                      {
-                        // Friends relation
-                        relationStatus === "NOTHING" ? 
-                          <Button  onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
-                        : 
-                        // Pending request relation
-                        relationStatus === 'PENDING' ? 
-                          <button className='BtpPending' onClick={CancelRequest}>
-                                <Hourglass/>
-                                Cancel Request
-                          </button>
-                        :
-                        // Blocked relation
-                        relationStatus === "BLOCKED" ? 
-                          <button className='BtpBlocked'onClick={UnBlockUser}>
-                            <UnblockIcon/>
-                            UnBlock
-                          </button>
-                        :
-                        // relationStatus === "BLOCKED" ? 
-                        // <Button  icon={<BlockIcon/>}   type='secondary' text='GHAYERHA'/>
-                        // :
-                        relationStatus === "FRIENDS" ? 
-                          <>
-                          <div className='row'>
-
-                            <Button   type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
-                            
-                            <button className='BtpBlocked'onClick={BlockUser}>
-                              <BlockIcon/>
-                              Block
+                  {
+                    props.isCurrentUser === false && 
+                      <Buttons className='Btp' >
+                        {
+                          relationStatus === "NOTHING" ?  
+                            <Button  onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
+                          : 
+                          relationStatus === 'PENDING' ? 
+                            <button className='BtpPending' onClick={CancelRequest}>
+                                  <Hourglass/>
+                                  Cancel Request
                             </button>
-                            
-                          </div>
-                          <div className='row'>
-                            <Link to={"/chat/" + props.player?.dmChannel}>  
-                              <Button isIcon={true}  icon={<SendMessage/>} text='Send Message'/>
-                            </Link>
-                            <Button  icon={<InviteToPlayIcon/>} isIcon={true}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
+                          :
+                          relationStatus === "BLOCKED" ? 
+                            <button className='BtpBlocked'onClick={UnBlockUser}>
+                              <UnblockIcon/>
+                              UnBlock
+                            </button>
+                          :
+                          relationStatus === "FRIENDS" ? 
+                            <>
+                            <div className='row'>
+
+                              <Button   type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
+                              
+                              <button className='BtpBlocked'onClick={BlockUser}>
+                                <BlockIcon/>
+                                Block
+                              </button>
+                              
+                            </div>
+                            <div className='row'>
+                              <Link to={"/chat/" + props.player?.dmChannel}>  
+                                <Button isIcon={true}  icon={<SendMessage/>} text='Send Message'/>
+                              </Link>
+                              <Button  icon={<InviteToPlayIcon/>} isIcon={true}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
 
 
-                          </div>
+                            </div>
 
-                          </>
-                        :
-                        null
-                        
-                      }
-                    </Buttons>
+                            </>
+                          :
+                            null
+                        }
+                      </Buttons>
                   }
 
                 </div>
