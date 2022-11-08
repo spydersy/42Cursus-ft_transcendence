@@ -42,8 +42,9 @@ import { WsGuard } from './auth/jwt.strategy';
       // this.server.to(payload.channelId).emit('event', ret.payload);
       client.to(payload.channelId).emit('msg_event', ret.payload);
     }
-    else
-      this.server.to(ret.login).emit('event', ret.payload)
+    // else
+    //   this.server.to(ret.login).emit('event', ret.payload) // fix this TODO
+    
   }
 
 
