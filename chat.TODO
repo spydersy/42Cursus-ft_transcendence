@@ -1,20 +1,8 @@
-CRUD Channel:
-- [ ] Create Channel(private/public/protected)
-- [ ] Read Channels(Get all public/protected channels)
-- [ ] Read Channels(Get all managed Channels)
-- [ ] Read Channels(Get my channels)
-- [ ] Update Channel(Switch btwn public/private/protected)
-- [ ] Delete Channel
-
-CRUD Users:
-- [ ] Add User To Channel
-- [ ] Update User in channel(set admin/unset admin/
-        Ban user/ Unban User/mute user/ unmute user)
-- [ ] Delete User
-
-CRUD Messages:
-- [ ] Send Message(in channel/muted or not/ banned or not)
-- [X] Get Mesaages(in channel / banned or not)
+CHAT:
+- [ ] Join Channel
+- [ ] Leave Channel
+- [ ] Chanege Channel Acccess
+- [ ] Kick Users
 
 ACHIEVEMENTS SYSYEM:
 - [X] Create room Index[0]
