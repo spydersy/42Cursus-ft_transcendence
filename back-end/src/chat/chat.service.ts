@@ -13,6 +13,7 @@ interface ManyUsers {
 interface SocketRes {
     stat: boolean;
     payload: any;
+    login: string;
 }
 
 enum USERSTAT{
@@ -111,13 +112,14 @@ export class ChatService {
     }
 
     async SendMessage(me: number, messageContent: string, channelId: string) {
-        let socketRes: SocketRes = {stat: false, payload: null};
+        let socketRes: SocketRes = {stat: false, payload: null, login: null};
         const userStat = await this.PostMessageValidationLayer(me, channelId);
-
         console.log("__USER__STAT__DBG__ : ", userStat);
         if (userStat === USERSTAT.NOTFOUND || userStat === USERSTAT.MUTED
             || userStat === USERSTAT.BANNED || userStat === USERSTAT.BLOCKED) {
+            const meDto = await this.userService.GetUserById(me);
             socketRes.stat = false;
+            socketRes.login = meDto.login;
             socketRes.payload =  userStat === USERSTAT.NOTFOUND ? 'User or Channel Not Found'
             : userStat === USERSTAT.BANNED ? 'Banned User'
             : userStat === USERSTAT.BLOCKED ? 'Blocked User'
@@ -143,6 +145,7 @@ export class ChatService {
         delete msg.sender;
         socketRes.stat = true;
         socketRes.payload = msg;
+        socketRes.login = msg.sender.displayName;
         console.log("__ENDPOINT__01__");
         return socketRes;
     }
@@ -269,9 +272,11 @@ export class ChatService {
         if (((userInChannel.permission === PERMISSION.ADMIN || userInChannel.permission === PERMISSION.OWNER)
             && meDto.permission === PERMISSION.ADMIN) || userInChannel.restriction === RESTRICTION.BANNED)
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'You Dont Have Rights To Update This User'});
-        await this.prisma.channelsUsers.update({
+        console.log("__DBG__UPDATE__USER__");
+        await this.prisma.channelsUsers.updateMany({
             where: {
-                userId_channelId: {userId, channelId},
+                userId: userDto.id,
+                channelId: channelId,
             },
             data: { permission: role}
         });
@@ -342,7 +347,7 @@ export class ChatService {
         }
     }
 
-    async ApplieMuteRestriction(userInChannel: any) {
+    async ApplieMuteRestriction(userInChannel: any, duration: number) {
         if (userInChannel.restriction !== RESTRICTION.BANNED)
             await this.prisma.channelsUsers.updateMany({
                 where: {
@@ -350,8 +355,8 @@ export class ChatService {
                     channelId: userInChannel.channelId
                 },
                 data: {
-                    restriction: RESTRICTION.MUTED,
-                    duration: 30
+                    restriction: duration === 0 ? RESTRICTION.NULL : RESTRICTION.MUTED,
+                    duration: duration
                 }
             });
     }
@@ -385,7 +390,7 @@ export class ChatService {
         if (restriction === RESTRICTION.BANNED)
             this.ApplieBanRestriction(userInChannel);
         else if (restriction === RESTRICTION.MUTED)
-            this.ApplieMuteRestriction(userInChannel);
+            this.ApplieMuteRestriction(userInChannel, duration);
         else if (restriction === RESTRICTION.NULL)
             this.ApplieUnbanRestriction(userInChannel);
         return res.status(HttpStatus.OK).send({'message': 'User Successefully Updated'});
