@@ -374,10 +374,10 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       var newRoom = new GameService(myuuid)
       newRoom.status = "AiGame"
       newRoom.joinPlayer(payload , client.id)
-      newRoom.joinPlayer("ai_1" , "ai_1")
+      newRoom.joinPlayer("drVegaPunk" , "drVegaPunk")
       client.join(newRoom.roomName)
       this.roomArray.push(newRoom)
-      this.wss.to(newRoom.roomName).emit("startGame" , {player1 : payload , player2: "ai_1"})
+      this.wss.to(newRoom.roomName).emit("startGame" , {player1 : payload , player2: "drVegaPunk"})
       console.log("__PLAYAI___DBG: ", )
       this.wss.emit("change" , this.getArrayData() )
 
