@@ -43,7 +43,7 @@ export class ChatController {
     }
 
     //DONE
-    @Delete('LeaveChannel')
+    @Delete('LeaveChannel/:user')
     async DeleteUserFromChannel(@Req() req, @Query('channel') channelId, @Res() res) {
       if (channelId !== undefined)
         return this.chatService.DeleteUserFromChannel(req.user.userId, req.params.user, channelId, res);

@@ -25,21 +25,20 @@ export class GameService {
     // score: {score1 : number , score2 : number};
 
 
-   constructor(roomName : string)
-   {
+    constructor(roomName : string)
+    {
    //   this.logger.log("client is disconnected")
-       this.prisma = new PrismaService();
-       this.userService = new UserService(this.prisma, null);
-       this.roomName = roomName;
-       this.score = {score1 : 0 , score2 : 0}
-       this.ball = {size : 20 , x :  500 , y :350}
-       this.direction = { x :  3 , y :3}
-       this.status  = "waiting";
-       this.paddel2 = {x : 1000 - 30 , y : 0}
-       this.predict = 0;
-       this.predicty = 0;
-
-   }
+        this.prisma = new PrismaService();
+        this.userService = new UserService(this.prisma, null);
+        this.roomName = roomName;
+        this.score = {score1 : 0 , score2 : 0}
+        this.ball = {size : 20 , x :  500 , y :350}
+        this.direction = { x :  3 , y :3}
+        this.status  = "waiting";
+        this.paddel2 = {x : 1000 - 30 , y : 0}
+        this.predict = 0;
+        this.predicty = 0;
+    }
 
     joinPlayer(login : string , id : string)
     {
@@ -63,10 +62,10 @@ export class GameService {
                 return this.roomPlayers[i];
             }
         }
-       return null
-   }
+        return null
+    }
 
-   async saveGame( mode: MODE) {
+    async saveGame( mode: MODE) {
         const player1Dto = await this.prisma.users.findUnique({ where: { login: this.roomPlayers[0].login}});
         const player2Dto = await this.prisma.users.findUnique({ where: { login:   this.roomPlayers[1].login}});
 
@@ -95,26 +94,22 @@ export class GameService {
                 }
             }
         });
-   }
+    }
 
 
-   changeId(id : string , login : string)
-   {
-
+    changeId(id : string , login : string)
+    {
         //    console.log("players number : " , this.roomPlayers.length)
-       for (let i = 0; i < this.roomPlayers.length; i++) {
+        for (let i = 0; i < this.roomPlayers.length; i++) {
+            if ( this.roomPlayers[i].login === login )
+            {
+                this.roomPlayers[i].id = id
+            }
+        }
+    }
 
-           if ( this.roomPlayers[i].login === login )
-           {
-
-               this.roomPlayers[i].id = id
-           }
-       }
-
-   }
-
-   getPlayerbyLogin(id : string)
-   {
+    getPlayerbyLogin(id : string)
+    {
 
        for (let i = 0; i < this.roomPlayers.length; i++) {
 
