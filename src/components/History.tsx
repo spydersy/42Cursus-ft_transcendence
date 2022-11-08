@@ -92,7 +92,7 @@ export  function HistoryComponent() {
 
 const Conta = styled.div`
 
-    width: 90%;
+    width: 100%;
     height: auto;
     display: flex;
     align-items: center;
@@ -108,7 +108,8 @@ const HistoryComponentStyle = styled.div`
 
     flex: 1;
     height:300px;
-    min-width: 100%;
+    width: 95%;
+    min-width: 95%;
     min-height: 300px;
     max-height: 300px;
     display: flex;
@@ -117,9 +118,25 @@ const HistoryComponentStyle = styled.div`
     background: #171A22;
     flex-direction: column;
     border-radius: 10px ;
-    padding: 0 15px;
-    overflow: scroll;
+    /* padding: 0 15px; */
+    margin: 0 auto ;
+    overflow-y: scroll;
     border : 1px solid ${props => props.theme.colors.border};;
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent; 
+    } 
+
+    &::-webkit-scrollbar-thumb {
+      background: ${props => props.theme.colors.primarybg};
+    } 
+
+    &::-webkit-scrollbar-thumb:hover { 
+      background: ${props => props.theme.colors.primarybg};
+    }
 `
 const Head = styled.div`
     margin-bottom: 20px;
@@ -200,13 +217,12 @@ const GameCompStyle = styled.div<GameCompProps>`
     display: flex;
     align-items: center;
     background: linear-gradient(270deg, #157DBD 3.1%, rgba(21, 125, 189, 0.82) 44.76%, rgba(21, 125, 189, 0.58) 72.2%, #FFFFFF 100.65%); */
-    width: 100%;
+    width: 95%;
 
     height: 80px;
     background: ${props => props.theme.colors.bg};
-    border-top: 2px solid  ${props => props.theme.colors.purple};
-    border-bottom: 2px solid  ${props => props.theme.colors.purple};
-    border-left: 2px solid  ${props => props.theme.colors.purple};
+    border: 2px solid  ${props => props.theme.colors.purple};
+    margin: 0 auto;
     border-radius : 10px;
     margin-bottom: 10px;
     display: flex;
