@@ -33,6 +33,7 @@ services:
   front-end:
     depends_on:
       - dev-db
+      - back-end
     build:
       context: ./front-end
     ports:
