@@ -156,7 +156,8 @@ export class GameService {
                 include: {
                     player1: true,
                     player2: true,
-                }
+                },
+                orderBy: {date: 'desc'}
             });
         }
         else {
@@ -173,8 +174,10 @@ export class GameService {
                 include: {
                     player1: true,
                     player2: true,
-                }
-            });
+                },
+                orderBy: {date: 'desc'}
+            },
+            );
         }
         if (History.length !== 0) {
             History.forEach(game => {
