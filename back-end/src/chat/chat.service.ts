@@ -280,7 +280,7 @@ export class ChatService {
         return res.status(HttpStatus.OK).send({'message': 'User Updated successfully'});
     }
 
-    async DeleteUserFromChannel(userId: number, user: string, channelId: string, @Res() res) {
+    async DeleteUserFromChannel(userId: number, channelId: string, @Res() res) {
         const meDto = await this.prisma.channelsUsers.findUnique({
             where: {userId_channelId: {userId, channelId},},
         });
@@ -315,6 +315,25 @@ export class ChatService {
             }
         }
         return res.status(HttpStatus.OK).send({'message': 'User Updated successfully'});
+    }
+
+    async KickUserFromChannel(me: number, user: string, channelId: string, @Res() res) {
+        const userDto = await this.userService.GetUserByLogin(user);
+        if(userDto === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+        const userInChannel = await this.FindUserInChannel(userDto.id, channelId);
+        const meInChannel = await this.FindUserInChannel(me, channelId);
+        if (userInChannel === null || meInChannel === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'User or Channel Does Not Exist'});
+        if (this.CanUpdateUserRestriction(meInChannel, userInChannel) === false)
+            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
+        await this.prisma.channelsUsers.deleteMany({
+            where: {
+                channelId: channelId,
+                userId: userInChannel.userId
+            }
+        });
+        return res.status(HttpStatus.OK).send({'message': 'User Removed Successefully'});
     }
 
     CanUpdateUserRestriction(meInChannel: any, userInChannel: any) : boolean {

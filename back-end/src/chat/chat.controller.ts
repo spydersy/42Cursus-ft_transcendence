@@ -43,10 +43,18 @@ export class ChatController {
     }
 
     //DONE
-    @Delete('LeaveChannel/:user')
+    @Delete('leaveChannel')
     async DeleteUserFromChannel(@Req() req, @Query('channel') channelId, @Res() res) {
       if (channelId !== undefined)
-        return this.chatService.DeleteUserFromChannel(req.user.userId, req.params.user, channelId, res);
+        return this.chatService.DeleteUserFromChannel(req.user.userId, channelId, res);
+      return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Query Not Set Properly'});
+    }
+
+    //DONE
+    @Delete('kickUser/:user')
+    async KickUserFromChannel(@Req() req, @Query('channel') channelId, @Res() res) {
+      if (channelId !== undefined)
+        return this.chatService.KickUserFromChannel(req.user.userId, req.params.user, channelId, res);
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Query Not Set Properly'});
     }
 

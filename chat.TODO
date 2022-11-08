@@ -1,8 +1,8 @@
 CHAT:
-- [ ] Join Channel
-- [ ] Leave Channel
+- [X] Join Channel
+- [X] Leave Channel
 - [ ] Chanege Channel Acccess
-- [ ] Kick Users
+- [X] Kick Users
 
 ACHIEVEMENTS SYSYEM:
 - [X] Create room Index[0]
