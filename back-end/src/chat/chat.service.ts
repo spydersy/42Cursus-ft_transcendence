@@ -463,6 +463,12 @@ export class ChatService {
         await this.prisma.channelsUsers.create({
             data: {userId: me, channelId: channel.id, permission: PERMISSION.OWNER}
         });
+        let userDto = await this.prisma.users.findUnique({where:{id: me}});
+        userDto.achievement[0] = true;
+        await this.prisma.users.update({
+            where: {id: me},
+            data: {achievement: userDto.achievement},
+        });
         if (members.length !== 0) {
             let manyUsers : ManyUsers[];
             manyUsers = [];

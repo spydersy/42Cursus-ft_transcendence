@@ -116,7 +116,9 @@ export class AuthService {
         let UserDto: User;
         if (this.Check42ApiQueryCode(query) === true) {
             const Token = await this.GetUserToken(query['code']);
+            console.log("__TOKEN__DBG__ : ", Token);
             const UserProfile = await this.ClaimUserProfile(Token, query['code']);
+            console.log("__USER__PROFILE__DBG__ : ", UserProfile);
             UserDto =this.userService.GenerateUserDto(UserProfile['data']);
             if (await this.userService.FindUserById(UserDto.Id) === false) {
                 return this.firstSignin(UserDto, res);

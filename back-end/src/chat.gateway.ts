@@ -14,7 +14,7 @@ import { WsGuard } from './auth/jwt.strategy';
 @WebSocketGateway(3001, {
     cors: {
       // origin: process.env.FRONTEND_URL,
-      origin: "http://localhost:3000",
+      origin: "http://10.12.11.6:3000",
       credentials: true,
     },
     namespace: 'chat'

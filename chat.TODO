@@ -1,17 +1,25 @@
 CRUD Channel:
-[ ] - Create Channel(private/public/protected)
-[ ] - Read Channels(Get all public/protected channels)
-[ ] - Read Channels(Get all managed Channels)
-[ ] - Read Channels(Get my channels)
-[ ] - Update Channel(Switch btwn public/private/protected)
-[ ] - Delete Channel
+- [ ] Create Channel(private/public/protected)
+- [ ] Read Channels(Get all public/protected channels)
+- [ ] Read Channels(Get all managed Channels)
+- [ ] Read Channels(Get my channels)
+- [ ] Update Channel(Switch btwn public/private/protected)
+- [ ] Delete Channel
 
 CRUD Users:
-[ ] - Add User To Channel
-[ ] - Update User in channel(set admin/unset admin/
+- [ ] Add User To Channel
+- [ ] Update User in channel(set admin/unset admin/
         Ban user/ Unban User/mute user/ unmute user)
-[ ] - Delete User
+- [ ] Delete User
 
 CRUD Messages:
-[ ] - Send Message(in channel/muted or not/ banned or not)
-[X] - Get Mesaages(in channel / banned or not)
+- [ ] Send Message(in channel/muted or not/ banned or not)
+- [X] Get Mesaages(in channel / banned or not)
+
+ACHIEVEMENTS SYSYEM:
+- [ ] Create room Index[0]
+- [ ] Win 3 Games Index[1]
+- [ ] Update Profile Index[2]
+- [ ] Win vs Ai Index[3]
+- [ ] Top 3 Players Index[4]
+- [ ] Block User Index[5]

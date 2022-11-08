@@ -12,7 +12,7 @@ import { emit } from 'process';
 
 @WebSocketGateway(3001, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: "http://10.12.11.6:3000",
       credentials: true,
     },
     namespace : "game"

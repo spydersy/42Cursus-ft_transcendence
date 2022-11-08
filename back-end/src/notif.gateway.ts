@@ -12,7 +12,7 @@ import { Socket, Server } from 'socket.io';
 @WebSocketGateway(3001,{
   cors: {
     // origin: process.env.FRONTEND_URL,
-    origin: "http://localhost:3000",
+    origin: "http://10.12.11.6:3000",
     credentials: true,
   },
   namespace: 'notif'
