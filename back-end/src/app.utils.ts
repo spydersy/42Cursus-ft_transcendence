@@ -12,7 +12,7 @@ export const editFileName = (req, file, callback) => {
 };
 
 export const imageFileFilter = (req, file, callback) => {
-    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
       return callback(new NotAcceptableException(), false);
     }
     callback(null, true);
