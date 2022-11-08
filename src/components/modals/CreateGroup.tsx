@@ -74,17 +74,15 @@ export default function CreateGroup(props :{closeModal : ()=>void}) {
         bodyFormData.append('name',data.name);
         bodyFormData.append('members', JSON.stringify(members));
         bodyFormData.append('type',check);
-        if (check === "protected" )
+        if (passRef.current != null)
         {
-            if (passRef.current != null)
-            {
-                var pass = passRef.current.value;
-                if (pass != "")
-                {
-                    bodyFormData.append('password',pass);
-                }
-            }
+            var pass = passRef.current.value;
+            bodyFormData.append('password',pass);
+        
         }
+
+
+
         console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
         axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 

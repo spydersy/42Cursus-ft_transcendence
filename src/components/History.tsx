@@ -204,16 +204,17 @@ const GameCompStyle = styled.div<GameCompProps>`
 
     height: 80px;
     background: ${props => props.theme.colors.bg};
-    border-top: 2px solid  ${props => props.theme.colors.border};
-    border-bottom: 2px solid  ${props => props.theme.colors.border};
-    border-left: 2px solid  ${props => props.theme.colors.border};
+    border-top: 2px solid  ${props => props.theme.colors.purple};
+    border-bottom: 2px solid  ${props => props.theme.colors.purple};
+    border-left: 2px solid  ${props => props.theme.colors.purple};
+    border-radius : 10px;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
     flex-direction: row;
     justify-content: center;
     position: relative;
-    &::after{
+    /* &::after{
         content: "";
         position: absolute;
         width: 3px;
@@ -224,7 +225,7 @@ const GameCompStyle = styled.div<GameCompProps>`
         ${props => (props.win === false) && css`
         background-color:  ${props => props.theme.colors.danger};
             `}
-    }
+    } */
     #addFriend{
         position: absolute;
         bottom: 5px;

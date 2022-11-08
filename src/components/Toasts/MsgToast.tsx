@@ -252,38 +252,39 @@ export  function FriendRequestToast(props: {data : any}) {
     wins : 0,
     losses : 0,
   })
-  const acceptFriendReq = (k: boolean)=> {
+  let joinChannels = async () => {
+    let userLogin : string;
+    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
+    {withCredentials: true} 
+    ).then((res)=>{
+      userLogin = res.data.login
+    }).catch((err)=>{
+      console.log(err)
+    })
+    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+    {withCredentials: true} 
+    ).then((res)=>{
+      var myChannels : Array<string> = [];
+      for (let index = 0; index < res.data.length; index++) {
+        myChannels.push(res.data[index].channelId);
+      }
+      myChannels.push(userLogin);
+      // mychannels.pushback(userlogin)
+      socket.emit('joinRoom', myChannels)
+    }).catch((err)=>{
+      console.log(err)
+    })
+    }
+  const acceptFriendReq = async(k: boolean)=> {
 
 
     if (k)
     {
-
-      console.log(User?.login )
-      axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+  User?.login + "?event=accept",  {withCredentials: true} 
+      await axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+  User?.login + "?event=accept",  {withCredentials: true} 
       ).then((res)=>{
-        // console.log(res)
-        socket.emit('joinRoom', [])
-
-      axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/friends/"+  User?.login ,  {withCredentials: true} 
-      ).then((res)=>{
-        console.log(res.data)
-        socket.emit('joinRoom', [])
-        // var s  = props.friends.indexOf(props.data)
-        // var l = props.friends
-        // l.splice(s , 1)
-        // props.setfriends([...l])
-        // alert("User Request Accepted" + res.status) 
-        
-      }).catch((err)=>{  })
-        // var s  = props.friends.indexOf(props.data)
-        // var l = props.friends
-        // l.splice(s , 1)
-        // props.setfriends([...l])
-        // alert("User Request Accepted" + res.status) 
-        
+        joinChannels()
       }).catch((err)=>{  })
     }
-      
     userData.then((user : UserProp | "{}")=>{
       if (user !== "{}")
       {

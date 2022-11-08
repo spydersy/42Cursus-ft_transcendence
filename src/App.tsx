@@ -150,9 +150,9 @@ function App() {
       hideProgressBar: true,
     })
   }
-  function acceptRequest (payload) {
+  async function acceptRequest (payload) {
     console.log('acceptii a sahbi:',payload)
-    
+    await joinChannels()
     toast(CustomToastAcceptFriendReq(payload) , {
       className: "toast",
       progressClassName: "toastProgress",
