@@ -143,6 +143,11 @@ export class UserService {
             return res.status(HttpStatus.OK).send({"message": `${User} Already Blocked ${BlockedUser}`});
         if (await this.IsBlockedUser(BlockedUserDto.id, UserDto.id) === true)
             return res.status(HttpStatus.FORBIDDEN).send({"message": `Cant Block this user | Reason : ${BlockedUser} Already Blocked ${User}`});
+        UserDto.achievement[5] = true;
+        await this.prisma.users.update({
+            where: {id: UserDto.id},
+            data: {achievement: UserDto.achievement}
+        });
         const user = await this.prisma.blocks.create({
             data: {
                 userId: UserDto.id,
