@@ -8,6 +8,7 @@ import { GameService } from './game/game.service';
 import { WsGuard } from './auth/jwt.strategy';
 import { MODE } from '@prisma/client';
 import {v4 as uuidv4} from 'uuid';
+import { emit } from 'process';
 
 @WebSocketGateway(3001, {
     cors: {
@@ -83,7 +84,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       if (this.roomArray[i].roomName === name)
           return i;
     }
-    return null
+    return -1
   }
 
   RemovePlayer(client : any , login : string)
@@ -181,9 +182,9 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
     this.logger.log("client is disconnected")
     var room = this.getRoombyPlayerId(client.id)
-    if (room)
+    if (room !== null)
     {
-      // console.log("__ROOM__DBG__ : ", room);
+      console.log("__ROOM__DBG__ : ", room);
       this.wss.to(room.roomName).emit("endGame" , {score: room.score, roomPlayers :   room.roomPlayers})
       this.wss.emit("change" , this.getArrayData() )
       this.RemovePlayer(client , payload)
@@ -202,7 +203,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 
       this.logger.log("challengeGame" , payload)
-  if (this.getRoombyName(payload.player1+payload.player2) === null)
+  if (this.getRoombyName(payload.player1+payload.player2) === -1)
   {
     var newRoom = new GameService(payload.player1+payload.player2)
     newRoom.joinPlayer(payload.player1 , client.id)
@@ -221,7 +222,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       var i = this.getRoombyName(payload.player1 + payload.player2)
       this.logger.log("gameAccept" , i)
 
-      if (i != null)
+      if (i !== -1)
       {
         this.logger.log("gameAccept" , i)
         client.join(this.roomArray[i].roomName)
@@ -271,9 +272,14 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       const element = this.roomArray[i];
       if (element)
       {
-        var test = { players :[element.roomPlayers[0].login ,element.roomPlayers[1].login ] , score : element.score}
+        // console.log(element)
+        console.log(element.roomPlayers)
         if (element.status != "waiting")
-          l.push(test)
+        {
+
+          var test = { players :[element.roomPlayers[0].login ,element.roomPlayers[1].login ] , score : element.score , name : element.roomName}
+            l.push(test)
+        }
       }
     }
     console.log(l)
@@ -315,7 +321,15 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   
   @SubscribeMessage('watchGame')
   addWatch(client: any, payload: any): void {
-    
+    console.log(payload)
+    var i = this.getRoombyName(payload)
+    if (i !== -1)
+     client.emit('roomNotFound')
+    else
+    {
+      client.join(payload)
+      // client.emit()
+    }
   }
   @SubscribeMessage('player1Moved')
   player1moved(client: any, payload: any): void {
@@ -368,20 +382,27 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     console.log("____DBG___SALAM")
     let myuuid = uuidv4();
     var ret  = this.playerExist(client , payload);
-    console.log(ret)
-    if (ret)
-    {
+    console.log("__PLAYAI___DBG" , ret)
+    // console.log("__PLAYAI___DBG: ", newRoom.roomPlayers)
+    for (let index = 0; index < this.roomArray.length; index++) {
+      this.roomArray[index].debug();
+
+   }
+   console.log("__PLAYAI___DBG" , ret)
+
+    // if (ret === -1)
+    // {
       var newRoom = new GameService(myuuid)
       newRoom.status = "AiGame"
       newRoom.joinPlayer(payload , client.id)
       newRoom.joinPlayer("drVegaPunk" , "drVegaPunk")
+      console.log("__PLAYAI___DBG: ", newRoom.roomPlayers)
       client.join(newRoom.roomName)
       this.roomArray.push(newRoom)
       this.wss.to(newRoom.roomName).emit("startGame" , {player1 : payload , player2: "drVegaPunk"})
-      console.log("__PLAYAI___DBG: ", )
       this.wss.emit("change" , this.getArrayData() )
 
-    }
+    // }
     for (let index = 0; index < this.roomArray.length; index++) {
       this.roomArray[index].debug();
 
