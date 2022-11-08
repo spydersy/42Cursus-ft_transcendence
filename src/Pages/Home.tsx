@@ -26,7 +26,7 @@ export default function Home(props: HomeProps) {
         <Slider/>
       </Hero>
       <GameModes settheme={(e: any)=> props.settheme(e)} />
-      <Hero style={{marginTop : "40px" }}>
+      <Hero style={{marginTop : "40px"  , flex:"1"}}>
         <HeadComponent title="History"/>
         <History />
       </Hero> 

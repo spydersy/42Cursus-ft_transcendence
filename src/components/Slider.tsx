@@ -12,7 +12,7 @@ const list  = [0,0 , 1 , 2 , 1 , 0, 0]
 interface LiveGameProps {
     players : string[],
     score : {score1 : number , score2 : number}
-
+    name : string,
 }
 export default function Slider() {
     const [main, setmain] = useState(2)
@@ -79,7 +79,7 @@ export default function Slider() {
                     classname = "emptyright"
                 else if (id <  main - 1)
                     classname = "emptyleft"
-                return<Slide to="/game/watch/salam3alata3am"
+                return<Slide to={"/game/watch/" + data.name  }
                 //  onClick={()=>animatethis(id)} 
                  className={classname}key={id}  >
                     <div className='center'>

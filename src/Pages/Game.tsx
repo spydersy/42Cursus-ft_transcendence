@@ -49,6 +49,9 @@ export default function Game(props : GameProps) {
     setshow(true)
     setplayer(loged?.login === pyload.player1 )
  })
+  gamesocket.on("roomNotFound" , (pyload : any)=>{
+    window.location.href = "/NotFound"
+ })
 
  gamesocket.off("endGame").on("endGame" , (payload)=>{
    setstart(false)
@@ -86,7 +89,7 @@ var dat : UserProp;
     const pageName = window.location.pathname.split("/")[2];
     const room = window.location.pathname.split("/")[3];
     var mode = localStorage.getItem('mode') ;
-      
+      alert(mode)
     if (data !== "{}")
     {
       dat = data
@@ -96,7 +99,8 @@ var dat : UserProp;
       {
           if (room)
           {
-
+            gamesocket.emit("watchGame" ,room )
+            
           }
       }
       else

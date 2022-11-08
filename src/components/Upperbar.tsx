@@ -129,9 +129,9 @@ interface LogoProps {
 }
 export  function LogoComponent(props : LogoProps) {
     return (
-      <a style={{marginLeft :"10px"}}href='/'>
+      <Link style={{marginLeft :"10px"}}to='/'>
         {(props.size === "small")  ? <Logo/> : <BigLogo/>}
-      </a>
+      </Link>
     )
 }
 

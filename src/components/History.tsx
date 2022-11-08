@@ -11,6 +11,7 @@ import AchievmentModal from './modals/AchievmentModal';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 import { UserProp } from './game/types';
+import EmptyComponent from './PlayerrEmptyComp';
 
 interface  matchType {
      id  : number,
@@ -80,10 +81,15 @@ export  function HistoryComponent() {
       }, [])
   return (
     <HistoryComponentStyle>
+        {list.length === 0 ? <EmptyComponent text='No Games had been played .' /> : 
+        <>
         {
+
             list.map((match : any, id : number )=>{
                 return<GameComp key={id} match={match}  />
             })
+        }
+        </>
         }
 
     </HistoryComponentStyle>
@@ -93,25 +99,26 @@ export  function HistoryComponent() {
 const Conta = styled.div`
 
     width: 100%;
-    height: auto;
     display: flex;
     align-items: center;
+    flex: 1;
+    background-color: red;
     margin-top: 20px;
     /* background: #171A22; */
     flex-direction: row;
     border-radius: 10px ;
-    padding: 0 15px;
+  
     gap: 5px;
     /* border : 1px solid ${props => props.theme.colors.border};; */
 `
 const HistoryComponentStyle = styled.div`
 
     flex: 1;
-    height:300px;
+    /* height:300px; */
     width: 95%;
     min-width: 95%;
     min-height: 300px;
-    max-height: 300px;
+    /* max-height: 300px; */
     display: flex;
     align-items: flex-start;
     /* justify-content: center; */
