@@ -65,10 +65,28 @@ export class GameService {
         return null
     }
 
-    async saveGame( mode: MODE) {
-        const player1Dto = await this.prisma.users.findUnique({ where: { login: this.roomPlayers[0].login}});
-        const player2Dto = await this.prisma.users.findUnique({ where: { login:   this.roomPlayers[1].login}});
+    async addAchievement(player1: any, player2: any, mode: MODE) {
+        let winner = this.score.score1 > this.score.score2 ? player1 : player2;
+        let loser  = this.score.score1 > this.score.score2 ? player2 : player1;
 
+        if (mode === MODE.AIBUGGY && winner.id !== 0) {
+            winner.achievement[3] = true;
+            await this.prisma.users.update({
+                where: {
+                    id: winner.id
+                },
+                data: {
+                    achievement: winner.achievement
+                }
+            });
+        }
+    }
+
+    async saveGame( mode: MODE) {
+        let player1Dto = await this.prisma.users.findUnique({ where: { login: this.roomPlayers[0].login}});
+        let player2Dto = await this.prisma.users.findUnique({ where: { login:   this.roomPlayers[1].login}});
+
+        await this.addAchievement(player1Dto, player2Dto, mode);
         await this.prisma.matchHistory.create({
             data: {
                 player1Id: player1Dto.id,
