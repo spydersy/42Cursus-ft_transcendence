@@ -18,7 +18,8 @@ import {ReactComponent as BlockIcon} from "../../assets/imgs/LogOutRoom.svg";
     login : string
     displayName : string,
     restriction: string,
-    permission: string, 
+    permission: string,
+    num: number
     restrictionTime: string,
     duration: number,
   }

@@ -26,7 +26,8 @@ interface usersType {
   login : string
   displayName : string,
   restriction: string,
-  permission: string,
+  permission: string, // OWNER=> 2 / ADMIN=> 1 / USER => 0
+  num: number,
   restrictionTime: string,
   duration: number,
 }
@@ -80,7 +81,7 @@ interface MemberProps{
         duration: 0
       }
       await axios.post( process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData,
-      {withCredentials: true} 
+      {withCredentials: true}
       ).then((res)=>{
         (k === 0 ? setrestriction("BAN") : setrestriction("NULL") )
       }).catch((err)=>{
@@ -89,26 +90,14 @@ interface MemberProps{
     };
     const OwnerMute = async () => {
       console.log("OwnerMute")
-      var  bodyFormData = {
-        channelId: props.channelId.toString(),
-        user: props.data.login,
-        restriction: "MUTE",
-        duration: 60
-      }
       setmuteModel(!muteModel)
-      // await axios.post( process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData,
-      // {withCredentials: true} 
-      // ).then((res)=>{
-      // }).catch((err)=>{
-      //   console.log(err)
-      // })
     };
     const OwnerUnMute = async () => {
       console.log("OwnerunMute")
       var  bodyFormData = {
         channelId: props.channelId.toString(),
         user: props.data.login,
-        restriction: "USER",
+        restriction: "MUTE",
         duration: 0
       }
   
@@ -119,14 +108,15 @@ interface MemberProps{
         console.log(err)
       })
     };
-    const AdminBan = () => {
-      console.log("AdminBan")
-    };
-    const AdminMute = () => {
-      setmuteModel(!muteModel)
+    // const AdminBan = () => {
+    //   console.log("AdminBan")
 
-      console.log("AdminMute")
-    };
+    // };
+    // const AdminMute = () => {
+    //   setmuteModel(!muteModel)
+
+    //   console.log("AdminMute")
+    // };
 
     const ChallengeGame = () => {
       console.log("ChallengeGame")
@@ -146,14 +136,11 @@ interface MemberProps{
       }).catch((err)=>{
         console.log(err)
       })
-
     };
 
     return (
       <MemberStyle>
-    
         <div className='data'>
-  
           <div className='avatar'>
             <AvatarComponent img={props.data.defaultAvatar}/>
           </div>
@@ -164,28 +151,17 @@ interface MemberProps{
             </span>
           </div>
         </div>
-
         <div className='buttons'>
           {props.access === "OWNER"
           &&
           <>
            {permission === "USER"? 
                   <Button size='small' isIcon={true} onClick={()=>{SetAdmin("admin")}} icon={<Admin/>}/> 
-
-
           :
           <Button size='small'   color={"#ae0b0b"} isIcon={true} onClick={()=>{SetAdmin("USER")}} icon={<Admin/>}/> 
-
-          
-
         }
-          {restriction === "NULL"? 
-          <Button size='small' color={"#ae0b0b"}  isIcon={true} onClick={()=>{OwnerBan(0)}} icon={<Ban/>}/>
-
-          :
-          <Button size='small'  isIcon={true} onClick={()=>{OwnerBan(1)}} icon={<Ban/>}/>
-          
-
+          {restriction === "NULL"? <Button size='small' color={"#ae0b0b"}  isIcon={true} onClick={()=>{OwnerBan(0)}} icon={<Ban/>}/>
+          :<Button size='small'  isIcon={true} onClick={()=>{OwnerBan(1)}} icon={<Ban/>}/>
         }
           {
             muteModel &&
@@ -197,41 +173,35 @@ interface MemberProps{
                   <MuteModal setPermission={(e)=>(setrestriction(e))}  closeModal={()=>setmuteModel(false)} data={props.data} channelId={props.channelId} />
                   </Modal>
           }
-          {restriction === "MUTED" ? 
-          <Button size='small' color={"#ae0b0b"} isIcon={true} onClick={()=>{OwnerUnMute()}} icon={<Mute/>}/>
-          :
-          <Button size='small'  isIcon={true} onClick={()=>{OwnerMute()}} icon={<Mute/>}/>
+          {restriction === "MUTED" ? <Button size='small' color={"#ae0b0b"} isIcon={true} onClick={()=>{OwnerUnMute()}} icon={<Mute/>}/>
+          :<Button size='small'  isIcon={true} onClick={()=>{OwnerMute()}} icon={<Mute/>}/>
         }
           </>
-          
         }
           {(props.access === "ADMIN"
           && props.data.permission !== "OWNER" )&& 
           <>
-          <Button size='small'color={"#ae0b0b"}   isIcon={true} onClick={()=>{AdminBan()}} icon={<Ban/>}/>
-          {restriction === "MUTED" ? 
-          <Button size='small' color={"#ae0b0b"} isIcon={true} onClick={()=>{OwnerUnMute()}} icon={<Mute/>}/>
-          :
-          <Button size='small'  isIcon={true} onClick={()=>{OwnerMute()}} icon={<Mute/>}/>
+          {restriction === "NULL"? <Button size='small' color={"#ae0b0b"}  isIcon={true} onClick={()=>{OwnerBan(0)}} icon={<Ban/>}/>
+          :<Button size='small'  isIcon={true} onClick={()=>{OwnerBan(1)}} icon={<Ban/>}/>
         }
+          {/* <Button size='small'color={"#ae0b0b"}   isIcon={true} onClick={()=>{AdminBan()}} icon={<Ban/>}/> */}
           {
             muteModel &&
             <Modal
-                    isOpen={muteModel}
-                    onRequestClose={() => setmuteModel(false)}
-                    hideModal={() => setmuteModel(false)}
-                >
+            isOpen={muteModel}
+            onRequestClose={() => setmuteModel(false)}
+            hideModal={() => setmuteModel(false)}
+            >
                   <MuteModal setPermission={(e)=>(setrestriction(e))} closeModal={()=>setmuteModel(false)} data={props.data} channelId={props.channelId} />
                   </Modal>
           }
+          {restriction === "MUTED" ? <Button size='small' color={"#ae0b0b"} isIcon={true} onClick={()=>{OwnerUnMute()}} icon={<Mute/>}/>
+          :<Button size='small'  isIcon={true} onClick={()=>{OwnerMute()}} icon={<Mute/>}/>
+        }
           </>
-          
         }
         <Button size='small'  isIcon={true} onClick={()=>{ChallengeGame()}} icon={<GameIcon/>}/>
-  
         </div>
-      
-      
       </MemberStyle>
     )
   }
@@ -297,7 +267,6 @@ interface MemberProps{
         restriction: "MUTE",
         duration: muteTime
       }
-
       await axios.post( process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData,
       {withCredentials: true} 
       ).then((res)=>{
@@ -316,12 +285,10 @@ interface MemberProps{
         <Button type={muteTime === 1800? 'primary':'secondary'} text='30 min' onClick={()=>setmuteTime(1800)} />
         <Button type={muteTime === 3600? 'primary':'secondary'} text='1 hr' onClick={()=>setmuteTime(3600)} />
         <Button type={muteTime === 86400? 'primary':'secondary'} text='1 day' onClick={()=>setmuteTime(86400)} />
-
         </div>
         <div className='buttons'>
         <Button text='confirm' onClick={()=>OwnerMute()} />
         <Button  type='secondary' text='cancel' onClick={()=>props.closeModal()} />
-
         </div>
       </MuteModalStyle>
     )

@@ -40,7 +40,18 @@ interface UserProp {
   wins : number
   losses : number
 }
+export  function MutedToast() {
+  return (
+    <ToastStyle to="">
 
+        <div className='data'>
+            <div className='msg'>
+              Please ! Take a break,  You are Muted for a while
+            </div>
+        </div>
+    </ToastStyle>
+  )
+}
 
 export  function AcceptToast(props: {data : ssss}) {
   const [User, setUser] = useState<UserProp>({

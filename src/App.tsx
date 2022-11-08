@@ -34,7 +34,7 @@ import SocketTesting from './components/testing/SocketTesting';
 import ChatTesting from './components/testing/ChatTesting';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import MsgToast , {AcceptToast, FriendRequestToast, GameChallengeToast, CancelToast} from './components/Toasts/MsgToast';
+import MsgToast , {AcceptToast, FriendRequestToast, GameChallengeToast, CancelToast, MutedToast} from './components/Toasts/MsgToast';
 import { ReactComponent as CloseIcon } from "./assets/imgs/close-icon.svg";
 import { UserContext } from './context/UserContext';
 
@@ -80,6 +80,12 @@ const CustomToastWithLink = (data : msgType) => (
   </div>
 );
 
+
+const CustomToastMutedUser = () => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <MutedToast />
+  </div>
+);
 const CustomToastAcceptFriendReq = (data : ssss) => (
   <div style={{width: "100%" , height : "100%"}}>
         <AcceptToast data={data}/>
@@ -154,6 +160,14 @@ function App() {
       hideProgressBar: true,
     })
   }
+  function handleevent (payload) {
+    toast(CustomToastMutedUser() , {
+      className: "toast",
+      progressClassName: "toastProgress",
+      autoClose: 2000,
+      hideProgressBar: true,
+    })
+  }
   function handelChallengeAccept (payload) {
     localStorage.setItem("mode","1v1")
     navigate("/game/")
@@ -166,12 +180,15 @@ function App() {
     socket.on('challeneEvent', handleChallenge);
     socket.on('recievedRequest', handleRequest)
     socket.on('acceptedReq', acceptRequest)
+    socket.on('event', handleevent);
     gameSocket.on('challengeAccepted', handelChallengeAccept)
     return () => {
       socket.removeListener('msg_event', hundleMsg);
       socket.removeListener('challeneEvent', handleChallenge);
       socket.removeListener('recievedRequest', handleRequest);
       socket.removeListener('acceptedReq', acceptRequest);
+      socket.removeListener('event', handleevent);
+
       gameSocket.removeListener('challengeAccepted', handelChallengeAccept);
     }
     })

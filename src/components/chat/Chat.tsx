@@ -29,7 +29,7 @@ interface UserProp {
     displayName : string,
     restriction: string,
     permission: string, 
-
+    num: number,
     restrictionTime: string,
     duration: number,
   }
@@ -82,7 +82,7 @@ export default function Chat() {
     restrictionTime: "string",
     duration: 0,
     permission: "string", 
-
+    num: 0,
       }]
     })
     const userData = useContext(UserContext)
