@@ -33,12 +33,19 @@ export class ProfileService {
     }
 
     async UploadAvatar(uploadedAvatart: string, userId: number, @Res() res) {
+        let userDto = await this.prisma.users.findUnique({
+            where: {
+                id: userId
+            }
+        });
+        userDto.achievement[2] = true;
         let uploaded = await this.prisma.users.update({
             where: {
                 id: userId
             },
             data: {
                 defaultAvatar: uploadedAvatart,
+                achievement: userDto.achievement,
             }
         });
         console.log("__UPLOAD__uploaded__ : ", uploaded);

@@ -17,9 +17,9 @@ CRUD Messages:
 - [X] Get Mesaages(in channel / banned or not)
 
 ACHIEVEMENTS SYSYEM:
-- [ ] Create room Index[0]
+- [X] Create room Index[0]
 - [ ] Win 3 Games Index[1]
-- [ ] Update Profile Index[2]
+- [X] Update Avatar Index[2]
 - [ ] Win vs Ai Index[3]
 - [ ] Top 3 Players Index[4]
 - [ ] Block User Index[5]
