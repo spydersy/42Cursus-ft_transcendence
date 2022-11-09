@@ -27,6 +27,7 @@ export default function Setting() {
     const [QrCode, setQrCode] = useState("")
     const [values, setValues] = useState(['', '', '','','','']);
     const [SaveName, setSaveName] = useState("");
+    const [alert, setalert] = useState(false);
 
     const error = (props: string) => {
         toast.error(props, {
@@ -110,7 +111,9 @@ export default function Setting() {
         if (Name.trim().length >= 25)    
         {
             enteredName = Name.trim().slice(0, 25);
-            warning("YOur Display Name must be less than 25 characters");
+            setalert(true)
+
+            // warning("YOur Display Name must be less than 25 characters");
             // MinLenghtname();
         }
         else
@@ -214,7 +217,8 @@ export default function Setting() {
         
         if (name.length === 0)
         {
-            warning("Display Name empty or invalid Friendo!!!");
+            // warning("Display Name empty or invalid Friendo!!!");
+            setalert(true)
             // NoNameError();
             return;
         }
@@ -253,7 +257,7 @@ export default function Setting() {
                 <Line></Line>
         
                 <Row>
-                        <InputComponent onChange={(e)=>{inputHandler(e)}} value={data.displayName} type='text' lable='Display Name' />
+                        <InputComponent alert={alert} onChange={(e)=>{inputHandler(e)}} value={data.displayName} type='text' lable='Display Name' />
                         <InputComponent  disabled={true} onChange={(e)=>{inputHandler(e)}} value={data.login} type='text' lable='Login' /> 
                 
                         <ToggleSwitchStyle>

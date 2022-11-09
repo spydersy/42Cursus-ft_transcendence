@@ -20,13 +20,13 @@ interface HomeProps {
 export default function Home(props: HomeProps) {
   // const [index, setindex] = useState(1)
   return (
-    <div className='container' >
+    <div className='container'  >
       <Hero>
         <HeadComponent title="Live Games"/>
         <Slider/>
       </Hero>
       <GameModes settheme={(e: any)=> props.settheme(e)} />
-      <Hero style={{marginTop : "40px"  , flex:"1"}}>
+      <Hero style={{marginTop : "40px"  }}>
         <HeadComponent title="History"/>
         <History />
       </Hero> 

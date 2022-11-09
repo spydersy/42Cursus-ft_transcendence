@@ -20,8 +20,9 @@ export default function Slider() {
   const socket = useContext(SocketGameContext)
     socket.off("change").on("change" , (data : LiveGameProps[])=>{
         setlist([...data])
-
-        setmain(data.length / 2 > 1 ? data.length / 2  : 0 )
+        var ma  : number= data.length / 2 > 1 ? data.length / 2  : 0 
+        setmain(Math.floor(ma))
+        console.log("maiiin : " , )
     })
     socket.on("changeScoreLive" , (data : any)=>{
 

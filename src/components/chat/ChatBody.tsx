@@ -1,4 +1,3 @@
-
 import axios from 'axios'
 import React , {useEffect , useState , useContext, useRef} from 'react'
 import styled  from "styled-components"
@@ -58,13 +57,10 @@ const [UserData, setUserData] = useState<UserProp>({
     losses : 0,
 })
 const first = useRef(null)
-
     useEffect(() => {
       User.then((data : UserProp | "{}" )=>{
         if (data !== "{}")
           setUserData(data)
-     
-
       })
     }, [])
     useEffect(() => {
@@ -72,65 +68,43 @@ const first = useRef(null)
     }, [props.msgs])
     const scroolDown  = ()=>
     {
-
       if (props.msgs.length != 0)
       {
         var s = document.getElementsByClassName("bar" )
-        
         console.log(s[props.msgs.length-1])
         if (s[props.msgs.length-1])
           s[props.msgs.length-1].scrollIntoView({behavior: 'smooth'});
-
       }
     }
     return (
       <ChatBodyStyle>
         <div className='wrapper'>
-
         {
-          
           props.msgs.map((object: any , i : number)=>{
-        
-
+            console.table(object)
               if (object.senderId != UserData.id)
               {
-
-
                 return <div id={"bar"+ i} className='bar' key={i} >  <MsgNotStyle>
                   <div className='name'>{object.displayName}</div>
                   {object.content}
                 <span>
-                  7:20pm
+                  {object.date.slice(11, 16)}
                 </span>
                 </MsgNotStyle></div>
-
               }
               else
               {
               return <div id={"bar"+ i} className='bar'  key={i} > <MsgStyle>
-
                 {object.content}
                 <span>
-                7:20pm
+                {object.date.slice(11, 16)}
               </span>
                 </MsgStyle></div>
-
               }
-            
-              
-        
-    
-  
-             
-            
-
           })
         }
         {/* <div className='butt' ref={props.refss} /> */}
-
         </div>
-        
-       
       </ChatBodyStyle>
     )
   }

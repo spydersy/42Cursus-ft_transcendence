@@ -11,8 +11,12 @@ import { Button } from './SignIn'
 import io, { Socket } from "socket.io-client";
 import {
 Link
+,
+useNavigate
+
 } from "react-router-dom";
 import { AlterType } from 'tsparticles-engine'
+
 import { UserContext } from '../context/UserContext'
 interface UserProp {
   id : string,
@@ -24,7 +28,6 @@ interface UserProp {
   wins : number
   losses : number
 }
-
 interface GameProps {
   theme: any
   
@@ -37,6 +40,7 @@ export default function Game(props : GameProps) {
   const [opennet, setOpennet] = useState<UserProp>()
   const gamesocket = useContext(SocketGameContext)
   const UserData = useContext(UserContext)
+  const navigate = useNavigate();
 
   const [end, setend] = useState(false)
   const [start, setstart] = useState(false)
@@ -49,8 +53,11 @@ export default function Game(props : GameProps) {
     setshow(true)
     setplayer(loged?.login === pyload.player1 )
  })
+  gamesocket.on("watchGame" , (pyload : any)=>{
+    fetchPlayersData(pyload.player1 , pyload.player2)
+ })
   gamesocket.on("roomNotFound" , (pyload : any)=>{
-    window.location.href = "/NotFound"
+    navigate ("/NotFound")
  })
 
  gamesocket.off("endGame").on("endGame" , (payload)=>{

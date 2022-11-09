@@ -114,7 +114,7 @@ const Conta = styled.div`
 const HistoryComponentStyle = styled.div`
 
     flex: 1;
-    /* height:300px; */
+    height:300px;
     width: 95%;
     min-width: 95%;
     min-height: 300px;
