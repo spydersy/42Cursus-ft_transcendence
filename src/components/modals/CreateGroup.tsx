@@ -126,15 +126,14 @@ x
             }} onChange={(e)=>{
              setdata({...data , name : e.target.value})
             }} type='text' lable='Group name' alert={alertt} placeholder='Enter Group name'/>
-<Row2>
-            <input type="radio" defaultChecked  onChange={handleRadioChange} id="public" name="status" value="public"/>
-            <label>Public</label>
-            <input type="radio" onChange={handleRadioChange} id="private" name="status" value="private"/>
-            <label>Private</label>
-            <input type="radio" onChange={handleRadioChange} id="protected" name="status" value="protected"/>
-            <label>Protected</label>
-
-</Row2>
+            <Row2>
+                <input type="radio" defaultChecked  onChange={handleRadioChange} id="public" name="status" value="public"/>
+                <label>Public</label>
+                <input type="radio" onChange={handleRadioChange} id="private" name="status" value="private"/>
+                <label>Private</label>
+                <input type="radio" onChange={handleRadioChange} id="protected" name="status" value="protected"/>
+                <label>Protected</label>
+            </Row2>
             </div>
 
 
@@ -174,6 +173,14 @@ const CreateGroupStyle = styled.div`
 display:flex;
 align-items: flex-start;
 flex-direction: column;
+.btp {
+    /* background-color: aqua; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* position: absolute; */
+    width: 100%;
+}
 `;
 const Form = styled.form`
 margin-top: 15px;
@@ -326,7 +333,6 @@ width: 100%;
     `
   }
 `;
-
 const MembersCont= styled.div`
 margin: 15px 0;
   width: calc(100% - 10px);
@@ -373,14 +379,11 @@ margin: 15px 0;
     }
   
 `;
-
-
 interface  MemberProp{
     members : string[],
     setmembers : (e : any) => void,
     id: string,
 }
-
 
 export  function Member(props:MemberProp ) {
     const [img, setimg] = useState("")
@@ -418,7 +421,6 @@ export  function Member(props:MemberProp ) {
     </MembersStyle>
   )
 }
-
 const MembersStyle= styled.div`
     margin: 0 4px;
     width: 40px;
@@ -460,3 +462,166 @@ const MembersStyle= styled.div`
         }
     }
 `;
+
+
+interface  UpdateGroupProp{
+    members : string[],
+    setmembers : (e : any) => void,
+    id: string,
+    closeModal : ()=>void,
+}
+
+export  function UpdateGroup(props : UpdateGroupProp) {
+    
+   
+    const [members, setmembers] = useState([
+     
+    ])
+    const [data, setdata] = useState({
+        name : "",
+        icone : '',
+        type : "",
+        password : "",
+        members :[]
+    })
+    const [check, setcheck] = useState("public")
+    const [hide, sethide] = useState(false)
+    const [alertt, setalert] = useState(false)
+    const [img, setimg] = useState("")
+    const groupName = useRef(null)
+    const passRef = useRef<HTMLInputElement>(null)
+    // const first = useRef(second)
+    const uploadFile = ()=>{
+        var e = document.getElementById("fileInput")
+        e?.click()
+    }
+    const handleRadioChange = (e : any)=>{
+        if (e.target.id === "protected")
+        {
+            if (e.target.checked === true)
+            {
+                setcheck("protected")
+                setdata({...data, type: "protected"})
+
+            }
+        }
+        else if (e.target.id === "public")
+        {
+            if (e.target.checked === true)
+            {
+                setdata({...data, type: "public"})
+                setcheck("public")
+            }
+        }
+        else if (e.target.id === "private")
+        {
+            if (e.target.checked === true)
+            {
+
+                setdata({...data, type: "private"})
+                setcheck("private")
+            }
+        }
+        console.log(e.target)
+    }
+    const createGroup = ()=>{
+        //check for valid input
+        var  bodyFormData = new FormData();
+        bodyFormData.append('icone',data.icone);
+        bodyFormData.append('name',data.name);
+        bodyFormData.append('members', JSON.stringify(members));
+        bodyFormData.append('type',check);
+        if (passRef.current != null)
+        {
+            var pass = passRef.current.value;
+            bodyFormData.append('password',pass);
+        
+        }
+
+
+
+        console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
+        axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
+        {withCredentials: true} 
+      ).then((res)=>{
+        console.log(res.data)
+        // props.close.closeModal()
+      }).catch((err)=>{
+        // if (data.name === "")
+            setalert(true)
+        console.log(err)
+        })
+        
+    }
+    useEffect(() => {
+        var e = document.getElementById("fileInput")
+        e?.addEventListener("change", (c :any)=>{
+            console.log(c.target.files[0])
+          
+            setimg( URL.createObjectURL(c.target.files[0]))
+            setdata({...data , icone: c.target.files[0]})
+        })
+    }, [data])
+    // console.log("__MEMBERS__DBG__ : ", members);
+  return (
+    <CreateGroupStyle>
+        <div className='btp'>
+            <HeadComponent title={"Update Group"}/>
+            <Button type='primary' text='Create' onClick={createGroup} />
+        </div>
+        <Form>
+            <Row >
+                <div  onClick={uploadFile} className='groupImg' >
+                    <input id="fileInput" type="file" hidden />
+                    {img === ""? < Image/> :  <img style={{width  : "100%", height : "100%"  }} src={img}alt="xx" />}
+                <div className='hov'>
+    x
+                </div>
+                </div>
+                {/* <input className='inputText' type="text"  placeholder='Enter group name ..'/> */}
+                <div className='con' >
+                <InputComponent onFocus={()=>{
+                    setalert(false)
+                }} onChange={(e)=>{
+                setdata({...data , name : e.target.value})
+                }} type='text' lable='Group name' alert={alertt} placeholder='Enter Group name'/>
+                <Row2>
+                    <input type="radio" defaultChecked  onChange={handleRadioChange} id="public" name="status" value="public"/>
+                    <label>Public</label>
+                    <input type="radio" onChange={handleRadioChange} id="private" name="status" value="private"/>
+                    <label>Private</label>
+                    <input type="radio" onChange={handleRadioChange} id="protected" name="status" value="protected"/>
+                    <label>Protected</label>
+                </Row2>
+                </div>
+
+
+            </Row>
+            {/* <Row2 > */}
+                <InputPassWord  defaultChecked={(check === "protected")}>
+                <InputComponent refs={passRef} type='password' placeholder='Group Password'/>
+
+                </InputPassWord>
+            {/* </Row2> */}
+            <MembersCont>
+                <div onClick={()=>{sethide(!hide)}} className='add'>
+                    <Add/>
+                    {hide && <Modal
+                            isOpen={hide}
+                            onRequestClose={() => sethide(false)}
+                            hideModal={() => sethide(false)}
+                            >
+                                <AddFriendsModal closeModal={() => sethide(false)} members={members} setmembers={(e : any)=>{setmembers(e)}}/>
+                            </Modal>}
+                </div>
+                {
+                    members.map((member : string , id : number)=>{
+                        return <Member key={id} members={members} setmembers={(e)=>setmembers(e)} id={member}/>
+                    })
+                }
+            </MembersCont> 
+        </Form>
+        
+    </CreateGroupStyle>
+  )
+}

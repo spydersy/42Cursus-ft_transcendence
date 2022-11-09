@@ -256,7 +256,6 @@ interface MemberProps{
   `;
   
 
-
   export  function MuteModal(props : {data : usersType, channelId: number , closeModal : ()=> void , setPermission :  (e : any)=> void }) {
     const [muteTime, setmuteTime] = useState(0)
     const OwnerMute = async () => {
