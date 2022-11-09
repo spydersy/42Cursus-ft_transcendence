@@ -34,6 +34,8 @@ interface ChatProps {
   data : convType,
   setcurrentConv : (e : any)=>void,
   msgs : any,
+  empty : boolean
+
 }
 
 export default function ChatBottom(props: ChatProps) {

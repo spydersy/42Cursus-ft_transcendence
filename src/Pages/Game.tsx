@@ -89,7 +89,6 @@ var dat : UserProp;
     const pageName = window.location.pathname.split("/")[2];
     const room = window.location.pathname.split("/")[3];
     var mode = localStorage.getItem('mode') ;
-      alert(mode)
     if (data !== "{}")
     {
       dat = data

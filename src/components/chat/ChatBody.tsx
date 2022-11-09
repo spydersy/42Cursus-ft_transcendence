@@ -34,6 +34,7 @@ interface ChatProps {
     msgs : any
     setcurrentConv : (e : any)=>void
     refss : any;
+    empty : boolean
   }
 
   interface msgType {
@@ -87,6 +88,7 @@ const first = useRef(null)
         <div className='wrapper'>
 
         {
+          
           props.msgs.map((object: any , i : number)=>{
         
 

@@ -36,7 +36,8 @@ import {ReactComponent as BlockIcon} from "../../assets/imgs/LogOutRoom.svg";
   }
 
 
-export default function ChatControlBar(props :{data : convType }) {
+   
+    export default function ChatControlBar(props :{data : convType ,   empty : boolean}) {
 
   const [hide, sethide] = useState(false)
   const socket = useContext(SocketContext)
@@ -51,59 +52,67 @@ export default function ChatControlBar(props :{data : convType }) {
 
   return (
     <ContoleStyle>
-      <div className='avatar'>
-          {
-              props.data?.access === "DM" ? 
-                <AvatarComponent img={props.data?.users[1].defaultAvatar}/>
-              :
-                <AvatarComponent img={props.data?.picture}/>
-          }
-
-      </div>
-
+      {
+        props.empty ? <div></div>
+        :
+        
+        <>
+        <div className='avatar'>
+            {
+                props.data?.access === "DM" ? 
+                  <AvatarComponent img={props.data?.users[1].defaultAvatar}/>
+                :
+                  <AvatarComponent img={props.data?.picture}/>
+            }
+  
+        </div>
+  
+        {
+          props.data?.access === "DM" ? 
+          <div className='name'>
+              {props.data?.users[1].displayName} 
+          </div>
+                  :
+          <div className='name'>
+              {props.data?.name}
+          </div>
+        }
       {
         props.data?.access === "DM" ? 
-        <div className='name'>
-            {props.data?.users[1].displayName} 
-        </div>
-                :
-        <div className='name'>
-            {props.data?.name}
-        </div>
-      }
-    {
-      props.data?.access === "DM" ? 
-        <div className='buttons'>
+          <div className='buttons'>
+                
+            <Button  isIcon={true} onClick={()=>{ 
               
-          <Button  isIcon={true} onClick={()=>{ 
+              socket.emit("gameChallenge", props.data.channelId , props.data.users[0].login) ; 
+                gamesocket.emit("gameChallenge" , {player1 : props.data.users[0].login , player2 : props.data.users[1].login})}} icon={<GameIcon/>}/>
             
-            socket.emit("gameChallenge", props.data.channelId , props.data.users[0].login) ; 
-              gamesocket.emit("gameChallenge" , {player1 : props.data.users[0].login , player2 : props.data.users[1].login})}} icon={<GameIcon/>}/>
-          
-          <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
-        {/* <Button   isIcon={true} onClick={()=>{}} icon={<Mute/>}/> */}
-        </div>
-          :
-        <div className='buttons'>
-              {/* <Button  isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/>  */}
-            
-              <Button  isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/> 
-                  {hide &&  <Modal
-                    isOpen={hide}
-                    onRequestClose={() => sethide(false)}
-                    hideModal={() => sethide(false)}
-                >
-                  <MembersChatModal  data={props.data}closeModal={()=>sethide(false) } />
-                  </Modal>
-
-            }
-            <Button  color={"#ae0b0b"} isIcon={true} onClick={()=>{sethide(true)}} icon={<BlockIcon/>}/>
-            {props.data.users[0].permission === "OWNER" &&
-            
-            <Button   isIcon={true} onClick={()=>{deleteChunnel()}} icon={<BlockIcon/>}/>
-            
-            }
-        </div>
+            <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
+          {/* <Button   isIcon={true} onClick={()=>{}} icon={<Mute/>}/> */}
+          </div>
+            :
+          <div className='buttons'>
+                {/* <Button  isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/>  */}
+              
+                <Button  isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/> 
+                    {hide &&  <Modal
+                      isOpen={hide}
+                      onRequestClose={() => sethide(false)}
+                      hideModal={() => sethide(false)}
+                  >
+                    <MembersChatModal  data={props.data}closeModal={()=>sethide(false) } />
+                    </Modal>
+  
+              }
+              <Button  color={"#ae0b0b"} isIcon={true} onClick={()=>{sethide(true)}} icon={<BlockIcon/>}/>
+              {props.data.users[0].permission === "OWNER" &&
+              
+              <Button   isIcon={true} onClick={()=>{deleteChunnel()}} icon={<BlockIcon/>}/>
+              
+              }
+          </div>
+        
+      }     
+        </>
     }    
 
 

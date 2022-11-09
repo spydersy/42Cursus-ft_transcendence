@@ -58,6 +58,7 @@ export default function Chat() {
   const socket = useContext(SocketContext)
   const pageName = window.location.pathname.split("/")[2];
   const [msgs, setmsgs] = useState<msgType[]>([])
+  const [empty, setempty] = useState(true)
   const bottomRef = useRef<HTMLDivElement>(null)
     const [list, setlist] = useState<convType[]>([])
     var x = -1;
@@ -220,10 +221,10 @@ export default function Chat() {
    
     return (
       <GridContainer id="test" className='container' style={{ marginTop: "100px" }}>
-          { list.length ?<>
+          { <>
           {(state === -1 || state === 0) && 
           <div id="right" className='right'>
-          <ChatSidebar state={state} setState={(e)=> setstae(e)} setcurrentConv={(e)=>{ setcurrentConv(e)
+          <ChatSidebar empty={empty} state={state} setState={(e)=> setstae(e)} setcurrentConv={(e)=>{ setcurrentConv(e)
             var test = document.getElementById("test");
             if (test)
               test.style.zIndex = "1"
@@ -234,26 +235,24 @@ export default function Chat() {
           {(state === -1 || state === 1) && 
           <div id="body"className='bodyy'>
           <div  className='top'>
-            <ChatHeader  state={state} setState={(e)=> setstae(e)} data={currentConv} />
+            <ChatHeader empty={empty}   state={state} setState={(e)=> setstae(e)} data={currentConv} />
           </div>
           <div className='center'>
 
-          <ChatBody refss={bottomRef} setlist={(e : any)=>(setlist(e))} setmsgs={(e : any)=>(setmsgs(e))} msgs={msgs} setcurrentConv={(e)=>{ setcurrentConv(e) }}  currentconv={currentConv} list={list} />
+          <ChatBody empty={empty}  refss={bottomRef} setlist={(e : any)=>(setlist(e))} setmsgs={(e : any)=>(setmsgs(e))} msgs={msgs} setcurrentConv={(e)=>{ setcurrentConv(e) }}  currentconv={currentConv} list={list} />
           </div>
           <div className='bottom'>
-            <ChatBottom   setcurrentConv={(e)=>setcurrentConv(e)} msgs={msgs}  data={currentConv}  list={list} setList={(e)=>{setlist(e)}}  />
+            <ChatBottom  empty={empty}   setcurrentConv={(e)=>setcurrentConv(e)} msgs={msgs}  data={currentConv}  list={list} setList={(e)=>{setlist(e)}}  />
           </div>
         </div>
           
           }
          {(state === -1 || state === 3) && 
           <div className='left'>  
-            <ChatControlBar data={currentConv}/>
+            <ChatControlBar empty={empty}  data={currentConv}/>
           </div>
          }
-         </> : 
-         
-         <EmptyComponent text="GET SOME HELP" />
+         </>
         }
       </GridContainer>
     )

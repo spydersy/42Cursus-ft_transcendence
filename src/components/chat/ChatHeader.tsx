@@ -51,11 +51,11 @@ interface ListTypes  {
     data : convType,
     setState : (e: number)=>void,
     state : number,
+    empty : boolean,
   }
 
   
 export default function ChatHeader(props : chatHeaderProps) {
-  var list :ListTypes[] =  [{title: "Profile" , icon : <></> , href : "/profile/" + props.data.users[1].login} ]
 
     const [open, setopen] = useState(false)
     const [data, setdata] = useState<convType>(
@@ -78,13 +78,7 @@ export default function ChatHeader(props : chatHeaderProps) {
       }]
       })
 
-    const ToggleDD = (e : any)=>{
-      setopen(!open)
-      e.stopPropagation();
-      console.log("___DATA CHAT HEADER PROP__", props.data)
-      console.log("___DATA CHAT HEADER PROP LOGIN USER__",  props.data.users[1].login)
-      list[0].href = "/profile/" + props.data.users[1].login
-    }
+   
 
     useEffect(() => {
       setdata(props.data)
@@ -99,7 +93,7 @@ export default function ChatHeader(props : chatHeaderProps) {
 
             props.data?.access === "DM" ? 
         
-            <a className='conty' href={list[0].href}>
+            <a className='conty' href={""}>
 
               <div style={{width: "50px" , height: "50px"}}>
       
@@ -124,31 +118,6 @@ export default function ChatHeader(props : chatHeaderProps) {
 
           }
         
-        {
-          props.data?.access === "DM" ? 
-
-            <>
-
-              <Dots onClick={ToggleDD} />
-
-              {
-                open && 
-                <a className="Icon" href={list[0].href}>
-                  <UserProfileIcon /> 
-                </a>
-
-                //   <DropDown closeDropdown={ ()=>{
-              
-                //   console.log(open)
-                //   setopen(false)
-                // }} open={open} 
-                // style={{bottom: "-25px" , right: '0'}}
-                //   list={list}  />
-              }
-            </>
-          :
-          null
-        }
 
       </TopStyle>
     )

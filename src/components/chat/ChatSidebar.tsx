@@ -43,6 +43,7 @@ interface ChatProps {
   setcurrentConv : (e: any)=>void,
   setState : (e: number)=>void,
   state : number,
+  empty : boolean,
   currentConv : number,
 }
 export default function ChatSidebar(props : ChatProps) {
@@ -150,8 +151,8 @@ const ChatSidebarStyle = styled.div`
 
 interface ConvProps{
   onClick : ()=>void,
-  active : boolean
-  data : convType
+  active : boolean,
+  data : convType,
 }
 export  function ConversationComponent(props : ConvProps) {
   return (
