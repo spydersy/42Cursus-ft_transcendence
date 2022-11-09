@@ -146,10 +146,10 @@ export class ChatService {
             data: {nbMessages: {increment: 1}},
         });
         msg['displayName'] = msg.sender.displayName;
-        delete msg.sender;
         socketRes.stat = true;
         socketRes.payload = msg;
         socketRes.login = msg.sender.displayName;
+        delete msg.sender;
         console.log("__ENDPOINT__01__");
         return socketRes;
     }
@@ -181,6 +181,7 @@ export class ChatService {
                 orderBy: { date: 'desc'},
                 take: 1,
             });
+            console.log("__last__message__ : ", lastMessage);
             myChannels[index]['lastMessage'] = "";
             if (lastMessage.length === 1) {
                 myChannels[index]['lastMessage'] = lastMessage[0].content;
@@ -222,6 +223,7 @@ export class ChatService {
             }
         });
         await this.SetLastMessageInChannel(me, filtredChannels);
+        console.log("__BEF__RETURN__ : ", filtredChannels);
         return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, filtredChannels));
     }
 
@@ -366,7 +368,7 @@ export class ChatService {
         }
         return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Access Type'});
     }
-    
+
     CanUpdateUserRestriction(meInChannel: any, userInChannel: any) : boolean {
         if (meInChannel.restriction === RESTRICTION.BANNED
             || meInChannel.permission === PERMISSION.USER
