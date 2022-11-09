@@ -48,7 +48,7 @@ interface ChatProps {
 }
 export default function ChatSidebar(props : ChatProps) {
   const pageName = window.location.pathname.split("/")[2];
- 
+
     const [hide, sethide] = useState(false)
     return (
       <ChatSidebarStyle>
@@ -66,23 +66,23 @@ export default function ChatSidebar(props : ChatProps) {
           </div>
           <div className='conversation'>
                 {props.list.map((data : convType , id : number)=>{
-        
+
                    return < ConversationComponent  key={id}onClick={()=>{
                       props.setcurrentConv(data)
                       // window.location.href= data.channelId.toString()
                       if (props.state != -1 )
                         props.setState(1)
                   }}  data={data} active={pageName === data.channelId.toString()} />
-                
+
                 })}
           </div>
-  
+
       </ChatSidebarStyle>
     )
-  
+
 }
 const ChatSidebarStyle = styled.div`
-  
+
   width: 100%;
   height: 100%;
   /* padding: 5px  5px; */
@@ -95,7 +95,7 @@ const ChatSidebarStyle = styled.div`
 
     .title{
     position: sticky;
-        color :${props => props.theme.colors.seconderyText}; 
+        color :${props => props.theme.colors.seconderyText};
         height: 80px;
         width: 95%;
         margin: 0 auto;
@@ -108,15 +108,15 @@ const ChatSidebarStyle = styled.div`
         display: flex;
         align-items: center;
         justify-content: space-between;
-       
+
         }
-    
+
     .searchbar{
 
         width: 95%;
         height: 40px;
       margin:10px auto;
-        color :${props => props.theme.colors.seconderyText}; 
+        color :${props => props.theme.colors.seconderyText};
 
         font-size:  ${props => props.theme.fontSize.l};
         font-family: 'Poppins', sans-serif;
@@ -124,18 +124,18 @@ const ChatSidebarStyle = styled.div`
         position: relative;
          > svg{
               position: absolute;
-            left: 10px; 
-            top: 60%; 
+            left: 10px;
+            top: 60%;
             transform: translateY(-50%);
          }
-        
+
     }
     .conversation{
       flex: auto;
-      
+
       /* margin-top: 50px; */
       width: 95%;
-      
+
       margin:  0 auto;
 
       display: flex;
@@ -174,7 +174,7 @@ export  function ConversationComponent(props : ConvProps) {
             }
         </div>
         <div className='time'>
-          3min ago
+  {props.data.lastUpdate.slice(11, 16)}
         </div>
           </>
           :
@@ -193,12 +193,13 @@ export  function ConversationComponent(props : ConvProps) {
             }
         </div>
         <div className='time'>
-          3min ago
+        {props.data.lastUpdate.slice(11, 16)}
+
         </div>
           </>
 
         }
-      
+
       </ChatMesgstyle>
   )
 }
