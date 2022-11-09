@@ -12,7 +12,7 @@ import { emit } from 'process';
 
 @WebSocketGateway(3001, {
     cors: {
-      origin: "http://10.12.11.6:3000",
+      origin: "http://localhost:3000",
       credentials: true,
     },
     namespace : "game"
@@ -184,15 +184,13 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     var room = this.getRoombyPlayerId(client.id)
     if (room !== null)
     {
-      console.log("__ROOM__DBG__ : ", room);
       this.wss.to(room.roomName).emit("endGame" , {score: room.score, roomPlayers :   room.roomPlayers})
       this.wss.emit("change" , this.getArrayData() )
       this.RemovePlayer(client , payload)
-
-
       // this.wss.emit("change" ,  this.roomArray)
     }
-    console.log("testtt " ,this.roomArray.length)
+
+    
     for (let index = 0; index < this.roomArray.length; index++) {
       this.roomArray[index].debug();
 
@@ -241,9 +239,9 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   start(client: any, payload: string): void {
 
 
-      console.log("______DBG___START__00 : " , client.id)
+
       var room = this.getRoombyPlayerId(client.id)
-      console.log("______DBG___START__01 : " , room)
+
 
       if (room != null)
       {
@@ -258,7 +256,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
           this.wss.emit("change" , this.getArrayData() )
         }
-        console.log("______DBG___START__02 : " , "start")
+
       }
 
 
@@ -272,8 +270,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       const element = this.roomArray[i];
       if (element)
       {
-        // console.log(element)
-        console.log(element.roomPlayers)
         if (element.status != "waiting")
         {
 
@@ -282,7 +278,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         }
       }
     }
-    console.log(l)
     return l
   }
 
@@ -303,7 +298,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     var index = this.playerExist(client , login)
     if (index === -1)
     {
-      // console.log(login + ": Player does not exist" )
       this.AddtoRoomArray(client , login)
       this.JoinPlayer(client , login)
       for (let index = 0; index < this.roomArray.length; index++) {
@@ -321,14 +315,14 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   
   @SubscribeMessage('watchGame')
   addWatch(client: any, payload: any): void {
-    console.log(payload)
     var i = this.getRoombyName(payload)
-    if (i !== -1)
+    console.log("WATCHH___GAAME :: ", i)
+    if (i === -1)
      client.emit('roomNotFound')
     else
     {
       client.join(payload)
-      // client.emit()
+      client.emit("watchGame" , {player1 : this.roomArray[i].roomPlayers[0].login , player2 : this.roomArray[i].roomPlayers[1].login})
     }
   }
   @SubscribeMessage('player1Moved')
@@ -366,7 +360,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
       if(room.status === "AiGame" && room.direction.x > 0)
       {
-        console.log("salam : ", i)
           this.moveAI( this.roomArray[i])
       }
       this.wss.to(room.roomName).emit("moveBallClient" , {x: this.roomArray[i].ball.x , y: this.roomArray[i].ball.y , px : this.roomArray[i].paddel2.x, py :this.roomArray[i].predicty })
@@ -379,16 +372,15 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   @SubscribeMessage('PlayAi')
   playAi(client: any, payload: any): void {
-    console.log("____DBG___SALAM")
     let myuuid = uuidv4();
     var ret  = this.playerExist(client , payload);
-    console.log("__PLAYAI___DBG" , ret)
+
     // console.log("__PLAYAI___DBG: ", newRoom.roomPlayers)
     for (let index = 0; index < this.roomArray.length; index++) {
       this.roomArray[index].debug();
 
    }
-   console.log("__PLAYAI___DBG" , ret)
+
 
     // if (ret === -1)
     // {
