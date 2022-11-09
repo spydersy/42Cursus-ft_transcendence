@@ -119,19 +119,21 @@ function App() {
     {
       console.table(payload)
       
-      toast(CustomToastWithLink(payload) , {
+       const    toasty = () =>  toast(CustomToastWithLink(payload) , {
         className: "toast",
         progressClassName: "toastProgress",
         autoClose: 2000,
         
         hideProgressBar: true,
       })
+      toasty()
     }
+
   }
   function handleChallenge (payload) {
     console.log(payload)
     
-    toast(CustomToastWithLinkGame(payload) , {
+     const    toasty = () =>  toast(CustomToastWithLinkGame(payload) , {
       // position : toast.POSITION.TOP_RIGHT,
       className: "toast",
       progressClassName: "toastProgress",
@@ -139,34 +141,41 @@ function App() {
       hideProgressBar: true,
       // closeOnClick: false
     })
+    toasty()
+
     // CHallengeNotify()
   }
   function handleRequest (payload) {
-    // console.log('__sahbiiiiii____:'+payload)
-    toast(CustomToastFriendReq(payload) , {
+
+    const    toasty = () => toast(CustomToastFriendReq(payload) , {
       className: "toast",
       progressClassName: "toastProgress",
       autoClose: 2000,
       hideProgressBar: true,
     })
+    toasty()
   }
   async function acceptRequest (payload) {
     console.log('acceptii a sahbi:',payload)
     await joinChannels()
-    toast(CustomToastAcceptFriendReq(payload) , {
+     const    toasty = () =>  toast(CustomToastAcceptFriendReq(payload) , {
       className: "toast",
       progressClassName: "toastProgress",
       autoClose: 2000,
       hideProgressBar: true,
     })
+    toasty()
+
   }
   function handleevent (payload) {
-    toast(CustomToastMutedUser() , {
+     const    toasty = () =>  toast(CustomToastMutedUser() , {
       className: "toast",
       progressClassName: "toastProgress",
       autoClose: 2000,
       hideProgressBar: true,
     })
+    toasty()
+
   }
   function handelChallengeAccept (payload) {
     localStorage.setItem("mode","1v1")
