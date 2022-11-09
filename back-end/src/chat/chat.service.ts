@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CHANNEL, PERMISSION, RESTRICTION } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
+import { UpdateChannelDto } from 'src/dtos/Inputs.dto';
 
 interface ManyUsers {
     userId:    number;
@@ -336,6 +337,31 @@ export class ChatService {
         return res.status(HttpStatus.OK).send({'message': 'User Removed Successefully'});
     }
 
+    async UpdateChannelAccess(me: number, updateChannelDto: UpdateChannelDto, @Res() res) {
+        const userInChannel = await this.FindUserInChannel(me, updateChannelDto.channelId);
+        if (userInChannel === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Or Channel Does Not Exist'});
+        if (userInChannel.permission !== PERMISSION.OWNER)
+            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Methode Not Allowed'});
+        if (updateChannelDto.newAccessType === 'PUBLIC' ||
+            updateChannelDto.newAccessType === 'PRIVATE'
+            || updateChannelDto.newAccessType === 'PROTECTED')
+        {
+            await this.prisma.channels.update({
+                where: { id: userInChannel.channelId},
+                data: {
+                    access: updateChannelDto.newAccessType === 'PUBLIC' ? CHANNEL.PUBLIC
+                            : updateChannelDto.newAccessType === 'PRIVATE' ? CHANNEL.PRIVATE
+                            : CHANNEL.PRIVATE,
+                    password: updateChannelDto.newAccessType === 'PROTECTED' ? updateChannelDto.password
+                            : null,
+                }
+            });
+            return res.status(HttpStatus.OK).send({'message': 'Channel Updated Successefully'});
+        }
+        return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Access Type'});
+    }
+    
     CanUpdateUserRestriction(meInChannel: any, userInChannel: any) : boolean {
         if (meInChannel.restriction === RESTRICTION.BANNED
             || meInChannel.permission === PERMISSION.USER

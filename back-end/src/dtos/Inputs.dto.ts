@@ -62,6 +62,19 @@ export class JoinChannelDto {
     password: string;
 }
 
+export class UpdateChannelDto {
+    @IsUUID()
+    @IsNotEmpty()
+    channelId: string;
+
+    @IsString()
+    @IsNotEmpty()
+    newAccessType;
+    
+    @IsString()
+    @IsNotEmpty()
+    password: string;
+}
 export class UserRestrictionDto {
     @IsUUID()
     @IsNotEmpty()

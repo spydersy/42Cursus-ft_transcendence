@@ -4,7 +4,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
 import { ChatService } from './chat.service';
-import { ChannelData, ChannelUserDto, JoinChannelDto, MessageDataDto, UserRestrictionDto } from 'src/dtos/Inputs.dto';
+import { ChannelData, ChannelUserDto, JoinChannelDto, UpdateChannelDto, UserRestrictionDto } from 'src/dtos/Inputs.dto';
 import { PERMISSION, RESTRICTION } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard)
@@ -80,6 +80,11 @@ export class ChatController {
     @Get('managedChannels')
     async GetManagedChannels(@Req() req, @Res() res) {
       return this.chatService.GetManagedChannels(req.user.userId, res);
+    }
+
+    @Post()
+    async UdpatedChannelAccess(@Req() req, @Body() updateChannelDto: UpdateChannelDto, @Res() res) {
+      return this.chatService.UpdateChannelAccess(req.user.userId, updateChannelDto, res);
     }
 
     //DONE [password must be allways defined]
