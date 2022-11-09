@@ -90,8 +90,12 @@ export default function ChatHeader(props : chatHeaderProps) {
       <TopStyle>
        {props.state === 1 && <BackIcon onClick={()=>props.setState(0)} />}
           {
+            props.empty ? <div></div>
+            :
 
-            props.data?.access === "DM" ? 
+          
+
+            props.data?.access === "DM"  ? 
         
             <a className='conty' href={""}>
 
@@ -117,6 +121,7 @@ export default function ChatHeader(props : chatHeaderProps) {
             </div>
 
           }
+          
         
 
       </TopStyle>

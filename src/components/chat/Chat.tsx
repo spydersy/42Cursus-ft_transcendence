@@ -95,6 +95,7 @@ export default function Chat() {
          {withCredentials: true} 
          ).then((res)=>{
            setlist(res.data);
+           setempty(res.data.length === 0)
            var s : convType | undefined ;
            if (pageName === '0')
            {
