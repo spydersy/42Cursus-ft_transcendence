@@ -27,10 +27,6 @@ export default function FriendsComponent(props : FriendsProps)
         setfriends(res.data)
       }).catch((err)=>{ })
 
-
-
-
-
     }, [props.id])
 
   return (
@@ -82,23 +78,23 @@ export  function UserCard(props : UserCardProps) {
     const socket = useContext(OnlineContextSocket)
     
     
-    // const setUserStatu =( list : UserType[] )=>{
-    //   for (let i = 0; i < list.length; i++) {
-    //     const element : UserType = list[i];
-    //     console.log("element__", element)
-    //     if (element.userid === props?.data.login)
-    //     {
-    //       setstate(true)
-    //       return ;
-    //     }
-    //   }
-    //   setstate(false)
-    // }
+    const setUserStatu =( list : UserType[] )=>{
+      for (let i = 0; i < list.length; i++) {
+        const element : UserType = list[i];
+        console.log("element__", element)
+        if (element.userid === props?.data.login)
+        {
+          setstate(true)
+          return ;
+        }
+      }
+      setstate(false)
+    }
 
-    // socket.on("ConnectedUser" , (pyload : any)=>{
-    //  console.log(pyload)
-    //  setUserStatu(pyload)
-    // })
+    socket.on("ConnectedUser" , (pyload : any)=>{
+     console.log(pyload)
+     setUserStatu(pyload)
+    })
 
     let color = ("#d21f2e");
     

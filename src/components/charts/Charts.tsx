@@ -17,34 +17,21 @@ align-items: flex-end;
 `;
 
 export  function RadarChart() {
+  var wins = [0,0];
+  var losses = [0,0];
+  var draws = [0,0];
 
-  let Ewins = [8, 9, 10, 11, 12]
-  let Elosses = [12, 12, 13, 14, 15]
-  let Edraws = [5, 6, 7, 8, 9]
-
-
-  // let Ewins = [8, 9, 10, 11, 12]
-  // let Elosses = [12, 12, 13, 14, 15]
-  // let Edraws = [5, 6, 7, 8, 9]
-
-
-  // Edraws = []
-  // Elosses = []
-  // Ewins = []
-
-  // Wins [classic, tag-team, 1vs1, (Ai)buggy, (Ai)Dr VegaPunk]
-  // Loss [classic, tag-team, 1vs1, (Ai)buggy, (Ai)Dr VegaPunk]
-  // Draws [classic, tag-team, 1vs1, (Ai)buggy, (Ai)Dr VegaPunk]
-  
-  // setdraws([2, 17, 5, 8, 10])
+  let Ewins = [wins[0], wins[1], 25, 10, 25]
+  let Elosses = [losses[0], losses[1], 25, 18, 25]
+  let Edraws = [draws[0], draws[1], 25, 25,25]
 
   const dataRadar = {
     labels: [
       "Classic",
-      "Tag-Team",
-      "",
-      "",
-      "(Ai)-Dr VegaPunk",
+      "Ai-Dr VegaPunk",
+      "!Ai-Doflamigo",
+      "!Tag-Team",
+      "!AI-Buggy",
     ],
     datasets: [
       {
@@ -90,8 +77,8 @@ export  function RadarChart() {
                     display : false,
                   },
                   grid: { color: 'rgba(145, 102, 102, 0.37)', },
-                          angleLines: {color: 'rgba(91, 91, 103, 0.776)',  }
-                        }
+                  angleLines: {color: 'rgba(91, 91, 103, 0.776)',  }
+                  }
                 }
               }
             }

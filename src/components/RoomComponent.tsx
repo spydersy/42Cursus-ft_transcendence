@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {useState, useEffect,useRef} from 'react'
 import styled from "styled-components"
 
 import Fadi from "../assets/imgs/avatar/ael-fadi.jpeg";
@@ -9,6 +9,11 @@ import CreateGroup , {UpdateGroup} from './modals/CreateGroup';
 import InputComponent from './Input';
 import { Link } from 'react-router-dom'
 import { Button } from '../Pages/SignIn'
+import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
+import {ReactComponent as UserAddIcon} from "../assets/imgs/user-plus.svg";
+import {ReactComponent as BlockIcon} from "../assets/imgs/ban.svg";
+import { HeadComponent } from '../Pages/Home';
+import { ReactComponent as Image} from "../assets/imgs/users.svg";
 
 interface RoomProps{
     isLocked : boolean,
@@ -21,17 +26,13 @@ interface RoomProps{
 export default function RoomComponent(props : RoomProps) {
   const [hideModel, sethideModel] = useState(false)
   const [hideModel1, sethideModel1] = useState(false)
-
   const [valo, setvalo]= useState(true)
-
   const enable = () => {
 
     if (!valo && !hideModel1)
       sethideModel(true)
-
     setvalo(!valo)
   }
-
   const disablo = () => {
       console.log(hideModel)
       sethideModel(false)
@@ -74,8 +75,11 @@ export default function RoomComponent(props : RoomProps) {
     
   } 
 
+  // check ownership to display hideModel1
+
   return (
     <RoomStyle  >
+
         {/* onClick={()=>enable()} */}
         <div className='banner' >
           
@@ -84,18 +88,16 @@ export default function RoomComponent(props : RoomProps) {
           <div className='Edit'>
                 
               <Button  onClick={()=>{ sethideModel1(true) 
-              sethideModel(false) }}isIcon={true} icon={<></>} />
-              Edit
+              sethideModel(false) }}isIcon={true} icon={<BlockIcon/>} />
+
           </div>
 
           <div className='Edit1'>
                   <Button onClick={()=>{
                   sethideModel1(false)
                   sethideModel(true)
-                }}isIcon={true} icon={<></>}
-                  text='Edit'
+                }}isIcon={true} icon={<UserAddIcon/>}
                 />
-                Join
           </div>
 
         </div>
@@ -114,8 +116,8 @@ export default function RoomComponent(props : RoomProps) {
 
         {hideModel &&  <Modal
             isOpen={hideModel}
-            onRequestClose={() => {}}
-            hideModal={() => {}}
+            onRequestClose={() => sethideModel(false)}
+            hideModal={() => sethideModel(false)}
             >
 
           {/* <UpdateGroup id={""} members={["",""]} setmembers={()=>{}}  closeModal={  ()=>{} } /> */}
@@ -143,11 +145,15 @@ export default function RoomComponent(props : RoomProps) {
 
         {hideModel1 &&  <Modal
             isOpen={hideModel1}
-            onRequestClose={() => {}}
-            hideModal={() => {}}
+            onRequestClose={()=>sethideModel1(false)}
+            hideModal={() =>sethideModel1(false)}
         >
-          <UpdateGroup id={""} members={["",""]} setmembers={()=>{}}  closeModal={  ()=>{} } />
-          <Button onClick={ ()=>disabloModel()} type='secondary' text='Cancel' />
+
+          <UpdateGroup  banner={props.roomBanner} id={props.roomName} members={["",""]} setmembers={()=>{}}  closeModal={  ()=>sethideModel1(false) } />
+        
+          <Btpo >
+              <Button onClick={ ()=>disabloModel()} type='secondary' text='Cancel' />
+          </Btpo>  
 
         </Modal>}
        
@@ -241,6 +247,11 @@ cursor: pointer;
             opacity: 0.7;
         }
     }
+    .btpo {
+      display: flex;
+      justify-content: center;
+      background-color: #FFF;
+    }
 `;
 const RoomSstyle = styled.div`
     display: flex;
@@ -257,4 +268,9 @@ const RoomSstyle = styled.div`
             width: 40%;
         }
     }
+`;
+const Btpo = styled.div`
+  display: flex;
+  /* background-color: aquamarine; */
+
 `;

@@ -38,17 +38,9 @@ interface UserProp {
   losses : number
   lastModification : string 
 }
-interface usersType {
-  id : string ,
-  defaultAvatar: string,
-  login : string
-  displayName : string,
-  restriction: string,
-  restrictionTime: string,
-  duration: number,
-}
 
 const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderColor: "black",};
+
 export interface PlayerCardProps { isCurrentUser : boolean,  player: UserProp }
 
 export function PlayerCard(props: PlayerCardProps) {
@@ -87,19 +79,6 @@ export function PlayerCard(props: PlayerCardProps) {
   {
     color = ("#af1c1c");  status = "OFFLINE";
   }
-  
-  // else if (props.player.status === "BLOCKED")
-  // {
-  //   color = ("#b5c113");
-  //   status = "Unavailable";
-  // }
-  // else
-  // {
-  //   // setLoading(false);
-  //   status = "UnvailableStatus";
-  // }
-
-   
     return (
       <PlayerCardStyle  status={color} >
       
@@ -427,14 +406,20 @@ background-color: ${props => props.theme.colors.seconderybg};
         })
         
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
+
           // Achievenments          
           setAChievements(res.data)
           console.log("MY___ACHIEVEMENTS___Achievements___ : ", AChievements)
+
+
         }).catch((err)=>{
         })
         
         console.log( "- 1Relation <" , props.player, "> \n")
-      }, [setAChievements])
+
+
+      }, [])
+
       return (
         <StatsStyle  >
           <Data>

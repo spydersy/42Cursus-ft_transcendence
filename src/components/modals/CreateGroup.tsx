@@ -174,8 +174,10 @@ flex-direction: column;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* position: absolute; */
+    position: absolute;
     width: 100%;
+    top: 15%;
+    left: 100px;
 }
 `;
 const Form = styled.form`
@@ -463,7 +465,8 @@ interface  UpdateGroupProp{
     members : string[],
     setmembers : (e : any) => void,
     id: string,
-    closeModal : ()=>void,
+    closeModal : () => void,
+    banner : string,
 }
 
 export  function UpdateGroup(props : UpdateGroupProp) {
@@ -565,67 +568,39 @@ export  function UpdateGroup(props : UpdateGroupProp) {
     // console.log("__MEMBERS__DBG__ : ", members);
   return (
     <CreateGroupStyle>
-        
-        <div className='btp'>
-            <HeadComponent title={"Update Group"}/>
-        </div>
-        
+
+        <HeadComponent title={"Update Group"}/>
+      
         <Form>
             
             <Row >
                 <div  onClick={uploadFile} className='groupImg' >
-                    <input id="fileInput" type="file" hidden />
-                    {img === ""? < Image/> :  <img style={{width  : "100%", height : "100%"  }} src={img}alt="xx" />}
-                <div className='hov'>
-                x
+                    {props.banner === ""? < Image/> :  <img style={{width  : "100%", height : "100%"  }} src={props.banner}alt="xx" />}
                 </div>
-                </div>
-                {/* <input className='inputText' type="text"  placeholder='Enter group name ..'/> */}
+
                 <div className='con' >
-                <InputComponent onFocus={()=>{
-                    setalert(false)
-                }} onChange={(e)=>{
-                setdata({...data , name : e.target.value})
-                }} type='text' lable='Group name' alert={alertt} placeholder='Enter Group name'/>
-                <Row2>
-                    <input type="radio" defaultChecked  onChange={handleRadioChange} id="public" name="status" value="public"/>
-                    <label>Public</label>
-                    <input type="radio" onChange={handleRadioChange} id="private" name="status" value="private"/>
-                    <label>Private</label>
-                    <input type="radio" onChange={handleRadioChange} id="protected" name="status" value="protected"/>
-                    <label>Protected</label>
-                </Row2>
+                    <InputComponent  disabled={true} type='text' lable='Group name' alert={alertt} placeholder={props.id}/>
+                    <Row2>
+                        <input type="radio" defaultChecked  onChange={handleRadioChange} id="public" name="status" value="public"/>
+                        <label>Public</label>
+                        <input type="radio" onChange={handleRadioChange} id="private" name="status" value="private"/>
+                        <label>Private</label>
+                        <input type="radio" onChange={handleRadioChange} id="protected" name="status" value="protected"/>
+                        <label>Protected</label>
+                    </Row2>
                 </div>
-
-
             </Row>
             
             <InputPassWord  defaultChecked={(check === "protected")}>
+
             <InputComponent refs={passRef} type='password' placeholder='Group Password'/>
 
             </InputPassWord>
 
-            <MembersCont>
-                <div onClick={()=>{sethide(!hide)}} className='add'>
-                    <Add/>
-                    {hide && <Modal
-                            isOpen={hide}
-                            onRequestClose={() => sethide(false)}
-                            hideModal={() => sethide(false)}
-                            >
-                                <AddFriendsModal closeModal={() => sethide(false)} members={members} setmembers={(e : any)=>{setmembers(e)}}/>
-                            </Modal>}
-                </div>
-                {
-                    members.map((member : string , id : number)=>{
-                        return <Member key={id} members={members} setmembers={(e)=>setmembers(e)} id={member}/>
-                    })
-                }
-            </MembersCont> 
-        
         </Form>
+
         <div className='btp'>
-            <Button type='primary' text='Create' onClick={updateGroup} />
+            <Button type='primary' text='Update' onClick={updateGroup} />
         </div>
 
     </CreateGroupStyle>
