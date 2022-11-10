@@ -22,6 +22,8 @@ export class GameService {
     status : string
     predict : number
     predicty : number
+    width : number
+    height : number
     // score: {score1 : number , score2 : number};
 
 
@@ -138,7 +140,6 @@ export class GameService {
            }
        }
        return null
-
    }
    incrementScore(id : number)
    {
@@ -146,7 +147,7 @@ export class GameService {
             this.score.score1++;
         else
             this.score.score2++;
-        this.ball = {size : 35 , x :  500 , y :350}
+        this.ball = {size : 35 , x :  this.width/ 2 , y :350}
         this.direction = { x :  3 , y :3}
    }
 

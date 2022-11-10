@@ -345,14 +345,15 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 
-
-
   @SubscribeMessage('moveBall')
   moveBall(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
     if (room)
     {
       var i = this.roomArray.indexOf(room)
+      this.roomArray[i].width = payload.w
+      this.roomArray[i].height = payload.h
+      this.roomArray[i].paddel2.x = payload.w - 30
       if (!this.hitWalls(i, this.roomArray[i].ball ,this.roomArray[i].direction , payload.w, payload.h ,payload.p1 , payload.p2 ))
         return ;
       this.roomArray[i].predict =  (this.roomArray[i].paddel2.x -  this.roomArray[i].ball.x) / this.roomArray[i].direction.x
