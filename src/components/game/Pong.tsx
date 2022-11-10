@@ -15,12 +15,15 @@ export default function Pong(props: gameProps) {
     const [gameData, setgameData] = useState<GameProps>(defaultProp)
     const [widthstate, setwidthState] = useState(0)
     const gamesocket = useContext(SocketGameContext)
-    var width = 1000;
+    var p = document.getElementById("canva")?.offsetWidth
+    var width : number = 0;
+    if (p)
+        width = p;
 
     var height = 700;
     var ballCord = {
         size: 20,
-        x: width / 2,
+        x: 0 / 2,
         y: height / 2
     }
     var paddel1 = {
@@ -54,7 +57,9 @@ export default function Pong(props: gameProps) {
 
         topLimit = 0;
         console.log("_____WTFFFF____")
-
+        var p = document.getElementById("canva")?.offsetWidth
+        if (p)
+            width = p;
         bottomLimit = width - paddel2.h;
         p5.createCanvas(width, height ).parent(canvasParentRef);
 
@@ -77,6 +82,24 @@ export default function Pong(props: gameProps) {
             }
 
         }   
+    }
+    const windowResize = (p5: p5Types) => {
+        var p = document.getElementById("canva")?.offsetWidth
+        if (p)
+        {
+            width = p;
+             paddel1 = {
+                w: 20,
+                h: 100,
+                x: 20,
+                y: height / 2,
+        
+            };
+             paddel2.x = width - 30;
+             paddel1.x = 30;
+      
+        
+        }
     }
 
     const drowPaddels = (p5 : p5Types)=>{
@@ -169,7 +192,7 @@ export default function Pong(props: gameProps) {
     }, [setwidthState])
 
 
-    return <Sketch mouseMoved={mouseMoved} setup={setup} draw={draw} />;
+    return <Sketch windowResized={windowResize} mouseMoved={mouseMoved} setup={setup} draw={draw} />;
     /* <Button cursor='pointer' onClick={(e)=>{props.setstart(!props.start)}} text='start'/> */
 
 }

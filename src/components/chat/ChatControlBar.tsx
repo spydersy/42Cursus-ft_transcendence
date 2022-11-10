@@ -122,10 +122,10 @@ import {ReactComponent as BlockIcon} from "../../assets/imgs/LogOutRoom.svg";
   )
 }
 
-const ContoleStyle = styled.div`
 
+const ContoleStyle = styled.div`
 position: relative;
-display: flex;
+display: flex;  
 align-items: center;
 flex-direction: column;
 width: 95%;
