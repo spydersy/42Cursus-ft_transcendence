@@ -117,7 +117,7 @@ export class UserService {
             return res.status(HttpStatus.FORBIDDEN).send({'message' : 'Forbidden : User Blocked you'}); // DO SOMETHING
         }
         UserDto['relation'] = 'NOTHING';
-        if (await this.IsBlockedUser(UserDto.id, MeDto.id) === true) {
+        if (await this.IsBlockedUser(MeDto.id, UserDto.id) === true) {
             UserDto['relation'] = 'BLOCKED';
             return res.status(HttpStatus.OK).send(UserDto);
         }
