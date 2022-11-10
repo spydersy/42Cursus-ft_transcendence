@@ -82,7 +82,7 @@ export class ChatController {
       return this.chatService.GetManagedChannels(req.user.userId, res);
     }
 
-    @Post()
+    @Post('UdpatedChannelAccess')
     async UdpatedChannelAccess(@Req() req, @Body() updateChannelDto: UpdateChannelDto, @Res() res) {
       return this.chatService.UpdateChannelAccess(req.user.userId, updateChannelDto, res);
     }

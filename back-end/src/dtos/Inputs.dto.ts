@@ -75,6 +75,7 @@ export class UpdateChannelDto {
     @IsNotEmpty()
     password: string;
 }
+
 export class UserRestrictionDto {
     @IsUUID()
     @IsNotEmpty()
