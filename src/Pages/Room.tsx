@@ -4,6 +4,7 @@ import styled from "styled-components"
 import Navlinks from '../components/Navlinks';
 import RoomComponent from '../components/RoomComponent';
 import { HeadComponent } from './Home';
+
 interface usersType {
   id : string,
       defaultAvatar: string,
@@ -12,45 +13,19 @@ interface usersType {
       restriction: string,
       restrictionTime: string,
       duration: number,
-    }
+}
   
-    interface convType {
-      nbMessages: number,
-      lastUpdate: string,
-      access : string,
-      channelId: number,
-      name: string;
-      password: string,
-      picture : string,
-      users: usersType[]
-    }
-const  roomListDummy = [
-  {
-    isLocked : true,
-    roomBanner: "string",
-    roomName : "string"
-  }, 
-  {
-    isLocked : true,
-    roomBanner: "string",
-    roomName : "string"
-  },
-  {
-    isLocked : false,
-    roomBanner: "string",
-    roomName : "string"
-  },
-  {
-    isLocked : true,
-    roomBanner: "string",
-    roomName : "string"
-  },
-  {
-    isLocked : false,
-    roomBanner: "string",
-    roomName : "string"
-  }
-]
+interface convType {
+  nbMessages: number,
+  lastUpdate: string,
+  access : string,
+  channelId: number,
+  name: string;
+  password: string,
+  picture : string,
+  users: usersType[]
+}
+
 export default function Room() {
 const linkslist = ["All" , "My Rooms"]
 

@@ -25,17 +25,24 @@ export default function RoomComponent(props : RoomProps) {
   const [valo, setvalo]= useState(true)
 
   const enable = () => {
+
     if (!valo && !hideModel1)
       sethideModel(true)
 
-
     setvalo(!valo)
   }
+
   const disablo = () => {
       console.log(hideModel)
       sethideModel(false)
       console.log(hideModel)
       setvalo(false)
+  }
+  const disabloModel = () => {
+      console.log(hideModel)
+      sethideModel1(false)
+      sethideModel(false)
+      console.log(hideModel1)
   }
   const UpdateGroupData = ()=>{
     //check for valid input
@@ -65,41 +72,51 @@ export default function RoomComponent(props : RoomProps) {
   //   console.log(err)
   //   })
     
-}
-
+  } 
 
   return (
-    <RoomStyle onClick={()=>enable()} >
-        <div className='banner'>
+    <RoomStyle  >
+        {/* onClick={()=>enable()} */}
+        <div className='banner' >
+          
           <img src={props.roomBanner} alt="banner" />
-          {/* <button className='btp'>ALOHA</button> */}
+
           <div className='Edit'>
-                {/* <Link to={`/chat/${props.id}`}> */}
-                  <Button onClick={()=>{
-                  sethideModel1(true)
-                  sethideModel(false)
-                }}isIcon={true} icon={<i className="fas fa-edit"></i>}/>
-                  {/* </Link> */}
+                
+              <Button  onClick={()=>{ sethideModel1(true) 
+              sethideModel(false) }}isIcon={true} icon={<></>} />
+              Edit
           </div>
+
+          <div className='Edit1'>
+                  <Button onClick={()=>{
+                  sethideModel1(false)
+                  sethideModel(true)
+                }}isIcon={true} icon={<></>}
+                  text='Edit'
+                />
+                Join
+          </div>
+
         </div>
         
         <div className='desc'>
             <div className='name'>
-                    {props.isLocked  && <Lock/>}
-                    
-                    {props.roomName}
+                  {props.isLocked  && <Lock/>}
+                  {props.roomName}
             </div>
         
             <div className='members'>
                 {props.roomMembers} Members
             </div>
+
         </div>
 
         {hideModel &&  <Modal
             isOpen={hideModel}
             onRequestClose={() => {}}
             hideModal={() => {}}
-        >
+            >
 
           {/* <UpdateGroup id={""} members={["",""]} setmembers={()=>{}}  closeModal={  ()=>{} } /> */}
           
@@ -119,23 +136,22 @@ export default function RoomComponent(props : RoomProps) {
           
             <Button onClick={ ()=>disablo()} type='secondary' text='Cancel' />
 
-
             </div>
           </RoomSstyle>
 
         </Modal>}
-
 
         {hideModel1 &&  <Modal
             isOpen={hideModel1}
             onRequestClose={() => {}}
             hideModal={() => {}}
         >
-
           <UpdateGroup id={""} members={["",""]} setmembers={()=>{}}  closeModal={  ()=>{} } />
-          
+          <Button onClick={ ()=>disabloModel()} type='secondary' text='Cancel' />
+
         </Modal>}
-          
+       
+
     </RoomStyle>
   )
 }
@@ -170,8 +186,19 @@ cursor: pointer;
         .Edit{
           position: absolute;
           display: flex;
+          width: 50px;
+          height: 50px;
           top: 0;
           right: 0;
+          margin: 10px;
+        }
+        .Edit1{
+          position: absolute;
+          display: flex;
+          width: 50px;
+          height: 50px;
+          top: 0;
+          left: 0;
           margin: 10px;
         }
 
@@ -215,7 +242,6 @@ cursor: pointer;
         }
     }
 `;
-
 const RoomSstyle = styled.div`
     display: flex;
     align-items: center;

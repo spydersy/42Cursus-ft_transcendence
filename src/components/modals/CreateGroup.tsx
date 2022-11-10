@@ -1,13 +1,9 @@
 import React, {useState , useEffect , useRef} from 'react'
 import styled , {css} from "styled-components"
 import { HeadComponent } from '../../Pages/Home';
-
-// import Image from "../../assets/imgs/image.svg";
 import { ReactComponent as Image} from "../../assets/imgs/users.svg";
-import {ReactComponent as Edit} from "../../assets/imgs/edit.svg";
 import {ReactComponent as Add} from "../../assets/imgs/plus.svg";
 import { ReactComponent as CloseIcon } from "../../assets/imgs/close-icon.svg";
-import Img from "../../assets/imgs/avatar/a1.png";
 import Modal from '../Modal';
 import AddFriendsModal from './AddFriendsModal';
 import InputComponent from '../Input';
@@ -463,7 +459,6 @@ const MembersStyle= styled.div`
     }
 `;
 
-
 interface  UpdateGroupProp{
     members : string[],
     setmembers : (e : any) => void,
@@ -524,35 +519,40 @@ export  function UpdateGroup(props : UpdateGroupProp) {
         }
         console.log(e.target)
     }
-    const createGroup = ()=>{
+    // const createGroup = ()=>{
+    //     //check for valid input
+    //     var  bodyFormData = new FormData();
+    //     bodyFormData.append('icone',data.icone);
+    //     bodyFormData.append('name',data.name);
+    //     bodyFormData.append('members', JSON.stringify(members));
+    //     bodyFormData.append('type',check);
+    //     if (passRef.current != null)
+    //     {
+    //         var pass = passRef.current.value;
+    //         bodyFormData.append('password',pass);
+        
+    //     }
+
+
+
+    //     console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
+    //     axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
+    //     {withCredentials: true} 
+    //   ).then((res)=>{
+    //     console.log(res.data)
+    //     // props.close.closeModal()
+    //   }).catch((err)=>{
+    //     // if (data.name === "")
+    //         setalert(true)
+    //     console.log(err)
+    //     })
+        
+    // }
+    const updateGroup = ()=>{
         //check for valid input
-        var  bodyFormData = new FormData();
-        bodyFormData.append('icone',data.icone);
-        bodyFormData.append('name',data.name);
-        bodyFormData.append('members', JSON.stringify(members));
-        bodyFormData.append('type',check);
-        if (passRef.current != null)
-        {
-            var pass = passRef.current.value;
-            bodyFormData.append('password',pass);
-        
-        }
 
-
-
-        console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
-        axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
-        {withCredentials: true} 
-      ).then((res)=>{
-        console.log(res.data)
-        // props.close.closeModal()
-      }).catch((err)=>{
-        // if (data.name === "")
-            setalert(true)
-        console.log(err)
-        })
-        
     }
+    
     useEffect(() => {
         var e = document.getElementById("fileInput")
         e?.addEventListener("change", (c :any)=>{
@@ -565,17 +565,19 @@ export  function UpdateGroup(props : UpdateGroupProp) {
     // console.log("__MEMBERS__DBG__ : ", members);
   return (
     <CreateGroupStyle>
+        
         <div className='btp'>
             <HeadComponent title={"Update Group"}/>
-            <Button type='primary' text='Create' onClick={createGroup} />
         </div>
+        
         <Form>
+            
             <Row >
                 <div  onClick={uploadFile} className='groupImg' >
                     <input id="fileInput" type="file" hidden />
                     {img === ""? < Image/> :  <img style={{width  : "100%", height : "100%"  }} src={img}alt="xx" />}
                 <div className='hov'>
-    x
+                x
                 </div>
                 </div>
                 {/* <input className='inputText' type="text"  placeholder='Enter group name ..'/> */}
@@ -597,12 +599,12 @@ export  function UpdateGroup(props : UpdateGroupProp) {
 
 
             </Row>
-            {/* <Row2 > */}
-                <InputPassWord  defaultChecked={(check === "protected")}>
-                <InputComponent refs={passRef} type='password' placeholder='Group Password'/>
+            
+            <InputPassWord  defaultChecked={(check === "protected")}>
+            <InputComponent refs={passRef} type='password' placeholder='Group Password'/>
 
-                </InputPassWord>
-            {/* </Row2> */}
+            </InputPassWord>
+
             <MembersCont>
                 <div onClick={()=>{sethide(!hide)}} className='add'>
                     <Add/>
@@ -620,8 +622,12 @@ export  function UpdateGroup(props : UpdateGroupProp) {
                     })
                 }
             </MembersCont> 
-        </Form>
         
+        </Form>
+        <div className='btp'>
+            <Button type='primary' text='Create' onClick={updateGroup} />
+        </div>
+
     </CreateGroupStyle>
   )
 }

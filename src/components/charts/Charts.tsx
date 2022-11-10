@@ -18,12 +18,14 @@ align-items: flex-end;
 
 export  function RadarChart() {
 
-
-
-
   let Ewins = [8, 9, 10, 11, 12]
   let Elosses = [12, 12, 13, 14, 15]
   let Edraws = [5, 6, 7, 8, 9]
+
+
+  // let Ewins = [8, 9, 10, 11, 12]
+  // let Elosses = [12, 12, 13, 14, 15]
+  // let Edraws = [5, 6, 7, 8, 9]
 
 
   // Edraws = []
@@ -40,8 +42,8 @@ export  function RadarChart() {
     labels: [
       "Classic",
       "Tag-Team",
-      "1 vs 1",
-      "(Ai)-Buggy",
+      "",
+      "",
       "(Ai)-Dr VegaPunk",
     ],
     datasets: [

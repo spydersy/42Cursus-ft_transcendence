@@ -1,48 +1,37 @@
-import React, {useState , useEffect, CSSProperties} from 'react'
+import React, {useState , useEffect, CSSProperties, useContext} from 'react'
 import CircleLoader from "react-spinners/CircleLoader";
 import styled from "styled-components"
-import avataro from "../assets/imgs/avatar/avatar2.png";
 import EmptyComponent from "./PlayerrEmptyComp"
 import axios from 'axios';
+import { OnlineContextSocket, SocketContext,  SocketValue } from '../context/Socket';
+import { UserContext } from '../context/UserContext';
 
+interface UserType {
+  socketId : string[],
+  userid : string,
+  gameStatu : boolean,
+ }
 interface FriendsProps { id : string }
-
 const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderColor: "black",};
-
 export interface UserCardProps { data: { status: string; defaultAvatar: string; login: string;} }
-
 export interface StyleProps { status: string; }
-
 //
 export default function FriendsComponent(props : FriendsProps)
 {
-  // const [friends, setfriends] = useState(
-  //   [
-  //     {
-  //         status: "ONLINE",
-  //         defaultAvatar:avataro,
-  //         login: "DefaultUser1",
-  //     },
-  //     {
-  //       status: "OFFLINE",
-  //       defaultAvatar:avataro,
-  //       login: "DefaultUser2"
-  //     },
-  //     {
-  //       status: "ONGAME",
-  //       defaultAvatar:avataro,
-  //       login: "DefaultUser3"
-  //     }
-  //   ])
-  
   const [friends, setfriends] = useState([])
   
   useEffect(() => {
-      axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/friends/" + props.id,   {withCredentials: true}  ).then((res)=>{
-        // console.log(res.data)
+
+      axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/friends/" + props.id,   {withCredentials: true}  
+      ).then((res)=>{
         setfriends(res.data)
       }).catch((err)=>{ })
-  }, [props.id])
+
+
+
+
+
+    }, [props.id])
 
   return (
     <TabfourStyle >
@@ -89,10 +78,31 @@ const TabfourStyle= styled.div`
 export  function UserCard(props : UserCardProps) {
 
     const [loading] = useState(true);
+    const [state, setstate] = useState(true)
+    const socket = useContext(OnlineContextSocket)
     
+    
+    // const setUserStatu =( list : UserType[] )=>{
+    //   for (let i = 0; i < list.length; i++) {
+    //     const element : UserType = list[i];
+    //     console.log("element__", element)
+    //     if (element.userid === props?.data.login)
+    //     {
+    //       setstate(true)
+    //       return ;
+    //     }
+    //   }
+    //   setstate(false)
+    // }
+
+    // socket.on("ConnectedUser" , (pyload : any)=>{
+    //  console.log(pyload)
+    //  setUserStatu(pyload)
+    // })
+
     let color = ("#d21f2e");
     
-    if (props.data.status === "ONLINE")
+    if (props.data.status === "ONLINE" || state === true)
        color = ("#1ea122") 
     else if (props.data.status === "ONGAME")
       color = ("#ee900c");
@@ -136,16 +146,13 @@ box-shadow:         2px 1px 1px 1px ${props => props.status};
   /* transform: translate(-10%, -10%); */
   background-color: #f9f9f984;
 }
-
 > svg { // Dots icon
-    /* display: flex; */
     cursor: pointer;
     position: absolute;
     width: 25px;
     height:25px;
     right: 10px;
     top: 3px;
-    /* padding: 1px 1px ; */
     path{
       stroke: ${props=> props.status} ;
     }
@@ -158,7 +165,6 @@ box-shadow:         2px 1px 1px 1px ${props => props.status};
       }
     }
 }
-
 .avatar {
 border: 3px solid #ffffff;
 border-radius: 50%;
@@ -173,7 +179,6 @@ animation: fadeIn 3s;
     height: 80px;
 }
 }
-
 .Uname {
 position: absolute;
 color: #fcfafc;
@@ -187,7 +192,6 @@ font-weight: bolder;
 bottom: 0px;
 /* -webkit-text-stroke: 1px #929292b7; */
 }
-
 &:hover {
   /* transform:  rotate(360deg); */
   transform: scale(1.1);
@@ -196,9 +200,6 @@ bottom: 0px;
   backface-visibility: visible;
   transition: 1s ease-in-out;
 }
-  /* @keyframes fadeIn {
-  0% { opacity: 0.9; }
-  100% { opacity: 1; }
-  } */
+
 `;
 //

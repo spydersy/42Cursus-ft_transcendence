@@ -24,3 +24,12 @@ response : always "DONE"
 expected : .....
 > users relations BLOCKED & BLOCKER
 > 
+
+
+
+> relation "BLOCKER"
+> update chat room type
+> local storage notificaions
+> Join channel {join channel Endpoint}
+> Achievements
+> handle empty chat messages

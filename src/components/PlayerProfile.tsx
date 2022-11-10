@@ -20,10 +20,9 @@ import  { RadarChart } from './charts/Charts';
 import CircleLoader from "react-spinners/CircleLoader";
 import { OnlineContextSocket, SocketContext,  SocketValue } from '../context/Socket';
 import {Link} from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../context/UserContext';
-import { data } from 'jquery';
+import { toast } from 'react-toastify';
 
 //// PlayerCard Comp
 interface UserProp {
@@ -39,7 +38,6 @@ interface UserProp {
   losses : number
   lastModification : string 
 }
-
 interface usersType {
   id : string ,
   defaultAvatar: string,
@@ -54,17 +52,11 @@ const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderC
 export interface PlayerCardProps { isCurrentUser : boolean,  player: UserProp }
 
 export function PlayerCard(props: PlayerCardProps) {
-
   let color = ("");
   const [loading] = useState(true);
   let username = props.player.displayName;
-  let name = username.split(" ");
   let status = "";  
-
   const socket = useContext(OnlineContextSocket)
-
-  const User = useContext(UserContext)
-
   const [state, setstate] = useState(true)
  
   const setUserStatu =( list : UserType[] )=>{
@@ -82,39 +74,18 @@ export function PlayerCard(props: PlayerCardProps) {
   socket.on("ConnectedUser" , (pyload)=>{
    console.log(pyload)
    setUserStatu(pyload)
-  
   })
-  useEffect(() => {
-  //   User.then((data : UserProp | "{}")=>{
-  //     if (data !== "{}")
-  //       socket.emit("AddOnlineUser" ,data?.login)
 
-  // })
-        console.log("mystatue=", state)
-    
-
-
-  }, [props.player.login])
+  useEffect(() => { console.log("mystatue=", state) }, [props.player.login])
   
-  
-  
-  // console.log("actual statue", props.player.status);
 
-  // if (props.player.status === "InGame")
-  // {
-  //   color = ("#1e30a1");
-  //   status = "IN-GAME";
-  // }
-  // else 
   if (state)
   {
-    color = ("#1cb52e");
-    status = "ONLINE";
+    color = ("#1cb52e"); status = "ONLINE";
   }
   else if (!state)
   {
-    color = ("#af1c1c");
-    status = "OFFLINE";
+    color = ("#af1c1c");  status = "OFFLINE";
   }
   
   // else if (props.player.status === "BLOCKED")
@@ -458,7 +429,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
           // Achievenments          
           setAChievements(res.data)
-          console.log("> Achievements : ", AChievements)
+          console.log("MY___ACHIEVEMENTS___Achievements___ : ", AChievements)
         }).catch((err)=>{
         })
         
