@@ -23,6 +23,9 @@ export default function Score(props : {socket : Socket,user? :UserProp , opennet
   props.socket.on("startGame" , (py : any)=>{
     setScore({score1: 0 , score2: 0})
   })
+  props.socket.on("endGame" , (py : any)=>{
+    setScore({score1: 0 , score2: 0})
+  })
   return (
     <PlayerStyle>
         <Player1>
@@ -30,7 +33,7 @@ export default function Score(props : {socket : Socket,user? :UserProp , opennet
         </Player1>
         <ScoreStyle>
             {score.score1}
-            |
+            -
             {score.score2}
         </ScoreStyle>
         <Player2>
@@ -58,7 +61,7 @@ const ScoreStyle = styled.div`
   display: flex;
   align-items: center;
   font-family: "Poppins" , sans-serif;
-  font-size: ${props=> props.theme.fontSize.xl};
+  font-size: 30px;
 
   `;
 const Player2 = styled.div`
@@ -166,11 +169,11 @@ interface UserComponetProps {
           </div>
           <div className='mesgData'>
             <div className='name'>
-             {props?.data?.login}
+             {props?.data?.displayName}
             </div>
             <div className='msg'>
             {/* {props.data.msg} */}
-            ghadi tslkh
+            {props?.data?.login }
             </div>
           </div>
 

@@ -115,7 +115,7 @@ var dat : UserProp;
         {
           if (!end)
             gamesocket.emit("playerConnect" , data?.login)
-          // setUser(data)
+          setUser(data)
         }
         else if (mode === "1v1")
         {
@@ -221,14 +221,31 @@ export  function GameEndModal(props : {msg : boolean , socket :Socket , login? :
     <GameEndStyle>
       {props.msg ? "YOU WON" :"YOU LOST"}
         
-        
+        <div className='buttns'>
+
+
         <Button onClick={()=>{
-          props.socket.emit("playerConnect" , props.login)
+        var mode = localStorage.getItem('mode') ;
+        if (mode === "classic")
+        {
+
+            props.socket.emit("playerConnect" , props?.login)
+        }
+        else if (mode === "1v1")
+        {
+          props.socket.emit("start" , props?.login)
+        }
+        else if (mode === "AI")
+        {
+          props.socket.emit("PlayAi" , props?.login)
+        }
           props.close()
         }} type='primary' text='playe again'/>
         <Link to="/">
         <Button type='secondary' text="go home"/>
         </Link>
+
+        </div>
           
     </GameEndStyle>
   )
@@ -238,4 +255,14 @@ const GameEndStyle = styled.div`
     width: 100%;
     align-items: center;
 justify-content: space-around;
+flex-direction :column;
+font-size: 50px;
+font-family: "Poppins" , sans-serif;
+> .buttns{
+  margin-top: 20px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+justify-content: space-around;
+}
   `;

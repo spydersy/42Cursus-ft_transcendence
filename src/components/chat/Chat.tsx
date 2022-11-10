@@ -227,7 +227,7 @@ export default function Chat() {
             var test = document.getElementById("test");
             if (test)
               test.style.zIndex = "1"
-          }} currentConv={0} list={list} />
+          }} currentConv={currentConv} list={list} />
           </div>
           
           }

@@ -216,8 +216,13 @@ export  function GameChallengeToast(props: {data : any}) {
         
   }, [])
   const acceptChallenge = ()=>{
-    // gamesocket.emit("gameAccept", {player1 : props.data, player2: UserData?.login})
-    // window.location.href = "/game"
+    UserData.then((data: UserProp | "{}")=>{
+      if (data !== "{}")
+      {
+        gamesocket.emit("gameAccept", {player1 : props.data, player2: data?.login})
+      }
+    }
+    )
   }
   return (
     <ToastStyle to="">

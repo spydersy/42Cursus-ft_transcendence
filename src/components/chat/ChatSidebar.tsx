@@ -44,7 +44,7 @@ interface ChatProps {
   setState : (e: number)=>void,
   state : number,
   empty : boolean,
-  currentConv : number,
+  currentConv : convType,
 }
 export default function ChatSidebar(props : ChatProps) {
   const pageName = window.location.pathname.split("/")[2];
@@ -72,7 +72,7 @@ export default function ChatSidebar(props : ChatProps) {
                       // window.location.href= data.channelId.toString()
                       if (props.state != -1 )
                         props.setState(1)
-                  }}  data={data} active={pageName === data.channelId.toString()} />
+                  }}  data={data} active={props.currentConv.channelId.toString() === data.channelId.toString()} />
 
                 })}
           </div>

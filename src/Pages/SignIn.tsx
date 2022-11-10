@@ -258,7 +258,7 @@ const Bloc = styled.div`
          color:  ${props => props.theme.colors.primaryText};;
          font-weight: 500;
          font-size: 15px;
-         background-color: #25a8d70;
+         background-color: #258d70;
          /* margin     : 10px 0px; */
          width: 100%;
          /* height: 100px; */
@@ -333,7 +333,7 @@ interface ButtonStyleProps {
 }
 export  function Button(props :ButtonProps ) {
   return (
-    <LoginButtonStyle color={props.color} size={props.size} isIcon={props.isIcon} onClick={props.onClick} typeS={props.type}>
+    <LoginButtonStyle  color={props.color} size={props.size} isIcon={props.isIcon} onClick={props.onClick} typeS={props.type}>
       {props?.icon}
       
       {props.isIcon ? "" : <>{props.text}</>}
@@ -389,6 +389,12 @@ const LoginButtonStyle = styled.button<ButtonStyleProps>`
    justify-content: center;
    gap : 5px;
    position: relative;
+   &:active {
+            transform: scale(0.90);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+        }
    ${props => (props.size === "small") && `
 padding: 3px 5px;
 `}
