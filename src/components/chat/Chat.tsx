@@ -166,13 +166,11 @@ export default function Chat() {
         {
           if (payload.channelId  === currentConv.channelId.toString())
           {
-            console.log(currentConv.channelId)
-            console.log(payload.channelId)
-    
+            // console.log(currentConv.channelId)
+            // console.log(payload.channelId)
             var tmp  : msgType[] = msgs;
             tmp.push(payload)
             setmsgs([...tmp])
-    
           }
 
         }

@@ -6,8 +6,6 @@ import {ReactComponent as Mute} from "../../assets/imgs/mute.svg";
 import {ReactComponent as GameIcon} from "../../assets/imgs/game-icon.svg";
 import axios from 'axios';
 import {ReactComponent as Admin} from "../../assets/imgs/Admino.svg";
-
-
 import styled , {css} from "styled-components"
 import Modal from '../Modal';
 interface convType {
@@ -32,12 +30,8 @@ interface usersType {
   duration: number,
 }
 
-
 export default function MembersChatModal(props : { closeModal : ()=>void , data : convType}) {
-
   const channelId = props.data.channelId;
-
-
   console.log(props.data.users)
   return (
     <div>   
@@ -93,35 +87,23 @@ interface MemberProps{
       setmuteModel(!muteModel)
     };
     const OwnerUnMute = async () => {
-      console.log("OwnerunMute")
       var  bodyFormData = {
         channelId: props.channelId.toString(),
         user: props.data.login,
         restriction: "MUTE",
         duration: 0
       }
-  
       await axios.post( process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData,
       {withCredentials: true} 
       ).then((res)=>{
+        setrestriction("NULL")
       }).catch((err)=>{
         console.log(err)
       })
     };
-    // const AdminBan = () => {
-    //   console.log("AdminBan")
-
-    // };
-    // const AdminMute = () => {
-    //   setmuteModel(!muteModel)
-
-    //   console.log("AdminMute")
-    // };
-
     const ChallengeGame = () => {
       console.log("ChallengeGame")
     };
-    //set admin todo
     const SetAdmin = async (s: string) => {
       console.log("Set the user as admin")
       var o = {
@@ -137,7 +119,6 @@ interface MemberProps{
         console.log(err)
       })
     };
-
     return (
       <MemberStyle>
         <div className='data'>
@@ -155,12 +136,10 @@ interface MemberProps{
           {props.access === "OWNER"
           &&
           <>
-           {permission === "USER"? 
-                  <Button size='small' isIcon={true} onClick={()=>{SetAdmin("admin")}} icon={<Admin/>}/> 
-          :
-          <Button size='small'   color={"#ae0b0b"} isIcon={true} onClick={()=>{SetAdmin("USER")}} icon={<Admin/>}/> 
+           {permission === "USER"? <Button size='small' isIcon={true} onClick={()=>{SetAdmin("admin")}} icon={<Admin/>}/> 
+          :<Button size='small' color={"#ae0b0b"} isIcon={true} onClick={()=>{SetAdmin("USER")}} icon={<Admin/>}/>
         }
-          {restriction === "NULL"? <Button size='small' color={"#ae0b0b"}  isIcon={true} onClick={()=>{OwnerBan(0)}} icon={<Ban/>}/>
+          {(restriction === "NULL"||restriction === "MUTED")? <Button size='small' color={"#ae0b0b"}  isIcon={true} onClick={()=>{OwnerBan(0)}} icon={<Ban/>}/>
           :<Button size='small'  isIcon={true} onClick={()=>{OwnerBan(1)}} icon={<Ban/>}/>
         }
           {
@@ -184,7 +163,6 @@ interface MemberProps{
           {restriction === "NULL"? <Button size='small' color={"#ae0b0b"}  isIcon={true} onClick={()=>{OwnerBan(0)}} icon={<Ban/>}/>
           :<Button size='small'  isIcon={true} onClick={()=>{OwnerBan(1)}} icon={<Ban/>}/>
         }
-          {/* <Button size='small'color={"#ae0b0b"}   isIcon={true} onClick={()=>{AdminBan()}} icon={<Ban/>}/> */}
           {
             muteModel &&
             <Modal
@@ -207,26 +185,25 @@ interface MemberProps{
   }
   
   const MemberStyle = styled.div`
-  
       position: relative;
       display: flex;
       align-items: center;
-  justify-content: space-between;
+      justify-content: space-between;
       flex-direction: row;
-        width: 95%;
-        height: 60px;
-        margin: 0 auto;
-        gap: 5px;
-        font-family: 'Poppins', sans-serif;
+      width: 95%;
+      height: 60px;
+      margin: 0 auto;
+      gap: 5px;
+      font-family: 'Poppins', sans-serif;
         .data{
           display: flex;
-      align-items: center;
-      flex-direction: row;
-      flex : 1;
-        height: 60px;
-        margin: 0 auto;
-        gap: 5px;
-        font-family: 'Poppins', sans-serif;
+          align-items: center;
+          flex-direction: row;
+          flex : 1;
+          height: 60px;
+          margin: 0 auto;
+          gap: 5px;
+          font-family: 'Poppins', sans-serif;
           .avatar{
               width: 50px;
               height: 50px;
@@ -237,22 +214,20 @@ interface MemberProps{
             justify-content: space-between;
             flex-direction: column;
             text-align: start;
-              color : #FFF;
-              font-size:  ${props => props.theme.fontSize.s};
-              font-weight : 600;
-              text-align: start ;
+            color : #FFF;
+            font-size:  ${props => props.theme.fontSize.s};
+            font-weight : 600;
+            text-align: start ;
             > span{
               font-weight : 500;
               opacity: 0.8;
             }
-  
           }
         }
           > .buttons{
             display: flex;
             gap: 10px;
           }
-      
   `;
   
 
@@ -307,15 +282,12 @@ interface MemberProps{
       justify-content: center;
     align-items:center;
     flex-direction: row;
-    
     }
     >.buttons{
     width: 100%;
-
       display: flex;
     align-items: flex-start;
     flex-direction: row;
     justify-content: space-around;
-
     }
   `;

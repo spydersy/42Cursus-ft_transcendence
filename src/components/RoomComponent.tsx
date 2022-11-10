@@ -121,8 +121,8 @@ export default function RoomComponent(props : RoomProps) {
             >
 
           {/* <UpdateGroup id={""} members={["",""]} setmembers={()=>{}}  closeModal={  ()=>{} } /> */}
-          
-          <RoomSstyle  >
+          <JoinGroupModal isLocked={props.isLocked}  id={props.id} />
+          {/* <RoomSstyle  >
             {
                 props.isLocked === true && 
                 <InputComponent type='password' placeholder='Enter Password' />
@@ -132,14 +132,11 @@ export default function RoomComponent(props : RoomProps) {
               <Button text='Join' />
             </Link>
           
-            {/* <div>
-              <Button type='primary' text='Update' onClick={UpdateGroupData} />
-            </div> */}
           
             <Button onClick={ ()=>disablo()} type='secondary' text='Cancel' />
 
             </div>
-          </RoomSstyle>
+          </RoomSstyle> */}
 
         </Modal>}
 

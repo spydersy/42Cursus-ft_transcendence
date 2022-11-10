@@ -50,18 +50,23 @@ export default function ChatBottom(props: ChatProps) {
       User.then((data : UserProp | "{}")=>{
         if (data !== "{}")
         {
-          if (inputRef.current?.value && inputRef.current?.value != "")
+          if (inputRef.current?.value)
           {
-            mesg =  inputRef.current.value;
-            inputRef.current.value = "";
-            var msgtmp = {
-              userId: data.id,
-              content: mesg,
-              channelId:  props.data?.channelId
+            mesg =  inputRef.current?.value;
+            mesg =  mesg.trim();
+            if (mesg != "")
+            {
+              inputRef.current.value = "";
+              var msgtmp = {
+                userId: data.id,
+                content: mesg,
+                channelId:  props.data?.channelId
+              }
+              //validation layer (restrictions
+    
+              socket.emit('chatToServer', msgtmp);
+
             }
-            //validation layer (restrictions
-  
-            socket.emit('chatToServer', msgtmp);
 
         }
         }
