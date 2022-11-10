@@ -84,6 +84,17 @@ export class UserService {
         return res.status(HttpStatus.OK).send(AllFriends);
     }
 
+    async GetAchievements(me: number, user: string, @Res() res) {
+        let ret: boolean[] = [false, false, false, false, false, false];
+        const userDto = await this.GetUserByLogin(user);
+
+        if (userDto === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+        if (await this.IsBlockedUser(userDto.id, me) === true)
+            return res.status(HttpStatus.OK).send(ret);
+        return res.status(HttpStatus.OK).send(userDto.achievement);
+    }
+
     async GetUserByUsername(Me: string, User: string, @Res() res) {
 
         let MeDto = await this.GetUserByLogin(Me);

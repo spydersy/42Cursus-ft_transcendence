@@ -11,8 +11,7 @@ import { Socket, Server } from 'socket.io';
 
 @WebSocketGateway(3001,{
   cors: {
-    // origin: process.env.FRONTEND_URL,
-    origin: "http://localhost:3000",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   },
   namespace: 'notif'
