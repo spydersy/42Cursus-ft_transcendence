@@ -81,9 +81,9 @@ const CustomToastWithLink = (data : msgType) => (
 );
 
 
-const CustomToastMutedUser = () => (
+const CustomToastMesg = (msg : string) => (
   <div style={{width: "100%" , height : "100%"}}>
-        <MutedToast />
+        <MutedToast mesg={msg} />
   </div>
 );
 const CustomToastAcceptFriendReq = (data : ssss) => (
@@ -168,7 +168,7 @@ function App() {
 
   }
   function handleevent (payload) {
-     const    toasty = () =>  toast(CustomToastMutedUser() , {
+     const    toasty = () =>  toast(CustomToastMesg("Please ! Take a break,  You are Muted for a while") , {
       className: "toast",
       progressClassName: "toastProgress",
       autoClose: 2000,
