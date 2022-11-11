@@ -472,8 +472,9 @@ export class ChatService {
             return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
         // Find User In Channel:
         const userInChannel = await this.FindUserInChannel(me, channelId);
-        if (userInChannel !== null || userInChannel.restriction === RESTRICTION.BANNED
-            || channel.access === CHANNEL.PRIVATE || channel.access === CHANNEL.DM)
+        console.log("__USER__IN__ : ", userInChannel);
+        if (userInChannel !== null && (userInChannel.restriction === RESTRICTION.BANNED
+            || channel.access === CHANNEL.PRIVATE || channel.access === CHANNEL.DM))
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'User Is Not Allowed To Join This Channel'});
         if (channel.access === CHANNEL.PROTECTED)
             return this.JoinProtectedChannel(userProfile, channel, password, res);
