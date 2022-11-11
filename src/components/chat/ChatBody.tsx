@@ -53,8 +53,8 @@ const [UserData, setUserData] = useState<UserProp>({
     defaultAvatar: "string",
     login : "string",
     displayName : "string",
-    wins : 0,
-    losses : 0,
+    wins : [0,0],
+    losses : [0,0],
 })
 const first = useRef(null)
     useEffect(() => {

@@ -13,8 +13,8 @@ interface UserProp {
     displayName : string
     relation? : string
     nbFriends? : string
-    wins : number
-    losses : number
+    wins : number[]
+    losses : number[]
   }
 export default function AddFriendsModal(props : {members : string[] , setmembers : (e : any)=>void , closeModal : ()=> void} ) {
     const [friends, setfriends] = useState([])

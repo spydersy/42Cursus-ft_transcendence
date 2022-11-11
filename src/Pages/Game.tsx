@@ -23,10 +23,10 @@ interface UserProp {
   defaultAvatar: string,
   login : string
   displayName : string
-  relation? : string,
-  nbFriends? : string,
-  wins : number[],
-  losses : number[],
+  relation? : string
+  nbFriends? : string
+  wins : number[]
+  losses : number[]
 }
 interface GameProps {
   theme: any
