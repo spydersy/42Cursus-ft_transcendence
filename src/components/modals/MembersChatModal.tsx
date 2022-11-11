@@ -190,6 +190,7 @@ interface MemberProps{
           {restriction === "MUTED" ? <Button size='small' color={"#ae0b0b"} isIcon={true} onClick={()=>{OwnerUnMute()}} icon={<Mute/>}/>
           :<Button size='small'  isIcon={true} onClick={()=>{OwnerMute()}} icon={<Mute/>}/>
         }
+        <Button size='small'  isIcon={true} onClick={()=>{OwnerKick()}} icon={<Kick/>}/>
           </>
         }
         <Button size='small'  isIcon={true} onClick={()=>{ChallengeGame()}} icon={<GameIcon/>}/>
