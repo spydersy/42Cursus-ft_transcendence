@@ -10,6 +10,7 @@ import MembersChatModal from '../modals/MembersChatModal';
 import {ReactComponent as GameIcon} from "../../assets/imgs/game-icon.svg";
 import { SocketContext , SocketGameContext} from '../../context/Socket';
 import {ReactComponent as BlockIcon} from "../../assets/imgs/LogOutRoom.svg";
+import axios from 'axios';
 
 
   interface usersType {
@@ -43,13 +44,15 @@ import {ReactComponent as BlockIcon} from "../../assets/imgs/LogOutRoom.svg";
   const socket = useContext(SocketContext)
   const gamesocket = useContext(SocketGameContext)
 
-  const LeaveRoom = () => {
+  const leaveChannel = async() => {
     console.log("leave room {" , props.data)
+    await axios.delete(process.env.REACT_APP_BACKEND_URL+"/chat/leaveChannel?channel=" + props.data.channelId , {withCredentials: true} )
+    .then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err)
+    })
   }
-  const deleteChunnel = () => {
-    alert()
-  }
-
   return (
     <ContoleStyle>
       {
@@ -103,12 +106,12 @@ import {ReactComponent as BlockIcon} from "../../assets/imgs/LogOutRoom.svg";
                     </Modal>
   
               }
-              <Button  color={"#ae0b0b"} isIcon={true} onClick={()=>{sethide(true)}} icon={<BlockIcon/>}/>
-              {props.data.users[0].permission === "OWNER" &&
+              {/* <Button  color={"#ae0b0b"} isIcon={true} onClick={()=>{sethide(true)}} icon={<BlockIcon/>}/> */}
+              {/* {props.data.users[0].permission === "OWNER" && */}
               
-              <Button   isIcon={true} onClick={()=>{deleteChunnel()}} icon={<BlockIcon/>}/>
+              <Button   isIcon={true} onClick={()=>{leaveChannel()}} icon={<BlockIcon/>}/>
               
-              }
+              {/* // } */}
           </div>
         
       }     
