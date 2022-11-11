@@ -11,8 +11,8 @@ interface UserProp {
     relation : string
     dmChannel : string
     nbFriends? : string
-    wins : number
-    losses : number
+    wins : number[]
+    losses : number[]
     lastModification: string
     Achievements: boolean[]
 } 

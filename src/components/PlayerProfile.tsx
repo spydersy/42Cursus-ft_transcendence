@@ -34,8 +34,8 @@ interface UserProp {
   dmChannel : string,
   relation : string
   nbFriends? : string
-  wins : number
-  losses : number
+  wins : number[]
+  losses : number[]
   lastModification : string 
 }
 
@@ -222,23 +222,14 @@ background-color: ${props => props.theme.colors.seconderybg};
     const [relationStatus, setrelationStatus] = useState<string >("");
     const id = window.location.pathname.split("/")[2];
     const [createdTime, setcreatedTime] = useState<string | undefined>("Mon 1 Oct 1999 00:00:00")
-    const Grades = ["Unranked","Shinobi","ShiboKay","Hokage","Yonko","3ANKOUB","XX","XXXX","XXXXX","XXXXX"]
-    const [grade, setgrade] = useState<string | undefined>(Grades[5])
+    const Grades = ["New-Bie","Shinobi","ShiboKay","Hokage","Yuaiba", "Alchemist", "Spyder" ,"Medara", "ALA-ZWIN","3ANKOUB"]
+    const [grade, setgrade] = useState<string | undefined>(Grades[10])
     const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
     const userData = useContext(UserContext)
-    let isBlocked = "";
+    const [TotalGames, setTotalGames] = useState<number | undefined>(0)
+
 
     const    AddUsernotify = () => toast.success("You have successfully Send the invitaion to " + id.toLocaleUpperCase() , {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored"
-    });
-    const    ALreadyFriendnotify = () => toast.success("You can't Friendo !!" + id.toLocaleUpperCase() , {
       position: "bottom-center",
       autoClose: 2000,
       hideProgressBar: true,
@@ -288,32 +279,19 @@ background-color: ${props => props.theme.colors.seconderybg};
       progress: undefined,
       theme: "colored"
     });
-
     const addFriend = ()=>{
 
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{
         console.log(res.data)
-        // if (res.data.message === "Relation Already Exist")
-        // {
-        //   setrelationStatus("PENDING")
-        //   ALreadyFriendnotify();
-        // } 
-        // else
-        // {
           setrelationStatus("PENDING")
           AddUsernotify();
-        // }
         userData.then((user : UserProp | "{}")=>{
-          if (user !== "{}")
-          {
-            socket.emit('sendFriendRequest', {sender : user?.login , reciver : props.player.login} )
-
-          }
-
+        if (user !== "{}")
+        {
+          socket.emit('sendFriendRequest', {sender : user?.login , reciver : props.player.login} )
+        }
     })
-
-
         // get this user login
         // join user login room
         // emit event to the room.
@@ -322,7 +300,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         console.log(err)
         alert("USER ALREADY BLOCKED")
         setrelationStatus("BLOCKER")
-        isBlocked = "BLOCKER"
+        // isBlocked = "BLOCKER"
       })
     }
     const CancelRequest = ()=>{
@@ -360,7 +338,7 @@ background-color: ${props => props.theme.colors.seconderybg};
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
       ).then((res)=>{
       setrelationStatus("BLOCKED")
-      isBlocked = "BLOCKED";
+      // isBlocked = "BLOCKED";
       BlockUserNotify();
       // window.location.reload();
       }).catch((err)=>{  })
@@ -378,45 +356,39 @@ background-color: ${props => props.theme.colors.seconderybg};
     }
     const InviteToPlay = ()=>{ }
 
+    const setUserGrade = (grade : any)=>{
+      console.log("__MY GRADE ___", grade)
+      if (grade <= 0)
+        setgrade("Unranked")
+      else
+        setgrade(Grades[grade / 10])
+    }
+
     useEffect(() => {
-        
-        // setrelationStatus(props.player?.relation)
-        console.log( "- 2Relation <" , relationStatus, "> \n")
-        
-        // get user data  from server
+
+        setTotalGames( props.player.wins[0] + props.player.wins[1] + props.player.losses[0] + props.player.losses[1])
+
+        //User Data
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/" + id,  {withCredentials: true}).then((res)=>{
-          
+
+          //Relation
           setrelationStatus(res.data.relation)
           
-          //Rank
-          if (res.data.level)
-          setgrade(Grades[res.data.level])
-          else
-          setgrade("Unranked")
+          //Grade
+          setUserGrade(res.data.level)
           
           //CreatedTime
           const date = new Date(res.data.lastModification)
           setcreatedTime(date.toString().split("GMT")[0])
+
           
-          console.log("> createdTime : ", createdTime)
-          console.log("> grade : ", grade, "\n")
-          console.log(  "> Relation <" , relationStatus, "> \n")
-          
-        }).catch((err)=>{   
-        })
+        }).catch((err)=>{})
         
+        // User Achievements
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
-
-          // Achievenments          
           setAChievements(res.data)
-          console.log("MY___ACHIEVEMENTS___Achievements___ : ", AChievements)
-
-
-        }).catch((err)=>{
-        })
-        
-        console.log( "- 1Relation <" , props.player, "> \n")
-
+          // console.log("MY___ACHIEVEMENTS___Achievements___ : ", AChievements)
+        }).catch((err)=>{})
 
       }, [])
 
@@ -425,7 +397,6 @@ background-color: ${props => props.theme.colors.seconderybg};
           <Data>
 
               <div className='data'>
-                
                 <div>
 
                   <DataTag> 
@@ -434,68 +405,64 @@ background-color: ${props => props.theme.colors.seconderybg};
                   </DataTag>
 
                   <DataTag>
-                    <DataTag>     <GameIcon/> {props.player?.wins +   props.player?.losses} {"  Game"} </DataTag>
+                    <DataTag>     <GameIcon/> {TotalGames} {"  Game"} </DataTag>
                     <DataTag>     <CalendarIcon/> {createdTime}  </DataTag>
                   </DataTag>
                   
                   {
                     props.isCurrentUser === false && 
-                      <Buttons className='Btp' >
-                        {
-                          relationStatus === "NOTHING" ?  
-                            <Button  onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
-                          : 
-                          relationStatus === 'PENDING' ? 
-                            <button className='BtpPending' onClick={CancelRequest}>
-                                  <Hourglass/>
-                                  Cancel Request
+                    <Buttons className='Btp' >
+                      {
+                        relationStatus === "NOTHING" ?  
+                          <Button  onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
+                        : 
+                        relationStatus === 'PENDING' ? 
+                          <button className='BtpPending' onClick={CancelRequest}>
+                                <Hourglass/>
+                                Cancel Request
+                          </button>
+                        :
+                        relationStatus === "BLOCKED" ? 
+                          <button className='BtpBlocked'onClick={UnBlockUser}>
+                            <UnblockIcon/>
+                            UnBlock
+                          </button>
+                        :
+                        relationStatus === "FRIENDS" ? 
+                          <>
+                          <div className='row'>
+
+                            <Button   type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
+                            
+                            <button className='BtpBlocked'onClick={BlockUser}>
+                              <BlockIcon/>
+                              Block
                             </button>
-                          :
-                          relationStatus === "BLOCKED" ? 
-                            <button className='BtpBlocked'onClick={UnBlockUser}>
-                              <UnblockIcon/>
-                              UnBlock
-                            </button>
-                          :
-                          relationStatus === "FRIENDS" ? 
-                            <>
-                            <div className='row'>
+                            
+                          </div>
+                          <div className='row'>
+                            <Link to={"/chat/" + props.player?.dmChannel}>  
+                              <Button isIcon={true}  icon={<SendMessage/>} text='Send Message'/>
+                            </Link>
+                            <Button  icon={<InviteToPlayIcon/>} isIcon={true}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
 
-                              <Button   type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
-                              
-                              <button className='BtpBlocked'onClick={BlockUser}>
-                                <BlockIcon/>
-                                Block
-                              </button>
-                              
-                            </div>
-                            <div className='row'>
-                              <Link to={"/chat/" + props.player?.dmChannel}>  
-                                <Button isIcon={true}  icon={<SendMessage/>} text='Send Message'/>
-                              </Link>
-                              <Button  icon={<InviteToPlayIcon/>} isIcon={true}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
-
-
-                            </div>
-
-                            </>
-                          :
-                            null
-                        }
-                      </Buttons>
+                          </div>
+                          </>
+                        :
+                          null
+                      }
+                    </Buttons>
                   }
-
                 </div>
               
               <Achivments  data={AChievements} /> 
-                {/* <div className="Achiv"> <Achivments2/> </div> */}
 
               </div>
 
               <div className='vr'> </div>
 
               <div className='Stats'>
-                < RadarChart/>
+                < RadarChart     />
               </div>
 
           </Data>
@@ -704,6 +671,7 @@ gap:10px;
 
 /// Game History tab //
 export interface GameCompProps { win: boolean }
+
 export interface GameCardProps {
   match: {
       name: string;

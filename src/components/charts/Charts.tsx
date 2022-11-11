@@ -13,10 +13,14 @@ const DoughnutStyle = styled.div`
   display: flex;
   /* align-items: center; */
 align-items: flex-end;
-
 `;
 
+
+
+
 export  function RadarChart() {
+
+
   var wins = [0,0];
   var losses = [0,0];
   var draws = [0,0];

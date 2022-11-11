@@ -18,8 +18,8 @@ interface UserProp {
   relation : string
   dmChannel : string
   nbFriends? : string
-  wins : number
-  losses : number
+  wins : number[]
+  losses : number[]
   lastModification: string
   Achievements: boolean[]
 }
@@ -28,6 +28,7 @@ interface UserProp {
 export default function Profile() {
   const id = window.location.pathname.split("/")[2];
   const [isCurrentUser, setisCurrent] = useState(true)
+  
   const [User, setUser] = useState<UserProp>({
     id: "Ss",
     defaultAvatar: "avataro",
@@ -35,11 +36,10 @@ export default function Profile() {
     login : "DefaultUserLogin",
     displayName : 'Default DisplayName',
     relation : "",
-  dmChannel : "string",
-
+    dmChannel : "string",
     nbFriends : "100",
-    wins : 100,
-    losses : 0,
+    wins : [0,0],
+    losses : [0,0],
     lastModification: "Xxx 12 Xxx 1963 12:00:00",
     Achievements: [false, false, false, false, false, false, false, false]
   })
@@ -51,11 +51,10 @@ export default function Profile() {
     login : "Hiddenlogin",
     displayName : "HiddenDisplayName",
     relation : "BLOCKED",
-  dmChannel : "string",
-
+    dmChannel : "string",
     nbFriends : "000",
-    wins : 0,
-    losses : 0,
+    wins : [0,0],
+    losses : [0,0],
     lastModification: "Xxx 00 Xxx 0000 00:00:00",
     Achievements: [false, false, false, false, false, false, false, false]
   }
@@ -65,6 +64,7 @@ export default function Profile() {
   useEffect(() => {
 
     user.then((data : UserProp | "{}")=>{
+      
       if (data !== "{}"){
         if (id === data?.login){
             setisCurrent(true)
@@ -73,20 +73,20 @@ export default function Profile() {
         else
         {
           setisCurrent(false)
-          axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + id,  {withCredentials: true}
-          ).then((res)=>{
-                // check for the user is bloked 
-                setUser(res.data)
-         
-              }).catch((error)=>{ 
-                if (error.response) 
-                {
-                  if (error.response.data.message == ("Forbidden : User Blocked you"))
-                    setUser(BlockedUser)
-                } 
-              })
+          axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + id,  {withCredentials: true}  ).then((res)=>{
+            // check for the user is bloked 
+            setUser(res.data)
+      
+          }).catch((error)=>{ 
+            if (error.response) 
+            {
+              if (error.response.data.message == ("Forbidden : User Blocked you"))
+                setUser(BlockedUser)
+            } 
+          })
+
         }
-    }
+      }
 
  })
 

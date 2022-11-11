@@ -37,8 +37,8 @@ interface UserProp {
   displayName : string
   relation? : string
   nbFriends? : string
-  wins : number
-  losses : number
+  wins : number[]
+  losses : number[]
 }
 export  function MutedToast() {
   return (
@@ -60,8 +60,8 @@ export  function AcceptToast(props: {data : ssss}) {
     displayName : "string",
     relation : "string",
     nbFriends : "string",
-    wins : 0,
-    losses : 0,
+    wins : [0,0],
+    losses : [0,0],
   })
 
   useEffect(() => {
@@ -103,8 +103,8 @@ export default  function MsgToast(props: {data : msgType}) {
     displayName : "string",
     relation : "string",
     nbFriends : "string",
-    wins : 0,
-    losses : 0,
+    wins : [0,0],
+    losses : [0,0],
   })
   useEffect(() => {
   //   axios.get( process.env.REACT_APP_BACKEND_URL + "/users/friends/" + props.data.senderId  ,  {withCredentials: true}
@@ -197,8 +197,8 @@ export  function GameChallengeToast(props: {data : any}) {
     displayName : "string",
     relation : "string",
     nbFriends : "string",
-    wins : 0,
-    losses : 0,
+    wins : [0,0],
+    losses : [0,0],
   })
   useEffect(() => {
     console.log(props.data)
@@ -254,8 +254,8 @@ export  function FriendRequestToast(props: {data : any}) {
     displayName : "string",
     relation : "string",
     nbFriends : "string",
-    wins : 0,
-    losses : 0,
+    wins : [0,0],
+    losses : [0,0],
   })
   let joinChannels = async () => {
     let userLogin : string;

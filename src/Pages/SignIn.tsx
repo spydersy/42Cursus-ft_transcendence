@@ -258,7 +258,7 @@ const Bloc = styled.div`
          color:  ${props => props.theme.colors.primaryText};;
          font-weight: 500;
          font-size: 15px;
-         background-color: #258d70;
+         /* background-color: #258d70; */
          /* margin     : 10px 0px; */
          width: 100%;
          /* height: 100px; */

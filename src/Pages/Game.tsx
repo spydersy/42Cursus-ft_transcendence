@@ -25,8 +25,8 @@ interface UserProp {
   displayName : string
   relation? : string
   nbFriends? : string
-  wins : number
-  losses : number
+  wins : number[]
+  losses : number[]
 }
 interface GameProps {
   theme: any
