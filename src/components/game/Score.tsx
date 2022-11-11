@@ -10,8 +10,8 @@ interface UserProp {
     displayName : string
     relation? : string
     nbFriends? : string
-    wins : number
-    losses : number
+    wins : number[]
+    losses : number[]
   }
   
 export default function Score(props : {socket : Socket,user? :UserProp , opennet?: UserProp} ) {
