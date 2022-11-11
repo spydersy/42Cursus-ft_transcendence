@@ -123,12 +123,10 @@ function App() {
         className: "toast",
         progressClassName: "toastProgress",
         autoClose: 2000,
-        
         hideProgressBar: true,
       })
       toasty()
     }
-
   }
   function handleChallenge (payload) {
     console.log(payload)
@@ -168,7 +166,7 @@ function App() {
 
   }
   function handleevent (payload) {
-     const    toasty = () =>  toast(CustomToastMesg("Please ! Take a break,  You are Muted for a while") , {
+     const    toasty = () =>  toast(CustomToastMesg("Please ! Take a break,  You are Muted for a while!") , {
       className: "toast",
       progressClassName: "toastProgress",
       autoClose: 2000,
@@ -188,7 +186,6 @@ function App() {
     
   }
   useEffect(()=>{
-    // sub
     
     socket.on('msg_event', hundleMsg);
     socket.on('challeneEvent', handleChallenge);
