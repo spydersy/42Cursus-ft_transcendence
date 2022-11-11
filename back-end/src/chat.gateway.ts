@@ -11,6 +11,16 @@ import { Socket, Server } from 'socket.io';
 import { ChatService } from './chat/chat.service';
 import { WsGuard } from './auth/jwt.strategy';
 
+interface UserProp {
+  id : string , 
+    defaultAvatar: string,
+    login : string
+    displayName : string
+    relation? : string
+    nbFriends? : string
+    wins : number[]
+    losses : number[]
+  }
 @WebSocketGateway(3001, {
     cors: {
       origin: process.env.FRONTEND_URL,
@@ -46,6 +56,14 @@ import { WsGuard } from './auth/jwt.strategy';
     
   }
 
+  @SubscribeMessage('addedMember')
+  AddMemberToChannel(client: any, payload: any): void {
+    console.log("______DBG____ ADD_MEMBER : " , payload)
+    client.join((payload.addedMember))
+    client.to(payload.addedMember).emit("addedMember", payload.owner.login)
+    // client.to(payload[0]).emit('challeneEvent', payload[1]);
+  }
+  
 
   @UseGuards(WsGuard)
   @SubscribeMessage('joinRoom')

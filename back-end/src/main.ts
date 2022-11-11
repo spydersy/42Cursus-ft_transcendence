@@ -45,7 +45,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new VersionHeaderInterceptor());
   app.enableCors({
     origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST", "PUT"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     allowedHeaders: ["cookie", "Cookie", "authorization", "Authorization", "content-type"],
     exposedHeaders: ["cookie", "Cookie", "authorization", "Authorization", "content-type"],
