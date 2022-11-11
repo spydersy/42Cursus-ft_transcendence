@@ -3,11 +3,14 @@ import { Button } from '../../Pages/SignIn';
 import { AvatarComponent } from '../PlayerProfile';
 import {ReactComponent as Ban} from "../../assets/imgs/ban.svg";
 import {ReactComponent as Mute} from "../../assets/imgs/mute.svg";
+import {ReactComponent as Kick} from "../../assets/imgs/kick.svg";
+
 import {ReactComponent as GameIcon} from "../../assets/imgs/game-icon.svg";
 import axios from 'axios';
 import {ReactComponent as Admin} from "../../assets/imgs/Admino.svg";
 import styled , {css} from "styled-components"
 import Modal from '../Modal';
+
 interface convType {
   nbMessages: number,
   lastUpdate: string,
@@ -119,6 +122,16 @@ interface MemberProps{
         console.log(err)
       })
     };
+    const OwnerKick = async() =>{
+      console.log("you are going to be kicked oout")
+      console.log(props.channelId)
+      console.log(props.data.login)
+      await axios.delete(process.env.REACT_APP_BACKEND_URL+"/chat/kickUser/" +props.data.login +"?channel=" + props.channelId ,       {withCredentials: true} )
+      .then((res)=>{
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
     return (
       <MemberStyle>
         <div className='data'>
@@ -155,6 +168,7 @@ interface MemberProps{
           {restriction === "MUTED" ? <Button size='small' color={"#ae0b0b"} isIcon={true} onClick={()=>{OwnerUnMute()}} icon={<Mute/>}/>
           :<Button size='small'  isIcon={true} onClick={()=>{OwnerMute()}} icon={<Mute/>}/>
         }
+           <Button size='small'  isIcon={true} onClick={()=>{OwnerKick()}} icon={<Kick/>}/>
           </>
         }
           {(props.access === "ADMIN"

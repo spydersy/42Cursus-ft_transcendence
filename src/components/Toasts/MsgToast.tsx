@@ -43,7 +43,6 @@ interface UserProp {
 export  function MutedToast(props :{ mesg : string}) {
   return (
     <ToastStyle to="">
-
         <div className='data'>
             <div className='msg'>
               {props.mesg}

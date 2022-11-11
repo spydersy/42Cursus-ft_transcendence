@@ -121,7 +121,9 @@ export default function RoomComponent(props : RoomProps) {
             >
 
           {/* <UpdateGroup id={""} members={["",""]} setmembers={()=>{}}  closeModal={  ()=>{} } /> */}
-          <JoinGroupModal isLocked={props.isLocked}  id={props.id} />
+          <JoinGroupModal  closeModal={()=>{
+            sethideModel(false)
+          }} isLocked={props.isLocked}  id={props.id} />
           {/* <RoomSstyle  >
             {
                 props.isLocked === true && 
