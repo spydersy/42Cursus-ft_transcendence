@@ -2,8 +2,9 @@ import React, { useEffect, useState, useContext } from 'react'
 import Sketch from "react-p5";
 import p5Types from "p5";
 import { Button } from '../../Pages/SignIn';
-import { GameProps } from './types';
+import { GameProps, UserProp } from './types';
 import { SocketGameContext } from '../../context/Socket'
+import { UserContext } from '../../context/UserContext';
 
 var defaultProp = {
     ballcolor: "#000",
@@ -15,6 +16,8 @@ export default function Pong(props: gameProps) {
     const [gameData, setgameData] = useState<GameProps>(defaultProp)
     const [widthstate, setwidthState] = useState(0)
     const gamesocket = useContext(SocketGameContext)
+    const user = useContext(UserContext)
+
     var p = document.getElementById("canva")?.offsetWidth
     var width : number = 0;
     if (p)
@@ -69,19 +72,24 @@ export default function Pong(props: gameProps) {
     };
 
 
-
     const mouseMoved = (p5: p5Types) => {
+        user.then((data : UserProp | "{}")=>{
+            if (data !== "{}")
+            {
 
-        if (p5.mouseY > topLimit && p5.mouseY < bottomLimit) {
-            
-            if (props.player) {
-                gamesocket.emit("player1Moved", p5.mouseY)
+                if (p5.mouseY > topLimit && p5.mouseY < bottomLimit) {
+                    
+                    if (props.player) {
+                        
+                        gamesocket.emit("player1Moved", {login : data.login, y : p5.mouseY})
+                    }
+                    else {
+                        gamesocket.emit("player2Moved", {login : data.login, y : p5.mouseY})
+                    }
+        
+                }   
             }
-            else {
-                gamesocket.emit("player2Moved", p5.mouseY)
-            }
-
-        }   
+        })
     }
     const windowResize = (p5: p5Types) => {
         var p = document.getElementById("canva")?.offsetWidth
@@ -168,9 +176,9 @@ export default function Pong(props: gameProps) {
 
     })
     gamesocket.on("moveBallClient", (pyload) => {
-
-        ballCord.x = pyload.x;
-        ballCord.y = pyload.y;
+        // console.log(pyload.x)
+        ballCord.x = pyload.x * width;
+        ballCord.y = pyload.y * height;
         pre.x =  pyload.px
         pre.y = pyload.py
     })

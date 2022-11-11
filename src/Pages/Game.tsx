@@ -33,7 +33,6 @@ interface GameProps {
   
 }
 
-
 export default function Game(props : GameProps) {
   const [user, setUser] = useState<UserProp>()
   const [loged, setloged] = useState<UserProp>()
@@ -133,7 +132,7 @@ var dat : UserProp;
     })
     document.addEventListener('visibilitychange', function (event) {
       if (document.hidden) {
-        gamesocket.emit("endGame" , dat?.login)
+        // gamesocket.emit("endGame" , dat?.login)
       } else {
           console.log('is visible');
       }
