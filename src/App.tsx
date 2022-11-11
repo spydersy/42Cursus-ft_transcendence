@@ -182,6 +182,11 @@ function App() {
     navigate("/game/")
     
   }
+  function PlayerInGame (payload) {
+    localStorage.setItem("mode","1v1")
+    navigate("/game/"+ payload)
+    
+  }
   useEffect(()=>{
     // sub
     
@@ -191,12 +196,14 @@ function App() {
     socket.on('acceptedReq', acceptRequest)
     socket.on('event', handleevent);
     gameSocket.on('challengeAccepted', handelChallengeAccept)
+    gameSocket.on('PlayerInGame', PlayerInGame);
     return () => {
       socket.removeListener('msg_event', hundleMsg);
       socket.removeListener('challeneEvent', handleChallenge);
       socket.removeListener('recievedRequest', handleRequest);
       socket.removeListener('acceptedReq', acceptRequest);
       socket.removeListener('event', handleevent);
+      gameSocket.removeListener('PlayerInGame', PlayerInGame);
 
       gameSocket.removeListener('challengeAccepted', handelChallengeAccept);
     }
@@ -260,14 +267,17 @@ function App() {
           onlinesSocket.close()
           navigate("/signin")
         }
+        else{
+  
+            gameSocket.emit('gameConnected', {login : user.login});
+
+        }
       })
       
       axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me", 
       {withCredentials: true} 
       ).then((res)=>{
         
-        // console.log(res.data)
-        localStorage.setItem("user", JSON.stringify(User))
         localStorage.setItem("mode","classic")
         joinChannels()
         socket.emit("AddOnlineUser")
@@ -295,6 +305,7 @@ function App() {
               <Route path="/signin" element={<SignIn />} />
               <Route path="/game" element={<Game theme={gametheme}  />} />
               <Route path="/game/watch/:id" element={<Game theme={gametheme}  />} />
+              <Route path="/game/:id" element={<Game theme={gametheme}  />} />
               <Route path="/chat/:id" element={<Chat />} />
               <Route path="/setting" element={<Setting />} />
               <Route path="/testing" element={<SocketTesting />} />

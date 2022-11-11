@@ -23,10 +23,10 @@ interface UserProp {
   defaultAvatar: string,
   login : string
   displayName : string
-  relation? : string
-  nbFriends? : string
-  wins : number
-  losses : number
+  relation? : string,
+  nbFriends? : string,
+  wins : number[],
+  losses : number[],
 }
 interface GameProps {
   theme: any
@@ -47,6 +47,8 @@ export default function Game(props : GameProps) {
   const [msg, setmsg] = useState(false)
   const [player, setplayer] = useState(true)
   const [show, setshow] = useState(false)
+
+
   gamesocket.on("startGame" , (pyload : any)=>{
     fetchPlayersData(pyload.player1 , pyload.player2)
     setend(false)
@@ -129,8 +131,15 @@ var dat : UserProp;
       }
       }
     })
-
+    document.addEventListener('visibilitychange', function (event) {
+      if (document.hidden) {
+        gamesocket.emit("endGame" , dat?.login)
+      } else {
+          console.log('is visible');
+      }
+  });
     return () => {
+
 
       gamesocket.emit("endGame" , dat?.login)
     }

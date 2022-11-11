@@ -23,7 +23,7 @@ export default function Pong(props: gameProps) {
     var height = 700;
     var ballCord = {
         size: 20,
-        x: 0 / 2,
+        x: width / 2,
         y: height / 2
     }
     var paddel1 = {
@@ -36,7 +36,7 @@ export default function Pong(props: gameProps) {
     var paddel2 = {
         w: 20,
         h: 100,
-        x: width - 30,
+        x: width - 50,
         y: 0,
     }
     var pre = {
@@ -95,7 +95,7 @@ export default function Pong(props: gameProps) {
                 y: height / 2,
         
             };
-             paddel2.x = width - 30;
+             paddel2.x = width - 50;
              paddel1.x = 30;
       
         
