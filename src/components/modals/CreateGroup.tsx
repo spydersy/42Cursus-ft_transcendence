@@ -464,17 +464,14 @@ const MembersStyle= styled.div`
 interface  UpdateGroupProp{
     members : string[],
     setmembers : (e : any) => void,
-    id: string,
+    id: number,
+    name: string,
     closeModal : () => void,
     banner : string,
 }
 
 export  function UpdateGroup(props : UpdateGroupProp) {
     
-   
-    const [members, setmembers] = useState([
-     
-    ])
     const [data, setdata] = useState({
         name : "",
         icone : '',
@@ -483,16 +480,9 @@ export  function UpdateGroup(props : UpdateGroupProp) {
         members :[]
     })
     const [check, setcheck] = useState("public")
-    const [hide, sethide] = useState(false)
-    const [alertt, setalert] = useState(false)
-    const [img, setimg] = useState("")
-    const groupName = useRef(null)
+
     const passRef = useRef<HTMLInputElement>(null)
-    // const first = useRef(second)
-    const uploadFile = ()=>{
-        var e = document.getElementById("fileInput")
-        e?.click()
-    }
+   
     const handleRadioChange = (e : any)=>{
         if (e.target.id === "protected")
         {
@@ -522,49 +512,55 @@ export  function UpdateGroup(props : UpdateGroupProp) {
         }
         console.log(e.target)
     }
-    // const createGroup = ()=>{
-    //     //check for valid input
-    //     var  bodyFormData = new FormData();
-    //     bodyFormData.append('icone',data.icone);
-    //     bodyFormData.append('name',data.name);
-    //     bodyFormData.append('members', JSON.stringify(members));
-    //     bodyFormData.append('type',check);
-    //     if (passRef.current != null)
-    //     {
-    //         var pass = passRef.current.value;
-    //         bodyFormData.append('password',pass);
-        
-    //     }
 
-
-
-    //     console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
-    //     axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
-    //     {withCredentials: true} 
-    //   ).then((res)=>{
-    //     console.log(res.data)
-    //     // props.close.closeModal()
-    //   }).catch((err)=>{
-    //     // if (data.name === "")
-    //         setalert(true)
-    //     console.log(err)
-    //     })
-        
-    // }
     const updateGroup = ()=>{
         //check for valid input
 
+        // var  bodyFormData = new FormData();
+
+        // bodyFormData.append('channelId',props.id.toString());
+        // bodyFormData.append('newAccessType',data.type);
+        
+        // if (passRef.current != null)
+        // {
+        //     var pass = passRef.current.value;
+        //     bodyFormData.append('password',pass);
+        // }
+        // else
+        //     bodyFormData.append('password', "     ");
+
+        var pass;
+        if (passRef != null)
+            pass = passRef.current?.value;
+        else
+            pass = "------";
+
+        // bodyFormData.append('password',pass);
+
+
+        const obj = {
+            channelId: props.id,
+            newAccessType: data.type.toUpperCase(),
+            password: pass,
+        }
+
+        // console.log("_+____BODY___", bodyFormData)
+        console.log("_+____BODY___", obj)
+
+        axios.post("http://localhost:8000/chat/UdpatedChannelAccess" , obj,   {withCredentials: true}).then((res)=>{
+            console.log(res.data)
+
+        }).catch((err)=>{
+            console.log(err)
+        })
     }
     
     useEffect(() => {
-        var e = document.getElementById("fileInput")
-        e?.addEventListener("change", (c :any)=>{
-            console.log(c.target.files[0])
-          
-            setimg( URL.createObjectURL(c.target.files[0]))
-            setdata({...data , icone: c.target.files[0]})
-        })
+       
+
+
     }, [data])
+
     // console.log("__MEMBERS__DBG__ : ", members);
   return (
     <CreateGroupStyle>
@@ -574,12 +570,12 @@ export  function UpdateGroup(props : UpdateGroupProp) {
         <Form>
             
             <Row >
-                <div  onClick={uploadFile} className='groupImg' >
+                <div   className='groupImg' >
                     {props.banner === ""? < Image/> :  <img style={{width  : "100%", height : "100%"  }} src={props.banner}alt="xx" />}
                 </div>
 
                 <div className='con' >
-                    <InputComponent  disabled={true} type='text' lable='Group name' alert={alertt} placeholder={props.id}/>
+                    <InputComponent  disabled={true} type='text' lable='Group name' placeholder={props.name}/>
                     <Row2>
                         <input type="radio" defaultChecked  onChange={handleRadioChange} id="public" name="status" value="public"/>
                         <label>Public</label>
