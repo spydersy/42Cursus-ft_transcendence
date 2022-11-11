@@ -462,7 +462,7 @@ background-color: ${props => props.theme.colors.seconderybg};
               <div className='vr'> </div>
 
               <div className='Stats'>
-                < RadarChart     />
+                < RadarChart  wins={props.player.wins}  losses={props.player.losses} />
               </div>
 
           </Data>

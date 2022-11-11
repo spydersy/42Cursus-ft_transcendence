@@ -16,18 +16,20 @@ align-items: flex-end;
 `;
 
 
+export interface GameData 
+{
+  wins : number[],
+  losses : number[],    
+}
+
+export  function RadarChart(props: GameData) {
 
 
-export  function RadarChart() {
+  var wins = props.wins;
+  var losses = props.losses;
 
-
-  var wins = [0,0];
-  var losses = [0,0];
-  var draws = [0,0];
-
-  let Ewins = [wins[0], wins[1], 25, 10, 25]
-  let Elosses = [losses[0], losses[1], 25, 18, 25]
-  let Edraws = [draws[0], draws[1], 25, 25,25]
+  let Ewins = [wins[0], wins[1], 25, 25, 25]
+  let Elosses = [losses[0], losses[1], 25, 25, 25]
 
   const dataRadar = {
     labels: [
@@ -55,14 +57,7 @@ export  function RadarChart() {
         pointRadius: 1,
         data: Elosses
       },
-      {
-        label: "Draws",
-        borderWidth: 0.5,
-        backgroundColor: 'rgba(206, 140, 107, 0.438)',
-        borderColor: 'rgba(226, 128, 30, 0.8)',
-        pointRadius: 1,
-        data: Edraws
-      }
+
     ]
     };
 
