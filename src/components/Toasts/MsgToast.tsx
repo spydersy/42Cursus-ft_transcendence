@@ -40,13 +40,13 @@ interface UserProp {
   wins : number[]
   losses : number[]
 }
-export  function MutedToast() {
+export  function MutedToast(props :{ mesg : string}) {
   return (
     <ToastStyle to="">
 
         <div className='data'>
             <div className='msg'>
-              Please ! Take a break,  You are Muted for a while
+              {props.mesg}
             </div>
         </div>
     </ToastStyle>
