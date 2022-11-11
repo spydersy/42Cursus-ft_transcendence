@@ -74,11 +74,7 @@ export default function CreateGroup(props :{closeModal : ()=>void}) {
         {
             var pass = passRef.current.value;
             bodyFormData.append('password',pass);
-        
         }
-
-
-
         console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
         axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 

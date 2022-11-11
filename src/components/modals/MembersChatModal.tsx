@@ -172,7 +172,7 @@ interface MemberProps{
           </>
         }
           {(props.access === "ADMIN"
-          && props.data.permission !== "OWNER" )&& 
+          && props.data.permission !== "OWNER" && props.data.permission !== "ADMIN" )&& 
           <>
           {restriction === "NULL"? <Button size='small' color={"#ae0b0b"}  isIcon={true} onClick={()=>{OwnerBan(0)}} icon={<Ban/>}/>
           :<Button size='small'  isIcon={true} onClick={()=>{OwnerBan(1)}} icon={<Ban/>}/>

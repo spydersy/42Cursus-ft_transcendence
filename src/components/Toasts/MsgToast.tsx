@@ -31,6 +31,7 @@ interface ssss {
   reciever: string,
   status: boolean
 }
+
 interface UserProp {
   defaultAvatar: string,
   login : string
@@ -46,6 +47,42 @@ export  function MutedToast(props :{ mesg : string}) {
         <div className='data'>
             <div className='msg'>
               {props.mesg}
+            </div>
+        </div>
+    </ToastStyle>
+  )
+}
+export  function AddedToast(props: {data : string}) {
+  const [User, setUser] = useState<UserProp>({
+    defaultAvatar: "string",
+    login : "string",
+    displayName : "string",
+    relation : "string",
+    nbFriends : "string",
+    wins : [0,0],
+    losses : [0,0],
+  })
+
+  useEffect(() => {
+    axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data  ,  {withCredentials: true}
+        ).then((res)=>{
+              // check for the user is bloked 
+              setUser(res.data)
+            }).catch((error)=>{ 
+              } 
+   )     
+  }, [])
+  return (
+    <ToastStyle to="">
+        <div className='avatar'>
+          <AvatarComponent img={User.defaultAvatar}/>
+        </div>
+        <div className='data'>
+            <div className=' name'>
+              {props.data}
+            </div>
+            <div className='msg'>
+              Added You to a channel
             </div>
         </div>
     </ToastStyle>

@@ -34,7 +34,7 @@ import SocketTesting from './components/testing/SocketTesting';
 import ChatTesting from './components/testing/ChatTesting';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import MsgToast , {AcceptToast, FriendRequestToast, GameChallengeToast, CancelToast, MutedToast} from './components/Toasts/MsgToast';
+import MsgToast , {AcceptToast, AddedToast, FriendRequestToast, GameChallengeToast, CancelToast, MutedToast} from './components/Toasts/MsgToast';
 import { ReactComponent as CloseIcon } from "./assets/imgs/close-icon.svg";
 import { UserContext } from './context/UserContext';
 
@@ -80,6 +80,11 @@ const CustomToastWithLink = (data : msgType) => (
   </div>
 );
 
+const CustomToast = (data : string) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <AddedToast data={data}/>
+  </div>
+);
 
 const CustomToastMesg = (msg : string) => (
   <div style={{width: "100%" , height : "100%"}}>
@@ -180,6 +185,16 @@ function App() {
     navigate("/game/")
     
   }
+  function handladdedMembert (payload) {
+      console.log(payload)
+      const    toasty = () =>  toast(CustomToast(payload) , {
+        className: "toast",
+        progressClassName: "toastProgress",
+        autoClose: 2000,
+        hideProgressBar: true,
+      })
+      toasty()
+  }
   function PlayerInGame (payload) {
     localStorage.setItem("mode","1v1")
     navigate("/game/"+ payload)
@@ -192,6 +207,7 @@ function App() {
     socket.on('recievedRequest', handleRequest)
     socket.on('acceptedReq', acceptRequest)
     socket.on('event', handleevent);
+    socket.on('addedMember', handladdedMembert);
     gameSocket.on('challengeAccepted', handelChallengeAccept)
     gameSocket.on('PlayerInGame', PlayerInGame);
     return () => {
@@ -201,7 +217,7 @@ function App() {
       socket.removeListener('acceptedReq', acceptRequest);
       socket.removeListener('event', handleevent);
       gameSocket.removeListener('PlayerInGame', PlayerInGame);
-
+      socket.removeListener('addedMember', handladdedMembert);
       gameSocket.removeListener('challengeAccepted', handelChallengeAccept);
     }
     })

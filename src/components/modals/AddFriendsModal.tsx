@@ -6,6 +6,7 @@ import { AvatarComponent } from '../PlayerProfile';
 import axios from 'axios';
 import { Button } from '../../Pages/SignIn';
 import { UserContext } from '../../context/UserContext';
+import { SocketContext } from '../../context/Socket';
 interface UserProp {
   id : string , 
     defaultAvatar: string,
@@ -18,8 +19,9 @@ interface UserProp {
   }
 export default function AddFriendsModal(props : {members : string[] , setmembers : (e : any)=>void , closeModal : ()=> void} ) {
     const [friends, setfriends] = useState([])
+    const socket = useContext(SocketContext)
     const handleFriend= (e : any)=>{
-
+        // console.log("hnaaaaaaaaaaaaa____:")
         e.stopPropagation();
     }
 
@@ -30,25 +32,20 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
   const user = useContext(UserContext)
 
     useEffect(() => {
-        var s : string | null = localStorage.getItem('user');
+        // var s : string | null = localStorage.getItem('user');
         user.then((data : UserProp | "{}")=>{
           if (data !== "{}")
           {
             axios.get("http://localhost:8000/users/friends/" + data.login, 
             {withCredentials: true} 
           ).then((res)=>{
-    
-    
+            console.log(res.data)
             setfriends(res.data)
             console.log(res.data[0])
           }).catch((err)=>{
-           
             })
           }
         })
-       
-    
- 
     }  , [ props.setmembers])
     
   return (
@@ -60,6 +57,7 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
 
     { 
         friends.map((data : any , id :number)=>{
+          console.log(data);
             return <Friend key={id}>
                     <div>
                         <div style={{width : '35px' , height :'35px'}}>
@@ -74,26 +72,27 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
                 !props.members.includes(data.id ) ? 
                 <Button   onClick={(e)=>{handleFriend(e)
                   var test = props.members;
+                  user.then((me : UserProp | "{}")=>{
+                    if (me !== "{}")
+                    {
+                      socket.emit("addedMember", {owner: me, addedMember: data.login})
+                    }})
                   test.push(data.id)
                    props.setmembers([...test])
-                    }} text={  "add" }/>
+                    }} text={"add"}/>
                     :
-                      
                     <Button  onClick={(e)=>{handleFriend(e)
                       var test = props.members;
+                      console.log("khkhkh")
                       test.splice(id , 1)
                       props.setmembers([...test])
               }} text='Added' type='secondary'/>
               }
-
-                
                     </Friend>
         })
-
     }
     <Button onClick={done} text="Done" />
     </AddFriendsModalStyle>
-
   )
 }
 
