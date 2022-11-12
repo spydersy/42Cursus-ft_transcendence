@@ -9,6 +9,7 @@ import AddFriendsModal from './AddFriendsModal';
 import InputComponent from '../Input';
 import { Button } from '../../Pages/SignIn';
 import axios from 'axios';
+import { type } from 'os';
 
 export default function CreateGroup(props :{closeModal : ()=>void}) {
     
@@ -70,17 +71,22 @@ export default function CreateGroup(props :{closeModal : ()=>void}) {
         bodyFormData.append('name',data.name);
         bodyFormData.append('members', JSON.stringify(members));
         bodyFormData.append('type',check);
+       
         if (passRef.current != null)
         {
             var pass = passRef.current.value;
             bodyFormData.append('password',pass);
         }
+        
         console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
         axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 
       ).then((res)=>{
+        
         console.log(res.data)
+        
         props.closeModal()
+
       }).catch((err)=>{
         // if (data.name === "")
             setalert(true)
@@ -464,6 +470,7 @@ interface  UpdateGroupProp{
     name: string,
     closeModal : () => void,
     banner : string,
+    type: string,
 }
 
 export  function UpdateGroup(props : UpdateGroupProp) {
@@ -471,14 +478,12 @@ export  function UpdateGroup(props : UpdateGroupProp) {
     const [data, setdata] = useState({
         name : "",
         icone : '',
-        type : "",
-        password : "",
+        type : "PUBLIC",
+        password : "password",
         members :[]
     })
     const [check, setcheck] = useState("public")
-
     const passRef = useRef<HTMLInputElement>(null)
-   
     const handleRadioChange = (e : any)=>{
         if (e.target.id === "protected")
         {
@@ -506,56 +511,35 @@ export  function UpdateGroup(props : UpdateGroupProp) {
                 setcheck("private")
             }
         }
-        console.log(e.target)
+        console.log("radio change : ", e.target)
     }
 
     const updateGroup = ()=>{
-        //check for valid input
 
-        // var  bodyFormData = new FormData();
-
-        // bodyFormData.append('channelId',props.id.toString());
-        // bodyFormData.append('newAccessType',data.type);
-        
-        // if (passRef.current != null)
-        // {
-        //     var pass = passRef.current.value;
-        //     bodyFormData.append('password',pass);
-        // }
-        // else
-        //     bodyFormData.append('password', "     ");
-
-        var pass;
-        if (passRef != null)
-            pass = passRef.current?.value;
-        else
-            pass = "------";
-
-        // bodyFormData.append('password',pass);
-
-
+        let pass;
+        (passRef.current?.value) ?  pass = passRef.current?.value.trim() :  pass = "defaultpasswrd";
+        console.log("pass : {", passRef.current?.value , "} pass {" , pass, "}")
         const obj = {
             channelId: props.id,
             newAccessType: data.type.toUpperCase(),
             password: pass,
         }
-
-        // console.log("_+____BODY___", bodyFormData)
         console.log("_+____BODY___", obj)
 
         axios.post("http://localhost:8000/chat/UdpatedChannelAccess" , obj,   {withCredentials: true}).then((res)=>{
             console.log(res.data)
+            props.closeModal()
 
+            // window.location.reload()
         }).catch((err)=>{
             console.log(err)
+            
         })
     }
     
     useEffect(() => {
-       
 
-
-    }, [data])
+    }, [])
 
     // console.log("__MEMBERS__DBG__ : ", members);
   return (
@@ -573,7 +557,7 @@ export  function UpdateGroup(props : UpdateGroupProp) {
                 <div className='con' >
                     <InputComponent  disabled={true} type='text' lable='Group name' placeholder={props.name}/>
                     <Row2>
-                        <input type="radio" defaultChecked  onChange={handleRadioChange} id="public" name="status" value="public"/>
+                        <input type="radio"  onChange={handleRadioChange} id="public" name="status" value="public"/>
                         <label>Public</label>
                         <input type="radio" onChange={handleRadioChange} id="private" name="status" value="private"/>
                         <label>Private</label>

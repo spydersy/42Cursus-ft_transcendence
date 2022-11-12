@@ -11,6 +11,7 @@ import {ReactComponent as UserAddIcon} from "../assets/imgs/user-plus.svg";
 import {ReactComponent as BlockIcon} from "../assets/imgs/ban.svg";
 import {ReactComponent as Edit} from "../assets/edit.svg";
 import {ReactComponent as Join} from "../assets/join-group.svg";
+import { type } from 'os';
 
 
 interface RoomProps{
@@ -20,12 +21,14 @@ interface RoomProps{
     roomMembers : number
     id: number
     ownership : boolean
+    type: string
 }
 
 export default function RoomComponent(props : RoomProps) {
   const [hideModel, sethideModel] = useState(false)
   const [hideModel1, sethideModel1] = useState(false)
   const [valo, setvalo]= useState(true)
+
   const enable = () => {
 
     if (!valo && !hideModel1)
@@ -37,12 +40,6 @@ export default function RoomComponent(props : RoomProps) {
       sethideModel(false)
       console.log(hideModel)
       setvalo(false)
-  }
-  const disabloModel = () => {
-      console.log(hideModel)
-      sethideModel1(false)
-      sethideModel(false)
-      console.log(hideModel1)
   }
   const UpdateGroupData = ()=>{
     //check for valid input
@@ -73,8 +70,14 @@ export default function RoomComponent(props : RoomProps) {
   //   })
     
   } 
-  // check ownership to display hideModel1
+  const disabloModel = () => {
+      console.log(hideModel)
+      sethideModel1(false)
+      sethideModel(false)
+      console.log(hideModel1)
+    }
 
+  // check ownership to display hideModel1
   return (
     <RoomStyle  >
 
@@ -87,16 +90,16 @@ export default function RoomComponent(props : RoomProps) {
                 sethideModel(false) }}isIcon={true} icon={<Edit/>} />
             </div>
           } 
-            
+
+          { !props.ownership &&
             <div className='Edit1'>
-                  <Button onClick={()=>{
-                  sethideModel1(false)
-                  sethideModel(true)
-                }}isIcon={true} icon={<UserAddIcon/>}
-                />
+            <Button onClick={()=>{
+            sethideModel1(false)
+            sethideModel(true)
+            }}isIcon={true} icon={<UserAddIcon/>}
+            />
             </div>
-
-
+          }
         </div>
         
         <div className='desc'>
@@ -108,7 +111,6 @@ export default function RoomComponent(props : RoomProps) {
             <div className='members'>
                 {props.roomMembers} Members
             </div>
-
         </div>
 
         {hideModel &&  <Modal
@@ -121,21 +123,6 @@ export default function RoomComponent(props : RoomProps) {
           <JoinGroupModal  closeModal={()=>{
             sethideModel(false)
           }} isLocked={props.isLocked}  id={props.id} />
-          {/* <RoomSstyle  >
-            {
-                props.isLocked === true && 
-                <InputComponent type='password' placeholder='Enter Password' />
-            }
-            <div>
-            <Link to={"/chat/" + props.id}>
-              <Button text='Join' />
-            </Link>
-          
-          
-            <Button onClick={ ()=>disablo()} type='secondary' text='Cancel' />
-
-            </div>
-          </RoomSstyle> */}
 
         </Modal>}
 
@@ -145,14 +132,13 @@ export default function RoomComponent(props : RoomProps) {
             hideModal={() =>sethideModel1(false)}
         >
 
-          <UpdateGroup  banner={props.roomBanner} id={props.id} name={props.roomName} members={["",""]} setmembers={()=>{}}  closeModal={  ()=>sethideModel1(false) } />
+          <UpdateGroup  type={props.type} banner={props.roomBanner} id={props.id} name={props.roomName} members={["",""]} setmembers={()=>{}}  closeModal={  ()=>sethideModel1(false) } />
         
           <Btpo >
               <Button onClick={ ()=>disabloModel()} type='secondary' text='Cancel' />
           </Btpo>  
 
         </Modal>}
-       
 
     </RoomStyle>
   )

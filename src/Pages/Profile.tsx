@@ -75,6 +75,8 @@ export default function Profile() {
           setisCurrent(false)
           axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + id,  {withCredentials: true}  ).then((res)=>{
             // check for the user is bloked 
+
+            console.log("____ALOHA___0", res.data)
             setUser(res.data)
       
           }).catch((error)=>{ 

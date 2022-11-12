@@ -639,9 +639,6 @@ export  function BottomChat(props: ChatProps) {
   
 `;
 
-
-
-
 export  function ControlBar() {
   return (
     <ControlBarStyle>

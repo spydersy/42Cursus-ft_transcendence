@@ -26,7 +26,7 @@ const CustomToastMesg = (msg: string) => (
   </div>
 );
 export default function JoinGroupModal(props: RoomProps) {
-  const reff = useRef<HTMLInputElement>(null)
+  const reffo = useRef<HTMLInputElement>(null)
   const user = useContext(UserContext)
   const cancelreq = ()=> {
     props.closeModal()
@@ -34,7 +34,7 @@ export default function JoinGroupModal(props: RoomProps) {
   const addMember = () => {
     // alert(props.id)
     console.log("_____ADD MEMEBER____")
-    var v = reff.current?.value
+    var v = reffo.current?.value
     if (v) {
       user.then(async (data: UserProp | "{}") => {
         if (data != "{}") {
@@ -57,7 +57,6 @@ export default function JoinGroupModal(props: RoomProps) {
               toasty()
             }
             // if joined 
-            props.closeModal()
           }).catch((err) => {
             console.log(err)
             console.log("haaaaaaaa")
@@ -103,13 +102,14 @@ export default function JoinGroupModal(props: RoomProps) {
         }
       })
     }
+    props.closeModal()
   }
 
   return (
     <RoomStyle  >
       {
         props.isLocked === true &&
-        <InputComponent refs={reff} type='password' placeholder='Enter Password' />
+        <InputComponent refs={reffo} type='password' placeholder='Enter Password' />
       }
       <div>
         {/* <Link to={"/chat/" + props.link}> */}
