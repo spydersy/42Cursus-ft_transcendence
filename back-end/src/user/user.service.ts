@@ -56,13 +56,15 @@ export class UserService {
             return -1;
         }
         const rankedUsers = await this.prisma.users.findMany({
-            select: {id: true},
+            select: {id: true,
+                    level: true},
             orderBy:{ level: 'desc'},
         });
+        const range: number = rankedUsers[0].level - rankedUsers[rankedUsers.length - 1].level;
         for (let index = 0; index < rankedUsers.length; index++) {
             if (UserDto.id === rankedUsers[index].id) {
-                console.log("__MY__RANK__ : ", (index + 1 / rankedUsers.length) * 100);
-                return (index + 1 / rankedUsers.length) * 100;
+                console.log("__MY__RANK__ : ", ((rankedUsers[index].level + rankedUsers[rankedUsers.length - 1].level) / range) * 100);
+                return ((rankedUsers[index].level + Math.abs(rankedUsers[rankedUsers.length - 1].level)) / range) * 100;
             }
         }
     }
@@ -136,6 +138,7 @@ export class UserService {
             return res.status(HttpStatus.FORBIDDEN).send({'message' : 'Forbidden : User Blocked you'}); // DO SOMETHING
         }
         UserDto['relation'] = 'NOTHING';
+        UserDto['rank'] = await this.GetRank(Me, User);
         if (await this.IsBlockedUser(MeDto.id, UserDto.id) === true) {
             UserDto['relation'] = 'BLOCKED';
             return res.status(HttpStatus.OK).send(UserDto);
