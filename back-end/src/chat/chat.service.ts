@@ -359,8 +359,8 @@ export class ChatService {
                 data: {
                     access: updateChannelDto.newAccessType === 'PUBLIC' ? CHANNEL.PUBLIC
                             : updateChannelDto.newAccessType === 'PRIVATE' ? CHANNEL.PRIVATE
-                            : CHANNEL.PRIVATE,
-                    password: updateChannelDto.newAccessType === 'PROTECTED' ? updateChannelDto.password
+                            : CHANNEL.PROTECTED,
+                    password: updateChannelDto.newAccessType === 'PROTECTED' ? await bcrypt.hash(updateChannelDto.password, 10)
                             : null,
                 }
             });

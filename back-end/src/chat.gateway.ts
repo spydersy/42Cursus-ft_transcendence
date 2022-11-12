@@ -11,16 +11,6 @@ import { Socket, Server } from 'socket.io';
 import { ChatService } from './chat/chat.service';
 import { WsGuard } from './auth/jwt.strategy';
 
-interface UserProp {
-  id : string , 
-    defaultAvatar: string,
-    login : string
-    displayName : string
-    relation? : string
-    nbFriends? : string
-    wins : number[]
-    losses : number[]
-  }
 @WebSocketGateway(3001, {
     cors: {
       origin: process.env.FRONTEND_URL,
