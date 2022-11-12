@@ -48,6 +48,22 @@ export class UserService {
         return AllFriends.length;
     }
 
+    async GetRank(UserMe: string, User: string) : Promise<number> {
+        let UserMeDto = await this.GetUserByLogin(UserMe);
+        let UserDto = await this.GetUserByLogin(User);
+
+        if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true) {
+            return -1;
+        }
+        const rankedUsers = await this.prisma.users.findMany();
+        for (let index = 0; index < rankedUsers.length; index++) {
+            if (UserDto.id === rankedUsers[index].id) {
+                console.log("__MY__RANK__ : ", (index + 1 / rankedUsers.length) * 100);
+                return (index + 1 / rankedUsers.length) * 100;
+            }
+        }
+    }
+
     async GetFriends(UserMe: string, User: string, @Res() res) {
         let UserMeDto = await this.GetUserByLogin(UserMe);
         let UserDto = await this.GetUserByLogin(User);
