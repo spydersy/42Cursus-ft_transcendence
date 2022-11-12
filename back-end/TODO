@@ -1,0 +1,89 @@
+TODO VERSION 4.1(Chat Endpoints):
+- [ ] ADD USER
+- [ ] GET USERS
+- [ ] UPDATE USERS PERMISSION - OWNER
+- [ ] UPDATE USERS PERMISSION - ADMIN
+- [ ] UPDATE USERS PERMISSION - USER
+- [ ] UPDATE USER RESTRICTION - BAN
+- [ ] UPDATE USER RESTRICTION - MUTE
+- [ ] UPDATE USER RESTRICTION - UNBAN
+- [ ] UPDATE USER RESTRICTION - UNMUTE
+- [ ] DELETE USER - BAN
+- [ ] DELETE USER - REMOVE
+- [ ] DELETE USER - LEAVE
+
+- [X] CREATE CHANNEL
+- [ ] CHANNEL GETTERS
+- [ ] UPDATE CHANNEL - NAME
+- [ ] UPDATE CHANNEL - PICTURE
+- [ ] UPDATE CHANNEL - ACCESS
+- [ ] UPDATE CHANNEL - PASSWORD
+- [ ] DELETE CHANNEL
+
+- [ ] APPLY RESTRICTIONS ON USERS - BANNED USERS
+- [ ] APPLY RESTRICTIONS ON USERS - MUTED USERS
+- [ ] APPLY RESTRICTIONS ON USERS - BLOCKED USERS
+
+
+<!-- STEPS : -->
+<!-- - [X] Block user -->
+<!-- - [X] Unblock user -->
+<!--  -->
+<!-- - [X] Add User -->
+<!-- - [X] Accept User Request -->
+<!-- - [X] Decline User Request -->
+<!-- - [X] Unfriend User -->
+<!-- - [X] Cancel Friend Request -->
+<!-- - [X] Add Relation Between Users In Json Object -->
+<!-- - [ ] Add Validation Layer For Outputs -->
+<!-- - [X] Real Time Search Engine [Channel Search] -->
+<!-- - [X] Add nb Friends in user Object -->
+<!-- - [ ] Two Factor Authentication -->
+<!-- - [ ] Users Status -->
+<!-- - [X] Create Rooms Endpoint -->
+<!-- - [ ] Username need Input Validation -->
+<!--  -->
+<!-- - [X] Create DM Channel After Accepting Friend Request -->
+<!-- - [X] Create Channels -->
+<!-- - [P] Update Channels -->
+<!-- - [P] Remove Channel -->
+<!-- - [ ] Update Users Permissions -->
+<!-- - [ ] Delete User from Channel -->
+<!-- - [ ] Get users In Channel -->
+<!-- - [X] Logout Endpoint -->
+<!-- - [ ] Update 2fa Status -->
+<!-- - [ ] Route Of Created Rooms -->
+<!--  -->
+<!-- USER SERVICE : -->
+<!--  -->
+<!-- CHAT SERVICE : -->
+<!-- - [ ] Optimize Schema -->
+<!-- - [ ] Create DM Channel for friends -->
+<!--  -->
+<!-- ENDPOINTS : -->
+<!-- - [X] GET /auth -->
+<!-- - [X] GET /user/{id}?data={achievements, friends, games} -->
+<!-- - [X] PUT /user/relation/{id}?event={[add, block, accept, decline, unfriend, cancel]} [Temporary GET Request] -->
+<!-- - [X] GET /profile/me?data={achievements, matchs, ... , [friends, requests, blacklist]} -->
+<!-- - [ ] PUT /profile/update/{2fa, displayname} -->
+<!-- - [ ] POST /profile/update/avatar -->
+<!--  -->
+<!-- DATABASE : -->
+<!-- - [ ] Relation btwn tables. -->
+<!--  -->
+<!-- SECRET CODE : -->
+<!-- - [ ] Import it from .env file -->
+<!--  -->
+<!--  -->
+<!-- LEAR ABOUT MCD MODEL LOGIC DES DONNEES -->
+<!--  -->
+<!-- === OPERATIONS IN CHANNELS  :  ==================================================================== -->
+ <!-- - [ ] CREATE CHANNEL -->
+ <!-- - [ ] UPDATE CHANNEL -->
+ <!-- - [ ] DELETE CHANNEL -->
+<!--  -->
+<!-- === OPERATIONS IN CHANNELS  :  ==================================================================== -->
+ <!-- - [ ] ADD USER TO CHANNEL -->
+ <!-- - [ ] UPDATE USER IN CHANNEL -->
+ <!-- - [ ] DELETE USER FROM CHANNEL -->
+<!--  -->

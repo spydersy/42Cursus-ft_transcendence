@@ -1,0 +1,44 @@
+INPUT/OUTPUT VALIDATION:
+- [X] GET /upload/{imgpath}
+- [X] GET /users
+- [ ] GET /users/{id}
+- [ ] GET /users/friends/{id}
+- [ ] GET /users/achievements/{id}
+- [ ] GET /users/games/{id}
+- [ ] GET /users/relation/{id}
+- [ ] GET /profile/me
+- [ ] POST /profile/updateAvatar
+- [ ] POST /profile/logout
+- [ ] GET /profile/update2FA
+- [ ] POST /profile/update2FA
+- [ ] PUT /profile/updateUsername/{newname}
+- [ ] POST /chat/joinChannel
+- [ ] POST /chat/UpdateUserPermission
+- [ ] POST /chat/UpdateUserRestriction
+- [ ] DELETE /chat/leaveChannel
+- [ ] DELETE /chat/kickUser/{user}
+- [ ] GET /chat/myChannels
+- [ ] GET /chat/allChannels
+- [ ] GET /chat/messages/{channelId}
+- [ ] GET /chat/managedChannels
+- [ ] POST /chat
+- [ ] POST /chat/createRoom
+- [ ] GET /2fa/generate
+- [ ] GET /game/MatchHistory/{user}
+- [ ] GET /auth
+- [ ] POST /auth/validate2FA
+- [ ] GET /search/{dest}
+
+CHAT:
+- [X] Join Channel
+- [X] Leave Channel
+- [X] Chanege Channel Acccess
+- [X] Kick Users
+
+ACHIEVEMENTS SYSYEM:
+- [X] Create room Index[0]
+- [ ] Win 3 Games Index[1]
+- [X] Update Avatar Index[2]
+- [X] Win vs Ai Index[3]
+- [ ] Top 3 Players Index[4]
+- [X] Block User Index[5]

@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// [Users Data] : ================================================================================= //
+
+model users {
+  id                  Int             @id @unique
+  login               String          @unique
+  displayName         String          @unique
+  defaultAvatar       String
+  achievement         Boolean[]       @default([false, false, false, false, false, false])
+  wins                Int[]           @default([0, 0])
+  losses              Int[]           @default([0, 0])
+  level               Int             @default(0)
+  twoFactorAuth       Boolean         @default(false)
+  twoFactorAuthSecret String?
+  sentRequests        Friends[]       @relation("SentRequests")
+  receivedRequets     Friends[]       @relation("ReceivedRequets")
+  blackList           Blocks[]        @relation("BlackList")
+  blockedFrom         Blocks[]        @relation("BlockedUsers")
+  channels            channelsUsers[] @relation("Channels")
+  messages            Messages[]      @relation("Messages")
+  player1             MatchHistory[]  @relation("Player1")
+  player2             MatchHistory[]  @relation("Player2")
+  lastModification    DateTime        @default(now())
+}
+
+// ================================================================================================ //
+
+
+// [Relations Between Users] : ==================================================================== //
+
+enum RELATION {
+  FRIENDS
+  PENDING
+}
+
+model Friends {
+  id         Int     @id @default(autoincrement())
+  sender     users   @relation(name: "SentRequests", fields: [senderId], references: [id])
+  senderId   Int
+  receiver   users   @relation(name: "ReceivedRequets", fields: [receiverId], references: [id])
+  receiverId Int
+  status     RELATION
+}
+
+model Blocks {
+  id        Int      @id @default(autoincrement())
+  user      users    @relation(name: "BlackList", fields: [userId], references: [id])
+  userId    Int
+  blocked   users   @relation(name: "BlockedUsers", fields: [blockedId], references: [id])
+  blockedId Int
+  date      DateTime @default(now())
+}
+// ================================================================================================ //
+
+
+// [Played Matches Data] : ======================================================================== //
+enum MODE {
+  CLASSIC
+  AIBUGGY
+}
+
+model MatchHistory {
+  id        Int       @id @default(autoincrement())
+  player1   users     @relation("Player1", fields: [player1Id], references: [id])
+  player1Id Int
+  player2   users     @relation("Player2", fields: [player2Id], references: [id])
+  player2Id Int
+  score1    Int       @default(0)
+  score2    Int       @default(0)
+  mode      MODE
+  date      DateTime  @default(now())
+}
+// ================================================================================================ //
+
+
+// [Channels/Chat/UserMessages Data] : ============================================================ //
+
+enum CHANNEL {
+  DM
+  PUBLIC
+  PRIVATE
+  PROTECTED
+}
+
+enum PERMISSION {
+  OWNER
+  ADMIN
+  USER
+}
+
+enum RESTRICTION {
+  BANNED
+  MUTED
+  NULL
+}
+
+model channels {
+  id         String       @id @default(uuid())
+  access     CHANNEL
+  name       String?
+  picture    String?
+  password   String?
+  nbMessages Int             @default(0)
+  users      channelsUsers[] @relation("ChannelsUsers")
+  messages   Messages[]      @relation("ChannelMessages")
+  lastUpdate DateTime        @updatedAt
+}
+
+model channelsUsers {
+  id              Int      @id @default(autoincrement())
+  user            users    @relation(name: "Channels", fields: [userId], references: [id])
+  userId          Int
+  channel         channels @relation("ChannelsUsers", fields: [channelId], references: [id])
+  channelId       String
+  permission      PERMISSION
+  restriction     RESTRICTION @default(NULL)
+  restrictionTime DateTime     @updatedAt
+  duration        Int          @default(0)
+  @@unique([userId, channelId])
+}
+
+model Messages {
+  id        Int       @id @default(autoincrement())
+  sender    users     @relation("Messages", fields: [senderId], references: [id])
+  senderId  Int
+  channel   channels  @relation("ChannelMessages", fields: [channelId], references: [id])
+  channelId String
+  content   String
+  date      DateTime  @default(now())
+}
+// ================================================================================================ //
+
