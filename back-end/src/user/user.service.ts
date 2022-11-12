@@ -55,7 +55,10 @@ export class UserService {
         if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true) {
             return -1;
         }
-        const rankedUsers = await this.prisma.users.findMany();
+        const rankedUsers = await this.prisma.users.findMany({
+            select: {id: true},
+            orderBy:{ level: 'desc'},
+        });
         for (let index = 0; index < rankedUsers.length; index++) {
             if (UserDto.id === rankedUsers[index].id) {
                 console.log("__MY__RANK__ : ", (index + 1 / rankedUsers.length) * 100);
