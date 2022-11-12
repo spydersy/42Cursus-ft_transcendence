@@ -12,50 +12,14 @@ datasource db {
 
 // [Users Data] : ================================================================================= //
 
-enum SOCKET {
-  GAME
-  ONLINE
-}
-
-model websockets {
-  socketId  String  @id
-  userId    Int
-  userLogin String
-  type      SOCKET @default(ONLINE)
-}
-
-enum NOTIFICATION {
-  REQUEST
-  ACCEPT
-  MESSAGE
-  GAMEINVITAION
-}
-
-model notifications {
-  id     Int      @id @default(autoincrement())
-  user   users    @relation(name: "Notifications", fields: [userId], references: [id])
-  userId Int
-  type   NOTIFICATION
-  // Request & Accept & Game Invitation
-  displayName   String?
-  login         String?
-  defaultAvatar String?
-  // MESSAGE
-  channelName   String?
-  channelType   CHANNEL?
-  Date   DateTime @default(now())
-}
-
-
 model users {
   id                  Int             @id @unique
   login               String          @unique
   displayName         String          @unique
   defaultAvatar       String
-  achievement         Boolean[]       @default([false, false, false, false, false, false, false, false])
-  notifications       notifications[] @relation("Notifications")
-  wins                Int[]           @default([0, 0, 0, 0, 0])
-  losses              Int[]           @default([0, 0, 0, 0, 0])
+  achievement         Boolean[]       @default([false, false, false, false, false, false])
+  wins                Int[]           @default([0, 0])
+  losses              Int[]           @default([0, 0])
   level               Int             @default(0)
   twoFactorAuth       Boolean         @default(false)
   twoFactorAuthSecret String?
@@ -104,7 +68,6 @@ model Blocks {
 enum MODE {
   CLASSIC
   AIBUGGY
-  AIDRVEGA
 }
 
 model MatchHistory {
@@ -139,7 +102,6 @@ enum PERMISSION {
 enum RESTRICTION {
   BANNED
   MUTED
-  RECHECK
   NULL
 }
 

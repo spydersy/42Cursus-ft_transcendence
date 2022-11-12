@@ -1,14 +1,8 @@
 -- CreateEnum
-CREATE TYPE "SOCKET" AS ENUM ('GAME', 'ONLINE');
-
--- CreateEnum
-CREATE TYPE "NOTIFICATION" AS ENUM ('REQUEST', 'ACCEPT', 'MESSAGE', 'GAMEINVITAION');
-
--- CreateEnum
 CREATE TYPE "RELATION" AS ENUM ('FRIENDS', 'PENDING');
 
 -- CreateEnum
-CREATE TYPE "MODE" AS ENUM ('CLASSIC', 'AIBUGGY', 'AIDRVEGA');
+CREATE TYPE "MODE" AS ENUM ('CLASSIC', 'AIBUGGY');
 
 -- CreateEnum
 CREATE TYPE "CHANNEL" AS ENUM ('DM', 'PUBLIC', 'PRIVATE', 'PROTECTED');
@@ -17,32 +11,7 @@ CREATE TYPE "CHANNEL" AS ENUM ('DM', 'PUBLIC', 'PRIVATE', 'PROTECTED');
 CREATE TYPE "PERMISSION" AS ENUM ('OWNER', 'ADMIN', 'USER');
 
 -- CreateEnum
-CREATE TYPE "RESTRICTION" AS ENUM ('BANNED', 'MUTED', 'RECHECK', 'NULL');
-
--- CreateTable
-CREATE TABLE "websockets" (
-    "socketId" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "userLogin" TEXT NOT NULL,
-    "type" "SOCKET" NOT NULL DEFAULT 'ONLINE',
-
-    CONSTRAINT "websockets_pkey" PRIMARY KEY ("socketId")
-);
-
--- CreateTable
-CREATE TABLE "notifications" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "type" "NOTIFICATION" NOT NULL,
-    "displayName" TEXT,
-    "login" TEXT,
-    "defaultAvatar" TEXT,
-    "channelName" TEXT,
-    "channelType" "CHANNEL",
-    "Date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "notifications_pkey" PRIMARY KEY ("id")
-);
+CREATE TYPE "RESTRICTION" AS ENUM ('BANNED', 'MUTED', 'NULL');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -50,9 +19,9 @@ CREATE TABLE "users" (
     "login" TEXT NOT NULL,
     "displayName" TEXT NOT NULL,
     "defaultAvatar" TEXT NOT NULL,
-    "achievement" BOOLEAN[] DEFAULT ARRAY[false, false, false, false, false, false, false, false]::BOOLEAN[],
-    "wins" INTEGER[] DEFAULT ARRAY[0, 0, 0, 0, 0]::INTEGER[],
-    "losses" INTEGER[] DEFAULT ARRAY[0, 0, 0, 0, 0]::INTEGER[],
+    "achievement" BOOLEAN[] DEFAULT ARRAY[false, false, false, false, false, false]::BOOLEAN[],
+    "wins" INTEGER[] DEFAULT ARRAY[0, 0]::INTEGER[],
+    "losses" INTEGER[] DEFAULT ARRAY[0, 0]::INTEGER[],
     "level" INTEGER NOT NULL DEFAULT 0,
     "twoFactorAuth" BOOLEAN NOT NULL DEFAULT false,
     "twoFactorAuthSecret" TEXT,
@@ -142,9 +111,6 @@ CREATE UNIQUE INDEX "users_displayName_key" ON "users"("displayName");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "channelsUsers_userId_channelId_key" ON "channelsUsers"("userId", "channelId");
-
--- AddForeignKey
-ALTER TABLE "notifications" ADD CONSTRAINT "notifications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Friends" ADD CONSTRAINT "Friends_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
