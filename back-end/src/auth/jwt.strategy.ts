@@ -8,7 +8,6 @@ import { JwtService } from "@nestjs/jwt";
 import { JwtSignOptions } from "@nestjs/jwt";
 import { PrismaService } from "src/prisma/prisma.service";
 import { decode } from "punycode";
-import { SOCKET } from "@prisma/client";
 
 export const JWT_SECRET = process.env.JWT_SECRET;
 

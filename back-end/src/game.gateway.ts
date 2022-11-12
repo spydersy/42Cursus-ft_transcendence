@@ -457,7 +457,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 }
 async checkScore (room : any) {
     //you can do better
-    console.log(Math.abs(room.score.score1 - room.score.score2))
+    // console.log(Math.abs(room.score.score1 - room.score.score2))
+    console.log("__ROOM__DBG__ : ", room);
     if (room.score.score1 + room.score.score2  >= 3)
     {
       var i = this.roomArray.indexOf(room)

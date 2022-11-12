@@ -11,7 +11,6 @@ import {
  import { ChatService } from './chat/chat.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { PrismaService } from './prisma/prisma.service';
-import { SOCKET } from '@prisma/client';
 interface UserType {
  socketId : string[],
  userid : string,

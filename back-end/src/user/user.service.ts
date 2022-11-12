@@ -62,10 +62,8 @@ export class UserService {
         });
         const range: number = rankedUsers[0].level - rankedUsers[rankedUsers.length - 1].level;
         for (let index = 0; index < rankedUsers.length; index++) {
-            if (UserDto.id === rankedUsers[index].id) {
-                console.log("__MY__RANK__ : ", ((rankedUsers[index].level + rankedUsers[rankedUsers.length - 1].level) / range) * 100);
+            if (UserDto.id === rankedUsers[index].id)
                 return ((rankedUsers[index].level + Math.abs(rankedUsers[rankedUsers.length - 1].level)) / range) * 100;
-            }
         }
     }
 
@@ -333,10 +331,7 @@ export class UserService {
                 login: UserProfile.Login,
                 displayName: UserProfile.UsualFullName,
                 defaultAvatar: UserProfile.DefaultAvatar,
-                notifications: UserProfile.Notifications,
-                wins: UserProfile.Wins,
-                losses: UserProfile.Losses,
-                level: UserProfile.Level,
+                level: 100,
                 twoFactorAuth: false,
             },
         });

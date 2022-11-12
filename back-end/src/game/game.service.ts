@@ -87,6 +87,25 @@ export class GameService {
     async saveGame( mode: MODE) {
         let player1Dto = await this.prisma.users.findUnique({ where: { login: this.roomPlayers[0].login}});
         let player2Dto = await this.prisma.users.findUnique({ where: { login:   this.roomPlayers[1].login}});
+        const gameIndex = mode == MODE.CLASSIC ? 0 : 1;
+
+        player1Dto.wins[gameIndex] = this.score.score1 > this.score.score2
+                                    ? player1Dto.wins[gameIndex] + 1
+                                    : player1Dto.wins[gameIndex];
+
+        player1Dto.losses[gameIndex] = this.score.score2 > this.score.score1
+                                    ? player1Dto.losses[gameIndex] + 1
+                                    : player1Dto.losses[gameIndex];
+
+
+        player2Dto.wins[gameIndex] = this.score.score2 > this.score.score1
+                                    ? player2Dto.wins[gameIndex] + 1
+                                    : player2Dto.wins[gameIndex];
+
+        player2Dto.losses[gameIndex] = this.score.score1 > this.score.score2
+                                    ? player2Dto.losses[gameIndex] + 1
+                                    : player2Dto.losses[gameIndex];
+
 
         await this.addAchievement(player1Dto, player2Dto, mode);
         await this.prisma.matchHistory.create({
@@ -103,7 +122,9 @@ export class GameService {
             data: {
                 level: {
                     increment: this.score.score1 > this.score.score2 ? 100 : -50,
-                }
+                },
+                wins: player1Dto.wins,
+                losses: player1Dto.losses,
             }
         });
         await this.prisma.users.update({
@@ -111,7 +132,9 @@ export class GameService {
             data: {
                 level: {
                     increment: this.score.score2 > this.score.score1 ? 100 : -50,
-                }
+                },
+                wins: player2Dto.wins,
+                losses: player2Dto.losses,
             }
         });
     }
