@@ -34,9 +34,7 @@ import { WsGuard } from './auth/jwt.strategy';
   @UseGuards(WsGuard)
   @SubscribeMessage('chatToServer')
   async handleMessage(client: Socket, payload) {
-    console.log("__PAYLOAD__DBG__ : ", payload);
     const ret = await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
-    console.log("__RET__DBG__ : ", ret);
     if (ret.stat === true)
     {
       this.server.to(payload.channelId).emit('chatToClient', ret.payload);
@@ -52,7 +50,6 @@ import { WsGuard } from './auth/jwt.strategy';
   
   @SubscribeMessage('addedMember')
   AddMemberToChannel(client: any, payload: any): void {
-    console.log("______DBG____ ADD_MEMBER : " , payload)
     client.join((payload.addedMember))
     client.to(payload.addedMember).emit("addedMember", payload.owner.login)
     // client.to(payload[0]).emit('challeneEvent', payload[1]);
@@ -66,19 +63,16 @@ import { WsGuard } from './auth/jwt.strategy';
     for(var index in rooms)
     {
 
-      // console.log("__ROOM__DBG__ : ", rooms[index])
       client.join(rooms[index]);
     }
   //  client.emit('joinedRoom', room );
   }
   @SubscribeMessage('gameChallenge')
   SendGameChallenge(client: any, payload: any): void {
-    console.log("______DBG____ CHALLENGEGAME : " , payload[1])
     client.to(payload[0]).emit('challeneEvent', payload[1]);
   }
   @SubscribeMessage('sendFriendRequest')
   handleFriendRequest(client: Socket, payload: any): void {
-    console.log('___FreindRequest____:',  payload)
     client.join(payload.reciver);
     client.to(payload.reciver).emit('recievedRequest', payload);
     client.leave(payload.reciver)
@@ -92,8 +86,6 @@ import { WsGuard } from './auth/jwt.strategy';
 
   @SubscribeMessage('acceptFriendRequest')
   handleAcceptRequest(client: Socket, payload: any): void {
-
-    console.log('___requestd Login___', payload)
     client.join(payload.reciever);
     client.to(payload.reciever).emit('acceptedReq', payload)
     client.leave(payload.reciever)
@@ -109,7 +101,6 @@ import { WsGuard } from './auth/jwt.strategy';
 
   @SubscribeMessage('authEvent')
   handleAuthEvent(client: Socket, payload: string): void {
-    console.log('___here___', payload)
     // function to store new stat => ret
     // if (ret === true) {
     // emit(friends, online);
@@ -118,7 +109,6 @@ import { WsGuard } from './auth/jwt.strategy';
 
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: Socket, room: string): void {
-    console.log("__CLIENT__LEAVE__ROOM__DBG__ : ", room);
    client.leave(room);
    client.emit('leftRoom', room );
   }

@@ -330,16 +330,19 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     var room = this.getRoombyPlayerId(client.id)
     if (room)
     {
-      this.wss.to(room.roomName).emit("player1moved" , payload)
+      if (payload.y <  1 - 0.15 && payload.y > 0)
+        this.wss.to(room.roomName).emit("player1moved" , payload)
     }
   }
+
 
   @SubscribeMessage('player2Moved')
   player2moved(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
     if (room)
     {
-      this.wss.to(room.roomName).emit("player2moved" , payload)
+      if (payload.y <  1 - 0.15 && payload.y > 0)
+        this.wss.to(room.roomName).emit("player2moved" , payload)
     }
 
   }
@@ -352,7 +355,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       var i = this.roomArray.indexOf(room)
       this.roomArray[i].width = payload.w
       this.roomArray[i].height = payload.h
-      this.roomArray[i].paddel2.x = payload.w - 30
+      // this.roomArray[i].paddel2.x = payload.w - 30
       if (!this.hitWalls(i, this.roomArray[i].ball ,this.roomArray[i].direction , payload.w, payload.h ,payload.p1 , payload.p2 ))
         return ;
       this.roomArray[i].predict =  (this.roomArray[i].paddel2.x -  this.roomArray[i].ball.x) / this.roomArray[i].direction.x
@@ -361,7 +364,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
       if(room.status === "AiGame" && room.direction.x > 0)
       {
-          this.moveAI( this.roomArray[i])
+        this.moveAI( this.roomArray[i])
       }
       this.wss.to(room.roomName).emit("moveBallClient" , {x: this.roomArray[i].ball.x , y: this.roomArray[i].ball.y , px : this.roomArray[i].paddel2.x, py :this.roomArray[i].predicty })
     }
@@ -407,7 +410,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   }
    hitWalls = (i : number,ballCord : any ,direction: any , width , height  ,paddel1 : any , paddel2 : any, )=>{
 
-    if (ballCord.x + direction.x > width - (ballCord.size  /2 ))
+    if (ballCord.x + direction.x > 1 - ballCord.size /2  )
     {
       this.roomArray[i].incrementScore(1)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
@@ -417,7 +420,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
       return false
     }
-    else if (ballCord.x + direction.x  < ( ballCord.size /2)    )
+    else if (ballCord.x + direction.x  <  ballCord.size /2  )
     {
       this.roomArray[i].incrementScore(2)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
@@ -429,11 +432,11 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 
     }
-    else if (ballCord.y <=  ballCord.size / 2 || ballCord.y  >= height - ballCord.size / 2 )
-        this.roomArray[i].direction.y = -this.roomArray[i].direction.y
+    else if (ballCord.y <= ballCord.size /2 || ballCord.y  >= 1 - ballCord.size /2 )
+        this.roomArray[i].direction.y = - this.roomArray[i].direction.y
     else if (this.detectCollision(paddel1 , ballCord , this.roomArray[i].direction) || this.detectCollision(paddel2 , ballCord , this.roomArray[i].direction))
     {
-        this.roomArray[i].direction.x =( -this.roomArray[i].direction.x) * 1.15;
+        this.roomArray[i].direction.x = ( -this.roomArray[i].direction.x);
     }
     return true
 
@@ -443,12 +446,12 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
    detectCollision(player : any , ballCord : any , direction : any) {
     const cx = ballCord.x + direction.x ;
     const cy = ballCord.y + direction.y;
-    const r = ballCord.size / 2 ;
+    const r = 0.02 / 2 ;
     const [x1, y1, w1, h1] = [cx - r, cy - r, r * 2, r * 2];
     const x2 =player.x ;
     const y2 =player.y;
-    const w2 = parseInt(player.w);
-    const h2 = parseInt(player.h);
+    const w2 = 0.02;
+    const h2 = 0.15;
 
     const colliding = x1 < (x2 + w2) && (x1 + w1) > x2 &&
     y1 < (y2 + h2) && (y1 + h1) > y2;
@@ -458,14 +461,14 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 async checkScore (room : any) {
     //you can do better
     // console.log(Math.abs(room.score.score1 - room.score.score2))
-    console.log("__ROOM__DBG__ : ", room);
+    // console.log("__ROOM__DBG__ : ", room);
     if (room.score.score1 + room.score.score2  >= 3)
     {
       var i = this.roomArray.indexOf(room)
 
       this.wss.to(this.roomArray[i].roomName).emit("endGame" , {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
 
-      await this.roomArray[i].saveGame(MODE.AIBUGGY)
+      await this.roomArray[i].saveGame(this.roomArray[i].status === "AiGame" ?  MODE.AIBUGGY : MODE.CLASSIC)
       this.roomArray.splice(i, 1)
       console.log(this.roomArray)
     }
@@ -476,40 +479,42 @@ async checkScore (room : any) {
 moveAI(room : any )
  {
   var i = this.roomArray.indexOf(room)
-   const h =  100;
+   const h =  0.15 ;
    var yp : number ;
    var yb : number ;
+   console.log(" room.paddel2.x  : ", room.paddel2.x )
+   console.log("room.ball.x : " ,room.ball.x)
+   console.log("q :",q)
    var q = ( room.paddel2.x -  room.ball.x ) / room.direction.x
    yp =  room.paddel2.y;
    yb =  room.ball.y + room.direction.y;
    var PreditctY : number =  yb +( room.direction.y * q) -( h / 2);
     this.roomArray[i].predicty = PreditctY
-   var TableH : number =   700;
-
+   var TableH : number =   1;
 
        if (PreditctY > 0 && PreditctY < TableH)
        {
          if (PreditctY >  yb && PreditctY < yb  + h)
            return ;
          else if (yp  > PreditctY)
-            this.roomArray[i].paddel2.y = yp - 10
+            this.roomArray[i].paddel2.y = yp - 0.01
          else if (yp + (h / 2) < PreditctY)
-            this.roomArray[i].paddel2.y = yp + 10
+            this.roomArray[i].paddel2.y = yp + 0.01
 
        }
        else if (PreditctY < TableH + (TableH / 2)  &&  PreditctY > TableH)
        {
-           if (yp  + h < TableH)
-            this.roomArray[i].paddel2.y = yp + 10
+           if (yp  + h < TableH  )
+            this.roomArray[i].paddel2.y = yp + 0.01
 
 
        }
        else if (PreditctY < 0  &&  PreditctY > - (TableH / 2))
        {
            if (yp  > 0)
-            this.roomArray[i].paddel2.y = yp - 10
+            this.roomArray[i].paddel2.y = yp - 0.01
        }
 
-       this.wss.to(room.roomName).emit("player2moved" , this.roomArray[i].paddel2.y)
+       this.wss.to(room.roomName).emit("player2moved" , {y  : this.roomArray[i].paddel2.y})
  }
 }

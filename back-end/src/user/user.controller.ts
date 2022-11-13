@@ -32,14 +32,8 @@ export class UserController {
         return this.userService.GetAchievements(req.user.userId, req.params.id, res);
     }
 
-    @Get('games/:id')
-    async GetGames(@Req() req, @Res() res) {
-        return res.send([]);   //"this.userService.GetGames(req.user.username, req.params.id, res)";
-    }
-
     @Get('relation/:id')
     async RelationsHandler(@Req() req, @Query() query, @Res() res) {
-        console.log("__QUERIES__DBG__ : ", query);
         if (query['event']) {
             switch (query['event']) {
                 case 'block':
@@ -60,6 +54,6 @@ export class UserController {
                     return res.status(HttpStatus.BAD_REQUEST).set().send({"message": "Bad Request"});
             }
         }
-        return {"message": "Bad Request01"};
+        return {"message": "Bad Request"};
     }
 }

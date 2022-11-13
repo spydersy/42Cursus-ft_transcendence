@@ -1,27 +1,26 @@
 INPUT/OUTPUT VALIDATION:
 - [X] GET /upload/{imgpath}
 - [X] GET /users
-- [ ] GET /users/{id}
-- [ ] GET /users/friends/{id}
-- [ ] GET /users/achievements/{id}
-- [ ] GET /users/games/{id}
-- [ ] GET /users/relation/{id}
-- [ ] GET /profile/me
-- [ ] POST /profile/updateAvatar
-- [ ] POST /profile/logout
-- [ ] GET /profile/update2FA
-- [ ] POST /profile/update2FA
-- [ ] PUT /profile/updateUsername/{newname}
-- [ ] POST /chat/joinChannel
-- [ ] POST /chat/UpdateUserPermission
-- [ ] POST /chat/UpdateUserRestriction
-- [ ] DELETE /chat/leaveChannel
-- [ ] DELETE /chat/kickUser/{user}
-- [ ] GET /chat/myChannels
-- [ ] GET /chat/allChannels
-- [ ] GET /chat/messages/{channelId}
-- [ ] GET /chat/managedChannels
-- [ ] POST /chat
+- [X] GET /users/{id}
+- [X] GET /users/friends/{id}
+- [X] GET /users/achievements/{id}
+- [X] GET /users/relation/{id}
+- [X] GET /profile/me
+- [X] POST /profile/updateAvatar
+- [X] POST /profile/logout
+- [X] GET /profile/update2FA
+- [X] POST /profile/update2FA
+- [F] PUT /profile/updateUsername/{newname}
+- [X] POST /chat/joinChannel
+- [X] POST /chat/UpdateUserPermission
+- [X] POST /chat/UpdateUserRestriction
+- [X] DELETE /chat/leaveChannel
+- [X] DELETE /chat/kickUser/{user}
+- [X] GET /chat/myChannels
+- [X] GET /chat/allChannels
+- [X] GET /chat/messages/{channelId}
+- [X] GET /chat/managedChannels
+- [ ] POST /chat/UdpatedChannelAccess
 - [ ] POST /chat/createRoom
 - [ ] GET /2fa/generate
 - [ ] GET /game/MatchHistory/{user}
