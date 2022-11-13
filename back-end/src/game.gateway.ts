@@ -64,6 +64,19 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
   }
 
+  getRoombyLogin(login : string )
+  {
+    for (let i = 0; i < this.roomArray.length; i++) {
+      if (this.roomArray[i])
+      {
+        const element = this.roomArray[i].getPlayerbyLogin(login);
+        if (element)
+          return this.roomArray[i];
+      }
+    }
+    return null
+  }
+
   getRoombyPlayerId(id : string )
   {
     for (let i = 0; i < this.roomArray.length; i++) {
@@ -181,7 +194,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   deleteRoom(client: any, payload: any): void {
 
     this.logger.log("client is disconnected")
-    var room = this.getRoombyPlayerId(client.id)
+    var room = this.getRoombyLogin(payload)
     if (room !== null)
     {
       this.wss.to(room.roomName).emit("endGame" , {score: room.score, roomPlayers :   room.roomPlayers})
@@ -374,6 +387,14 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   }
 
 
+  @SubscribeMessage('gameConnected')
+  playerConnected(client: any, payload: any): void {
+      var i = this.getRoombyLogin(payload.login)
+      if (i !== null){
+       
+        client.emit("PlayerInGame" , i.roomName)
+      }
+  }
   @SubscribeMessage('PlayAi')
   playAi(client: any, payload: any): void {
     let myuuid = uuidv4();
@@ -386,8 +407,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
    }
 
 
-    // if (ret === -1)
-    // {
+    if (ret === -1)
+    {
       var newRoom = new GameService(myuuid)
       newRoom.status = "AiGame"
       newRoom.joinPlayer(payload , client.id)
@@ -398,7 +419,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       this.wss.to(newRoom.roomName).emit("startGame" , {player1 : payload , player2: "drVegaPunk"})
       this.wss.emit("change" , this.getArrayData() )
 
-    // }
+    }
     for (let index = 0; index < this.roomArray.length; index++) {
       this.roomArray[index].debug();
 
