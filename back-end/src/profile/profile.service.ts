@@ -41,6 +41,7 @@ export class ProfileService {
     }
 
     async UpdateUserName(newName: string, userId: number, @Res() res) {
+        newName = newName.toLowerCase();
         try {
             await this.prisma.users.update({
                 where: { id: userId},

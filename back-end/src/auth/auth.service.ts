@@ -148,7 +148,6 @@ export class AuthService {
     }
 
     async TFAVerificationRes(publicKey: string, code: string, @Response() res) {
-
         const hash = publicKey.split('_-_');
         if (hash.length !== 2 || await bcrypt.compare(hash[1], hash[0]) === false)
             return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Key'});
