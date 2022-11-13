@@ -185,7 +185,7 @@ function App() {
     navigate("/game/")
     
   }
-  function handladdedMembert (payload) {
+  async function handladdedMembert (payload) {
       console.log(payload)
       const    toasty = () =>  toast(CustomToast(payload) , {
         className: "toast",
@@ -194,6 +194,7 @@ function App() {
         hideProgressBar: true,
       })
       toasty()
+      await joinChannels()
   }
   // function BlockedUser (payload) {
   //   console.log(payload)

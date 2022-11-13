@@ -101,7 +101,30 @@ export default function CreateGroup(props :CloseProps) {
            console.log(err)
          })
        }
-    const createGroup = ()=>{
+    let joinChannels = async () => {
+        let userLogin : string;
+        await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
+        {withCredentials: true} 
+        ).then((res)=>{
+            userLogin = res.data.login
+        }).catch((err)=>{
+            console.log(err)
+        })
+        await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+        {withCredentials: true} 
+        ).then((res)=>{
+            var myChannels : Array<string> = [];
+            for (let index = 0; index < res.data.length; index++) {
+            myChannels.push(res.data[index].channelId);
+            }
+            myChannels.push(userLogin);
+            // mychannels.pushback(userlogin)
+            socket.emit('joinRoom', myChannels)
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
+    const createGroup =  ()=>{
         //check for valid input
         console.log(memberss)
         var  bodyFormData = new FormData();
@@ -130,13 +153,13 @@ export default function CreateGroup(props :CloseProps) {
       ).then((res)=>{
 
         fetchData()
-        user.then((me : UserProp | "{}")=>{
+        user.then(async (me : UserProp | "{}")=>{
             if (me !== "{}")
             {
                 for (let i = 0; i < memberss.length; i++) {
                     const element = memberss[i];
                     socket.emit("addedMember", {owner: me, addedMember: element.login})
-                    
+                    await joinChannels()
                 }
             }
           })
