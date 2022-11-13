@@ -38,7 +38,6 @@ export class ChatController {
           userRestriction.restriction === "BAN" ? RESTRICTION.BANNED
           : userRestriction.restriction === "MUTE" ? RESTRICTION.MUTED
           : RESTRICTION.NULL, userRestriction.duration, res);
-
       return res.status(HttpStatus.BAD_REQUEST).send({'message': 'BAD REQUEST'});
     }
 
@@ -104,7 +103,6 @@ export class ChatController {
       if (file !== undefined)
         ChannelIcone = encodeURI(process.env.BACKEND_URL + `/upload/${file.filename}`);
       var membersObj = JSON.parse(channelData['members']);
-      console.log("__CHANNEL_DATA__DBG__ : ", channelData);
       if (channelData['type'] === 'protected' && channelData['password'] === undefined)
         return res.status(HttpStatus.BAD_REQUEST).send({'message': "Password Required"});
       if (channelData['type'] === 'protected' && channelData['password'] !== undefined)

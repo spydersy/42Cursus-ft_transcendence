@@ -17,7 +17,6 @@ export class AuthController {
 
     @Post('validate2FA')
     async Validate2FA(@Req() req: Request, @Query() query, @Response() res) {
-        console.log("__WIIIIIIIIIII__", req.cookies['2FA_PUBLICKEY']); // or "request.cookies['cookieKey']"
         if (req.cookies['2FA_PUBLICKEY'] !== undefined && req.cookies['2FA_PUBLICKEY'] !== null)
           return this.authservice.TFAVerificationRes(req.cookies['2FA_PUBLICKEY'], query['code'], res);
         else

@@ -76,9 +76,7 @@ export class ChatService {
                     {userId: ReceiverId, channelId: Channel.id, permission: PERMISSION.USER, restriction: RESTRICTION.NULL, duration: 0}
                 ]
             });
-            console.log("__DM__USERS__DBG__ : ", Users);
         }
-        console.log("__DM__CHANNEL__DBG__ : ", DMChannel);
     }
 
     async GetChannelMessages(me: number, channelId: string, @Res() res) {
@@ -118,7 +116,6 @@ export class ChatService {
         let socketRes: SocketRes = {stat: false, payload: null, login: null};
         const userStat = await this.PostMessageValidationLayer(me, channelId);
 
-        console.log("__USER__STAT__DBG__ : ", userStat);
         if (userStat === USERSTAT.NOTFOUND || userStat === USERSTAT.MUTED
             || userStat === USERSTAT.BANNED || userStat === USERSTAT.BLOCKED) {
             const meDto = await this.userService.GetUserById(me);
@@ -128,7 +125,6 @@ export class ChatService {
             : userStat === USERSTAT.BANNED ? 'Banned User'
             : userStat === USERSTAT.BLOCKED ? 'Blocked User'
             : 'Muted User'
-            console.log("__ENDPOINT__00__");
             return socketRes;
         }
         let msg = await this.prisma.messages.create({
@@ -150,7 +146,6 @@ export class ChatService {
         socketRes.payload = msg;
         socketRes.login = msg.sender.displayName;
         delete msg.sender;
-        console.log("__ENDPOINT__01__");
         return socketRes;
     }
 
@@ -167,7 +162,6 @@ export class ChatService {
                 }],
             }
         });
-        console.log("__MANAGED__CHANNELS__DBG__ : ", managedChannels);
         return res.send(managedChannels);
     }
 
@@ -181,7 +175,6 @@ export class ChatService {
                 orderBy: { date: 'desc'},
                 take: 1,
             });
-            console.log("__last__message__ : ", lastMessage);
             myChannels[index]['lastMessage'] = "";
             if (lastMessage.length === 1) {
                 myChannels[index]['lastMessage'] = lastMessage[0].content;
@@ -223,7 +216,6 @@ export class ChatService {
             }
         });
         await this.SetLastMessageInChannel(me, filtredChannels);
-        console.log("__BEF__RETURN__ : ", filtredChannels);
         return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, filtredChannels));
     }
 
@@ -257,7 +249,6 @@ export class ChatService {
                 }
             }
         });
-        console.log("__ALL__CHANNELS__ENDPOINT__DBG__ : ", filtredChannels);
         return res.status(HttpStatus.OK).send(filtredChannels);
     }
 
@@ -472,7 +463,6 @@ export class ChatService {
             return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
         // Find User In Channel:
         const userInChannel = await this.FindUserInChannel(me, channelId);
-        console.log("__USER__IN__ : ", userInChannel);
         if (userInChannel !== null || channel.access === CHANNEL.DM)
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'User Is Not Allowed To Join This Channel'});
         if (channel.access === CHANNEL.PROTECTED)
@@ -501,7 +491,6 @@ export class ChatService {
         if (password !== null &&  password !== undefined) {
             const saltOrRounds = 10;
             password = await bcrypt.hash(password, saltOrRounds);
-            console.log("__HASHED__PASSWORD__ : ", password);
         }
         let channel = await this.prisma.channels.create({
             data: {
@@ -596,21 +585,18 @@ export class ChatService {
         if (channel === null)
             return USERSTAT.NOTFOUND;
         const userInChannel = await this.FindUserInChannel(me, channelId);
-        console.log("__USER))IN__CHANNEL__BEF__SEND__MESSAGE__ : ", userInChannel);
         if (userInChannel === null)
             return USERSTAT.NOTFOUND;
         if (channel.access === CHANNEL.DM) {
             const dmChannel = await this.prisma.channelsUsers.findMany({where: {channelId: channelId}});
             if (await this.userService.IsBlockedUser(dmChannel[1].userId, dmChannel[0].userId)
                 || await this.userService.IsBlockedUser(dmChannel[0].userId, dmChannel[1].userId)) {
-                    console.log("__BLOCKED__USER__BEF__SEND__MESSAGE__");
                     return USERSTAT.BLOCKED;
             }
         }
         else if (userInChannel.restriction === RESTRICTION.BANNED)
             return USERSTAT.BANNED;
         else if (userInChannel.restriction === RESTRICTION.MUTED) {
-            console.log("__MUTED__USER__DBG__");
             let currentDt = new Date();
             if (currentDt < this.addSeconds(new Date(userInChannel.restrictionTime), userInChannel.duration)) {
                 return USERSTAT.MUTED

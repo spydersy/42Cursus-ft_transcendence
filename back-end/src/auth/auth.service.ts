@@ -106,9 +106,7 @@ export class AuthService {
     }
     async Generate2faPublicKey(login: string) {
         const saltOrRounds = 10;
-        console.log("__LOGIN__BEF__DBG__ : ", login);
         const hash = await bcrypt.hash(login, saltOrRounds);
-        console.log("__HASH__DBG__ : ", hash + "_-_" + login);
         return hash + "_-_" + login;
     }
 
@@ -116,15 +114,12 @@ export class AuthService {
         let UserDto: User;
         if (this.Check42ApiQueryCode(query) === true) {
             const Token = await this.GetUserToken(query['code']);
-            console.log("__TOKEN__DBG__ : ", Token);
             const UserProfile = await this.ClaimUserProfile(Token, query['code']);
-            console.log("__USER__PROFILE__DBG__ : ", UserProfile);
             UserDto =this.userService.GenerateUserDto(UserProfile['data']);
             if (await this.userService.FindUserById(UserDto.Id) === false) {
                 return this.firstSignin(UserDto, res);
             }
             const userDB = await this.userService.GetUserByLogin(UserDto.Login);
-            console.log("__USERDB__DBG__ : ", userDB);
             const JWT = await this.GenerateJwt(UserDto);
             if (userDB.twoFactorAuth === true && userDB.twoFactorAuthSecret !== null) {                
                 const hashedKey = await this.Generate2faPublicKey(userDB.login);
@@ -156,17 +151,14 @@ export class AuthService {
     }
 
     async TFAVerificationRes(publicKey: string, code: string, @Response() res) {
-        console.log("__REQ__DBG__123__ : ", publicKey);
 
         const hash = publicKey.split('_-_');
-        console.log("__HAAAASH__ : ", hash);
         if (hash.length !== 2 || await bcrypt.compare(hash[1], hash[0]) === false)
             return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Key'});
         
         const user = await this.prisma.users.findUnique({
             where: {login: hash[1]}
         });
-        console.log("__USER__DBG__ : ", user);
         if (user === null) 
             return res.status(HttpStatus.BAD_REQUEST).send({'message': 'User Not Found'});
         if (await this.tfaService.TFAVerification(user.id, code) === true) {

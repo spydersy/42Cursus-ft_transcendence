@@ -34,25 +34,7 @@ interface UserType {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('OnlineLogerGateway');
   onLineArray  : UserType[] = [];
-  // @UseGuards(OnlineGuard)
-  // @SubscribeMessage('AddOnlineUser')
-  // async handleMessage(client: Socket, payload) {
-  //   let onlineArr: string[] = [];
-  //   let inGameArr: string[] = [];
 
-  //   const online = await this.prisma.websockets.findMany({where: {type: SOCKET.ONLINE,} });
-  //   const ingame = await this.prisma.websockets.findMany({where: {type: SOCKET.GAME,} });
-  //   online.forEach(element => {
-  //     if (onlineArr.includes(element.userLogin) === false)
-  //       onlineArr.push(element.userLogin);
-  //   });
-  //   ingame.forEach(element => {
-  //     if (inGameArr.includes(element.userLogin) === false)
-  //       inGameArr.push(element.userLogin);
-  //   });
-  //   console.log("__EMIT__EVENT__DBG__ : ", {onlineArr, inGameArr});
-  //   this.server.emit('ConnectedUser', {onlineArr, inGameArr});
-  // }
   @SubscribeMessage('AddOnlineUser')
    handleConnect(client: Socket, payload) {
 
@@ -69,13 +51,8 @@ interface UserType {
         console.log("______BGGGG___: ", this.onLineArray[i].socketId.includes(client.id.toString()))
         if( this.onLineArray[i].socketId.includes(client.id.toString()) === false)
           this.onLineArray[i].socketId.push(client.id)
-
       }
-
-
-
     this.debug()
-
     this.server.emit('ConnectedUser', this.onLineArray);
   }
 
@@ -123,10 +100,6 @@ interface UserType {
   debug(){
     for (let i = 0; i < this.onLineArray.length; i++) {
       const element = this.onLineArray[i];
-      // console.log("{")
-      // console.log("UserId : " , element.userid)
-      // console.log("socketId : " , element.socketId)
-      // console.log("}")
     }
   }
   // async handleDisconnect(client) {

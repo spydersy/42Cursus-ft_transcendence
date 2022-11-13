@@ -12,15 +12,6 @@ export class TfaController {
     @Get('generate')
     async register(@Res() response: Response, @Req() req) {
     const { otpauthUrl } = await this.tfaService.generateTwoFactorAuthenticationSecret(req.user.userId, req.user.Login);
-    console.log("vjnfsljvjbsdfflfvnnsdffkjbsdfkjjblsdfjjbnsdljnb ::::::: ", otpauthUrl);
     return this.tfaService.pipeQrCodeStream(response, otpauthUrl);
     }
-
-    // @Post('validate')
-    // async TFAVerification(@Req() req: Request, @Query() query, @Res() res) {
-    //   if (req.cookies['2FA_PUBLICKEY'] !== undefined && req.cookies['2FA_PUBLICKEY'] !== null)
-    //     return this.tfaService.TFAVerificationRes(req.cookies['2FA_PUBLICKEY'], query['code'], res);
-    //   else
-    //     return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Error Unvalid Cookie'});
-    // }
 }
