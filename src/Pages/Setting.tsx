@@ -69,17 +69,11 @@ export default function Setting() {
     useEffect(() => {
         
         axios.get(process.env.REACT_APP_BACKEND_URL+ "/profile/me",   {withCredentials: true}).then((res)=>{
-            // console.log("__Settings__Data__: ", res.data )
             setdata(res.data)
             setImg(res.data.defaultAvatar)
             setIsToggled(res.data.twoFactorAuth)
             setSaveName(res.data.displayName);
-
-            // console.log("__res.data.twoFactorAuth__ = " , res.data.twoFactorAuth)
-            // console.log("__isToggled__ = " , isToggled)
-        }).catch((err)=>{
-            setIsToggled(false)
-        })
+        }).catch((err)=>{ setIsToggled(false)  })
 
         var e = document.getElementById("fileInput")
         e?.addEventListener("change", (c :any)=>{
@@ -99,53 +93,34 @@ export default function Setting() {
 
     }, [])
     
-    const uploadFile = ()=>{  var e = document.getElementById("fileInput")
+    const uploadFile = ()=>{  
+        var e = document.getElementById("fileInput")
         e?.click()
     }
-    
     const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-
         const Name = event.target.value;
         let enteredName = "";
-
         if (Name.trim().length >= 25)    
         {
             enteredName = Name.trim().slice(0, 25);
             setalert(true)
-
-            // warning("YOur Display Name must be less than 25 characters");
-            // MinLenghtname();
         }
         else
             enteredName = Name;
-
-        
         setdata({...data, displayName : enteredName})
-    };
-
+    }
     const setClosePop = () => {
         setclosepop(false)
         setopenpass(false)
-        // CancelProc()
         warning(" 2FA Third Party Procces Canceled");
     }
-
     const setCancel = () => {
-        // console.log("false =  " , isToggled)
-        axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
-
-            // console.log("Response false Data ={", res.data.message , "}")
-
-        }).catch((err)=>{ })
-
+        axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{  }).catch((err)=>{ })
         setclosepop(false)
         setIsToggled(false)
         setopenpass(false)
-        // CancelProc()
         warning(" 2FA Third Party Procces Canceled");
-        wait(1000).then(() => {  window.location.reload(); })
     }
-
     const onToggle = ()=> {
         
         const stateToggle = !isToggled
@@ -162,22 +137,17 @@ export default function Setting() {
             axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
                 setIsToggled(false)
                 succes("You have successfully Enable 2FA Third Party");
-                // DisabledSucces()
             }).catch((err)=>{
                error("2FA Third Party Procces Failed");
-                // DisabledError()
             })
         }
     }
-    
     const setEnable = () => {        
         setclosepop(false)
         setopenpass(true)
         setValues(['', '', '','','','']);
     }
-
     const submitpass = ()=> {
-
         setopenpass(false)
         setclosepop(false)
         console.log("__PIN  = ", values)
@@ -196,50 +166,32 @@ export default function Setting() {
             else
                 pass += values[i];
         } 
-        
         axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true&code=" + pass , " ", {withCredentials: true}).then((res)=>{
             console.log("__status=true_&_code=__: ", res.data )
-            // EnabledSucces()
             succes("You have successfully Enable 2FA Third Party");
+            setIsToggled(true)
         }).catch((err)=>{
             setIsToggled(false)
             error("2FA Third Party Procces Failed");
-            // EnableError()
         })
-        wait(1000).then(() => { 
-            window.location.reload();
-          })
-
     }
-
     const submitHandler = () => {
         const name = data.displayName.trim();
-        
         if (name.length === 0)
         {
-            // warning("Display Name empty or invalid Friendo!!!");
             setalert(true)
-            // NoNameError();
             return;
         }
         if (name === SaveName)
         {
             warning("Change Something Friendo !!!");
-            // NoNameError();
             return;
         }
-
         axios.put(process.env.REACT_APP_BACKEND_URL+ "/profile/updateUsername/" + name , name, {withCredentials: true}).then((res)=>{
-            // NameUpdated();
             setSaveName(name);
-
             succes("You have successfully updated your Universe");
-        }   ).catch((err)=>{ 
-            error("Updating your Universe Failed");
-            // NameNotUpdated()
-        })
-    };
-
+        }   ).catch((err)=>{   error("Updating your Universe Failed");  })
+    }
     return (
         <SettingsStyle  className='container'  >
             <div className='all'>
@@ -617,7 +569,6 @@ const Row = styled.div`
 }
 
 `;
-
 const SettingsStyle = styled.div`
     height: 650px;
     background-color: ${props => props.theme.colors.seconderybg};
@@ -641,11 +592,10 @@ const SettingsStyle = styled.div`
         align-items: center;
     }
 `;
-
 const Avatar = styled.div`
-   width: 200px;
-   height: 200px;
-   background-color: ${props => props.theme.colors.bg};
+    width: 200px;
+    height: 200px;
+    background-color: ${props => props.theme.colors.bg};
     position: relative;
     border-radius: 50%;
     border: 0.5px solid ${props => props.theme.colors.primaryText};
@@ -662,19 +612,15 @@ const Avatar = styled.div`
         >svg{
         width: 50px;
         height: 50px;
-            >path{
-                stroke:  ${props => props.theme.colors.seconderyText};
-        }
+        >path{ stroke:  ${props => props.theme.colors.seconderyText};  }
         }
     }
     &:hover{
         .edit{
         display: flex;
-
     }
     }
 `;
-
 const Line = styled.div`
     position: relative;
    margin: 20px 0;
@@ -683,12 +629,9 @@ const Line = styled.div`
     opacity: 0.5;
     background-color: ${props => props.theme.colors.seconderyText};
 `;
-
 const ToggleSwitchStyle = styled.div`
-
 font-family: "Poppins", sans-serif;
 position: relative;
-/* background-color: #00ff40; */
 color : white;
 display: flex;
 width: 100%;
@@ -696,9 +639,7 @@ min-width: 50px;
 margin: 20px;
 height: 30px;
 
-
 .TwoFaText{
-    /* background-color: aqua; */
     margin: 0px 10px;
 }   
 .toggle-switch {
@@ -739,6 +680,5 @@ background-color: #6699cc;
 .toggle-switch input[type="checkbox"]:checked + .switch {
 background-color: #336699;
 }
-
 `;
 
