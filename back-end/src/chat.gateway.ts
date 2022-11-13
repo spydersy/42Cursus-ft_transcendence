@@ -11,12 +11,14 @@ import { Socket, Server } from 'socket.io';
 import { ChatService } from './chat/chat.service';
 import { WsGuard } from './auth/jwt.strategy';
 
+
 @WebSocketGateway(3001, {
     cors: {
       origin: process.env.FRONTEND_URL,
       credentials: true,
     },
     namespace: 'chat'
+
 
  })   // @WebSocketGateway decorator gives us access to the socket.io functionality.
 
@@ -46,6 +48,8 @@ import { WsGuard } from './auth/jwt.strategy';
     
   }
 
+
+  
   @SubscribeMessage('addedMember')
   AddMemberToChannel(client: any, payload: any): void {
     console.log("______DBG____ ADD_MEMBER : " , payload)
