@@ -195,6 +195,17 @@ function App() {
       })
       toasty()
   }
+  // function BlockedUser (payload) {
+  //   console.log(payload)
+  //   const    toasty = () =>  toast(CustomToastMesg("🚫🚫 You've Been Blocked by " + payload.sender + "🚫🚫") , {
+  //     className: "toast",
+  //     progressClassName: "toastProgress",
+  //     autoClose: 2000,
+  //     hideProgressBar: true,
+  //   })
+  //   toasty()
+  // }
+
   function PlayerInGame (payload) {
     // localStorage.setItem("mode","1v1")
     navigate("/game/"+ payload)
@@ -208,6 +219,7 @@ function App() {
     socket.on('acceptedReq', acceptRequest)
     socket.on('event', handleevent);
     socket.on('addedMember', handladdedMembert);
+    // socket.on('BlockRequest', BlockedUser);
     gameSocket.on('challengeAccepted', handelChallengeAccept)
     gameSocket.on('PlayerInGame', PlayerInGame);
     return () => {
@@ -218,6 +230,7 @@ function App() {
       socket.removeListener('event', handleevent);
       gameSocket.removeListener('PlayerInGame', PlayerInGame);
       socket.removeListener('addedMember', handladdedMembert);
+      // socket.removeListener('BlockRequest', BlockedUser);
       gameSocket.removeListener('challengeAccepted', handelChallengeAccept);
     }
     })

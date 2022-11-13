@@ -318,7 +318,6 @@ export  function FriendRequestToast(props: {data : any}) {
     }
   const acceptFriendReq = async(k: boolean)=> {
 
-
     if (k)
     {
       await axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+  User?.login + "?event=accept",  {withCredentials: true} 
@@ -327,10 +326,10 @@ export  function FriendRequestToast(props: {data : any}) {
       }).catch((err)=>{  })
     }
     userData.then((user : UserProp | "{}")=>{
-      if (user !== "{}")
-      {
-        socket.emit('acceptFriendRequest', {accepter: user?.login, reciever: User?.login, status: k} )
-      }
+    if (user !== "{}")
+    {
+      socket.emit('acceptFriendRequest', {accepter: user?.login, reciever: User?.login, status: k} )
+    }
 
   })
   }

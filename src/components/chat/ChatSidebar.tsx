@@ -1,7 +1,5 @@
 import React , { useState}from 'react'
 import {ReactComponent as Group} from "../../assets/imgs/users.svg";
-import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
-
 import styled  from "styled-components"
 import { Button } from '../../Pages/SignIn';
 import Modal from '../Modal';
@@ -9,15 +7,6 @@ import CreateGroup from '../modals/CreateGroup';
 import { AvatarComponent } from '../PlayerProfile';
 import { Link } from 'react-router-dom';
 
-interface UserProp {
-  defaultAvatar: string,
-  login : string
-  displayName : string
-  relation? : string
-  nbFriends? : string
-  wins : number
-  losses : number
-}
 interface usersType {
 
   defaultAvatar: string,
@@ -48,7 +37,6 @@ interface ChatProps {
   currentConv : convType,
 }
 export default function ChatSidebar(props : ChatProps) {
-  const pageName = window.location.pathname.split("/")[2];
 
     const [hide, sethide] = useState(false)
     return (
@@ -71,7 +59,7 @@ export default function ChatSidebar(props : ChatProps) {
                    return < ConversationComponent  key={id}onClick={()=>{
                       props.setcurrentConv(data)
                       // window.location.href= data.channelId.toString()
-                      if (props.state != -1 )
+                      if (props.state !== -1 )
                         props.setState(1)
                   }}  data={data} active={props.currentConv.channelId.toString() === data.channelId.toString()} />
 

@@ -32,7 +32,7 @@ export default function BlockedUsers()
            <EmptyComponent text="Peaceful User !"/>
            : 
           listBlocked.map((invit : any, id : number )=>{
-              return<UserBlockedCard key={id} data={invit} />
+              return<UserBlockedCard key={id} data={invit} index={id} listBlocked={ listBlocked} setlistBlocked={(e)=>setlistBlocked(e)}  />
           })
         }  
     </TabfourStyle>
@@ -69,13 +69,15 @@ const TabfourStyle= styled.div`
 // My Black List
 
 /// Blocked Users ///
-export interface UserBlockedCardProps {
-  data: {
+interface BlockProp {
     login: string;
     defaultAvatar: string;
-    listBlocked : [], 
-    setlistBlocked : (e : any)=>void
-  }
+}
+export interface UserBlockedCardProps {
+  data: BlockProp,
+  listBlocked : BlockProp[], 
+  setlistBlocked : (e : any)=>void
+  index : number
 }
 
 export interface StyleProps { status: string; }
@@ -101,10 +103,10 @@ export  function UserBlockedCard(props : UserBlockedCardProps) {
       
         DeclineFriendNotify();
           
-          var s  = props.data.listBlocked.findIndex((e : any)=> e.login === props.data.login)
-          var l = props.data.listBlocked
+          var s  = props.listBlocked.indexOf(props.data)
+          var l = props.listBlocked
           l.splice(s , 1)
-          props.data.setlistBlocked([...l])
+          props.setlistBlocked([...l])
           
       }).catch((err)=>{  })
           // window.location.reload();

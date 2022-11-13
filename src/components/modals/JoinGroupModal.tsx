@@ -2,11 +2,10 @@ import React, { useRef, useContext } from 'react'
 import { Button } from '../../Pages/SignIn'
 import styled from "styled-components"
 import InputComponent from '../Input'
-import { Link } from 'react-router-dom'
 import { UserContext } from '../../context/UserContext'
 import { UserProp } from '../game/types'
 import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { MutedToast } from '../Toasts/MsgToast';
 
 
@@ -33,17 +32,17 @@ export default function JoinGroupModal(props: RoomProps) {
   }
   const addMember = () => {
     // alert(props.id)
-    console.log("_____ADD MEMEBER____")
+    // console.log("_____ADD MEMEBER____")
     var v = reffo.current?.value
     if (v) {
       user.then(async (data: UserProp | "{}") => {
-        if (data != "{}") {
+        if (data !== "{}") {
           const obj = {
             channelId: props.id,
             user: data.login,
             password: v,
           }
-          console.log(obj)
+          // console.log(obj)
           await axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/joinChannel/", obj, { withCredentials: true }).then((res) => {
             console.log(res.data.message)
             if (res.data.message === "User Added") {
@@ -58,8 +57,8 @@ export default function JoinGroupModal(props: RoomProps) {
             }
             // if joined 
           }).catch((err) => {
-            console.log(err)
-            console.log("haaaaaaaa")
+            // console.log(err)
+            // console.log("haaaaaaaa")
             const toasty = () => toast(CustomToastMesg("Ouups, reye7 mea kerek!"), {
               className: "toast",
               progressClassName: "toastProgress",
@@ -73,19 +72,19 @@ export default function JoinGroupModal(props: RoomProps) {
     }
     else
     {
-      console.log("_____Hnaaaaa____")
+      // console.log("_____Hnaaaaa____")
       user.then(async (data: UserProp | "{}") => {
-        if (data != "{}") {
+        if (data !== "{}") {
           const obj = {
             channelId: props.id,
             user: data.login,
             password: "whatever",
           }
-          console.log(obj)
+          // console.log(obj)
           await axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/joinChannel/", obj, { withCredentials: true }).then((res) => {
-            console.log(res.data.message)
+            // console.log(res.data.message)
             if (res.data.message === "User Added") {
-              console.log("joined succesfully!")
+              // console.log("joined succesfully!")
               const toasty = () => toast(CustomToastMesg("Ooopaa, Channel joined succefully"), {
                 className: "toast",
                 progressClassName: "toastProgress",
@@ -97,7 +96,7 @@ export default function JoinGroupModal(props: RoomProps) {
             // if joined 
             props.closeModal()
           }).catch((err) => {
-            console.log(err)
+            // console.log(err)
           })
         }
       })

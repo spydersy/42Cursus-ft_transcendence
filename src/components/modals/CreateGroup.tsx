@@ -8,42 +8,37 @@ import Modal from '../Modal';
 import AddFriendsModal from './AddFriendsModal';
 import InputComponent from '../Input';
 import { Button } from '../../Pages/SignIn';
-
 import axios from 'axios';
-import { type } from 'os';
 import { UserContext } from '../../context/UserContext';
 import { UserProp } from '../game/types';
-import { Socket } from 'socket.io-client';
 import { SocketContext } from '../../context/Socket';
-interface usersType {
 
+interface usersType {
     defaultAvatar: string,
     login : string
     displayName : string,
     restriction: string,
     restrictionTime: string,
     duration: number,
-  }
-  interface convType {
-    nbMessages: number,
-    lastUpdate: string,
-    access : string,
-    channelId: number,
-    name: string;
-    password: string,
-    picture : string,
-    users: usersType[]
-  }
+}
+interface convType {
+nbMessages: number,
+lastUpdate: string,
+access : string,
+channelId: number,
+name: string;
+password: string,
+picture : string,
+users: usersType[]
+}
+interface CloseProps {
+list :convType[], closeModal : ()=>void , setlist: (e: any)=>void,setcurrentConv : (e: any)=>void
+}
+interface idsType{
+login : string,
+id : string
+}
 
-  interface CloseProps {
-    list :convType[], closeModal : ()=>void , setlist: (e: any)=>void,setcurrentConv : (e: any)=>void
-  }
-  interface idsType{
-    
-        login : string,
-        id : string
-    
-  }
 export default function CreateGroup(props :CloseProps) {
   const user = useContext(UserContext)
   const socket = useContext(SocketContext)
@@ -60,9 +55,8 @@ export default function CreateGroup(props :CloseProps) {
     const [hide, sethide] = useState(false)
     const [alertt, setalert] = useState(false)
     const [img, setimg] = useState("")
-    const groupName = useRef(null)
+    // const groupName = useRef(null)
     const passRef = useRef<HTMLInputElement>(null)
-    // const first = useRef(second)
     const uploadFile = ()=>{
         var e = document.getElementById("fileInput")
         e?.click()
@@ -465,12 +459,13 @@ export  function Member(props:MemberProp ) {
           })
         
     
- 
-    }  , [props.members])
+    
+    }  , [props.members, props.id])
+
     const deleteMember = ()=>{
 
         var list = props.members
-        var index = 0
+        // var index = 0
         for (let i = 0; i < props.members.length; i++) {
             const element = props.members[i];
             if (element.login === props.id)

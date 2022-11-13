@@ -1,4 +1,4 @@
-import React  , {useState , useContext} from 'react'
+import React  , {useState , useContext, useEffect} from 'react'
 import styled  from "styled-components"
 import { AvatarComponent } from '../PlayerProfile';
 import {ReactComponent as Group} from "../../assets/imgs/users.svg";
@@ -53,6 +53,10 @@ import axios from 'axios';
       console.log(err)
     })
   }
+
+  useEffect(() => {
+  }  , [])
+
   return (
     <ContoleStyle>
       {
@@ -85,7 +89,8 @@ import axios from 'axios';
           <div className='buttons'>
                 
             <Button  isIcon={true} onClick={()=>{ 
-              
+              console.log(">> invite game " , props.data)
+
               socket.emit("gameChallenge", props.data.channelId , props.data.users[0].login) ; 
                 gamesocket.emit("gameChallenge" , {player1 : props.data.users[0].login , player2 : props.data.users[1].login})}} icon={<GameIcon/>}/>
             

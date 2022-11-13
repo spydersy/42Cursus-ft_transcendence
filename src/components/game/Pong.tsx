@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import Sketch from "react-p5";
 import p5Types from "p5";
-import { Button } from '../../Pages/SignIn';
 import { GameProps, UserProp } from './types';
 import { SocketGameContext } from '../../context/Socket'
 import { UserContext } from '../../context/UserContext';

@@ -1,24 +1,8 @@
 import React , { useState , useEffect}from 'react'
-import {ReactComponent as Dots} from "../../assets/imgs/dotsvertical.svg";
-import {ReactComponent as UserIcon} from "../../assets/imgs/dotsvertical.svg";
-import {ReactComponent as SettingIcon} from "../../assets/imgs/dotsvertical.svg";
 import {ReactComponent as BackIcon} from "../../assets/imgs/arrowLeft.svg";
-import {ReactComponent as UserProfileIcon} from "../../assets/imgs/userprofile.svg";
 import styled  from "styled-components"
 import { AvatarComponent } from '../PlayerProfile';
-import DropDown from '../DropDown';
-import { data } from 'jquery';
 import { Link } from 'react-router-dom';
-
-interface UserProp {
-  defaultAvatar: string,
-  login : string
-  displayName : string
-  relation? : string
-  nbFriends? : string
-  wins : number
-  losses : number
-}
 
 interface usersType {
   id: string,

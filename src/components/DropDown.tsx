@@ -25,11 +25,10 @@ export default function DropDown(props : DropDownProps) {
     <Dstyle style={props.style}  ref={ref} >
       {
         props.list.map(((data :ListTypes , id : number )=>{
-            return  <Item key={id}href={data.href}>
-              { data.icon}
-          
-              {data.title}
-        </Item>
+            return   ( <Item key={id} href={data.href}>
+                    { data.icon}
+                    {data.title}
+                    </Item>)
         }))
       }
     </Dstyle>}

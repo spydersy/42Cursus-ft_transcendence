@@ -1,14 +1,10 @@
 import React , {useState , useEffect, useContext} from 'react'
 import styled  from "styled-components"
 import SearchIcon from "../../assets/imgs/searchIcon.svg"
-
 import { AvatarComponent } from '../PlayerProfile';
 import axios from 'axios';
 import { Button } from '../../Pages/SignIn';
 import { UserContext } from '../../context/UserContext';
-import { SocketContext } from '../../context/Socket';
-import Mamali from "../../assets/imgs/avatar/Ai-lwahch.png";
-
 
 interface UserProp {
   id : string , 
@@ -28,17 +24,12 @@ interface UserProp {
 }
 export default function AddFriendsModal(props : {members : idsType[] , setmembers : (e : any)=>void , closeModal : ()=> void} ) {
     const [friends, setfriends] = useState([])
-    const socket = useContext(SocketContext)
-    const handleFriend= (e : any)=>{
-        // console.log("hnaaaaaaaaaaaaa____:")
-        e.stopPropagation();
-    }
-
+    const handleFriend= (e : any)=>{ e.stopPropagation();  }
     const done = ()=>{
       console.log(props.members)
-        props.closeModal()
+      props.closeModal()
     }
-  const user = useContext(UserContext)
+    const user = useContext(UserContext)
 
     useEffect(() => {
 
@@ -60,7 +51,7 @@ export default function AddFriendsModal(props : {members : idsType[] , setmember
     const exist = (e : any)=>
     {
       console.log(props.members)
-      var i = props.members.indexOf(e)
+      // var i = props.members.indexOf(e)
       for (let i = 0; i < props.members.length; i++) {
           const element = props.members[i];
           if (element.id === e.id)
@@ -82,12 +73,7 @@ export default function AddFriendsModal(props : {members : idsType[] , setmember
             return <Friend key={id}>
                     <div>
                         <div style={{width : '35px' , height :'35px'}}>
-<<<<<<< HEAD
-                            <AvatarComponent img={Mamali}/>
-
-=======
                             <AvatarComponent img={data.defaultAvatar}/>
->>>>>>> 2049d078de9ebeceeee029464e307dec4f8a2050
                         </div>
                         <div className='name'>
                             {data.displayName}

@@ -43,7 +43,6 @@ export default function Profile() {
     lastModification: "Xxx 12 Xxx 1963 12:00:00",
     Achievements: [false, false, false, false, false, false, false, false]
   })
-
   const BlockedUser = {
     id: "Ss",
     defaultAvatar: BlockIcon,

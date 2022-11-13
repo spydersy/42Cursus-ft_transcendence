@@ -38,7 +38,6 @@ interface UserProp {
   losses : number[]
   lastModification : string 
 }
-
 const override: CSSProperties = {  display: "grid",  margin: "10 auto",  borderColor: "black",};
 
 export interface PlayerCardProps { isCurrentUser : boolean,  player: UserProp }
@@ -60,7 +59,6 @@ export function PlayerCard(props: PlayerCardProps) {
         setstate("ONLINE")
         return ;
       }
-      
     }
     setstate("OFFLINE")
   }
@@ -68,8 +66,8 @@ export function PlayerCard(props: PlayerCardProps) {
    console.log("PAYLOAD___" , pyload)
    setUserStatu(pyload)
   })
+//
   gameSocket.on('PlayerInGame', PlayerInGame);
-
   function PlayerInGame(pyload : any){
     console.log(pyload)
     if (pyload.player === props?.player.login)
@@ -77,57 +75,36 @@ export function PlayerCard(props: PlayerCardProps) {
       setstate("ONGAME")
     }
   }
-
+//
   useEffect(() => { console.log("mystatue=", state) }, [props.player.login])
   
-
   if (state === "ONLINE")
-  {
-    color = ("#1cb52e"); status = "ONLINE";
-  }
+  { color = ("#1cb52e"); status = "ONLINE";  }
   else if (state === "ONGAME")
-  {
-    color = ("#b13911");  status = "ONGAME";
-  }
+  { color = ("#b13911");  status = "ONGAME"; }
   else
-  {
-    color = ("#af1c1c");  status = "OFFLINE";
-  }
+  { color = ("#af1c1c");  status = "OFFLINE"; }
+
     return (
       <PlayerCardStyle  status={color} >
-      
           <div className='Identity'>
-              {/* {state && <>BULLLSHIT</>} */}
-              {/* <>Status: </> */}
               <div className="status" >       
-                {/* <HashLoader   color={color} loading={loading} cssOverride={override} size={22} /> */}
                 <CircleLoader   color={color} loading={loading} cssOverride={override} size={20} />
                 <div className='status-text' >{status}</div>
-                {/* ONLINE */}
               </div>
-
-
               <div className='Iavatar' style={ {width : "150px" , height : "150px"}} >
                 <AvatarComponent login={props.player.login} img={props.player.defaultAvatar}/>
               </div>  
-
               <div className='infoSec'>
-
                   <div className='Bar'>  
-        
                       <div className='text' > {username} </div>
                   </div>
-
                   <div className='Bar'>  
                       <div className='text' > @{props.player.login} </div>
                   </div>
-
               </div>
-              
           </div>
-
           <Stats isCurrentUser={props.isCurrentUser} player={props.player}/>
-          
       </PlayerCardStyle>
   )
 }
@@ -222,12 +199,10 @@ background-color: ${props => props.theme.colors.seconderybg};
                 text-align: left;
 
                 -webkit-text-stroke: 1px #44404562;
-
             }
         }
     }
 }
-
 `;
 
 // State  // 
@@ -241,7 +216,7 @@ background-color: ${props => props.theme.colors.seconderybg};
     const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
     const userData = useContext(UserContext)
     const [TotalGames, setTotalGames] = useState<number | undefined>(0)
-
+    const gamesocket = useContext(SocketGameContext)
 
     const    AddUsernotify = () => toast.success("You have successfully Send the invitaion to " + id.toLocaleUpperCase() , {
       position: "bottom-center",
@@ -299,7 +274,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         console.log(res.data)
           setrelationStatus("PENDING")
           AddUsernotify();
-        userData.then((user : UserProp | "{}")=>{
+        user.then((user : UserProp | "{}")=>{
         if (user !== "{}")
         {
           socket.emit('sendFriendRequest', {sender : user?.login , reciver : props.player.login} )
@@ -318,168 +293,149 @@ background-color: ${props => props.theme.colors.seconderybg};
       CancelNotify();
     }).catch((err)=>{  
       setrelationStatus("PENDING")
-
       })
-
     }
-
     socket.on('acceptedReq', (data : any) => 
-    { 
-      setrelationStatus("FRIENDS")
-
-    }
-    )
+    {
+      if (data.status)
+        setrelationStatus("FRIENDS")
+      else
+        setrelationStatus("NOTHING")
+    })
     const UnfriendUser = ()=>{
-      //  GET process.env.REACT_APP_BACKEND_URL+  /users/relation/:id?event=unfriend
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
       ).then((res)=>{
-      // console.log(res.data)
-      // alert("friend Request sent" + res.status)
       setrelationStatus("NOTHING")
       UnfriendUserNotify();
-      // window.location.reload();
       }).catch((err)=>{  })
     }
     const BlockUser = ()=>{
-      //  GET process.env.REACT_APP_BACKEND_URL+  /users/relation/:id?event=block
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
       ).then((res)=>{
       setrelationStatus("BLOCKED")
-      // isBlocked = "BLOCKED";
       BlockUserNotify();
-      // window.location.reload();
+
+      // user.then((user : UserProp | "{}")=>{
+      //   if (user !== "{}")
+      //   {
+      //     socket.emit('msg_event', {sender : user?.login , reciver : props.player.login} )
+      //   }
+      //  })
+
       }).catch((err)=>{  })
     }
     const UnBlockUser = ()=>{
-      //  GET process.env.REACT_APP_BACKEND_URL+  /users/relation/:id?event=unblock
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=unblock",   {withCredentials: true}
       ).then((res)=>{
       // console.log(res.data)
-      // alert("friend Request sent" + res.status)
       setrelationStatus("NOTHING")
       UnBlockUserNotify()
-      // window.location.reload();
       }).catch((err)=>{  })
     }
     const setUserGrade = (props : any)=>{
-      console.log("__MY GRADE ___", props)
+      // console.log("__MY GRADE ___", props)
+      props = ( props > 100 ) ? 100 : (props < 0 ) ? 0 : props
       if (props <= 0)
         setgrade(Grades[0])
       else
         setgrade(Grades[props / 10])
-        console.log("__MY GRADE ___", grade)
-      
+        // console.log("__MY GRADE ___", grade)
     }
-    const InviteToPlay = ()=>{ }
+    const InviteToPlay = ()=>{ } // TO BE IMPLEMENTED
 
     useEffect(() => {
-
         setTotalGames( props.player.wins[0] + props.player.wins[1] + props.player.losses[0] + props.player.losses[1])
-
-        //User Data
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/" + id,  {withCredentials: true}).then((res)=>{
-
-          //Relation
           setrelationStatus(res.data.relation)
-          
-          //Grade
           setUserGrade(res.data.rank)
-          
-          //CreatedTime
           const date = new Date(res.data.lastModification)
           setcreatedTime(date.toString().split("GMT")[0])
-
-          
         }).catch((err)=>{})
-        
-        // User Achievements
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
           setAChievements(res.data)
-          // console.log("MY___ACHIEVEMENTS___Achievements___ : ", AChievements)
         }).catch((err)=>{})
+    }, [])
+    const user = useContext(UserContext)
+    const [Owner, setOwner] = useState("")
+    user.then((data : UserProp | "{}")=>{
+      if (data !== "{}")
+      {
+        setOwner(data?.login)
+      }
+    })
 
-      }, [])
+    return (
+      <StatsStyle  >
+        <Data>
+            <div className='data'>
+              <div>
+                <DataTag> 
+                  <DataTag>   <RankIcon/>  {grade}  </DataTag>
+                  <DataTag>   <UsersIcon/> {props.player.nbFriends} {" Friends"} </DataTag>
+                </DataTag>
 
-      return (
-        <StatsStyle  >
-          <Data>
+                <DataTag>
+                  <DataTag>     <GameIcon/> {TotalGames} {"  Game"} </DataTag>
+                  <DataTag>     <CalendarIcon/> {createdTime}  </DataTag>
+                </DataTag>
+                {
+                  props.isCurrentUser === false && 
+                  <Buttons className='Btp' >
+                    {
+                      relationStatus === "NOTHING" ?  
+                        <Button  onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
+                      : 
+                      relationStatus === 'PENDING' ?
+                        <Button  type='secondary' onClick={CancelRequest} icon={<Hourglass/>} text='Cancel Request'/>
+                      :
+                      relationStatus === "BLOCKED" ?
+                        <Button  type='secondary' onClick={UnBlockUser} icon={<UnblockIcon/>} text='UnBlock'/>
+                      :
+                      relationStatus === "FRIENDS" ? 
+                        <>
+                        <div className='row'>
 
-              <div className='data'>
-                <div>
-
-                  <DataTag> 
-                    <DataTag>   <RankIcon/>  {grade}  </DataTag>
-                    <DataTag>   <UsersIcon/> {props.player.nbFriends} {" Friends"} </DataTag>
-                  </DataTag>
-
-                  <DataTag>
-                    <DataTag>     <GameIcon/> {TotalGames} {"  Game"} </DataTag>
-                    <DataTag>     <CalendarIcon/> {createdTime}  </DataTag>
-                  </DataTag>
-                  
-                  {
-                    props.isCurrentUser === false && 
-                    <Buttons className='Btp' >
-                      {
-                        relationStatus === "NOTHING" ?  
-                          <Button  onClick={addFriend} icon={<UserAddIcon/>} text='Add User'/>
-                        : 
-                        relationStatus === 'PENDING' ? 
-                          <button className='BtpPending' onClick={CancelRequest}>
-                                <Hourglass/>
-                                Cancel Request
+                          <Button   type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
+                          
+                          <button className='BtpBlocked'onClick={BlockUser}>
+                            <BlockIcon/>
+                            Block
                           </button>
-                        :
-                        relationStatus === "BLOCKED" ? 
-                          <button className='BtpBlocked'onClick={UnBlockUser}>
-                            <UnblockIcon/>
-                            UnBlock
-                          </button>
-                        :
-                        relationStatus === "FRIENDS" ? 
-                          <>
-                          <div className='row'>
-
-                            <Button   type='secondary' onClick={UnfriendUser} icon={<UnfrienIcon/>} text='Unfriend'/>
-                            
-                            <button className='BtpBlocked'onClick={BlockUser}>
-                              <BlockIcon/>
-                              Block
-                            </button>
-                            
-                          </div>
-                          <div className='row'>
-                            <Link to={"/chat/" + props.player?.dmChannel}>  
-                              <Button isIcon={true}  icon={<SendMessage/>} text='Send Message'/>
-                            </Link>
-                            <Button  icon={<InviteToPlayIcon/>} isIcon={true}   type='secondary' onClick={InviteToPlay} text='Invite to Play'/>
-
-                          </div>
-                          </>
-                        :
-                          null
-                      }
-                    </Buttons>
-                  }
-                </div>
-              
-              <Achivments  data={AChievements} /> 
-
+                          
+                        </div>
+                        <div className='row'>
+                          <Link to={"/chat/" + props.player?.dmChannel}>  
+                            <Button isIcon={true}  icon={<SendMessage/>} text='Send Message'/>
+                          </Link>
+                           <Button  isIcon={true} onClick={()=>{ 
+                            socket.emit("gameChallenge", props.player?.dmChannel , Owner) ; 
+                            gamesocket.emit("gameChallenge" , {player1 : props.player.login , player2 : Owner})}} 
+                            icon={<GameIcon/>}/>
+                        </div>
+                        </>
+                      :
+                        null
+                    }
+                  </Buttons>
+                }
               </div>
+            
+            <Achivments  data={AChievements} /> 
 
-              <div className='vr'> </div>
+            </div>
 
-              <div className='Stats'>
-                < RadarChart  wins={props.player.wins}  losses={props.player.losses} />
-              </div>
+            <div className='vr'> </div>
 
-          </Data>
-        </StatsStyle>
-      )
+            <div className='Stats'>
+              < RadarChart  wins={props.player.wins}  losses={props.player.losses} />
+            </div>
+
+        </Data>
+      </StatsStyle>
+    )
   }
 
   const DataTag = styled.div`
-    /* background-color: #1c70b517; */
     display: flex;
     align-items: center;
     min-width : 200px;
@@ -675,7 +631,6 @@ gap:10px;
     
   }
   `
-// State //
 
 /// Game History tab //
 export interface GameCompProps { win: boolean }
@@ -792,16 +747,12 @@ const ElapsedTime = styled.div`
   }
 `;
 //
-
-//
 interface AvatarProps {img: string , login ?: string }
-
 interface UserType {
  socketId : string[],
  userid : string,
  gameStatu : boolean,
 }
-
 export  function AvatarComponent(props: AvatarProps) {
   const socket = useContext(OnlineContextSocket)
   const User = useContext(UserContext)
@@ -905,7 +856,7 @@ const Dataa = styled.div`
       letter-spacing: 0.3px;
   }
 `;
-
+//
 export  function AddFriend() {
 return (
   <AddFriendStyle>
@@ -913,7 +864,6 @@ return (
       Add Friend
   </AddFriendStyle>
 )}
-
 const AddFriendStyle = styled.div`
  font-family: 'Poppins';
   font-style: normal;

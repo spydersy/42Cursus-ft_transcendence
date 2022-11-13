@@ -10,6 +10,7 @@ import avataro from "../assets/imgs/avatar/avatar2.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SocketContext,  SocketValue } from '../context/Socket';
+import { UserContext } from '../context/UserContext';
 
 interface UserProp { defaultAvatar: string, login : string , dmChannel : string,  }
 export interface UserInvitCardProps { data: UserProp , friends : UserProp[], setfriends : (e : any)=>void }
@@ -79,33 +80,45 @@ const TabfourStyle= styled.div`
 //
 export  function UserInvitCard(props : UserInvitCardProps) {
     const socket = useContext(SocketContext)
+  const userData = useContext(UserContext)
 
-const accepteFriend = ()=>{
-    axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=accept",  {withCredentials: true} 
-            ).then((res)=>{
-                // console.log(res)
-                console.log(props.data)
-                socket.emit('joinRoom', [props.data.dmChannel])
-                var s  = props.friends.indexOf(props.data)
-                var l = props.friends
-                l.splice(s , 1)
-                props.setfriends([...l])
-        // alert("User Request Accepted" + res.status) 
+    const accepteFriend = ()=>{
+        axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=accept",  {withCredentials: true} 
+                ).then((res)=>{
+                    // console.log(res)
+                    console.log(props.data)
+                    socket.emit('joinRoom', [props.data.dmChannel])
+
+                    var s  = props.friends.indexOf(props.data)
+                    var l = props.friends
+                    l.splice(s , 1)
+                    props.setfriends([...l])
+                    
+                    userData.then((user : UserProp | "{}")=>{
+                    if (user !== "{}")
+                        socket.emit('acceptFriendRequest', {accepter: user?.login, reciever:  props.data.login, status: true} )
+                    })
+
+            // alert("User Request Accepted" + res.status) 
+        
+        }).catch((err)=>{  })
     
-    }).catch((err)=>{  })
-   
-}
-const DenyFriend = ()=>{
-    axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=decline",  {withCredentials: true} 
-        
-    ).then((res)=>{
-        
-        var s  = props.friends.indexOf(props.data)
-        var l = props.friends
-        l.splice(s , 1)
-        props.setfriends([...l])
+    }
+    const DenyFriend = ()=>{
+        axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=decline",  {withCredentials: true} 
+            
+        ).then((res)=>{
+            
+            var s  = props.friends.indexOf(props.data)
+            var l = props.friends
+            l.splice(s , 1)
+            props.setfriends([...l])
+            userData.then((user : UserProp | "{}")=>{
+            if (user !== "{}")
+                socket.emit('acceptFriendRequest', {accepter: user?.login, reciever:  props.data.login, status: false} )
+            })
 
-    }).catch((err)=>{  })
+        }).catch((err)=>{  })
 
 
 }
