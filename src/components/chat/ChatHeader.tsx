@@ -24,13 +24,13 @@ interface convType {
   picture : string,
   users: usersType[]
 }
-interface ListTypes  {
+// interface ListTypes  {
   
-    title : string,
-    icon :  any,
-    href: string
+//     title : string,
+//     icon :  any,
+//     href: string
   
-  }
+//   }
 
   interface chatHeaderProps {
     data : convType,
@@ -42,8 +42,7 @@ interface ListTypes  {
   
 export default function ChatHeader(props : chatHeaderProps) {
 
-    const [open, setopen] = useState(false)
-    const [data, setdata] = useState<convType>(
+  const [data, setdata] = useState<convType>(
       {
         nbMessages: 0,
         lastUpdate: "string",
@@ -63,12 +62,8 @@ export default function ChatHeader(props : chatHeaderProps) {
       }]
       })
 
-   
-
     useEffect(() => {
       setdata(props.data)
-
-
     }, [props.data])
     
     return (

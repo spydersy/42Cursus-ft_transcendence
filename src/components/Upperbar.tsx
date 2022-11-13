@@ -18,11 +18,9 @@ import EmptyComponent from './PlayerrEmptyComp';
 import { UserContext } from '../context/UserContext'
 import { FriendRequest } from './Notifications/NotifComponents';
 import Mamali from "../assets/imgs/avatar/Ai-lwahch.png";
-import { ToastContainer, toast } from 'react-toastify';
-import { useDetectClickOutside } from 'react-detect-click-outside';
 // import { UserContext } from './context/UserContext';
-import { OnlineContextSocket, SocketContext,  SocketGameContext,  SocketValue } from '../context/Socket';
-import MsgToast , {AcceptToast, FriendRequestToast, GameChallengeToast} from '../components/Toasts/MsgToast';
+import {SocketContext } from '../context/Socket';
+// import MsgToast  from '../components/Toasts/MsgToast';
 
 ///////
 
@@ -310,25 +308,20 @@ padding: 0px 0px 0px 49px;
 
 //////////////
 
-interface ssss {
-  accepter: string,
-  sender: string,
-  status: boolean
-}
-interface msgType {
-  channelId : string,
-  content : string, 
-  date : string, 
-  displayName : string, 
-  id : number,
-  senderId : number
-}
+// interface msgType {
+//   channelId : string,
+//   content : string, 
+//   date : string, 
+//   displayName : string, 
+//   id : number,
+//   senderId : number
+// }
 
-const CustomToastWithLink = (data : msgType) => (
-  <div style={{width: "100%" , height : "100%"}}>
-        <MsgToast data={data}/>
-  </div>
-);
+// const CustomToastWithLink = (data : msgType) => (
+//   <div style={{width: "100%" , height : "100%"}}>
+//         <MsgToast data={data}/>
+//   </div>
+// );
 
 export  function NotificationComponent(props: NotifProps) {
     const [openNotif, setopenNotif] = useState(false)
@@ -343,7 +336,7 @@ export  function NotificationComponent(props: NotifProps) {
       setisNotif(true)
       var type =  "msg" 
 
-      if (pageName != "chat")
+      if (pageName !== "chat")
       {
         list.push({sender:payload.displayName, img:payload.img, msg:payload.content, type:type})
       }
@@ -459,7 +452,7 @@ export  function NotifDropDown(props : NotifDropDownProps) {
   // const refs = useDetectClickOutside({ onTriggered: props.closeDropdown });
   const socket = useContext(SocketContext)
   var [list, setlist] = useState<NotifDataCard[]>(props.list)
-  const [isNotif, setisNotif] = useState(true)
+  const [isNotif] = useState(true)
 
 
   const ClearNotif = () => {
@@ -496,11 +489,11 @@ return (<>
               {
 
                 list.map((item: any, index: any) => (
-                item.type == "msg" ?
+                item.type === "msg" ?
                   <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={item.msg} check={()=>{}}  clear={(index)=>{removeNotif(index)}} />
-                : item.type == "friendReq" ?
+                : item.type === "friendReq" ?
                   <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={"Sent you a Friend Request"} check={()=>{}}  clear={(index)=>{removeNotif(index)}} /> 
-                : item.type == "acceptReq" ?
+                : item.type === "acceptReq" ?
                   <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={item.sende +  "Accepted your Request"} check={()=>{}}  clear={(index)=>{removeNotif(index)}} />
                 : null
 

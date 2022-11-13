@@ -48,10 +48,10 @@ export default function Pong(props: gameProps) {
     }
     var topLimit = 0
     var bottomLimit = height - paddel2.h;
-    var direction = {
-        x: 10,
-        y: 10,
-    }
+    // var direction = {
+    //     x: 10,
+    //     y: 10,
+    // }
 
     const setup = (p5: p5Types, canvasParentRef: Element) => {
 

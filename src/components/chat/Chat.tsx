@@ -4,11 +4,9 @@ import ChatBody from './ChatBody'
 import ChatHeader from './ChatHeader'
 import ChatSidebar from './ChatSidebar'
 import ChatBottom from './ChatBottom'
-import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 import axios from 'axios'
 import { SocketContext } from '../../context/Socket';
 import ChatControlBar from './ChatControlBar'
-import EmptyComponent from '../PlayerrEmptyComp'
 import { UserContext } from '../../context/UserContext'
 
 interface UserProp {
@@ -162,7 +160,7 @@ export default function Chat() {
     },[])
     useEffect(() => {
       const recievedMessgae  =  (payload : msgType) => {        
-        if (currentConv.channelId != 0)
+        if (currentConv.channelId !== 0)
         {
           if (payload.channelId  === currentConv.channelId.toString())
           {
@@ -181,9 +179,9 @@ export default function Chat() {
         recievedMessgae(payload);
         fetchData()
       })
-      const catchAllListener = (event : any, ...args : any) => {
-        console.log(`got event ${event}`);
-      }
+      // const catchAllListener = (event : any, ...args : any) => {
+      //   console.log(`got event ${event}`);
+      // }
       // return ()=>{
 
       //   socket.off("chatToClient").(catchAllListener)
