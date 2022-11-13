@@ -1,4 +1,4 @@
-import React, {useState , useEffect , useRef} from 'react'
+import React, {useState , useEffect , useRef , useContext} from 'react'
 import styled , {css} from "styled-components"
 import { HeadComponent } from '../../Pages/Home';
 import { ReactComponent as Image} from "../../assets/imgs/users.svg";
@@ -11,6 +11,10 @@ import { Button } from '../../Pages/SignIn';
 
 import axios from 'axios';
 import { type } from 'os';
+import { UserContext } from '../../context/UserContext';
+import { UserProp } from '../game/types';
+import { Socket } from 'socket.io-client';
+import { SocketContext } from '../../context/Socket';
 interface usersType {
 
     defaultAvatar: string,
@@ -34,11 +38,17 @@ interface usersType {
   interface CloseProps {
     list :convType[], closeModal : ()=>void , setlist: (e: any)=>void,setcurrentConv : (e: any)=>void
   }
-export default function CreateGroup(props :CloseProps) {
+  interface idsType{
     
-    const [members, setmembers] = useState([
-     
-    ])
+        login : string,
+        id : string
+    
+  }
+export default function CreateGroup(props :CloseProps) {
+  const user = useContext(UserContext)
+  const socket = useContext(SocketContext)
+    
+    const [memberss, setmemberss] = useState<idsType[]>([])
     const [data, setdata] = useState({
         name : "",
         icone : '',
@@ -99,10 +109,19 @@ export default function CreateGroup(props :CloseProps) {
        }
     const createGroup = ()=>{
         //check for valid input
+        console.log(memberss)
         var  bodyFormData = new FormData();
+        var tmpmembers = []
+        for (let i = 0; i < memberss.length; i++) {
+            const element = memberss[i];
+            console.log(element.id)
+            tmpmembers.push(element.id)
+            
+        }
+        bodyFormData.append('members', JSON.stringify(tmpmembers));
         bodyFormData.append('icone',data.icone);
         bodyFormData.append('name',data.name);
-        bodyFormData.append('members', JSON.stringify(members));
+        
         bodyFormData.append('type',check);
        
         if (passRef.current != null)
@@ -115,7 +134,18 @@ export default function CreateGroup(props :CloseProps) {
         axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 
       ).then((res)=>{
+
         fetchData()
+        user.then((me : UserProp | "{}")=>{
+            if (me !== "{}")
+            {
+                for (let i = 0; i < memberss.length; i++) {
+                    const element = memberss[i];
+                    socket.emit("addedMember", {owner: me, addedMember: element.login})
+                    
+                }
+            }
+          })
         props.closeModal()
 
 
@@ -185,13 +215,13 @@ x
                         onRequestClose={() => sethide(false)}
                         hideModal={() => sethide(false)}
                         >
-                            <AddFriendsModal closeModal={() => sethide(false)} members={members} setmembers={(e : any)=>{setmembers(e)}}/>
+                            <AddFriendsModal closeModal={() => sethide(false)} members={memberss} setmembers={(e : any)=>{setmemberss(e)}}/>
                         </Modal>}
             </div>
             {
-                members.map((member : string , id : number)=>{
-                    return <Member key={id} members={members} setmembers={(e)=>setmembers(e)} id={member}/>
-                })
+                memberss.map((member : idsType , id : number)=>{
+                    return <Member key={id} members={memberss} setmembers={(e)=>setmemberss(e)} id={member.login}/>
+                })  
             }
         </MembersCont> 
         </Form>
@@ -378,6 +408,7 @@ margin: 15px 0;
   /* align-items: center; */
   border: 1px solid ${props => props.theme.colors.purple};
   /* height: 40px; */
+  transition: all 1000s ease-in;
  border-radius: 10px;
   /* background-color: red;0 */
   
@@ -413,7 +444,7 @@ margin: 15px 0;
   
 `;
 interface  MemberProp{
-    members : string[],
+    members : idsType[],
     setmembers : (e : any) => void,
     id: string,
 }
@@ -437,11 +468,20 @@ export  function Member(props:MemberProp ) {
  
     }  , [props.members])
     const deleteMember = ()=>{
+
         var list = props.members
-        var index = list.indexOf(props.id)
-        console.log(index)
-        list = list.slice(index+ 1)
-        props.setmembers([...list])
+        var index = 0
+        for (let i = 0; i < props.members.length; i++) {
+            const element = props.members[i];
+            if (element.login === props.id)
+            {
+                list.splice(i , 1)
+                props.setmembers([...list])
+
+            }
+               
+            }
+
     }
   return (
     <MembersStyle>
