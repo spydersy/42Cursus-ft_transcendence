@@ -180,8 +180,6 @@ export default function Chat() {
         console.log(payload)
         recievedMessgae(payload);
         fetchData()
-
-    
       })
       const catchAllListener = (event : any, ...args : any) => {
         console.log(`got event ${event}`);
@@ -223,7 +221,7 @@ export default function Chat() {
           { <>
           {(state === -1 || state === 0) && 
           <div id="right" className='right'>
-          <ChatSidebar empty={empty} state={state} setState={(e)=> setstae(e)} setcurrentConv={(e)=>{ setcurrentConv(e)
+          <ChatSidebar setlist={(e)=>{setlist(e)}} empty={empty} state={state} setState={(e)=> setstae(e)} setcurrentConv={(e)=>{ setcurrentConv(e)
             var test = document.getElementById("test");
             if (test)
               test.style.zIndex = "1"

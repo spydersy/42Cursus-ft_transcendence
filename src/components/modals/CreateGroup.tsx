@@ -8,12 +8,34 @@ import Modal from '../Modal';
 import AddFriendsModal from './AddFriendsModal';
 import InputComponent from '../Input';
 import { Button } from '../../Pages/SignIn';
+
 import axios from 'axios';
 import { type } from 'os';
+interface usersType {
 
-export default function CreateGroup(props :{closeModal : ()=>void}) {
+    defaultAvatar: string,
+    login : string
+    displayName : string,
+    restriction: string,
+    restrictionTime: string,
+    duration: number,
+  }
+  interface convType {
+    nbMessages: number,
+    lastUpdate: string,
+    access : string,
+    channelId: number,
+    name: string;
+    password: string,
+    picture : string,
+    users: usersType[]
+  }
+
+  interface CloseProps {
+    list :convType[], closeModal : ()=>void , setlist: (e: any)=>void,setcurrentConv : (e: any)=>void
+  }
+export default function CreateGroup(props :CloseProps) {
     
-   
     const [members, setmembers] = useState([
      
     ])
@@ -64,6 +86,17 @@ export default function CreateGroup(props :{closeModal : ()=>void}) {
         }
         console.log(e.target)
     }
+    const fetchData = async () => {
+        await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+        {withCredentials: true} 
+        ).then((res)=>{
+          props.setlist([...res.data]);
+        props.setcurrentConv(res.data[0])
+
+         }).catch((err)=>{
+           console.log(err)
+         })
+       }
     const createGroup = ()=>{
         //check for valid input
         var  bodyFormData = new FormData();
@@ -82,10 +115,10 @@ export default function CreateGroup(props :{closeModal : ()=>void}) {
         axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 
       ).then((res)=>{
-        
-        console.log(res.data)
-        
+        fetchData()
         props.closeModal()
+
+
 
       }).catch((err)=>{
         // if (data.name === "")

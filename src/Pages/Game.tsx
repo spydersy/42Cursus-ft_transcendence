@@ -43,7 +43,7 @@ export default function Game(props : GameProps) {
 
   const [end, setend] = useState(false)
   const [start, setstart] = useState(false)
-  const [msg, setmsg] = useState(false)
+  const [msg, setmsg] = useState("")
   const [player, setplayer] = useState(true)
   const [show, setshow] = useState(false)
 
@@ -66,18 +66,23 @@ export default function Game(props : GameProps) {
   if (payload.score.score1 > payload.score.score2 )
   {
       if (payload.roomPlayers[0].login === loged?.login )
-        setmsg( true )
+        setmsg( "win" )
+      else if (payload.roomPlayers[1].login === loged?.login)
+        setmsg( 'lost' )
       else
-        setmsg( false )
+        setmsg( 'over' )
+
+      
 
   }
   else
   {
     if (payload.roomPlayers[0].login === loged?.login )
-        setmsg( false )
+        setmsg( "lost" )
+    else if (payload.roomPlayers[1].login === loged?.login)
+        setmsg( "win" )
     else
-        setmsg( true )
-
+        setmsg( 'over' )
   }
 
     setOpennet(undefined)
@@ -115,7 +120,7 @@ var dat : UserProp;
         if (mode === "classic")
         {
           if (!end)
-            gamesocket.emit("playerConnect" , data?.login)
+            gamesocket.emit("playerConnect" , data?.login )
           setUser(data)
         }
         else if (mode === "1v1")
@@ -132,17 +137,14 @@ var dat : UserProp;
     })
     document.addEventListener('visibilitychange', function (event) {
       if (document.hidden) {
-        // gamesocket.emit("endGame" , dat?.login)
+        gamesocket.emit("endGame" , dat?.login)
       } else {
           console.log('is visible');
       }
   });
     return () => {
-
-
       gamesocket.emit("endGame" , dat?.login)
     }
-
 
   }, [])
   
@@ -207,18 +209,14 @@ const GameStyle = styled.div`
   width: 100%;
   height: 700px ;
   position: relative;
-  /* background-color: red; */
-  /* > .react-p5{
+  .defaultCanvas0{
     width: 100%;
-    > .p5Canvas{
-      width: 100% !important;
-    }
-  } */
+  }
   `;
 
 
 
-export  function GameEndModal(props : {msg : boolean , socket :Socket , login? : string , close: ()=>void}) {
+export  function GameEndModal(props : {msg : string , socket :Socket , login? : string , close: ()=>void}) {
   
   useEffect(() => {
 
@@ -227,12 +225,12 @@ export  function GameEndModal(props : {msg : boolean , socket :Socket , login? :
   
   return (
     <GameEndStyle>
-      {props.msg ? "YOU WON" :"YOU LOST"}
+      {props.msg === "win" ? "YOU WON" : props.msg === "lost"  ? "YOU LOST" : "GAME OVER"}
         
         <div className='buttns'>
 
 
-        <Button onClick={()=>{
+{ props.msg!= "over" &&         <Button onClick={()=>{
         var mode = localStorage.getItem('mode') ;
         if (mode === "classic")
         {
@@ -248,7 +246,7 @@ export  function GameEndModal(props : {msg : boolean , socket :Socket , login? :
           props.socket.emit("PlayAi" , props?.login)
         }
           props.close()
-        }} type='primary' text='playe again'/>
+        }} type='primary' text='Play'/>}
         <Link to="/">
         <Button type='secondary' text="go home"/>
         </Link>

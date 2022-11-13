@@ -41,6 +41,7 @@ interface ChatProps {
   // setList: (e : any) => void,
   list:  convType[]
   setcurrentConv : (e: any)=>void,
+  setlist : (e: any)=>void,
   setState : (e: number)=>void,
   state : number,
   empty : boolean,
@@ -60,7 +61,7 @@ export default function ChatSidebar(props : ChatProps) {
                     onRequestClose={() => sethide(false)}
                     hideModal={() => sethide(false)}
                  >
-                  <CreateGroup closeModal={()=>sethide(false) } />
+                  <CreateGroup list={props.list} setlist={(e : any)=>{props.setlist(e)}} setcurrentConv={(e : any)=>{props.setcurrentConv(e)}}  closeModal={()=>sethide(false) } />
                  </Modal>
             }
           </div>

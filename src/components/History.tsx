@@ -181,6 +181,9 @@ export  function GameComp(props : GameCardProps) {
   return (
     <GameCompStyle win={state} >
         <Data>
+          <div>
+            {props.match.mode}
+          </div>
             <div className='name'>
                     {props.match.player1.displayName}
             </div>

@@ -25,22 +25,22 @@ export default function Pong(props: gameProps) {
 
     var height = 700;
     var ballCord = {
-        size: 20,
+        size: 0.02,
         x: width / 2,
         y: height / 2
     }
     var paddel1 = {
-        w: 20,
-        h: 100,
-        x: 20,
-        y: height / 2,
+        w: 0.02,
+        h: 0.15,
+        x: 0.03,
+        y: 0.5,
 
     };
     var paddel2 = {
-        w: 20,
-        h: 100,
-        x: width - 50,
-        y: 0,
+        w:  0.02,
+        h:  0.15,
+        x: 0.95,
+        y: 0.5,
     }
     var pre = {
 
@@ -54,12 +54,10 @@ export default function Pong(props: gameProps) {
         y: 10,
     }
 
-    console.log("_____WTFFFF____")
-
     const setup = (p5: p5Types, canvasParentRef: Element) => {
 
         topLimit = 0;
-        console.log("_____WTFFFF____")
+
         var p = document.getElementById("canva")?.offsetWidth
         if (p)
             width = p;
@@ -81,10 +79,10 @@ export default function Pong(props: gameProps) {
                     
                     if (props.player) {
                         
-                        gamesocket.emit("player1Moved", {login : data.login, y : p5.mouseY})
+                        gamesocket.emit("player1Moved", {login : data.login, y : p5.mouseY / height})
                     }
                     else {
-                        gamesocket.emit("player2Moved", {login : data.login, y : p5.mouseY})
+                        gamesocket.emit("player2Moved", {login : data.login, y : p5.mouseY/ height})
                     }
         
                 }   
@@ -96,16 +94,7 @@ export default function Pong(props: gameProps) {
         if (p)
         {
             width = p;
-             paddel1 = {
-                w: 20,
-                h: 100,
-                x: 20,
-                y: height / 2,
-        
-            };
-             paddel2.x = width - 50;
-             paddel1.x = 30;
-      
+
         
         }
     }
@@ -113,15 +102,15 @@ export default function Pong(props: gameProps) {
     const drowPaddels = (p5 : p5Types)=>{
         p5.stroke(p5.color("#157DBD"));
         p5.strokeWeight(4)
-        p5.rect(paddel1.x, paddel1.y, paddel1.w, paddel1.h , 10);
-        p5.rect(paddel2.x, paddel2.y, paddel2.w, paddel2.h , 10);
+        p5.rect(paddel1.x * width, paddel1.y * height, paddel1.w * width, paddel1.h * height, 10);
+        p5.rect(paddel2.x * width, paddel2.y * height, paddel2.w * width, paddel2.h * height , 10);
         p5.fill(p5.color(gameData?.paddlecolor))
         p5.noStroke()
     }
     const drowBall = (p5 : p5Types)=>{
         p5.stroke(p5.color("#157DBD"));
         p5.strokeWeight(2)
-        p5.ellipse(ballCord.x, ballCord.y, ballCord.size, ballCord.size);
+        p5.ellipse(ballCord.x, ballCord.y, ballCord.size * width, ballCord.size * width);
 
         p5.fill(p5.color(gameData?.ballcolor))
         p5.noStroke()
@@ -131,6 +120,8 @@ export default function Pong(props: gameProps) {
         p5.stroke(p5.color("#157DBD"));
         p5.strokeWeight(2)
         p5.ellipse(width /2, height / 2, 300, 300);
+        // p5.fill(0)
+
         
         p5.noStroke()
         
@@ -139,41 +130,33 @@ export default function Pong(props: gameProps) {
         p5.line(width /2, 0 , width /2, height);
     }
     const draw = (p5: p5Types) => {
-        p5.background(0);
         //create ball
+        p5.background(0);
         p5.stroke(p5.color("#157DBD"));
         p5.strokeWeight(2)
         p5.rect(0, 0, width - 2, height - 2, 10);
-        drowLine(p5)
-        // p5.noStroke()
-        drowPaddels(p5)
-
         
+
+        drowLine(p5)
+        drowPaddels(p5)
         drowBall(p5)
-        // s.noStroke()
-        //create paddels
-
-
-        // check for hit walls
-        // move the ball
         if (props.start) {
-            gamesocket.emit("moveBall", { w: width, h: height, p1: paddel1, p2: paddel2 })
+            gamesocket.emit("moveBall", { w: width, h: height, p1: {w : 20 , h : 100 , x : paddel1.x  , y : paddel1.y  },p2: {w : 20 , h : 100 , x : paddel2.x  , y : paddel2.y } })
         }
         // hitWalls(p5)
     };
     //detect Colision 
 
 
-    gamesocket.on("player1moved", (y: number) => {
-        paddel1.y = y;
+    gamesocket.on("player1moved", (y: any) => {
+        paddel1.y = y.y ;
+ 
 
 
     })
-    gamesocket.on("player2moved", (y: number) => {
+    gamesocket.on("player2moved", (y: any) => {
 
-        paddel2.y = y;
-
-
+        paddel2.y = y.y ;
     })
     gamesocket.on("moveBallClient", (pyload) => {
         // console.log(pyload.x)
@@ -191,11 +174,7 @@ export default function Pong(props: gameProps) {
             const gameData: GameProps = JSON.parse(games || '{}');
             setgameData(gameData)
         }
-        var test = document.getElementById("canva")
-        if (test) {
-            setwidthState(test.offsetWidth)
-            height = test.offsetHeight;
-        }
+       
 
     }, [setwidthState])
 

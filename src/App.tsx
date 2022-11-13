@@ -196,7 +196,7 @@ function App() {
       toasty()
   }
   function PlayerInGame (payload) {
-    localStorage.setItem("mode","1v1")
+    // localStorage.setItem("mode","1v1")
     navigate("/game/"+ payload)
     
   }

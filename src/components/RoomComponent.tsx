@@ -7,9 +7,9 @@ import JoinGroupModal from './modals/JoinGroupModal';
 import { ReactComponent as Lock} from "../assets/imgs/lock-01.svg"
 import CreateGroup , {UpdateGroup} from './modals/CreateGroup';
 import { Button } from '../Pages/SignIn'
-import {ReactComponent as UserAddIcon} from "../assets/imgs/user-plus.svg";
+import {ReactComponent as UserAddIcon} from "../assets/imgs/editRoom.svg";
 import {ReactComponent as BlockIcon} from "../assets/imgs/ban.svg";
-import {ReactComponent as Edit} from "../assets/edit.svg";
+import {ReactComponent as Edit} from "../assets/imgs/editRoom.svg";
 import {ReactComponent as Join} from "../assets/join-group.svg";
 import { type } from 'os';
 
@@ -86,7 +86,7 @@ export default function RoomComponent(props : RoomProps) {
 
           { props.ownership &&
             <div className='Edit'> 
-                <Button  onClick={()=>{ sethideModel1(true) 
+                <Button   onClick={()=>{ sethideModel1(true) 
                 sethideModel(false) }}isIcon={true} icon={<Edit/>} />
             </div>
           } 
