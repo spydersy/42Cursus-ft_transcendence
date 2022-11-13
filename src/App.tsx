@@ -122,7 +122,7 @@ function App() {
   function hundleMsg (payload) {
     if (pageName != "chat")
     {
-      console.table(payload)
+
       
        const    toasty = () =>  toast(CustomToastWithLink(payload) , {
         className: "toast",
@@ -361,7 +361,7 @@ const Cont = styled.div`
   flex-direction: row;
   flex: 1;
   @media  only screen and (max-width: 1270px) {
-    width: calc(100% - 70px);
+    width: calc(100% - 80px);
   }
   @media  only screen and (max-width: 560) {
     width: 100%;

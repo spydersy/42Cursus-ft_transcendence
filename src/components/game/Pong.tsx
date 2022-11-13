@@ -20,7 +20,11 @@ export default function Pong(props: gameProps) {
     var p = document.getElementById("canva")?.offsetWidth
     var width : number = 0;
     if (p)
+    {
         width = p;
+        height = p/ 1.57;
+
+    }
 
     var height = 700;
     var ballCord = {
@@ -53,19 +57,27 @@ export default function Pong(props: gameProps) {
     //     y: 10,
     // }
 
+
+
     const setup = (p5: p5Types, canvasParentRef: Element) => {
 
         topLimit = 0;
 
         var p = document.getElementById("canva")?.offsetWidth
         if (p)
+        {
             width = p;
+            height = p/ 1.57;
+
+        }
+        
         bottomLimit = width - paddel2.h;
         p5.createCanvas(width, height ).parent(canvasParentRef);
-
-
-
+        
+        
+        
         p5.frameRate(60);
+        p5.resizeCanvas(width , height)
     };
 
 
@@ -92,8 +104,11 @@ export default function Pong(props: gameProps) {
         var p = document.getElementById("canva")?.offsetWidth
         if (p)
         {
+     
             width = p;
+            height = p/ 1.57;
 
+            p5.resizeCanvas(width , height)
         
         }
     }
@@ -129,11 +144,13 @@ export default function Pong(props: gameProps) {
         p5.line(width /2, 0 , width /2, height);
     }
     const draw = (p5: p5Types) => {
+        p5.resizeCanvas(width , height)
+
         //create ball
         p5.background(0);
         p5.stroke(p5.color("#157DBD"));
         p5.strokeWeight(2)
-        p5.rect(0, 0, width - 2, height - 2, 10);
+        p5.rect(0, 0, width - 2, height -2, 10);
         
 
         drowLine(p5)
@@ -178,7 +195,7 @@ export default function Pong(props: gameProps) {
     }, [setwidthState])
 
 
-    return <Sketch windowResized={windowResize} mouseMoved={mouseMoved} setup={setup} draw={draw} />;
+    return <Sketch  windowResized={windowResize} mouseMoved={mouseMoved} setup={setup} draw={draw} />;
     /* <Button cursor='pointer' onClick={(e)=>{props.setstart(!props.start)}} text='start'/> */
 
 }

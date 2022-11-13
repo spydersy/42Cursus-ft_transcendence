@@ -86,16 +86,6 @@ export default function Sidebar() {
         else if (pageName === "leaderboard" ) pagenum = 3;
         else if (pageName === "setting" ) pagenum = 4;
         changeFocus(pagenum)
-
-    //     window.addEventListener("resize", (e : any)=>{
-
-    //     if (window.innerWidth < 1200 )
-    //         setopen(false)
-    //     else
-    //         setopen(true)
-   
-    // })
-    
       return () => {
         
       }
@@ -109,7 +99,7 @@ export default function Sidebar() {
                 <Button  size={"small"}isIcon={true} icon={<ArrowLeft/>}/>
             </Left>
 
-            <Items>
+            <Items id="items">
             {
                 sideBarItemsList.map((item : any , id : number)=>{
                     return <Item  open={open}key={id} onClick={()=>setfocused(id)} activel={id === focused ? "true" : "false"} to={item.link}>
@@ -184,7 +174,13 @@ const SidebarWrraper = styled.div`
         top: calc(100% - 70px);
         display: flex;
         align-items: center;
-        > svg{  display: none;  }
+        width: 100%;
+        flex-direction: row;
+        .items{
+            margin-top: 0;
+            background-color: red;
+        }
+        
     }
 `;
 const Test = styled.div<barProps>`
@@ -286,6 +282,7 @@ const Items = styled.div`
     flex-direction: column;
     overflow : hidden;
     @media  only screen and (max-width: 768px) {
+        
         flex-direction: row;
         justify-content: space-around;
         >a{

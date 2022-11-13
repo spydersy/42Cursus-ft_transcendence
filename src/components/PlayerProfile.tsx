@@ -888,4 +888,4 @@ const AddFriendStyle = styled.div`
   border-radius: 10px;
   padding: 0 5px;
 `;
-//
+//  
