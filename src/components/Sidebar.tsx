@@ -124,7 +124,7 @@ export default function Sidebar() {
                 }
                 </Item>
             <Item open={open} onClick={()=>{
-                axios.post("http://localhost:8000/profile/logout", {}, 
+                axios.post(process.env.REACT_APP_BACKEND_URL + "/profile/logout", {}, 
                 {withCredentials: true} 
                 ).then((res)=>{
                 navigate('/signin')

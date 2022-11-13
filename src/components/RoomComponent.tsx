@@ -58,7 +58,7 @@ export default function RoomComponent(props : RoomProps) {
 
 
   //   console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
-  //   axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
+  //   axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/createRoom" , bodyFormData, 
   //   {withCredentials: true} 
   // ).then((res)=>{
   //   console.log(res.data)
