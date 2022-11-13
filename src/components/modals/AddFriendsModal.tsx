@@ -17,11 +17,9 @@ interface UserProp {
     losses : number[]
   }
   interface idsType{
-    
     login : string,
     id : string
-
-}
+  }
 export default function AddFriendsModal(props : {members : idsType[] , setmembers : (e : any)=>void , closeModal : ()=> void} ) {
     const [friends, setfriends] = useState([])
     const handleFriend= (e : any)=>{ e.stopPropagation();  }
@@ -32,7 +30,6 @@ export default function AddFriendsModal(props : {members : idsType[] , setmember
     const user = useContext(UserContext)
 
     useEffect(() => {
-
         user.then((data : UserProp | "{}")=>{
           if (data !== "{}")
           {
@@ -51,7 +48,6 @@ export default function AddFriendsModal(props : {members : idsType[] , setmember
     const exist = (e : any)=>
     {
       console.log(props.members)
-      // var i = props.members.indexOf(e)
       for (let i = 0; i < props.members.length; i++) {
           const element = props.members[i];
           if (element.id === e.id)

@@ -160,14 +160,14 @@ function App() {
   }
   async function acceptRequest (payload) {
     console.log('acceptii a sahbi:',payload)
-    await joinChannels()
-     const    toasty = () =>  toast(CustomToastAcceptFriendReq(payload) , {
+    const    toasty = () =>  toast(CustomToastAcceptFriendReq(payload) , {
       className: "toast",
       progressClassName: "toastProgress",
       autoClose: 2000,
       hideProgressBar: true,
     })
     toasty()
+    await joinChannels()
 
   }
   function handleevent (payload) {
@@ -247,6 +247,7 @@ function App() {
     theme: "colored",
   });
   let joinChannels = async () => {
+
     let userLogin : string;
     await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
     {withCredentials: true} 
