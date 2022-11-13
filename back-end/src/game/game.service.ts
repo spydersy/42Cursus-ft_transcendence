@@ -34,10 +34,10 @@ export class GameService {
         this.userService = new UserService(this.prisma, null);
         this.roomName = roomName;
         this.score = {score1 : 0 , score2 : 0}
-        this.ball = {size : 20 , x :  500 , y :350}
-        this.direction = { x :  3 , y :3}
+        this.ball = {size : 0.02 , x :  0.5 , y :0.5}
+        this.direction = { x :  0.003 , y :0.003}
         this.status  = "waiting";
-        this.paddel2 = {x : 1000 - 30 , y : 0}
+        this.paddel2 = {x : 1 - 0.02  , y : 0}
         this.predict = 0;
         this.predicty = 0;
     }
@@ -170,8 +170,8 @@ export class GameService {
             this.score.score1++;
         else
             this.score.score2++;
-        this.ball = {size : 35 , x :  this.width/ 2 , y :350}
-        this.direction = { x :  3 , y :3}
+        this.ball = {size : 0.02 , x :  0.5 , y :0.5}
+        this.direction = { x :  0.002 , y :0.002}
    }
 
 
