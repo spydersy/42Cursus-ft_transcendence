@@ -20,7 +20,13 @@ interface UserProp {
     wins : number[]
     losses : number[]
   }
-export default function AddFriendsModal(props : {members : string[] , setmembers : (e : any)=>void , closeModal : ()=> void} ) {
+  interface idsType{
+    
+    login : string,
+    id : string
+
+}
+export default function AddFriendsModal(props : {members : idsType[] , setmembers : (e : any)=>void , closeModal : ()=> void} ) {
     const [friends, setfriends] = useState([])
     const socket = useContext(SocketContext)
     const handleFriend= (e : any)=>{
@@ -35,7 +41,7 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
   const user = useContext(UserContext)
 
     useEffect(() => {
-        // var s : string | null = localStorage.getItem('user');
+
         user.then((data : UserProp | "{}")=>{
           if (data !== "{}")
           {
@@ -49,8 +55,20 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
             })
           }
         })
-    }  , [ props.setmembers])
+    }  , [])
     
+    const exist = (e : any)=>
+    {
+      console.log(props.members)
+      var i = props.members.indexOf(e)
+      for (let i = 0; i < props.members.length; i++) {
+          const element = props.members[i];
+          if (element.id === e.id)
+            return true
+          }
+          
+          return false
+        }
   return (
     <AddFriendsModalStyle>
          <SearchBar>
@@ -64,29 +82,28 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
             return <Friend key={id}>
                     <div>
                         <div style={{width : '35px' , height :'35px'}}>
+<<<<<<< HEAD
                             <AvatarComponent img={Mamali}/>
 
+=======
+                            <AvatarComponent img={data.defaultAvatar}/>
+>>>>>>> 2049d078de9ebeceeee029464e307dec4f8a2050
                         </div>
                         <div className='name'>
                             {data.displayName}
                         </div>
                     </div>
               {
-                !props.members.includes(data.id ) ? 
+                (!exist({login : data.login , id : data.id})) ? 
                 <Button   onClick={(e)=>{handleFriend(e)
                   var test = props.members;
-                  user.then((me : UserProp | "{}")=>{
-                    if (me !== "{}")
-                    {
-                      socket.emit("addedMember", {owner: me, addedMember: data.login})
-                    }})
-                  test.push(data.id)
+                 
+                  test.push({login : data.login , id : data.id})
                    props.setmembers([...test])
                     }} text={"add"}/>
                     :
                     <Button  onClick={(e)=>{handleFriend(e)
                       var test = props.members;
-                      console.log("khkhkh")
                       test.splice(id , 1)
                       props.setmembers([...test])
               }} text='Added' type='secondary'/>
