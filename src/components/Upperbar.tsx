@@ -17,7 +17,7 @@ import { wait } from '@testing-library/user-event/dist/utils';
 import EmptyComponent from './PlayerrEmptyComp';
 import { UserContext } from '../context/UserContext'
 import { FriendRequest } from './Notifications/NotifComponents';
-import Mamali from "../assets/imgs/avatar/mamali.jpeg";
+import Mamali from "../assets/imgs/avatar/Ai-lwahch.png";
 import { ToastContainer, toast } from 'react-toastify';
 import { useDetectClickOutside } from 'react-detect-click-outside';
 // import { UserContext } from './context/UserContext';
@@ -331,101 +331,53 @@ const CustomToastWithLink = (data : msgType) => (
 );
 
 export  function NotificationComponent(props: NotifProps) {
-    
     const [openNotif, setopenNotif] = useState(false)
     const [isNotif, setisNotif] = useState(false)
     const socket = useContext(SocketContext)
-    // const onlinesSocket = useContext(OnlineContextSocket)
-    // const gameSocket = useContext(SocketGameContext)
-    // const User = useContext(UserContext)
-    // const [toastData, settoastData] = useState<msgType>()
-    // const [toastDataChallenge, settoastDataChallenge] = useState()
     const pageName = window.location.pathname.split("/")[1];
-    var [list, setlist] = useState<NotifDataCard[]>([
-      // {sender:"Mehdi",img:"", msg:"Send you Friend request", type:"request"},
-      // {sender:"Mehdi",img:"", msg:"Send you Game request", type:"request"},
-      // {sender:"Reda",img:"", msg:"oui", type:"msg"},
-      // {sender:"Reda",img:"", msg:"cv", type:"msg"},
-      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
-      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
-      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
-      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
-      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
-      // {sender:"Mehdi",img:"", msg:"Send you friend request", type:"request"},
-      // {sender:"Reda",img:"", msg:"MaHello", type:"msg"}
-    ])
-
+    var [list, setlist] = useState<NotifDataCard[]>([ ])
     const refo = useRef(null)
+
+
     function hundleMsg (payload : any) {
       setisNotif(true)
+      var type =  "msg" 
+
       if (pageName != "chat")
       {
-        console.table(">__NOTIF__HANDLE__MSG__", payload)
-        list.push({sender:payload.displayName, img:payload.img, msg:payload.content, type:payload.type})
+        list.push({sender:payload.displayName, img:payload.img, msg:payload.content, type:type})
       }
     }
+    function handleRequest (payload : any) {
+      console.log('__sahbiiiiii____:'+  payload)
+      setisNotif(true)
+      var type =  "friendReq" 
+      list.push({sender:payload.sender, img:payload.img, msg:payload.msg,type:type})
+    }
+    function acceptRequest (payload : any) {
+      console.log('acceptii a sahbi:',payload)
+      
+      setisNotif(true)
+      var type =  "acceptReq"
+      list.push({sender:payload.sender, img:payload.img, msg:payload.msg,type:type})
 
-    // function handleChallenge (payload) {
-    //   console.log(payload)
-      
-    //   toast(CustomToastWithLinkGame(payload) , {
-    //     // position : toast.POSITION.TOP_RIGHT,
-    //     className: "toast",
-    //     progressClassName: "toastProgress",
-    //     autoClose: 2000,
-    //     hideProgressBar: true,
-    //     // closeOnClick: false
-    //   })
-    //   // CHallengeNotify()
-    // }
-    // function handleRequest (payload) {
-    //   // console.log('__sahbiiiiii____:'+payload)
-    //   toast(CustomToastFriendReq(payload) , {
-    //     className: "toast",
-    //     progressClassName: "toastProgress",
-    //     autoClose: 2000,
-    //     hideProgressBar: true,
-    //   })
-    // }
-    // function acceptRequest (payload) {
-    //   console.log('acceptii a sahbi:',payload)
-      
-    //   toast(CustomToastAcceptFriendReq(payload) , {
-    //     className: "toast",
-    //     progressClassName: "toastProgress",
-    //     autoClose: 2000,
-    //     hideProgressBar: true,
-    //   })
-    // }
-    // function handelChallengeAccept (payload) {
-    //   localStorage.setItem("mode","1v1")
-    //   navigate("/game/")
-      
-    // }
-
+    }
     const handleClickOutside = () => {
       setopenNotif(false);
       // wait (3000).then(() => { setLoading(false); });
     };
-
     useClickOutside(refo, handleClickOutside);
 
-  useEffect(()=>{
-    // sub
-    
-    socket.on('msg_event', hundleMsg);
-    // socket.on('challeneEvent', handleChallenge);
-    // socket.on('recievedRequest', handleRequest)
-    // socket.on('acceptedReq', acceptRequest)
-    // gameSocket.on('challengeAccepted', handelChallengeAccept)
-      return () => {
-        socket.removeListener('msg_event', hundleMsg);
-        // socket.removeListener('challeneEvent', handleChallenge);
-        // socket.removeListener('recievedRequest', handleRequest);
-        // socket.removeListener('acceptedReq', acceptRequest);
-        // gameSocket.removeListener('challengeAccepted', handelChallengeAccept);
-      }
-    })
+    useEffect(()=>{
+      socket.on('msg_event', hundleMsg);
+      socket.on('recievedRequest', handleRequest)
+      socket.on('acceptedReq', acceptRequest)
+        return () => {
+          socket.removeListener('msg_event', hundleMsg);
+          socket.removeListener('recievedRequest', handleRequest)
+          socket.removeListener('acceptedReq', acceptRequest);
+        }
+      })
 
   return (
 
@@ -541,9 +493,19 @@ return (<>
            }  
 
             <Notif>
-              {list.map((item: any, index: any) => (
-                <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={item.msg} check={()=>{}}  clear={(index)=>{removeNotif(index)}} />
-              ))}
+              {
+
+                list.map((item: any, index: any) => (
+                item.type == "msg" ?
+                  <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={item.msg} check={()=>{}}  clear={(index)=>{removeNotif(index)}} />
+                : item.type == "friendReq" ?
+                  <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={"Sent you a Friend Request"} check={()=>{}}  clear={(index)=>{removeNotif(index)}} /> 
+                : item.type == "acceptReq" ?
+                  <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={item.sende +  "Accepted your Request"} check={()=>{}}  clear={(index)=>{removeNotif(index)}} />
+                : null
+
+              ))
+             }
               {/* <FriendRequest name="moahmed" img={Mamali} msg={"Send a Friend request ."} check={()=>{}}  clear={()=>{}} /> */}
               {/* <FriendRequest name="moahmed" img={Mamali} msg={"Is challenging you."} check={()=>{}}  clear={()=>{}} /> */}
             </Notif>

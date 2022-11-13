@@ -7,6 +7,9 @@ import axios from 'axios';
 import { Button } from '../../Pages/SignIn';
 import { UserContext } from '../../context/UserContext';
 import { SocketContext } from '../../context/Socket';
+import Mamali from "../../assets/imgs/avatar/Ai-lwahch.png";
+
+
 interface UserProp {
   id : string , 
     defaultAvatar: string,
@@ -61,7 +64,7 @@ export default function AddFriendsModal(props : {members : string[] , setmembers
             return <Friend key={id}>
                     <div>
                         <div style={{width : '35px' , height :'35px'}}>
-                            <AvatarComponent img={data.defaultAvatar}/>
+                            <AvatarComponent img={Mamali}/>
 
                         </div>
                         <div className='name'>

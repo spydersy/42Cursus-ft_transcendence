@@ -8,6 +8,7 @@ import styled  from "styled-components"
 import { AvatarComponent } from '../PlayerProfile';
 import DropDown from '../DropDown';
 import { data } from 'jquery';
+import { Link } from 'react-router-dom';
 
 interface UserProp {
   defaultAvatar: string,
@@ -97,7 +98,7 @@ export default function ChatHeader(props : chatHeaderProps) {
 
             props.data?.access === "DM"  ? 
         
-            <a className='conty' href={""}>
+            <Link className='conty' to={"/profile/"+ props.data.users[1].login}>
 
               <div style={{width: "50px" , height: "50px"}}>
       
@@ -106,7 +107,7 @@ export default function ChatHeader(props : chatHeaderProps) {
 
               <div >  {props.data?.users[1].displayName} </div>
 
-            </a>
+            </Link>
 
             :
               

@@ -10,31 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 // My Black List
 export default function BlockedUsers()
 {
-  // eslint-disable-next-line 
-  // const [listBlocked, setlistBlocked] = useState(
-  //     [
-  //       {
-  //         status: "ONLINE",
-  //         defaultAvatar:avataro,
-  //         login: "DefaultUser1",
-  //       },
-  //       {
-  //         status: "OFFLINE",
-  //         defaultAvatar:avataro,
-  //         login: "DefaultUser2"
-  //       },
-  //       {
-  //         status: "ONGAME",
-  //         defaultAvatar:avataro,
-  //         login: "DefaultUser3"
-  //       },
-  //       {
-  //         status: "MGHAYER",
-  //         defaultAvatar:avataro,
-  //         login: "DefaultUser4"
-  //       }
-  //     ]
-  //   )
+
   const [listBlocked, setlistBlocked] = useState([])
   
     useEffect(() => {
@@ -97,11 +73,12 @@ export interface UserBlockedCardProps {
   data: {
     login: string;
     defaultAvatar: string;
+    listBlocked : [], 
+    setlistBlocked : (e : any)=>void
   }
 }
-export interface StyleProps {
-    status: string;
-}
+
+export interface StyleProps { status: string; }
 
 export  function UserBlockedCard(props : UserBlockedCardProps) {
 
@@ -114,18 +91,25 @@ export  function UserBlockedCard(props : UserBlockedCardProps) {
     draggable: true,
     progress: undefined,
     theme: "colored"
-    });
+  });
 
-    const RemoveBlockUser = ()=>{
-        axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=unblock",  {withCredentials: true} 
-                ).then((res)=>{
-        
-            DeclineFriendNotify();
-            
-           }).catch((err)=>{  })
-            // window.location.reload();
-    
-    }
+  const RemoveBlockUser = ()=>{
+
+    axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=unblock",  {withCredentials: true} 
+
+      ).then((res)=>{
+      
+        DeclineFriendNotify();
+          
+          var s  = props.data.listBlocked.findIndex((e : any)=> e.login === props.data.login)
+          var l = props.data.listBlocked
+          l.splice(s , 1)
+          props.data.setlistBlocked([...l])
+          
+      }).catch((err)=>{  })
+          // window.location.reload();
+  
+  }
     
   return (
     <UserBlockedCardStyle >

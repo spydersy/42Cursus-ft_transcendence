@@ -19,29 +19,6 @@ export interface StyleProps {  status: string; }
 export default function PendingRequests(props: {player : any})
 {
 
-  // const [friends, setfriends] = useState(
-  //   [
-  //     {
-  //       status: "ONLINE",
-  //       defaultAvatar:avataro,
-  //       login: "DefaultUser1",
-  //     },
-  //     {
-  //       status: "OFFLINE",
-  //       defaultAvatar:avataro,
-  //       login: "DefaultUser2"
-  //     },
-  //     {
-  //       status: "ONGAME",
-  //       defaultAvatar:avataro,
-  //       login: "DefaultUser3"
-  //     },
-  //     {
-  //       status: "ONGAME",
-  //       defaultAvatar:avataro,
-  //       login: "DefaultUser4"
-  //     }
-  //   ])
   const [friends, setfriends] = useState([])
   
   useEffect(() => {
@@ -120,8 +97,14 @@ const accepteFriend = ()=>{
 }
 const DenyFriend = ()=>{
     axios.get(process.env.REACT_APP_BACKEND_URL+  "/users/relation/"+ props.data.login+ "?event=decline",  {withCredentials: true} 
-            ).then((res)=>{
-    
+        
+    ).then((res)=>{
+        
+        var s  = props.friends.indexOf(props.data)
+        var l = props.friends
+        l.splice(s , 1)
+        props.setfriends([...l])
+
     }).catch((err)=>{  })
 
 

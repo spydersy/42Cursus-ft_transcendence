@@ -18,7 +18,7 @@ import axios from 'axios';
 import Achivments  from './Achivments';
 import  { RadarChart } from './charts/Charts';
 import CircleLoader from "react-spinners/CircleLoader";
-import { OnlineContextSocket, SocketContext,  SocketValue } from '../context/Socket';
+import { OnlineContextSocket, SocketContext,  SocketValue ,SocketGameContext} from '../context/Socket';
 import {Link} from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../context/UserContext';
@@ -49,33 +49,47 @@ export function PlayerCard(props: PlayerCardProps) {
   let username = props.player.displayName;
   let status = "";  
   const socket = useContext(OnlineContextSocket)
-  const [state, setstate] = useState(true)
- 
+  const [state, setstate] = useState("")
+  const gameSocket = useContext(SocketGameContext)
+
   const setUserStatu =( list : UserType[] )=>{
     for (let i = 0; i < list.length; i++) {
       const element : UserType = list[i];
       if (element.userid === props?.player.login)
       {
-        setstate(true)
+        setstate("ONLINE")
         return ;
       }
       
     }
-    setstate(false)
+    setstate("OFFLINE")
   }
   socket.on("ConnectedUser" , (pyload)=>{
-   console.log(pyload)
+   console.log("PAYLOAD___" , pyload)
    setUserStatu(pyload)
   })
+  gameSocket.on('PlayerInGame', PlayerInGame);
+
+  function PlayerInGame(pyload : any){
+    console.log(pyload)
+    if (pyload.player === props?.player.login)
+    {
+      setstate("ONGAME")
+    }
+  }
 
   useEffect(() => { console.log("mystatue=", state) }, [props.player.login])
   
 
-  if (state)
+  if (state === "ONLINE")
   {
     color = ("#1cb52e"); status = "ONLINE";
   }
-  else if (!state)
+  else if (state === "ONGAME")
+  {
+    color = ("#b13911");  status = "ONGAME";
+  }
+  else
   {
     color = ("#af1c1c");  status = "OFFLINE";
   }
@@ -222,8 +236,8 @@ background-color: ${props => props.theme.colors.seconderybg};
     const [relationStatus, setrelationStatus] = useState<string >("");
     const id = window.location.pathname.split("/")[2];
     const [createdTime, setcreatedTime] = useState<string | undefined>("Mon 1 Oct 1999 00:00:00")
-    const Grades = ["New-Bie","Shinobi","ShiboKay","Hokage","Yuaiba", "Alchemist", "Spyder" ,"Medara", "ALA-ZWIN","3ANKOUB"]
-    const [grade, setgrade] = useState<string | undefined>(Grades[10])
+    const Grades = [ "Unranked", "New-Bie","Shinobi","ShiboKay","Hokage","Yuaiba", "Alchemist", "Spyder" ,"Medara", "ALA-ZWIN","3ANKOUB"]
+    const [grade, setgrade] = useState<string | undefined>(Grades[11])
     const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
     const userData = useContext(UserContext)
     const [TotalGames, setTotalGames] = useState<number | undefined>(0)
@@ -280,7 +294,6 @@ background-color: ${props => props.theme.colors.seconderybg};
       theme: "colored"
     });
     const addFriend = ()=>{
-
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{
         console.log(res.data)
@@ -291,37 +304,31 @@ background-color: ${props => props.theme.colors.seconderybg};
         {
           socket.emit('sendFriendRequest', {sender : user?.login , reciver : props.player.login} )
         }
-    })
-        // get this user login
-        // join user login room
-        // emit event to the room.
-        // window.location.reload();
+       })
       }).catch((err)=>{ 
         console.log(err)
         alert("USER ALREADY BLOCKED")
         setrelationStatus("BLOCKER")
-        // isBlocked = "BLOCKER"
       })
     }
     const CancelRequest = ()=>{
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
       ).then((res)=>{
-      // console.log(res.data)
-      
-      
       setrelationStatus("NOTHING")
       CancelNotify();
-
-
-      // CancelRequestNotify();
-      // window.location.reload();
     }).catch((err)=>{  
-        // setrelationStatus("PENDING")
+      setrelationStatus("PENDING")
 
       })
-      window.location.reload();
 
     }
+
+    socket.on('acceptedReq', (data : any) => 
+    { 
+      setrelationStatus("FRIENDS")
+
+    }
+    )
     const UnfriendUser = ()=>{
       //  GET process.env.REACT_APP_BACKEND_URL+  /users/relation/:id?event=unfriend
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
@@ -354,15 +361,16 @@ background-color: ${props => props.theme.colors.seconderybg};
       // window.location.reload();
       }).catch((err)=>{  })
     }
-    const InviteToPlay = ()=>{ }
-
-    const setUserGrade = (grade : any)=>{
-      console.log("__MY GRADE ___", grade)
-      if (grade <= 0)
-        setgrade("Unranked")
+    const setUserGrade = (props : any)=>{
+      console.log("__MY GRADE ___", props)
+      if (props <= 0)
+        setgrade(Grades[0])
       else
-        setgrade(Grades[grade / 10])
+        setgrade(Grades[props / 10])
+        console.log("__MY GRADE ___", grade)
+      
     }
+    const InviteToPlay = ()=>{ }
 
     useEffect(() => {
 
@@ -375,7 +383,7 @@ background-color: ${props => props.theme.colors.seconderybg};
           setrelationStatus(res.data.relation)
           
           //Grade
-          setUserGrade(res.data.level)
+          setUserGrade(res.data.rank)
           
           //CreatedTime
           const date = new Date(res.data.lastModification)
