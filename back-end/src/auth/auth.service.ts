@@ -20,15 +20,15 @@ export class AuthService {
                 private tfaService: TfaService) {}
 
     Check42ApiQueryCode(@Query() query) : Boolean {
-        if (query['error'] || !query['code']) {
+        if (query['error'] || query['code'] === null
+            || query['code'] === undefined) {
             return false;
         }
         return true;
     }
 
-    HandleSigninErrors(@Query() query) {
-        console.log("// Do Something ...");
-        return "// Do Something ...";
+    HandleSigninErrors(@Response() res) {
+        return res.redirect(this.configService.get<string>('SIGNIN_FRONTEND_URL'));
     }
 
     async ClaimToken(HeadersRequest) {
@@ -40,7 +40,7 @@ export class AuthService {
             )));
     }
 
-    async ClaimUserProfile(Token, code) {
+    async ClaimUserProfile(Token, code, @Response() res) {
         try {
             const HeadersRequest = {
                 'Authorization': Token['token_type'] + ' ' + Token['access_token'],
@@ -53,11 +53,11 @@ export class AuthService {
                 .get(this.configService.get<string>('42API_PROFILE_ENDPOINT'), {headers: HeadersRequest}));
         }
         catch {
-            console.log("__ERROR__WHILE__GETTING__USER__DATA__");
+            return this.HandleSigninErrors(res);
         }
     }
 
-    async GetUserToken(code : String) {
+    async GetUserToken(code : String, @Response() res) {
         try {
             const HeadersRequest = {
                 'grant_type': 'authorization_code',
@@ -70,7 +70,7 @@ export class AuthService {
             return token;
         }
         catch {
-            console.log("__ERROR__ID__00");
+            return this.HandleSigninErrors(res);
         }
     }
 
@@ -113,8 +113,8 @@ export class AuthService {
     async SigninLogic(@Query() query, @Response() res: Res): Promise<any> {
         let UserDto: User;
         if (this.Check42ApiQueryCode(query) === true) {
-            const Token = await this.GetUserToken(query['code']);
-            const UserProfile = await this.ClaimUserProfile(Token, query['code']);
+            const Token = await this.GetUserToken(query['code'], res);
+            const UserProfile = await this.ClaimUserProfile(Token, query['code'], res);
             UserDto =this.userService.GenerateUserDto(UserProfile['data']);
             if (await this.userService.FindUserById(UserDto.Id) === false) {
                 return this.firstSignin(UserDto, res);
@@ -144,10 +144,7 @@ export class AuthService {
                         .redirect(this.configService.get<string>('FRONTEND_URL'));
             }
         }
-        else {
-            this.HandleSigninErrors(query);
-        }
-        return `Hello ${UserDto.UsualFullName}`;
+        return this.HandleSigninErrors(res);
     }
 
     async TFAVerificationRes(publicKey: string, code: string, @Response() res) {
@@ -155,7 +152,6 @@ export class AuthService {
         const hash = publicKey.split('_-_');
         if (hash.length !== 2 || await bcrypt.compare(hash[1], hash[0]) === false)
             return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Key'});
-        
         const user = await this.prisma.users.findUnique({
             where: {login: hash[1]}
         });
