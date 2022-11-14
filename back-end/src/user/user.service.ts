@@ -150,10 +150,10 @@ export class UserService {
         }
         let FriendsStat = await this.FriendsRelationExist(MeDto.id, UserDto.id);
         if (FriendsStat !== null) {
-            if (FriendsStat.senderId === MeDto.id)
-                UserDto['relation'] = FriendsStat['status'];
-            else
+            if (FriendsStat.status === RELATION.PENDING && FriendsStat.senderId != MeDto.id)
                 UserDto['relation'] = 'WAITING';
+            else
+                UserDto['relation'] = FriendsStat['status'];
         }
         UserDto['nbFriends'] = await this.GetnbFriends(Me, Me);
         UserDto['dmChannel'] = null;

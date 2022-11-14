@@ -48,7 +48,6 @@ interface UserType {
       }
       else
       {
-        console.log("______BGGGG___: ", this.onLineArray[i].socketId.includes(client.id.toString()))
         if( this.onLineArray[i].socketId.includes(client.id.toString()) === false)
           this.onLineArray[i].socketId.push(client.id)
       }
@@ -116,7 +115,6 @@ interface UserType {
 
    handleDisconnect(client) {
   var index = this.getIndex(client.id.toString())
-  console.log("___DBG__INDEX :", index)
     if (index !== -1)
     {
 

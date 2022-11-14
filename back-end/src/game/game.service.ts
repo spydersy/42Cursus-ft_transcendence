@@ -54,13 +54,9 @@ export class GameService {
 
     getPlayer(id : string)
     {
-
-        //    console.log("players number : " , this.roomPlayers.length)
         for (let i = 0; i < this.roomPlayers.length; i++) {
-            //    console.log(this.roomPlayers[i].id + " " + id )
             if ( this.roomPlayers[i].id === id )
             {
-                   // console.log("found")
                 return this.roomPlayers[i];
             }
         }
@@ -85,7 +81,10 @@ export class GameService {
     }
 
     async saveGame( mode: MODE) {
-        let player1Dto = await this.prisma.users.findUnique({ where: { login: this.roomPlayers[0].login}});
+        if (this.roomPlayers[0] === null || this.roomPlayers[0] === undefined
+            || this.roomPlayers[1] === null || this.roomPlayers[1] === undefined)
+            return;
+        let player1Dto = await this.prisma.users.findUnique({ where: { login: this.roomPlayers[0].login}}); 
         let player2Dto = await this.prisma.users.findUnique({ where: { login:   this.roomPlayers[1].login}});
         const gameIndex = mode == MODE.CLASSIC ? 0 : 1;
 
@@ -142,7 +141,6 @@ export class GameService {
 
     changeId(id : string , login : string)
     {
-        //    console.log("players number : " , this.roomPlayers.length)
         for (let i = 0; i < this.roomPlayers.length; i++) {
             if ( this.roomPlayers[i].login === login )
             {
@@ -194,7 +192,6 @@ export class GameService {
    }
 
    async GetMatchHistory(me: number, param: string, @Res() res) {
-        console.log("__PARAM__DBG__ : ", param);
         let History : any[] = [];
         if (param === 'all') {
             History = await this.prisma.matchHistory.findMany({

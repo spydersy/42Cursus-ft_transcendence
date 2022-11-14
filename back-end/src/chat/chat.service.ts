@@ -222,11 +222,12 @@ export class ChatService {
     async GetAllChannels(me: number, @Res() res) {
         let filtredChannels: any[] = [];
 
-        const bannedChannels = await this.prisma.channelsUsers.findMany({
+        let myChannels = await this.prisma.channels.findMany({
             where: {
-                userId: me,
-                restriction: RESTRICTION.BANNED
-            }
+                users: {some: { userId: me}}
+            },
+            include: {users: {include: { user: true }}},
+            orderBy: {lastUpdate: 'desc'},
         });
         let allChannels = await this.prisma.channels.findMany({
             where: {
@@ -242,14 +243,14 @@ export class ChatService {
             delete element.users;
             delete element.password;
             filtredChannels.push(element);
-            for (let index = 0; index < bannedChannels.length; index++) {
-                if (bannedChannels[index].channelId === element.id) {
+            for (let index = 0; index < myChannels.length; index++) {
+                if (myChannels[index].id === element.id) {
                     filtredChannels.pop();
                     break;
                 }
             }
         });
-        return res.status(HttpStatus.OK).send(filtredChannels);
+        return res.status(HttpStatus.OK).send(filtredChannels);  
     }
 
     async UpdateUserInChannel(userId: number, user: string, channelId: string, role: PERMISSION, @Res() res) {

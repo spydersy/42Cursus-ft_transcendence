@@ -29,7 +29,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   afterInit(server: any) {
     this.logger.log("After Init")
-    // console.log( server.adapter.rooms)
   }
  
 
@@ -53,7 +52,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   @SubscribeMessage('endGame')
   deleteRoom(client: any, payload: any): void {
-    console.log("ENDGAME")
     var room = this.getRoombyLogin(payload)
     if (room !== null)
     {
@@ -65,6 +63,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
     
     for (let index = 0; index < this.roomArray.length; index++) {
+      client.leave(this.roomArray[index].roomName)
       this.roomArray[index].debug();
 
   }
@@ -115,12 +114,9 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   Play1v1(client: any, i : number): void {
     client.join(this.roomArray[i].roomName)
-    console.log("__DDBGG___PLAU!V!__"  , this.roomArray[i].roomPlayers)
-
     if (this.roomArray[i].roomPlayers.length === 2)
     {
       this.roomArray[i].status = "1v1";
-      console.log("__DDBGG___PLAU!V!__"  , this.roomArray[i].roomPlayers)
         this.wss.to(this.roomArray[i].roomName).emit("startGame" , {player1: this.roomArray[i].roomPlayers[0].login , player2: this.roomArray[i].roomPlayers[1].login})
         this.wss.emit("change" , this.getArrayData() )
       }
@@ -178,7 +174,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   @SubscribeMessage('watchGame')
   addWatch(client: any, payload: any): void {
     var i = this.getRoombyName(payload)
-    console.log("WATCHH___GAAME :: ", i)
     if (i === -1)
      client.emit('roomNotFound')
     else
@@ -229,9 +224,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       }
       this.wss.to(room.roomName).emit("moveBallClient" , {x: this.roomArray[i].ball.x , y: this.roomArray[i].ball.y , px : this.roomArray[i].paddel2.x, py :this.roomArray[i].predicty })
     }
-
-
-
   }
 
 
@@ -279,7 +271,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         this.roomArray[i].direction.y = - this.roomArray[i].direction.y
     else if (this.detectCollision(paddel1 , ballCord , this.roomArray[i].direction) || this.detectCollision(paddel2 , ballCord , this.roomArray[i].direction))
     {
-        this.roomArray[i].direction.x = ( -this.roomArray[i].direction.x) * 1.15 ;
+        this.roomArray[i].direction.x = ( -this.roomArray[i].direction.x) * 1.05;
     }
     return true
 
@@ -370,7 +362,6 @@ moveAI(room : any )
 
  JoinPlayer(client : any , login : string)
  {
-   console.log("___DBG@")
    var roomslenght = this.roomArray.length;
 
    if (this.roomArray[roomslenght - 1].roomPlayers.length === 2)
@@ -378,7 +369,6 @@ moveAI(room : any )
      var roomName = this.roomArray[roomslenght - 1].roomName
      var lastRoomPlayers = this.roomArray[roomslenght - 1].roomPlayers
      this.roomArray[roomslenght - 1].status = "InGame"
-     console.log("___DBG@")
 
      this.logger.log("startgame emited")
      this.wss.to(roomName).emit("startGame", {player1 : lastRoomPlayers[0].login , player2 :  lastRoomPlayers[1].login })
@@ -426,25 +416,18 @@ moveAI(room : any )
 
  async RemovePlayer(client : any , login : string) 
  {
-   console.log("remove : " + login)
    for (let i = 0; i < this.roomArray.length; i++) {
      var room = this.roomArray[i];
      if (room)
      {
 
        var player = room.getPlayerbyLogin(login )
-       console.log(player)
        if (room.roomPlayers.includes(player))
-       {
-         console.log("remove : " +room.roomName)
- 
+       { 
          this.wss.to(room.roomName).emit("endGame", {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers , status : this.roomArray[i].status})
-         
          client.leave(room.roomName)
-         // room.roomPlayers.splice(0, 2);
          this.roomArray.splice(i, 1)
          this.wss.emit("change" , this.getArrayData() )
- 
          return ;
      }
      }
@@ -456,7 +439,6 @@ moveAI(room : any )
  AddtoRoomArray(client : any , login : string) {
 
    var roomslenght = this.roomArray.length;
-   console.log("__DBG__ADTOROOMS :",roomslenght )
    if (roomslenght === 0)
    {
      let myuuid = uuidv4();
