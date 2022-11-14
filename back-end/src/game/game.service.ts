@@ -172,7 +172,7 @@ export class GameService {
             this.score.score2++;
         this.ball = {size : 0.02 , x :  0.5 , y :0.5}
         this.direction = { x :  0.003 , y :0.003}
-        if ( this.status = "AiGame")
+        if ( this.status === "AiGame")
             this.direction = {x: 0.006 , y : 0.006}
    }
 
@@ -181,6 +181,7 @@ export class GameService {
    {
        console.log("roomName : " +  this.roomName )
        console.log("roomlenght : " +  this.roomlenght )
+       console.log("status : " +  this.status )
        console.log("roomPlayers  : {" )
        for (let index = 0; index < this.roomPlayers.length; index++) {
 

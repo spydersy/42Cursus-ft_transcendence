@@ -73,9 +73,9 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   gameChallenge(client: any, payload: {player1 : string ,player2 : string }): void {
 
 
-      this.logger.log("challengeGame" , payload)
-  if (this.getRoombyName(payload.player1+payload.player2) === -1)
-  {
+    if (this.getRoombyName(payload.player1+payload.player2) === -1 && !this.getRoombyLogin(payload.player1))
+    {
+    this.logger.log("challengeGame" , payload)
     var newRoom = new GameService(payload.player1+payload.player2)
     newRoom.joinPlayer(payload.player1 , client.id)
 
@@ -90,8 +90,12 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   @SubscribeMessage('gameAccept')
   gameAccept(client: any, payload: {player1 : string ,player2 : string }): void {
 
+    for (let index = 0; index < this.roomArray.length; index++) {
+      this.roomArray[index].debug();
 
+  }
       var i = this.getRoombyName(payload.player1 + payload.player2)
+      this.logger.log("gameAccept" , payload.player1 + payload.player2)
       this.logger.log("gameAccept" , i)
 
       if (i !== -1)
@@ -108,12 +112,15 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 
+
   Play1v1(client: any, i : number): void {
     client.join(this.roomArray[i].roomName)
-      console.log(this.roomArray[i].roomPlayers)
-      if (this.roomArray[i].roomPlayers.length === 2)
-      {
-        this.roomArray[i].status = "InGame";
+    console.log("__DDBGG___PLAU!V!__"  , this.roomArray[i].roomPlayers)
+
+    if (this.roomArray[i].roomPlayers.length === 2)
+    {
+      this.roomArray[i].status = "1v1";
+      console.log("__DDBGG___PLAU!V!__"  , this.roomArray[i].roomPlayers)
         this.wss.to(this.roomArray[i].roomName).emit("startGame" , {player1: this.roomArray[i].roomPlayers[0].login , player2: this.roomArray[i].roomPlayers[1].login})
         this.wss.emit("change" , this.getArrayData() )
       }
@@ -133,6 +140,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     var index = this.playerExist(client , payload.login)
     if (index === -1)
     {
+
+
       if (payload.mode === "classic")
       {
         this.AddtoRoomArray(client , payload.login)
@@ -143,15 +152,18 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       {
         this.playAi(client , payload.login)
       }
-      else if (payload.mode === "1v1")
-      {
-        this.Play1v1(client , index)
-      }
+      
     
     }
     else
     {
-       this.roomArray[index].changeId(client.id , payload.login)
+      // this.roomArray[index].changeId(client.id , payload.login)
+      // client.join(this.roomArray[index].roomName)
+      if (payload.mode === "1v1")
+      {
+        this.Play1v1(client , index)
+      }
+      
     }
 
     for (let index = 0; index < this.roomArray.length; index++) {
@@ -205,11 +217,10 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       var i = this.roomArray.indexOf(room)
       this.roomArray[i].width = payload.w
       this.roomArray[i].height = payload.h
-      // this.roomArray[i].paddel2.x = payload.w - 30
       if (!this.hitWalls(i, this.roomArray[i].ball ,this.roomArray[i].direction , payload.w, payload.h ,payload.p1 , payload.p2 ))
         return ;
       this.roomArray[i].predict =  (this.roomArray[i].paddel2.x -  this.roomArray[i].ball.x) / this.roomArray[i].direction.x
-       this.roomArray[i].ball.x += this.roomArray[i].direction.x
+      this.roomArray[i].ball.x += this.roomArray[i].direction.x
       this.roomArray[i].ball.y += this.roomArray[i].direction.y
 
       if(room.status === "AiGame" && room.direction.x > 0)
@@ -292,13 +303,13 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 }
 async checkScore (room : any) {
 
-    if (room.score.score1 + room.score.score2 === 3)
+    if (room.score.score1  === 3  || room.score.score2  === 3 )
     {
       var i = this.roomArray.indexOf(room)
 
       this.wss.to(this.roomArray[i].roomName).emit("endGame" , {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers , status : this.roomArray[i].status })
 
-      await this.roomArray[i].saveGame(this.roomArray[i].status === "AiGame" ?  MODE.AIBUGGY : MODE.CLASSIC)
+      await this.roomArray[i].saveGame(this.roomArray[i].status !== "AiGame" ?   MODE.CLASSIC :  MODE.AIBUGGY)
       this.roomArray.splice(i, 1)
     }
 }
@@ -323,22 +334,22 @@ moveAI(room : any )
          if (PreditctY >  yb && PreditctY < yb  + h)
            return ;
          else if (yp  > PreditctY)
-            this.roomArray[i].paddel2.y = yp - 0.01
+            this.roomArray[i].paddel2.y = yp - 0.04
          else if (yp + (h / 2) < PreditctY)
-            this.roomArray[i].paddel2.y = yp + 0.01
+            this.roomArray[i].paddel2.y = yp + 0.04
 
        }
        else if (PreditctY < TableH + (TableH / 2)  &&  PreditctY > TableH)
        {
            if (yp  + h < TableH  )
-            this.roomArray[i].paddel2.y = yp + 0.01
+            this.roomArray[i].paddel2.y = yp + 0.04
 
 
        }
        else if (PreditctY < 0  &&  PreditctY > - (TableH / 2))
        {
            if (yp  > 0)
-            this.roomArray[i].paddel2.y = yp - 0.01
+            this.roomArray[i].paddel2.y = yp - 0.04
        }
 
        this.wss.to(room.roomName).emit("player2moved" , {y  : this.roomArray[i].paddel2.y})
