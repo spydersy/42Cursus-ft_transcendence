@@ -48,33 +48,28 @@ export function PlayerCard(props: PlayerCardProps) {
   let status = "";  
   const socket = useContext(OnlineContextSocket)
   const [state, setstate] = useState("")
-  const gameSocket = useContext(SocketGameContext)
 
   const setUserStatu =( list : UserType[] )=>{
     for (let i = 0; i < list.length; i++) {
       const element : UserType = list[i];
-      if (element.userid === props?.player.login)
+      if (element.userid === props.player.login)
       {
-        setstate("ONLINE")
+        if (element.gameStatu === true)
+          setstate("INGAME")
+        else
+          setstate("ONLINE")
+
         return ;
       }
     }
     setstate("OFFLINE")
   }
+
   socket.on("ConnectedUser" , (pyload)=>{
    console.log("PAYLOAD___" , pyload)
    setUserStatu(pyload)
   })
-//
-  gameSocket.on('PlayerInGame', PlayerInGame);
-  function PlayerInGame(pyload : any){
-    console.log(pyload)
-    if (pyload.player === props?.player.login)
-    {
-      setstate("ONGAME")
-    }
-  }
-//
+
   useEffect(() => { 
     // console.log("mystatue=", state) 
   // eslint-disable-next-line
@@ -82,8 +77,8 @@ export function PlayerCard(props: PlayerCardProps) {
   
   if (state === "ONLINE")
   { color = ("#1cb52e"); status = "ONLINE";  }
-  else if (state === "ONGAME")
-  { color = ("#b13911");  status = "ONGAME"; }
+  else if (state === "INGAME")
+  { color = ("#e68f38");  status = "INGAME"; }
   else
   { color = ("#af1c1c");  status = "OFFLINE"; }
 
@@ -335,13 +330,16 @@ background-color: ${props => props.theme.colors.seconderybg};
       }).catch((err)=>{  })
     }
     const setUserGrade = (props : any)=>{
-      // console.log("__MY GRADE ___", props)
       props = ( props > 100 ) ? 100 : (props < 0 ) ? 0 : props
+      // console.log("__MY GRADE ___", props, "___", (props / 10).toFixed(0))
       if (props <= 0)
         setgrade(Grades[0])
       else
-        setgrade(Grades[props / 10])
-        // console.log("__MY GRADE ___", grade)
+      {
+        let index : unknown = (props / 10).toFixed(0)
+        setgrade(Grades[index as number])
+      }
+        console.log("__MY GRADE ___", grade)
     }
     // const InviteToPlay = ()=>{ } // TO BE IMPLEMENTED
 
@@ -390,6 +388,9 @@ background-color: ${props => props.theme.colors.seconderybg};
                       : 
                       relationStatus === 'PENDING' ?
                         <Button  type='secondary' onClick={CancelRequest} icon={<Hourglass/>} text='Cancel Request'/>
+                      :
+                      relationStatus === 'WAITING' ?
+                        <Button  type='secondary'  icon={<Hourglass/>} text='Pending Request'/>
                       :
                       relationStatus === "BLOCKED" ?
                         <Button  type='secondary' onClick={UnBlockUser} icon={<UnblockIcon/>} text='UnBlock'/>
@@ -774,7 +775,6 @@ export  function AvatarComponent(props: AvatarProps) {
 
         return ;
       }
-      
     }
     setstate("offline")
   }
@@ -813,11 +813,11 @@ border-radius : 50%;
 position: relative;
 border: 4px solid${props => props.theme.colors.bg};
 ${props => (props.on === "online") && `
-border: 4px solid #157DBD;
+border: 4px solid #1cb52e;
 
 `}
 ${props => (props.on === "ingame") && `
-border: 4px solid #15bd45;
+border: 4px solid #e68f38;
 
 `}
 > .crcl{

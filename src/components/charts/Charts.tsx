@@ -28,8 +28,8 @@ export  function RadarChart(props: GameData) {
   var wins = props.wins;
   var losses = props.losses;
 
-  let Ewins = [wins[0], wins[1], 25, 25, 25]
-  let Elosses = [losses[0], losses[1], 25, 25, 25]
+  let Ewins = [wins[0], wins[1],wins[0], wins[1], wins[0]]
+  let Elosses = [losses[0], losses[1], losses[0], losses[1], losses[0]]
 
   const dataRadar = {
     labels: [
