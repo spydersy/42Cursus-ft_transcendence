@@ -123,14 +123,13 @@ function App() {
   }
   function handleChallenge (payload) {
     console.log(payload)
-    
      const    toasty = () =>  toast(CustomToastWithLinkGame(payload) , {
       // position : toast.POSITION.TOP_RIGHT,
       className: "toast",
       progressClassName: "toastProgress",
-      autoClose: 2000,
+      autoClose: 10000,
       hideProgressBar: true,
-      // closeOnClick: false
+      closeOnClick: false
     })
     toasty()
 
@@ -208,7 +207,7 @@ function App() {
     socket.on('addedMember', handladdedMembert);
     // socket.on('BlockRequest', BlockedUser);
     gameSocket.on('challengeAccepted', handelChallengeAccept)
-    gameSocket.on('PlayerInGame', PlayerInGame);
+    // gameSocket.on('PlayerInGame', PlayerInGame);
     return () => {
       socket.removeListener('msg_event', hundleMsg);
       socket.removeListener('challeneEvent', handleChallenge);

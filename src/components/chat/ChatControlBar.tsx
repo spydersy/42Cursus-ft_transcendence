@@ -97,7 +97,7 @@ import { setDatasets } from 'react-chartjs-2/dist/utils';
               console.log(">> invite game " , props.data)
 
               socket.emit("gameChallenge", props.data.users[1].login , props.data.users[0].login) ; 
-                gamesocket.emit("gameChallenge" , {player1 : props.data.users[0].login , player2 : props.data.users[1].login})}} icon={<GameIcon/>}/>
+                gamesocket.emit("gameChallenge" , {player1 :props.data.users[1].login  , player2 :   props.data.users[0].login})}} icon={<GameIcon/>}/>
             
             <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
           {/* <Button   isIcon={true} onClick={()=>{}} icon={<Mute/>}/> */}

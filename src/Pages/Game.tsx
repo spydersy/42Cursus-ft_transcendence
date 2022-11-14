@@ -43,6 +43,7 @@ export default function Game(props : GameProps) {
 
 
   gamesocket.on("startGame" , (pyload : any)=>{
+
     fetchPlayersData(pyload.player1 , pyload.player2)
     setend(false)
     setshow(true)
@@ -101,6 +102,7 @@ export default function Game(props : GameProps) {
   {
       setmsg( "win" )
   }
+  onlineSocket.emit("outGame" , loged?.login)
 
     setOpennet(undefined)
     setUser(loged)
@@ -131,27 +133,29 @@ var dat : UserProp;
       }
       else
       {
-        if (mode === "classic")
-        {
-          if (!end)
-            gamesocket.emit("playerConnect" , data?.login )
-          setUser(data)
-        }
-        else if (mode === "1v1")
-        {
-          gamesocket.emit("start" , data?.login)
-        }
-        else if (mode === "AI")
-        {
-          gamesocket.emit("PlayAi" , data?.login)
+        setUser(data)
+        gamesocket.emit("Play" , {login : dat?.login , mode : mode})
+
+        // if (mode === "classic")
+        // {
+        //   if (!end)
+        //     gamesocket.emit("playerConnect" , data?.login )
+        // }
+        // else if (mode === "1v1")
+        // {
+        //   gamesocket.emit("start" , data?.login)
+        // }
+        // else if (mode === "AI")
+        // {
+        //   gamesocket.emit("PlayAi" , data?.login)
   
-        }
+        // }
       }
       }
     })
     document.addEventListener('visibilitychange', function (event) {
       if (document.hidden) {
-        gamesocket.emit("endGame" , dat?.login)
+        // gamesocket.emit("endGame" , dat?.login)
       } else {
           console.log('is visible');
       }
@@ -237,13 +241,15 @@ const GameStyle = styled.div`
 
 export  function GameEndModal(props : {msg : string , socket :Socket , login? : string , close: ()=>void}) {
   const [score, setScore] = useState({score1: 0 , score2: 0})
+  var mode = localStorage.getItem('mode') ;
   
-  props.socket.on("endGame" , (py : any)=>{
-    setScore(py.score)
-  })
-  useEffect(() => {
 
-  }, [score])
+  useEffect(() => {
+    props.socket.on("endGame" , (py : any)=>{
+      console.log(py.score)
+      setScore(py.score)
+    })
+  }, [])
   
   
   return (
@@ -256,21 +262,8 @@ export  function GameEndModal(props : {msg : string , socket :Socket , login? : 
         <div className='buttns'>
 
 
-{ props.msg !== "over" &&         <Button onClick={()=>{
-        var mode = localStorage.getItem('mode') ;
-        if (mode === "classic")
-        {
-
-            props.socket.emit("playerConnect" , props?.login)
-        }
-        else if (mode === "1v1")
-        {
-          props.socket.emit("start" , props?.login)
-        }
-        else if (mode === "AI")
-        {
-          props.socket.emit("PlayAi" , props?.login)
-        }
+{ props.msg !== "over" &&  mode !=="1v1"   &&       <Button onClick={()=>{
+        props.socket.emit("Play" , {login : props?.login , mode : mode})
           props.close()
         }} type='primary' text='Play'/>}
         <Link to="/">

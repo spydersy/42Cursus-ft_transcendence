@@ -243,11 +243,12 @@ export  function GameChallengeToast(props: {data : any}) {
 
       // eslint-disable-next-line
   }, [])
-  const acceptChallenge = ()=>{
+  const acceptChallenge = (e : any)=>{
+    e.stopPropagation()
     UserData.then((data: UserProp | "{}")=>{
       if (data !== "{}")
       {
-        gamesocket.emit("gameAccept", {player1 : props.data, player2: data?.login})
+        gamesocket.emit("gameAccept", {player1 :data?.login , player2:  props.data})
       }
     }
     )
@@ -266,7 +267,7 @@ export  function GameChallengeToast(props: {data : any}) {
             </div>
         </div>
         <div className='buttons'>
-          <Button  onClick={acceptChallenge} size='small'  isIcon={true} icon={<CheckIcon/>}/>
+          <Button  onClick={(e)=>{acceptChallenge(e)}} size='small'  isIcon={true} icon={<CheckIcon/>}/>
         </div>
     </ToastStyle>
   )
