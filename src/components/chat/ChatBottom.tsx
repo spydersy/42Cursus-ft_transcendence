@@ -50,6 +50,7 @@ export default function ChatBottom(props: ChatProps) {
       User.then((data : UserProp | "{}")=>{
         if (data !== "{}")
         {
+          console.log(data)
           if (inputRef.current?.value)
           {
             mesg =  inputRef.current?.value;
@@ -60,7 +61,8 @@ export default function ChatBottom(props: ChatProps) {
               var msgtmp = {
                 userId: data.id,
                 content: mesg,
-                channelId:  props.data?.channelId
+                channelId:  props.data?.channelId,
+                login: data.login
               }
               //validation layer (restrictions
     
