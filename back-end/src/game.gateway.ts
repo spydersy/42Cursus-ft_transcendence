@@ -411,6 +411,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     {
       var newRoom = new GameService(myuuid)
       newRoom.status = "AiGame"
+      newRoom.direction = {x: 0.006 , y : 0.006}
       newRoom.joinPlayer(payload , client.id)
       newRoom.joinPlayer("drVegaPunk" , "drVegaPunk")
       console.log("__PLAYAI___DBG: ", newRoom.roomPlayers)
@@ -457,7 +458,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         this.roomArray[i].direction.y = - this.roomArray[i].direction.y
     else if (this.detectCollision(paddel1 , ballCord , this.roomArray[i].direction) || this.detectCollision(paddel2 , ballCord , this.roomArray[i].direction))
     {
-        this.roomArray[i].direction.x = ( -this.roomArray[i].direction.x);
+        this.roomArray[i].direction.x = ( -this.roomArray[i].direction.x) * 1.22 ;
     }
     return true
 
@@ -483,7 +484,7 @@ async checkScore (room : any) {
     //you can do better
     console.log("absolute : ", Math.abs(room.score.score1 - room.score.score2))
     // console.log("__ROOM__DBG__ : ", room);
-    if (Math.abs(room.score.score1 - room.score.score2)  === 3)
+    if (room.score.score1 + room.score.score2 === 5)
     {
       var i = this.roomArray.indexOf(room)
 
@@ -503,9 +504,6 @@ moveAI(room : any )
    const h =  0.15 ;
    var yp : number ;
    var yb : number ;
-   console.log(" room.paddel2.x  : ", room.paddel2.x )
-   console.log("room.ball.x : " ,room.ball.x)
-   console.log("q :",q)
    var q = ( room.paddel2.x -  room.ball.x ) / room.direction.x
    yp =  room.paddel2.y;
    yb =  room.ball.y + room.direction.y;

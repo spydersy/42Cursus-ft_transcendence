@@ -171,7 +171,9 @@ export class GameService {
         else
             this.score.score2++;
         this.ball = {size : 0.02 , x :  0.5 , y :0.5}
-        this.direction = { x :  0.002 , y :0.002}
+        this.direction = { x :  0.003 , y :0.003}
+        if ( this.status = "AiGame")
+            this.direction = {x: 0.006 , y : 0.006}
    }
 
 
