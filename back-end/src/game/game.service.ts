@@ -98,7 +98,7 @@ export class GameService {
         );
         if (winnerHistory.length == 2)
         {
-            winner.achievement[5] = true;
+            winner.achievement[4] = true;
             await this.prisma.users.update({
                 where: {
                     id: winner.id
@@ -110,7 +110,7 @@ export class GameService {
         }
         if (loserHistory.length == 2)
         {
-            loser.achievement[5] = true;
+            loser.achievement[4] = true;
             await this.prisma.users.update({
                 where: {
                     id: loser.id

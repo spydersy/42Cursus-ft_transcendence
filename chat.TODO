@@ -29,13 +29,13 @@ INPUT/OUTPUT VALIDATION:
 - [ ] GET /search/{dest}
 
 TODO : 
-- [ ] Hidden content in channel
-- [ ] Achievements
+- [ ] Hidden content in channel (FROM FRONT-END)
+- [X] Achievements
 - [ ] Input Validation
 
-- [X]  achievement[0]  ===> Create Channel
-- [X]  achievement[1]  ===> Change Avatar
-- [X]  achievement[2]  ===> Block User
+- [D]  achievement[0]  ===> Create Channel
+- [D]  achievement[1]  ===> Change Avatar
+- [D]  achievement[2]  ===> Block User
 - [X]  achievement[3]  ===> Win vs AI
 - [X]  achievement[4]  ===> Play 3 Games
 - [X]  achievement[5]  ===> Enable 2FA
