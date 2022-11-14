@@ -10,6 +10,7 @@ import {ReactComponent as GameIcon} from "../../assets/imgs/game-icon.svg";
 import { SocketContext , SocketGameContext} from '../../context/Socket';
 import {ReactComponent as BlockIcon} from "../../assets/imgs/LogOutRoom.svg";
 import axios from 'axios';
+import { setDatasets } from 'react-chartjs-2/dist/utils';
 
 
   interface usersType {
@@ -37,7 +38,7 @@ import axios from 'axios';
 
 
    
-    export default function ChatControlBar(props :{data : convType ,   empty : boolean}) {
+    export default function ChatControlBar(props :{data : convType , list : convType[],   empty : boolean , setdata: (e : any)=>void  , setcurrentConv:  (e : any)=>void }) {
 
   const [hide, sethide] = useState(false)
   const socket = useContext(SocketContext)
@@ -48,6 +49,11 @@ import axios from 'axios';
     await axios.delete(process.env.REACT_APP_BACKEND_URL+"/chat/leaveChannel?channel=" + props.data.channelId , {withCredentials: true} )
     .then((res)=>{
       console.log(res)
+      var s = props.list
+      var i = s.indexOf(props.data)
+      s.splice(i , 1)
+      props.setdata([...s])
+      props.setcurrentConv(s[0])
     }).catch((err)=>{
       console.log(err)
     })

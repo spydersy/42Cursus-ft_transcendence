@@ -79,7 +79,7 @@ export default function Game(props : GameProps) {
       
 
   }
-  else
+  else if (payload.score.score1 < payload.score.score2)
   {
     if (payload.roomPlayers[0].login === loged?.login )
         setmsg( "lost" )
@@ -87,6 +87,10 @@ export default function Game(props : GameProps) {
         setmsg( "win" )
     else
         setmsg( 'over' )
+  }
+  else
+  {
+      setmsg( "win" )
   }
 
     setOpennet(undefined)
@@ -222,7 +226,11 @@ const GameStyle = styled.div`
 
 
 export  function GameEndModal(props : {msg : string , socket :Socket , login? : string , close: ()=>void}) {
+  const [score, setScore] = useState({score1: 0 , score2: 0})
   
+  props.socket.on("endGame" , (py : any)=>{
+    setScore({score1: 0 , score2: 0})
+  })
   useEffect(() => {
 
   }, [])
@@ -231,7 +239,10 @@ export  function GameEndModal(props : {msg : string , socket :Socket , login? : 
   return (
     <GameEndStyle>
       {props.msg === "win" ? "YOU WON" : props.msg === "lost"  ? "YOU LOST" : "GAME OVER"}
-        
+       <div>
+        {score.score1} - {score.score1}
+
+       </div>
         <div className='buttns'>
 
 

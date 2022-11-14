@@ -24,7 +24,7 @@ export default function Score(props : {socket : Socket,user? :UserProp , opennet
     setScore({score1: 0 , score2: 0})
   })
   props.socket.on("endGame" , (py : any)=>{
-    setScore({score1: 0 , score2: 0})
+    // setScore({score1: 0 , score2: 0})
   })
   return (
     <PlayerStyle>

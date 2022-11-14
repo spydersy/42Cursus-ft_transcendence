@@ -69,7 +69,7 @@ export default function JoinGroupModal(props: RoomProps) {
             password: v,
           }
           // console.log(obj)
-          await axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/joinChannel/", obj, { withCredentials: true }).then((res) => {
+          await axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/joinChannel/", obj, { withCredentials: true }).then(async(res) => {
             console.log(res.data.message)
             if (res.data.message === "User Added") {
               console.log("joined succesfully!")
@@ -80,7 +80,7 @@ export default function JoinGroupModal(props: RoomProps) {
                 hideProgressBar: true,
               })
               toasty()
-
+              await joinChannels()
             }
             // if joined 
           }).catch((err) => {

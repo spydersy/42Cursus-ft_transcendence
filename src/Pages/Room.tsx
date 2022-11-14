@@ -2,6 +2,7 @@ import axios from 'axios';
 import React , {useState , useEffect}from 'react'
 import styled from "styled-components"
 import Navlinks from '../components/Navlinks';
+import EmptyComponent from '../components/PlayerrEmptyComp';
 import RoomComponent from '../components/RoomComponent';
 import { HeadComponent } from './Home';
 
@@ -37,7 +38,13 @@ const linkslist = ["All" , "My Rooms"]
         await axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/myChannels", 
         {withCredentials: true} 
         ).then((res)=>{
-          setmyrooms(res.data)
+          var tmp = []
+          for (let i = 0; i < res.data.length; i++) {
+            const element = res.data[i];
+            if (element.access !== "DM")
+              tmp.push(element)
+          }
+          setmyrooms(tmp)
          }).catch((err)=>{
            console.log(err)
          })
@@ -45,6 +52,7 @@ const linkslist = ["All" , "My Rooms"]
         {withCredentials: true} 
         ).then((res)=>{
           console.log(res.data)
+
           setallRooms(res.data)
          }).catch((err)=>{
            console.log(err)
@@ -60,24 +68,33 @@ const linkslist = ["All" , "My Rooms"]
         <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/>
               {index === 0 && 
             <Warraper>
-
+              {
+                allRooms.length === 0 ? <EmptyComponent text="No Rooms" />:
+                <>
               {
                 allRooms.map((data : any , id : number)=>{
-                return<RoomComponent  key={id} id={data.id} roomMembers={data.nbUsers} roomName={data.name} roomBanner={data.picture} type={data.acces} isLocked={data.access === "Protected".toUpperCase()} ownership={false} />        
+                return<RoomComponent  id={data.id} roomMembers={data.nbUsers} roomName={data.name} roomBanner={data.picture} type={data.acces} isLocked={data.access === "Protected".toUpperCase()} ownership={false} />        
                 })
+              }
+                </>
               }
             </Warraper>
               }
               {index === 1 && 
             <Warraper>
               {
-                myrooms.map((data : convType , id : number)=>{
-                  if (data.access !== "DM")
+                myrooms.length === 0 ? <EmptyComponent text="No Rooms" />:
+                  <>
                   {
-                    return<RoomComponent  key={id}  id={data.channelId } roomMembers={data.users.length} roomName={data.name} roomBanner={data.picture} type={data.access}  isLocked={data.access === "Protected".toUpperCase()} ownership={true} />        
+                      myrooms.map((data : convType , id : number)=>{
+                  
+                        return<RoomComponent    id={data.channelId } roomMembers={data.users.length} roomName={data.name} roomBanner={data.picture} type={data.access}  isLocked={data.access === "Protected".toUpperCase()} ownership={true} />        
+                      
+    
+                    })
                   }
-                  return<div key={id} ></div>
-                })
+                  </>
+         
               }
             </Warraper>
               }

@@ -177,6 +177,7 @@ export default function CreateGroup(props :CloseProps) {
     }
     useEffect(() => {
         var e = document.getElementById("fileInput")
+
         e?.addEventListener("change", (c :any)=>{
             console.log(c.target.files[0])
           
@@ -630,7 +631,7 @@ export  function UpdateGroup(props : UpdateGroupProp) {
     }
     
     useEffect(() => {
-
+        document.getElementById(props.type.toLowerCase())?.toggleAttribute("checked")
     }, [])
 
     // console.log("__MEMBERS__DBG__ : ", members);
