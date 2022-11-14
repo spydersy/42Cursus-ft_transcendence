@@ -246,7 +246,7 @@ export default function Chat() {
           }
          {(state === -1 || state === 3) && 
           <div className='left'>  
-            <ChatControlBar empty={empty}  data={currentConv}/>
+            <ChatControlBar   setcurrentConv={(e)=>setcurrentConv(e)} list={list} setdata={(e : any)=>(setlist(e))} empty={empty}  data={currentConv}/>
           </div>
          }
          </>
