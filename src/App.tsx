@@ -330,12 +330,10 @@ function App() {
               <Route path="/game/:id" element={<Game theme={gametheme}  />} />
               <Route path="/chat/:id" element={<Chat />} />
               <Route path="/setting" element={<Setting />} />
-              {/* <Route path="/testing" element={<SocketTesting />} /> */}
               <Route path="/rooms" element={<Room />} />
               <Route path="/leaderboard" element={<Leader />} />
               <Route path="/" element={<Home settheme={(e: any)=> setGametheme(e)} />} />
               <Route path="/profile/:id" element={<Profile  />} />
-              {/* <Route path="/socketTest" element={<SocketTesting />} /> */}
               <Route path="/2fa" element={<TwoFa />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

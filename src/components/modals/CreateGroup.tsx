@@ -150,16 +150,17 @@ export default function CreateGroup(props :CloseProps) {
         console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
         axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 
-      ).then((res)=>{
+      ).then(async(res)=>{
 
         fetchData()
+        await joinChannels()
         user.then(async (me : UserProp | "{}")=>{
             if (me !== "{}")
             {
                 for (let i = 0; i < memberss.length; i++) {
                     const element = memberss[i];
                     socket.emit("addedMember", {owner: me, addedMember: element.login})
-                    await joinChannels()
+                 
                 }
             }
           })
