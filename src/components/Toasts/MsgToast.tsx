@@ -17,13 +17,12 @@ Link
 import { UserContext } from '../../context/UserContext';
 import { userInfo } from 'os';
 import { alterHsl } from 'tsparticles-engine';
+import { data } from 'jquery';
 interface msgType {
-  channelId : string,
+  login : string,
   content : string, 
-  date : string, 
-  displayName : string, 
-  id : number,
-  senderId : number
+  channelId: string,
+  displayName: string
 }
 
 interface ssss {
@@ -62,14 +61,13 @@ export  function AddedToast(props: {data : string}) {
     wins : [0,0],
     losses : [0,0],
   })
-
   useEffect(() => {
     axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data  ,  {withCredentials: true}
         ).then((res)=>{
-              // check for the user is bloked 
+              // check for the user is bloked
               setUser(res.data)
             }).catch((error)=>{ 
-              } 
+        } 
    )     
   }, [])
   return (
@@ -83,6 +81,50 @@ export  function AddedToast(props: {data : string}) {
             </div>
             <div className='msg'>
               Added You to a channel
+            </div>
+        </div>
+    </ToastStyle>
+  )
+}
+
+export default  function MsgToast(props: {data : msgType}) {
+
+  console.log(data)
+  const [User, setUser] = useState<UserProp>({
+    defaultAvatar: "string",
+    login : "string",
+    displayName : "string",
+    relation : "string",
+    nbFriends : "string",
+    wins : [0,0],
+    losses : [0,0],
+  })
+  console.log()
+  useEffect(() => {
+    axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data.login ,  {withCredentials: true}
+        ).then((res)=>{
+              // check for the user is bloked
+              setUser(res.data)
+              console.log("> status = " , User)
+            }).catch((error)=>{ 
+              } 
+   )
+  }, [])
+  
+  return (
+    <ToastStyle to={"/chat/"+ props.data.channelId}>
+        <div className='avatar'>
+          <AvatarComponent img={User.defaultAvatar}/>
+        </div>
+        <div className='data'>
+            <div className=' name'>
+              {props.data.displayName}
+            </div>
+            <div className='msg'>
+              Sent a meessage :
+              <span>
+                {" " + props.data.content}
+              </span>
             </div>
         </div>
     </ToastStyle>
@@ -105,7 +147,6 @@ export  function AcceptToast(props: {data : ssss}) {
         ).then((res)=>{
               // check for the user is bloked 
               setUser(res.data)
-
             }).catch((error)=>{ 
              
               } 
@@ -127,51 +168,6 @@ export  function AcceptToast(props: {data : ssss}) {
             <div className='msg'>
               
               {(props.data.status)?" accepted your friend request :":" canceled your friend request :"}
-            </div>
-        </div>
-    </ToastStyle>
-  )
-}
-export default  function MsgToast(props: {data : msgType}) {
-  const [User, setUser] = useState<UserProp>({
-    defaultAvatar: "string",
-    login : "string",
-    displayName : "string",
-    relation : "string",
-    nbFriends : "string",
-    wins : [0,0],
-    losses : [0,0],
-  })
-  useEffect(() => {
-  //   axios.get( process.env.REACT_APP_BACKEND_URL + "/users/friends/" + props.data.senderId  ,  {withCredentials: true}
-  //       ).then((res)=>{
-  //             // check for the user is bloked 
-  //             console.log("> status = " , res.status)
-  //             setUser(res.data)
-
-  //           }).catch((error)=>{ 
-             
-  //             } 
-  //  )
-
-
-        
-  }, [])
-  
-  return (
-    <ToastStyle to={"/chat/"+ props.data.channelId}>
-        <div className='avatar'>
-          <AvatarComponent img={Mamali}/>
-        </div>
-        <div className='data'>
-            <div className=' name'>
-              {props.data.displayName}
-            </div>
-            <div className='msg'>
-              Sent a meessage :
-              <span>
-                {" " + props.data.content}
-              </span>
             </div>
         </div>
     </ToastStyle>

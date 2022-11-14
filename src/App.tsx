@@ -66,12 +66,10 @@ interface ssss {
   status: boolean
 }
 interface msgType {
-  channelId : string,
+  login : string,
   content : string, 
-  date : string, 
-  displayName : string, 
-  id : number,
-  senderId : number
+  channelId: string,
+  displayName: string
 }
 
 const CustomToastWithLink = (data : msgType) => (
@@ -120,9 +118,9 @@ function App() {
   
   // const [toastData, settoastData] = useState()
   function hundleMsg (payload) {
+    console.table(payload)
     if (pageName != "chat")
     {
-      console.table(payload)
       
        const    toasty = () =>  toast(CustomToastWithLink(payload) , {
         className: "toast",
@@ -178,12 +176,10 @@ function App() {
       hideProgressBar: true,
     })
     toasty()
-
   }
   function handelChallengeAccept (payload) {
     localStorage.setItem("mode","1v1")
     navigate("/game/")
-    
   }
   async function handladdedMembert (payload) {
       console.log(payload)
