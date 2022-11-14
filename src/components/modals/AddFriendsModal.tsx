@@ -33,7 +33,7 @@ export default function AddFriendsModal(props : {members : idsType[] , setmember
         user.then((data : UserProp | "{}")=>{
           if (data !== "{}")
           {
-            axios.get("http://localhost:8000/users/friends/" + data.login, 
+            axios.get(process.env.REACT_APP_BACKEND_URL + "/users/friends/" + data.login, 
             {withCredentials: true} 
           ).then((res)=>{
             console.log(res.data)

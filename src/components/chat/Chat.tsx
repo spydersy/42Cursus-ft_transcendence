@@ -38,6 +38,7 @@ interface UserProp {
     access : string,
     channelId:  number,
     name: string;
+    lastMessage : string,
     password: string,
     picture : string,
     users: usersType[]
@@ -72,6 +73,7 @@ export default function Chat() {
       name: "string",
       password: "string",
       picture : "string",
+      lastMessage : "string",
       users: [{
         id : "string",
     defaultAvatar: "string",

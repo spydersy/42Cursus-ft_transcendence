@@ -79,7 +79,42 @@ const PlayerStyle = styled.div`
   height: auto;
   position: relative;
   margin: 10px 0;
+  @media only screen and (max-width: 800px) {
+
+    >div{
+    .avatar{
+
+        width: 60px !important;
+        height: 60px !important;
+    }
+     .mesgData{
+      margin-left: 12px;
+      height: 40px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-direction: column;
+      .name{
+        color:  ${props => props.theme.colors.primaryText};
+        font-size:  ${props=> props.theme.fontSize.l} !important;
+
+      }
+      .msg{
+ 
+        font-size:  ${props=> props.theme.fontSize.ll};
+        opacity: 0.7;
+        color:  ${props => props.theme.colors.seconderyText};
+      }
+   
+  }
+}
+  }
+
   >div{
+    .avatar{
+        width: 100px;
+        height: 100px;
+    }
      .mesgData{
       margin-left: 12px;
       height: 40px;
@@ -99,7 +134,11 @@ const PlayerStyle = styled.div`
         opacity: 0.7;
         color:  ${props => props.theme.colors.seconderyText};
       }
-  }}
+   
+  }
+  
+ 
+  }
 `;
 
 export function Spinner() {
@@ -163,7 +202,7 @@ interface UserComponetProps {
       export  function UserComponent(props: UserComponetProps) {
         return (
           <>
-              <div style={{ width: "100px", height: "100px" }}>
+              <div  className='avatar'>
             {props.Ai === false ? <AvatarComponent img={props?.data?.defaultAvatar ? props?.data?.defaultAvatar : ""} /> : <AIstyle img={props?.data?.defaultAvatar ? props?.data?.defaultAvatar : ""} ></AIstyle>}
             
           </div>

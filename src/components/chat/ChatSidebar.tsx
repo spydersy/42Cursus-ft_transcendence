@@ -22,8 +22,10 @@ interface convType {
   access : string,
   channelId: number,
   name: string;
+  lastMessage: string;
   password: string,
   picture : string,
+
   users: usersType[]
 }
 interface ChatProps {
@@ -72,7 +74,7 @@ export default function ChatSidebar(props : ChatProps) {
 }
 const ChatSidebarStyle = styled.div`
 
-  width: 100%;
+  width: 100%;      
   height: 100%;
   /* padding: 5px  5px; */
   border-right: 1px solid ${props => props.theme.colors.border};
@@ -144,6 +146,7 @@ interface ConvProps{
   data : convType,
 }
 export  function ConversationComponent(props : ConvProps) {
+  console.log(props.data)
   return (
       <ChatMesgstyle to={"/chat/" + ( props.data.channelId)} active={props.active ? "true" : "false"}onClick={props.onClick}>
         {
@@ -159,6 +162,7 @@ export  function ConversationComponent(props : ConvProps) {
             {
             <div className='msg'>
             {/* {props.messages[props.messages.length - 1]} */}
+            {props.data.lastMessage}
           </div>
             }
         </div>
@@ -217,14 +221,20 @@ background-color:  #0E1117;
 /* border :1px solid ${props => props.theme.colors.seconderybg};  */
 background-color: ${props => props.theme.colors.bg};
 }
-.mesgData{
+>.mesgData{
 margin-left: 12px;
 height: 40px;
 display: flex;
 align-items: flex-start;
 justify-content: space-between;
 flex-direction: column;
-.name{
+>.name{
+  width:100%;
+  min-width:120px;
+  /* max-width:120px; */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align :start;
   color:  ${props => props.theme.colors.primaryText};
 
 }

@@ -148,7 +148,7 @@ export default function CreateGroup(props :CloseProps) {
         }
         
         console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
-        axios.post("http://localhost:8000/chat/createRoom" , bodyFormData, 
+        axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 
       ).then((res)=>{
 
@@ -471,7 +471,7 @@ export  function Member(props:MemberProp ) {
     
     useEffect(() => {
 
-          axios.get("http://localhost:8000/users/" + props.id, 
+          axios.get(process.env.REACT_APP_BACKEND_URL + "/users/" + props.id, 
           {withCredentials: true} 
         ).then((res)=>{
   
@@ -617,7 +617,7 @@ export  function UpdateGroup(props : UpdateGroupProp) {
         }
         console.log("_+____BODY___", obj)
 
-        axios.post("http://localhost:8000/chat/UdpatedChannelAccess" , obj,   {withCredentials: true}).then((res)=>{
+        axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/UdpatedChannelAccess" , obj,   {withCredentials: true}).then((res)=>{
             console.log(res.data)
             props.closeModal()
 

@@ -55,7 +55,18 @@ export default function Game(props : GameProps) {
     setplayer(loged?.login === pyload.player1 )
  })
   gamesocket.on("watchGame" , (pyload : any)=>{
+
     fetchPlayersData(pyload.player1 , pyload.player2)
+    if (loged?.login === pyload.player1)
+    {
+      setplayer(true)
+
+    }
+    else if (loged?.login === pyload.player2)
+    {
+      setplayer(false)
+    }
+
  })
   gamesocket.on("roomNotFound" , (pyload : any)=>{
     navigate ("/NotFound")
@@ -107,7 +118,7 @@ var dat : UserProp;
       dat = data
       setloged(data)
       
-      if (pageName === "watch")
+      if (pageName === "watch" || pageName === "game")
       {
           if (room)
           {
@@ -209,9 +220,13 @@ const GameStyle = styled.div`
   width: 100%;
   height: 700px ;
   position: relative;
-  .defaultCanvas0{
-    width: 100%;
+  .react-p5{
+    display: flex;
+    align-items: flex-start;
   }
+  /* #defaultCanvas0{
+    width: 100%;
+  } */
   `;
 
 

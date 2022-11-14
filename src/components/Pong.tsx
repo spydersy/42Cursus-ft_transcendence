@@ -331,7 +331,7 @@ useEffect(() => {
                    player.current = playerRef.current
                    otherplayer.current = player2Ref.current
 
-            axios.get("http://localhost:8000/users/" + datatmp.player2, 
+            axios.get(process.env.REACT_APP_BACKEND_URL + "/users/" + datatmp.player2, 
             {withCredentials: true} 
              ).then((res)=>{
               setPlayer2Data(
@@ -345,7 +345,7 @@ useEffect(() => {
             player.current = player2Ref.current
             otherplayer.current = playerRef.current
             console.log("is Player2")
-            axios.get("http://localhost:8000/users/" + datatmp.player1, 
+            axios.get(process.env.REACT_APP_BACKEND_URL + "/users/" + datatmp.player1, 
             {withCredentials: true} 
              ).then((res)=>{
               setUser(res.data)
