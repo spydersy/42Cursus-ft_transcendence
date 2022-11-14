@@ -8,6 +8,7 @@ import FriendsComponent  from '../components/PlayerTabFriendsComp';
 import PendingRequests from '../components/PlayerTabPendingRequestsComp';
 import BlockIcon from "../assets/imgs/ban.svg";
 import {UserContext} from "../context/UserContext"
+import PlayerTabeGameHistory from '../components/PlayerTabGameHistory';
 //-----------------------//
 interface UserProp {
   id: string,
@@ -118,17 +119,18 @@ interface PlayerTabsProps { id : string, isCurrentUser : boolean , player : any 
 export function PlayerTabsBar(props : PlayerTabsProps)
 {
   const [index, setindex] = useState(0)
-  let linkslist = [ " FRIENDS"]
+  let linkslist = [ "GAME HISTORY", " FRIENDS"]
 
   if (props.isCurrentUser)
-    linkslist = [ " FRIENDS" ,"PENDING REQUESTS", "BLOCKED USERS"];
+    linkslist = [ "GAME HISTORY"," FRIENDS" ,  "PENDING REQUESTS", "BLOCKED USERS"];
 
   return ( 
     <PlayerTabsStyle>
       <Navlinks  index={index} setindex={(e)=> setindex(e)} list={linkslist}/> 
-        {index === 0 && <FriendsComponent id={props.id}/>}
-        {index === 1 && props.isCurrentUser &&  <PendingRequests player={props.player}/>}
-        {index === 2 && props.isCurrentUser && <BlockedUsers/>}
+        {index === 0 &&  <PlayerTabeGameHistory id={props.id} />}
+        {index === 1 &&  <FriendsComponent id={props.id}/>}
+        {index === 2 && props.isCurrentUser &&  <PendingRequests player={props.player}/>}
+        {index === 3 && props.isCurrentUser && <BlockedUsers/>}
     </PlayerTabsStyle>
   )
 }

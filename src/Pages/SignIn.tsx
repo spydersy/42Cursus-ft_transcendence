@@ -1,4 +1,4 @@
-import React from 'react'
+ import React from 'react'
 import styled , { css} from "styled-components"
 import PatternImg from "../assets/imgs/background.jpeg"
 import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
@@ -22,6 +22,7 @@ import  Cinq from "../assets/imgs/cinq.svg"
 //todo env file
 
 export default function SignIn() {
+
   return (
     <Wrraper>
       <Background/>
@@ -71,8 +72,6 @@ export default function SignIn() {
                </a>
             </div>
 
-           
-
          </div>
 
          <a className="Butto" href={process.env.REACT_APP_REDIRECT_URL}>
@@ -81,9 +80,6 @@ export default function SignIn() {
             <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}}   icon={<FtttImg/>} text="Sign up"/>
          </a>
          {/* <a id="TermsCond" href="#termscondPage">Terms & conditions</a> */}
-
-
-      
 
          <div className="title"> 
             <a className='space-zb'/>
@@ -234,13 +230,14 @@ const Bloc = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      /* position: relative; */
+      width: 50%;
+      position: relative;
       /* background-color: antiquewhite; */
       height: 60px;
+      left: 25%;
       /* margin: 0px 10px; */
       .space-zb {
-         width: 40px;
+         width: 30px;
       }
 
 
