@@ -50,10 +50,16 @@ import axios from 'axios';
     .then((res)=>{
       console.log(res)
       var s = props.list
-      var i = s.indexOf(props.data)
-      s.splice(i , 1)
-      props.setdata([...s])
-      props.setcurrentConv(s[0])
+      for (let i = 0; i < s.length; i++) {
+        const element = s[i];
+        if (element.channelId === props.data.channelId)
+        {
+          s.splice(i , 1)
+          props.setdata([...s])
+          props.setcurrentConv(s[0])
+          return ;
+        }
+      }
     }).catch((err)=>{
       console.log(err)
     })

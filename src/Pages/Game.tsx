@@ -193,8 +193,8 @@ var dat : UserProp;
       </GameStyle>
         {end && <Modal
                         isOpen={end}
-                        onRequestClose={() => setend(false)}
-                        hideModal={() => setend(false)}
+                        onRequestClose={() => {setend(false) ; navigate("/") }}
+                        hideModal={() => {setend(false) ; navigate("/")} }
                         >
                             <GameEndModal score={score}  msg={msg} close={()=>{ setend(false)
                              setstart(false)

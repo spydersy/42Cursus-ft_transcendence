@@ -8,6 +8,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify';
 import { MutedToast } from '../Toasts/MsgToast';
 import { SocketContext } from '../../context/Socket'
+import { useNavigate } from 'react-router-dom'
 
 
 interface RoomProps {
@@ -29,6 +30,8 @@ export default function JoinGroupModal(props: RoomProps) {
   const socket = useContext(SocketContext)
   const reffo = useRef<HTMLInputElement>(null)
   const user = useContext(UserContext)
+  const navigate = useNavigate();
+
   const cancelreq = ()=> {
     props.closeModal()
   }
@@ -81,6 +84,7 @@ export default function JoinGroupModal(props: RoomProps) {
               })
               toasty()
               await joinChannels()
+              navigate("/chat/" + props.id)
             }
             // if joined 
           }).catch((err) => {
@@ -120,6 +124,7 @@ export default function JoinGroupModal(props: RoomProps) {
               })
               toasty()
               await joinChannels()
+              navigate("/chat/" + props.id)
 
             }
             // if joined 

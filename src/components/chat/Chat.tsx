@@ -105,20 +105,21 @@ export default function Chat() {
 
            }
            else {
-     
+     var flag = 0
            for (let index = 0; index < res.data.length; index++) {
              const element : convType = res.data[index];
-             console.log(element )    
-        
-               
-            if (element.channelId?.toString() === pageName)
-            {
-              setcurrentConv(element)
-              s = element
-            }
+           
+                  if (element.channelId?.toString() === pageName)
+                  {
+                    setcurrentConv(element)
+                    s = element
+                    flag = 1
+                  }
                 
               
               }
+              if (flag === 0)
+                navigate("/NotFound")
             }
             axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + s?.channelId, 
             {withCredentials: true} 
@@ -163,7 +164,7 @@ export default function Chat() {
 
       // eslint-disable-next-line
     },[])
-    useEffect(() => {
+     useEffect( () => {
       if (!list.length)
       {
         setempty(true)
@@ -171,11 +172,37 @@ export default function Chat() {
       else
       {
         setempty(false)
+         joinChannels()
         navigate("/chat/"+ currentConv.channelId)
 
       }
 
     }, [list ])
+
+    let joinChannels = async () => {
+
+      let userLogin : string;
+      await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
+      {withCredentials: true} 
+      ).then((res)=>{
+        userLogin = res.data.login
+      }).catch((err)=>{
+        console.log(err)
+      })
+      await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+      {withCredentials: true} 
+      ).then((res)=>{
+        var myChannels : Array<string> = [];
+        for (let index = 0; index < res.data.length; index++) {
+          myChannels.push(res.data[index].channelId);
+        }
+        myChannels.push(userLogin);
+        // mychannels.pushback(userlogin)
+        socket.emit('joinRoom', myChannels)
+      }).catch((err)=>{
+        console.log(err)
+      })
+      }
     useEffect(() => {
       const recievedMessgae  =  (payload : msgType) => {        
         if (currentConv.channelId !== 0)
@@ -209,20 +236,24 @@ export default function Chat() {
        })
      }
      useEffect(() => {
-      axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + currentConv?.channelId, 
-        {withCredentials: true} 
-        ).then((res)=>{
-          setmsgs(res.data)
- 
+      if (currentConv  && currentConv.channelId !== 0)
+      {
+        axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/messages/" + currentConv?.channelId, 
+          {withCredentials: true} 
+          ).then((res)=>{
+            setmsgs(res.data)
+   
+    
+            console.log("done!")
+    
   
-          console.log("done!")
+            
+          }).catch((err)=>{
   
+             console.log(err)
+           })
 
-          
-        }).catch((err)=>{
-
-           console.log(err)
-         })
+      }
      }, [currentConv])
      
    
