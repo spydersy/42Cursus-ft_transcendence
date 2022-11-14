@@ -10,9 +10,10 @@ var defaultProp = {
     paddlecolor: "#000",
     mode: "string"
 }
-interface gameProps { start: boolean, setstart: (e: boolean) => void, player: boolean }
+interface gameProps {start: boolean, setstart: (e: boolean) => void, player: boolean }
 export default function Pong(props: gameProps) {
     const [gameData, setgameData] = useState<GameProps>(defaultProp)
+    var mode = localStorage.getItem('mode') ;
 
     const gamesocket = useContext(SocketGameContext)
     const user = useContext(UserContext)
@@ -76,8 +77,10 @@ export default function Pong(props: gameProps) {
         p5.createCanvas(width, height ).parent(canvasParentRef);
         
         
-        
+
         p5.frameRate(60);
+
+
         p5.resizeCanvas(width , height)
     };
 
@@ -103,7 +106,7 @@ export default function Pong(props: gameProps) {
     }
     const windowResize = (p5: p5Types) => {
         var p = document.getElementById("canva")?.offsetWidth
-        if (p)
+        if (p && props.start)
         {
      
             width = p;
@@ -160,9 +163,9 @@ export default function Pong(props: gameProps) {
         if (props.start) {
             gamesocket.emit("moveBall", { w: width, h: height, p1: {w : 20 , h : 100 , x : paddel1.x  , y : paddel1.y  },p2: {w : 20 , h : 100 , x : paddel2.x  , y : paddel2.y } })
         }
-        // hitWalls(p5)
+     
     };
-    //detect Colision 
+   
 
 
     gamesocket.on("player1moved", (y: any) => {
@@ -176,7 +179,6 @@ export default function Pong(props: gameProps) {
         paddel2.y = y.y ;
     })
     gamesocket.on("moveBallClient", (pyload) => {
-        // console.log(pyload.x)
         ballCord.x = pyload.x * width;
         ballCord.y = pyload.y * height;
         pre.x =  pyload.px
@@ -185,7 +187,6 @@ export default function Pong(props: gameProps) {
 
     useEffect(() => {
 
-        console.log("init")
         var games: string | null = localStorage.getItem('gameData');
         if (games) {
             const gameData: GameProps = JSON.parse(games || '{}');

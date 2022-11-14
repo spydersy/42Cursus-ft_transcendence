@@ -80,7 +80,6 @@ export  function UserCard(props : UserCardProps) {
     const setUserStatu =( list : UserType[] )=>{
       for (let i = 0; i < list.length; i++) {
         const element : UserType = list[i];
-        console.log("element__", element)
         if (element.userid === props?.data.login)
         {
           setstate(true)
@@ -91,7 +90,6 @@ export  function UserCard(props : UserCardProps) {
     }
 
     socket.on("ConnectedUser" , (pyload : any)=>{
-     console.log(pyload)
      setUserStatu(pyload)
     })
 

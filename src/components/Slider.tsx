@@ -21,15 +21,12 @@ export default function Slider() {
         setlist([...data])
         var ma  : number= data.length / 2 > 1 ? data.length / 2  : 0 
         setmain(Math.floor(ma))
-        console.log("maiiin : " , )
     })
     socket.on("changeScoreLive" , (data : any)=>{
 
 
 
        var l = list;
-    //    console.log(list)
-    //    console.log(l.length)
        if (l.length !== 0)
        {
         if (l[data.index])
@@ -51,8 +48,6 @@ export default function Slider() {
      // eslint-disable-next-line
     }, [])
     useEffect(() => {
-      console.log("sw")
-     
     }, [list])
     
   return (
@@ -79,7 +74,7 @@ export default function Slider() {
                     classname = "emptyright"
                 else if (id <  main - 1)
                     classname = "emptyleft"
-                return<Slide to={"/game/watch/" + data.name  }
+                return<Slide to={"/watch/" + data.name  }
                 //  onClick={()=>animatethis(id)} 
                  className={classname}key={id}  >
                     <div className='center'>
@@ -139,7 +134,6 @@ export  function UserAvatar(props : {login : string}) {
         axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.login  ,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked 
-              console.log("> status = " , res.data)
               setdata(res.data)
 
             }).catch((error)=>{ 

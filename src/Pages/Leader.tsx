@@ -81,7 +81,6 @@ export default function Leader() {
          axios.get(process.env.REACT_APP_BACKEND_URL+ "/users", 
     {withCredentials: true} 
   ).then((res)=>{
-    console.log(res.data)
     setusers(res.data)
 
   }).catch((err)=>{

@@ -65,7 +65,6 @@ export default function Chat() {
   useEffect(() => {
       
     // alert("ss")
-    console.log(list)
     
   }, [list ])
   return (
@@ -320,7 +319,6 @@ export  function Top() {
   const [open, setopen] = useState(false)
   const ToggleDD = (e : any)=>{
 
-    console.log("hello")
     setopen(!open)
     e.stopPropagation();
   }
@@ -342,7 +340,6 @@ export  function Top() {
       {
         open && <DropDown closeDropdown={ ()=>{
       
-          console.log(open)
           setopen(false)
         }} open={open} 
         style={{bottom: "-25px" , right: '0'}}
@@ -506,14 +503,7 @@ export  function BottomChat(props: ChatProps) {
   `;
 
   
-  export  function ChatBody(props: ChatProps) {
-    // useEffect(() => {
-    //   const  = io('http://localhost:3030');
-    //   socket.on('coco' , ()=>{
-    //     console.log("coco")
-    //   })
-    // }, [])
-    
+  export  function ChatBody(props: ChatProps) {    
     return (
       <ChatBodyStyle>
         {

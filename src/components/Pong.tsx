@@ -181,7 +181,6 @@ export default function Pong({themes , mode}:myProps ) {
   {
 
     const p = player.current;
-    // console.log(player)
     const h = parseInt(p.getAttribute('height'));
     var nextY;
 
@@ -285,7 +284,6 @@ useEffect(() => {
   if (gameData)
   {
     const gamedatao : GameProps =  JSON.parse(gameData || '{}');
-    console.log(gameData)
     setgameData(gamedatao)
 
   }
@@ -293,7 +291,6 @@ useEffect(() => {
     setPlayer1(80, 0)
     setPlayer2(tableRef.current.offsetWidth - 100,0 )
    
-    console.log(mode)
     switch(mode)
     {
       
@@ -325,7 +322,6 @@ useEffect(() => {
 
         gamesocket.on("startGame" , (datatmp)=>{
           
-          console.log(datatmp)
           if (datatmp.player1 === data.login)
           {
                    player.current = playerRef.current
@@ -344,7 +340,6 @@ useEffect(() => {
           {
             player.current = player2Ref.current
             otherplayer.current = playerRef.current
-            console.log("is Player2")
             axios.get(process.env.REACT_APP_BACKEND_URL + "/users/" + datatmp.player1, 
             {withCredentials: true} 
              ).then((res)=>{
@@ -358,9 +353,6 @@ useEffect(() => {
 
         })
         gamesocket.on("endGame" , ()=>{
-          // setStart(true)
-          // alert("endGame")
-          console.log("endGame")
         })
       } ,[mode])
       

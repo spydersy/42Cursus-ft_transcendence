@@ -74,17 +74,14 @@ export default function Setting() {
 
         var e = document.getElementById("fileInput")
         e?.addEventListener("change", (c :any)=>{
-            console.log(c.target.files[0])
             setImg(URL.createObjectURL(c.target.files[0]))
             var  bodyFormData = new FormData();
 
             bodyFormData.append('avatar', c.target.files[0]);
                 axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/updateAvatar", bodyFormData, {withCredentials: true}).then((res)=>{
                     succes("Avatar Updated Successfully")
-                    // console.log(res)
                 }   ).catch((err)=>{ 
                     error("Avatar Not Updated")
-                    // console.log(err)
                 }   )
         })
 
@@ -130,7 +127,6 @@ export default function Setting() {
         else
         {
             setclosepop(false)
-            console.log("false =  " , isToggled)
             axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=false" , "",{withCredentials: true}).then((res)=>{
                 setIsToggled(false)
                 succes("You have successfully Enable 2FA Third Party");
@@ -147,7 +143,6 @@ export default function Setting() {
     const submitpass = ()=> {
         setopenpass(false)
         setclosepop(false)
-        console.log("__PIN  = ", values)
         let pass  = "";
         if (values.length < 5)
         {
@@ -164,7 +159,6 @@ export default function Setting() {
                 pass += values[i];
         } 
         axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/update2fa?status=true&code=" + pass , " ", {withCredentials: true}).then((res)=>{
-            console.log("__status=true_&_code=__: ", res.data )
             succes("You have successfully Enable 2FA Third Party");
             setIsToggled(true)
         }).catch((err)=>{

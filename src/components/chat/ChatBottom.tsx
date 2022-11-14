@@ -1,4 +1,4 @@
-import React , {useContext, useRef}from 'react'
+import React , {useContext, useRef }from 'react'
 import {ReactComponent as SendIcon} from "../../assets/imgs/send-icon.svg";
 import { SocketContext } from '../../context/Socket';
 import styled  from "styled-components"
@@ -46,7 +46,6 @@ export default function ChatBottom(props: ChatProps) {
       User.then((data : UserProp | "{}")=>{
         if (data !== "{}")
         {
-          console.log(data)
           if (inputRef.current?.value)
           {
             mesg =  inputRef.current?.value;
@@ -61,7 +60,7 @@ export default function ChatBottom(props: ChatProps) {
                 login: data.login
               }
               //validation layer (restrictions
-    
+        
               socket.emit('chatToServer', msgtmp);
 
             }
@@ -71,13 +70,28 @@ export default function ChatBottom(props: ChatProps) {
       })
      
     }
-    inputRef.current?.addEventListener('keydown', (e : any)=>{
-      if (e.code === "Enter")
-      {
 
-        addMessage()
-      }
-    });
+    // useEffect(() => {
+    //   inputRef.current?.addEventListener('keydown', (e : any)=>{
+    //     if (e.code === "Enter")
+    //     {
+    //       if (props.data.channelId !== 0)
+    //         addMessage()
+    //     }
+    //   });
+    //   inputRef.current?.removeEventListener('keydown', (e : any)=>{
+    //     if (e.code === "Enter")
+    //     {
+    //       if (props.data.channelId !== 0)
+    //         addMessage()
+    //     }
+    //   });
+
+    
+    
+    // }, [props.data])
+    
+   
   
     return (
       <BottomChatStyle>

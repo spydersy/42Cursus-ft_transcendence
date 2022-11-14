@@ -11,16 +11,14 @@ export default function PlayerTabeGameHistory(props : GameHistory) {
     const [gameHistory, setgameHistory] = useState([])
 
     useEffect(() => {
-        console.log("PlayerTabeGameHistory")
 
         axios.get(process.env.REACT_APP_BACKEND_URL+  "/game/MatchHistory/" + props.id,   {withCredentials: true}
         ).then((res)=>{
             setgameHistory(res.data)
-            console.log("PlayerTabeGameHistory {" , props.id, "} " , res.data)
         }
         ).catch((err)=>{ })
 
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 return (

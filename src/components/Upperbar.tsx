@@ -49,10 +49,8 @@ export default function Upperbar() {
   const User = useContext(UserContext)
 
   useEffect(() => {
-    console.log(User)
     // setcurrentUser(localStorage.getItem("user"))
     User.then((user : UserProp | "{}" )=>{
-    //   console.log(user.defaultAvatar)
     if (user !== "{}"){
 
       setcurrentUser(user)
@@ -60,10 +58,7 @@ export default function Upperbar() {
     }
 
     })
-
-      // console.log(data)
-
-      // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -82,7 +77,6 @@ export default function Upperbar() {
               {
                 open && <DropDown closeDropdown={ ()=>{
         
-                  // console.log(open)
                   // setopen(false)
                 }} open={open} 
                 style={{bottom: "-25px" , right: '0'}}
@@ -147,7 +141,6 @@ export  function SearchBarComponent() {
 
       axios.get( process.env.REACT_APP_BACKEND_URL+  "/search/allUsers?input=" + event.target.value,  {withCredentials: true}  ).then((res)=>{
 
-      // console.log(res.data)
       setUsers(res.data)
       res.data.length > 0 ? setColor("#0eac1b") : setColor("#ac0e0e");
   
@@ -158,7 +151,6 @@ export  function SearchBarComponent() {
       if (event.target.value.length > 0) {  setopen(true)   }
       else { setopen(false)  }
       
-      // console.log("Value = ", event.target.value)
     };
 
     const handleClickOutside = () => {
@@ -382,7 +374,7 @@ export  function NotificationComponent(props: NotifProps) {
 
   return (
 
-    <Notification ref={refo} onClick={(e)=>{ console.log(openNotif)
+    <Notification ref={refo} onClick={(e)=>{
       setopenNotif(true) 
       e.stopPropagation()
       props.setopen(false)
@@ -390,7 +382,7 @@ export  function NotificationComponent(props: NotifProps) {
       
       <BellIcon />
       {
-        openNotif &&   <NotifDropDown closeDropdown={ ()=>{ console.log(openNotif)
+        openNotif &&   <NotifDropDown closeDropdown={ ()=>{
           setopenNotif(false)
         }} open={openNotif} 
         style={{bottom: "-25px" , right: '0'}}
@@ -492,7 +484,7 @@ export  function NotifDropDown(props : NotifDropDownProps) {
     }
     else
       setisNotif(false);
-      
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

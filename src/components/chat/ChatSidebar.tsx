@@ -146,7 +146,6 @@ interface ConvProps{
   data : convType,
 }
 export  function ConversationComponent(props : ConvProps) {
-  console.log(props.data)
   return (
       <ChatMesgstyle to={"/chat/" + ( props.data.channelId)} active={props.active ? "true" : "false"}onClick={props.onClick}>
         {

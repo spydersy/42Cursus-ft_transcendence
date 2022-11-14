@@ -60,7 +60,6 @@ export default function ChatBody(props: ChatProps) {
       if (props.msgs.length !== 0)
       {
         var s = document.getElementsByClassName("bar" )
-        console.log(s[props.msgs.length-1])
         if (s[props.msgs.length-1])
           s[props.msgs.length-1].scrollIntoView({behavior: 'smooth'});
       }
@@ -70,7 +69,6 @@ export default function ChatBody(props: ChatProps) {
         <div className='wrapper'>
         {
           props.msgs.map((object: any , i : number)=>{
-            console.table(object)
               if (object.senderId !== UserData.id)
               {
                 return <div id={"bar"+ i} className='bar' key={i} >  <MsgNotStyle>

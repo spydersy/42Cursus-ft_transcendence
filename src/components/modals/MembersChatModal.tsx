@@ -35,7 +35,6 @@ interface usersType {
 
 export default function MembersChatModal(props : { closeModal : ()=>void , data : convType}) {
   const channelId = props.data.channelId;
-  console.log(props.data.users)
   return (
     <div>   
         Members: 
@@ -44,7 +43,6 @@ export default function MembersChatModal(props : { closeModal : ()=>void , data 
               props.data.users.map((data : any , id : number)=>{
                 if (id === 0)
                   return <></>
-                console.log(data)
                 return <Member access={props.data.users[0].permission}  data={data} channelId={channelId} />
               })
           }
@@ -60,13 +58,11 @@ interface MemberProps{
   }
 
   export  function Member(props : MemberProps) {
-    // console.log('hna '+props.access)
     const [restriction, setrestriction] = useState(props.data.restriction)
     const [permission, setpermission] = useState(props.data.permission)
     const [muteModel, setmuteModel] = useState(false)
     
     useEffect(() => {
-      // console.log(props.data)
       return () => {
       }
     }, [])
@@ -83,11 +79,9 @@ interface MemberProps{
       ).then((res)=>{
         (k === 0 ? setrestriction("BAN") : setrestriction("NULL") )
       }).catch((err)=>{
-        console.log(err)
       })
     };
     const OwnerMute = async () => {
-      console.log("OwnerMute")
       setmuteModel(!muteModel)
     };
     const OwnerUnMute = async () => {
@@ -102,35 +96,26 @@ interface MemberProps{
       ).then((res)=>{
         setrestriction("NULL")
       }).catch((err)=>{
-        console.log(err)
       })
     };
     const ChallengeGame = () => {
-      console.log("ChallengeGame")
     };
     const SetAdmin = async (s: string) => {
-      console.log("Set the user as admin")
       var o = {
         channelId: props.channelId,
         user: props.data.login
       }
-      console.log(o);
       await axios.post( process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserPermission?role="+s.toLowerCase(), o,
       {withCredentials: true} 
       ).then((res)=>{
         setpermission(s)
       }).catch((err)=>{
-        console.log(err)
       })
     };
     const OwnerKick = async() =>{
-      console.log("you are going to be kicked oout")
-      console.log(props.channelId)
-      console.log(props.data.login)
       await axios.delete(process.env.REACT_APP_BACKEND_URL+"/chat/kickUser/" +props.data.login +"?channel=" + props.channelId ,       {withCredentials: true} )
       .then((res)=>{
       }).catch((err)=>{
-        console.log(err)
       })
     }
     return (
@@ -250,7 +235,6 @@ interface MemberProps{
   export  function MuteModal(props : {data : usersType, channelId: number , closeModal : ()=> void , setPermission :  (e : any)=> void }) {
     const [muteTime, setmuteTime] = useState(0)
     const OwnerMute = async () => {
-      console.log("OwnerMute")
       var  bodyFormData = {
         channelId: props.channelId.toString(),
         user: props.data.login,
@@ -263,7 +247,6 @@ interface MemberProps{
         props.setPermission("MUTED")
         props.closeModal()
       }).catch((err)=>{
-        console.log(err)
       })
     };
     return (

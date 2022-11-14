@@ -30,7 +30,7 @@ interface convType {
 export default function Room() {
 const linkslist = ["All" , "My Rooms"]
 
-    const [index, setindex] = useState(1)
+    const [index, setindex] = useState(0)
     const [myrooms, setmyrooms] = useState<convType[]>([])
     const [allRooms, setallRooms] = useState<convType[]>([])
     useEffect(() => {
@@ -46,16 +46,12 @@ const linkslist = ["All" , "My Rooms"]
           }
           setmyrooms(tmp)
          }).catch((err)=>{
-           console.log(err)
          })
         await axios.get( process.env.REACT_APP_BACKEND_URL + "/chat/allChannels", 
         {withCredentials: true} 
         ).then((res)=>{
-          console.log(res.data)
-
           setallRooms(res.data)
          }).catch((err)=>{
-           console.log(err)
          })
        }
        fetchData()
