@@ -1,7 +1,7 @@
 import React , {useContext , useState , useEffect} from 'react'
 import Modal from '../components/Modal'
 import Pong from '../components/game/Pong'
-import { SocketGameContext } from '../context/Socket'
+import { OnlineContextSocket, SocketGameContext } from '../context/Socket'
 import styled from "styled-components"
 import axios from 'axios'
 import CountDown from '../components/game/CountDown'
@@ -31,6 +31,7 @@ export default function Game(props : GameProps) {
   const [loged, setloged] = useState<UserProp>()
   const [opennet, setOpennet] = useState<UserProp>()
   const gamesocket = useContext(SocketGameContext)
+  const onlineSocket = useContext(OnlineContextSocket)
   const UserData = useContext(UserContext)
   const navigate = useNavigate();
 
@@ -46,6 +47,7 @@ export default function Game(props : GameProps) {
     setend(false)
     setshow(true)
     setplayer(loged?.login === pyload.player1 )
+    onlineSocket.emit("InGame" , loged?.login)
  })
   gamesocket.on("watchGame" , (pyload : any)=>{
 
@@ -61,6 +63,13 @@ export default function Game(props : GameProps) {
     }
 
  })
+ gamesocket.on("playerscored" , (py : any)=>{
+    setstart(false)
+    setTimeout(() => {
+    setstart(true)
+      
+    }, 3000);
+})
   gamesocket.on("roomNotFound" , (pyload : any)=>{
     navigate ("/NotFound")
  })
@@ -149,6 +158,7 @@ var dat : UserProp;
   });
     return () => {
       gamesocket.emit("endGame" , dat?.login)
+      onlineSocket.emit("outGame" , dat?.login)
     }
   // eslint-disable-next-line
   }, [])
@@ -229,11 +239,11 @@ export  function GameEndModal(props : {msg : string , socket :Socket , login? : 
   const [score, setScore] = useState({score1: 0 , score2: 0})
   
   props.socket.on("endGame" , (py : any)=>{
-    setScore({score1: 0 , score2: 0})
+    setScore(py.score)
   })
   useEffect(() => {
 
-  }, [])
+  }, [score])
   
   
   return (

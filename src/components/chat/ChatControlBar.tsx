@@ -96,7 +96,7 @@ import { setDatasets } from 'react-chartjs-2/dist/utils';
             <Button  isIcon={true} onClick={()=>{ 
               console.log(">> invite game " , props.data)
 
-              socket.emit("gameChallenge", props.data.channelId , props.data.users[0].login) ; 
+              socket.emit("gameChallenge", props.data.users[1].login , props.data.users[0].login) ; 
                 gamesocket.emit("gameChallenge" , {player1 : props.data.users[0].login , player2 : props.data.users[1].login})}} icon={<GameIcon/>}/>
             
             <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
@@ -104,8 +104,8 @@ import { setDatasets } from 'react-chartjs-2/dist/utils';
           </div>
             :
           <div className='buttons'>
-                {/* <Button  isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/>  */}
-              
+           
+          
                 <Button  isIcon={true} onClick={()=>{sethide(true)}} icon={<Group/>}/> 
                     {hide &&  <Modal
                       isOpen={hide}
@@ -116,12 +116,11 @@ import { setDatasets } from 'react-chartjs-2/dist/utils';
                     </Modal>
   
               }
-              {/* <Button  color={"#ae0b0b"} isIcon={true} onClick={()=>{sethide(true)}} icon={<BlockIcon/>}/> */}
-              {/* {props.data.users[0].permission === "OWNER" && */}
-              
+
+            
               <Button   isIcon={true} onClick={()=>{leaveChannel()}} icon={<BlockIcon/>}/>
               
-              {/* // } */}
+      
           </div>
         
       }     

@@ -411,7 +411,7 @@ background-color: ${props => props.theme.colors.seconderybg};
                             <Button isIcon={true}  icon={<SendMessage/>} text='Send Message'/>
                           </Link>
                            <Button  isIcon={true} onClick={()=>{ 
-                            socket.emit("gameChallenge", props.player?.dmChannel , Owner) ; 
+                            socket.emit("gameChallenge", props.player?.login , Owner) ; 
                             gamesocket.emit("gameChallenge" , {player1 : props.player.login , player2 : Owner})}} 
                             icon={<GameIcon/>}/>
                         </div>
@@ -760,19 +760,23 @@ export  function AvatarComponent(props: AvatarProps) {
   const socket = useContext(OnlineContextSocket)
   const User = useContext(UserContext)
 
-  const [state, setstate] = useState(false)
+  const [state, setstate] = useState("")
  
   const setUserStatu =( list : UserType[] )=>{
     for (let i = 0; i < list.length; i++) {
       const element : UserType = list[i];
       if (element.userid === props?.login)
       {
-        setstate(true)
+        if (element.gameStatu === true)
+          setstate("ingame")
+        else
+          setstate("online")
+
         return ;
       }
       
     }
-    setstate(false)
+    setstate("offline")
   }
   socket.on("ConnectedUser" , (pyload)=>{
   //  console.log(pyload)
@@ -791,7 +795,7 @@ export  function AvatarComponent(props: AvatarProps) {
   }, [props.login])
   
 return (
-  <Avatarr  on={state ? "true" : "false"}>
+  <Avatarr  on={state}>
   <div className='crcl'>
       <img src={props.img} alt='avatar' />
     </div>
@@ -808,8 +812,12 @@ height: 100%;
 border-radius : 50%;
 position: relative;
 border: 4px solid${props => props.theme.colors.bg};
-${props => (props.on === "true") && `
+${props => (props.on === "online") && `
 border: 4px solid #157DBD;
+
+`}
+${props => (props.on === "ingame") && `
+border: 4px solid #15bd45;
 
 `}
 > .crcl{
