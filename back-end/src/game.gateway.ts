@@ -100,7 +100,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     return -1
   }
 
-  RemovePlayer(client : any , login : string)
+  async RemovePlayer(client : any , login : string) 
   {
     console.log("remove : " + login)
     for (let i = 0; i < this.roomArray.length; i++) {
@@ -114,7 +114,8 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
         {
           console.log("remove : " +room.roomName)
   
-          this.wss.to(room.roomName).emit("endGame", {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
+          this.wss.to(room.roomName).emit("endGame", {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers , status : this.roomArray[i].status})
+          
           client.leave(room.roomName)
           // room.roomPlayers.splice(0, 2);
           this.roomArray.splice(i, 1)
@@ -193,11 +194,10 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   @SubscribeMessage('endGame')
   deleteRoom(client: any, payload: any): void {
 
-    this.logger.log("client is disconnected")
     var room = this.getRoombyLogin(payload)
     if (room !== null)
     {
-      this.wss.to(room.roomName).emit("endGame" , {score: room.score, roomPlayers :   room.roomPlayers})
+      this.wss.to(room.roomName).emit("endGame" , {score: room.score, roomPlayers :   room.roomPlayers, status : room.status})
       this.wss.emit("change" , this.getArrayData() )
       this.RemovePlayer(client , payload)
       // this.wss.emit("change" ,  this.roomArray)
@@ -481,13 +481,13 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 }
 async checkScore (room : any) {
     //you can do better
-    // console.log(Math.abs(room.score.score1 - room.score.score2))
+    console.log("absolute : ", Math.abs(room.score.score1 - room.score.score2))
     // console.log("__ROOM__DBG__ : ", room);
-    if (room.score.score1 + room.score.score2  >= 3)
+    if (Math.abs(room.score.score1 - room.score.score2)  === 3)
     {
       var i = this.roomArray.indexOf(room)
 
-      this.wss.to(this.roomArray[i].roomName).emit("endGame" , {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
+      this.wss.to(this.roomArray[i].roomName).emit("endGame" , {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers , status : this.roomArray[i].status })
 
       await this.roomArray[i].saveGame(this.roomArray[i].status === "AiGame" ?  MODE.AIBUGGY : MODE.CLASSIC)
       this.roomArray.splice(i, 1)
