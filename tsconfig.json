@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
@@ -21,6 +21,6 @@
     "jsx": "preserve"
   },
   "include": [
-    "src"
-, "src/Pages/Profile.tsx", "src/App.tsx", "src/context/Socket.ts"  ]
+    "src",
+ "src/Pages/Profile.tsx", "src/App.tsx", "src/context/Socket.ts"  ]
 }

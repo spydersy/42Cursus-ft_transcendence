@@ -122,14 +122,14 @@ function App() {
     }
   }
   function handleChallenge (payload) {
-    console.log(payload)
+   
      const    toasty = () =>  toast(CustomToastWithLinkGame(payload) , {
       // position : toast.POSITION.TOP_RIGHT,
       className: "toast",
       progressClassName: "toastProgress",
-      autoClose: 10000,
+      autoClose: 5000,
       hideProgressBar: true,
-      closeOnClick: false
+      // closeOnClick: false
     })
     toasty()
 
@@ -146,7 +146,7 @@ function App() {
     toasty()
   }
   async function acceptRequest (payload) {
-    console.log('acceptii a sahbi:',payload)
+
     const    toasty = () =>  toast(CustomToastAcceptFriendReq(payload) , {
       className: "toast",
       progressClassName: "toastProgress",
@@ -168,10 +168,10 @@ function App() {
   }
   function handelChallengeAccept (payload) {
     localStorage.setItem("mode","1v1")
-    navigate("/game/")
+    navigate("/game")
   }
   async function handladdedMembert (payload) {
-      console.log(payload)
+
       const    toasty = () =>  toast(CustomToast(payload) , {
         className: "toast",
         progressClassName: "toastProgress",
@@ -181,16 +181,7 @@ function App() {
       toasty()
       await joinChannels()
   }
-  // function BlockedUser (payload) {
-  //   console.log(payload)
-  //   const    toasty = () =>  toast(CustomToastMesg("🚫🚫 You've Been Blocked by " + payload.sender + "🚫🚫") , {
-  //     className: "toast",
-  //     progressClassName: "toastProgress",
-  //     autoClose: 2000,
-  //     hideProgressBar: true,
-  //   })
-  //   toasty()
-  // }
+
 
   function PlayerInGame (payload) {
     // localStorage.setItem("mode","1v1")
@@ -207,7 +198,7 @@ function App() {
     socket.on('addedMember', handladdedMembert);
     // socket.on('BlockRequest', BlockedUser);
     gameSocket.on('challengeAccepted', handelChallengeAccept)
-    // gameSocket.on('PlayerInGame', PlayerInGame);
+    gameSocket.on('PlayerInGame', PlayerInGame);
     return () => {
       socket.removeListener('msg_event', hundleMsg);
       socket.removeListener('challeneEvent', handleChallenge);
@@ -274,7 +265,7 @@ function App() {
   useEffect(() => {
       // if ()
       User.then((user : UserProp | string)=>{
-        console.log(user)
+
         if (user === "{}" && pageName !== "2fa")
         {
           onlinesSocket.close()

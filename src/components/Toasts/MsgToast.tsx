@@ -10,7 +10,7 @@ import { SocketGameContext } from '../../context/Socket'
 import { SocketContext } from '../../context/Socket'
 import {Link} from "react-router-dom";
 import { UserContext } from '../../context/UserContext';
-import { data } from 'jquery';
+
 
 interface msgType {
   login : string,
@@ -84,7 +84,7 @@ export  function AddedToast(props: {data : string}) {
 
 export default  function MsgToast(props: {data : msgType}) {
 
-  console.log(data)
+
   const [User, setUser] = useState<UserProp>({
     defaultAvatar: "string",
     login : "string",
@@ -94,13 +94,13 @@ export default  function MsgToast(props: {data : msgType}) {
     wins : [0,0],
     losses : [0,0],
   })
-  console.log()
+
   useEffect(() => {
     axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data.login ,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked
               setUser(res.data)
-              console.log("> status = " , User)
+
             }).catch((error)=>{ 
               } 
    )
@@ -229,7 +229,7 @@ export  function GameChallengeToast(props: {data : any}) {
     losses : [0,0],
   })
   useEffect(() => {
-    console.log(props.data)
+   
     axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data  ,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked 
@@ -244,7 +244,7 @@ export  function GameChallengeToast(props: {data : any}) {
       // eslint-disable-next-line
   }, [])
   const acceptChallenge = (e : any)=>{
-    e.stopPropagation()
+    // e.stopPropagation()
     UserData.then((data: UserProp | "{}")=>{
       if (data !== "{}")
       {
@@ -327,7 +327,7 @@ export  function FriendRequestToast(props: {data : any}) {
   })
   }
   useEffect(() => {
-    console.log(props.data)
+   
     axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data.sender  ,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked 

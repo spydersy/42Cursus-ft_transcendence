@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from 'react'
 // import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -20,13 +22,13 @@ const CountDownContainer = styled(motion.div)`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-  font-family: "Poppins" , sans-serif;
+    font-family: "Poppins" , sans-serif;
     font-size: 100px;
     color :  ${props => props.theme.colors.primaryText};
-`;
+    `;
 export default function CountDown(props : countDownProps) {
     // const [complete, setComplete] = useState(false);
-
+    
     const countdown = useCountdown({
         seconds: 3,
         onCompleted: () => {

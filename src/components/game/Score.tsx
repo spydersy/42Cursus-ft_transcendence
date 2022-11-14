@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {} from 'react'
 import { AvatarComponent } from '../../components/PlayerProfile'
 import styled from "styled-components"
 import { Socket } from "socket.io-client";
@@ -14,27 +14,17 @@ interface UserProp {
     losses : number[]
   }
   
-export default function Score(props : {socket : Socket,user? :UserProp , opennet?: UserProp} ) {
-  const [score, setScore] = useState({score1: 0 , score2: 0})
-  
-  props.socket.on("playerscored" , (py : any)=>{
-    setScore(py)
-  })
-  props.socket.on("startGame" , (py : any)=>{
-    setScore({score1: 0 , score2: 0})
-  })
-  props.socket.on("endGame" , (py : any)=>{
-    // setScore({score1: 0 , score2: 0})
-  })
+export default function Score(props : {socket : Socket,user? :UserProp , opennet?: UserProp , score : {score1: number, score2: number}} ) {
+ 
   return (
     <PlayerStyle>
         <Player1>
         {props.user ?     <UserComponent Ai={false} data={props.user}/>:  <Spinner/> }
         </Player1>
         <ScoreStyle>
-            {score.score1}
+            {props.score.score1}
             -
-            {score.score2}
+            {props.score.score2}
         </ScoreStyle>
         <Player2>
         {props.opennet ?    <UserComponent Ai={true} data={props.opennet}/>  :  <Spinner/> }

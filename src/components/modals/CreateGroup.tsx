@@ -632,7 +632,7 @@ export  function UpdateGroup(props : UpdateGroupProp) {
     
     useEffect(() => {
         document.getElementById(props.type.toLowerCase())?.toggleAttribute("checked")
-    }, [])
+    }, [props.type])
 
     // console.log("__MEMBERS__DBG__ : ", members);
   return (

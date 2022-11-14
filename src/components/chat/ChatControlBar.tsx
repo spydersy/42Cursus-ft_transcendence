@@ -10,7 +10,7 @@ import {ReactComponent as GameIcon} from "../../assets/imgs/game-icon.svg";
 import { SocketContext , SocketGameContext} from '../../context/Socket';
 import {ReactComponent as BlockIcon} from "../../assets/imgs/LogOutRoom.svg";
 import axios from 'axios';
-import { setDatasets } from 'react-chartjs-2/dist/utils';
+
 
 
   interface usersType {

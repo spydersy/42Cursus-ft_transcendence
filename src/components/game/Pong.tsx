@@ -13,7 +13,7 @@ var defaultProp = {
 interface gameProps { start: boolean, setstart: (e: boolean) => void, player: boolean }
 export default function Pong(props: gameProps) {
     const [gameData, setgameData] = useState<GameProps>(defaultProp)
-    const [widthstate, setwidthState] = useState(0)
+
     const gamesocket = useContext(SocketGameContext)
     const user = useContext(UserContext)
 
@@ -193,7 +193,7 @@ export default function Pong(props: gameProps) {
         }
        
 
-    }, [setwidthState])
+    }, [])
 
 
     return <Sketch  windowResized={windowResize} mouseMoved={mouseMoved} setup={setup} draw={draw} />;
