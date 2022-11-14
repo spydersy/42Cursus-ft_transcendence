@@ -55,6 +55,40 @@ interface UserType {
     this.debug()
     this.server.emit('ConnectedUser', this.onLineArray);
   }
+  @SubscribeMessage('InGame')
+   inGAme(client: Socket, payload) {
+
+
+       var i = this.getIndexLogin(payload);
+      if (i === -1)
+      {
+
+      }
+      else
+      {
+        this.onLineArray[i].gameStatu = true;
+       
+      }
+    this.debug()
+    this.server.emit('ConnectedUser', this.onLineArray);
+  }
+  @SubscribeMessage('outGame')
+  outGame(client: Socket, payload) {
+
+
+       var i = this.getIndexLogin(payload);
+      if (i === -1)
+      {
+
+      }
+      else
+      {
+        this.onLineArray[i].gameStatu = false;
+       
+      }
+    this.debug()
+    this.server.emit('ConnectedUser', this.onLineArray);
+  }
 
 
 
@@ -102,20 +136,6 @@ interface UserType {
       const element = this.onLineArray[i];
     }
   }
-  // async handleDisconnect(client) {
-  //   var index = this.getIndex(client.id)
-  //   try {
-  //     console.log("__DELETE__SOCKET__ : ",  client);
-  //     await this.prisma.websockets.delete({
-  //       where: {socketId: client.id,}
-  //     });
-  //   }
-  //   catch {
-  //     console.log("DO SOMETHING . . .");
-  //   }
-  //  this.logger.log(`Client disconnected: ${client.id}`);
-  //  this.server.emit('DisconnectedUser', {});
-  // }
 
   handleConnection(client: Socket, ...args: any[]) {
    this.logger.log(`Client connected: ${client.id}`);

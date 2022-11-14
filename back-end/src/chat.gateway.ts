@@ -64,7 +64,9 @@ import { WsGuard } from './auth/jwt.strategy';
   }
   @SubscribeMessage('gameChallenge')
   SendGameChallenge(client: any, payload: any): void {
-    client.to(payload[0]).emit('challeneEvent', payload[1]);
+    this.logger.log("challengeGame" , payload)
+
+    this.server.to(payload[0]).emit('challeneEvent', payload[1]);
   }
   @SubscribeMessage('sendFriendRequest')
   handleFriendRequest(client: Socket, payload: any): void {

@@ -37,7 +37,7 @@ export class GameService {
         this.ball = {size : 0.02 , x :  0.5 , y :0.5}
         this.direction = { x :  0.003 , y :0.003}
         this.status  = "waiting";
-        this.paddel2 = {x : 1 - 0.02  , y : 0}
+        this.paddel2 = {x : 1 - 0.02  , y : 0.5}
         this.predict = 0;
         this.predicty = 0;
     }
