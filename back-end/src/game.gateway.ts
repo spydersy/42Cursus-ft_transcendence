@@ -18,6 +18,8 @@ import { emit } from 'process';
     namespace : "game"
  })
 
+
+
 export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGatewayDisconnect{
 
   @WebSocketServer() wss : Server
@@ -32,7 +34,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   }
  
 
-  // @UseGuards(WsGuard)
+  @UseGuards(WsGuard)
   handleDisconnect(client: any)
   {
     this.logger.log("client is disconnected")
@@ -43,13 +45,14 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   }
 
 
-  // @UseGuards(WsGuard)
+  @UseGuards(WsGuard)
   handleConnection(client: any, payload: any): void {
 
     this.logger.log("client is connected "  + client.id)
 
   }
 
+  @UseGuards(WsGuard)
   @SubscribeMessage('endGame')
   deleteRoom(client: any, payload: any): void {
     var room = this.getRoombyLogin(payload)
@@ -62,12 +65,14 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
 
     
+    
     for (let index = 0; index < this.roomArray.length; index++) {
       client.leave(this.roomArray[index].roomName)
       this.roomArray[index].debug();
 
   }
 }
+  @UseGuards(WsGuard)
   @SubscribeMessage('gameChallenge')
   gameChallenge(client: any, payload: {player1 : string ,player2 : string }): void {
 
@@ -86,6 +91,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 
   }
+  @UseGuards(WsGuard)
   @SubscribeMessage('gameAccept')
   gameAccept(client: any, payload: {player1 : string ,player2 : string }): void {
 
@@ -124,13 +130,13 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   }
 
 
-
+  @UseGuards(WsGuard)
   @SubscribeMessage('getLiveGames')
   getLive(client: any): void {
     client.emit("change" , this.getArrayData() )
 
   }
-
+  @UseGuards(WsGuard)
   @SubscribeMessage('Play')
   Play(client: any, payload: {login : string , mode : string}): void {
     var index = this.playerExist(client , payload.login)
@@ -170,7 +176,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 
 
-  
+  @UseGuards(WsGuard)
   @SubscribeMessage('watchGame')
   addWatch(client: any, payload: any): void {
     var i = this.getRoombyName(payload)
@@ -182,6 +188,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       client.emit("watchGame" , {player1 : this.roomArray[i].roomPlayers[0].login , player2 : this.roomArray[i].roomPlayers[1].login})
     }
   }
+  @UseGuards(WsGuard)
   @SubscribeMessage('player1Moved')
   player1moved(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
@@ -193,6 +200,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   }
 
 
+  @UseGuards(WsGuard)
   @SubscribeMessage('player2Moved')
   player2moved(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
@@ -204,6 +212,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 
+  @UseGuards(WsGuard)
   @SubscribeMessage('moveBall')
   moveBall(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
@@ -226,13 +235,13 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
   }
 
-
+  @UseGuards(WsGuard)
   @SubscribeMessage('gameConnected')
   playerConnected(client: any, payload: any): void {
       var i = this.getRoombyLogin(payload.login)
       if (i !== null){
-       
-        client.emit("PlayerInGame" , i.roomName)
+        if (i.status !== "waiting")
+          client.emit("PlayerInGame" , i.roomName)
       }
   }
 

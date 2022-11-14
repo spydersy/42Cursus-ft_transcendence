@@ -47,7 +47,7 @@ import { WsGuard } from './auth/jwt.strategy';
   @SubscribeMessage('addedMember')
   AddMemberToChannel(client: any, payload: any): void {
     client.join((payload.addedMember))
-    client.to(payload.addedMember).emit("addedMember", payload.owner.login)
+    client.to(payload.addedMember).emit("addedMember",  payload.owner.login )
   }
 
   @UseGuards(WsGuard)
@@ -71,6 +71,12 @@ import { WsGuard } from './auth/jwt.strategy';
     client.to(payload.reciver).emit('recievedRequest', payload);
     client.leave(payload.reciver)
   }
+  @SubscribeMessage('leave')
+  handlelogour(client: Socket, payload: any): void {
+    client.join(payload.reciver);
+    client.to(payload.reciver).emit('recievedRequest', payload);
+    client.leave(payload.reciver)
+  }
 
   @SubscribeMessage('acceptFriendRequest')
   handleAcceptRequest(client: Socket, payload: any): void {
@@ -81,9 +87,11 @@ import { WsGuard } from './auth/jwt.strategy';
  
 
   @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(client: Socket, room: string): void {
-   client.leave(room);
-   client.emit('leftRoom', room );
+  handleLeaveRoom(client: Socket, rooms: Array<string>): void {
+    for(var index in rooms)
+    {
+      client.leave(rooms[index]);
+    }
   }
 
   afterInit(server: Server) {

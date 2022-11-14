@@ -114,6 +114,8 @@ interface UserType {
   }
 
    handleDisconnect(client) {
+    this.logger.log("client disconected")
+
   var index = this.getIndex(client.id.toString())
     if (index !== -1)
     {
@@ -125,6 +127,19 @@ interface UserType {
         this.onLineArray.splice(index , 1);
 
 
+    }
+    this.debug()
+    this.server.emit('ConnectedUser', this.onLineArray);
+  }
+
+
+@SubscribeMessage('logout')
+  logout(client , payload) {
+    var index = this.getIndexLogin(payload)
+    this.logger.log(index)
+    if (index !== -1)
+    {
+        this.onLineArray.splice(index , 1);
     }
     this.debug()
     this.server.emit('ConnectedUser', this.onLineArray);
