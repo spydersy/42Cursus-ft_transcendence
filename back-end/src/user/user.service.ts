@@ -149,8 +149,12 @@ export class UserService {
             return res.status(HttpStatus.OK).send(UserDto);
         }
         let FriendsStat = await this.FriendsRelationExist(MeDto.id, UserDto.id);
-        if (FriendsStat !== null)
-            UserDto['relation'] = FriendsStat['status'];
+        if (FriendsStat !== null) {
+            if (FriendsStat.senderId === MeDto.id)
+                UserDto['relation'] = FriendsStat['status'];
+            else
+                UserDto['relation'] = 'WAITING';
+        }
         UserDto['nbFriends'] = await this.GetnbFriends(Me, Me);
         UserDto['dmChannel'] = null;
         const dmChannel = await this.prisma.channels.findMany({
