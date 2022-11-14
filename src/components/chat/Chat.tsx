@@ -172,7 +172,7 @@ export default function Chat() {
         navigate("/chat/"+ currentConv.channelId)
 
       }
-
+      // eslint-disable-next-line
     }, [list ])
 
     let joinChannels = async () => {
@@ -217,6 +217,7 @@ export default function Chat() {
         recievedMessgae(payload);
         fetchData()
       })
+      // eslint-disable-next-line
     }, [msgs ])
 
 

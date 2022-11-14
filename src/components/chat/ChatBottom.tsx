@@ -1,4 +1,4 @@
-import React , {useContext, useRef , useEffect}from 'react'
+import React , {useContext, useRef }from 'react'
 import {ReactComponent as SendIcon} from "../../assets/imgs/send-icon.svg";
 import { SocketContext } from '../../context/Socket';
 import styled  from "styled-components"

@@ -18,7 +18,7 @@ export default function PlayerTabeGameHistory(props : GameHistory) {
         }
         ).catch((err)=>{ })
 
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 return (
