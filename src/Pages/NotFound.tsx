@@ -54,7 +54,6 @@ export  function TwoFa() {
     }
 
     const submitpass = ()=> {
-        console.log("__PIN  = ", values)
         let pass  = "";
 
         for (let i = 0; i < values.length; i++) 
@@ -66,9 +65,6 @@ export  function TwoFa() {
         } 
 
         axios.post(process.env.REACT_APP_BACKEND_URL+ "/auth/validate2FA?code=" + pass , {} ,{withCredentials: true}).then((res)=>{
-            
-            // console.log("___CONSOLE___", res.data.Authentication)
-
             if (res.data.Authentication === "SUCCESS")
             {
                 succes("Signed in successfully\nWelcome back!");

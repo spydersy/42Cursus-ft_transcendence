@@ -89,7 +89,6 @@ export default function Chat() {
     })
     const userData = useContext(UserContext)
      useEffect(() => {
-      // console.log(bottomRef)
 
        const fetchData = async () => {
          await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
@@ -107,10 +106,7 @@ export default function Chat() {
            else {
      
            for (let index = 0; index < res.data.length; index++) {
-             const element : convType = res.data[index];
-             console.log(element )    
-        
-               
+             const element : convType = res.data[index];        
             if (element.channelId?.toString() === pageName)
             {
               setcurrentConv(element)
@@ -130,12 +126,9 @@ export default function Chat() {
 
               
             }).catch((err)=>{
-    
-               console.log(err)
              })
 
           }).catch((err)=>{
-            console.log(err)
           })
         }
         fetchData()
@@ -191,7 +184,6 @@ export default function Chat() {
     
     }
       socket.off("chatToClient").on('chatToClient', (payload) => {
-        console.log(payload)
         recievedMessgae(payload);
         fetchData()
       })
@@ -205,7 +197,6 @@ export default function Chat() {
       ).then((res)=>{
         setlist([...res.data]);
        }).catch((err)=>{
-         console.log(err)
        })
      }
      useEffect(() => {
@@ -213,15 +204,7 @@ export default function Chat() {
         {withCredentials: true} 
         ).then((res)=>{
           setmsgs(res.data)
- 
-  
-          console.log("done!")
-  
-
-          
         }).catch((err)=>{
-
-           console.log(err)
          })
      }, [currentConv])
      

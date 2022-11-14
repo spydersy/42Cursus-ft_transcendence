@@ -23,7 +23,6 @@ const getUserData =  async()=>{
       ).then((res)=>{
         const data : UserProp   | null =  res.data
         localStorage.setItem("user", JSON.stringify(data))
-        // console.log(res.data)
         ret =  res.data;
       }).catch((err)=>{
           ret =  "{}"

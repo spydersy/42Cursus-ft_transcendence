@@ -46,7 +46,6 @@ export default function ChatBottom(props: ChatProps) {
       User.then((data : UserProp | "{}")=>{
         if (data !== "{}")
         {
-          console.log(data)
           if (inputRef.current?.value)
           {
             mesg =  inputRef.current?.value;

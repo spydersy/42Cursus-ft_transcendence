@@ -49,7 +49,6 @@ export interface AchiveStyleProps { status: boolean; }
 export default function Achivments(props: AchivementsProps) {
 
 
-  console.log("__MY ACH DATA ___", props.data)
   return (
     <AchiStyle>
       

@@ -12,7 +12,6 @@ export default function BlockedUsers()
     useEffect(() => {
       axios.get(process.env.REACT_APP_BACKEND_URL+  "/profile/me?data=blacklist",  {withCredentials: true} 
       ).then((res)=>{
-        // console.log("Blockedlist : ", res)
         setlistBlocked(res.data)
         }).catch((err)=>{
       })

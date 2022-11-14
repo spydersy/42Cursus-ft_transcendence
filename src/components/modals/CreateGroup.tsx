@@ -88,7 +88,6 @@ export default function CreateGroup(props :CloseProps) {
                 setcheck("private")
             }
         }
-        console.log(e.target)
     }
     const fetchData = async () => {
         await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
@@ -98,7 +97,6 @@ export default function CreateGroup(props :CloseProps) {
         props.setcurrentConv(res.data[0])
 
          }).catch((err)=>{
-           console.log(err)
          })
        }
     let joinChannels = async () => {
@@ -108,7 +106,6 @@ export default function CreateGroup(props :CloseProps) {
         ).then((res)=>{
             userLogin = res.data.login
         }).catch((err)=>{
-            console.log(err)
         })
         await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
         {withCredentials: true} 
@@ -121,17 +118,14 @@ export default function CreateGroup(props :CloseProps) {
             // mychannels.pushback(userlogin)
             socket.emit('joinRoom', myChannels)
         }).catch((err)=>{
-            console.log(err)
         })
     }
     const createGroup =  ()=>{
         //check for valid input
-        console.log(memberss)
         var  bodyFormData = new FormData();
         var tmpmembers = []
         for (let i = 0; i < memberss.length; i++) {
             const element = memberss[i];
-            console.log(element.id)
             tmpmembers.push(element.id)
             
         }
@@ -147,7 +141,6 @@ export default function CreateGroup(props :CloseProps) {
             bodyFormData.append('password',pass);
         }
         
-        console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
         axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 
       ).then(async(res)=>{
@@ -171,7 +164,6 @@ export default function CreateGroup(props :CloseProps) {
       }).catch((err)=>{
         // if (data.name === "")
             setalert(true)
-        console.log(err)
         })
         
     }
@@ -179,13 +171,11 @@ export default function CreateGroup(props :CloseProps) {
         var e = document.getElementById("fileInput")
 
         e?.addEventListener("change", (c :any)=>{
-            console.log(c.target.files[0])
           
             setimg( URL.createObjectURL(c.target.files[0]))
             setdata({...data , icone: c.target.files[0]})
         })
     }, [data])
-    // console.log("__MEMBERS__DBG__ : ", members);
   return (
     <CreateGroupStyle>
         <HeadComponent title={"New Group"}/>
@@ -604,29 +594,23 @@ export  function UpdateGroup(props : UpdateGroupProp) {
                 setcheck("private")
             }
         }
-        console.log("radio change : ", e.target)
     }
 
     const updateGroup = ()=>{
 
         let pass;
         (passRef.current?.value) ?  pass = passRef.current?.value.trim() :  pass = "defaultpasswrd";
-        console.log("pass : {", passRef.current?.value , "} pass {" , pass, "}")
         const obj = {
             channelId: props.id,
             newAccessType: data.type.toUpperCase(),
             password: pass,
         }
-        console.log("_+____BODY___", obj)
 
         axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/UdpatedChannelAccess" , obj,   {withCredentials: true}).then((res)=>{
-            console.log(res.data)
             props.closeModal()
 
             // window.location.reload()
-        }).catch((err)=>{
-            console.log(err)
-            
+        }).catch((err)=>{            
         })
     }
     
@@ -634,7 +618,6 @@ export  function UpdateGroup(props : UpdateGroupProp) {
         document.getElementById(props.type.toLowerCase())?.toggleAttribute("checked")
     }, [props.type])
 
-    // console.log("__MEMBERS__DBG__ : ", members);
   return (
     <CreateGroupStyle>
 
