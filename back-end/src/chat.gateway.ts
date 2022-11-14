@@ -11,12 +11,14 @@ import { Socket, Server } from 'socket.io';
 import { ChatService } from './chat/chat.service';
 import { WsGuard } from './auth/jwt.strategy';
 
+
 @WebSocketGateway(3001, {
     cors: {
       origin: process.env.FRONTEND_URL,
       credentials: true,
     },
     namespace: 'chat'
+
 
  })   // @WebSocketGateway decorator gives us access to the socket.io functionality.
 
@@ -32,25 +34,34 @@ import { WsGuard } from './auth/jwt.strategy';
   @UseGuards(WsGuard)
   @SubscribeMessage('chatToServer')
   async handleMessage(client: Socket, payload) {
+    console.log(payload)
     const ret = await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
     if (ret.stat === true)
     {
+      console.log(payload.channelId)
       this.server.to(payload.channelId).emit('chatToClient', ret.payload);
       // this.server.to(payload.channelId).emit('event', ret.payload);
-      client.to(payload.channelId).emit('msg_event', ret.payload);
+      var obj = {
+        content: ret.payload.content,
+        login: payload.login,
+        channelId: ret.payload.channelId,
+        displayName: ret.payload.displayName
+      }
+      console.log(obj)
+      client.to(payload.channelId).emit('msg_event', obj);
     }
     else
       this.server.to(ret.login).emit('event', ret.payload)
-    
   }
 
+
+  
   @SubscribeMessage('addedMember')
   AddMemberToChannel(client: any, payload: any): void {
     client.join((payload.addedMember))
     client.to(payload.addedMember).emit("addedMember", payload.owner.login)
     // client.to(payload[0]).emit('challeneEvent', payload[1]);
   }
-  
 
   @UseGuards(WsGuard)
   @SubscribeMessage('joinRoom')
@@ -58,7 +69,8 @@ import { WsGuard } from './auth/jwt.strategy';
     this.logger.log(`joining rooms: ${client.id}`);
     for(var index in rooms)
     {
-
+      this.logger.log(`>>>>rooms: ${rooms[index]}`);
+      
       client.join(rooms[index]);
     }
   //  client.emit('joinedRoom', room );
