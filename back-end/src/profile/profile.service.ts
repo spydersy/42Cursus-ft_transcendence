@@ -27,7 +27,7 @@ export class ProfileService {
                 id: userId
             }
         });
-        userDto.achievement[2] = true;
+        userDto.achievement[1] = true;
         let uploaded = await this.prisma.users.update({
             where: {
                 id: userId
@@ -122,6 +122,15 @@ export class ProfileService {
                     await this.prisma.users.update({
                         where: { id: me},
                         data: { twoFactorAuth: true},
+                    });
+                    user.achievement[5] = true;
+                    await this.prisma.users.update({
+                        where: {
+                            id: user.id
+                        },
+                        data: {
+                            achievement: user.achievement
+                        }
                     });
                     return res.status(HttpStatus.OK).send({'message': '2FA enabeled'});
                 }

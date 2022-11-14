@@ -78,6 +78,48 @@ export class GameService {
                 }
             });
         }
+        let winnerHistory =  await this.prisma.matchHistory.findMany({
+            where: {
+                OR: [
+                    {player1Id: winner.id},
+                    {player2Id: winner.id},
+                ],
+            },
+        },
+        );
+        let loserHistory =  await this.prisma.matchHistory.findMany({
+            where: {
+                OR: [
+                    {player1Id: loser.id},
+                    {player2Id: loser.id},
+                ],
+            },
+        },
+        );
+        if (winnerHistory.length == 2)
+        {
+            winner.achievement[5] = true;
+            await this.prisma.users.update({
+                where: {
+                    id: winner.id
+                },
+                data: {
+                    achievement: winner.achievement
+                }
+            });
+        }
+        if (loserHistory.length == 2)
+        {
+            loser.achievement[5] = true;
+            await this.prisma.users.update({
+                where: {
+                    id: loser.id
+                },
+                data: {
+                    achievement: loser.achievement
+                }
+            });
+        }
     }
 
     async saveGame( mode: MODE) {
