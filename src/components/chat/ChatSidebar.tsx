@@ -181,7 +181,7 @@ export  function ConversationComponent(props : ConvProps) {
           </div>
             {
             <div className='msg'>
-            {/* {props.messages[props.messages.length - 1]} */}
+              {props.data.lastMessage}
           </div>
             }
         </div>

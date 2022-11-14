@@ -81,6 +81,7 @@ export default function Leader() {
          axios.get(process.env.REACT_APP_BACKEND_URL+ "/users", 
     {withCredentials: true} 
   ).then((res)=>{
+    console.log(res.data)
     setusers(res.data)
 
   }).catch((err)=>{
@@ -135,16 +136,16 @@ export default function Leader() {
                             </a>
                         </td>
                         <td>
-                        10000
+                        {data.level}
                         </td>
                         <td>
-                        {data.wins + data.losses}
+                        { data.wins[0] + data.wins[1]+ data.losses[0] + data.losses[1]}
                         </td>
                         <td>
-                            {data.wins}
+                            {data.wins[0] + data.wins[1]}
                         </td>
                         <td>
-                            {data.losses}
+                            {data.losses[0] + data.losses[1]}
                         </td>
 
                 </Rank>

@@ -8,7 +8,7 @@ import axios from 'axios'
 import { SocketContext } from '../../context/Socket';
 import ChatControlBar from './ChatControlBar'
 import { UserContext } from '../../context/UserContext'
-
+import { useNavigate } from 'react-router-dom'
 interface UserProp {
   id : string,
   defaultAvatar: string,
@@ -58,6 +58,7 @@ export default function Chat() {
   const pageName = window.location.pathname.split("/")[2];
   const [msgs, setmsgs] = useState<msgType[]>([])
   const [empty, setempty] = useState(true)
+  const navigate  = useNavigate()
   const bottomRef = useRef<HTMLDivElement>(null)
     const [list, setlist] = useState<convType[]>([])
     var x = -1;
@@ -163,13 +164,24 @@ export default function Chat() {
       // eslint-disable-next-line
     },[])
     useEffect(() => {
+      if (!list.length)
+      {
+        setempty(true)
+      }
+      else
+      {
+        setempty(false)
+        navigate("/chat/"+ currentConv.channelId)
+
+      }
+
+    }, [list ])
+    useEffect(() => {
       const recievedMessgae  =  (payload : msgType) => {        
         if (currentConv.channelId !== 0)
         {
           if (payload.channelId  === currentConv.channelId.toString())
           {
-            // console.log(currentConv.channelId)
-            // console.log(payload.channelId)
             var tmp  : msgType[] = msgs;
             tmp.push(payload)
             setmsgs([...tmp])
@@ -183,16 +195,10 @@ export default function Chat() {
         recievedMessgae(payload);
         fetchData()
       })
-      // const catchAllListener = (event : any, ...args : any) => {
-      //   console.log(`got event ${event}`);
-      // }
-      // return ()=>{
-
-      //   socket.off("chatToClient").(catchAllListener)
-      // } 
-
-      // eslint-disable-next-line
     }, [msgs ])
+
+
+
       const fetchData = async () => {
       await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
       {withCredentials: true} 
