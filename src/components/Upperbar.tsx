@@ -65,11 +65,9 @@ export default function Upperbar() {
 
       // eslint-disable-next-line
   }, [])
+
   useEffect(() => {
-
   }, [currentUser])
-
-
 
   return (
     <Wrraper>
@@ -325,36 +323,41 @@ padding: 0px 0px 0px 49px;
 // );
 
 export  function NotificationComponent(props: NotifProps) {
+
     const [openNotif, setopenNotif] = useState(false)
     const [isNotif, setisNotif] = useState(false)
     const socket = useContext(SocketContext)
     const pageName = window.location.pathname.split("/")[1];
-    var [list] = useState<NotifDataCard[]>([ ])
     const refo = useRef(null)
-
+    var [list] = useState<NotifDataCard[]>([ ])
+    const [items, setItems] = useState<NotifDataCard[]>([]);
 
     function hundleMsg (payload : any) {
       setisNotif(true)
       var type =  "msg" 
-
+      // console.log("payload = ", payload)
       if (pageName !== "chat")
       {
         list.push({sender:payload.displayName, img:payload.img, msg:payload.content, type:type})
+        setItems(list)
+        localStorage.setItem('items', JSON.stringify(items));
       }
     }
     function handleRequest (payload : any) {
-      console.log('__sahbiiiiii____:'+  payload)
+      // console.log('__sahbiiiiii____:'+  payload)
       setisNotif(true)
       var type =  "friendReq" 
       list.push({sender:payload.sender, img:payload.img, msg:payload.msg,type:type})
+      setItems(list)
+      localStorage.setItem('items', JSON.stringify(items));
     }
     function acceptRequest (payload : any) {
-      console.log('acceptii a sahbi:',payload)
-      
+      // console.log('acceptii a sahbi:',payload)
       setisNotif(true)
       var type =  "acceptReq"
       list.push({sender:payload.sender, img:payload.img, msg:payload.msg,type:type})
-
+      setItems(list)
+      localStorage.setItem('items', JSON.stringify(items));
     }
     const handleClickOutside = () => {
       setopenNotif(false);
@@ -363,6 +366,9 @@ export  function NotificationComponent(props: NotifProps) {
     useClickOutside(refo, handleClickOutside);
 
     useEffect(()=>{
+      const Items = JSON.parse(localStorage.getItem('items') as string);
+      if (Items) 
+        setisNotif(true);
       socket.on('msg_event', hundleMsg);
       socket.on('recievedRequest', handleRequest)
       socket.on('acceptedReq', acceptRequest)
@@ -371,7 +377,8 @@ export  function NotificationComponent(props: NotifProps) {
           socket.removeListener('recievedRequest', handleRequest)
           socket.removeListener('acceptedReq', acceptRequest);
         }
-      })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [] )
 
   return (
 
@@ -387,7 +394,7 @@ export  function NotificationComponent(props: NotifProps) {
           setopenNotif(false)
         }} open={openNotif} 
         style={{bottom: "-25px" , right: '0'}}
-        list={list}
+        list={items}
         />
       }
     </Notification>
@@ -437,7 +444,7 @@ interface NotifDataCard {
   type : string
   // check: check(), 
   // clear: clear()
- }
+}
 
 interface NotifDropDownProps {
   closeDropdown: () => void,
@@ -449,61 +456,71 @@ interface NotifDropDownProps {
 export  function NotifDropDown(props : NotifDropDownProps) {
 
   const refs = useRef<HTMLDivElement>(null)
-
   // const refs = useDetectClickOutside({ onTriggered: props.closeDropdown });
   // const socket = useContext(SocketContext)
-  var [list, setlist] = useState<NotifDataCard[]>(props.list)
-  const [isNotif] = useState(true)
+  // var [list, setlist] = useState<NotifDataCard[]>()
+  const [isNotif, setisNotif] = useState(true)
+  const [items, setItems] = useState(props.list);
 
 
   const ClearNotif = () => {
     console.log("______clearALLNotifList_____")
-    list.splice(0, list.length)
-    setlist([])
-    props.list = []
+    items.splice(0, items.length)
+    // setItems([])
+    localStorage.setItem('items', JSON.stringify([]));
+    localStorage.clear();
+    setisNotif(false)
   }
-
   const removeNotif = (index : number) => {
     console.log("______removeNotif_____", index)
-    console.log("______removeNotif__list___", list)
-    list.splice(index, 1)
-    setlist([...list])
-    props.list = list
+    // console.log("______removeNotif__list___", list)
+    // list.splice(index, 1)
+    // setlist([...list])
+    // props.list = list
   }
 
-  // socket.on('event', (payload)=>{
-  //     console.table("___TABLE__", payload)
-  // });
+
+  useEffect(() => {
+    console.log("______ Actual Items _____", items, "________ END ITEMS____________")
+    let Items = JSON.parse(localStorage.getItem('items') as string);
+    console.log("______ Actual Items _____", Items, "________ END ITEMS____________")
+
+    if (Items) 
+    {
+     setItems(Items);
+     setisNotif(true);
+    }
+    else
+      setisNotif(false);
+      
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 return (<>
     
     {props.open && 
       <NotifD style={props.style}  ref={refs} new={isNotif}  >
             {
-                <Head>
-                  <div>Notifications</div>
-                  <div  className="clearo" onClick={ClearNotif} >Clear all</div>
-                </Head>
+              <Head>
+                <div>Notifications</div>
+                <div  className="clearo" onClick={ClearNotif} >Clear all</div>
+              </Head>
            }  
 
             <Notif>
               {
-
-                list.map((item: any, index: any) => (
+                items.map((item: any, index: any) => (
                 item.type === "msg" ?
                   <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={item.msg} check={()=>{}}  clear={(index)=>{removeNotif(index)}} />
                 : item.type === "friendReq" ?
                   <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={"Sent you a Friend Request"} check={()=>{}}  clear={(index)=>{removeNotif(index)}} /> 
                 : item.type === "acceptReq" ?
-                  <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={item.sende +  "Accepted your Request"} check={()=>{}}  clear={(index)=>{removeNotif(index)}} />
+                  <FriendRequest type={item.type} name={item.sender} img={Mamali} msg={item.sender +  " Accepted your Request"} check={()=>{}}  clear={(index)=>{removeNotif(index)}} />
                 : null
 
               ))
              }
-              {/* <FriendRequest name="moahmed" img={Mamali} msg={"Send a Friend request ."} check={()=>{}}  clear={()=>{}} /> */}
-              {/* <FriendRequest name="moahmed" img={Mamali} msg={"Is challenging you."} check={()=>{}}  clear={()=>{}} /> */}
             </Notif>
-
       </NotifD>}
 </>
 )
