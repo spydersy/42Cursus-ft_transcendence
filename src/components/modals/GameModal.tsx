@@ -8,7 +8,7 @@ import styled from "styled-components"
 import { useNavigate } from "react-router-dom";
 
 interface GmaemodelProps {
-  setmode : (mode: any)=>void
+  setmode ?: (mode: any)=>void
   mode : any
 }
 interface GameProps {
@@ -60,6 +60,16 @@ export default function GameModal(props: GmaemodelProps) {
         <Title>
           <div>Mode :</div>
          <span id="span">{props.mode}</span>
+        </Title>
+        <Title>
+          <div>How to Play :</div>
+         <div id="span">Use you mouse to move the paddel up and down </div>
+          
+        </Title>
+        <Title>
+          <div>Rules :</div>
+         <div id="span">Best Of Five</div>
+          
         </Title>
         <Title>
           <div>Ball :</div>

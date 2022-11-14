@@ -21,9 +21,9 @@ interface RoomProps {
   closeModal: () => void,
 }
 
-const CustomToastMesg = (msg: string) => (
+const CustomToastMesg = (msg: string ,id : string ) => (
   <div style={{ width: "100%", height: "100%" }}>
-    <MutedToast mesg={msg} />
+    <MutedToast link={id} mesg={msg} />
   </div>
 );
 export default function JoinGroupModal(props: RoomProps) {
@@ -70,7 +70,7 @@ export default function JoinGroupModal(props: RoomProps) {
           }
           await axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/joinChannel/", obj, { withCredentials: true }).then(async(res) => {
             if (res.data.message === "User Added") {
-              const toasty = () => toast(CustomToastMesg("Group joined succefully"), {
+              const toasty = () => toast(CustomToastMesg("Group joined succefully" , ""), {
                 className: "toast",
                 progressClassName: "toastProgress",
                 autoClose: 2000,
@@ -82,7 +82,7 @@ export default function JoinGroupModal(props: RoomProps) {
             }
             // if joined 
           }).catch((err) => {
-            const toasty = () => toast(CustomToastMesg("Ouups, reye7 mea kerek!"), {
+            const toasty = () => toast(CustomToastMesg("An Error has been accured !" , "/"), {
               className: "toast",
               progressClassName: "toastProgress",
               autoClose: 2000,
@@ -104,7 +104,7 @@ export default function JoinGroupModal(props: RoomProps) {
           }
           await axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/joinChannel/", obj, { withCredentials: true }).then(async (res) => {
             if (res.data.message === "User Added") {
-              const toasty = () => toast(CustomToastMesg("Ooopaa, Channel joined succefully"), {
+              const toasty = () => toast(CustomToastMesg("Channel joined succefully" , ""), {
                 className: "toast",
                 progressClassName: "toastProgress",
                 autoClose: 2000,

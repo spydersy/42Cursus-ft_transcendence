@@ -127,9 +127,8 @@ export default function Sidebar() {
                 axios.post(process.env.REACT_APP_BACKEND_URL + "/profile/logout", {}, 
                 {withCredentials: true} 
                 ).then((res)=>{
-                navigate('/signin')
+                window.location.href = ('/signin')
                 }).catch((err)=>{
-                    // history.pushState("/signin");
                 })
 
             }} className='item'   activel={"false"} to={""}>

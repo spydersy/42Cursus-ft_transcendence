@@ -1,4 +1,4 @@
- import React from 'react'
+ import React , {useEffect} from 'react'
 import styled , { css} from "styled-components"
 import PatternImg from "../assets/imgs/background.jpeg"
 import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
@@ -22,6 +22,9 @@ import  Cinq from "../assets/imgs/cinq.svg"
 //todo env file
 
 export default function SignIn() {
+useEffect(() => {
+// window.location.reload()
+}, [])
 
   return (
     <Wrraper>

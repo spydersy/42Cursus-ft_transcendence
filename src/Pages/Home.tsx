@@ -11,7 +11,7 @@ import Slider from '../components/Slider'
 
 interface HomeProps {
     
-  settheme: (e : any)=> void,
+  settheme?: (e : any)=> void,
   // banner :string 
   
 }
@@ -25,7 +25,7 @@ export default function Home(props: HomeProps) {
         <HeadComponent title="Live Games"/>
         <Slider/>
       </Hero>
-      <GameModes settheme={(e: any)=> props.settheme(e)} />
+      <GameModes  />
       <Hero style={{marginTop : "40px"  }}>
         <HeadComponent title="History"/>
         <History />

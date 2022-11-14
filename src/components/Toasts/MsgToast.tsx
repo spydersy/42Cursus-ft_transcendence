@@ -34,9 +34,9 @@ interface UserProp {
   wins : number[]
   losses : number[]
 }
-export  function MutedToast(props :{ mesg : string}) {
+export  function MutedToast(props :{ mesg : string , link? : string}) {
   return (
-    <ToastStyle to="">
+    <ToastStyle to={props.link}>
         <div className='data'>
             <div className='msg'>
               {props.mesg}

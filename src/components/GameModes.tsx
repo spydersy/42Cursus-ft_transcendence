@@ -26,7 +26,7 @@ const modes : any = [
 
 interface GameModesProps {
     
-  settheme: (e : any)=> void,
+  settheme?: (e : any)=> void,
   // banner :string 
   
 }

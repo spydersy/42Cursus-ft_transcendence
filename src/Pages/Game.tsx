@@ -22,7 +22,7 @@ interface UserProp {
   losses : number[]
 }
 interface GameProps {
-  theme: any
+  theme?: any
   
 }
 
