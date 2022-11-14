@@ -1,5 +1,5 @@
 import React from 'react'
-import styled , {keyframes , css} from "styled-components"
+import styled , { css} from "styled-components"
 import PatternImg from "../assets/imgs/background.jpeg"
 import {ReactComponent as FtImg } from "../assets/imgs/42Icon.svg"
 import {ReactComponent as FtttImg } from "../assets/imgs/google1.svg"
@@ -18,7 +18,7 @@ import  Huit from "../assets/imgs/huit.svg"
 import  Joke from "../assets/imgs/joke.svg"
 import  Cinq from "../assets/imgs/cinq.svg"
 
-import  Zeroo from "../assets/imgs/zero.svg"
+// import  Zeroo from "../assets/imgs/zero.svg"
 //todo env file
 
 export default function SignIn() {
@@ -38,37 +38,36 @@ export default function SignIn() {
 
 
             <div className='wrow'>
-               
 
                <a className='urow' href="https://github.com/spydersy">
-                  <img className='avatar' src={abelarif}  />
-                  <img className='avatarr' src={Cinq}></img>
+                  <img alt='img1' className='avatar' src={abelarif}  />
+                  <img alt='img2' className='avatarr' src={Cinq}></img>
                   <a > @Spydersy </a>  
                </a>
               
                <a className='urow' href="https://github.com/aladinez">
-                  <img className='avatar' src={aez_zaou}  />
-                  <img className='avatarr' src={Huit}></img>
+                  <img alt='img3' className='avatar' src={aez_zaou}  />
+                  <img alt='img4' className='avatarr' src={Huit}></img>
                   <a > @Aladinez </a>  
                </a>
               
                <a className='urow' href="https://github.com/NotYaiba">
-                  <img className='avatar' src={melkarmi}  />
-                  <img className='avatarr' src={Joke}></img>
+                  <img alt='img5' className='avatar' src={melkarmi}  />
+                  <img  alt='img6'  className='avatarr' src={Joke}></img>
                   <a > @NotYaiba </a>  
                </a>
 
                <a className='urow' href="https://github.com/mamali543">
-                  <img className='avatar' src={mamali}  />
-                  <img className='avatarr' src={Huit}></img>
+                  <img alt='img7' className='avatar' src={mamali}  />
+                  <img  alt='img8' className='avatarr' src={Huit}></img>
                   <a > @Mamali543 </a>  
                </a>
                <a className='urow' href="https://github.com/Alcheemiist">
-                  {/* <Zero className='badge'>
-                  </Zero> */}
-                     <img className='avatar' src={eelaazmi}  />
-                     <img className='avatarr' src={Zero}></img>
-                     <a > @Alchemist </a>  
+                  
+                  <img alt='img9' className='avatar' src={eelaazmi}  />
+                  <img alt='img10' className='avatarr' src={Zero}></img>
+                  <a > @Alchemist </a>  
+
                </a>
             </div>
 
@@ -102,8 +101,6 @@ export default function SignIn() {
    </Wrraper>
   )
 }
-
-
 
 const Wrraper = styled.div`
    position: relative;
@@ -298,22 +295,22 @@ const Bloc = styled.div`
   
 `;
 
-const Title = styled.div`
+// const Title = styled.div`
 
-`;
+// `;
 
-const Description = styled.div`
-   margin-bottom: 30px;
-   color:  ${props => props.theme.colors.primaryText};;
-   font-family: 'Poppins' , sans-serif;
-   font-style: normal;
-   font-weight: 300;
-   line-height: 20px;
-   display: flex;
-   text-align: start;
-   width: 500px;
-   opacity: 0.6;
-`;
+// const Description = styled.div`
+//    margin-bottom: 30px;
+//    color:  ${props => props.theme.colors.primaryText};;
+//    font-family: 'Poppins' , sans-serif;
+//    font-style: normal;
+//    font-weight: 300;
+//    line-height: 20px;
+//    display: flex;
+//    text-align: start;
+//    width: 500px;
+//    opacity: 0.6;
+// `;
 
 interface ButtonProps {
    isIcon? : boolean,

@@ -72,7 +72,7 @@ const linkslist = ["All" , "My Rooms"]
             <Warraper>
               {
                 myrooms.map((data : convType , id : number)=>{
-                  if (data.access != "DM")
+                  if (data.access !== "DM")
                   {
                     return<RoomComponent  key={id}  id={data.channelId } roomMembers={data.users.length} roomName={data.name} roomBanner={data.picture} type={data.access}  isLocked={data.access === "Protected".toUpperCase()} ownership={true} />        
                   }

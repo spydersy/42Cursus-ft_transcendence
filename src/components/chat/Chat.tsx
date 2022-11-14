@@ -159,6 +159,8 @@ export default function Chat() {
         // {
         //   data  =  JSON.parse(s || '{}');
         // }
+
+      // eslint-disable-next-line
     },[])
     useEffect(() => {
       const recievedMessgae  =  (payload : msgType) => {        
@@ -188,6 +190,8 @@ export default function Chat() {
 
       //   socket.off("chatToClient").(catchAllListener)
       // } 
+
+      // eslint-disable-next-line
     }, [msgs ])
       const fetchData = async () => {
       await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 

@@ -19,6 +19,8 @@ export default function Pong(props: gameProps) {
 
     var p = document.getElementById("canva")?.offsetWidth
     var width : number = 0;
+    var height = 700;
+
     if (p)
     {
         width = p;
@@ -26,7 +28,6 @@ export default function Pong(props: gameProps) {
 
     }
 
-    var height = 700;
     var ballCord = {
         size: 0.02,
         x: width / 2,

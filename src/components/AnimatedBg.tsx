@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import styled, { keyframes } from "styled-components";
 
 export default  function AnimatedBg() {
@@ -1777,14 +1777,14 @@ export default  function AnimatedBg() {
     }
   `;
   
-  const dash2 = keyframes`
-    0% { stroke-dashoffset: 2000;
-          opacity: 0;
-    }
-    to {
-      stroke-dashoffset: 0;
-    }
-  `;
+  // const dash2 = keyframes`
+  //   0% { stroke-dashoffset: 2000;
+  //         opacity: 0;
+  //   }
+  //   to {
+  //     stroke-dashoffset: 0;
+  //   }
+  // `;
   
   const fadein = keyframes`
     from {opacity: 0;}

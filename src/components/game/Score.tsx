@@ -1,8 +1,8 @@
 import React , {useState} from 'react'
 import { AvatarComponent } from '../../components/PlayerProfile'
 import styled from "styled-components"
-import io, { Socket } from "socket.io-client";
-import axios from 'axios'
+import { Socket } from "socket.io-client";
+// import axios from 'axios'
 interface UserProp {
     id : string,
     defaultAvatar: string,

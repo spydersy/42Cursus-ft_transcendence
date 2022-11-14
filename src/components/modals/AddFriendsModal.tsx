@@ -43,6 +43,7 @@ export default function AddFriendsModal(props : {members : idsType[] , setmember
             })
           }
         })
+        // eslint-disable-next-line
     }  , [])
     
     const exist = (e : any)=>

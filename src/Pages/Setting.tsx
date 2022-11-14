@@ -1,4 +1,4 @@
-import React, {useEffect, useState, CSSProperties, useCallback} from 'react'
+import React, {useEffect, useState} from 'react'
 import styled  from "styled-components"
 import { HeadComponent } from './Home';
 import {ReactComponent as Edit} from "../assets/imgs/edit.svg";
@@ -6,16 +6,13 @@ import { AvatarComponent } from '../components/PlayerProfile';
 import axios from 'axios';
 import InputComponent from '../components/Input';
 import { Button } from './SignIn';
-import RingLoader from "react-spinners/RingLoader";
-import { wait } from '@testing-library/user-event/dist/utils';
 import avataro from "../assets/imgs/avatar/avatar2.png";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
-import {ReactComponent as CloseLock} from "../assets/imgs/closelock.svg";
 import OpenLock from "../assets/imgs/TwoFa.png";
 import { PinInput } from 'react-input-pin-code' // ES Module
 import { toast } from 'react-toastify';
 
-const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderColor: "red", };
+// const override: CSSProperties = {  display: "block",  margin: "0 auto",  borderColor: "red", };
 
 export default function Setting() {
     

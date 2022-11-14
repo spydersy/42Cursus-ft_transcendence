@@ -1,11 +1,7 @@
-import React , {useEffect,useState ,useContext, useRef}from 'react'
-import {ReactComponent as  SearchIcon} from "../../assets/imgs/search.svg"
-import {ReactComponent as Group} from "../../assets/imgs/users.svg";
-import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
+import React , {useContext, useRef}from 'react'
 import {ReactComponent as SendIcon} from "../../assets/imgs/send-icon.svg";
 import { SocketContext } from '../../context/Socket';
 import styled  from "styled-components"
-import axios from 'axios';
 import { UserContext } from '../../context/UserContext';
 import { UserProp } from '../game/types';
 
@@ -45,8 +41,8 @@ export default function ChatBottom(props: ChatProps) {
  const User = useContext(UserContext)
     
     const addMessage = ()=>{
-      var s : string | null = localStorage.getItem('user');
-      var data: usersType ;
+      // var s : string | null = localStorage.getItem('user');
+      // var data: usersType ;
       User.then((data : UserProp | "{}")=>{
         if (data !== "{}")
         {
@@ -55,7 +51,7 @@ export default function ChatBottom(props: ChatProps) {
           {
             mesg =  inputRef.current?.value;
             mesg =  mesg.trim();
-            if (mesg != "")
+            if (mesg !== "")
             {
               inputRef.current.value = "";
               var msgtmp = {

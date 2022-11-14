@@ -1,10 +1,9 @@
 import React from 'react'
-
-import { useState } from 'react';
+// import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
 import useCountdown from "@bradgarropy/use-countdown"
-import Confetti from "react-confetti";
+// import Confetti from "react-confetti";
 interface countDownProps {start: boolean , setstart : (e : boolean)=>void, show: boolean , setshow : (e : boolean)=>void}
 
 const CountDownContainer = styled(motion.div)`
@@ -26,12 +25,12 @@ const CountDownContainer = styled(motion.div)`
     color :  ${props => props.theme.colors.primaryText};
 `;
 export default function CountDown(props : countDownProps) {
-    const [complete, setComplete] = useState(false);
+    // const [complete, setComplete] = useState(false);
 
     const countdown = useCountdown({
         seconds: 3,
         onCompleted: () => {
-            setComplete(true)
+            // setComplete(true)
             props.setshow(false)
             props.setstart(true)
         },

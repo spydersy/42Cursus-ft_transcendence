@@ -309,34 +309,6 @@ const Items = styled.div`
 
     
 `;
-const ToolTip = styled.span`
-                display: inline-block;
-				position: absolute;
-				background-color:  ${props => props.theme.colors.seconderybg}; 
-				padding: 8px 12px;
-				border-radius: 3px;
-				/* margin-top: -26px; */
-				left: calc(100% + 11px);
-				opacity: 1;
-				visibility: hidden;
-				font-size: 10px;
-				letter-spacing: .5px;
-				/* border: 1px solid ${props => props.theme.colors.border}; */
-                z-index: 3;
-				&:before {
-                    z-index: 13;
-                    content: '';
-                    /* border: 1px solid ${props => props.theme.colors.border}; */
-					display: block;
-					position: absolute;
-					left: -4px;
-					top: 10px;
-					transform: rotate(45deg);
-					width: 10px;
-					height: 10px;
-					background-color: inherit;
-				}
-`;
 const Item = styled(Link)<ItemProps>`
 
     /* width: 100%; */

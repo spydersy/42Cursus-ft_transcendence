@@ -3,21 +3,15 @@ import axios from 'axios'
 import React , {useEffect , useState , useContext} from 'react'
 import styled from "styled-components"
 import { AvatarComponent } from '../PlayerProfile'
-import Mamali from "../../assets/imgs/avatar/mamali.jpeg";
 import { Button } from '../../Pages/SignIn';
 import { ReactComponent as CheckIcon } from "../../assets/imgs/check.svg";
 import { ReactComponent as CloseIcon } from "../../assets/imgs/close-icon.svg";
-
 import { SocketGameContext } from '../../context/Socket'
 import { SocketContext } from '../../context/Socket'
-
-import {
-Link
-} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { UserContext } from '../../context/UserContext';
-import { userInfo } from 'os';
-import { alterHsl } from 'tsparticles-engine';
 import { data } from 'jquery';
+
 interface msgType {
   login : string,
   content : string, 
@@ -69,6 +63,7 @@ export  function AddedToast(props: {data : string}) {
             }).catch((error)=>{ 
         } 
    )     
+   // eslint-disable-next-line
   }, [])
   return (
     <ToastStyle to="">
@@ -109,6 +104,7 @@ export default  function MsgToast(props: {data : msgType}) {
             }).catch((error)=>{ 
               } 
    )
+   // eslint-disable-next-line
   }, [])
   
   return (
@@ -153,7 +149,7 @@ export  function AcceptToast(props: {data : ssss}) {
    )
 
 
-        
+        // eslint-disable-next-line
   }, [])
   
   return (
@@ -245,7 +241,7 @@ export  function GameChallengeToast(props: {data : any}) {
    )
 
 
-        
+      // eslint-disable-next-line
   }, [])
   const acceptChallenge = ()=>{
     UserData.then((data: UserProp | "{}")=>{
@@ -341,6 +337,7 @@ export  function FriendRequestToast(props: {data : any}) {
 
               } 
    )
+   // eslint-disable-next-line
   }, [])
   
   return (

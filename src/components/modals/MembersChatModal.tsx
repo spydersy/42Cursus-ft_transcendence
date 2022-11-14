@@ -8,7 +8,7 @@ import {ReactComponent as Kick} from "../../assets/imgs/kick.svg";
 import {ReactComponent as GameIcon} from "../../assets/imgs/game-icon.svg";
 import axios from 'axios';
 import {ReactComponent as Admin} from "../../assets/imgs/Admino.svg";
-import styled , {css} from "styled-components"
+import styled from "styled-components"
 import Modal from '../Modal';
 
 interface convType {
@@ -60,12 +60,13 @@ interface MemberProps{
   }
 
   export  function Member(props : MemberProps) {
-    console.log('hna '+props.access)
+    // console.log('hna '+props.access)
     const [restriction, setrestriction] = useState(props.data.restriction)
     const [permission, setpermission] = useState(props.data.permission)
     const [muteModel, setmuteModel] = useState(false)
+    
     useEffect(() => {
-      console.log(props.data)
+      // console.log(props.data)
       return () => {
       }
     }, [])

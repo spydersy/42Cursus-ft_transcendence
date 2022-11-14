@@ -1,7 +1,5 @@
-import axios from 'axios'
-import React , {useEffect , useState , useContext, useRef} from 'react'
+import React , {useEffect , useState , useContext} from 'react'
 import styled  from "styled-components"
-import { SocketContext } from '../../context/Socket';
 import { UserContext } from '../../context/UserContext';
 import { UserProp } from '../game/types';
 
@@ -14,7 +12,6 @@ interface usersType {
   restrictionTime: string,
   duration: number,
 }
-
 interface convType {
   nbMessages: number,
   lastUpdate: string,
@@ -34,41 +31,33 @@ interface ChatProps {
     setcurrentConv : (e : any)=>void
     refss : any;
     empty : boolean
-  }
+}
 
-  interface msgType {
-    channelId : string,
-    content : string, 
-    date : string, 
-    displayName : string, 
-    id : number,
-    senderId : number
-  }
-  export default function ChatBody(props: ChatProps) {
-  const socket = useContext(SocketContext)
+export default function ChatBody(props: ChatProps) {
   const User = useContext(UserContext)
 
-const [UserData, setUserData] = useState<UserProp>({
-  id: "string",
+  const [UserData, setUserData] = useState<UserProp>({
+    id: "string",
     defaultAvatar: "string",
     login : "string",
     displayName : "string",
     wins : [0,0],
     losses : [0,0],
-})
-const first = useRef(null)
+  })
     useEffect(() => {
       User.then((data : UserProp | "{}" )=>{
         if (data !== "{}")
           setUserData(data)
       })
+      // eslint-disable-next-line
     }, [])
     useEffect(() => {
       scroolDown()
+      // eslint-disable-next-line
     }, [props.msgs])
     const scroolDown  = ()=>
     {
-      if (props.msgs.length != 0)
+      if (props.msgs.length !== 0)
       {
         var s = document.getElementsByClassName("bar" )
         console.log(s[props.msgs.length-1])
@@ -82,7 +71,7 @@ const first = useRef(null)
         {
           props.msgs.map((object: any , i : number)=>{
             console.table(object)
-              if (object.senderId != UserData.id)
+              if (object.senderId !== UserData.id)
               {
                 return <div id={"bar"+ i} className='bar' key={i} >  <MsgNotStyle>
                   <div className='name'>{object.displayName}</div>

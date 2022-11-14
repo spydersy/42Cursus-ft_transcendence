@@ -2,25 +2,19 @@
 import  React, { useEffect  , useState , useContext  }  from 'react';
 import styled , {ThemeProvider} from "styled-components"
 import {theme} from './theme'
-
 import './App.css';
 import Marin from "./assets/imgs/marinford.png";
 import Punk from "./assets/imgs/punkhazard.png";
 import Dress from "./assets/imgs/dressRosa.jpg";
 import Wano from "./assets/imgs/wano.jpg";
 import Fish from "./assets/imgs/fishman.jpeg";
-import { OnlineContextSocket, SocketContext,  SocketGameContext,  SocketValue } from './context/Socket';
-import {
-  Routes, // instead of "Switch"
-  Route,
-  useNavigate
-} from "react-router-dom";
+import { OnlineContextSocket, SocketContext,  SocketGameContext } from './context/Socket';
+import {  Routes,   Route, useNavigate  } from "react-router-dom";
 import SignIn from './Pages/SignIn';
 import NotFound from './Pages/NotFound';
 import Home from './Pages/Home';
 import Upperbar from './components/Upperbar';
 import Sidebar from './components/Sidebar';
-import Test from './components/Test';
 import ProtectedLayout from './components/protected/ProtectedLayout';
 import Profile from './Pages/Profile';
 import Chat from './components/chat/Chat';
@@ -32,10 +26,8 @@ import Leader from './Pages/Leader';
 import Room from './Pages/Room';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import MsgToast , {AcceptToast, AddedToast, FriendRequestToast, GameChallengeToast, CancelToast, MutedToast} from './components/Toasts/MsgToast';
-import { ReactComponent as CloseIcon } from "./assets/imgs/close-icon.svg";
+import MsgToast , {AcceptToast, AddedToast, FriendRequestToast, GameChallengeToast, MutedToast} from './components/Toasts/MsgToast';
 import { UserContext } from './context/UserContext';
-
 
 const mockedItems : any = [{
   title: "MarinFord",
@@ -110,14 +102,14 @@ function App() {
   const onlinesSocket = useContext(OnlineContextSocket)
   const gameSocket = useContext(SocketGameContext)
   const User = useContext(UserContext)
-  const [toastData, settoastData] = useState<msgType>()
-  const [toastDataChallenge, settoastDataChallenge] = useState()
+  // const [toastData, settoastData] = useState<msgType>()
+  // const [toastDataChallenge] = useState()
   const pageName = window.location.pathname.split("/")[1];
   
   // const [toastData, settoastData] = useState()
   function hundleMsg (payload) {
     console.table(payload)
-    if (pageName != "chat")
+    if (pageName !== "chat")
     {
       
        const    toasty = () =>  toast(CustomToastWithLink(payload) , {
@@ -230,16 +222,16 @@ function App() {
     }
     })
   
-  const    CHallengeNotify = () => toast.success("You accepted " +  toastDataChallenge + " Friend Request", {
-    position: "top-right",
-    autoClose: 2000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  });
+  // const    CHallengeNotify = () => toast.success("You accepted " +  toastDataChallenge + " Friend Request", {
+  //   position: "top-right",
+  //   autoClose: 2000,
+  //   hideProgressBar: true,
+  //   closeOnClick: true,
+  //   pauseOnHover: true,
+  //   draggable: true,
+  //   progress: undefined,
+  //   theme: "colored",
+  // });
   let joinChannels = async () => {
 
     let userLogin : string;
@@ -284,7 +276,7 @@ function App() {
       // if ()
       User.then((user : UserProp | string)=>{
         console.log(user)
-        if (user === "{}" && pageName != "2fa")
+        if (user === "{}" && pageName !== "2fa")
         {
           onlinesSocket.close()
           navigate("/signin")
@@ -309,7 +301,7 @@ function App() {
           // const pageName = window.location.pathname.split("/")[1];
 
       })
-
+  // eslint-disable-next-line
   }, [])
   
   return (

@@ -1,6 +1,5 @@
 import React , {useContext , useState , useEffect} from 'react'
 import Modal from '../components/Modal'
-// import Pong from '../components/Pong'
 import Pong from '../components/game/Pong'
 import { SocketGameContext } from '../context/Socket'
 import styled from "styled-components"
@@ -8,16 +7,10 @@ import axios from 'axios'
 import CountDown from '../components/game/CountDown'
 import Score from '../components/game/Score'
 import { Button } from './SignIn'
-import io, { Socket } from "socket.io-client";
-import {
-Link
-,
-useNavigate
-
-} from "react-router-dom";
-import { AlterType } from 'tsparticles-engine'
-
+import{ Socket } from "socket.io-client";
+import { Link ,  useNavigate } from "react-router-dom";
 import { UserContext } from '../context/UserContext'
+
 interface UserProp {
   id : string,
   defaultAvatar: string,
@@ -101,11 +94,8 @@ export default function Game(props : GameProps) {
    setend(true)
  })
 
+//  var data : UserProp ;
  
-
- var data : UserProp ;
- 
-
   useEffect(() => {
 
 var dat : UserProp;
@@ -156,7 +146,7 @@ var dat : UserProp;
     return () => {
       gamesocket.emit("endGame" , dat?.login)
     }
-
+  // eslint-disable-next-line
   }, [])
   
 
@@ -245,7 +235,7 @@ export  function GameEndModal(props : {msg : string , socket :Socket , login? : 
         <div className='buttns'>
 
 
-{ props.msg!= "over" &&         <Button onClick={()=>{
+{ props.msg !== "over" &&         <Button onClick={()=>{
         var mode = localStorage.getItem('mode') ;
         if (mode === "classic")
         {

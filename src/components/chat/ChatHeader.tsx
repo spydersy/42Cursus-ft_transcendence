@@ -1,8 +1,7 @@
-import React , { useState , useEffect}from 'react'
+import React from 'react'
 import {ReactComponent as BackIcon} from "../../assets/imgs/arrowLeft.svg";
 import styled  from "styled-components"
 import { AvatarComponent } from '../PlayerProfile';
-import { Link } from 'react-router-dom';
 
 interface usersType {
   id: string,
@@ -42,29 +41,29 @@ interface convType {
   
 export default function ChatHeader(props : chatHeaderProps) {
 
-  const [data, setdata] = useState<convType>(
-      {
-        nbMessages: 0,
-        lastUpdate: "string",
-        access : "string",
-        channelId:  0,
-        name: "string",
-        password: "string",
-        picture : "string",
-        users: [{
-          id : "string",
-      defaultAvatar: "string",
-      login : "string",
-      displayName : "string",
-      restriction: "string",
-      restrictionTime: "string",
-      duration: 0,
-      }]
-      })
+  // const [data, setdata] = useState<convType>(
+  //     {
+  //       nbMessages: 0,
+  //       lastUpdate: "string",
+  //       access : "string",
+  //       channelId:  0,
+  //       name: "string",
+  //       password: "string",
+  //       picture : "string",
+  //       users: [{
+  //         id : "string",
+  //     defaultAvatar: "string",
+  //     login : "string",
+  //     displayName : "string",
+  //     restriction: "string",
+  //     restrictionTime: "string",
+  //     duration: 0,
+  //     }]
+  //     })
 
-    useEffect(() => {
-      setdata(props.data)
-    }, [props.data])
+  //   useEffect(() => {
+  //     setdata(props.data)
+  //   }, [props.data])
     
     return (
       <TopStyle>
@@ -72,7 +71,7 @@ export default function ChatHeader(props : chatHeaderProps) {
           {
             props.empty ? <div></div>:props.data?.access === "DM"  ? 
         
-            <Link className='conty' to={"/profile/"+ props.data.users[1].login}>
+            <a className='conty' href={"/profile/"+ props.data.users[1].login}>
 
               <div style={{width: "50px" , height: "50px"}}>
       
@@ -81,7 +80,7 @@ export default function ChatHeader(props : chatHeaderProps) {
 
               <div >  {props.data?.users[1].displayName} </div>
 
-            </Link>
+            </a>
 
             :
               

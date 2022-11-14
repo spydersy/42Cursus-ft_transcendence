@@ -1,34 +1,27 @@
 import React , {useState} from 'react'
 import { HeadComponent } from '../Pages/Home'
-
 import styled from "styled-components"
 import Modal from './Modal'
 import GameModal from './modals/GameModal'
-
-import FriendImg from "../assets/imgs/luffyAce.svg"
 import  RandImg from "../assets/imgs/aokiji.svg"
 import  AiImg from "../assets/imgs/coma.svg"
-import Tidk from "../assets/imgs/zoro.svg"
 import { useSpringCarousel } from 'react-spring-carousel'
-import { ReactComponent as Swipeicon} from "../assets/imgs/swipe-icon.svg"
-
 
 const modes : any = [
-  {
-    title : "Computer mode",
-    img : AiImg,
-    desc : "Test your haki skills with an Ai made by dr vegaPunk the legend say his unbeatable .",
-     background : 'linear-gradient(249.92deg, #31804A 0%, #000000 98.29%)'
+{
+  title : "Computer mode",
+  img : AiImg,
+  desc : "Test your haki skills with an Ai made by dr vegaPunk the legend say his unbeatable .",
+    background : 'linear-gradient(249.92deg, #31804A 0%, #000000 98.29%)'
 
-  }, 
-  {
-    title : "Classic",
-    img : RandImg,
-    desc : "Start Your jorney at the new world,  win games , rank higher .",
-     background : ' linear-gradient(249.44deg, #40196C 2.4%, #000000 99.44%)'
+}, 
+{
+  title : "Classic",
+  img : RandImg,
+  desc : "Start Your jorney at the new world,  win games , rank higher .",
+    background : ' linear-gradient(249.44deg, #40196C 2.4%, #000000 99.44%)'
 
-  },
-
+},
 ]
 
 interface GameModesProps {
@@ -58,7 +51,7 @@ const [mode, setmode] = useState("")
 
     sethideModel(!hideModel)
   }
-  const { carouselFragment ,      slideToNextItem } = useSpringCarousel({
+  const { carouselFragment} = useSpringCarousel({
 
     // width : "350px",
     itemsPerSlide: 2,

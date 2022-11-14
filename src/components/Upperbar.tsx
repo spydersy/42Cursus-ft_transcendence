@@ -63,6 +63,7 @@ export default function Upperbar() {
 
       // console.log(data)
 
+      // eslint-disable-next-line
   }, [])
   useEffect(() => {
 
@@ -83,7 +84,7 @@ export default function Upperbar() {
               {
                 open && <DropDown closeDropdown={ ()=>{
         
-                  console.log(open)
+                  // console.log(open)
                   // setopen(false)
                 }} open={open} 
                 style={{bottom: "-25px" , right: '0'}}
@@ -328,7 +329,7 @@ export  function NotificationComponent(props: NotifProps) {
     const [isNotif, setisNotif] = useState(false)
     const socket = useContext(SocketContext)
     const pageName = window.location.pathname.split("/")[1];
-    var [list, setlist] = useState<NotifDataCard[]>([ ])
+    var [list] = useState<NotifDataCard[]>([ ])
     const refo = useRef(null)
 
 
@@ -450,7 +451,7 @@ export  function NotifDropDown(props : NotifDropDownProps) {
   const refs = useRef<HTMLDivElement>(null)
 
   // const refs = useDetectClickOutside({ onTriggered: props.closeDropdown });
-  const socket = useContext(SocketContext)
+  // const socket = useContext(SocketContext)
   var [list, setlist] = useState<NotifDataCard[]>(props.list)
   const [isNotif] = useState(true)
 

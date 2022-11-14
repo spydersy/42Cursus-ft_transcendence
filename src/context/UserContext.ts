@@ -1,6 +1,5 @@
 import axios from "axios";
 import React  from "react";
-import { useNavigate } from "react-router-dom";
 
 interface UserProp {
     id: string,
@@ -24,13 +23,12 @@ const getUserData =  async()=>{
       ).then((res)=>{
         const data : UserProp   | null =  res.data
         localStorage.setItem("user", JSON.stringify(data))
-        console.log(res.data)
+        // console.log(res.data)
         ret =  res.data;
       }).catch((err)=>{
           ret =  "{}"
     })
     return ret;
-  }
-
+}
 
 export const UserContext = React.createContext<Promise<UserProp | "{}">>(getUserData());

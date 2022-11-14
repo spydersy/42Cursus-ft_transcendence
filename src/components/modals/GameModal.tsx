@@ -1,15 +1,12 @@
 import React , {useState , useEffect} from 'react'
-import { useSpringCarousel } from 'react-spring-carousel'
-import styled , {css} from "styled-components"
-import Marin from "../../assets/imgs/marinford.png";
-import Punk from "../../assets/imgs/punkhazard.png";
-import Dress from "../../assets/imgs/dressRosa.jpg";
-import Wano from "../../assets/imgs/wano.jpg";
-import Fish from "../../assets/imgs/fishman.jpeg";
-import {
+import styled from "styled-components"
+// import Marin from "../../assets/imgs/marinford.png";
+// import Punk from "../../assets/imgs/punkhazard.png";
+// import Dress from "../../assets/imgs/dressRosa.jpg";
+// import Wano from "../../assets/imgs/wano.jpg";
+// import Fish from "../../assets/imgs/fishman.jpeg";
+import { useNavigate } from "react-router-dom";
 
-  useNavigate
-} from "react-router-dom";
 interface GmaemodelProps {
   setmode : (mode: any)=>void
   mode : any
@@ -25,41 +22,15 @@ var defaultProp = {
   mode : "string"
 }
 export default function GameModal(props: GmaemodelProps) {
-  const [selected, setselected] = useState(2)
+  // const [selected, setselected] = useState(2)
   const [gameData, setgameData] = useState<GameProps>(defaultProp)
 
   const navigate = useNavigate();
   useEffect(() => {
     localStorage.setItem("mode",props.mode)
+    // eslint-disable-next-line
   }, [])
-  
-  interface GameModalProps {
-    
-    title: string,
-    banner :string 
-    
-  }
-  
-  const mockedItems : any = [{
-    title: "MarinFord",
-    banner :Marin,
-  },
-  {
-    title: "Punk Hazard",
-    banner :Punk 
-  },
-  {
-    title: "Dressrosa",
-    banner :Dress 
-  },
-  {
-    title: "Wano",
-    banner :Wano 
-  },
-  {
-    title: "Fishman Island",
-    banner :Fish 
-  }]
+
   const changemode = ()=>{
     // var theme = {mode : props.mode, theme : {map : mockedItems[selected] , rounds : 5 }}
     // props.setmode(theme)

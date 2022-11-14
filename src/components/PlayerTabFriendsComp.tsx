@@ -3,8 +3,7 @@ import CircleLoader from "react-spinners/CircleLoader";
 import styled from "styled-components"
 import EmptyComponent from "./PlayerrEmptyComp"
 import axios from 'axios';
-import { OnlineContextSocket, SocketContext,  SocketValue } from '../context/Socket';
-import { UserContext } from '../context/UserContext';
+import { OnlineContextSocket} from '../context/Socket';
 
 interface UserType {
   socketId : string[],

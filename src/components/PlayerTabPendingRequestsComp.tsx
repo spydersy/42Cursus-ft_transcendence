@@ -1,15 +1,12 @@
 import React, {useState , useEffect , useContext} from 'react'
-// import { UserInvitCard } from "./PlayerProfile";
 import styled from "styled-components"
 import axios from 'axios';
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import {ReactComponent as Accepte} from "../assets/imgs/y-circle.svg";
-
 import EmptyComponent  from "./PlayerrEmptyComp"
-import avataro from "../assets/imgs/avatar/avatar2.png";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { SocketContext,  SocketValue } from '../context/Socket';
+import { SocketContext } from '../context/Socket';
 import { UserContext } from '../context/UserContext';
 
 interface UserProp { defaultAvatar: string, login : string , dmChannel : string,  }
@@ -30,7 +27,7 @@ export default function PendingRequests(props: {player : any})
         setfriends(res.data)
   
      }).catch((err)=>{ })
-
+// eslint-disable-next-line
   }, [])
   
   return (

@@ -1,9 +1,9 @@
-import React , {useState}from 'react'
+import React from 'react'
 import styled from "styled-components"
 import { Chart as ChartJS,  RadialLinearScale,
   PointElement, LineElement, Filler, Tooltip, 
   Legend, ArcElement } from 'chart.js';
-import { Doughnut, Radar } from 'react-chartjs-2';
+import {  Radar } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 

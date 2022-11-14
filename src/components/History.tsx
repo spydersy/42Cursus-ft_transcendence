@@ -1,10 +1,7 @@
 import React , {useState , useEffect , useContext} from 'react'
 import styled , {css} from "styled-components"
 import { AvatarComponent } from './PlayerProfile';
-
 import {ReactComponent as AddIcon} from "../assets/imgs/add-icon.svg";
-
-import Img from "../assets/imgs/avatar/a1.png";
 import { ReactComponent as BattleIcon} from "../assets/imgs/battle-icon.svg"
 import Modal from './Modal';
 import AchievmentModal from './modals/AchievmentModal';
@@ -30,13 +27,6 @@ interface  matchType {
          defaultAvatar :string,
     }
   }
-const match2 = {
-    name: "Alchemist",
-    score1 : 2,
-    score2 : 5,
-  }
-
-
 
 //   var listGame = [match1 , match2 ,  match2]
 
@@ -78,6 +68,7 @@ export  function HistoryComponent() {
         return () => {
           
         }
+  // eslint-disable-next-line
       }, [])
   return (
     <HistoryComponentStyle>

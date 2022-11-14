@@ -1,23 +1,18 @@
 import React, {useState , useEffect} from 'react'
-import avataro from "../assets/imgs/avatar/avatar2.png";
 import {ReactComponent as Deny} from "../assets/imgs/x-circle.svg";
 import axios from 'axios';
 import styled from "styled-components"
 import EmptyComponent from './PlayerrEmptyComp';
 import { ToastContainer, toast } from 'react-toastify';
 
-
 // My Black List
 export default function BlockedUsers()
 {
-
   const [listBlocked, setlistBlocked] = useState([])
-  
     useEffect(() => {
-
       axios.get(process.env.REACT_APP_BACKEND_URL+  "/profile/me?data=blacklist",  {withCredentials: true} 
       ).then((res)=>{
-        console.log("Blockedlist : ", res)
+        // console.log("Blockedlist : ", res)
         setlistBlocked(res.data)
         }).catch((err)=>{
       })
@@ -66,7 +61,6 @@ const TabfourStyle= styled.div`
       background: ${props => props.theme.colors.primarybg};
     }
 `;
-// My Black List
 
 /// Blocked Users ///
 interface BlockProp {

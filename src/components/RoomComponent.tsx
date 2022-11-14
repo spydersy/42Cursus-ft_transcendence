@@ -1,18 +1,12 @@
-import React , {useState, useEffect,useRef} from 'react'
+import React , {useState} from 'react'
 import styled from "styled-components"
-
-import Fadi from "../assets/imgs/avatar/ael-fadi.jpeg";
 import Modal from './Modal';
 import JoinGroupModal from './modals/JoinGroupModal';
 import { ReactComponent as Lock} from "../assets/imgs/lock-01.svg"
-import CreateGroup , {UpdateGroup} from './modals/CreateGroup';
+import  {UpdateGroup} from './modals/CreateGroup';
 import { Button } from '../Pages/SignIn'
 import {ReactComponent as UserAddIcon} from "../assets/imgs/editRoom.svg";
-import {ReactComponent as BlockIcon} from "../assets/imgs/ban.svg";
 import {ReactComponent as Edit} from "../assets/imgs/editRoom.svg";
-import {ReactComponent as Join} from "../assets/join-group.svg";
-import { type } from 'os';
-
 
 interface RoomProps{
     isLocked : boolean,
@@ -27,49 +21,7 @@ interface RoomProps{
 export default function RoomComponent(props : RoomProps) {
   const [hideModel, sethideModel] = useState(false)
   const [hideModel1, sethideModel1] = useState(false)
-  const [valo, setvalo]= useState(true)
-
-  const enable = () => {
-
-    if (!valo && !hideModel1)
-      sethideModel(true)
-    setvalo(!valo)
-  }
-  const disablo = () => {
-      console.log(hideModel)
-      sethideModel(false)
-      console.log(hideModel)
-      setvalo(false)
-  }
-  const UpdateGroupData = ()=>{
-    //check for valid input
-  //   var  bodyFormData = new FormData();
-  //   bodyFormData.append('icone',data.icone);
-  //   bodyFormData.append('name',data.name);
-  //   bodyFormData.append('members', JSON.stringify(members));
-  //   bodyFormData.append('type',check);
-  //   if (passRef.current != null)
-  //   {
-  //       var pass = passRef.current.value;
-  //       bodyFormData.append('password',pass);
-    
-  //   }
-
-
-
-  //   console.log("__MEMBERS__DBG__ : ",bodyFormData.getAll("type"))
-  //   axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/createRoom" , bodyFormData, 
-  //   {withCredentials: true} 
-  // ).then((res)=>{
-  //   console.log(res.data)
-  //   props.closeModal()
-  // }).catch((err)=>{
-  //   // if (data.name === "")
-  //       setalert(true)
-  //   console.log(err)
-  //   })
-    
-  } 
+ 
   const disabloModel = () => {
       console.log(hideModel)
       sethideModel1(false)
@@ -233,22 +185,6 @@ cursor: pointer;
       display: flex;
       justify-content: center;
       background-color: #FFF;
-    }
-`;
-const RoomSstyle = styled.div`
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 10px;
-    >div{
-
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        > button {
-            width: 40%;
-        }
     }
 `;
 const Btpo = styled.div`

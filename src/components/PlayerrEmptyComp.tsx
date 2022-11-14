@@ -1,4 +1,4 @@
-import React , {useContext} from 'react'
+import React  from 'react'
 import styled from "styled-components"
 import {ReactComponent as LuffyAce} from "../assets/imgs/luffyAce.svg";
 
@@ -7,7 +7,6 @@ interface EmptyProps { text: string }
 
 export default function EmptyComponent(props: EmptyProps)
 {
- 
   return (
     <Empty >
       <LuffyAce/>

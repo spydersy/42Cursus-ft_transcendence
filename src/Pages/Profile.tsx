@@ -81,7 +81,7 @@ export default function Profile() {
           }).catch((error)=>{ 
             if (error.response) 
             {
-              if (error.response.data.message == ("Forbidden : User Blocked you"))
+              if (error.response.data.message === ("Forbidden : User Blocked you"))
                 setUser(BlockedUser)
             } 
           })
@@ -92,7 +92,7 @@ export default function Profile() {
  })
 
 
-
+  // eslint-disable-next-line
   }, []);
 
   return (

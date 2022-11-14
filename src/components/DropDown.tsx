@@ -1,9 +1,9 @@
-import React, {useContext} from 'react'
+import React  from 'react'
 import styled  from "styled-components"
 import { useDetectClickOutside } from 'react-detect-click-outside';
-import { FriendRequest } from './Notifications/NotifComponents';
-import Mamali from "../assets/imgs/avatar/mamali.jpeg";
-import { SocketContext } from '../context/Socket';
+// import { FriendRequest } from './Notifications/NotifComponents';
+// import Mamali from "../assets/imgs/avatar/mamali.jpeg";
+// import { SocketContext } from '../context/Socket';
 
 
 interface ListTypes {

@@ -8,7 +8,6 @@ import { SocketGameContext } from '../context/Socket';
 import axios from 'axios'
 
 import { Link } from 'react-router-dom'
-const list  = [0,0 , 1 , 2 , 1 , 0, 0]
 interface LiveGameProps {
     players : string[],
     score : {score1 : number , score2 : number}
@@ -29,8 +28,8 @@ export default function Slider() {
 
 
        var l = list;
-       console.log(list)
-       console.log(l.length)
+    //    console.log(list)
+    //    console.log(l.length)
        if (l.length !== 0)
        {
         if (l[data.index])
@@ -49,7 +48,7 @@ export default function Slider() {
     }
     useEffect(() => {
         socket.emit("getLiveGames")
-     
+     // eslint-disable-next-line
     }, [])
     useEffect(() => {
       console.log("sw")
@@ -147,6 +146,7 @@ export  function UserAvatar(props : {login : string}) {
              
               } 
    )
+   // eslint-disable-next-line
 }, [])
 
 

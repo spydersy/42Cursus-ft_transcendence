@@ -6,7 +6,6 @@ import {ReactComponent as UserAddIcon} from "../assets/imgs/user-plus.svg";
 import {ReactComponent as SendMessage} from "../assets/imgs/sendMessage.svg";
 import {ReactComponent as Hourglass} from "../assets/imgs/hourglass.svg";
 import {ReactComponent as UnfrienIcon} from "../assets/imgs/unfriend.svg";
-import {ReactComponent as InviteToPlayIcon} from "../assets/imgs/rocket.svg";
 import {ReactComponent as UnblockIcon} from "../assets/imgs/unbrella.svg";
 import {ReactComponent as UsersIcon} from "../assets/imgs/users.svg";
 import {ReactComponent as CalendarIcon} from "../assets/imgs/calendar.svg";
@@ -18,7 +17,7 @@ import axios from 'axios';
 import Achivments  from './Achivments';
 import  { RadarChart } from './charts/Charts';
 import CircleLoader from "react-spinners/CircleLoader";
-import { OnlineContextSocket, SocketContext,  SocketValue ,SocketGameContext} from '../context/Socket';
+import { OnlineContextSocket, SocketContext ,SocketGameContext} from '../context/Socket';
 import {Link} from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../context/UserContext';
@@ -76,7 +75,10 @@ export function PlayerCard(props: PlayerCardProps) {
     }
   }
 //
-  useEffect(() => { console.log("mystatue=", state) }, [props.player.login])
+  useEffect(() => { 
+    // console.log("mystatue=", state) 
+  // eslint-disable-next-line
+  },[props.player.login])
   
   if (state === "ONLINE")
   { color = ("#1cb52e"); status = "ONLINE";  }
@@ -214,7 +216,7 @@ background-color: ${props => props.theme.colors.seconderybg};
     const Grades = [ "Unranked", "New-Bie","Shinobi","ShiboKay","Hokage","Yuaiba", "Alchemist", "Spyder" ,"Medara", "ALA-ZWIN","3ANKOUB"]
     const [grade, setgrade] = useState<string | undefined>(Grades[11])
     const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
-    const userData = useContext(UserContext)
+    // const userData = useContext(UserContext)
     const [TotalGames, setTotalGames] = useState<number | undefined>(0)
     const gamesocket = useContext(SocketGameContext)
 
@@ -341,7 +343,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         setgrade(Grades[props / 10])
         // console.log("__MY GRADE ___", grade)
     }
-    const InviteToPlay = ()=>{ } // TO BE IMPLEMENTED
+    // const InviteToPlay = ()=>{ } // TO BE IMPLEMENTED
 
     useEffect(() => {
         setTotalGames( props.player.wins[0] + props.player.wins[1] + props.player.losses[0] + props.player.losses[1])
@@ -354,6 +356,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
           setAChievements(res.data)
         }).catch((err)=>{})
+  // eslint-disable-next-line
     }, [])
     const user = useContext(UserContext)
     const [Owner, setOwner] = useState("")
@@ -784,6 +787,7 @@ export  function AvatarComponent(props: AvatarProps) {
     
 
   console.log("AvatarComponent status = ", state)
+  // eslint-disable-next-line
   }, [props.login])
   
 return (
