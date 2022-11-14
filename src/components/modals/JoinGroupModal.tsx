@@ -7,6 +7,7 @@ import { UserProp } from '../game/types'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import { MutedToast } from '../Toasts/MsgToast';
+import { SocketContext } from '../../context/Socket'
 
 
 interface RoomProps {
@@ -25,10 +26,35 @@ const CustomToastMesg = (msg: string) => (
   </div>
 );
 export default function JoinGroupModal(props: RoomProps) {
+  const socket = useContext(SocketContext)
   const reffo = useRef<HTMLInputElement>(null)
   const user = useContext(UserContext)
   const cancelreq = ()=> {
     props.closeModal()
+  }
+  let joinChannels = async () => {
+
+    let userLogin : string;
+    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
+    {withCredentials: true} 
+    ).then((res)=>{
+      userLogin = res.data.login
+    }).catch((err)=>{
+      console.log(err)
+    })
+    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+    {withCredentials: true} 
+    ).then((res)=>{
+      var myChannels : Array<string> = [];
+      for (let index = 0; index < res.data.length; index++) {
+        myChannels.push(res.data[index].channelId);
+      }
+      myChannels.push(userLogin);
+      // mychannels.pushback(userlogin)
+      socket.emit('joinRoom', myChannels)
+    }).catch((err)=>{
+      console.log(err)
+    })
   }
   const addMember = () => {
     // alert(props.id)
@@ -47,13 +73,14 @@ export default function JoinGroupModal(props: RoomProps) {
             console.log(res.data.message)
             if (res.data.message === "User Added") {
               console.log("joined succesfully!")
-              const toasty = () => toast(CustomToastMesg("Ooopaa, Channel joined succefully"), {
+              const toasty = () => toast(CustomToastMesg("Group joined succefully"), {
                 className: "toast",
                 progressClassName: "toastProgress",
                 autoClose: 2000,
                 hideProgressBar: true,
               })
               toasty()
+
             }
             // if joined 
           }).catch((err) => {
@@ -81,7 +108,7 @@ export default function JoinGroupModal(props: RoomProps) {
             password: "whatever",
           }
           // console.log(obj)
-          await axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/joinChannel/", obj, { withCredentials: true }).then((res) => {
+          await axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/joinChannel/", obj, { withCredentials: true }).then(async (res) => {
             // console.log(res.data.message)
             if (res.data.message === "User Added") {
               // console.log("joined succesfully!")
@@ -92,6 +119,8 @@ export default function JoinGroupModal(props: RoomProps) {
                 hideProgressBar: true,
               })
               toasty()
+              await joinChannels()
+
             }
             // if joined 
             props.closeModal()
