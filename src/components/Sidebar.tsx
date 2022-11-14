@@ -129,7 +129,6 @@ export default function Sidebar() {
                 ).then((res)=>{
                 navigate('/signin')
                 }).catch((err)=>{
-                    console.log(err)
                     // history.pushState("/signin");
                 })
 

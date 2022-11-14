@@ -24,7 +24,6 @@ export default function AddFriendsModal(props : {members : idsType[] , setmember
     const [friends, setfriends] = useState([])
     const handleFriend= (e : any)=>{ e.stopPropagation();  }
     const done = ()=>{
-      console.log(props.members)
       props.closeModal()
     }
     const user = useContext(UserContext)
@@ -36,9 +35,7 @@ export default function AddFriendsModal(props : {members : idsType[] , setmember
             axios.get(process.env.REACT_APP_BACKEND_URL + "/users/friends/" + data.login, 
             {withCredentials: true} 
           ).then((res)=>{
-            console.log(res.data)
             setfriends(res.data)
-            console.log(res.data[0])
           }).catch((err)=>{
             })
           }
@@ -48,7 +45,6 @@ export default function AddFriendsModal(props : {members : idsType[] , setmember
     
     const exist = (e : any)=>
     {
-      console.log(props.members)
       for (let i = 0; i < props.members.length; i++) {
           const element = props.members[i];
           if (element.id === e.id)
@@ -66,7 +62,6 @@ export default function AddFriendsModal(props : {members : idsType[] , setmember
 
     { 
         friends.map((data : any , id :number)=>{
-          console.log(data);
             return <Friend key={id}>
                     <div>
                         <div style={{width : '35px' , height :'35px'}}>

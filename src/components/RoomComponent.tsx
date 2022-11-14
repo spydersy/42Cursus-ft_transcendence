@@ -23,10 +23,8 @@ export default function RoomComponent(props : RoomProps) {
   const [hideModel1, sethideModel1] = useState(false)
  
   const disabloModel = () => {
-      console.log(hideModel)
       sethideModel1(false)
       sethideModel(false)
-      console.log(hideModel1)
     }
 
   // check ownership to display hideModel1

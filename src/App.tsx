@@ -230,7 +230,6 @@ function App() {
     ).then((res)=>{
       userLogin = res.data.login
     }).catch((err)=>{
-      console.log(err)
     })
     await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
     {withCredentials: true} 
@@ -243,7 +242,6 @@ function App() {
       // mychannels.pushback(userlogin)
       socket.emit('joinRoom', myChannels)
     }).catch((err)=>{
-      console.log(err)
     })
     }
     interface UserProp {
@@ -287,11 +285,8 @@ function App() {
         socket.emit("AddOnlineUser")
         
     }).catch((err)=>{
-          // console.log(err.message)
-          // const pageName = window.location.pathname.split("/")[1];
 
       })
-  // eslint-disable-next-line
   }, [])
   
   return (
@@ -308,7 +303,7 @@ function App() {
             <Routes>
               <Route path="/signin" element={<SignIn />} />
               <Route path="/game" element={<Game theme={gametheme}  />} />
-              <Route path="/game/watch/:id" element={<Game theme={gametheme}  />} />
+              <Route path="/watch/:id" element={<Game theme={gametheme}  />} />
               <Route path="/game/:id" element={<Game theme={gametheme}  />} />
               <Route path="/chat/:id" element={<Chat />} />
               <Route path="/setting" element={<Setting />} />

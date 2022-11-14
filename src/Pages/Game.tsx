@@ -115,15 +115,14 @@ export default function Game(props : GameProps) {
 
 var dat : UserProp;
     UserData.then((data : UserProp | "{}")=>{
-    const pageName = window.location.pathname.split("/")[2];
-    const room = window.location.pathname.split("/")[3];
+    const pageName = window.location.pathname.split("/")[1];
+    const room = window.location.pathname.split("/")[2];
     var mode = localStorage.getItem('mode') ;
     if (data !== "{}")
     {
       dat = data
       setloged(data)
-      
-        if (pageName === "watch" || pageName === "game")
+        if (pageName === "watch")
         {
             if (room)
               gamesocket.emit("watchGame" ,room )       

@@ -49,10 +49,8 @@ export default function Upperbar() {
   const User = useContext(UserContext)
 
   useEffect(() => {
-    console.log(User)
     // setcurrentUser(localStorage.getItem("user"))
     User.then((user : UserProp | "{}" )=>{
-    //   console.log(user.defaultAvatar)
     if (user !== "{}"){
 
       setcurrentUser(user)
@@ -60,10 +58,6 @@ export default function Upperbar() {
     }
 
     })
-
-      // console.log(data)
-
-      // eslint-disable-next-line
   }, [])
   useEffect(() => {
 
@@ -84,7 +78,6 @@ export default function Upperbar() {
               {
                 open && <DropDown closeDropdown={ ()=>{
         
-                  // console.log(open)
                   // setopen(false)
                 }} open={open} 
                 style={{bottom: "-25px" , right: '0'}}
@@ -149,7 +142,6 @@ export  function SearchBarComponent() {
 
       axios.get( process.env.REACT_APP_BACKEND_URL+  "/search/allUsers?input=" + event.target.value,  {withCredentials: true}  ).then((res)=>{
 
-      // console.log(res.data)
       setUsers(res.data)
       res.data.length > 0 ? setColor("#0eac1b") : setColor("#ac0e0e");
   
@@ -160,7 +152,6 @@ export  function SearchBarComponent() {
       if (event.target.value.length > 0) {  setopen(true)   }
       else { setopen(false)  }
       
-      // console.log("Value = ", event.target.value)
     };
 
     const handleClickOutside = () => {
@@ -343,13 +334,11 @@ export  function NotificationComponent(props: NotifProps) {
       }
     }
     function handleRequest (payload : any) {
-      console.log('__sahbiiiiii____:'+  payload)
       setisNotif(true)
       var type =  "friendReq" 
       list.push({sender:payload.sender, img:payload.img, msg:payload.msg,type:type})
     }
     function acceptRequest (payload : any) {
-      console.log('acceptii a sahbi:',payload)
       
       setisNotif(true)
       var type =  "acceptReq"
@@ -375,7 +364,7 @@ export  function NotificationComponent(props: NotifProps) {
 
   return (
 
-    <Notification ref={refo} onClick={(e)=>{ console.log(openNotif)
+    <Notification ref={refo} onClick={(e)=>{
       setopenNotif(true) 
       e.stopPropagation()
       props.setopen(false)
@@ -383,7 +372,7 @@ export  function NotificationComponent(props: NotifProps) {
       
       <BellIcon />
       {
-        openNotif &&   <NotifDropDown closeDropdown={ ()=>{ console.log(openNotif)
+        openNotif &&   <NotifDropDown closeDropdown={ ()=>{
           setopenNotif(false)
         }} open={openNotif} 
         style={{bottom: "-25px" , right: '0'}}
@@ -457,15 +446,12 @@ export  function NotifDropDown(props : NotifDropDownProps) {
 
 
   const ClearNotif = () => {
-    console.log("______clearALLNotifList_____")
     list.splice(0, list.length)
     setlist([])
     props.list = []
   }
 
   const removeNotif = (index : number) => {
-    console.log("______removeNotif_____", index)
-    console.log("______removeNotif__list___", list)
     list.splice(index, 1)
     setlist([...list])
     props.list = list

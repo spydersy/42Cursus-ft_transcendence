@@ -50,13 +50,9 @@ export  function HistoryComponent() {
             axios.get(process.env.REACT_APP_BACKEND_URL+ "/game/MatchHistory/all" , 
             {withCredentials: true} 
             ).then((res)=>{
-                console.log(res.data)
                 setlist(res.data)
             
               }).catch((err)=>{
-            
-            
-                    console.log(err)
                 })
 
         }

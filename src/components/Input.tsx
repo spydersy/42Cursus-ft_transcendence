@@ -41,7 +41,6 @@ const ToggleSwitchStyle = styled.div`
 
 export default function InputComponent(props: InputProps) {
   useEffect(() => {
-console.log(props.alert)
   }, [props.alert])
   
   return (

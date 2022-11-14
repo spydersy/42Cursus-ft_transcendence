@@ -66,13 +66,10 @@ export function PlayerCard(props: PlayerCardProps) {
   }
 
   socket.on("ConnectedUser" , (pyload)=>{
-   console.log("PAYLOAD___" , pyload)
    setUserStatu(pyload)
   })
 
   useEffect(() => { 
-    // console.log("mystatue=", state) 
-  // eslint-disable-next-line
   },[props.player.login])
   
   if (state === "ONLINE")
@@ -268,7 +265,6 @@ background-color: ${props => props.theme.colors.seconderybg};
     const addFriend = ()=>{
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{
-        console.log(res.data)
           setrelationStatus("PENDING")
           AddUsernotify();
         user.then((user : UserProp | "{}")=>{
@@ -278,7 +274,6 @@ background-color: ${props => props.theme.colors.seconderybg};
         }
        })
       }).catch((err)=>{ 
-        console.log(err)
         alert("USER ALREADY BLOCKED")
         setrelationStatus("BLOCKER")
       })
@@ -324,14 +319,12 @@ background-color: ${props => props.theme.colors.seconderybg};
     const UnBlockUser = ()=>{
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=unblock",   {withCredentials: true}
       ).then((res)=>{
-      // console.log(res.data)
       setrelationStatus("NOTHING")
       UnBlockUserNotify()
       }).catch((err)=>{  })
     }
     const setUserGrade = (props : any)=>{
       props = ( props > 100 ) ? 100 : (props < 0 ) ? 0 : props
-      // console.log("__MY GRADE ___", props, "___", (props / 10).toFixed(0))
       if (props <= 0)
         setgrade(Grades[0])
       else
@@ -339,7 +332,6 @@ background-color: ${props => props.theme.colors.seconderybg};
         let index : unknown = (props / 10).toFixed(0)
         setgrade(Grades[index as number])
       }
-        console.log("__MY GRADE ___", grade)
     }
     // const InviteToPlay = ()=>{ } // TO BE IMPLEMENTED
 
@@ -779,7 +771,6 @@ export  function AvatarComponent(props: AvatarProps) {
     setstate("offline")
   }
   socket.on("ConnectedUser" , (pyload)=>{
-  //  console.log(pyload)
    setUserStatu(pyload)
   
   })
@@ -790,7 +781,6 @@ export  function AvatarComponent(props: AvatarProps) {
  })
     
 
-  console.log("AvatarComponent status = ", state)
   // eslint-disable-next-line
   }, [props.login])
   

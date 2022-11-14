@@ -34,7 +34,6 @@ export default function GameModal(props: GmaemodelProps) {
   const changemode = ()=>{
     // var theme = {mode : props.mode, theme : {map : mockedItems[selected] , rounds : 5 }}
     // props.setmode(theme)
-    // console.log(theme)
     setgameData({...gameData, mode : props.mode })
     localStorage.setItem("gameData", JSON.stringify(gameData))
     // localStorage.setItem("mode", props.mode)

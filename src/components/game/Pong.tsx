@@ -179,7 +179,6 @@ export default function Pong(props: gameProps) {
         paddel2.y = y.y ;
     })
     gamesocket.on("moveBallClient", (pyload) => {
-        // console.log(pyload.x)
         ballCord.x = pyload.x * width;
         ballCord.y = pyload.y * height;
         pre.x =  pyload.px
@@ -188,7 +187,6 @@ export default function Pong(props: gameProps) {
 
     useEffect(() => {
 
-        console.log("init")
         var games: string | null = localStorage.getItem('gameData');
         if (games) {
             const gameData: GameProps = JSON.parse(games || '{}');

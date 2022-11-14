@@ -293,7 +293,6 @@ export  function FriendRequestToast(props: {data : any}) {
     ).then((res)=>{
       userLogin = res.data.login
     }).catch((err)=>{
-      console.log(err)
     })
     await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
     {withCredentials: true} 
@@ -306,7 +305,6 @@ export  function FriendRequestToast(props: {data : any}) {
       // mychannels.pushback(userlogin)
       socket.emit('joinRoom', myChannels)
     }).catch((err)=>{
-      console.log(err)
     })
     }
   const acceptFriendReq = async(k: boolean)=> {
@@ -331,7 +329,6 @@ export  function FriendRequestToast(props: {data : any}) {
     axios.get( process.env.REACT_APP_BACKEND_URL + "/users/" + props.data.sender  ,  {withCredentials: true}
         ).then((res)=>{
               // check for the user is bloked 
-              console.log("> status = " , res.data)
               setUser(res.data)
 
             }).catch((error)=>{ 

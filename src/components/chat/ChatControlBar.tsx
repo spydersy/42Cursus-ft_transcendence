@@ -45,10 +45,8 @@ import axios from 'axios';
   const gamesocket = useContext(SocketGameContext)
 
   const leaveChannel = async() => {
-    console.log("leave room {" , props.data)
     await axios.delete(process.env.REACT_APP_BACKEND_URL+"/chat/leaveChannel?channel=" + props.data.channelId , {withCredentials: true} )
     .then((res)=>{
-      console.log(res)
       var s = props.list
       for (let i = 0; i < s.length; i++) {
         const element = s[i];
@@ -61,7 +59,6 @@ import axios from 'axios';
         }
       }
     }).catch((err)=>{
-      console.log(err)
     })
   }
 
@@ -100,7 +97,6 @@ import axios from 'axios';
           <div className='buttons'>
                 
             <Button  isIcon={true} onClick={()=>{ 
-              console.log(">> invite game " , props.data)
 
               socket.emit("gameChallenge", props.data.users[1].login , props.data.users[0].login) ; 
                 gamesocket.emit("gameChallenge" , {player1 :props.data.users[1].login  , player2 :   props.data.users[0].login})}} icon={<GameIcon/>}/>
