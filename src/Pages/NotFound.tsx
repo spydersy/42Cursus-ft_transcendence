@@ -69,7 +69,8 @@ export  function TwoFa() {
             if (res.data.Authentication === "SUCCESS")
             {
                 succes("Signed in successfully\nWelcome back!");
-                navigate("/");
+                // navigate("/");
+                window.location.href = ('/')
             }
             else
             {

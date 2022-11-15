@@ -122,15 +122,16 @@ export default function Sidebar() {
                 //    : <ToolTip>Setting</ToolTip>  
                 }
                 </Item>
-            <Item open={open} onClick={()=>{
+            <Item open={open} to={"/signin"}  onClick={()=>{
                 axios.post(process.env.REACT_APP_BACKEND_URL + "/profile/logout", {}, 
                 {withCredentials: true} 
                 ).then((res)=>{
+                    
                 window.location.href = ('/signin')
                 }).catch((err)=>{
                 })
 
-            }} className='item'   activel={"false"} to={""}>
+            }} className='item'   activel={"false"} >
                 <LogoutIcon/>
                 {
                     <div>LogOut</div> 
