@@ -336,7 +336,8 @@ background-color: ${props => props.theme.colors.seconderybg};
     // const InviteToPlay = ()=>{ } // TO BE IMPLEMENTED
 
     useEffect(() => {
-        setTotalGames( props.player.wins[0] + props.player.wins[1] + props.player.losses[0] + props.player.losses[1])
+      console.log("____DBGGGG ::" , props.player.wins )
+        // setTotalGames( props.player.wins[0] + props.player.wins[1] + props.player.losses[0] + props.player.losses[1])
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/" + id,  {withCredentials: true}).then((res)=>{
           setrelationStatus(res.data.relation)
           setUserGrade(res.data.rank)
@@ -368,7 +369,7 @@ background-color: ${props => props.theme.colors.seconderybg};
                 </DataTag>
 
                 <DataTag>
-                  <DataTag>     <GameIcon/> {TotalGames} {"  Game"} </DataTag>
+                  <DataTag>     <GameIcon/> {props.player.wins[0] + props.player.wins[1] + props.player.losses[0] + props.player.losses[1]} {"  Game"} </DataTag>
                   <DataTag>     <CalendarIcon/> {createdTime}  </DataTag>
                 </DataTag>
                 {

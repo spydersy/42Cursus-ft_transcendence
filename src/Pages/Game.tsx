@@ -186,7 +186,7 @@ var dat : UserProp;
             }} />
         }
        
-          <Pong player={player} start={start}  setstart={(e)=>{
+          <Pong login={loged?.login} player={player} start={start}  setstart={(e)=>{
             setstart(e)
           }} />
       </GameStyle>

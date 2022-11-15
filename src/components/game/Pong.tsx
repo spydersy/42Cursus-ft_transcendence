@@ -10,7 +10,7 @@ var defaultProp = {
     paddlecolor: "#000",
     mode: "string"
 }
-interface gameProps {start: boolean, setstart: (e: boolean) => void, player: boolean }
+interface gameProps {login : string ,  start: boolean, setstart: (e: boolean) => void, player: boolean }
 export default function Pong(props: gameProps) {
     const [gameData, setgameData] = useState<GameProps>(defaultProp)
     // var mode = localStorage.getItem('mode') ;
@@ -148,7 +148,7 @@ export default function Pong(props: gameProps) {
         p5.line(width /2, 0 , width /2, height);
     }
     const draw = (p5: p5Types) => {
-        p5.resizeCanvas(width , height)
+        // p5.resizeCanvas(width , height)
 
         //create ball
         p5.background(0);
@@ -161,7 +161,7 @@ export default function Pong(props: gameProps) {
         drowPaddels(p5)
         drowBall(p5)
         if (props.start) {
-            gamesocket.emit("moveBall", { w: width, h: height, p1: {w : 20 , h : 100 , x : paddel1.x  , y : paddel1.y  },p2: {w : 20 , h : 100 , x : paddel2.x  , y : paddel2.y } })
+            gamesocket.emit("moveBall", {login : props.login,  w: width, h: height, p1: {w : 20 , h : 100 , x : paddel1.x  , y : paddel1.y  },p2: {w : 20 , h : 100 , x : paddel2.x  , y : paddel2.y } })
         }
      
     };

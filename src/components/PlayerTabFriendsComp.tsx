@@ -4,6 +4,7 @@ import styled from "styled-components"
 import EmptyComponent from "./PlayerrEmptyComp"
 import axios from 'axios';
 import { OnlineContextSocket} from '../context/Socket';
+import { AvatarComponent } from './PlayerProfile';
 
 interface UserType {
   socketId : string[],
@@ -106,7 +107,10 @@ export  function UserCard(props : UserCardProps) {
             <div className="status" >       
                 <CircleLoader   color={color} loading={loading} cssOverride={override} size={20} />
             </div>
-            <img alt="avatar" src={props.data.defaultAvatar} className="avatar" />
+            <div style={{width : "50px" , height : "50px" , margin : "0 auto"}}>
+            <AvatarComponent login={props.data.login} img={props.data.defaultAvatar} />
+            </div>
+            
             <div className="Uname"> @{props.data.login} </div>
         </a>  
     </UserCardStyle>

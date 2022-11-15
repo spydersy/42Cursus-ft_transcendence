@@ -1,4 +1,4 @@
-import React , {useState , useRef, useEffect} from 'react'
+import React , {useState , useRef, useEffect ,useContext} from 'react'
 import styled , {css} from "styled-components"
 import {ReactComponent as DashIcon} from "../assets/imgs/home.svg";
 import {ReactComponent as DMIcon} from "../assets/imgs/dm.svg";
@@ -10,6 +10,9 @@ import {ReactComponent as SettingIcon} from "../assets/imgs/settings.svg";
 import { Button } from '../Pages/SignIn';
 import { Link} from 'react-router-dom';
 import axios from 'axios';
+import { UserContext } from '../context/UserContext';
+import { OnlineContextSocket, SocketContext } from '../context/Socket';
+import { UserProp } from './game/types';
 
 
 export interface barProps { open: boolean   }
@@ -42,7 +45,9 @@ export default function Sidebar() {
     const sideBaRed : any= useRef<HTMLElement>(null);
     const sideBaref : any= useRef<HTMLElement>(null);
     const [open, setopen] = useState(false)
-
+    const onlineSocket = useContext(OnlineContextSocket)
+    const socket = useContext(SocketContext)
+    const User = useContext(UserContext)
 
     const [focused, setfocused] = useState(0)
     const openClose=  ()=>
@@ -69,6 +74,28 @@ export default function Sidebar() {
             }
             setopen(!open)
         }
+    }
+    let leaveChunnels = async () => {
+
+    let userLogin : string;
+    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
+    {withCredentials: true} 
+    ).then((res)=>{
+      userLogin = res.data.login
+    }).catch((err)=>{
+    })
+    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+    {withCredentials: true} 
+    ).then((res)=>{
+      var myChannels : Array<string> = [];
+      for (let index = 0; index < res.data.length; index++) {
+        myChannels.push(res.data[index].channelId);
+      }
+      myChannels.push(userLogin);
+      // mychannels.pushback(userlogin)
+      socket.emit('leaveRoom', myChannels)
+    }).catch((err)=>{
+    })
     }
     const changeFocus=  (page : number)=>
     {   
@@ -122,15 +149,25 @@ export default function Sidebar() {
                 //    : <ToolTip>Setting</ToolTip>  
                 }
                 </Item>
-            <Item open={open} onClick={()=>{
-                axios.post(process.env.REACT_APP_BACKEND_URL + "/profile/logout", {}, 
-                {withCredentials: true} 
-                ).then((res)=>{
-                window.location.href = ('/signin')
-                }).catch((err)=>{
-                })
+            <Item open={open} to={"/signin"}  onClick={()=>{
 
-            }} className='item'   activel={"false"} to={""}>
+
+User.then(async(user : UserProp | "{}")=>{
+    if (user !== "{}")
+    {
+        axios.post(process.env.REACT_APP_BACKEND_URL + "/profile/logout", {}, 
+        {withCredentials: true} 
+        ).then(async(res)=>{
+                      await leaveChunnels()
+  onlineSocket.emit("logout" ,  user.login)
+        window.location.href = ('/signin')
+        }).catch((err)=>{
+        })
+        
+    }
+    
+
+            })} }className='item'   activel={"false"} >
                 <LogoutIcon/>
                 {
                     <div>LogOut</div> 

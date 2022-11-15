@@ -122,17 +122,21 @@ function App() {
     }
   }
   function handleChallenge (payload) {
-   
-     const    toasty = () =>  toast(CustomToastWithLinkGame(payload) , {
-      // position : toast.POSITION.TOP_RIGHT,
-      className: "toast",
-      progressClassName: "toastProgress",
-      autoClose: 3000,
-      hideProgressBar: true,
-      // closeOnClick: false
-    })
-    toasty()
-
+    if (pageName !== "game")
+    {
+      
+      const    toasty = () =>  toast(CustomToastWithLinkGame(payload) , {
+        // position : toast.POSITION.TOP_RIGHT,
+        className: "toast",
+        progressClassName: "toastProgress",
+        autoClose: 3000,
+        hideProgressBar: true,
+        // closeOnClick: false
+      })
+      toasty()
+  
+    }
+    
     // CHallengeNotify()
   }
   function handleRequest (payload) {
@@ -283,39 +287,38 @@ function App() {
     }
   useEffect(() => {
       User.then(async(user : UserProp | string)=>{
-        if (user === "{}" && pageName !== "2fa")
+        if (user === "{}")
         {
-          onlinesSocket.close()
-          await leaveChunnels()
-          onlineSocket.emit("logout" ,  user.login)
-          console.log("user is not logged in")
-            // navigate("/signin")
+    
+          
+
+          // console.log("user is not logged in")
+          if (pageName !== "2fa")
+            navigate("/signin")
         } 
         else{
-            console.log("user is logged in")
+            await joinChannels()
+            socket.emit("AddOnlineUser")
             gameSocket.emit('gameConnected', {login : user.login});
-            // navigate("/")
-        }
+            }
       })
       
-      axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me",  {withCredentials: true} 
-      ).then(async(res)=>{
+    //   axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me",  {withCredentials: true} 
+    //   ).then(async(res)=>{
         
-        localStorage.setItem("mode","classic")
-        joinChannels()
-        socket.emit("AddOnlineUser")
-        console.log("user is logged in1")
+    //     localStorage.setItem("mode","classic")
 
-       if (pageName === "2fa")
-          navigate("/")
+    //     console.log("user is logged in1")
 
-        console.log("user is logged in Req ")
+    //   //   }
 
-    }).catch((err)=>{
-      console.log("user is  not logged in1")
-      // navigate("/")
+    //     console.log("user is logged in Req ")
 
-      })
+    // }).catch((err)=>{
+    //   console.log("user is  not logged in1")
+    //   // navigate("/")
+
+    //   })  
   }, [])
   
   return (
