@@ -30,6 +30,7 @@ export class ChannelData {
     members: string;
 
     @IsString()
+    @IsNotEmpty()
     password: string;
 }
 export class MessageDataDto {

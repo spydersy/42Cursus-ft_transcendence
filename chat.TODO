@@ -10,7 +10,7 @@ INPUT/OUTPUT VALIDATION:
 - [X] POST /profile/logout
 - [X] GET /profile/update2FA
 - [X] POST /profile/update2FA
-- [F] PUT /profile/updateUsername/{newname}
+- [X] PUT /profile/updateUsername/{newname}
 - [X] POST /chat/joinChannel
 - [X] POST /chat/UpdateUserPermission
 - [X] POST /chat/UpdateUserRestriction
@@ -20,22 +20,22 @@ INPUT/OUTPUT VALIDATION:
 - [X] GET /chat/allChannels
 - [X] GET /chat/messages/{channelId}
 - [X] GET /chat/managedChannels
-- [ ] POST /chat/UdpatedChannelAccess
-- [ ] POST /chat/createRoom
-- [ ] GET /2fa/generate
-- [ ] GET /game/MatchHistory/{user}
-- [ ] GET /auth
-- [ ] POST /auth/validate2FA
-- [ ] GET /search/{dest}
+- [X] POST /chat/UdpatedChannelAccess
+- [X] POST /chat/createRoom
+- [X] GET /2fa/generate
+- [X] GET /game/MatchHistory/{user}
+- [X] GET /auth
+- [X] POST /auth/validate2FA
+- [X] GET /search/{dest}
 
 TODO : 
-- [ ] Hidden content in channel (FROM FRONT-END)
+- [X] Hidden content in channel (FROM FRONT-END)
 - [X] Achievements
-- [ ] Input Validation
+- [X] Input Validation
 
-- [D]  achievement[0]  ===> Create Channel
-- [D]  achievement[1]  ===> Change Avatar
-- [D]  achievement[2]  ===> Block User
+- [X]  achievement[0]  ===> Create Channel
+- [X]  achievement[1]  ===> Change Avatar
+- [X]  achievement[2]  ===> Block User
 - [X]  achievement[3]  ===> Win vs AI
 - [X]  achievement[4]  ===> Play 3 Games
 - [X]  achievement[5]  ===> Enable 2FA

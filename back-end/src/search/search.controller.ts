@@ -17,9 +17,6 @@ export class SearchController {
                     return this.searchService.FriendsSearch(req.user.userId, query['input'], res);
                 case 'allUsers':
                     return this.searchService.AllUsersSearch(query['input'], res);
-                case 'channels':
-                    return res.send({'message': "Not Implemented Yet",
-                                     'Channels': []});
                 default:
                     return res.status(HttpStatus.BAD_REQUEST).send({"message": "Bad Request00"});
             }

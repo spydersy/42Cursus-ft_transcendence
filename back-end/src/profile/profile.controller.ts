@@ -6,6 +6,7 @@ import { ProfileService } from './profile.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
+import { UserNameDto } from '../dtos/Inputs.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('profile')
@@ -68,8 +69,8 @@ export class ProfileController {
     return this.profileService.Update2FA(req.user.userId, status, code, res);
   }
 
-  @Put("updateUsername/:newname")
-  async UpdateUserName(@Req() req, @Param('newname') newname: string, @Res() res) {
-    return this.profileService.UpdateUserName(newname, req.user.userId, res);
+  @Post("updateUsername")
+  async UpdateUserName(@Req() req, @Body() newname: UserNameDto, @Res() res) {
+    return this.profileService.UpdateUserName(newname.newname, req.user.userId, res);
   }
 }
