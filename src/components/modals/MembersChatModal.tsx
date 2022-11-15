@@ -268,9 +268,7 @@ interface MemberProps{
         restriction: "MUTE",
         duration: muteTime
       }
-      await axios.post( process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData,
-      {withCredentials: true} 
-      ).then((res)=>{
+      await axios.post(process.env.REACT_APP_BACKEND_URL+ "/chat/UpdateUserRestriction", bodyFormData,{withCredentials: true} ).then((res)=>{
         props.setPermission("MUTED")
         props.closeModal()
       }).catch((err)=>{

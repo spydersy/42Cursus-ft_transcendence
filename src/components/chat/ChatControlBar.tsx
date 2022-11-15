@@ -97,12 +97,8 @@ import axios from 'axios';
           <div className='buttons'>
                 
             <Button  isIcon={true} onClick={()=>{ 
-
               socket.emit("gameChallenge", props.data.users[1].login , props.data.users[0].login) ; 
-                gamesocket.emit("gameChallenge" , {player1 :props.data.users[1].login  , player2 :   props.data.users[0].login})}} icon={<GameIcon/>}/>
-            
-            <Button  isIcon={true} onClick={()=>{}} icon={<Ban/>}/>
-          {/* <Button   isIcon={true} onClick={()=>{}} icon={<Mute/>}/> */}
+              gamesocket.emit("gameChallenge" , {player1 :props.data.users[1].login  , player2 :   props.data.users[0].login})}} icon={<GameIcon/>}/>
           </div>
             :
           <div className='buttons'>

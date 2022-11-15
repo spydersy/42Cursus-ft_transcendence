@@ -132,7 +132,6 @@ function App() {
       // closeOnClick: false
     })
     toasty()
-
     // CHallengeNotify()
   }
   function handleRequest (payload) {

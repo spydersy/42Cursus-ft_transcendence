@@ -96,7 +96,10 @@ export default function Leader() {
                 <AvatarComponent img={list[1].img}/>
             </div> */}
             <div style={{width: "200px" , height: "200px"}}>
-                <AvatarComponent   img={list[0].img}/>
+                {
+                    users.length === 0 ? <></>:  <AvatarComponent   img={users[0].defaultAvatar}/>
+                }
+               
             <Hat/>
 
             </div>
