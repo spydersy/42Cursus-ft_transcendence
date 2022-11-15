@@ -134,15 +134,20 @@ export default function CreateGroup(props :CloseProps) {
         bodyFormData.append('name',data.name);
         
         bodyFormData.append('type',check);
-       
-        if (passRef.current != null)
-            var pass = passRef.current.value;
-        else
-            var pass = "passwordempty"
-            
+        
+        var pass = "passwordempty"
+        if (check === "protected")
+        {
+            var passv = passRef.current.value
+            if (passv != null)
+            {
+                pass = passRef.current.value;
+            }
+        }
         bodyFormData.append('password',pass);
         
-        axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/createRoom" , bodyFormData, 
+        axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/createRoom" , bodyFormData,
+
         {withCredentials: true} 
       ).then(async(res)=>{
 
