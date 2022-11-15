@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Response as Res } from 'express';
 import { Request } from 'express';
+import useCookies from '../utils/useCookies';
 
 @Controller('auth')
 export class AuthController {
