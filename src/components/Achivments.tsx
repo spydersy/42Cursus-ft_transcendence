@@ -1,4 +1,4 @@
-import React from 'react'
+import React , {useEffect} from 'react'
 import styled , {css} from "styled-components";
 import Badge1 from "../assets/imgs/Archive/badge1.svg";
 import Badge2 from "../assets/imgs/Archive/badge2.svg";
@@ -6,49 +6,49 @@ import Badge3 from "../assets/imgs/Archive/badge3.svg";
 import Badge4 from "../assets/imgs/Archive/badge4.svg";
 import Badge5 from "../assets/imgs/Archive/badge5.svg";
 import Badge7 from "../assets/imgs/Archive/badge7.svg";
+import Modal from './Modal';
 
-const achievment1 = {
-    name: "NEW-3ANKOUB",
-    desc : "you played 20 game without any loss",
+const achievment5 = {
+    name: "Walo",
+    desc : "play 3 batteles in the grand Line",
     badge : Badge1,
   }
 const achievment2 = {
-    name: "ONLY-ALCHEMIST",
-    desc : "You are a M9WED player by nature",
+    name: "Camillion",
+    desc : "Change Avatar.",
     badge : Badge2,
   }
+
 const achievment3 = {
-    name: "3ANKOUB-MASTER",
-    desc : "you win 5 game.",
-    badge : Badge3 ,
-  }
-const achievment4 = {
-    name: "MOGIWARA",
-    desc : " (9owat Sada9a).",
+    name: "Blockuu",
+    desc : "Block a user fih sda3.",
     badge : Badge4 ,
   }
-const achievment5 = {
-    name: "ROOOOM",
-    desc : "(MODMIR aka Yaiba)",
+const achievment4 = {
+    name: "Win vs AI",
+    desc : "Defeate the powerful Legend  Dr VegaPunk.",
+    badge : Badge3 ,
+  }
+const achievment1 = {
+    name: "ROOOM",
+    desc : "Create Your first Channel",
     badge : Badge5 ,
   }
   const achievment7 = {
     name: "OYAJI",
-    desc : "(Only Golden Promo)",
+    desc : " Enable the F 2FA",
     badge : Badge7 ,
   }
 
 export interface StyleProps { status: boolean; }
 
-const achiv = [achievment1 , achievment7 , achievment3 , achievment4, achievment5, achievment2]
+const achiv = [achievment1 , achievment2 , achievment3 , achievment4, achievment5, achievment7]
 
 export interface AchivementsProps { data: [] }
 
 export interface AchiveStyleProps { status: boolean; }
 
 export default function Achivments(props: AchivementsProps) {
-
-
   return (
     <AchiStyle>
       
@@ -56,16 +56,36 @@ export default function Achivments(props: AchivementsProps) {
         {
             achiv.map((data : any, id : number)=>{
                return (
-                 <ContyStyle key={id} status={props.data[id]} >
-                    <ToolTip>{data.name} </ToolTip>
-                      <img key={id} src={data.badge} alt={data.name} />
-                  </ContyStyle>
+                <Conty key={id} name={data.name} desc={data.desc} statue={props.data[id]} badge={data.badge} />
               )
             })
         }
         </div>
 
     </AchiStyle>
+  )
+}
+
+export  function Conty(props : {statue : boolean , name : string , desc : string , badge : any}) {
+  const [show, setshow] = React.useState(false)
+  return (
+    <ContyStyle onClick={()=>{setshow(!show)}} status={props.statue} >
+      {show && <Modal isOpen={show}
+                        onRequestClose={() => {setshow(false)}}
+                        hideModal={() => {setshow(false) }}
+                        >
+                            <ModalStyle status={false} className='modal'>
+                              <img  src={props.badge} alt={props.name} />
+
+                              <div className='name'>{props.name}</div>
+                              <div className='desc'>{props.desc}</div>
+                            </ModalStyle>  
+                        </Modal>
+                        
+              }
+    <ToolTip>{props.name} </ToolTip>
+      <img  src={props.badge} alt={props.name} />
+  </ContyStyle>
   )
 }
 
@@ -98,6 +118,23 @@ margin: 35px 0px;
 
 }
 `
+const ModalStyle = styled.div<AchiveStyleProps>`
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    width: 100%;
+
+    >img{
+      width: 200px;
+      height: auto;
+      margin: 20px 0px;
+    }
+    font-size: "Poppins" , sans-serif;
+    >.name{
+      font-size: 30px;
+
+    }
+`;
 const ContyStyle = styled.div<AchiveStyleProps>`
   display: flex;
   flex-direction: row;

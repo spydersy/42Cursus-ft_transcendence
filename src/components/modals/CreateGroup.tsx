@@ -48,7 +48,7 @@ export default function CreateGroup(props :CloseProps) {
         name : "",
         icone : '',
         type : "",
-        password : "",
+        password : "passwordempty",
         members :[]
     })
     const [check, setcheck] = useState("public")
@@ -136,10 +136,11 @@ export default function CreateGroup(props :CloseProps) {
         bodyFormData.append('type',check);
        
         if (passRef.current != null)
-        {
             var pass = passRef.current.value;
-            bodyFormData.append('password',pass);
-        }
+        else
+            var pass = "passwordempty"
+            
+        bodyFormData.append('password',pass);
         
         axios.post(process.env.REACT_APP_BACKEND_URL + "/chat/createRoom" , bodyFormData, 
         {withCredentials: true} 

@@ -71,53 +71,52 @@ export default function Outlet() {
     const navigate = useNavigate();
     const pageName = window.location.pathname.split("/")[1];
     // const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
- 
 
-    let joinChannels = async () => {
+      let joinChannels = async () => {
 
-        let userLogin : string;
-        await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
-        {withCredentials: true} 
-        ).then((res)=>{
-          userLogin = res.data.login
-        }).catch((err)=>{
-        })
-        await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
-        {withCredentials: true} 
-        ).then((res)=>{
-          var myChannels : Array<string> = [];
-          for (let index = 0; index < res.data.length; index++) {
-            myChannels.push(res.data[index].channelId);
-          }
-          myChannels.push(userLogin);
-          // mychannels.pushback(userlogin)
-          socket.emit('joinRoom', myChannels)
-        }).catch((err)=>{
-        })
-        }
-    let leaveChunnels = async () => {
+          let userLogin : string;
+          await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
+          {withCredentials: true} 
+          ).then((res)=>{
+            userLogin = res.data.login
+          }).catch((err)=>{
+          })
+          await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+          {withCredentials: true} 
+          ).then((res)=>{
+            var myChannels : Array<string> = [];
+            for (let index = 0; index < res.data.length; index++) {
+              myChannels.push(res.data[index].channelId);
+            }
+            myChannels.push(userLogin);
+            // mychannels.pushback(userlogin)
+            socket.emit('joinRoom', myChannels)
+          }).catch((err)=>{
+          })
+      }
+      let leaveChunnels = async () => {
 
-        let userLogin : string;
-        await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
-        {withCredentials: true} 
-        ).then((res)=>{
-          userLogin = res.data.login
-        }).catch((err)=>{
-        })
-        await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
-        {withCredentials: true} 
-        ).then((res)=>{
-          var myChannels : Array<string> = [];
-          for (let index = 0; index < res.data.length; index++) {
-            myChannels.push(res.data[index].channelId);
-          }
-          myChannels.push(userLogin);
-          // mychannels.pushback(userlogin)
-          socket.emit('leave', myChannels)
-        }).catch((err)=>{
-        })
-        }
-    function hundleMsg (payload) {
+          let userLogin : string;
+          await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
+          {withCredentials: true} 
+          ).then((res)=>{
+            userLogin = res.data.login
+          }).catch((err)=>{
+          })
+          await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+          {withCredentials: true} 
+          ).then((res)=>{
+            var myChannels : Array<string> = [];
+            for (let index = 0; index < res.data.length; index++) {
+              myChannels.push(res.data[index].channelId);
+            }
+            myChannels.push(userLogin);
+            // mychannels.pushback(userlogin)
+            socket.emit('leave', myChannels)
+          }).catch((err)=>{
+          })
+      }
+      function hundleMsg (payload) {
         console.table(payload)
         if (pageName !== "chat")
         {
@@ -195,7 +194,10 @@ export default function Outlet() {
         // localStorage.setItem("mode","1v1")
         navigate("/game/"+ payload)
       }
+
       useEffect(()=>{
+        
+        if (pageName )
         
         socket.on('msg_event', hundleMsg);
         socket.on('challeneEvent', handleChallenge);
@@ -206,6 +208,9 @@ export default function Outlet() {
         // socket.on('BlockRequest', BlockedUser);
         gameSocket.on('challengeAccepted', handelChallengeAccept)
         gameSocket.on('PlayerInGame', PlayerInGame);
+
+
+
         return () => {
           socket.removeListener('msg_event', hundleMsg);
           socket.removeListener('challeneEvent', handleChallenge);
@@ -223,11 +228,7 @@ export default function Outlet() {
     <Routes>
          
               <Route path="/signin" element={<SignIn />} />
-        
-      
-            
-       
-         <Route path="/game" element={<Game/>} />
+              <Route path="/game" element={<Game/>} />
               <Route path="/watch/:id" element={<Game   />} />
               <Route path="/game/:id" element={<Game   />} />
               <Route path="/chat/:id" element={<Chat />} />

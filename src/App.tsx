@@ -57,6 +57,7 @@ function App() {
   const onlineSocket = useContext(OnlineContextSocket)
   const User = useContext(UserContext)
   const pageName = window.location.pathname.split("/")[1];
+  const [isLogged, setIsLogged] = useState(false);
 
     interface UserProp {
       id: string,
@@ -98,29 +99,38 @@ function App() {
   useEffect(() => {
       // if ()
       User.then(async (user : UserProp | string)=>{
+        console.log("_____USER___SIGN___", user)
 
-        if (user === "{}" && pageName !== "2fa")
+        if (user === "{}" &&  pageName !== "2fa" )
         {
           await leaveChunnels()
           onlineSocket.emit("logout" ,  user.login)
-          navigate("/signin")
-        }
+          console.log("user is not logged in")
+            // navigate("/signin")
+        } 
         else{
-  
+            console.log("user is logged in")
             gameSocket.emit('gameConnected', {login : user.login});
-
+            // navigate("/")
         }
       })
       
-      axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me", 
-      {withCredentials: true} 
+      axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me",  {withCredentials: true} 
       ).then(async(res)=>{
         
         localStorage.setItem("mode","classic")
         await joinChannels()
         socket.emit("AddOnlineUser")
-        
+        console.log("user is logged in1")
+
+       if (pageName === "2fa")
+          navigate("/")
+
+        console.log("user is logged in Req ")
+
     }).catch((err)=>{
+      console.log("user is  not logged in1")
+      // navigate("/")
 
       })
   }, [window.location.pathname])
