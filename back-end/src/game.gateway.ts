@@ -39,9 +39,9 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   {
     this.logger.log("client is disconnected")
     this.RemovePlayer(client , client.id)
-    for (let index = 0; index < this.roomArray.length; index++) {
-      this.roomArray[index].debug();
-   }
+  //   for (let index = 0; index < this.roomArray.length; index++) {
+  //     this.roomArray[index].debug();
+  //  }
   }
 
   async handleConnection(client: any, payload: any) {
@@ -72,11 +72,11 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
     for (let index = 0; index < this.roomArray.length; index++) {
       client.leave(this.roomArray[index].roomName)
-      this.roomArray[index].debug();
+      // this.roomArray[index].debug();
 
   }
 }
-  @UseGuards(WsGuard)
+  // @UseGuards(WsGuard)
   @SubscribeMessage('gameChallenge')
   gameChallenge(client: any, payload: {player1 : string ,player2 : string }): void {
 
@@ -110,7 +110,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 
   }
-  @UseGuards(WsGuard)
+  // @UseGuards(WsGuard)
   @SubscribeMessage('gameAccept')
   gameAccept(client: any, payload: {player1 : string ,player2 : string }): void {
 
@@ -146,7 +146,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   }
 
 
-  @UseGuards(WsGuard)
+  // @UseGuards(WsGuard)
   @SubscribeMessage('getLiveGames')
   getLive(client: any): void {
     client.emit("change" , this.getArrayData() )
@@ -229,27 +229,30 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   @SubscribeMessage('moveBall')
   moveBall(client: any, payload: any): void {
-    var room = this.getRoombyPlayerId(client.id)
+    var room = this.getRoombyLogin(payload.login)
     if (room)
     {
       var i = this.roomArray.indexOf(room)
-      this.roomArray[i].width = payload.w
-      this.roomArray[i].height = payload.h
-      if (!this.hitWalls(i, this.roomArray[i].ball ,this.roomArray[i].direction , payload.w, payload.h ,payload.p1 , payload.p2 ))
-        return ;
-      this.roomArray[i].predict =  (this.roomArray[i].paddel2.x -  this.roomArray[i].ball.x) / this.roomArray[i].direction.x
-      this.roomArray[i].ball.x += this.roomArray[i].direction.x
-      this.roomArray[i].ball.y += this.roomArray[i].direction.y
 
-      if(room.status === "AiGame" && room.direction.x > 0)
-      {
-        this.moveAI( this.roomArray[i])
-      }
-      this.wss.to(room.roomName).emit("moveBallClient" , {x: this.roomArray[i].ball.x , y: this.roomArray[i].ball.y , px : this.roomArray[i].paddel2.x, py :this.roomArray[i].predicty })
+
+        this.roomArray[i].width = payload.w
+        this.roomArray[i].height = payload.h
+        if (!this.hitWalls(i, this.roomArray[i].ball ,this.roomArray[i].direction , payload.w, payload.h ,payload.p1 , payload.p2 ))
+          return ;
+        this.roomArray[i].predict =  (this.roomArray[i].paddel2.x -  this.roomArray[i].ball.x) / this.roomArray[i].direction.x
+        this.roomArray[i].ball.x += this.roomArray[i].direction.x
+        this.roomArray[i].ball.y += this.roomArray[i].direction.y
+  
+        if(room.status === "AiGame" && room.direction.x > 0)
+        {
+          this.moveAI( this.roomArray[i])
+        }
+        this.wss.to(room.roomName).emit("moveBallClient" , {x: this.roomArray[i].ball.x , y: this.roomArray[i].ball.y , px : this.roomArray[i].paddel2.x, py :this.roomArray[i].predicty })
+      
     }
   }
 
-  @UseGuards(WsGuard)
+  // @UseGuards(WsGuard)
   @SubscribeMessage('gameConnected')
   playerConnected(client: any, payload: any): void {
       var i = this.getRoombyLogin(payload.login)
@@ -495,10 +498,7 @@ moveAI(room : any )
  client.join(roomName)
    // this.wss.emit("change" ,  this.roomArray)
    this.logger.log("changeee")
-   for (let index = 0; index < this.roomArray.length; index++) {
-     this.roomArray[index].debug();
-  }
-
+  
  }
 
  getArrayData() {
