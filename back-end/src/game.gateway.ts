@@ -5,10 +5,12 @@ import { get } from 'http';
 import { Controller, Get } from '@nestjs/common';
 import { start } from 'repl';
 import { GameService } from './game/game.service';
-import { WsGuard } from './auth/jwt.strategy';
+import { WsGuard, WsGuard2 } from './auth/jwt.strategy';
 import { MODE } from '@prisma/client';
 import {v4 as uuidv4} from 'uuid';
 import { emit } from 'process';
+import { JwtService } from "@nestjs/jwt";
+
 
 @WebSocketGateway(3001, {
     cors: {
@@ -33,8 +35,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     this.logger.log("After Init")
   }
  
-
-  @UseGuards(WsGuard)
   handleDisconnect(client: any)
   {
     this.logger.log("client is disconnected")
@@ -44,12 +44,16 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
    }
   }
 
+  async handleConnection(client: any, payload: any) {
 
-  @UseGuards(WsGuard)
-  handleConnection(client: any, payload: any): void {
-
+    const wsGuard2: WsGuard2 = new WsGuard2(new JwtService(), null);
+    try {
+      await wsGuard2.canActivate(client.handshake) === false
+    } catch {
+      client.disconnect();
+      return;
+    }
     this.logger.log("client is connected "  + client.id)
-
   }
 
   @UseGuards(WsGuard)
@@ -66,9 +70,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       this.RemovePlayer(client , payload)
       // this.wss.emit("change" ,  this.roomArray)
     }
-
-    
-    
     for (let index = 0; index < this.roomArray.length; index++) {
       client.leave(this.roomArray[index].roomName)
       this.roomArray[index].debug();
