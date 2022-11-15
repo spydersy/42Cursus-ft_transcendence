@@ -8,7 +8,7 @@ import {ReactComponent as LogoutIcon} from "../assets/imgs/logout.svg";
 import {ReactComponent as LeaderIcon} from "../assets/imgs/leader-icon.svg";
 import {ReactComponent as SettingIcon} from "../assets/imgs/settings.svg";
 import { Button } from '../Pages/SignIn';
-import { Link ,   useNavigate} from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -42,7 +42,6 @@ export default function Sidebar() {
     const sideBaRed : any= useRef<HTMLElement>(null);
     const sideBaref : any= useRef<HTMLElement>(null);
     const [open, setopen] = useState(false)
-    const navigate = useNavigate();
 
 
     const [focused, setfocused] = useState(0)

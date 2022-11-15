@@ -8,27 +8,26 @@ import Punk from "./assets/imgs/punkhazard.png";
 import Dress from "./assets/imgs/dressRosa.jpg";
 import Wano from "./assets/imgs/wano.jpg";
 import Fish from "./assets/imgs/fishman.jpeg";
+import { OnlineContextSocket, SocketContext,  SocketGameContext } from './context/Socket';
 import {  Routes,   Route, useNavigate  } from "react-router-dom";
 import SignIn from './Pages/SignIn';
-// import NotFound from './Pages/NotFound';
-// import Home from './Pages/Home';
+import NotFound from './Pages/NotFound';
+import Home from './Pages/Home';
 import Upperbar from './components/Upperbar';
 import Sidebar from './components/Sidebar';
 import ProtectedLayout from './components/protected/ProtectedLayout';
-// import Profile from './Pages/Profile';
-// import Chat from './components/chat/Chat';
-// import Game from './Pages/Game';
+import Profile from './Pages/Profile';
+import Chat from './components/chat/Chat';
+import Game from './Pages/Game';
 import {TwoFa} from './Pages/NotFound';
 import axios from 'axios';
-// import Setting from './Pages/Setting';
-// import Leader from './Pages/Leader';
-// import Room from './Pages/Room';
-import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from './context/UserContext';
-import io, { Socket } from "socket.io-client";
+import Setting from './Pages/Setting';
+import Leader from './Pages/Leader';
+import Room from './Pages/Room';
 import { ToastContainer, toast } from 'react-toastify';
-import Outlet from './Pages/Outlet';
-import { OnlineContextSocket, SocketGameContext } from './context/Socket';
+import 'react-toastify/dist/ReactToastify.css';
+import MsgToast , {AcceptToast, AddedToast, FriendRequestToast, GameChallengeToast, MutedToast} from './components/Toasts/MsgToast';
+import { UserContext } from './context/UserContext';
 
 const mockedItems : any = [{
   title: "MarinFord",
@@ -51,14 +50,200 @@ const mockedItems : any = [{
   banner :Fish 
 }]
 
+interface ssss {
+  accepter: string,
+  sender: string,
+  status: boolean
+}
+interface msgType {
+  login : string,
+  content : string, 
+  channelId: string,
+  displayName: string
+}
+
+const CustomToastWithLink = (data : msgType) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <MsgToast data={data}/>
+  </div>
+);
+
+const CustomToast = (data : string) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <AddedToast data={data}/>
+  </div>
+);
+
+const CustomToastMesg = (msg : string) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <MutedToast mesg={msg} />
+  </div>
+);
+const CustomToastAcceptFriendReq = (data : ssss) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <AcceptToast data={data}/>
+  </div>
+);
+const CustomToastFriendReq = (data : any) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <FriendRequestToast data={data}/>
+  </div>
+);
+const CustomToastWithLinkGame = (data : any) => (
+  <div style={{width: "100%" , height : "100%"}}>
+        <GameChallengeToast data={data}/>
+  </div>
+);
 
 function App() {
+  const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
+  
+  const socket = useContext(SocketContext)
+  const onlinesSocket = useContext(OnlineContextSocket)
   const gameSocket = useContext(SocketGameContext)
-  const onlineSocket = useContext(OnlineContextSocket)
   const User = useContext(UserContext)
+  // const [toastData, settoastData] = useState<msgType>()
+  // const [toastDataChallenge] = useState()
   const pageName = window.location.pathname.split("/")[1];
-  const [isLogged, setIsLogged] = useState(false);
+  
+  // const [toastData, settoastData] = useState()
+  function hundleMsg (payload) {
+    console.table(payload)
+    if (pageName !== "chat")
+    {
+      
+       const    toasty = () =>  toast(CustomToastWithLink(payload) , {
+        className: "toast",
+        progressClassName: "toastProgress",
+        autoClose: 2000,
+        hideProgressBar: true,
+      })
+      toasty()
+    }
+  }
+  function handleChallenge (payload) {
+   
+     const    toasty = () =>  toast(CustomToastWithLinkGame(payload) , {
+      // position : toast.POSITION.TOP_RIGHT,
+      className: "toast",
+      progressClassName: "toastProgress",
+      autoClose: 3000,
+      hideProgressBar: true,
+      // closeOnClick: false
+    })
+    toasty()
 
+    // CHallengeNotify()
+  }
+  function handleRequest (payload) {
+
+    const    toasty = () => toast(CustomToastFriendReq(payload) , {
+      className: "toast",
+      progressClassName: "toastProgress",
+      autoClose: 2000,
+      hideProgressBar: true,
+    })
+    toasty()
+  }
+  async function acceptRequest (payload) {
+
+    const    toasty = () =>  toast(CustomToastAcceptFriendReq(payload) , {
+      className: "toast",
+      progressClassName: "toastProgress",
+      autoClose: 2000,
+      hideProgressBar: true,
+    })
+    toasty()
+    await joinChannels()
+
+  }
+  function handleevent (payload) {
+     const    toasty = () =>  toast(CustomToastMesg("Please, Come OHH...Take a break !") , {
+      className: "toast",
+      progressClassName: "toastProgress",
+      autoClose: 2000,
+      hideProgressBar: true,
+    })
+    toasty()
+  }
+  function handelChallengeAccept (payload) {
+    localStorage.setItem("mode","1v1")
+    navigate("/game")
+  }
+  async function handladdedMembert (payload) {
+
+      const    toasty = () =>  toast(CustomToast(payload) , {
+        className: "toast",
+        progressClassName: "toastProgress",
+        autoClose: 2000,
+        hideProgressBar: true,
+      })
+      toasty()
+      await joinChannels()
+  }
+
+
+  function PlayerInGame (payload) {
+    // localStorage.setItem("mode","1v1")
+    navigate("/game/"+ payload)
+    
+  }
+  useEffect(()=>{
+    
+    socket.on('msg_event', hundleMsg);
+    socket.on('challeneEvent', handleChallenge);
+    socket.on('recievedRequest', handleRequest)
+    socket.on('acceptedReq', acceptRequest)
+    socket.on('event', handleevent);
+    socket.on('addedMember', handladdedMembert);
+    // socket.on('BlockRequest', BlockedUser);
+    gameSocket.on('challengeAccepted', handelChallengeAccept)
+    gameSocket.on('PlayerInGame', PlayerInGame);
+    return () => {
+      socket.removeListener('msg_event', hundleMsg);
+      socket.removeListener('challeneEvent', handleChallenge);
+      socket.removeListener('recievedRequest', handleRequest);
+      socket.removeListener('acceptedReq', acceptRequest);
+      socket.removeListener('event', handleevent);
+      gameSocket.removeListener('PlayerInGame', PlayerInGame);
+      socket.removeListener('addedMember', handladdedMembert);
+      // socket.removeListener('BlockRequest', BlockedUser);
+      gameSocket.removeListener('challengeAccepted', handelChallengeAccept);
+    }
+    })
+  
+  // const    CHallengeNotify = () => toast.success("You accepted " +  toastDataChallenge + " Friend Request", {
+  //   position: "top-right",
+  //   autoClose: 2000,
+  //   hideProgressBar: true,
+  //   closeOnClick: true,
+  //   pauseOnHover: true,
+  //   draggable: true,
+  //   progress: undefined,
+  //   theme: "colored",
+  // });
+  let joinChannels = async () => {
+
+    let userLogin : string;
+    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
+    {withCredentials: true} 
+    ).then((res)=>{
+      userLogin = res.data.login
+    }).catch((err)=>{
+    })
+    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+    {withCredentials: true} 
+    ).then((res)=>{
+      var myChannels : Array<string> = [];
+      for (let index = 0; index < res.data.length; index++) {
+        myChannels.push(res.data[index].channelId);
+      }
+      myChannels.push(userLogin);
+      // mychannels.pushback(userlogin)
+      socket.emit('joinRoom', myChannels)
+    }).catch((err)=>{
+    })
+    }
     interface UserProp {
       id: string,
       defaultAvatar: string,
@@ -92,17 +277,15 @@ function App() {
       }
       myChannels.push(userLogin);
       // mychannels.pushback(userlogin)
-      socket.emit('leave', myChannels)
+      socket.emit('leaveRoom', myChannels)
     }).catch((err)=>{
     })
     }
   useEffect(() => {
-      // if ()
-      User.then(async (user : UserProp | string)=>{
-        console.log("_____USER___SIGN___", user)
-
-        if (user === "{}" &&  pageName !== "2fa" )
+      User.then(async(user : UserProp | string)=>{
+        if (user === "{}" && pageName !== "2fa")
         {
+          onlinesSocket.close()
           await leaveChunnels()
           onlineSocket.emit("logout" ,  user.login)
           console.log("user is not logged in")
@@ -119,7 +302,7 @@ function App() {
       ).then(async(res)=>{
         
         localStorage.setItem("mode","classic")
-        await joinChannels()
+        joinChannels()
         socket.emit("AddOnlineUser")
         console.log("user is logged in1")
 
@@ -133,7 +316,7 @@ function App() {
       // navigate("/")
 
       })
-  }, [window.location.pathname])
+  }, [])
   
   return (
     <div className="App">
@@ -145,9 +328,24 @@ function App() {
           <ProtectedLayout body={ <Sidebar/>} />
           <Cont  >
           <ToastContainer  className={"toast_container"}/>
-            <Outlet/>
-           
+            {/* <SocketContext.Provider value={SocketValue}> */}
+            <Routes>
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/game" element={<Game theme={gametheme}  />} />
+              <Route path="/watch/:id" element={<Game theme={gametheme}  />} />
+              <Route path="/game/:id" element={<Game theme={gametheme}  />} />
+              <Route path="/chat/:id" element={<Chat />} />
+              <Route path="/setting" element={<Setting />} />
+              <Route path="/rooms" element={<Room />} />
+              <Route path="/leaderboard" element={<Leader />} />
+              <Route path="/" element={<Home settheme={(e: any)=> setGametheme(e)} />} />
+              <Route path="/profile/:id" element={<Profile  />} />
+              <Route path="/2fa" element={<TwoFa />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
 
+
+            {/* </SocketContext.Provider> */}
           </Cont>
         </Main>
        </ThemeProvider>
@@ -155,15 +353,6 @@ function App() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
 
 const Cont = styled.div`
   height: calc(100% - 70px);
@@ -185,15 +374,11 @@ const Cont = styled.div`
     border: 3px solid ${props => props.theme.colors.purple};
   }
   .toastProgress{
-
     background-color: ${props => props.theme.colors.secondaryText} !important;;
-
   }
 `;
 
 const Main = styled.main`
-
-
 display: flex;
   flex-direction: row;
   .vr{
@@ -205,15 +390,12 @@ display: flex;
   &::-webkit-scrollbar {
       width: 4px;
     }
-
     &::-webkit-scrollbar-track {
       background: transparent; 
     } 
-
     &::-webkit-scrollbar-thumb {
       background: ${props => props.theme.colors.primarybg};
     } 
-
     &::-webkit-scrollbar-thumb:hover { 
       background: ${props => props.theme.colors.primarybg};
     }
@@ -221,15 +403,12 @@ display: flex;
       &::-webkit-scrollbar {
       width: 4px;
     }
-
     &::-webkit-scrollbar-track {
       background: transparent; 
     } 
-
     &::-webkit-scrollbar-thumb {
       background: ${props => props.theme.colors.primarybg};
     } 
-
     &::-webkit-scrollbar-thumb:hover { 
       background: ${props => props.theme.colors.primarybg};
     }

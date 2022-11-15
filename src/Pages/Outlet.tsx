@@ -130,7 +130,7 @@ export default function Outlet() {
         }
       }
       function handleChallenge (payload) {
-       
+      
          const    toasty = () =>  toast(CustomToastWithLinkGame(payload) , {
           // position : toast.POSITION.TOP_RIGHT,
           className: "toast",
