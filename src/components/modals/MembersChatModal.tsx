@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import { Button } from '../../Pages/SignIn';
 import { AvatarComponent } from '../PlayerProfile';
 import {ReactComponent as Ban} from "../../assets/imgs/ban.svg";
@@ -11,6 +11,9 @@ import {ReactComponent as Admin} from "../../assets/imgs/Admino.svg";
 import styled from "styled-components"
 import Modal from '../Modal';
 import EmptyComponent from '../PlayerrEmptyComp';
+import { SocketContext , SocketGameContext} from '../../context/Socket';
+import { UserContext } from '../../context/UserContext';
+
 
 interface convType {
   nbMessages: number,
@@ -22,6 +25,18 @@ interface convType {
   picture : string,
   users: usersType[]
 }
+
+export interface UserProp {
+  id: string,
+    defaultAvatar: string,
+    login : string
+    displayName : string
+    relation? : string
+    nbFriends? : string
+    wins : number[]
+    losses : number[]
+  }
+
 interface usersType {
   id: string,
   defaultAvatar: string,
@@ -77,7 +92,12 @@ interface MemberProps{
     const [restriction, setrestriction] = useState(props.data.restriction)
     const [permission, setpermission] = useState(props.data.permission)
     const [muteModel, setmuteModel] = useState(false)
-    
+    const socket = useContext(SocketContext)
+    const gamesocket = useContext(SocketGameContext)
+    const User = useContext(UserContext)
+
+
+
     // useEffect(() => {
     //   setmembers(prps.users)
     //   return () => {
@@ -115,7 +135,15 @@ interface MemberProps{
       }).catch((err)=>{
       })
     };
-    const ChallengeGame = () => {
+    const ChallengeGame =  () => {
+      User.then((user : UserProp | "{}")=>{
+        if (user !== "{}")
+        {
+          socket.emit("gameChallenge",  props.data.login, user.login ) ; 
+          gamesocket.emit("gameChallenge" , {player1 :props.data.login  , player2 :  user.login})
+        }
+      })
+      // console.log(props.data)
     };
     const SetAdmin = async (s: string) => {
       var o = {

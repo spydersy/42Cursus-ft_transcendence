@@ -122,7 +122,7 @@ function App() {
     }
   }
   function handleChallenge (payload) {
-   
+    console.log("From APP.tsx  ",payload)
      const    toasty = () =>  toast(CustomToastWithLinkGame(payload) , {
       // position : toast.POSITION.TOP_RIGHT,
       className: "toast",

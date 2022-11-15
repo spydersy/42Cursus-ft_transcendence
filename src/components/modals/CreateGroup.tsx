@@ -156,6 +156,7 @@ export default function CreateGroup(props :CloseProps) {
         user.then(async (me : UserProp | "{}")=>{
             if (me !== "{}")
             {
+                console.log(me.login)
                 for (let i = 0; i < memberss.length; i++) {
                     const element = memberss[i];
                     socket.emit("addedMember", {owner: me, addedMember: element.login})
