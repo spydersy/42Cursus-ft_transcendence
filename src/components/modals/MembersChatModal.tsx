@@ -10,6 +10,7 @@ import axios from 'axios';
 import {ReactComponent as Admin} from "../../assets/imgs/Admino.svg";
 import styled from "styled-components"
 import Modal from '../Modal';
+import EmptyComponent from '../PlayerrEmptyComp';
 
 interface convType {
   nbMessages: number,
@@ -33,20 +34,33 @@ interface usersType {
   duration: number,
 }
 
-export default function MembersChatModal(props : { closeModal : ()=>void , data : convType}) {
+export default function MembersChatModal(props : { closeModal : ()=>void , data : convType }) {
+  useEffect(() => {
+    var l  =   []
+    for (let i = 1; i < props.data.users.length; i++) {
+      const element = props.data.users[i];
+        l.push(element)
+    }   
+    setmembers(l)
+    console.log(props.data.users)
+
+  }, [])
+  const [members, setmembers] = useState([])
+  
   const channelId = props.data.channelId;
   return (
-    <div>   
+    <div>
         Members: 
+        {
+         members.length === 0 ? <EmptyComponent text="Just You !"/> : 
         <div className='members'>
           {
-              props.data.users.map((data : any , id : number)=>{
-                if (id === 0)
-                  return <></>
-                return <Member access={props.data.users[0].permission}  data={data} channelId={channelId} />
+              members.map((data : any , id : number)=>{
+                return <Member key={id} users={ members} setUsers={(e)=>{setmembers(e)}} access={props.data.users[0].permission}  data={data} channelId={channelId} />
               })
           }
       </div>
+        }
       </div>
   )
 }
@@ -55,6 +69,8 @@ interface MemberProps{
    channelId: number,
     data : usersType
     access : string
+    users : usersType[],
+    setUsers : (e: any)=>void,
   }
 
   export  function Member(props : MemberProps) {
@@ -62,10 +78,11 @@ interface MemberProps{
     const [permission, setpermission] = useState(props.data.permission)
     const [muteModel, setmuteModel] = useState(false)
     
-    useEffect(() => {
-      return () => {
-      }
-    }, [])
+    // useEffect(() => {
+    //   setmembers(prps.users)
+    //   return () => {
+    //   }
+    // }, [])
     
     const OwnerBan = async (k: number) => {
       var  bodyFormData = {
@@ -115,6 +132,16 @@ interface MemberProps{
     const OwnerKick = async() =>{
       await axios.delete(process.env.REACT_APP_BACKEND_URL+"/chat/kickUser/" +props.data.login +"?channel=" + props.channelId ,       {withCredentials: true} )
       .then((res)=>{
+        for (let i = 0; i < props.users.length; i++) {
+          const element = props.users[i];
+          if (element.login === props.data.login)
+          {
+            var s = props.users;
+            s.splice(i , 1);
+            props.setUsers([...s])
+
+          }
+        }
       }).catch((err)=>{
       })
     }

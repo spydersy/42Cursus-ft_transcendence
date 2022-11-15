@@ -13,7 +13,7 @@ var defaultProp = {
 interface gameProps {start: boolean, setstart: (e: boolean) => void, player: boolean }
 export default function Pong(props: gameProps) {
     const [gameData, setgameData] = useState<GameProps>(defaultProp)
-    var mode = localStorage.getItem('mode') ;
+    // var mode = localStorage.getItem('mode') ;
 
     const gamesocket = useContext(SocketGameContext)
     const user = useContext(UserContext)
