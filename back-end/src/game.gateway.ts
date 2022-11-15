@@ -54,11 +54,14 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   @UseGuards(WsGuard)
   @SubscribeMessage('endGame')
-  deleteRoom(client: any, payload: any): void {
+  async deleteRoom(client: any, payload: any) {
     var room = this.getRoombyLogin(payload)
     if (room !== null)
     {
-      this.wss.to(room.roomName).emit("endGame" , {score: room.score, roomPlayers :   room.roomPlayers, status : room.status})
+      
+      this.wss.to(room.roomName).emit("endGame" , {score: {score1 : 0 , score2 : 0}, roomPlayers :   room.roomPlayers, status : room.status})
+      await room.saveGame(room.status !== "AiGame" ?   MODE.CLASSIC :  MODE.AIBUGGY)
+
       this.wss.emit("change" , this.getArrayData() )
       this.RemovePlayer(client , payload)
       // this.wss.emit("change" ,  this.roomArray)
@@ -76,8 +79,22 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   @SubscribeMessage('gameChallenge')
   gameChallenge(client: any, payload: {player1 : string ,player2 : string }): void {
 
+    this.logger.log("challengeGame" , payload)
+    var i =  this.getRoombyLogin(payload.player1)
+    if (i!== null)
+    {
+      var index = this.roomArray.indexOf(i)
 
-    if (this.getRoombyName(payload.player1+payload.player2) === -1 && !this.getRoombyLogin(payload.player1))
+        this.roomArray.splice(index , 1)
+    }
+    var j =  this.getRoombyLogin(payload.player2)
+    if (j !== null)
+    {
+        var index = this.roomArray.indexOf(j)
+        this.roomArray.splice(index , 1)
+    }
+
+    if (this.getRoombyName(payload.player1+payload.player2) === -1  )
     {
     this.logger.log("challengeGame" , payload)
     var newRoom = new GameService(payload.player1+payload.player2)
