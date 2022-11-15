@@ -11,6 +11,9 @@ import {
  import { ChatService } from './chat/chat.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { PrismaService } from './prisma/prisma.service';
+import { WsGuard, WsGuard2 } from './auth/jwt.strategy';
+import { JwtService } from "@nestjs/jwt";
+
 interface UserType {
  socketId : string[],
  userid : string,
@@ -35,6 +38,8 @@ interface UserType {
   private logger: Logger = new Logger('OnlineLogerGateway');
   onLineArray  : UserType[] = [];
 
+
+  @UseGuards(WsGuard)
   @SubscribeMessage('AddOnlineUser')
    handleConnect(client: Socket, payload) {
 
@@ -54,6 +59,8 @@ interface UserType {
     this.debug()
     this.server.emit('ConnectedUser', this.onLineArray);
   }
+
+  @UseGuards(WsGuard)
   @SubscribeMessage('InGame')
    inGAme(client: Socket, payload) {
 
@@ -71,6 +78,8 @@ interface UserType {
     this.debug()
     this.server.emit('ConnectedUser', this.onLineArray);
   }
+
+  @UseGuards(WsGuard)
   @SubscribeMessage('outGame')
   outGame(client: Socket, payload) {
 
@@ -133,7 +142,8 @@ interface UserType {
   }
 
 
-@SubscribeMessage('logout')
+  @UseGuards(WsGuard)
+  @SubscribeMessage('logout')
   logout(client , payload) {
     var index = this.getIndexLogin(payload)
     this.logger.log(index)
@@ -150,7 +160,16 @@ interface UserType {
     }
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
+  async handleConnection(client: Socket, ...args: any[]) {
+
+    const wsGuard2: WsGuard2 = new WsGuard2(new JwtService(), null);
+    try {
+      await wsGuard2.canActivate(client.handshake) === false
+    } catch {
+      client.disconnect();
+      return;
+    }
+
    this.logger.log(`Client connected: ${client.id}`);
   }
  }
