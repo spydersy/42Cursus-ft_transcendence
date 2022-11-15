@@ -156,6 +156,7 @@ export default function CreateGroup(props :CloseProps) {
         user.then(async (me : UserProp | "{}")=>{
             if (me !== "{}")
             {
+                console.log(me.login)
                 for (let i = 0; i < memberss.length; i++) {
                     const element = memberss[i];
                     socket.emit("addedMember", {owner: me, addedMember: element.login})
@@ -164,9 +165,6 @@ export default function CreateGroup(props :CloseProps) {
             }
           })
         props.closeModal()
-
-
-
       }).catch((err)=>{
         // if (data.name === "")
             setalert(true)
@@ -186,7 +184,6 @@ export default function CreateGroup(props :CloseProps) {
     <CreateGroupStyle>
         <HeadComponent title={"New Group"}/>
         <Form>
-
         <Row >
             <div  onClick={uploadFile} className='groupImg' >
                 <input id="fileInput" type="file" hidden />
@@ -195,7 +192,6 @@ export default function CreateGroup(props :CloseProps) {
 x
                </div>
             </div>
-            {/* <input className='inputText' type="text"  placeholder='Enter group name ..'/> */}
             <div className='con' >
             <InputComponent onFocus={()=>{
                 setalert(false)
@@ -211,12 +207,7 @@ x
                 <label>Protected</label>
             </Row2>
             </div>
-
-
         </Row>
-        {/* <Row2 > */}
-
-
             <InputPassWord  defaultChecked={(check === "protected")}>
             <InputComponent refs={passRef} type='password' placeholder='Group Password'/>
 

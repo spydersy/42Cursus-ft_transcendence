@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react'
+import React, { useRef, useContext , useState } from 'react'
 import { Button } from '../../Pages/SignIn'
 import styled from "styled-components"
 import InputComponent from '../Input'
@@ -31,7 +31,7 @@ export default function JoinGroupModal(props: RoomProps) {
   const reffo = useRef<HTMLInputElement>(null)
   const user = useContext(UserContext)
   const navigate = useNavigate();
-
+const [alert, setalert] = useState(false)
   const cancelreq = ()=> {
     props.closeModal()
   }
@@ -59,9 +59,15 @@ export default function JoinGroupModal(props: RoomProps) {
   }
   const addMember = () => {
     // alert(props.id)
-    var v = reffo.current?.value
-    if (v) {
+    if (props.isLocked) {
       user.then(async (data: UserProp | "{}") => {
+        var v = reffo.current?.value
+        if (v === "")
+        {
+          console.log(  v)
+          setalert(true)
+          return ;
+        }
         if (data !== "{}") {
           const obj = {
             channelId: props.id,
@@ -82,13 +88,8 @@ export default function JoinGroupModal(props: RoomProps) {
             }
             // if joined 
           }).catch((err) => {
-            const toasty = () => toast(CustomToastMesg("An Error has been accured !" , "/"), {
-              className: "toast",
-              progressClassName: "toastProgress",
-              autoClose: 2000,
-              hideProgressBar: true,
-            })
-            toasty()
+          setalert(true)
+           
           })
         }
       })
@@ -122,14 +123,14 @@ export default function JoinGroupModal(props: RoomProps) {
         }
       })
     }
-    props.closeModal()
+   
   }
 
   return (
     <RoomStyle  >
       {
         props.isLocked === true &&
-        <InputComponent refs={reffo} type='password' placeholder='Enter Password' />
+        <InputComponent  alert={alert} onFocus={()=>{setalert(false)}} refs={reffo} type='password' placeholder='Enter Password' />
       }
       <div>
         {/* <Link to={"/chat/" + props.link}> */}
