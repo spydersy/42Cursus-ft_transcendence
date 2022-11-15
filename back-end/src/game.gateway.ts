@@ -82,23 +82,24 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
     this.logger.log("challengeGame" , payload)
     var i =  this.getRoombyLogin(payload.player1)
-    if (i!== null)
-    {
-      var index = this.roomArray.indexOf(i)
+    // if (i!== null && i.status === "waiting")
+    // {
+    //   var index = this.roomArray.indexOf(i)
 
-        this.roomArray.splice(index , 1)
-    }
-    var j =  this.getRoombyLogin(payload.player2)
-    if (j !== null)
-    {
-        var index = this.roomArray.indexOf(j)
-        this.roomArray.splice(index , 1)
-    }
+    //     this.roomArray.splice(index , 1)
+    // }
+    // var j =  this.getRoombyLogin(payload.player2)
+    // if (j !== null &&  j.status === "waiting")
+    // {
+    //     var index = this.roomArray.indexOf(j)
+    //     this.roomArray.splice(index , 1)
+    // }
 
     if (this.getRoombyName(payload.player1+payload.player2) === -1  )
     {
     this.logger.log("challengeGame" , payload)
     var newRoom = new GameService(payload.player1+payload.player2)
+
     newRoom.joinPlayer(payload.player1 , client.id)
 
     this.roomArray.push(newRoom)
@@ -113,10 +114,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
   @SubscribeMessage('gameAccept')
   gameAccept(client: any, payload: {player1 : string ,player2 : string }): void {
 
-    for (let index = 0; index < this.roomArray.length; index++) {
-      this.roomArray[index].debug();
 
-  }
       var i = this.getRoombyName(payload.player1 + payload.player2)
       this.logger.log("gameAccept" , payload.player1 + payload.player2)
       this.logger.log("gameAccept" , i)
@@ -186,10 +184,10 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       
     }
 
-    for (let index = 0; index < this.roomArray.length; index++) {
-      this.roomArray[index].debug();
+  //   for (let index = 0; index < this.roomArray.length; index++) {
+  //     this.roomArray[index].debug();
 
-   }
+  //  }
   }
 
 
@@ -206,7 +204,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       client.emit("watchGame" , {player1 : this.roomArray[i].roomPlayers[0].login , player2 : this.roomArray[i].roomPlayers[1].login})
     }
   }
-  @UseGuards(WsGuard)
+
   @SubscribeMessage('player1Moved')
   player1moved(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
@@ -217,8 +215,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     }
   }
 
-
-  @UseGuards(WsGuard)
+  
   @SubscribeMessage('player2Moved')
   player2moved(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
@@ -230,7 +227,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 
-  @UseGuards(WsGuard)
   @SubscribeMessage('moveBall')
   moveBall(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)

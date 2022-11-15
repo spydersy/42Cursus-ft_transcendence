@@ -32,7 +32,6 @@ export class WsGuard implements CanActivate {
     async canActivate(
       context: any,
     ) : Promise<boolean | any> {
-        console.log("__TRACK__CONTEXT__ : ", context);
         if (context.args[0].handshake.headers.cookie !== undefined) {
             let token = decodeURI(context.args[0].handshake.headers.cookie);
             if (token.indexOf('Authorization=Bearer ') != -1)
