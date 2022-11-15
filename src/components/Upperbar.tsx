@@ -59,9 +59,10 @@ export default function Upperbar() {
 
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [window.location.pathname])
 
   useEffect(() => {
+    console.log("ddss")
   }, [currentUser])
 
   return (
