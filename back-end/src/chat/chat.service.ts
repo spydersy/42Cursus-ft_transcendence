@@ -563,6 +563,8 @@ export class ChatService {
     }
 
     async GetChannelById(channelId: string) {
+        if (channelId === null || channelId === undefined)
+            return null;
         return await this.prisma.channels.findUnique({where: {id: channelId} });
     }
 

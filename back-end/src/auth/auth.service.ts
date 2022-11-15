@@ -144,7 +144,8 @@ export class AuthService {
                         .redirect(this.configService.get<string>('FRONTEND_URL'));
             }
         }
-        return this.HandleSigninErrors(res);
+        else
+            return this.HandleSigninErrors(res);
     }
 
     async TFAVerificationRes(publicKey: string, code: string, @Response() res) {
@@ -167,6 +168,7 @@ export class AuthService {
             .cookie('Authorization', 'Bearer ' + JWT.access_token, {httpOnly: true})
             .send({'Authentication': 'SUCCESS'});
         }
-        return res.status(HttpStatus.OK).send({'Authentication': 'REFUSED'});
+        else
+            return res.status(HttpStatus.OK).send({'Authentication': 'REFUSED'});
     }
 }

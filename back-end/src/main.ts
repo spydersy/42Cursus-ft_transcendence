@@ -30,7 +30,8 @@ async function initDB() {
         id: 0,
         login: "drVegaPunk",
         displayName: "الذكاء الاصطناعي الخارق",
-        defaultAvatar: "https://www.greenscene.co.id/wp-content/uploads/2021/10/Dr-Vegapunk.jpg"
+        defaultAvatar: "https://www.greenscene.co.id/wp-content/uploads/2021/10/Dr-Vegapunk.jpg",
+        level: 100,
       }
     });
   } catch { return; }

@@ -19,9 +19,10 @@ export class UserService {
         let UserMeDto = await this.GetUserByLogin(UserMe);
         let UserDto = await this.GetUserByLogin(User);
 
-        if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true) {
+        if (UserMeDto === null || UserMeDto === null)
             return 0;
-        }
+        if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true)
+            return 0;
         let FriendsRowA = await this.prisma.friends.findMany({
             where: {
                 status: RELATION.FRIENDS,
