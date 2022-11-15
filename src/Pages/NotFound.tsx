@@ -69,7 +69,7 @@ export  function TwoFa() {
             if (res.data.Authentication === "SUCCESS")
             {
                 succes("Signed in successfully\nWelcome back!");
-                navigate("/");
+                window .Location.("/");
             }
             else
             {

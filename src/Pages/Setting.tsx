@@ -178,7 +178,7 @@ export default function Setting() {
             warning("Change Something Friendo !!!");
             return;
         }
-        axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/updateUsername/", {newname: name}, {withCredentials: true}).then((res)=>{
+        axios.post(process.env.REACT_APP_BACKEND_URL+ "/profile/updateUsername/" , {newname: name}, {withCredentials: true}).then((res)=>{
             setSaveName(name);
             succes("You have successfully updated your Universe");
         }   ).catch((err)=>{   error("Updating your Universe Failed");  })
