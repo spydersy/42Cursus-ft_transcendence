@@ -2,7 +2,6 @@ import React  , {useState , useContext, useEffect} from 'react'
 import styled  from "styled-components"
 import { AvatarComponent } from '../PlayerProfile';
 import {ReactComponent as Group} from "../../assets/imgs/users.svg";
-import {ReactComponent as Ban} from "../../assets/imgs/ban.svg";
 import { Button } from '../../Pages/SignIn';
 import Modal from '../Modal';
 import MembersChatModal from '../modals/MembersChatModal';

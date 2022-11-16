@@ -223,8 +223,8 @@ background-color: ${props => props.theme.colors.bg};
 }
 >.mesgData{
   flex: 1;
-  margin-left: 12px;
-  height: 40px;
+  margin-left: 15px;
+  height: 50px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -239,6 +239,7 @@ background-color: ${props => props.theme.colors.bg};
   
 }
 > .msg{
+  margin-left : 5px
   font-size: 15px;
   opacity: 0.7;
   color:  ${props => props.theme.colors.seconderyText};

@@ -160,7 +160,7 @@ User.then(async(user : UserProp | "{}")=>{
         ).then(async(res)=>{
                       await leaveChunnels()
   onlineSocket.emit("logout" ,  user.login)
-        window.location.href = ('/signin')
+       
         }).catch((err)=>{
         })
         

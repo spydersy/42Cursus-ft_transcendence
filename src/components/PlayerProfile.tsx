@@ -21,7 +21,6 @@ import { OnlineContextSocket, SocketContext ,SocketGameContext} from '../context
 import {Link} from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../context/UserContext';
-import { toast } from 'react-toastify';
 
 //// PlayerCard Comp
 interface UserProp {
@@ -80,7 +79,7 @@ export function PlayerCard(props: PlayerCardProps) {
   else
   { color = ("#af1c1c");  status = "OFFLINE"; }
 
-  if (id == "drVegaPunk")
+  if (id === "drVegaPunk")
   { color = ("#efd320");  status = "AI"; }
 
     return (
@@ -213,59 +212,8 @@ background-color: ${props => props.theme.colors.seconderybg};
     const [grade, setgrade] = useState<string | undefined>(Grades[11])
     const [AChievements, setAChievements] = useState< {} | any>([false, false, false, false, false, false, false, false])
     // const userData = useContext(UserContext)
-    const [TotalGames, setTotalGames] = useState<number | undefined>(0)
     const gamesocket = useContext(SocketGameContext)
 
-    const    AddUsernotify = () => toast.success("You have successfully Send the invitaion to " + id.toLocaleUpperCase() , {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored"
-    });
-    const    UnfriendUserNotify = () => toast.error("You have successfully Unfriend this Bastard " + id.toLocaleUpperCase()  , {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored"
-    });
-    const    BlockUserNotify = () => toast.error("You have successfully Block " + id.toLocaleUpperCase()  , {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored"
-    });
-    const    UnBlockUserNotify = () => toast.warning("You have successfully UnBlock " + id.toLocaleUpperCase()  , {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored"
-    });
-    const    CancelNotify = () => toast.warning("You have successfully Cancel the invitation to " + id.toLocaleUpperCase() , {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored"
-    });
     const addFriend = ()=>{
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{

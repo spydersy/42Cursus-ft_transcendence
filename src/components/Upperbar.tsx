@@ -68,12 +68,12 @@ export default function Upperbar() {
     axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me",  {withCredentials: true}  ).then(async(res)=>{
       let Save = JSON.parse(localStorage.getItem("achievement") || "[]")
 
-      if ((Save[0] !== res.data.achievement[0]) && res.data.achievement[0] || 
-          (Save[1] !== res.data.achievement[1]) && res.data.achievement[1] ||
-          (Save[2] !== res.data.achievement[2]) && res.data.achievement[2] ||
-          (Save[3] !== res.data.achievement[3]) && res.data.achievement[3] ||
-          (Save[4] !== res.data.achievement[4]) && res.data.achievement[4] ||
-          (Save[5] !== res.data.achievement[5]) && res.data.achievement[5] ) 
+      if (((Save[0] !== res.data.achievement[0]) && res.data.achievement[0]) || 
+          ((Save[1] !== res.data.achievement[1]) && res.data.achievement[1]) ||
+          ((Save[2] !== res.data.achievement[2]) && res.data.achievement[2]) ||
+          ((Save[3] !== res.data.achievement[3]) && res.data.achievement[3]) ||
+          ((Save[4] !== res.data.achievement[4]) && res.data.achievement[4]) ||
+          ((Save[5] !== res.data.achievement[5]) && res.data.achievement[5]) )
           {
             localStorage.setItem("achievement", JSON.stringify(res.data.achievement))
             setshow(true)

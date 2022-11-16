@@ -59,6 +59,7 @@ export default function MembersChatModal(props : { closeModal : ()=>void , data 
     setmembers(l)
     console.log(props.data.users)
 
+  // eslint-disable-next-line
   }, [])
   const [members, setmembers] = useState([])
   

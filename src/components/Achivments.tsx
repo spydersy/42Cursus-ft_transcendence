@@ -1,4 +1,4 @@
-import React , {useEffect} from 'react'
+import React from 'react'
 import styled , {css} from "styled-components";
 import Badge1 from "../assets/imgs/Archive/badge1.svg";
 import Badge2 from "../assets/imgs/Archive/badge2.svg";

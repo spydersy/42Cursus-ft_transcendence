@@ -17,6 +17,7 @@ import  Zero from "../assets/imgs/badgezero.svg"
 import  Huit from "../assets/imgs/huit.svg"
 import  Joke from "../assets/imgs/joke.svg"
 import  Cinq from "../assets/imgs/cinq.svg"
+import {Link} from "react-router-dom";
 
 // import  Zeroo from "../assets/imgs/zero.svg"
 //todo env file
@@ -43,55 +44,55 @@ useEffect(() => {
 
             <div className='wrow'>
 
-               <a className='urow' href="https://github.com/spydersy">
+               <Link className='urow' to="https://github.com/spydersy">
                   <img alt='img1' className='avatar' src={abelarif}  />
                   <img alt='img2' className='avatarr' src={Cinq}></img>
-                  <a > @Spydersy </a>  
-               </a>
+                  <div > @Spydersy </div>  
+               </Link>
               
-               <a className='urow' href="https://github.com/aladinez">
+               <Link className='urow' to="https://github.com/aladinez">
                   <img alt='img3' className='avatar' src={aez_zaou}  />
                   <img alt='img4' className='avatarr' src={Huit}></img>
-                  <a > @Aladinez </a>  
-               </a>
+                  <div > @Aladinez </div>  
+               </Link>
               
-               <a className='urow' href="https://github.com/NotYaiba">
+               <Link className='urow' to="https://github.com/NotYaiba">
                   <img alt='img5' className='avatar' src={melkarmi}  />
                   <img  alt='img6'  className='avatarr' src={Joke}></img>
-                  <a > @NotYaiba </a>  
-               </a>
+                  <div > @NotYaiba </div>  
+               </Link>
 
-               <a className='urow' href="https://github.com/mamali543">
+               <Link className='urow' to="https://github.com/mamali543">
                   <img alt='img7' className='avatar' src={mamali}  />
                   <img  alt='img8' className='avatarr' src={Huit}></img>
-                  <a > @Mamali543 </a>  
-               </a>
-               <a className='urow' href="https://github.com/Alcheemiist">
+                  <div > @Mamali543 </div>  
+               </Link>
+               <Link className='urow' to="https://github.com/Alcheemiist">
                   
                   <img alt='img9' className='avatar' src={eelaazmi}  />
                   <img alt='img10' className='avatarr' src={Zero}></img>
-                  <a > @Alchemist </a>  
+                  <div > @Alchemist </div>  
 
-               </a>
+               </Link>
             </div>
 
          </div>
 
-         <a className="Butto" href={process.env.REACT_APP_REDIRECT_URL}>
+         <a  className="Butto" href={process.env.REACT_APP_REDIRECT_URL}>
             <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}}   icon={<FtImg/>} text="Sign in"/>
-            <a className='space-zb'/>
+            <div className='space-zb'/>
             <Button  onClick={()=>{console.log(process.env.REDIRECT_URL)}}   icon={<FtttImg/>} text="Sign up"/>
          </a>
          {/* <a id="TermsCond" href="#termscondPage">Terms & conditions</a> */}
 
          <div className="title"> 
-            <a className='space-zb'/>
+            <div className='space-zb'/>
 
             <img className="spider" src="https://emojipedia-us.s3.amazonaws.com/source/skype/289/spider_1f577-fe0f.png" 
                   // srcset="https://emojipedia-us.s3.amazonaws.com/source/skype/289/spider_1f577-fe0f.png 2x"
                   alt="Spider on Skype Emoticons 1.2" width="80" height="70" /> 
             
-            <a className="timo"  > # Team AL-3ANAKIB </a>
+            <div className="timo"  > # Team AL-3ANAKIB </div>
             
          </div>
          

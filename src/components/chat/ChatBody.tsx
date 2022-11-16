@@ -163,7 +163,6 @@ export default function ChatBody(props: ChatProps) {
   >.msg{
   line-break: anywhere;
    min-width: 100%;
- font-weight: 600;
  }
   `;
   const    MsgNotStyle = styled.div`
@@ -203,8 +202,7 @@ export default function ChatBody(props: ChatProps) {
  >.msg{
   line-break: anywhere;
    min-width: 100%;
- color: ${props => props.theme.colors.purple};
- font-weight: 600;
+
  }
   >span{
     opacity: 0.5;
