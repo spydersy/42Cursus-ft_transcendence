@@ -31,8 +31,8 @@ export default function Pong(props: gameProps) {
 
     var ballCord = {
         size: 0.02,
-        x: width / 2,
-        y: height / 2
+        x: 0.5,
+        y:0.5
     }
     var paddel1 = {
         w: 0.02,
@@ -54,11 +54,6 @@ export default function Pong(props: gameProps) {
     }
     var topLimit = 0
     var bottomLimit = height - paddel2.h;
-    // var direction = {
-    //     x: 10,
-    //     y: 10,
-    // }
-
 
 
     const setup = (p5: p5Types, canvasParentRef: Element) => {
@@ -91,7 +86,6 @@ export default function Pong(props: gameProps) {
             {
 
                 if (p5.mouseY > topLimit && p5.mouseY < bottomLimit) {
-                    
                     if (props.player) {
                         
                         gamesocket.emit("player1Moved", {login : data.login, y : p5.mouseY / height})
@@ -106,9 +100,10 @@ export default function Pong(props: gameProps) {
     }
     const windowResize = (p5: p5Types) => {
         var p = document.getElementById("canva")?.offsetWidth
-        if (p && props.start)
+        if (p )
         {
      
+
             width = p;
             height = p/ 1.57;
 
@@ -120,17 +115,17 @@ export default function Pong(props: gameProps) {
     const drowPaddels = (p5 : p5Types)=>{
         p5.stroke(p5.color("#157DBD"));
         p5.strokeWeight(4)
+        p5.fill(p5.color(gameData?.paddlecolor))
         p5.rect(paddel1.x * width, paddel1.y * height, paddel1.w * width, paddel1.h * height, 10);
         p5.rect(paddel2.x * width, paddel2.y * height, paddel2.w * width, paddel2.h * height , 10);
-        p5.fill(p5.color(gameData?.paddlecolor))
         p5.noStroke()
     }
     const drowBall = (p5 : p5Types)=>{
         p5.stroke(p5.color("#157DBD"));
         p5.strokeWeight(2)
-        p5.ellipse(ballCord.x, ballCord.y, ballCord.size * width, ballCord.size * width);
-
         p5.fill(p5.color(gameData?.ballcolor))
+        p5.ellipse(ballCord.x* width, ballCord.y * height, ballCord.size * width, ballCord.size * width);
+
         p5.noStroke()
     }
     const drowLine = (p5 : p5Types)=>{
@@ -148,26 +143,20 @@ export default function Pong(props: gameProps) {
         p5.line(width /2, 0 , width /2, height);
     }
     const draw = (p5: p5Types) => {
-        // p5.resizeCanvas(width , height)
+        p5.resizeCanvas(width , height)
 
         //create ball
-        p5.background(0);
+        p5.clear();
         p5.stroke(p5.color("#157DBD"));
         p5.strokeWeight(2)
+        p5.fill(0)
         p5.rect(0, 0, width - 2, height -2, 10);
-        
+    
 
         drowLine(p5)
         drowPaddels(p5)
         drowBall(p5)
-        if (props.start) {
-            gamesocket.emit("moveBall", {login : props.login,  w: width, h: height, p1: {w : 20 , h : 100 , x : paddel1.x  , y : paddel1.y  },p2: {w : 20 , h : 100 , x : paddel2.x  , y : paddel2.y } })
-        }
-     
     };
-   
-
-
     gamesocket.on("player1moved", (y: any) => {
         paddel1.y = y.y ;
  
@@ -179,8 +168,8 @@ export default function Pong(props: gameProps) {
         paddel2.y = y.y ;
     })
     gamesocket.on("moveBallClient", (pyload) => {
-        ballCord.x = pyload.x * width;
-        ballCord.y = pyload.y * height;
+        ballCord.x = pyload.x;
+        ballCord.y = pyload.y;
         pre.x =  pyload.px
         pre.y = pyload.py
     })

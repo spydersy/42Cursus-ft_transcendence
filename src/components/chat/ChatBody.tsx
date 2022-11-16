@@ -73,7 +73,8 @@ export default function ChatBody(props: ChatProps) {
               {
                 return <div id={"bar"+ i} className='bar' key={i} >  <MsgNotStyle>
                   <div className='name'>{object.displayName}</div>
-                  {object.content}
+                  <div className='msg'> {object.content}</div>
+                 
                 <span>
                   {object.date.slice(11, 16)}
                 </span>
@@ -82,7 +83,8 @@ export default function ChatBody(props: ChatProps) {
               else
               {
               return <div id={"bar"+ i} className='bar'  key={i} > <MsgStyle>
-                {object.content}
+                   <div className='msg'> {object.content}</div>
+
                 <span>
                 {object.date.slice(11, 16)}
               </span>
@@ -158,6 +160,11 @@ export default function ChatBody(props: ChatProps) {
    bottom: 5px;
    
   }
+  >.msg{
+  line-break: anywhere;
+   min-width: 100%;
+ font-weight: 600;
+ }
   `;
   const    MsgNotStyle = styled.div`
 
@@ -170,7 +177,6 @@ export default function ChatBody(props: ChatProps) {
   background-color:  ${props => props.theme.colors.primarybg};
   max-width: 300px;
   min-width: 150px;
-  /* min-height: 35px; */
   margin-right: auto;
   margin-left: 10px;
   position: relative;
@@ -190,7 +196,13 @@ export default function ChatBody(props: ChatProps) {
 					height: 10px;
 					background-color: inherit;
 				}
- .name{
+ >.name{
+ color: ${props => props.theme.colors.purple};
+ font-weight: 600;
+ }
+ >.msg{
+  line-break: anywhere;
+   min-width: 100%;
  color: ${props => props.theme.colors.purple};
  font-weight: 600;
  }

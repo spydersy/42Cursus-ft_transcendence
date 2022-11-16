@@ -17,8 +17,8 @@ interface GameProps {
   mode : string
 }
 var defaultProp = {
-  ballcolor : "#000",
-  paddlecolor : "#000",
+  ballcolor : "#000000",
+  paddlecolor : "#000000",
   mode : "string"
 }
 export default function GameModal(props: GmaemodelProps) {
