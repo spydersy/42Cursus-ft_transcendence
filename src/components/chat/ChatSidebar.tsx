@@ -197,6 +197,8 @@ export  function ConversationComponent(props : ConvProps) {
 }
 const Avatar = styled.div`
 margin-left : 5px;
+
+min-width: 50px;
 width: 50px;
 height: 50px;
 `
@@ -211,7 +213,7 @@ position: relative;
 border-radius: 5px;
 align-items: center;
 display: flex;
-
+overflow: hidden;
 margin-bottom: 10px;
 ${props => (props.active === "true") && `
 background-color:  #0E1117;
@@ -222,22 +224,26 @@ background-color: ${props => props.theme.colors.bg};
 }
 >.mesgData{
 margin-left: 12px;
+flex : 1;
 height: 40px;
 display: flex;
 align-items: flex-start;
 justify-content: space-between;
 flex-direction: column;
 >.name{
-  width:100%;
+  width: 90%;
   min-width:120px;
   /* max-width:120px; */
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align :start;
   color:  ${props => props.theme.colors.primaryText};
-
+  
 }
-.msg{
+>.msg{
+  width:80%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 15px;
   opacity: 0.7;
   color:  ${props => props.theme.colors.seconderyText};

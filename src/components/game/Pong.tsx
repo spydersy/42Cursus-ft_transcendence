@@ -148,7 +148,7 @@ export default function Pong(props: gameProps) {
         p5.line(width /2, 0 , width /2, height);
     }
     const draw = (p5: p5Types) => {
-        // p5.resizeCanvas(width , height)
+        p5.resizeCanvas(width , height)
 
         //create ball
         p5.background(0);
@@ -165,9 +165,6 @@ export default function Pong(props: gameProps) {
         }
      
     };
-   
-
-
     gamesocket.on("player1moved", (y: any) => {
         paddel1.y = y.y ;
  
