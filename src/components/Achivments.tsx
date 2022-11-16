@@ -71,16 +71,16 @@ export  function Conty(props : {statue : boolean , name : string , desc : string
   return (
     <ContyStyle onClick={()=>{setshow(!show)}} status={props.statue} >
       {show && <Modal isOpen={show}
-                        onRequestClose={() => {setshow(false)}}
-                        hideModal={() => {setshow(false) }}
-                        >
-                            <ModalStyle status={false} className='modal'>
-                              <img  src={props.badge} alt={props.name} />
+                  onRequestClose={() => {setshow(false)}}
+                  hideModal={() => {setshow(false) }}
+                  >
+                      <ModalStyle status={false} className='modal'>
+                        <img  src={props.badge} alt={props.name} />
 
-                              <div className='name'>{props.name}</div>
-                              <div className='desc'>{props.desc}</div>
-                            </ModalStyle>  
-                        </Modal>
+                        <div className='name'>{props.name}</div>
+                        <div className='desc'>{props.desc}</div>
+                      </ModalStyle>  
+                  </Modal>
                         
               }
     <ToolTip>{props.name} </ToolTip>

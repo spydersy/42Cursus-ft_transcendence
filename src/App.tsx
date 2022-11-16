@@ -289,20 +289,32 @@ function App() {
       User.then(async(user : UserProp | string)=>{
         if (user === "{}")
         {
-    
-          
-
+  
           // console.log("user is not logged in")
           if (pageName !== "2fa")
             navigate("/signin")
         } 
-        else{
+        else
+        {
             await joinChannels()
-            socket.emit("AddOnlineUser")
+            // socket.emit("AddOnlineUser")
             gameSocket.emit('gameConnected', {login : user.login});
-            }
+
+            
+
+          }
+
+
+
+
+
+
+
+
+
       })
-      
+
+
     //   axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me",  {withCredentials: true} 
     //   ).then(async(res)=>{
         
@@ -320,6 +332,7 @@ function App() {
 
     //   })  
   }, [])
+
   
   return (
     <div className="App">

@@ -157,9 +157,6 @@ export default function Pong(props: gameProps) {
         drowPaddels(p5)
         drowBall(p5)
     };
-   
-
-
     gamesocket.on("player1moved", (y: any) => {
         paddel1.y = y.y ;
  

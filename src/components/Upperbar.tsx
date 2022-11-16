@@ -18,10 +18,12 @@ import EmptyComponent from './PlayerrEmptyComp';
 import { UserContext } from '../context/UserContext'
 import { FriendRequest } from './Notifications/NotifComponents';
 import Mamali from "../assets/imgs/avatar/Ai-lwahch.png";
+import trophy from "../assets/trophy.png";
 // import { UserContext } from './context/UserContext';
 import {SocketContext } from '../context/Socket';
-// import MsgToast  from '../components/Toasts/MsgToast';
+import Modal from './Modal'
 
+// import MsgToast  from '../components/Toasts/MsgToast';
 ///////
 
 interface ListTypes {
@@ -42,6 +44,7 @@ const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : ""}
 export default function Upperbar() {
   const [open, setopen] = useState(false)
   const [currentUser, setcurrentUser] = useState< UserProp>({defaultAvatar : NoUserIcon , login : ""})
+  const [show, setshow] = React.useState(false)
   const ToggleDD = (e : any)=>{
     setopen(!open)
     e.stopPropagation();
@@ -62,8 +65,24 @@ export default function Upperbar() {
   }, [window.location.pathname])
 
   useEffect(() => {
-    console.log("ddss")
+    axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me",  {withCredentials: true}  ).then(async(res)=>{
+      let Save = JSON.parse(localStorage.getItem("achievement") || "[]")
+
+      if ((Save[0] !== res.data.achievement[0]) && res.data.achievement[0] || 
+          (Save[1] !== res.data.achievement[1]) && res.data.achievement[1] ||
+          (Save[2] !== res.data.achievement[2]) && res.data.achievement[2] ||
+          (Save[3] !== res.data.achievement[3]) && res.data.achievement[3] ||
+          (Save[4] !== res.data.achievement[4]) && res.data.achievement[4] ||
+          (Save[5] !== res.data.achievement[5]) && res.data.achievement[5] ) 
+          {
+            localStorage.setItem("achievement", JSON.stringify(res.data.achievement))
+            setshow(true)
+          }
+      })
+
+
   }, [currentUser])
+
 
   return (
     <Wrraper>
@@ -86,11 +105,46 @@ export default function Upperbar() {
               }
             </div>
         </RightCont>
-       
+
+    
+        {show && <Modal isOpen={show}
+                    onRequestClose={() => {setshow(false)}}
+                    hideModal={() => {setshow(false) }}
+                    >
+                        <ModalStyle status={true} className='modal'>
+                          <img  src={trophy} alt={trophy} />
+
+                          <div className='name'>New Achievement is Unlocked</div>
+                          <div className='desc'></div>
+                        </ModalStyle>  
+                    </Modal>
+                          
+        }
+
     </Wrraper>
     
   )
 }
+export interface AchiveStyleProps { status: boolean; }
+
+const ModalStyle = styled.div<AchiveStyleProps>`
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    width: 100%;
+
+    >img{
+      width: 350px;
+      height: auto;
+      margin: 20px 0px;
+    }
+    font-size: "Poppins" , sans-serif;
+    >.name{
+      font-size: 30px;
+
+    }
+`;
+
 const Wrraper = styled.div`
   z-index: 20;
 

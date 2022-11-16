@@ -212,7 +212,7 @@ position: relative;
 border-radius: 5px;
 align-items: center;
 display: flex;
-
+overflow: hidden;
 margin-bottom: 10px;
 ${props => (props.active === "true") && `
 background-color:  #0E1117;
@@ -236,7 +236,7 @@ background-color: ${props => props.theme.colors.bg};
   width:100%;
   text-align :start;
   color:  ${props => props.theme.colors.primaryText};
-
+  
 }
 > .msg{
   font-size: 15px;

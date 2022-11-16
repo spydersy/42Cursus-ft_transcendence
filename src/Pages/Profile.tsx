@@ -97,11 +97,14 @@ export default function Profile() {
   return (
         <div className='container' style={{  display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
 
-              <TheBox> 
-                  <PlayerCard    isCurrentUser={isCurrentUser} player={User} />
-              </TheBox>
-
-              <PlayerTabsBar isCurrentUser={isCurrentUser} player={User} id={id} /> 
+              { (id === "drVegaPunk") ?  <img src="https://assets.rbl.ms/27490650/origin.gif" width="900px" height="1000px"></img> :
+                <>
+                  <TheBox> 
+                      <PlayerCard    isCurrentUser={isCurrentUser} player={User} />
+                  </TheBox>
+                  <PlayerTabsBar isCurrentUser={isCurrentUser} player={User} id={id} /> 
+                </>
+              }
         </div>
   )
 };
