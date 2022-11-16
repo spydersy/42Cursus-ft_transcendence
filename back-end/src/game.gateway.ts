@@ -63,17 +63,14 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     if (room !== null)
     {
       
-      this.wss.to(room.roomName).emit("endGame" , {score: {score1 : 0 , score2 : 0}, roomPlayers :   room.roomPlayers, status : room.status})
-      await room.saveGame(room.status !== "AiGame" ?   MODE.CLASSIC :  MODE.AIBUGGY)
+      var i = this.roomArray.indexOf(room);
+      this.roomArray[i].Stop()
 
       this.wss.emit("change" , this.getArrayData() )
       this.RemovePlayer(client , payload)
-      // this.wss.emit("change" ,  this.roomArray)
     }
     for (let index = 0; index < this.roomArray.length; index++) {
       client.leave(this.roomArray[index].roomName)
-      // this.roomArray[index].debug();
-
   }
 }
   // @UseGuards(WsGuard)
@@ -82,23 +79,11 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
     this.logger.log("challengeGame" , payload)
     var i =  this.getRoombyLogin(payload.player1)
-    // if (i!== null && i.status === "waiting")
-    // {
-    //   var index = this.roomArray.indexOf(i)
-
-    //     this.roomArray.splice(index , 1)
-    // }
-    // var j =  this.getRoombyLogin(payload.player2)
-    // if (j !== null &&  j.status === "waiting")
-    // {
-    //     var index = this.roomArray.indexOf(j)
-    //     this.roomArray.splice(index , 1)
-    // }
 
     if (this.getRoombyName(payload.player1+payload.player2) === -1  )
     {
     this.logger.log("challengeGame" , payload)
-    var newRoom = new GameService(payload.player1+payload.player2)
+    var newRoom = new GameService(payload.player1+payload.player2 , this.wss)
 
     newRoom.joinPlayer(payload.player1 , client.id)
 
@@ -136,12 +121,40 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   Play1v1(client: any, i : number): void {
     client.join(this.roomArray[i].roomName)
-    if (this.roomArray[i].roomPlayers.length === 2)
+
+    if (this.roomArray[i].status === "1v1")
     {
-      this.roomArray[i].status = "1v1";
+      // console.log("____DBG___!V!")
+      this.roomArray[i].StartGame();
         this.wss.to(this.roomArray[i].roomName).emit("startGame" , {player1: this.roomArray[i].roomPlayers[0].login , player2: this.roomArray[i].roomPlayers[1].login})
         this.wss.emit("change" , this.getArrayData() )
       }
+      else
+      {
+        this.roomArray[i].status =  "1v1"
+
+      }
+
+  }
+  @SubscribeMessage('checkEnd')
+  CheckEndGames(client: any, i : number): void {
+    for (let i = 0; i < this.roomArray.length; i++) {
+      if (this.roomArray[i].status === "ENDED")
+      this.roomArray.splice(i , 1)
+    }
+    this.wss.emit("change" , this.getArrayData() )
+ 
+
+  }
+  @SubscribeMessage('changeGameStatue')
+  changeGame(client: any , login): void {
+    var room = this.getRoombyLogin(login)
+    if (room !== null)
+    {
+      var i = this.roomArray.indexOf(room);
+      this.roomArray[i].state = "START"
+    }
+ 
 
   }
 
@@ -152,7 +165,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     client.emit("change" , this.getArrayData() )
 
   }
-  @UseGuards(WsGuard)
+  // @UseGuards(WsGuard)
   @SubscribeMessage('Play')
   Play(client: any, payload: {login : string , mode : string}): void {
     var index = this.playerExist(client , payload.login)
@@ -192,7 +205,7 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 
 
-  @UseGuards(WsGuard)
+  // @UseGuards(WsGuard)
   @SubscribeMessage('watchGame')
   addWatch(client: any, payload: any): void {
     var i = this.getRoombyName(payload)
@@ -211,7 +224,11 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     if (room)
     {
       if (payload.y <  1 - 0.15 && payload.y > 0)
+      {
+        var i = this.roomArray.indexOf(room);
+        this.roomArray[i].paddel1.y = payload.y;
         this.wss.to(room.roomName).emit("player1moved" , payload)
+      }
     }
   }
 
@@ -222,35 +239,39 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
     if (room)
     {
       if (payload.y <  1 - 0.15 && payload.y > 0)
+      {
+        var i = this.roomArray.indexOf(room);
+        this.roomArray[i].paddel2.y = payload.y;
         this.wss.to(room.roomName).emit("player2moved" , payload)
+      }
     }
 
   }
 
-  @SubscribeMessage('moveBall')
-  moveBall(client: any, payload: any): void {
-    var room = this.getRoombyLogin(payload.login)
-    if (room)
-    {
-      var i = this.roomArray.indexOf(room)
+  // @SubscribeMessage('moveBall')
+  // moveBall(client: any, payload: any): void {
+  //   var room = this.getRoombyLogin(payload.login)
+  //   if (room)
+  //   {
+  //     var i = this.roomArray.indexOf(room)
 
 
-        this.roomArray[i].width = payload.w
-        this.roomArray[i].height = payload.h
-        if (!this.hitWalls(i, this.roomArray[i].ball ,this.roomArray[i].direction , payload.w, payload.h ,payload.p1 , payload.p2 ))
-          return ;
-        this.roomArray[i].predict =  (this.roomArray[i].paddel2.x -  this.roomArray[i].ball.x) / this.roomArray[i].direction.x
-        this.roomArray[i].ball.x += this.roomArray[i].direction.x
-        this.roomArray[i].ball.y += this.roomArray[i].direction.y
+  //       this.roomArray[i].width = payload.w
+  //       this.roomArray[i].height = payload.h
+  //       if (!this.hitWalls(i, this.roomArray[i].ball ,this.roomArray[i].direction , payload.w, payload.h ,payload.p1 , payload.p2 ))
+  //         return ;
+  //       this.roomArray[i].predict =  (this.roomArray[i].paddel2.x -  this.roomArray[i].ball.x) / this.roomArray[i].direction.x
+  //       this.roomArray[i].ball.x += this.roomArray[i].direction.x
+  //       this.roomArray[i].ball.y += this.roomArray[i].direction.y
   
-        if(room.status === "AiGame" && room.direction.x > 0)
-        {
-          this.moveAI( this.roomArray[i])
-        }
-        this.wss.to(room.roomName).emit("moveBallClient" , {x: this.roomArray[i].ball.x , y: this.roomArray[i].ball.y , px : this.roomArray[i].paddel2.x, py :this.roomArray[i].predicty })
+  //       if(room.status === "AiGame" && room.direction.x > 0)
+  //       {
+  //         this.moveAI( this.roomArray[i])
+  //       }
+  //       this.wss.to(room.roomName).emit("moveBallClient" , {x: this.roomArray[i].ball.x , y: this.roomArray[i].ball.y , px : this.roomArray[i].paddel2.x, py :this.roomArray[i].predicty })
       
-    }
-  }
+  //   }
+  // }
 
   // @UseGuards(WsGuard)
   @SubscribeMessage('gameConnected')
@@ -395,8 +416,9 @@ moveAI(room : any )
      var roomName = this.roomArray[roomslenght - 1].roomName
      var lastRoomPlayers = this.roomArray[roomslenght - 1].roomPlayers
      this.roomArray[roomslenght - 1].status = "InGame"
-
      this.logger.log("startgame emited")
+     this.roomArray[roomslenght - 1].StartGame()
+
      this.wss.to(roomName).emit("startGame", {player1 : lastRoomPlayers[0].login , player2 :  lastRoomPlayers[1].login })
      this.wss.emit("change" , this.getArrayData() )
 
@@ -469,7 +491,7 @@ moveAI(room : any )
    {
      let myuuid = uuidv4();
 
-     const  newRoom = new GameService(myuuid)
+     const  newRoom = new GameService(myuuid , this.wss)
 
    newRoom.joinPlayer(login , client.id)
    this.roomArray.push(newRoom)
@@ -489,7 +511,7 @@ moveAI(room : any )
    else
    {
      let myuuid = uuidv4();
-     const  newRoom = new GameService(myuuid)
+     const  newRoom = new GameService(myuuid , this.wss)
      newRoom.joinPlayer(login , client.id)
      this.roomArray.push(newRoom)
    }
@@ -520,13 +542,15 @@ moveAI(room : any )
 
 playAi(client: any, payload: any): void {
   let myuuid = uuidv4();
-  var newRoom = new GameService(myuuid)
+  var newRoom = new GameService(myuuid , this.wss)
   newRoom.status = "AiGame"
   newRoom.direction = {x: 0.006 , y : 0.006}
   newRoom.joinPlayer(payload , client.id)
   newRoom.joinPlayer("drVegaPunk" , "drVegaPunk")
   client.join(newRoom.roomName)
+
   this.roomArray.push(newRoom)
+  this.roomArray[this.roomArray.length - 1].StartGame()
   this.wss.to(newRoom.roomName).emit("startGame" , {player1 : payload , player2: "drVegaPunk"})
   this.wss.emit("change" , this.getArrayData() )
 }
