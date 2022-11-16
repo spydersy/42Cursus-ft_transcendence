@@ -15,7 +15,10 @@ export class ProfileService {
 
     async me(@Req() req , @Query() query, @Res() res: Response) {
         let profile = await this.userService.GetUserByLogin(req.user.username);
-        profile['nbFriends'] = await this.userService.GetnbFriends(req.user.username, req.user.username);
+        profile['nbFriends'] = 0;
+        const nbFriends = await this.userService.GetnbFriends(req.user.username, req.user.username);
+        if (nbFriends)
+            profile['nbFriends'] = nbFriends;
         profile['rank'] = await this.userService.GetRank(req.user.username, req.user.username);
         delete profile.twoFactorAuthSecret;
         return res.send(profile);

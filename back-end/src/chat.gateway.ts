@@ -61,7 +61,6 @@ import { JwtService } from "@nestjs/jwt";
     if (ret.stat === true)
     {
       let blockedUsers : string[] = await this.GetNotAllowedUsersInChannel(payload.userId, payload.channelId)
-      console.log(">>>>>>>>>>>blocked users :", blockedUsers)
       // this.server.to(payload.channelId).emit('chatToClient', ret.payload);
       this.server.to(payload.channelId).except(blockedUsers).emit('chatToClient', ret.payload);
       var obj = {
@@ -73,7 +72,9 @@ import { JwtService } from "@nestjs/jwt";
       client.to(payload.channelId).except(blockedUsers).emit('msg_event', obj);
     }
     else
+    {
       this.server.to(ret.login).emit('event', ret.payload)
+    }
   }
 
   @UseGuards(WsGuard)
@@ -81,6 +82,8 @@ import { JwtService } from "@nestjs/jwt";
   AddMemberToChannel(client: any, payload: any): void {
     client.join((payload.addedMember))
     client.to(payload.addedMember).emit("addedMember",  payload.owner.login )
+    client.leave((payload.addedMember))
+
   }
 
 
@@ -96,11 +99,10 @@ import { JwtService } from "@nestjs/jwt";
 
   @UseGuards(WsGuard)
   @SubscribeMessage('gameChallenge')
-  SendGameChallenge(client: any, payload: any): void {
+  SendGameChallenge(client: any, payload: string[]): void {
     this.logger.log("challengeGame" , payload)
     client.join(payload[0]);
     client.to(payload[0]).emit('challeneEvent', payload[1]);
-    console.log("EMITEDdddddd")
     client.leave(payload[0]);
   }
 

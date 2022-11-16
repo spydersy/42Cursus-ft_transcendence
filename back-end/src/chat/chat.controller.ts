@@ -63,6 +63,13 @@ export class ChatController {
       return this.chatService.GetMyChannels(req.user.userId, res);
     }
 
+    @Get('userRestriction/:user')
+    async GetUserRestriction(@Req() req, @Query('channelId') channelId, @Res() res) {
+      if (channelId && req.params.user)
+        return this.chatService.GetUserRestriction(req.user.userId, req.params.user, channelId, res);
+      return res.status(HttpStatus.BAD_REQUEST).send({'message': 'Bad Request'});
+    }
+
     //DONE
     @Get('allChannels')
     async GetAllChannels(@Req() req, @Res() res) {

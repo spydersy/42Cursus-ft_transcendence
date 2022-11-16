@@ -149,6 +149,40 @@ export class ChatService {
         return socketRes;
     }
 
+    async GetUserRestriction(me: number, user: string, channelId: string, @Res() res) {
+        const userDto = await this.userService.GetUserByLogin(user);
+        if (userDto === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+        const meInChannel = await this.FindUserInChannel(me, channelId);
+        if (meInChannel === null)
+            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
+        const userInChannel = await this.FindUserInChannel(userDto.id, channelId);
+        if (userInChannel === null)
+            return res.status().send({'message': 'User Does Not Exist In Channel'});
+        if (userInChannel.restriction === RESTRICTION.MUTED) {
+            let currentDt = new Date();
+            if (currentDt < this.addSeconds(new Date(userInChannel.restrictionTime), userInChannel.duration)) {
+                return res.status(HttpStatus.OK).send({'restriction': 'MUTED',
+                                                        'permission': userInChannel.permission});
+            } else {
+                await this.prisma.channelsUsers.updateMany({
+                    where: {
+                        userId: userInChannel.userId,
+                        channelId: userInChannel.channelId
+                    },
+                    data: {
+                        restriction: RESTRICTION.NULL,
+                        duration: 0
+                    }
+                });
+                return res.status(HttpStatus.OK).send({'restriction': 'NULL',
+                                                        'permission': userInChannel.permission});
+            }
+        }
+        return res.status(HttpStatus.OK).send({'restriction': userInChannel.restriction,
+                                                'permission': userInChannel.permission});
+    }
+
     async GetManagedChannels(me: number, @Res() res) {
         let managedChannels = await this.prisma.channelsUsers.findMany({
             where: {

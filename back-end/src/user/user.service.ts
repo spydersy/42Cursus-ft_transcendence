@@ -19,7 +19,7 @@ export class UserService {
         let UserMeDto = await this.GetUserByLogin(UserMe);
         let UserDto = await this.GetUserByLogin(User);
 
-        if (UserMeDto === null || UserMeDto === null)
+        if (UserMeDto === null || UserDto === null)
             return 0;
         if (await this.IsBlockedUser(UserDto.id, UserMeDto.id) === true)
             return 0;

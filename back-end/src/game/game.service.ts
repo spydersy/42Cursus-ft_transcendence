@@ -32,13 +32,8 @@ export class GameService {
     server : Server
     gameInter : any
 
-    // score: {score1 : number , score2 : number};
-
-
     constructor(roomName : string , sv : Server)
     {
-   //   this.logger.log("client is disconnected")
-   console.log("salaam")
         this.prisma = new PrismaService();
         this.server = sv ;
         this.userService = new UserService(this.prisma, null);
@@ -56,7 +51,6 @@ export class GameService {
 
     StartGame()
     {
-        console.log(this.status)
         this.gameInter = setInterval(this.loop, 1000/60 , this);
     }
     async Stop()
@@ -68,7 +62,6 @@ export class GameService {
 
     }
     loop(game : GameService){
-        // console.log(game.status)
         if (game.state !== "PAUSE")
         {
             if(game.status === "AiGame" && game.direction.x > 0)
@@ -300,26 +293,9 @@ export class GameService {
         else
             this.score.score2++;
         this.ball = {size : 0.02 , x :  0.5 , y :0.5}
-        this.direction = { x :  0.003 , y :0.003}
+        this.direction = { x :  0.005 , y :0.005}
         if ( this.status === "AiGame")
-            this.direction = {x: 0.006 , y : 0.006}
-   }
-
-
-   debug()
-   {
-       console.log("roomName : " +  this.roomName )
-       console.log("roomlenght : " +  this.roomlenght )
-       console.log("status : " +  this.status )
-       console.log("roomPlayers  : {" )
-       for (let index = 0; index < this.roomPlayers.length; index++) {
-
-           console.log("id : " +  this.roomPlayers[index].id )
-           console.log("login : " +  this.roomPlayers[index].login )
-
-       }
-       console.log("}" )
-
+            this.direction = {x: 0.005 , y : 0.005}
    }
 
    async GetMatchHistory(me: number, param: string, @Res() res) {

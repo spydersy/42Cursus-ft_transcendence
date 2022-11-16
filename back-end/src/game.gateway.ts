@@ -124,7 +124,6 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
     if (this.roomArray[i].status === "1v1")
     {
-      // console.log("____DBG___!V!")
       this.roomArray[i].StartGame();
         this.wss.to(this.roomArray[i].roomName).emit("startGame" , {player1: this.roomArray[i].roomPlayers[0].login , player2: this.roomArray[i].roomPlayers[1].login})
         this.wss.emit("change" , this.getArrayData() )
@@ -531,9 +530,10 @@ moveAI(room : any )
     {
       if (element.status != "waiting")
       {
-
-        var test = { players :[element.roomPlayers[0].login ,element.roomPlayers[1].login ] , score : element.score , name : element.roomName}
-          l.push(test)
+          if (element.roomPlayers[0] && element.roomPlayers[1]) {
+            var test = { players :[element.roomPlayers[0].login ,element.roomPlayers[1].login ] , score : element.score , name : element.roomName}
+            l.push(test)
+          }
       }
     }
   }
