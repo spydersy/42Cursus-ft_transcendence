@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
 import useCountdown from "@bradgarropy/use-countdown"
 // import Confetti from "react-confetti";
-interface countDownProps {start: boolean , setstart : (e : boolean)=>void, show: boolean , setshow : (e : boolean)=>void}
+interface countDownProps {start: boolean , setstart : (e : boolean)=>void, show: boolean , setshow : (e : boolean)=>void , onComplete : (e : any)=>void }
 
 const CountDownContainer = styled(motion.div)`
     position: absolute;
@@ -32,6 +32,7 @@ export default function CountDown(props : countDownProps) {
     const countdown = useCountdown({
         seconds: 3,
         onCompleted: () => {
+            props.onComplete()
             // setComplete(true)
             props.setshow(false)
             props.setstart(true)

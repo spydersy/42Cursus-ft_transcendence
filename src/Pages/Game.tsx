@@ -43,6 +43,12 @@ export default function Game(props : GameProps) {
   const [score, setScore] = useState({score1: 0 , score2: 0})
 
 
+  function startGame()
+  {
+    // setshow(false)
+    // setstart(true)
+    gamesocket.emit("changeGameStatue" , loged?.login)
+  }
   gamesocket.on("startGame" , (pyload : any)=>{
 
     fetchPlayersData(pyload.player1 , pyload.player2)
@@ -66,14 +72,14 @@ export default function Game(props : GameProps) {
       setplayer(false)
     }
 
+
  })
  gamesocket.on("playerscored" , (py : any)=>{
-  setScore(py)
-    setstart(false)
-    setTimeout(() => {
-    setstart(true)
+    // setstart(false)
+    // setTimeout(() => {
+    // setstart(true)
   
-    }, 3000);
+    // }, 3000);
 })
   gamesocket.on("roomNotFound" , (pyload : any)=>{
     navigate ("/NotFound")
@@ -81,6 +87,7 @@ export default function Game(props : GameProps) {
 
  gamesocket.off("endGame").on("endGame" , (payload)=>{
    setstart(false)
+   gamesocket.emit("checkEnd")
   if (payload.score.score1 > payload.score.score2 )
   {
       if (payload.roomPlayers[0].login === loged?.login )
@@ -102,7 +109,7 @@ export default function Game(props : GameProps) {
   }
   else
   {
-      setmsg( "win" )
+      setmsg( "over" )
   }
   onlineSocket.emit("outGame" , loged?.login)
   setOpennet(undefined)
@@ -136,7 +143,7 @@ var dat : UserProp;
     })
     document.addEventListener('visibilitychange', function (event) {
       if (document.hidden) {
-        gamesocket.emit("endGame" , dat?.login)
+        // gamesocket.emit("endGame" , dat?.login)
       } else {
 
       }
@@ -179,7 +186,7 @@ var dat : UserProp;
       <Score score={score} socket={gamesocket}  user={user} opennet={opennet} />
       <GameStyle id="canva">
         {show &&
-            <CountDown show={show} setshow={(e)=>{
+            <CountDown onComplete={()=>{startGame()}} show={show} setshow={(e)=>{
               setshow(e)
             }} start={start}  setstart={(e)=>{
               setstart(e)
@@ -195,7 +202,7 @@ var dat : UserProp;
                         onRequestClose={() => {setend(false) ; navigate("/") }}
                         hideModal={() => {setend(false) ; navigate("/")} }
                         >
-                            <GameEndModal score={score}  msg={msg} close={()=>{ setend(false)
+                            <GameEndModal  score={score}  msg={msg} close={()=>{ setend(false)
                              setstart(false)
                             }}login={loged?.login}  socket={gamesocket} />
                         </Modal>}
@@ -219,18 +226,18 @@ const GameStyle = styled.div`
 
 
 
-export  function GameEndModal(props : {score : {score1: number , score2: number}, msg : string , socket :Socket , login? : string , close: ()=>void}) {
+export  function GameEndModal(props : { score : {score1: number , score2: number}, msg : string , socket :Socket , login? : string , close: ()=>void}) {
+  const [score, setScore] = useState({score1: 0 , score2: 0})
 
   var mode = localStorage.getItem('mode') ;
   
-
-  
+ 
   
   return (
     <GameEndStyle>
       {props.msg === "win" ? "YOU WON" : props.msg === "lost"  ? "YOU LOST" : "GAME OVER"}
        <div>
-        {props.score.score1} - {props.score.score2}
+        {/* {score.score1} - {score.score2} */}
 
        </div>
         <div className='buttns'>

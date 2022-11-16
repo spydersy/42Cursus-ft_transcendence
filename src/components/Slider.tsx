@@ -23,15 +23,12 @@ export default function Slider() {
         setmain(Math.floor(ma))
     })
     socket.on("changeScoreLive" , (data : any)=>{
-
-
-
        var l = list;
-       if (l.length !== 0)
-       {
-        if (l[data.index])
-           l[data.index].score = data.score
-
+       for (let i = 0; i < l.length; i++) {
+        const element = l[i];
+        if (element.name === data.name)
+            l[i].score = data.score
+        
        }
        setlist([...l])
         // setmain(data.length / 2 > 1 ? data.length / 2  : 0 )
