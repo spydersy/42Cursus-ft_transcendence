@@ -266,7 +266,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{
           setrelationStatus("PENDING")
-          AddUsernotify();
+          // AddUsernotify();
         user.then((user : UserProp | "{}")=>{
         if (user !== "{}")
         {
@@ -274,7 +274,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         }
        })
       }).catch((err)=>{ 
-        alert("USER ALREADY BLOCKED")
+        // alert("USER ALREADY BLOCKED")
         setrelationStatus("BLOCKER")
       })
     }
@@ -282,7 +282,7 @@ background-color: ${props => props.theme.colors.seconderybg};
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
       ).then((res)=>{
       setrelationStatus("NOTHING")
-      CancelNotify();
+      // CancelNotify();
     }).catch((err)=>{  
       setrelationStatus("PENDING")
       })
@@ -298,14 +298,14 @@ background-color: ${props => props.theme.colors.seconderybg};
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
       ).then((res)=>{
       setrelationStatus("NOTHING")
-      UnfriendUserNotify();
+      // UnfriendUserNotify();
       }).catch((err)=>{  })
     }
     const BlockUser = ()=>{
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
       ).then((res)=>{
       setrelationStatus("BLOCKED")
-      BlockUserNotify();
+      // BlockUserNotify();
 
       // user.then((user : UserProp | "{}")=>{
       //   if (user !== "{}")
@@ -320,7 +320,7 @@ background-color: ${props => props.theme.colors.seconderybg};
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=unblock",   {withCredentials: true}
       ).then((res)=>{
       setrelationStatus("NOTHING")
-      UnBlockUserNotify()
+      // UnBlockUserNotify()
       }).catch((err)=>{  })
     }
     const setUserGrade = (props : any)=>{
@@ -773,12 +773,18 @@ export  function AvatarComponent(props: AvatarProps) {
   }
   socket.on("ConnectedUser" , (pyload)=>{
    setUserStatu(pyload)
+
+
+
   
   })
+
   useEffect(() => {
     User.then((data : UserProp | "{}")=>{
       if (data !== "{}")
-        socket.emit("AddOnlineUser" ,data?.login)
+      socket.emit("AddOnlineUser" ,data?.login)
+      
+
  })
     
 
