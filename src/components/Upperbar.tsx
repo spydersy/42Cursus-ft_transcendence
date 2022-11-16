@@ -19,12 +19,48 @@ import { UserContext } from '../context/UserContext'
 import { FriendRequest } from './Notifications/NotifComponents';
 import Mamali from "../assets/imgs/avatar/Ai-lwahch.png";
 import trophy from "../assets/trophy.png";
-// import { UserContext } from './context/UserContext';
 import {SocketContext } from '../context/Socket';
 import Modal from './Modal'
+import Badge1 from "../assets/imgs/Archive/badge1.svg";
+import Badge2 from "../assets/imgs/Archive/badge2.svg";
+import Badge3 from "../assets/imgs/Archive/badge3.svg";
+import Badge4 from "../assets/imgs/Archive/badge4.svg";
+import Badge5 from "../assets/imgs/Archive/badge5.svg";
+import Badge7 from "../assets/imgs/Archive/badge7.svg";
 
-// import MsgToast  from '../components/Toasts/MsgToast';
-///////
+const achievment5 = {
+  name: "Walo",
+  desc : "play 3 batteles in the grand Line",
+  badge : Badge1,
+}
+const achievment2 = {
+  name: "Camillion",
+  desc : "Change Avatar.",
+  badge : Badge2,
+}
+
+const achievment3 = {
+  name: "Blockuu",
+  desc : "Block a user fih sda3.",
+  badge : Badge4 ,
+}
+const achievment4 = {
+  name: "Win vs AI",
+  desc : "Defeate the powerful Legend  Dr VegaPunk.",
+  badge : Badge3 ,
+}
+const achievment1 = {
+  name: "ROOOM",
+  desc : "Create Your first Channel",
+  badge : Badge5 ,
+}
+const achievment7 = {
+  name: "OYAJI",
+  desc : " Enable the F 2FA",
+  badge : Badge7 ,
+}
+
+const ListAchievement = [achievment1 , achievment2 , achievment3 , achievment4, achievment5, achievment7]
 
 interface ListTypes {
   title : string,
@@ -40,6 +76,12 @@ interface NotifProps {
   setopen: (e : boolean) => void,
   
 }
+interface achievementProps { 
+  name: string,
+  desc : string,
+  badge : any,
+}
+
 const list :ListTypes[]  =  [{title: "Profile" , icon : <UserIcon/> , href : ""},{title: "Setting" , icon : <SettingIcon/>  ,href : "/setting"} ]
 export default function Upperbar() {
   const [open, setopen] = useState(false)
@@ -50,6 +92,7 @@ export default function Upperbar() {
     e.stopPropagation();
   }
   const User = useContext(UserContext)
+  const [Achiv, setAchiv] = useState<achievementProps>()
 
   useEffect(() => {
     // setcurrentUser(localStorage.getItem("user"))
@@ -66,21 +109,31 @@ export default function Upperbar() {
 
   useEffect(() => {
     axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me",  {withCredentials: true}  ).then(async(res)=>{
+      
       let Save = JSON.parse(localStorage.getItem("achievement") || "[]")
 
       if ((Save[0] !== res.data.achievement[0]) && res.data.achievement[0] || 
-          (Save[1] !== res.data.achievement[1]) && res.data.achievement[1] ||
-          (Save[2] !== res.data.achievement[2]) && res.data.achievement[2] ||
-          (Save[3] !== res.data.achievement[3]) && res.data.achievement[3] ||
-          (Save[4] !== res.data.achievement[4]) && res.data.achievement[4] ||
-          (Save[5] !== res.data.achievement[5]) && res.data.achievement[5] ) 
-          {
-            localStorage.setItem("achievement", JSON.stringify(res.data.achievement))
-            setshow(true)
+        (Save[1] !== res.data.achievement[1]) && res.data.achievement[1] ||
+        (Save[2] !== res.data.achievement[2]) && res.data.achievement[2] ||
+        (Save[3] !== res.data.achievement[3]) && res.data.achievement[3] ||
+        (Save[4] !== res.data.achievement[4]) && res.data.achievement[4] ||
+        (Save[5] !== res.data.achievement[5]) && res.data.achievement[5] ) 
+        {
+          
+          for (let i = 0 ; i < 6 ; i++){
+            if (res.data.achievement[i] && !Save[i]){
+              setAchiv(ListAchievement[i])
+              // setshow(true)
+              break
+            }
           }
+
+          localStorage.removeItem("achievement")
+          localStorage.setItem("achievement", JSON.stringify(res.data.achievement))
+          setshow(true)
+        }
+
       })
-
-
   }, [currentUser])
 
 
@@ -106,21 +159,18 @@ export default function Upperbar() {
             </div>
         </RightCont>
 
-    
         {show && <Modal isOpen={show}
-                    onRequestClose={() => {setshow(false)}}
-                    hideModal={() => {setshow(false) }}
-                    >
-                        <ModalStyle status={true} className='modal'>
-                          <img  src={trophy} alt={trophy} />
-
-                          <div className='name'>New Achievement is Unlocked</div>
-                          <div className='desc'></div>
-                        </ModalStyle>  
-                    </Modal>
-                          
-        }
-
+            onRequestClose={() => {setshow(false)}}
+            hideModal={() => {setshow(false) }}
+            >
+                <ModalStyle status={true} className='modal'>
+                  <img  src={Achiv.badge} alt={Achiv.desc} />
+                  <div className='name'> { Achiv.name } </div>
+                  <div className='name'> { " Successfully Unlocked"} </div>
+                  <div className='desc'></div>
+                </ModalStyle>  
+            </Modal>      
+        } 
     </Wrraper>
     
   )
@@ -134,7 +184,7 @@ const ModalStyle = styled.div<AchiveStyleProps>`
     width: 100%;
 
     >img{
-      width: 350px;
+      width: 250px;
       height: auto;
       margin: 20px 0px;
     }

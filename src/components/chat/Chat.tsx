@@ -237,10 +237,6 @@ export default function Chat() {
           {withCredentials: true} 
           ).then((res)=>{
             setmsgs(res.data)
-   
-    
-            console.log("done!")
-    
   
             
           }).catch((err)=>{
