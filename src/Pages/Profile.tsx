@@ -97,7 +97,7 @@ export default function Profile() {
   return (
         <div className='container' style={{  display: "flex" ,flexDirection : "column", marginTop: "100px"}}>
 
-              { (id === "drVegaPunk") ?  <img src="https://assets.rbl.ms/27490650/origin.gif" width="900px" height="1000px"></img> :
+              { (id === "drVegaPunk") ?  <img alt="" src="https://assets.rbl.ms/27490650/origin.gif" width="900px" height="1000px"></img> :
                 <>
                   <TheBox> 
                       <PlayerCard    isCurrentUser={isCurrentUser} player={User} />

@@ -64,7 +64,6 @@ const [alert, setalert] = useState(false)
         var v = reffo.current?.value
         if (v === "")
         {
-          console.log(  v)
           setalert(true)
           return ;
         }

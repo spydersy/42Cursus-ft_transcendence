@@ -183,7 +183,6 @@ export default function Chat() {
       ).then((res)=>{
         userLogin = res.data.login
       }).catch((err)=>{
-        console.log(err)
       })
       await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
       {withCredentials: true} 
@@ -196,7 +195,6 @@ export default function Chat() {
         // mychannels.pushback(userlogin)
         socket.emit('joinRoom', myChannels)
       }).catch((err)=>{
-        console.log(err)
       })
       }
     useEffect(() => {
@@ -237,15 +235,9 @@ export default function Chat() {
           {withCredentials: true} 
           ).then((res)=>{
             setmsgs(res.data)
-   
-    
-            console.log("done!")
-    
   
             
           }).catch((err)=>{
-  
-             console.log(err)
            })
 
       }

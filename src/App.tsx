@@ -8,7 +8,7 @@ import Punk from "./assets/imgs/punkhazard.png";
 import Dress from "./assets/imgs/dressRosa.jpg";
 import Wano from "./assets/imgs/wano.jpg";
 import Fish from "./assets/imgs/fishman.jpeg";
-import { OnlineContextSocket, SocketContext,  SocketGameContext } from './context/Socket';
+import { SocketContext,  SocketGameContext } from './context/Socket';
 import {  Routes,   Route, useNavigate  } from "react-router-dom";
 import SignIn from './Pages/SignIn';
 import NotFound from './Pages/NotFound';
@@ -99,7 +99,7 @@ function App() {
   const [gametheme, setGametheme] = useState({theme :  {map :mockedItems[1], rounds : 5}, mode : "classic"})
   
   const socket = useContext(SocketContext)
-  const onlinesSocket = useContext(OnlineContextSocket)
+  // const onlinesSocket = useContext(OnlineContextSocket)
   const gameSocket = useContext(SocketGameContext)
   const User = useContext(UserContext)
   // const [toastData, settoastData] = useState<msgType>()
@@ -108,7 +108,6 @@ function App() {
   
   // const [toastData, settoastData] = useState()
   function hundleMsg (payload) {
-    console.table(payload)
     if (pageName !== "chat")
     {
       
@@ -263,34 +262,33 @@ function App() {
       Achievements: boolean[]
   } 
   const navigate = useNavigate();
-  let leaveChunnels = async () => {
+  // let leaveChunnels = async () => {
 
-    let userLogin : string;
-    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
-    {withCredentials: true} 
-    ).then((res)=>{
-      userLogin = res.data.login
-    }).catch((err)=>{
-    })
-    await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
-    {withCredentials: true} 
-    ).then((res)=>{
-      var myChannels : Array<string> = [];
-      for (let index = 0; index < res.data.length; index++) {
-        myChannels.push(res.data[index].channelId);
-      }
-      myChannels.push(userLogin);
-      // mychannels.pushback(userlogin)
-      socket.emit('leaveRoom', myChannels)
-    }).catch((err)=>{
-    })
-    }
+  //   let userLogin : string;
+  //   await axios.get( process.env.REACT_APP_BACKEND_URL+ "/profile/me", 
+  //   {withCredentials: true} 
+  //   ).then((res)=>{
+  //     userLogin = res.data.login
+  //   }).catch((err)=>{
+  //   })
+  //   await axios.get( process.env.REACT_APP_BACKEND_URL+ "/chat/myChannels", 
+  //   {withCredentials: true} 
+  //   ).then((res)=>{
+  //     var myChannels : Array<string> = [];
+  //     for (let index = 0; index < res.data.length; index++) {
+  //       myChannels.push(res.data[index].channelId);
+  //     }
+  //     myChannels.push(userLogin);
+  //     // mychannels.pushback(userlogin)
+  //     socket.emit('leaveRoom', myChannels)
+  //   }).catch((err)=>{
+  //   })
+  //   }
   useEffect(() => {
       User.then(async(user : UserProp | string)=>{
         if (user === "{}")
         {
   
-          // console.log("user is not logged in")
           if (pageName !== "2fa")
             navigate("/signin")
         } 
@@ -313,24 +311,8 @@ function App() {
 
 
       })
-
-
-    //   axios.get(process.env.REACT_APP_BACKEND_URL +"/profile/me",  {withCredentials: true} 
-    //   ).then(async(res)=>{
-        
-    //     localStorage.setItem("mode","classic")
-
-    //     console.log("user is logged in1")
-
-    //   //   }
-
-    //     console.log("user is logged in Req ")
-
-    // }).catch((err)=>{
-    //   console.log("user is  not logged in1")
-    //   // navigate("/")
-
-    //   })  
+      
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   

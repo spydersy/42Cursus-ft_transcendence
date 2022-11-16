@@ -4,75 +4,9 @@ import { AvatarComponent } from '../components/PlayerProfile';
 import { HeadComponent } from './Home';
 import { ReactComponent as Hat} from "../assets/imgs/hat.svg"
 
-import Melkarmi from "../assets/imgs/avatar/melkarmi.jpeg";
-import Mamali from "../assets/imgs/avatar/mamali.jpeg";
-import Hfadyl from "../assets/imgs/avatar/hfadyl.jpeg";
-import Fadi from "../assets/imgs/avatar/ael-fadi.jpeg";
 import axios from 'axios';
 
 
-const list = [
-    {
-        name : "Docker",
-        wins : 150,
-        lost : 100,
-        played : 250,
-        img : Hfadyl
-    
-    },
-    {
-    name : "melkarmi",
-    wins : 150,
-    lost : 100,
-    played : 250,
-    img : Melkarmi
-},
-{
-    name : "mamali",
-    wins : 150,
-    lost : 100,
-    played : 250,
-    img : Mamali
-
-},
-{
-    name : "Achraf",
-    wins : 150,
-    lost : 100,
-    played : 250,
-    img : Fadi
-
-}, {
-    name : "Docker",
-    wins : 150,
-    lost : 100,
-    played : 250,
-    img : Hfadyl
-
-},
-{
-name : "melkarmi",
-wins : 150,
-lost : 100,
-played : 250,
-img : Melkarmi
-},
-{
-name : "mamali",
-wins : 150,
-lost : 100,
-played : 250,
-img : Mamali
-
-},
-{
-name : "Achraf",
-wins : 150,
-lost : 100,
-played : 250,
-img : Fadi
-
-}]
 
 export default function Leader() {
 

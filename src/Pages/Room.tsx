@@ -69,7 +69,7 @@ const linkslist = ["All" , "My Rooms"]
                 <>
               {
                 allRooms.map((data : any , id : number)=>{
-                return<RoomComponent  id={data.id} roomMembers={data.nbUsers} roomName={data.name} roomBanner={data.picture} type={data.acces} isLocked={data.access === "Protected".toUpperCase()} ownership={false} />        
+                return<RoomComponent key={id} id={data.id} roomMembers={data.nbUsers} roomName={data.name} roomBanner={data.picture} type={data.acces} isLocked={data.access === "Protected".toUpperCase()} ownership={false} />        
                 })
               }
                 </>
@@ -84,7 +84,7 @@ const linkslist = ["All" , "My Rooms"]
                   {
                       myrooms.map((data : convType , id : number)=>{
                   
-                        return<RoomComponent    id={data.channelId } roomMembers={data.users.length} roomName={data.name} roomBanner={data.picture} type={data.access}  isLocked={data.access === "Protected".toUpperCase()} ownership={true} />        
+                        return<RoomComponent   key={id} id={data.channelId } roomMembers={data.users.length} roomName={data.name} roomBanner={data.picture} type={data.access}  isLocked={data.access === "Protected".toUpperCase()} ownership={true} />        
                       
     
                     })

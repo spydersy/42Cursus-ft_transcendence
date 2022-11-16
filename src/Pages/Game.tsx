@@ -45,8 +45,8 @@ export default function Game(props : GameProps) {
 
   function startGame()
   {
-    // setshow(false)
-    // setstart(true)
+    setshow(false)
+    setstart(true)
     gamesocket.emit("changeGameStatue" , loged?.login)
   }
   gamesocket.on("startGame" , (pyload : any)=>{
@@ -227,7 +227,7 @@ const GameStyle = styled.div`
 
 
 export  function GameEndModal(props : { score : {score1: number , score2: number}, msg : string , socket :Socket , login? : string , close: ()=>void}) {
-  const [score, setScore] = useState({score1: 0 , score2: 0})
+  // const [score, setScore] = useState({score1: 0 , score2: 0})
 
   var mode = localStorage.getItem('mode') ;
   

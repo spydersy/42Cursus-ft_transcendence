@@ -57,7 +57,7 @@ export default function MembersChatModal(props : { closeModal : ()=>void , data 
         l.push(element)
     }   
     setmembers(l)
-    console.log(props.data.users)
+ 
 
   // eslint-disable-next-line
   }, [])
@@ -99,11 +99,19 @@ interface MemberProps{
 
 
 
-    // useEffect(() => {
-    //   setmembers(prps.users)
-    //   return () => {
-    //   }
-    // }, [])
+    useEffect(() => {
+      // setmembers(prps.users)
+      axios.get(process.env.REACT_APP_BACKEND_URL + "/chat/userRestriction/" + props.data.login + "?channelId=" + props.channelId,  {withCredentials: true}  ).then(async(res)=>{
+   
+        setrestriction(res.data.restriction)
+        setpermission(res.data.permission)
+      })
+
+      return () => {
+      }
+
+    // eslint-disable-next-line
+    }, [])
     
     const OwnerBan = async (k: number) => {
       var  bodyFormData = {
@@ -144,7 +152,6 @@ interface MemberProps{
           gamesocket.emit("gameChallenge" , {player1 :props.data.login  , player2 :  user.login})
         }
       })
-      // console.log(props.data)
     };
     const SetAdmin = async (s: string) => {
       var o = {
@@ -194,8 +201,8 @@ interface MemberProps{
            {permission === "USER"? <Button size='small' isIcon={true} onClick={()=>{SetAdmin("admin")}} icon={<Admin/>}/> 
           :<Button size='small' color={"#ae0b0b"} isIcon={true} onClick={()=>{SetAdmin("USER")}} icon={<Admin/>}/>
         }
-          {(restriction === "NULL"||restriction === "MUTED")? <Button size='small' color={"#ae0b0b"}  isIcon={true} onClick={()=>{OwnerBan(0)}} icon={<Ban/>}/>
-          :<Button size='small'  isIcon={true} onClick={()=>{OwnerBan(1)}} icon={<Ban/>}/>
+          {(restriction === "NULL"||restriction === "MUTED")? <Button size='small'   isIcon={true} onClick={()=>{OwnerBan(0)}} icon={<Ban/>}/>
+          :<Button size='small' color={"#ae0b0b"}  isIcon={true} onClick={()=>{OwnerBan(1)}} icon={<Ban/>}/>
         }
           {
             muteModel &&

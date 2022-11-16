@@ -6,7 +6,7 @@ import AnimatedBg from '../components/AnimatedBg';
 import { Button } from './SignIn';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { wait } from '@testing-library/user-event/dist/utils';
+// import { wait } from '@testing-library/user-event/dist/utils';
 
 export default function NotFound() {
     return <StyledTwoFa>
@@ -65,7 +65,6 @@ export  function TwoFa() {
         } 
 
         axios.post(process.env.REACT_APP_BACKEND_URL+ "/auth/validate2FA?code=" + pass , {} ,{withCredentials: true}).then((res)=>{
-            console.log(" _______CODE DATA ______ " , res.data)
             if (res.data.Authentication === "SUCCESS")
             {
                 succes("Signed in successfully\nWelcome back!");

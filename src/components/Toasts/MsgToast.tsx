@@ -234,7 +234,6 @@ export  function GameChallengeToast(props: {data : any}) {
         ).then((res)=>{
               // check for the user is bloked 
               setUser(res.data)
-              console.log(User)
             }).catch((error)=>{ 
              
               } 

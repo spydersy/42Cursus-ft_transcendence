@@ -24,6 +24,9 @@ import {Link} from "react-router-dom";
 
 export default function SignIn() {
 useEffect(() => {
+   localStorage.setItem("achievement", JSON.stringify([false, false, false, false, false, false]))
+   localStorage.setItem("first", JSON.stringify(true))
+
 // window.location.reload()
 }, [])
 

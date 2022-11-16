@@ -34,8 +34,8 @@ export default function CountDown(props : countDownProps) {
         onCompleted: () => {
             props.onComplete()
             // setComplete(true)
-            props.setshow(false)
-            props.setstart(true)
+            // props.setshow(false)
+            // props.setstart(true)
         },
     })
 
