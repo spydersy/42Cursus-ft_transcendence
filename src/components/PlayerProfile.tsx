@@ -48,6 +48,7 @@ export function PlayerCard(props: PlayerCardProps) {
   let status = "";  
   const socket = useContext(OnlineContextSocket)
   const [state, setstate] = useState("")
+  const id = window.location.pathname.split("/")[2];
 
   const setUserStatu =( list : UserType[] )=>{
     for (let i = 0; i < list.length; i++) {
@@ -78,6 +79,9 @@ export function PlayerCard(props: PlayerCardProps) {
   { color = ("#e68f38");  status = "INGAME"; }
   else
   { color = ("#af1c1c");  status = "OFFLINE"; }
+
+  if (id == "drVegaPunk")
+  { color = ("#efd320");  status = "AI"; }
 
     return (
       <PlayerCardStyle  status={color} >
@@ -266,7 +270,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=add",   {withCredentials: true} 
         ).then((res)=>{
           setrelationStatus("PENDING")
-          AddUsernotify();
+          // AddUsernotify();
         user.then((user : UserProp | "{}")=>{
         if (user !== "{}")
         {
@@ -274,7 +278,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         }
        })
       }).catch((err)=>{ 
-        alert("USER ALREADY BLOCKED")
+        // alert("USER ALREADY BLOCKED")
         setrelationStatus("BLOCKER")
       })
     }
@@ -282,7 +286,7 @@ background-color: ${props => props.theme.colors.seconderybg};
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=cancel",   {withCredentials: true}
       ).then((res)=>{
       setrelationStatus("NOTHING")
-      CancelNotify();
+      // CancelNotify();
     }).catch((err)=>{  
       setrelationStatus("PENDING")
       })
@@ -298,14 +302,14 @@ background-color: ${props => props.theme.colors.seconderybg};
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=unfriend",   {withCredentials: true} 
       ).then((res)=>{
       setrelationStatus("NOTHING")
-      UnfriendUserNotify();
+      // UnfriendUserNotify();
       }).catch((err)=>{  })
     }
     const BlockUser = ()=>{
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=block",   {withCredentials: true} 
       ).then((res)=>{
       setrelationStatus("BLOCKED")
-      BlockUserNotify();
+      // BlockUserNotify();
 
       // user.then((user : UserProp | "{}")=>{
       //   if (user !== "{}")
@@ -320,7 +324,7 @@ background-color: ${props => props.theme.colors.seconderybg};
       axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/relation/"+ props.player.login+ "?event=unblock",   {withCredentials: true}
       ).then((res)=>{
       setrelationStatus("NOTHING")
-      UnBlockUserNotify()
+      // UnBlockUserNotify()
       }).catch((err)=>{  })
     }
     const setUserGrade = (props : any)=>{
@@ -347,6 +351,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
           setAChievements(res.data)
         }).catch((err)=>{})
+
   // eslint-disable-next-line
     }, [])
     const user = useContext(UserContext)
@@ -773,12 +778,18 @@ export  function AvatarComponent(props: AvatarProps) {
   }
   socket.on("ConnectedUser" , (pyload)=>{
    setUserStatu(pyload)
+
+
+
   
   })
+
   useEffect(() => {
     User.then((data : UserProp | "{}")=>{
       if (data !== "{}")
-        socket.emit("AddOnlineUser" ,data?.login)
+      socket.emit("AddOnlineUser" ,data?.login)
+      
+
  })
     
 
