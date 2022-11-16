@@ -48,6 +48,7 @@ export function PlayerCard(props: PlayerCardProps) {
   let status = "";  
   const socket = useContext(OnlineContextSocket)
   const [state, setstate] = useState("")
+  const id = window.location.pathname.split("/")[2];
 
   const setUserStatu =( list : UserType[] )=>{
     for (let i = 0; i < list.length; i++) {
@@ -78,6 +79,9 @@ export function PlayerCard(props: PlayerCardProps) {
   { color = ("#e68f38");  status = "INGAME"; }
   else
   { color = ("#af1c1c");  status = "OFFLINE"; }
+
+  if (id == "drVegaPunk")
+  { color = ("#efd320");  status = "AI"; }
 
     return (
       <PlayerCardStyle  status={color} >
@@ -347,6 +351,7 @@ background-color: ${props => props.theme.colors.seconderybg};
         axios.get( process.env.REACT_APP_BACKEND_URL+ "/users/achievements/" + id,  {withCredentials: true}).then((res)=>{
           setAChievements(res.data)
         }).catch((err)=>{})
+
   // eslint-disable-next-line
     }, [])
     const user = useContext(UserContext)
