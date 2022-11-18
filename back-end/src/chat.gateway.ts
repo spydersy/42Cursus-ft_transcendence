@@ -6,10 +6,13 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
  } from '@nestjs/websockets';
-import { Logger, UseGuards } from '@nestjs/common';
+import { Logger, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { ChatService } from './chat/chat.service';
-import { WsGuard } from './auth/jwt.strategy';
+import { WsGuard, WsGuard2 } from './auth/jwt.strategy';
+import { PrismaService } from './prisma/prisma.service';
+import { JwtService } from "@nestjs/jwt";
+
 
 @WebSocketGateway(3001, {
     cors: {
@@ -17,117 +20,138 @@ import { WsGuard } from './auth/jwt.strategy';
       credentials: true,
     },
     namespace: 'chat'
-
- })   // @WebSocketGateway decorator gives us access to the socket.io functionality.
-
- /*We also implement three interfaces OnGatewayInit, OnGatewayConnection
- and OnGatewayDisconnect which we use to log some key states of our application*/
+ })
+ 
  export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private chatService: ChatService) {}
-   // we created a member variable called server which is decorated with @WebsocketServer() which gives us access to the websockets server instance.
+  constructor(private chatService: ChatService, private prisma: PrismaService) {}
   @WebSocketServer() server: Server;
 
   private logger: Logger = new Logger('ChatGateway');
-//The handleMessage() function is also decorated with @SubscribeMessage() which makes it listen to an event named msgToServer.
+
+  async GetNotAllowedUsersInChannel(userId: number, channelId: string)
+  {
+    let fitredUsers:  any[] = [];
+    let notAllowedUsers = await  this.prisma.blocks.findMany({
+      where: {userId: userId}
+    });
+    const usersInChannel = await  this.prisma.channelsUsers.findMany({
+      where: {
+        channelId: channelId
+      },
+      include:  {
+        user: true
+      }
+    });
+    notAllowedUsers.forEach(element => {
+      for (let index = 0; index < usersInChannel.length; index++) {
+        if (element.blockedId ===  usersInChannel[index].userId) {
+          fitredUsers.push(usersInChannel[index].user.login);
+          break;
+        }
+      }
+    });
+    return fitredUsers;
+  }
+
+
   @UseGuards(WsGuard)
   @SubscribeMessage('chatToServer')
   async handleMessage(client: Socket, payload) {
-    console.log("__PAYLOAD__DBG__ : ", payload);
     const ret = await this.chatService.SendMessage(payload.userId, payload.content, payload.channelId);
-    console.log("__RET__DBG__ : ", ret);
     if (ret.stat === true)
     {
-      this.server.to(payload.channelId).emit('chatToClient', ret.payload);
-      // this.server.to(payload.channelId).emit('event', ret.payload);
-      client.to(payload.channelId).emit('msg_event', ret.payload);
+      let blockedUsers : string[] = await this.GetNotAllowedUsersInChannel(payload.userId, payload.channelId)
+      this.server.to(payload.channelId).except(blockedUsers).emit('chatToClient', ret.payload);
+      var obj = {
+        content: ret.payload.content,
+        login: payload.login,
+        channelId: ret.payload.channelId,
+        displayName: ret.payload.displayName
+      }
+      client.to(payload.channelId).except(blockedUsers).emit('msg_event', obj);
     }
     else
+    {
       this.server.to(ret.login).emit('event', ret.payload)
-    
+    }
   }
 
+  @UseGuards(WsGuard)
   @SubscribeMessage('addedMember')
   AddMemberToChannel(client: any, payload: any): void {
-    console.log("______DBG____ ADD_MEMBER : " , payload)
     client.join((payload.addedMember))
-    client.to(payload.addedMember).emit("addedMember", payload.owner.login)
-    // client.to(payload[0]).emit('challeneEvent', payload[1]);
+    client.to(payload.addedMember).emit("addedMember",  payload.owner.login )
+    client.leave((payload.addedMember))
+
   }
-  
+
 
   @UseGuards(WsGuard)
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket, rooms: Array<string>): void {
-    this.logger.log(`joining rooms: ${client.id}`);
     for(var index in rooms)
     {
-
-      // console.log("__ROOM__DBG__ : ", rooms[index])
       client.join(rooms[index]);
     }
-  //  client.emit('joinedRoom', room );
   }
+
+  @UseGuards(WsGuard)
   @SubscribeMessage('gameChallenge')
-  SendGameChallenge(client: any, payload: any): void {
-    console.log("______DBG____ CHALLENGEGAME : " , payload[1])
+  SendGameChallenge(client: any, payload: string[]): void {
+
+    client.join(payload[0]);
     client.to(payload[0]).emit('challeneEvent', payload[1]);
+    client.leave(payload[0]);
   }
+
+  @UseGuards(WsGuard)
   @SubscribeMessage('sendFriendRequest')
   handleFriendRequest(client: Socket, payload: any): void {
-    console.log('___FreindRequest____:',  payload)
     client.join(payload.reciver);
     client.to(payload.reciver).emit('recievedRequest', payload);
     client.leave(payload.reciver)
-    // client.to(payload[0]).emit('challeneEvent', payload[1]);
   }
 
-  // @SubscribeMessage('connection')
-  // handleCon() {
-  //   console.log('connected');
-  // }
+  @UseGuards(WsGuard)
+  @SubscribeMessage('leave')
+  handlelogour(client: Socket, payload: any): void {
+    client.join(payload.reciver);
+    client.to(payload.reciver).emit('recievedRequest', payload);
+    client.leave(payload.reciver)
+  }
 
+  @UseGuards(WsGuard)
   @SubscribeMessage('acceptFriendRequest')
   handleAcceptRequest(client: Socket, payload: any): void {
-
-    console.log('___requestd Login___', payload)
     client.join(payload.reciever);
     client.to(payload.reciever).emit('acceptedReq', payload)
     client.leave(payload.reciever)
   }
+ 
 
-  // @SubscribeMessage('declineFriendRequest')
-  // handleDeclineRequest(client: Socket, payload: any): void {
-  //   // console.log('___requestd Login___', payload)
-  //   client.join(payload.reciever);
-  //   client.to(payload.reciever).emit('declineReq', payload.accepter)
-  //   client.leave(payload.reciever)
-  // }
-
-  @SubscribeMessage('authEvent')
-  handleAuthEvent(client: Socket, payload: string): void {
-    console.log('___here___', payload)
-    // function to store new stat => ret
-    // if (ret === true) {
-    // emit(friends, online);
-    //}
-  }
-
+  @UseGuards(WsGuard)
   @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(client: Socket, room: string): void {
-    console.log("__CLIENT__LEAVE__ROOM__DBG__ : ", room);
-   client.leave(room);
-   client.emit('leftRoom', room );
+  handleLeaveRoom(client: Socket, rooms: Array<string>): void {
+    for(var index in rooms)
+    {
+      client.leave(rooms[index]);
+    }
   }
 
   afterInit(server: Server) {
-   this.logger.log('Init');
   }
 
   handleDisconnect(client: Socket) {
-   this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
-   this.logger.log(`Client connected: ${client.id}`);
+  async handleConnection(client: Socket, ...args: any[]) {
+
+    const wsGuard2: WsGuard2 = new WsGuard2(new JwtService(), null);
+    try {
+      await wsGuard2.canActivate(client.handshake) === false
+    } catch {
+      client.disconnect();
+      return;
+    }
   }
  }

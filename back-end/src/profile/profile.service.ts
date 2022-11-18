@@ -1,35 +1,26 @@
 import { HttpStatus, Injectable, Query } from '@nestjs/common';
 import { Req, Res } from '@nestjs/common';
-import { UserNameDto } from 'src/dtos/Inputs.dto';
 import { UserService } from 'src/user/user.service';
 import { Response } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RELATION } from '@prisma/client';
 import { TfaService } from 'src/tfa/tfa.service';
-import { Console } from 'console';
-import { ConfigService } from '@nestjs/config';
-import { GameService } from 'src/game/game.service';
 
 @Injectable()
 export class ProfileService {
 
     constructor(private userService: UserService,
                 private prisma: PrismaService,
-                private tfaService: TfaService,
-                private configService: ConfigService) {}
+                private tfaService: TfaService) {}
 
     async me(@Req() req , @Query() query, @Res() res: Response) {
-        // JUST FOR TEST
-        let ForbiddenString : string = "";
-        let TestUserNameDTO: UserNameDto ={
-            newname: ForbiddenString,
-        }
-        // console.log("__TEST__USER_NNAME__DTO__ : ", TestUserNameDTO);
         let profile = await this.userService.GetUserByLogin(req.user.username);
-        console.log("WEWE11 : ", req.user.username, req.user.username);
-        profile['nbFriends'] = await this.userService.GetnbFriends(req.user.username, req.user.username);
+        profile['nbFriends'] = 0;
+        const nbFriends = await this.userService.GetnbFriends(req.user.username, req.user.username);
+        if (nbFriends)
+            profile['nbFriends'] = nbFriends;
         profile['rank'] = await this.userService.GetRank(req.user.username, req.user.username);
-        // console.log("__USER__PROFILE__ : ", profile);
+        delete profile.twoFactorAuthSecret;
         return res.send(profile);
     }
 
@@ -39,7 +30,7 @@ export class ProfileService {
                 id: userId
             }
         });
-        userDto.achievement[2] = true;
+        userDto.achievement[1] = true;
         let uploaded = await this.prisma.users.update({
             where: {
                 id: userId
@@ -49,12 +40,11 @@ export class ProfileService {
                 achievement: userDto.achievement,
             }
         });
-        console.log("__UPLOAD__uploaded__ : ", uploaded);
         return res.status(HttpStatus.CREATED).send(uploadedAvatart);
     }
 
     async UpdateUserName(newName: string, userId: number, @Res() res) {
-        console.log("__NEW__NAME__ : ", newName);
+        newName = newName.toLowerCase();
         try {
             await this.prisma.users.update({
                 where: { id: userId},
@@ -79,12 +69,11 @@ export class ProfileService {
         });
         let FriendRequestsDTO = [];
         FriendRequests.forEach(element => {
+            delete element.sender.twoFactorAuth;
+            delete element.sender.twoFactorAuthSecret;
             FriendRequestsDTO.push(element.sender);
         });
-        console.log("__FRIEND__REQUESTS__DTO__ : ", FriendRequestsDTO);
-        console.log("__PENDING__REQUESTS__00__ : ", FriendRequests);
         return res.send(FriendRequestsDTO);
-        // return res.set().send();// requests;
     }
 
     async GetFriends(UserId: number, @Res() res) {
@@ -108,8 +97,16 @@ export class ProfileService {
             }
         });
         let AllFriends = [];
-        FriendsRowA.forEach(element => AllFriends.push(element.receiver));
-        FriendsRowB.forEach(element => AllFriends.push(element.sender));
+        FriendsRowA.forEach(element => {
+            delete element.receiver.twoFactorAuth;
+            delete element.receiver.twoFactorAuthSecret;
+            AllFriends.push(element.receiver)
+        });
+        FriendsRowB.forEach(element => {
+            delete element.sender.twoFactorAuth;
+            delete element.sender.twoFactorAuthSecret;
+            AllFriends.push(element.sender)
+        });
         return res.status(HttpStatus.OK).send(AllFriends);
     }
 
@@ -128,6 +125,15 @@ export class ProfileService {
                     await this.prisma.users.update({
                         where: { id: me},
                         data: { twoFactorAuth: true},
+                    });
+                    user.achievement[5] = true;
+                    await this.prisma.users.update({
+                        where: {
+                            id: user.id
+                        },
+                        data: {
+                            achievement: user.achievement
+                        }
                     });
                     return res.status(HttpStatus.OK).send({'message': '2FA enabeled'});
                 }
@@ -178,9 +184,11 @@ export class ProfileService {
         });
 
         let BlackList = [];
-        BlockRow.forEach(element => BlackList.push(element.blocked));
-        console.log("__BLACK__LIST__", BlackList);
-
+        BlockRow.forEach(element => {
+            delete element.blocked.twoFactorAuth;
+            delete element.blocked.twoFactorAuthSecret;
+            BlackList.push(element.blocked)
+        });
         return res.status(HttpStatus.OK).send(BlackList);
     }
 }

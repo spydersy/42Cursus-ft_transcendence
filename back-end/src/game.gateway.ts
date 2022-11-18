@@ -5,10 +5,12 @@ import { get } from 'http';
 import { Controller, Get } from '@nestjs/common';
 import { start } from 'repl';
 import { GameService } from './game/game.service';
-import { WsGuard } from './auth/jwt.strategy';
+import { WsGuard, WsGuard2 } from './auth/jwt.strategy';
 import { MODE } from '@prisma/client';
 import {v4 as uuidv4} from 'uuid';
 import { emit } from 'process';
+import { JwtService } from "@nestjs/jwt";
+
 
 @WebSocketGateway(3001, {
     cors: {
@@ -18,269 +20,131 @@ import { emit } from 'process';
     namespace : "game"
  })
 
+
+
 export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGatewayDisconnect{
 
   @WebSocketServer() wss : Server
   private logger: Logger = new Logger('GameLogger')
   private roomslenght: number = 0
-  private roomArray: GameService[] = [];//Room[] = []
+  private roomArray: GameService[] = [];
 
 
 
   afterInit(server: any) {
-    this.logger.log("After Init")
-    // console.log( server.adapter.rooms)
   }
-  playerExist(client : any , login  : string)
-  {
-
-    for (let i = 0; i < this.roomArray.length; i++) {
-      var room = this.roomArray[i];
-      var player = room.getPlayerbyLogin(login )
-      if (player)
-        return  i;
-    }
-
-    return -1;
-  }
-
-  JoinPlayer(client : any , login : string)
-  {
-    console.log("___DBG@")
-    var roomslenght = this.roomArray.length;
-
-    if (this.roomArray[roomslenght - 1].roomPlayers.length === 2)
-    {
-      var roomName = this.roomArray[roomslenght - 1].roomName
-      var lastRoomPlayers = this.roomArray[roomslenght - 1].roomPlayers
-      this.roomArray[roomslenght - 1].status = "InGame"
-      console.log("___DBG@")
-
-      this.logger.log("startgame emited")
-      this.wss.to(roomName).emit("startGame", {player1 : lastRoomPlayers[0].login , player2 :  lastRoomPlayers[1].login })
-      this.wss.emit("change" , this.getArrayData() )
-
-      this.logger.log("startgame emited")
-    }
-  }
-
-  getRoombyPlayerId(id : string )
-  {
-    for (let i = 0; i < this.roomArray.length; i++) {
-      if (this.roomArray[i])
-      {
-        const element = this.roomArray[i].getPlayer(id);
-        if (element)
-          return this.roomArray[i];
-      }
-    }
-    return null
-  }
-
-  getRoombyName(name : string )
-  {
-    for (let i = 0; i < this.roomArray.length; i++) {
-
-      if (this.roomArray[i].roomName === name)
-          return i;
-    }
-    return -1
-  }
-
-  RemovePlayer(client : any , login : string)
-  {
-    console.log("remove : " + login)
-    for (let i = 0; i < this.roomArray.length; i++) {
-      var room = this.roomArray[i];
-      if (room)
-      {
-
-        var player = room.getPlayerbyLogin(login )
-        console.log(player)
-        if (room.roomPlayers.includes(player))
-        {
-          console.log("remove : " +room.roomName)
-  
-          this.wss.to(room.roomName).emit("endGame", {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
-          client.leave(room.roomName)
-          // room.roomPlayers.splice(0, 2);
-          this.roomArray.splice(i, 1)
-          this.wss.emit("change" , this.getArrayData() )
-  
-          return ;
-      }
-      }
-    }
-
-  }
-
-
-  AddtoRoomArray(client : any , login : string) {
-
-    var roomslenght = this.roomArray.length;
-    console.log("__DBG__ADTOROOMS :",roomslenght )
-    if (roomslenght === 0)
-    {
-      let myuuid = uuidv4();
-
-      const  newRoom = new GameService(myuuid)
-
-    newRoom.joinPlayer(login , client.id)
-    this.roomArray.push(newRoom)
-    roomName = this.roomArray[roomslenght].roomName
-  }
-  else
-  {
-    roomName = this.roomArray[roomslenght - 1].roomName
-    if ( this.roomArray[roomslenght - 1].status  === "waiting")
-    {
-      if (this.roomArray[roomslenght - 1].roomPlayers.length  < 2)
-      {
-        this.roomArray[roomslenght - 1].joinPlayer(login , client.id)
-      }
-
-    }
-    else
-    {
-      let myuuid = uuidv4();
-      const  newRoom = new GameService(myuuid)
-      newRoom.joinPlayer(login , client.id)
-      this.roomArray.push(newRoom)
-    }
-  }
-  var roomName = this.roomArray[this.roomArray.length - 1].roomName
-  client.join(roomName)
-    // this.wss.emit("change" ,  this.roomArray)
-    this.logger.log("changeee")
-    for (let index = 0; index < this.roomArray.length; index++) {
-      this.roomArray[index].debug();
-   }
-
-  }
-
-
-  // @UseGuards(WsGuard)
+ 
   handleDisconnect(client: any)
   {
-    this.logger.log("client is disconnected")
     this.RemovePlayer(client , client.id)
-    for (let index = 0; index < this.roomArray.length; index++) {
-      this.roomArray[index].debug();
-   }
   }
 
+  async handleConnection(client: any, payload: any) {
 
-  // @UseGuards(WsGuard)
-  handleConnection(client: any, payload: any): void {
-
-    this.logger.log("client is connected "  + client.id)
-
+    const wsGuard2: WsGuard2 = new WsGuard2(new JwtService(), null);
+    try {
+      await wsGuard2.canActivate(client.handshake) === false
+    } catch {
+      client.disconnect();
+      return;
+    }
   }
 
+  @UseGuards(WsGuard)
   @SubscribeMessage('endGame')
-  deleteRoom(client: any, payload: any): void {
-
-    this.logger.log("client is disconnected")
-    var room = this.getRoombyPlayerId(client.id)
+  async deleteRoom(client: any, payload: any) {
+    var room = this.getRoombyLogin(payload)
     if (room !== null)
     {
-      this.wss.to(room.roomName).emit("endGame" , {score: room.score, roomPlayers :   room.roomPlayers})
+      
+      var i = this.roomArray.indexOf(room);
+      this.roomArray[i].Stop()
+
       this.wss.emit("change" , this.getArrayData() )
       this.RemovePlayer(client , payload)
-      // this.wss.emit("change" ,  this.roomArray)
     }
-
-    
     for (let index = 0; index < this.roomArray.length; index++) {
-      this.roomArray[index].debug();
-
+      client.leave(this.roomArray[index].roomName)
   }
 }
+
   @SubscribeMessage('gameChallenge')
   gameChallenge(client: any, payload: {player1 : string ,player2 : string }): void {
 
+    var i =  this.getRoombyLogin(payload.player1)
 
-      this.logger.log("challengeGame" , payload)
-  if (this.getRoombyName(payload.player1+payload.player2) === -1)
-  {
-    var newRoom = new GameService(payload.player1+payload.player2)
+    if (this.getRoombyName(payload.player1+payload.player2) === -1  )
+    {
+    var newRoom = new GameService(payload.player1+payload.player2 , this.wss)
+
     newRoom.joinPlayer(payload.player1 , client.id)
-    client.join(newRoom.roomName)
+
     this.roomArray.push(newRoom)
-    this.roomArray[this.roomArray.length - 1].debug()
+  
+    client.join(newRoom.roomName)
 
   }
 
 
   }
+
   @SubscribeMessage('gameAccept')
   gameAccept(client: any, payload: {player1 : string ,player2 : string }): void {
 
 
       var i = this.getRoombyName(payload.player1 + payload.player2)
-      this.logger.log("gameAccept" , i)
+
 
       if (i !== -1)
       {
-        this.logger.log("gameAccept" , i)
         client.join(this.roomArray[i].roomName)
-
-        this.wss.to(this.roomArray[i].roomName).emit("challengeAccepted")
         this.roomArray[i].joinPlayer(payload.player2 , client.id)
+        this.wss.to(this.roomArray[i].roomName).emit("challengeAccepted")
 
-        this.roomArray[i].debug()
-        // this.wss.to(this.roomArray[i].roomName).emit("startGame" , payload)
       }
 
 
 
   }
-  @SubscribeMessage('start')
-  start(client: any, payload: string): void {
 
 
+  Play1v1(client: any, i : number): void {
+    client.join(this.roomArray[i].roomName)
 
-      var room = this.getRoombyPlayerId(client.id)
-
-
-      if (room != null)
+    if (this.roomArray[i].status === "1v1")
+    {
+      this.roomArray[i].StartGame();
+        this.wss.to(this.roomArray[i].roomName).emit("startGame" , {player1: this.roomArray[i].roomPlayers[0].login , player2: this.roomArray[i].roomPlayers[1].login})
+        this.wss.emit("change" , this.getArrayData() )
+      }
+      else
       {
-        client.join(room.roomName)
-        var i = this.roomArray.indexOf(room)
-        // this.roomArray[i].roomPlayers.
-        if (this.roomArray[i].roomPlayers.length === 2)
-        {
-          this.roomArray[i].status = "InGame";
-          this.wss.to(this.roomArray[i].roomName).emit("startGame" , {player1: this.roomArray[i].roomPlayers[0].login , player2: this.roomArray[i].roomPlayers[1].login})
-
-
-          this.wss.emit("change" , this.getArrayData() )
-        }
+        this.roomArray[i].status =  "1v1"
 
       }
 
-
-
-
-
   }
-  getArrayData() {
-    var l = [];
+  @SubscribeMessage('checkEnd')
+  CheckEndGames(client: any, i : number): void {
     for (let i = 0; i < this.roomArray.length; i++) {
-      const element = this.roomArray[i];
-      if (element)
-      {
-        if (element.status != "waiting")
-        {
-
-          var test = { players :[element.roomPlayers[0].login ,element.roomPlayers[1].login ] , score : element.score , name : element.roomName}
-            l.push(test)
-        }
-      }
+      if (this.roomArray[i].status === "ENDED")
+      this.roomArray.splice(i , 1)
     }
-    return l
-  }
+    this.wss.emit("change" , this.getArrayData() )
+ 
 
+  }
+  @SubscribeMessage('changeGameStatue')
+  changeGame(client: any , login): void {
+    var room = this.getRoombyLogin(login)
+    if (room !== null)
+    {
+      var i = this.roomArray.indexOf(room);
+      this.roomArray[i].state = "START"
+    }
+ 
+
+  }
 
 
   @SubscribeMessage('getLiveGames')
@@ -289,34 +153,45 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
   }
 
-
-
-  @SubscribeMessage('playerConnect')
-    playerConnect(client: any, login: any): void {
-    this.logger.log("player connected:  "  + client.id + " : " + login)
-
-    var index = this.playerExist(client , login)
+  @SubscribeMessage('Play')
+  Play(client: any, payload: {login : string , mode : string}): void {
+    for (let index = 0; index < this.roomArray.length; index++) {
+      client.leave(this.roomArray[index].roomName)
+  }
+    var index = this.playerExist(client , payload.login)
     if (index === -1)
     {
-      this.AddtoRoomArray(client , login)
-      this.JoinPlayer(client , login)
-      for (let index = 0; index < this.roomArray.length; index++) {
-         this.roomArray[index].debug();
+
+
+      if (payload.mode === "classic")
+      {
+        this.AddtoRoomArray(client , payload.login)
+        this.JoinPlayer(client , payload.login)
 
       }
+      else if (payload.mode === "AI")
+      {
+        this.playAi(client , payload.login)
+      }
+      
+    
     }
     else
     {
-       this.roomArray[index].changeId(client.id , login)
-    }
 
+      if (payload.mode === "1v1")
+      {
+        this.Play1v1(client , index)
+      }
+      
+    }
   }
 
-  
+
+
   @SubscribeMessage('watchGame')
   addWatch(client: any, payload: any): void {
     var i = this.getRoombyName(payload)
-    console.log("WATCHH___GAAME :: ", i)
     if (i === -1)
      client.emit('roomNotFound')
     else
@@ -325,103 +200,62 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
       client.emit("watchGame" , {player1 : this.roomArray[i].roomPlayers[0].login , player2 : this.roomArray[i].roomPlayers[1].login})
     }
   }
+
   @SubscribeMessage('player1Moved')
   player1moved(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
     if (room)
     {
-      this.wss.to(room.roomName).emit("player1moved" , payload)
+      if (payload.y <  1 - 0.15 && payload.y > 0)
+      {
+        var i = this.roomArray.indexOf(room);
+        this.roomArray[i].paddel1.y = payload.y;
+        this.wss.to(room.roomName).emit("player1moved" , payload)
+      }
     }
   }
 
+  
   @SubscribeMessage('player2Moved')
   player2moved(client: any, payload: any): void {
     var room = this.getRoombyPlayerId(client.id)
     if (room)
     {
-      this.wss.to(room.roomName).emit("player2moved" , payload)
-    }
-
-  }
-
-  @SubscribeMessage('moveBall')
-  moveBall(client: any, payload: any): void {
-    var room = this.getRoombyPlayerId(client.id)
-    if (room)
-    {
-      var i = this.roomArray.indexOf(room)
-      this.roomArray[i].width = payload.w
-      this.roomArray[i].height = payload.h
-      this.roomArray[i].paddel2.x = payload.w - 30
-      if (!this.hitWalls(i, this.roomArray[i].ball ,this.roomArray[i].direction , payload.w, payload.h ,payload.p1 , payload.p2 ))
-        return ;
-      this.roomArray[i].predict =  (this.roomArray[i].paddel2.x -  this.roomArray[i].ball.x) / this.roomArray[i].direction.x
-       this.roomArray[i].ball.x += this.roomArray[i].direction.x
-      this.roomArray[i].ball.y += this.roomArray[i].direction.y
-
-      if(room.status === "AiGame" && room.direction.x > 0)
+      if (payload.y <  1 - 0.15 && payload.y > 0)
       {
-          this.moveAI( this.roomArray[i])
+        var i = this.roomArray.indexOf(room);
+        this.roomArray[i].paddel2.y = payload.y;
+        this.wss.to(room.roomName).emit("player2moved" , payload)
       }
-      this.wss.to(room.roomName).emit("moveBallClient" , {x: this.roomArray[i].ball.x , y: this.roomArray[i].ball.y , px : this.roomArray[i].paddel2.x, py :this.roomArray[i].predicty })
     }
 
-
-
   }
 
-
-  @SubscribeMessage('PlayAi')
-  playAi(client: any, payload: any): void {
-    let myuuid = uuidv4();
-    var ret  = this.playerExist(client , payload);
-
-    // console.log("__PLAYAI___DBG: ", newRoom.roomPlayers)
-    for (let index = 0; index < this.roomArray.length; index++) {
-      this.roomArray[index].debug();
-
-   }
-
-
-    // if (ret === -1)
-    // {
-      var newRoom = new GameService(myuuid)
-      newRoom.status = "AiGame"
-      newRoom.joinPlayer(payload , client.id)
-      newRoom.joinPlayer("drVegaPunk" , "drVegaPunk")
-      console.log("__PLAYAI___DBG: ", newRoom.roomPlayers)
-      client.join(newRoom.roomName)
-      this.roomArray.push(newRoom)
-      this.wss.to(newRoom.roomName).emit("startGame" , {player1 : payload , player2: "drVegaPunk"})
-      this.wss.emit("change" , this.getArrayData() )
-
-    // }
-    for (let index = 0; index < this.roomArray.length; index++) {
-      this.roomArray[index].debug();
-
-   }
-
-
-
-
+  @SubscribeMessage('gameConnected')
+  playerConnected(client: any, payload: any): void {
+      var i = this.getRoombyLogin(payload.login)
+      if (i !== null){
+        if (i.status !== "waiting")
+          client.emit("PlayerInGame" , i.roomName)
+      }
   }
+
    hitWalls = (i : number,ballCord : any ,direction: any , width , height  ,paddel1 : any , paddel2 : any, )=>{
 
-    if (ballCord.x + direction.x > width - (ballCord.size  /2 ))
+    if (ballCord.x + direction.x > 1 - ballCord.size /2  )
     {
       this.roomArray[i].incrementScore(1)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
-      console.log("Room : " , i)
+
       this.wss.emit("changeScoreLive" , {index : i , score :this.roomArray[i].score  })
       this.checkScore(this.roomArray[i])
 
       return false
     }
-    else if (ballCord.x + direction.x  < ( ballCord.size /2)    )
+    else if (ballCord.x + direction.x  <  ballCord.size /2  )
     {
       this.roomArray[i].incrementScore(2)
       this.wss.to( this.roomArray[i].roomName).emit("playerscored" ,  this.roomArray[i].score)
-      console.log("Room : " , i)
       this.wss.emit("changeScoreLive" , {index : i , score :this.roomArray[i].score  })
       this.checkScore(this.roomArray[i])
 
@@ -429,11 +263,11 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 
     }
-    else if (ballCord.y <=  ballCord.size / 2 || ballCord.y  >= height - ballCord.size / 2 )
-        this.roomArray[i].direction.y = -this.roomArray[i].direction.y
+    else if (ballCord.y <= ballCord.size /2 || ballCord.y  >= 1 - ballCord.size /2 )
+        this.roomArray[i].direction.y = - this.roomArray[i].direction.y
     else if (this.detectCollision(paddel1 , ballCord , this.roomArray[i].direction) || this.detectCollision(paddel2 , ballCord , this.roomArray[i].direction))
     {
-        this.roomArray[i].direction.x =( -this.roomArray[i].direction.x) * 1.15;
+        this.roomArray[i].direction.x = ( -this.roomArray[i].direction.x) * 1.05;
     }
     return true
 
@@ -443,12 +277,12 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
    detectCollision(player : any , ballCord : any , direction : any) {
     const cx = ballCord.x + direction.x ;
     const cy = ballCord.y + direction.y;
-    const r = ballCord.size / 2 ;
+    const r = 0.02 / 2 ;
     const [x1, y1, w1, h1] = [cx - r, cy - r, r * 2, r * 2];
     const x2 =player.x ;
     const y2 =player.y;
-    const w2 = parseInt(player.w);
-    const h2 = parseInt(player.h);
+    const w2 = 0.02;
+    const h2 = 0.15;
 
     const colliding = x1 < (x2 + w2) && (x1 + w1) > x2 &&
     y1 < (y2 + h2) && (y1 + h1) > y2;
@@ -456,17 +290,15 @@ export class GameGateway implements OnGatewayInit , OnGatewayConnection  , OnGat
 
 }
 async checkScore (room : any) {
-    //you can do better
-    console.log(Math.abs(room.score.score1 - room.score.score2))
-    if (room.score.score1 + room.score.score2  >= 3)
+
+    if (room.score.score1  === 3  || room.score.score2  === 3 )
     {
       var i = this.roomArray.indexOf(room)
 
-      this.wss.to(this.roomArray[i].roomName).emit("endGame" , {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers})
+      this.wss.to(this.roomArray[i].roomName).emit("endGame" , {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers , status : this.roomArray[i].status })
 
-      await this.roomArray[i].saveGame(MODE.AIBUGGY)
+      await this.roomArray[i].saveGame(this.roomArray[i].status !== "AiGame" ?   MODE.CLASSIC :  MODE.AIBUGGY)
       this.roomArray.splice(i, 1)
-      console.log(this.roomArray)
     }
 }
 
@@ -475,7 +307,7 @@ async checkScore (room : any) {
 moveAI(room : any )
  {
   var i = this.roomArray.indexOf(room)
-   const h =  100;
+   const h =  0.15 ;
    var yp : number ;
    var yb : number ;
    var q = ( room.paddel2.x -  room.ball.x ) / room.direction.x
@@ -483,32 +315,189 @@ moveAI(room : any )
    yb =  room.ball.y + room.direction.y;
    var PreditctY : number =  yb +( room.direction.y * q) -( h / 2);
     this.roomArray[i].predicty = PreditctY
-   var TableH : number =   700;
-
+   var TableH : number =   1;
 
        if (PreditctY > 0 && PreditctY < TableH)
        {
          if (PreditctY >  yb && PreditctY < yb  + h)
            return ;
          else if (yp  > PreditctY)
-            this.roomArray[i].paddel2.y = yp - 10
+            this.roomArray[i].paddel2.y = yp - 0.04
          else if (yp + (h / 2) < PreditctY)
-            this.roomArray[i].paddel2.y = yp + 10
+            this.roomArray[i].paddel2.y = yp + 0.04
 
        }
        else if (PreditctY < TableH + (TableH / 2)  &&  PreditctY > TableH)
        {
-           if (yp  + h < TableH)
-            this.roomArray[i].paddel2.y = yp + 10
+           if (yp  + h < TableH  )
+            this.roomArray[i].paddel2.y = yp + 0.04
 
 
        }
        else if (PreditctY < 0  &&  PreditctY > - (TableH / 2))
        {
            if (yp  > 0)
-            this.roomArray[i].paddel2.y = yp - 10
+            this.roomArray[i].paddel2.y = yp - 0.04
        }
 
-       this.wss.to(room.roomName).emit("player2moved" , this.roomArray[i].paddel2.y)
+       this.wss.to(room.roomName).emit("player2moved" , {y  : this.roomArray[i].paddel2.y})
  }
+
+ playerExist(client : any , login  : string)
+ {
+
+   for (let i = 0; i < this.roomArray.length; i++) {
+     var room = this.roomArray[i];
+     var player = room.getPlayerbyLogin(login )
+     if (player)
+       return  i;
+   }
+
+   return -1;
+ }
+
+ JoinPlayer(client : any , login : string)
+ {
+   var roomslenght = this.roomArray.length;
+
+   if (this.roomArray[roomslenght - 1].roomPlayers.length === 2)
+   {
+     var roomName = this.roomArray[roomslenght - 1].roomName
+     var lastRoomPlayers = this.roomArray[roomslenght - 1].roomPlayers
+     this.roomArray[roomslenght - 1].status = "InGame"
+     this.roomArray[roomslenght - 1].StartGame()
+
+     this.wss.to(roomName).emit("startGame", {player1 : lastRoomPlayers[0].login , player2 :  lastRoomPlayers[1].login })
+     this.wss.emit("change" , this.getArrayData() )
+
+   }
+ }
+
+ getRoombyLogin(login : string )
+ {
+   for (let i = 0; i < this.roomArray.length; i++) {
+     if (this.roomArray[i])
+     {
+       const element = this.roomArray[i].getPlayerbyLogin(login);
+       if (element)
+         return this.roomArray[i];
+     }
+   }
+   return null
+ }
+
+ getRoombyPlayerId(id : string )
+ {
+   for (let i = 0; i < this.roomArray.length; i++) {
+     if (this.roomArray[i])
+     {
+       const element = this.roomArray[i].getPlayer(id);
+       if (element)
+         return this.roomArray[i];
+     }
+   }
+   return null
+ }
+
+ getRoombyName(name : string )
+ {
+   for (let i = 0; i < this.roomArray.length; i++) {
+
+     if (this.roomArray[i].roomName === name)
+         return i;
+   }
+   return -1
+ }
+
+ async RemovePlayer(client : any , login : string) 
+ {
+   for (let i = 0; i < this.roomArray.length; i++) {
+     var room = this.roomArray[i];
+     if (room)
+     {
+
+       var player = room.getPlayerbyLogin(login )
+       if (room.roomPlayers.includes(player))
+       { 
+         this.wss.to(room.roomName).emit("endGame", {score: this.roomArray[i].score, roomPlayers :   this.roomArray[i].roomPlayers , status : this.roomArray[i].status})
+         client.leave(room.roomName)
+         this.roomArray.splice(i, 1)
+         this.wss.emit("change" , this.getArrayData() )
+         return ;
+     }
+     }
+   }
+
+ }
+
+
+ AddtoRoomArray(client : any , login : string) {
+
+   var roomslenght = this.roomArray.length;
+   if (roomslenght === 0)
+   {
+     let myuuid = uuidv4();
+
+     const  newRoom = new GameService(myuuid , this.wss)
+
+   newRoom.joinPlayer(login , client.id)
+   this.roomArray.push(newRoom)
+   roomName = this.roomArray[roomslenght].roomName
+ }
+ else
+ {
+   roomName = this.roomArray[roomslenght - 1].roomName
+   if ( this.roomArray[roomslenght - 1].status  === "waiting")
+   {
+     if (this.roomArray[roomslenght - 1].roomPlayers.length  < 2)
+     {
+       this.roomArray[roomslenght - 1].joinPlayer(login , client.id)
+     }
+
+   }
+   else
+   {
+     let myuuid = uuidv4();
+     const  newRoom = new GameService(myuuid , this.wss)
+     newRoom.joinPlayer(login , client.id)
+     this.roomArray.push(newRoom)
+   }
+ }
+ var roomName = this.roomArray[this.roomArray.length - 1].roomName
+ client.join(roomName)
+  
+ }
+
+ getArrayData() {
+  var l = [];
+  for (let i = 0; i < this.roomArray.length; i++) {
+    const element = this.roomArray[i];
+    if (element)
+    {
+      if (element.status != "waiting")
+      {
+          if (element.roomPlayers[0] && element.roomPlayers[1]) {
+            var test = { players :[element.roomPlayers[0].login ,element.roomPlayers[1].login ] , score : element.score , name : element.roomName}
+            l.push(test)
+          }
+      }
+    }
+  }
+  return l
+}
+
+playAi(client: any, payload: any): void {
+  let myuuid = uuidv4();
+  var newRoom = new GameService(myuuid , this.wss)
+  newRoom.status = "AiGame"
+  newRoom.direction = {x: 0.006 , y : 0.006}
+  newRoom.joinPlayer(payload , client.id)
+  newRoom.joinPlayer("drVegaPunk" , "drVegaPunk")
+  client.join(newRoom.roomName)
+
+  this.roomArray.push(newRoom)
+  this.roomArray[this.roomArray.length - 1].StartGame()
+  this.wss.to(newRoom.roomName).emit("startGame" , {player1 : payload , player2: "drVegaPunk"})
+  this.wss.emit("change" , this.getArrayData() )
+}
 }

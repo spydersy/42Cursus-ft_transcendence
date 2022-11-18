@@ -76,31 +76,23 @@ export class ChatService {
                     {userId: ReceiverId, channelId: Channel.id, permission: PERMISSION.USER, restriction: RESTRICTION.NULL, duration: 0}
                 ]
             });
-            console.log("__DM__USERS__DBG__ : ", Users);
         }
-        console.log("__DM__CHANNEL__DBG__ : ", DMChannel);
     }
 
     async GetChannelMessages(me: number, channelId: string, @Res() res) {
-        // Find Channel
         const channel = await this.GetChannelById(channelId);
         if (channel === null)
             return res.status(HttpStatus.NOT_FOUND).send({'message': 'Channel Not Found'});
-        // Find User In Channel
         const userChannel = await this.FindUserInChannel(me, channelId);
         if (userChannel === null)
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'Forbidden'});
-        // Check Banned User
         if (userChannel.restriction === RESTRICTION.BANNED)
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'Banned User'});
-        // Get All Messages
         let messages = await this.prisma.messages.findMany({
             where: {channelId: channelId},
             include: {sender: true},
         });
-        // Get Blocked Users
         const blackList = await this.prisma.blocks.findMany({where: {blockedId: me} });
-        // Filter Messages
         messages.forEach(message => {
             message['displayName'] = message.sender.displayName;
             for (let index = 0; index < blackList.length; index++) {
@@ -118,7 +110,6 @@ export class ChatService {
         let socketRes: SocketRes = {stat: false, payload: null, login: null};
         const userStat = await this.PostMessageValidationLayer(me, channelId);
 
-        console.log("__USER__STAT__DBG__ : ", userStat);
         if (userStat === USERSTAT.NOTFOUND || userStat === USERSTAT.MUTED
             || userStat === USERSTAT.BANNED || userStat === USERSTAT.BLOCKED) {
             const meDto = await this.userService.GetUserById(me);
@@ -128,7 +119,6 @@ export class ChatService {
             : userStat === USERSTAT.BANNED ? 'Banned User'
             : userStat === USERSTAT.BLOCKED ? 'Blocked User'
             : 'Muted User'
-            console.log("__ENDPOINT__00__");
             return socketRes;
         }
         let msg = await this.prisma.messages.create({
@@ -150,8 +140,41 @@ export class ChatService {
         socketRes.payload = msg;
         socketRes.login = msg.sender.displayName;
         delete msg.sender;
-        console.log("__ENDPOINT__01__");
         return socketRes;
+    }
+
+    async GetUserRestriction(me: number, user: string, channelId: string, @Res() res) {
+        const userDto = await this.userService.GetUserByLogin(user);
+        if (userDto === null)
+            return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
+        const meInChannel = await this.FindUserInChannel(me, channelId);
+        if (meInChannel === null)
+            return res.status(HttpStatus.FORBIDDEN).send({'message': 'Method Not Allowed'});
+        const userInChannel = await this.FindUserInChannel(userDto.id, channelId);
+        if (userInChannel === null)
+            return res.status().send({'message': 'User Does Not Exist In Channel'});
+        if (userInChannel.restriction === RESTRICTION.MUTED) {
+            let currentDt = new Date();
+            if (currentDt < this.addSeconds(new Date(userInChannel.restrictionTime), userInChannel.duration)) {
+                return res.status(HttpStatus.OK).send({'restriction': 'MUTED',
+                                                        'permission': userInChannel.permission});
+            } else {
+                await this.prisma.channelsUsers.updateMany({
+                    where: {
+                        userId: userInChannel.userId,
+                        channelId: userInChannel.channelId
+                    },
+                    data: {
+                        restriction: RESTRICTION.NULL,
+                        duration: 0
+                    }
+                });
+                return res.status(HttpStatus.OK).send({'restriction': 'NULL',
+                                                        'permission': userInChannel.permission});
+            }
+        }
+        return res.status(HttpStatus.OK).send({'restriction': userInChannel.restriction,
+                                                'permission': userInChannel.permission});
     }
 
     async GetManagedChannels(me: number, @Res() res) {
@@ -167,7 +190,6 @@ export class ChatService {
                 }],
             }
         });
-        console.log("__MANAGED__CHANNELS__DBG__ : ", managedChannels);
         return res.send(managedChannels);
     }
 
@@ -181,7 +203,6 @@ export class ChatService {
                 orderBy: { date: 'desc'},
                 take: 1,
             });
-            console.log("__last__message__ : ", lastMessage);
             myChannels[index]['lastMessage'] = "";
             if (lastMessage.length === 1) {
                 myChannels[index]['lastMessage'] = lastMessage[0].content;
@@ -223,18 +244,18 @@ export class ChatService {
             }
         });
         await this.SetLastMessageInChannel(me, filtredChannels);
-        console.log("__BEF__RETURN__ : ", filtredChannels);
         return res.status(HttpStatus.OK).send(await this.generateChannelDto(me, filtredChannels));
     }
 
     async GetAllChannels(me: number, @Res() res) {
         let filtredChannels: any[] = [];
 
-        const bannedChannels = await this.prisma.channelsUsers.findMany({
+        let myChannels = await this.prisma.channels.findMany({
             where: {
-                userId: me,
-                restriction: RESTRICTION.BANNED
-            }
+                users: {some: { userId: me}}
+            },
+            include: {users: {include: { user: true }}},
+            orderBy: {lastUpdate: 'desc'},
         });
         let allChannels = await this.prisma.channels.findMany({
             where: {
@@ -250,15 +271,14 @@ export class ChatService {
             delete element.users;
             delete element.password;
             filtredChannels.push(element);
-            for (let index = 0; index < bannedChannels.length; index++) {
-                if (bannedChannels[index].channelId === element.id) {
+            for (let index = 0; index < myChannels.length; index++) {
+                if (myChannels[index].id === element.id) {
                     filtredChannels.pop();
                     break;
                 }
             }
         });
-        console.log("__ALL__CHANNELS__ENDPOINT__DBG__ : ", filtredChannels);
-        return res.status(HttpStatus.OK).send(filtredChannels);
+        return res.status(HttpStatus.OK).send(filtredChannels);  
     }
 
     async UpdateUserInChannel(userId: number, user: string, channelId: string, role: PERMISSION, @Res() res) {
@@ -462,17 +482,13 @@ export class ChatService {
     }
 
     async JoinChannel(me: number, channelId: string, password: string, @Res() res) {
-        // Find Channel:
         const channel = await this.GetChannelById(channelId);
         if (channel === null)
             return res.status(HttpStatus.NOT_FOUND).send({'message': 'Channel Not Found'});
-        // Find User:
         const userProfile = await this.userService.GetUserById(me);
         if (userProfile === null)
             return res.status(HttpStatus.NOT_FOUND).send({'message': 'User Not Found'});
-        // Find User In Channel:
         const userInChannel = await this.FindUserInChannel(me, channelId);
-        console.log("__USER__IN__ : ", userInChannel);
         if (userInChannel !== null || channel.access === CHANNEL.DM)
             return res.status(HttpStatus.FORBIDDEN).send({'message': 'User Is Not Allowed To Join This Channel'});
         if (channel.access === CHANNEL.PROTECTED)
@@ -501,7 +517,6 @@ export class ChatService {
         if (password !== null &&  password !== undefined) {
             const saltOrRounds = 10;
             password = await bcrypt.hash(password, saltOrRounds);
-            console.log("__HASHED__PASSWORD__ : ", password);
         }
         let channel = await this.prisma.channels.create({
             data: {
@@ -573,6 +588,8 @@ export class ChatService {
     }
 
     async GetChannelById(channelId: string) {
+        if (channelId === null || channelId === undefined)
+            return null;
         return await this.prisma.channels.findUnique({where: {id: channelId} });
     }
 
@@ -596,21 +613,18 @@ export class ChatService {
         if (channel === null)
             return USERSTAT.NOTFOUND;
         const userInChannel = await this.FindUserInChannel(me, channelId);
-        console.log("__USER))IN__CHANNEL__BEF__SEND__MESSAGE__ : ", userInChannel);
         if (userInChannel === null)
             return USERSTAT.NOTFOUND;
         if (channel.access === CHANNEL.DM) {
             const dmChannel = await this.prisma.channelsUsers.findMany({where: {channelId: channelId}});
             if (await this.userService.IsBlockedUser(dmChannel[1].userId, dmChannel[0].userId)
                 || await this.userService.IsBlockedUser(dmChannel[0].userId, dmChannel[1].userId)) {
-                    console.log("__BLOCKED__USER__BEF__SEND__MESSAGE__");
                     return USERSTAT.BLOCKED;
             }
         }
         else if (userInChannel.restriction === RESTRICTION.BANNED)
             return USERSTAT.BANNED;
         else if (userInChannel.restriction === RESTRICTION.MUTED) {
-            console.log("__MUTED__USER__DBG__");
             let currentDt = new Date();
             if (currentDt < this.addSeconds(new Date(userInChannel.restrictionTime), userInChannel.duration)) {
                 return USERSTAT.MUTED

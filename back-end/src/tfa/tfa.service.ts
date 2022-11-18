@@ -21,11 +21,8 @@ export class TfaService {
     }
 
     async generateTwoFactorAuthenticationSecret(user: number, login: string) {
-        console.log("__EMAIL__DBG__ : ", login);
         const secret = authenticator.generateSecret();
-        console.log("__SECRET__DBG__ :", secret );
         const otpauthUrl = authenticator.keyuri(login, this.configService.get('TWO_FACTOR_AUTHENTICATION_APP_NAME'), secret);
-        console.log("__OTP__AUTH__URL__DBG__ :", otpauthUrl );
         return { secret, otpauthUrl };
     }
 

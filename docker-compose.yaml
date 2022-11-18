@@ -4,11 +4,8 @@ services:
     image: postgres:13
     ports:
       - 5432:5432
+    env_file: ./back-end/.env
     container_name: db-container
-    environment:
-      - POSTGRES_USER=abelarif
-      - POSTGRES_PASSWORD=1325
-      - POSTGRES_DB=nest
     networks:
       - ft_transcendence
 
@@ -22,7 +19,7 @@ services:
       - 3001:3001
       - 5555:5555
       - 8000:8000
-    env_file: ./back-end/.env
+    # env_file: ./back-end/.env
     container_name: nest-container
     volumes:
        - ./back-end:/back-end

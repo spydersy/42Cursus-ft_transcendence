@@ -1,3 +1,6 @@
-node_module
-front-end
-app
+*/dist
+*/node_modules
+*/build
+*/upload/
+TODO
+*/.env

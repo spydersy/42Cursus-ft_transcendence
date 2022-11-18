@@ -1,0 +1,9 @@
+./README.md
+./dockerfile
+./node_modules
+./public
+./src
+./static_pages
+./styled.d.ts
+./tsconfig.json
+./yarn.lock

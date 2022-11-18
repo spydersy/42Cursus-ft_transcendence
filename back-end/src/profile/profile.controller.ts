@@ -6,6 +6,7 @@ import { ProfileService } from './profile.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/app.utils';
+import { UserNameDto } from '../dtos/Inputs.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('profile')
@@ -19,12 +20,8 @@ export class ProfileController {
   async GetUserProfile(@Req() req  , @Query() query, @Res() res: Response) {
     if (query['data']) {
       switch (query['data']) {
-        case 'achievements':
-          return res.send("this.userService.GetAchievements()");
         case 'friends':
           return await this.profileService.GetFriends(req.user.userId, res);
-        case 'games':
-          return res.send("this.userService.GetGames()");
         case 'requests':
           return await this.profileService.GetRequests(req.user.userId, res);
         case 'blacklist':
@@ -47,13 +44,12 @@ export class ProfileController {
     }),
   )
   async UpdateAvatar(@Req() req, @UploadedFile() file, @Res() res) {
-    const uploadedAvatarPath = `http://localhost:8000/upload/${file.filename}`;
+    const uploadedAvatarPath = process.env.BACKEND_URL + "/upload/" + file.filename;
     return this.profileService.UploadAvatar(uploadedAvatarPath, req.user.userId, res);
   }
 
   @Post('logout')
   async Logout(@Res() res) {
-    console.log("__LOGOUT__ENDPOINT__DBG__");
     return this.profileService.Logout(true, res);
   }
 
@@ -73,11 +69,8 @@ export class ProfileController {
     return this.profileService.Update2FA(req.user.userId, status, code, res);
   }
 
-  @Put("updateUsername/:newname")
-  async UpdateUserName(@Req() req, @Param('newname') newname: string, @Res() res) {
-    console.log("__BODY__DBG__", newname);
-    // let newNameDto: UserName ={};
-    // newNameDto.newname = newname;
-    return this.profileService.UpdateUserName(newname, req.user.userId, res);
+  @Post("updateUsername")
+  async UpdateUserName(@Req() req, @Body() newname: UserNameDto, @Res() res) {
+    return this.profileService.UpdateUserName(newname.newname, req.user.userId, res);
   }
 }

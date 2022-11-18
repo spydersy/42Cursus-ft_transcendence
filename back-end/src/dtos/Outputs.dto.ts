@@ -31,17 +31,3 @@ export interface MsgPayload {
     id : number,
     senderId : number
 }
-
-// export class CurrentUser {
-//     login:          string;
-//     displayName:    string;
-//     defaultAvatar:  string;
-//     notifications:  any;
-//     wins:           number;
-//     losses:         number;
-//     level:          number;
-//     twoFactorAuth:  boolean;
-// }
-
-// export class demo {
-// }

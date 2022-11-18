@@ -27,6 +27,5 @@ export class NotifGateway implements  OnGatewayConnection{
   }
 
   handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log(`mok connected: ${client.id}`);
    }
 }

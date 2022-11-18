@@ -30,6 +30,7 @@ export class ChannelData {
     members: string;
 
     @IsString()
+    @IsNotEmpty()
     password: string;
 }
 export class MessageDataDto {
@@ -90,5 +91,5 @@ export class UserRestrictionDto {
     restriction: string;
 
     @IsNumber()
-    duration: number; // 1min(60s), 5min(300s), 10min(600s), 30min(1800s), 60min(3600s), 1day(86400s)
+    duration: number;
 }

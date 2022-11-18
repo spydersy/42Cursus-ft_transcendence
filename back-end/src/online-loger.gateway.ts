@@ -11,7 +11,9 @@ import {
  import { ChatService } from './chat/chat.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { PrismaService } from './prisma/prisma.service';
-import { SOCKET } from '@prisma/client';
+import { WsGuard, WsGuard2 } from './auth/jwt.strategy';
+import { JwtService } from "@nestjs/jwt";
+
 interface UserType {
  socketId : string[],
  userid : string,
@@ -35,25 +37,9 @@ interface UserType {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('OnlineLogerGateway');
   onLineArray  : UserType[] = [];
-  // @UseGuards(OnlineGuard)
-  // @SubscribeMessage('AddOnlineUser')
-  // async handleMessage(client: Socket, payload) {
-  //   let onlineArr: string[] = [];
-  //   let inGameArr: string[] = [];
 
-  //   const online = await this.prisma.websockets.findMany({where: {type: SOCKET.ONLINE,} });
-  //   const ingame = await this.prisma.websockets.findMany({where: {type: SOCKET.GAME,} });
-  //   online.forEach(element => {
-  //     if (onlineArr.includes(element.userLogin) === false)
-  //       onlineArr.push(element.userLogin);
-  //   });
-  //   ingame.forEach(element => {
-  //     if (inGameArr.includes(element.userLogin) === false)
-  //       inGameArr.push(element.userLogin);
-  //   });
-  //   console.log("__EMIT__EVENT__DBG__ : ", {onlineArr, inGameArr});
-  //   this.server.emit('ConnectedUser', {onlineArr, inGameArr});
-  // }
+
+  @UseGuards(WsGuard)
   @SubscribeMessage('AddOnlineUser')
    handleConnect(client: Socket, payload) {
 
@@ -67,16 +53,48 @@ interface UserType {
       }
       else
       {
-        console.log("______BGGGG___: ", this.onLineArray[i].socketId.includes(client.id.toString()))
         if( this.onLineArray[i].socketId.includes(client.id.toString()) === false)
           this.onLineArray[i].socketId.push(client.id)
+      }
+    this.debug()
+    this.server.emit('ConnectedUser', this.onLineArray);
+  }
+
+  @UseGuards(WsGuard)
+  @SubscribeMessage('InGame')
+   inGAme(client: Socket, payload) {
+
+
+       var i = this.getIndexLogin(payload);
+      if (i === -1)
+      {
 
       }
-
-
-
+      else
+      {
+        this.onLineArray[i].gameStatu = true;
+       
+      }
     this.debug()
+    this.server.emit('ConnectedUser', this.onLineArray);
+  }
 
+  @UseGuards(WsGuard)
+  @SubscribeMessage('outGame')
+  outGame(client: Socket, payload) {
+
+
+       var i = this.getIndexLogin(payload);
+      if (i === -1)
+      {
+
+      }
+      else
+      {
+        this.onLineArray[i].gameStatu = false;
+       
+      }
+    this.debug()
     this.server.emit('ConnectedUser', this.onLineArray);
   }
 
@@ -84,7 +102,6 @@ interface UserType {
 
 
   afterInit(server: Server) {
-   this.logger.log('Init OnlineLogerGateway');
   }
 
   getIndex( id : string) {
@@ -105,8 +122,8 @@ interface UserType {
   }
 
    handleDisconnect(client) {
+
   var index = this.getIndex(client.id.toString())
-  console.log("___DBG__INDEX :", index)
     if (index !== -1)
     {
 
@@ -121,31 +138,33 @@ interface UserType {
     this.debug()
     this.server.emit('ConnectedUser', this.onLineArray);
   }
+
+
+  @UseGuards(WsGuard)
+  @SubscribeMessage('logout')
+  logout(client , payload) {
+    var index = this.getIndexLogin(payload)
+    if (index !== -1)
+    {
+        this.onLineArray.splice(index , 1);
+    }
+    this.debug()
+    this.server.emit('ConnectedUser', this.onLineArray);
+  }
   debug(){
     for (let i = 0; i < this.onLineArray.length; i++) {
       const element = this.onLineArray[i];
-      // console.log("{")
-      // console.log("UserId : " , element.userid)
-      // console.log("socketId : " , element.socketId)
-      // console.log("}")
     }
   }
-  // async handleDisconnect(client) {
-  //   var index = this.getIndex(client.id)
-  //   try {
-  //     console.log("__DELETE__SOCKET__ : ",  client);
-  //     await this.prisma.websockets.delete({
-  //       where: {socketId: client.id,}
-  //     });
-  //   }
-  //   catch {
-  //     console.log("DO SOMETHING . . .");
-  //   }
-  //  this.logger.log(`Client disconnected: ${client.id}`);
-  //  this.server.emit('DisconnectedUser', {});
-  // }
 
-  handleConnection(client: Socket, ...args: any[]) {
-   this.logger.log(`Client connected: ${client.id}`);
+  async handleConnection(client: Socket, ...args: any[]) {
+
+    const wsGuard2: WsGuard2 = new WsGuard2(new JwtService(), null);
+    try {
+      await wsGuard2.canActivate(client.handshake) === false
+    } catch {
+      client.disconnect();
+      return;
+    }
   }
  }
