@@ -27,10 +27,13 @@ import { GameController } from './game/game.controller';
 import { GameModule } from './game/game.module';
 import { GameGateway } from './game.gateway'; 
 import { NotifGateway } from './notif.gateway';
+import { GoogleController } from './googleAuth/google.controller';
+import { GoogleStrategy } from './googleAuth/google.startegy';
+import { GoogleService } from './googleAuth/google.service';
 
 @Module({
   imports: [AuthModule, PrismaModule, UserModule, ProfileModule, ConfigModule.forRoot(), SearchModule, ChatModule, TfaModule, GameModule],
-  controllers: [AppController, UserController, ProfileController, ChatController, TfaController, GameController],
-  providers: [AppService, UserService, ProfileService, PrismaService, SearchService, ChatService, TfaService, ChatGateway, GameGateway, JwtService, OnlineLogerGateway, GameService, NotifGateway],
+  controllers: [AppController, UserController, ProfileController, ChatController, TfaController, GameController , GoogleController],
+  providers: [AppService, UserService, ProfileService, PrismaService, SearchService, ChatService, TfaService, ChatGateway, GameGateway, JwtService, OnlineLogerGateway, GameService, NotifGateway ,GoogleStrategy , GoogleService],
 })
 export class AppModule {}

@@ -99,7 +99,32 @@ export class GameService {
             this.direction.y = - this.direction.y
         else if (this.detectCollision(this.paddel1 , this.ball , this.direction , -0.02) || this.detectCollision(this.paddel2 , this.ball , this.direction , +0.02))
         {
+
             this.direction.x = ( -this.direction.x) * 1.05;
+            if (this.ball.x > 0.5)
+            {   if (this.ball.y < this.paddel2.y + (0.02 / 4) ||  this.ball.y > this.paddel2.y + ((0.02 * 3 )/ 4) )
+            {
+                this.direction.y = 2* this.direction.x;
+                this.direction.y = -this.direction.y 
+            }
+            else
+            {
+                this.direction.y = this.direction.x
+            }
+            }
+            {
+                if (this.ball.x < 0.5)
+                if (this.ball.y < this.paddel1.y + (0.02 / 4) ||  this.ball.y > this.paddel1.y + ((0.02 * 3 )/ 4) )
+                {
+                    this.direction.y = 2* this.direction.x;
+                    this.direction.y = -this.direction.y 
+
+                }
+                else
+                {
+                    this.direction.y = this.direction.x
+                }
+            }
         }
         return true
     }
@@ -293,10 +318,17 @@ export class GameService {
         else
             this.score.score2++;
         this.ball = {size : 0.02 , x :  0.5 , y :0.5}
-        this.direction = { x :  0.005 , y :0.005}
-        if ( this.status === "AiGame")
-            this.direction = {x: 0.005 , y : 0.005}
+        var random1 = Math.round(Math.random() * 99) + 1;    
+        if (random1 < 25)
+            this.direction = { x :  0.005 , y :0.005}
+        else if (random1 < 50)
+            this.direction = { x :  0.005 , y : -0.005}
+        else if (random1 < 75)
+            this.direction = { x :  -0.005 , y : 0.005}
+        else
+            this.direction = { x :  -0.005 , y :-0.005}
    }
+     
 
    async GetMatchHistory(me: number, param: string, @Res() res) {
         let History : any[] = [];

@@ -13,9 +13,9 @@ datasource db {
 // [Users Data] : ================================================================================= //
 
 model users {
-  id                  Int             @id @unique
-  login               String          @unique
-  displayName         String          @unique
+  id                  Int             @id @unique  // greater than 200000
+  login               String          @unique      // "firstName":"Mohamed","lastName":"ELKARMI" ==> mohelkarmi ? exist
+  displayName         String          @unique     // "firstName":"Mohamed" + "lastName":"ELKARMI"
   defaultAvatar       String
   achievement         Boolean[]       @default([false, false, false, false, false, false])
   wins                Int[]           @default([0, 0])

@@ -114,9 +114,9 @@ export class AuthService {
         let UserDto: User;
         if (this.Check42ApiQueryCode(query) === true) {
             const Token = await this.GetUserToken(query['code'], res);
-            const UserProfile = await this.ClaimUserProfile(Token, query['code'], res);
-            UserDto =this.userService.GenerateUserDto(UserProfile['data']);
-            if (await this.userService.FindUserById(UserDto.Id) === false) {
+            const UserProfile = await this.ClaimUserProfile(Token, query['code'], res); //DONE
+            UserDto =this.userService.GenerateUserDto(UserProfile['data']); // skip(google)
+            if (await this.userService.FindUserById(UserDto.Id) === false) { //next step
                 return this.firstSignin(UserDto, res);
             }
             const userDB = await this.userService.GetUserByLogin(UserDto.Login);
